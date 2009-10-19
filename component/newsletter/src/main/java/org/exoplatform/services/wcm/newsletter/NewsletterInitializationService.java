@@ -103,6 +103,7 @@ public class NewsletterInitializationService implements Startable {
         newsletterInitializationService = serviceFolder.addNode("NewsletterInitializationService", "nt:unstructured");
       }
       if (!newsletterInitializationService.hasNode("NewsletterInitializationServiceLog")) {
+        String[] arrayPers = {PermissionType.READ, PermissionType.SET_PROPERTY, PermissionType.ADD_NODE, PermissionType.REMOVE} ;
         for (String portalName : portalNames) {
           NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
           for (NewsletterCategoryConfig categoryConfig : categoryConfigs) {
@@ -119,10 +120,11 @@ public class NewsletterInitializationService implements Startable {
           for (NewsletterUserConfig userConfig : userConfigs) {
             userNode = manageUserHandler.add(sessionProvider, portalName, userConfig.getMail());
           }
-          ExtendedNode userFolderNode = (ExtendedNode) userNode.getParent();
+          ExtendedNode userFolderNode = (ExtendedNode)((Node)session.getItem(NewsletterConstant.generateUserPath(portalName)));
           if(userFolderNode.canAddMixin("exo:privilegeable")) 
             userFolderNode.addMixin("exo:privilegeable");
-          userFolderNode.setPermission("any", PermissionType.ALL) ;
+          
+          userFolderNode.setPermission("any", arrayPers);
           
           Node newsletterInitializationServiceLog = newsletterInitializationService.addNode("NewsletterInitializationServiceLog", "nt:file");
           Node newsletterInitializationServiceLogContent = newsletterInitializationServiceLog.addNode("jcr:content", "nt:resource");
