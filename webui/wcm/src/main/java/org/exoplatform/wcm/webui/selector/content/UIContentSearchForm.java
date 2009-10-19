@@ -203,9 +203,15 @@ public class UIContentSearchForm extends UIForm {
 
   private QueryCriteria getInitialQueryCriteria(String siteName) {
     QueryCriteria qCriteria = new QueryCriteria();
-    qCriteria.setSearchDocument(false);
+    String contentType = getAncestorOfType(UIContentSelector.class).getChild(UIContentBrowsePanel.class).contentType;
+    if (UIContentBrowsePanel.WEBCONENT.equals(contentType)) {
+    	qCriteria.setSearchDocument(false);
+    	qCriteria.setSearchWebContent(true);
+    } else if (UIContentBrowsePanel.DMSDOCUMENT.equals(contentType)) {
+    	qCriteria.setSearchDocument(true);
+    	qCriteria.setSearchWebContent(false);
+    }
     qCriteria.setSearchWebpage(false);
-    qCriteria.setSearchWebContent(true);
     qCriteria.setSiteName(siteName);
     qCriteria.setLiveMode(false);
     return qCriteria;
