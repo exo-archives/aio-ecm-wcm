@@ -18,7 +18,6 @@ package org.exoplatform.wcm.webui.scv.config;
 
 import javax.jcr.Node;
 import javax.portlet.PortletMode;
-import javax.portlet.PortletPreferences;
 
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
@@ -89,9 +88,8 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
       return;
     }    
     try{
-//      Node node = presentationContainer.getReferenceNode();
     	Node node = presentationContainer.getNodeView();
-      if(uiPresentationPortlet.canEditContent(node)) {
+      if(Utils.isShowQuickEdit(node)) {
         UIQuickCreationWizard uiQuickCreationWizard = addChild(UIQuickCreationWizard.class, null, null);
         UIContentDialogForm contentDialogForm  = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
         contentDialogForm.setEditNotIntegrity(false);
@@ -119,22 +117,6 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
   }
 
   /**
-   * Checks if is quick editable.
-   * 
-   * @return true, if is quick editable
-   * 
-   * @throws Exception the exception
-   */
-  public boolean isQuickEditable() throws Exception {
-    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
-    PortletPreferences prefs = portletRequestContext.getRequest().getPreferences();
-    boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue("ShowQuickEdit", null));        
-    UISingleContentViewerPortlet uiPresentationPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);
-    if (isQuickEdit) return uiPresentationPortlet.canEditPortlet();
-    return false;
-  }
-
-  /**
    * Check new config.
    * 
    * @return true, if successful
@@ -142,7 +124,6 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
   private boolean checkNewConfig() throws Exception {
     UIPresentationContainer presentationContainer = getAncestorOfType(UIPresentationContainer.class);
     if (presentationContainer == null) return true;
-//    Node content = presentationContainer.getReferenceNode();
     Node content = presentationContainer.getNodeView();
     if (content == null) return true;
     return false;

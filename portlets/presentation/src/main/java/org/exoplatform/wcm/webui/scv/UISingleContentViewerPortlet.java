@@ -16,14 +16,9 @@
  */
 package org.exoplatform.wcm.webui.scv;
 
-import java.security.AccessControlException;
-
-import javax.jcr.Node;
 import javax.portlet.PortletMode;
 
 import org.apache.commons.logging.Log;
-import org.exoplatform.services.jcr.access.PermissionType;
-import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
@@ -131,24 +126,4 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
     return Utils.canEditCurrentPortal(userId);
   }
 
-  /**
-   * Can edit content.
-   * 
-   * @param content the content
-   * 
-   * @return true, if successful
-   * 
-   * @throws Exception the exception
-   */
-  public boolean canEditContent(final Node content) throws Exception {
-    if (content == null || !content.isNodeType("exo:webContent")) return false;
-    try {
-      ((ExtendedNode)content).checkPermission(PermissionType.ADD_NODE);
-      ((ExtendedNode)content).checkPermission(PermissionType.REMOVE);
-      ((ExtendedNode)content).checkPermission(PermissionType.SET_PROPERTY);
-    } catch (AccessControlException e) {
-      return false;
-    }
-    return true;
-  }
 }

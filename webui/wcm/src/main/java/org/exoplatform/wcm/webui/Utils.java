@@ -188,6 +188,8 @@ public class Utils {
   		boolean isEditMode = false;
   		if (WCMComposer.MODE_EDIT.equals(getCurrentMode())) isEditMode = true;
   		((ExtendedNode) content).checkPermission(PermissionType.SET_PROPERTY);
+  		((ExtendedNode) content).checkPermission(PermissionType.ADD_NODE);
+      ((ExtendedNode) content).checkPermission(PermissionType.REMOVE);
   		return isEditMode;
 		} catch (Exception e) {
 			return false;

@@ -37,6 +37,7 @@ import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.scv.UIPresentationContainer;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.web.application.RequestContext;
@@ -93,9 +94,6 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
     List<SelectItemOption<String>> option = new ArrayList<SelectItemOption<String>>();
     RequestContext context = RequestContext.<RequestContext>getCurrentInstance();
     ResourceBundle res = context.getApplicationResourceBundle();
-    //String labelQuickCreate = res.getString(getId() + ".label.QuickCreateWebContent");
-    //String labelSelectExistedWebContent = res.getString(getId() + ".label.SelectExistedWebContent");
-    //String labelSelectExistedDMS = res.getString(getId() + ".label.SelectExistedDMS");
     String labelEditContent = res.getString(getId() + ".label.EditWebContent");
     String labelSelectExistedContent = res.getString(getId() + ".label.ExistedContent");
     if(isNewConfig) {
@@ -103,9 +101,8 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
     }else {
       UISingleContentViewerPortlet uiPresentationPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);
       UIPresentationContainer presentationContainer = uiPresentationPortlet.getChild(UIPresentationContainer.class);
-//      Node node = presentationContainer.getReferenceNode();
       Node node = presentationContainer.getNodeView();
-      if(uiPresentationPortlet.canEditContent(node)) {
+      if(Utils.isShowQuickEdit(node)) {
         option.add(new SelectItemOption<String>(labelEditContent, "EditCurrentWebContent"));
         option.add(new SelectItemOption<String>(labelSelectExistedContent, "SelectExistedContent"));
         UIFormRadioBoxInput radioInput = new UIFormRadioBoxInput("radio", "radio", option);

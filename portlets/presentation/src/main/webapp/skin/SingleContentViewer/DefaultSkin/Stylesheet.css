@@ -301,12 +301,16 @@
 	text-decoration: underline;
 }
 
-.UISingleContentViewerPortlet .location .UIFormGrid td {
+.UISingleContentViewerPortlet .UIFormGrid td {
 	padding: 0px;
 }
 
-.UISingleContentViewerPortlet .location .UIFormGrid {
+.UISingleContentViewerPortlet .UIFormGrid {
 	width: 100%;
+}
+
+.UISingleContentViewerPortlet .UIFormGrid {
+	widthL 1
 }
 
 .UISingleContentViewerPortlet .UIWizard .UIWCMUserContainer .Icon {
