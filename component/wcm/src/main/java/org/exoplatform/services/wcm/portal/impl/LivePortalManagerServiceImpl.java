@@ -209,7 +209,7 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService, S
         return (Node)childNode.getSession().getItem(portalPath);
       }
     }
-    throw new Exception("The node doen't belong to any site content storage");
+    return null;
   }
 
   public void start() {

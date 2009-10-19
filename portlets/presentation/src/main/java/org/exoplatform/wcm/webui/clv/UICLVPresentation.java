@@ -303,7 +303,11 @@ import org.exoplatform.webui.event.EventListener;
 	  if (node.hasNode("jcr:content")) {
 		  Node content = node.getNode("jcr:content");
 		  if (content.hasProperty("dc:title")) {
-			  title = content.getProperty("dc:title").getValues()[0].getString();
+		    try {
+		      title = content.getProperty("dc:title").getValues()[0].getString();
+		    } catch(Exception ex) {
+		      return null;
+		    }
 		  }
 	  } else if (node.hasProperty("exo:title")) {
 		  title = node.getProperty("exo:title").getValue().getString();
@@ -329,7 +333,11 @@ import org.exoplatform.webui.event.EventListener;
 	  } else if (node.hasNode("jcr:content")) {
 		  Node content = node.getNode("jcr:content");
 		  if (content.hasProperty("dc:description")) {
-			  desc = content.getProperty("dc:description").getValues()[0].getString();
+		    try {
+		      desc = content.getProperty("dc:description").getValues()[0].getString();
+		    } catch(Exception ex) {
+		      return null;
+		    }
 		  }
 	  }
 	  return desc;
