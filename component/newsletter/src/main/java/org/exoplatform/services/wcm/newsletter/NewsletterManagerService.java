@@ -137,6 +137,25 @@ public class NewsletterManagerService {
 		return templateHandler;
 	}
 
+  private List<String> getAllBannedUser(Session session)throws Exception{
+    try{
+      QueryManager queryManager = session.getWorkspace().getQueryManager();
+      String sqlQuery = "select * from " + NewsletterConstant.USER_NODETYPE + " where " + 
+                          NewsletterConstant.USER_PROPERTY_BANNED + "='true'";
+      Query query = queryManager.createQuery(sqlQuery, Query.SQL);
+      QueryResult queryResult = query.execute();
+      NodeIterator nodeIterator = queryResult.getNodes();
+      List<String> listEmails = new ArrayList<String>();
+      while(nodeIterator.hasNext()){
+        listEmails.add(nodeIterator.nextNode().getProperty(NewsletterConstant.USER_PROPERTY_MAIL).getString());
+      }
+      return listEmails;
+    }catch(Exception ex){
+      ex.printStackTrace();
+      return null;
+    }
+  }
+
 	/**
 	 * Gets the manage user handler.
 	 * 
@@ -166,6 +185,8 @@ public class NewsletterManagerService {
 		ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
 		SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
 		Session session = sessionProvider.getSession(workspaceName, manageableRepository);
+		
+		List<String> listBannedEmail = this.getAllBannedUser(session);
 
 		ExoContainer container = ExoContainerContext.getCurrentContainer();
 		MailService mailService = (MailService) container.getComponentInstanceOfType(MailService.class);
@@ -191,7 +212,7 @@ public class NewsletterManagerService {
 			Node subscriptionNode = newsletterEntry.getParent();
 
 			if(subscriptionNode.hasProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER)){
-  			listEmailAddress = convertValuesToArray(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER).getValues());
+  			listEmailAddress = convertValuesToArray(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER).getValues(), listBannedEmail);
 			}
 
 			if(listEmailAddress!= null && listEmailAddress.size() > 0) {
@@ -236,11 +257,12 @@ public class NewsletterManagerService {
 	 * 
 	 * @return the list< string>
 	 */
-	private List<String> convertValuesToArray(Value[] values) {
+	private List<String> convertValuesToArray(Value[] values, List<String> listBannedUser) {
 		List<String> listString = new ArrayList<String>();
 		for (Value value : values) {
 			try {
-				listString.add(value.getString());
+			  if(!listBannedUser.contains(value.getString()))
+			    listString.add(value.getString());
 			} catch(Exception e) {
 			  log.error("Error when convert values to array: ", e.fillInStackTrace());
 			}
