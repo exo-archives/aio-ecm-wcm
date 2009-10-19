@@ -75,9 +75,6 @@ import org.exoplatform.webui.event.EventListener;
 })
 public class UISearchResult extends UIContainer {
 
-	/** The Constant DRAFT. */
-	public static final String				DRAFT							= "draft".intern();
-
 	/** The template path. */
 	private String										templatePath;
 
@@ -336,33 +333,6 @@ public class UISearchResult extends UIContainer {
 			}
 		}
 		return urls;
-	}
-
-	/**
-	 * Show draft button.
-	 * 
-	 * @param node the node
-	 * 
-	 * @return true, if successful
-	 * 
-	 * @throws Exception the exception
-	 */
-	public boolean showDraftButton(Node node) throws Exception {
-		Object obj = Util	.getPortalRequestContext()
-											.getRequest()
-											.getSession()
-											.getAttribute(Utils.TURN_ON_QUICK_EDIT);
-		if (obj == null)
-			return false;
-		String currentState = null;
-		try {
-			currentState = node.getProperty("publication:currentState").getString();
-		} catch (Exception e) {
-			return false;
-		}
-		if (Boolean.parseBoolean(obj.toString()) && DRAFT.equals(currentState))
-			return true;
-		return false;
 	}
 
 	/**

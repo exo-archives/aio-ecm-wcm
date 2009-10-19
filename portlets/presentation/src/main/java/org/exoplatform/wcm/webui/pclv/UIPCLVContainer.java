@@ -210,7 +210,7 @@ public class UIPCLVContainer extends UIContainer {
 		PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
 		PortletPreferences references = portletRequestContext.getRequest().getPreferences();
 		String repository = references.getValue(UIPCLVPortlet.PREFERENCE_REPOSITORY, null);
-		DMSConfiguration dmsConfiguration = Utils.getService(this, DMSConfiguration.class);
+		DMSConfiguration dmsConfiguration = Utils.getService(DMSConfiguration.class);
 		String workspace = dmsConfiguration.getConfig(repository).getSystemWorkspace();
 
 		return new JCRResourceResolver(repository, workspace, "exo:templateFile");
@@ -294,7 +294,7 @@ public class UIPCLVContainer extends UIContainer {
 		if ("".equals(orderBy)) orderBy = "exo:dateCreated";
 		String orderQuery = " ORDER BY ";
 		orderQuery += orderBy + " " + orderType;
-		RepositoryService repositoryService = Utils.getService(this, RepositoryService.class);
+		RepositoryService repositoryService = Utils.getService(RepositoryService.class);
 		ManageableRepository manageableRepository = repositoryService.getRepository(repository);
 		Session session = Utils.getSessionProvider(this).getSession(worksapce, manageableRepository);
 		QueryManager queryManager = session.getWorkspace().getQueryManager();

@@ -36,7 +36,7 @@ public class WCMCoreUtils {
    * 
    * @return the service
    */
-  private static <T> T getService(Class<T> clazz) {
+  public static <T> T getService(Class<T> clazz) {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     return clazz.cast(container.getComponentInstanceOfType(clazz));
   }

@@ -17,19 +17,16 @@
 package org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui;
 
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
-import javax.jcr.Value;
 
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.NodeLocation;
@@ -42,7 +39,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupComponent;
 import org.exoplatform.webui.core.UIPopupWindow;

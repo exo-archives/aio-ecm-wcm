@@ -43,7 +43,6 @@ import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Application;
-import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;

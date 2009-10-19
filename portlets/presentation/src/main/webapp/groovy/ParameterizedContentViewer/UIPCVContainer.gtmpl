@@ -5,17 +5,13 @@
 	import org.exoplatform.portal.webui.util.Util;
 	import org.exoplatform.services.wcm.core.WCMConfigurationService;
 	import org.exoplatform.wcm.webui.pcv.UIPCVPresentation;
+	import org.exoplatform.wcm.webui.Utils;
 
 	def node = uicomponent.getNode();
-	def isDraftRevision = uicomponent.isDraftRevision();
-	def isQuickEditable = uicomponent.isQuickEditAble();
 	def isPrint = uicomponent.getIsPrint();
 	def lblBack = _ctx.appRes("UIContentViewerContainer.action.back");
-
 	def showTitle = uicomponent.isShowTitle();
-	
 	def showDate = uicomponent.isShowDateCreated();
-	
 	def wcmConfigurationService = uicomponent.getApplicationComponent(WCMConfigurationService.class);
 	def parameterizedPageURI = wcmConfigurationService.getRuntimeContextParam("parameterizedPageURI");
 	def printPreviewPageURI = wcmConfigurationService.getRuntimeContextParam("printPageURI");
@@ -49,10 +45,10 @@
 			  		</div>
 				<%
 			}
-			if (isQuickEditable && !isPrint) {
+			if (Utils.isShowQuickEdit(node) && !isPrint) {
 				%><a class="DocumentQuickEdit" href="<%= uicomponent.event("QuickEdit") %>" title="<%= _ctx.appRes("UIContentViewerContainer.label.quickEditTitle") %>"></a><% 	
 			}
-			if (isDraftRevision) { 
+			if (Utils.isShowDraft(node)) { 
 	 			%>
 					<div style="padding: 5px 10px; line-height: 16px; ">
 						[ <span class="DraftIcon" style="padding-left: 20px"><%= _ctx.appRes("UIPresentationContainer.draft") %></span> ]

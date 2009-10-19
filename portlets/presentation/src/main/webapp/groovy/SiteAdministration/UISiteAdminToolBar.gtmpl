@@ -283,7 +283,7 @@
 	<% if (currentRole >= UISiteAdminToolbar.REDACTOR) { %>		
 	
 		<!-- on/off -->				
-		<% if (Utils.turnOnQuickEditable(rcontext, true)) { %> 
+		<% if (Utils.isShowQuickEdit()) { %> 
 			<div class="BoxOnOff SelectOff">
 				<div class="LeftSelect">
 			    	<div class="RightSelect">

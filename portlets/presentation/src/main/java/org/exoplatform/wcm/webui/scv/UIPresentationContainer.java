@@ -16,34 +16,17 @@
  */
 package org.exoplatform.wcm.webui.scv;
 
-import java.security.AccessControlException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
 
-import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
-import javax.jcr.RepositoryException;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.portal.webui.container.UIContainer;
-import org.exoplatform.portal.webui.page.UIPage;
-import org.exoplatform.portal.webui.portal.UIPortal;
-import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
-import org.exoplatform.services.ecm.publication.PublicationPlugin;
-import org.exoplatform.services.ecm.publication.PublicationService;
-import org.exoplatform.services.jcr.access.PermissionType;
-import org.exoplatform.services.jcr.core.ExtendedNode;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.core.WCMService;
-import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
-import org.exoplatform.services.wcm.publication.WCMComposer;
-import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
@@ -70,33 +53,6 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIPresentationContainer extends UIContainer{
 
-  /** The is draft revision. */
-  private boolean isDraftRevision = false;
-  
-  /** The is show draft. */
-  private boolean isShowDraft     = false;
-
-  /** The date formatter. */
-  private DateFormat               dateFormatter = null;
-
-  /**
-   * Checks if is show draft.
-   * 
-   * @return true, if is show draft
-   */
-  public boolean isShowDraft() {
-    return isShowDraft;
-  }
-
-  /**
-   * Sets the show draft.
-   * 
-   * @param isShowDraft the new show draft
-   */
-  public void setShowDraft(boolean isShowDraft) {
-    this.isShowDraft = isShowDraft;
-  }
-
   /**
    * Instantiates a new uI presentation container.
    * 
@@ -104,70 +60,8 @@ public class UIPresentationContainer extends UIContainer{
    */
   public UIPresentationContainer() throws Exception{   	  
     addChild(UIPresentation.class, null, null);
-    dateFormatter = new SimpleDateFormat();
-    ((SimpleDateFormat) dateFormatter).applyPattern("dd.MM.yyyy '|' hh'h'mm");
   }
 
-  /**
-   * Checks if is quick editable.
-   * 
-   * @return true, if is quick editable
-   * 
-   * @throws Exception the exception
-   */
-  public boolean isQuickEditable() throws Exception {
-    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();           
-    return Utils.turnOnQuickEditable(portletRequestContext, true);
-  }
-
-  /**
-   * Checks if is draft revision.
-   * 
-   * @return true, if is draft revision
-   */
-  public boolean isDraftRevision() {
-    return isDraftRevision;
-  }
-
-  /**
-   * Sets the draft revision.
-   * 
-   * @param isDraftRevision the new draft revision
-   */
-  public void setDraftRevision(boolean isDraftRevision) {
-    this.isDraftRevision = isDraftRevision;
-  }
-
-  /**
-   * Checks if is editable.
-   * 
-   * @return true, if is editable
-   * 
-   * @throws Exception the exception
-   */
-  public boolean isEditable() throws Exception {
-	  Node originalNode = null;
-	  try {
-		  originalNode = getReferenceNode();
-	  } catch(ItemNotFoundException ex) {
-		  originalNode =  null;
-	  } catch(RepositoryException rx) {
-		  originalNode =  null;
-	  } catch(Exception rx) {
-		  originalNode =  null;
-	  }
-	  try {
-		  ((ExtendedNode)originalNode).checkPermission(PermissionType.SET_PROPERTY);
-		  return true;
-	  } catch(AccessControlException e) {
-		  return false;
-	  } catch(RepositoryException e) {
-		  return false;
-	  } catch(NullPointerException e) {
-		  return true;
-	  }
-  }
-  
   /**
    * Gets the title.
    * 
@@ -204,48 +98,11 @@ public class UIPresentationContainer extends UIContainer{
   public String getCreatedDate(Node node) throws Exception {
     if (node.hasProperty("exo:dateCreated")) {
       Calendar calendar = node.getProperty("exo:dateCreated").getValue().getDate();
-      return dateFormatter.format(calendar.getTime());
+      return new SimpleDateFormat("dd.MM.yyyy '|' hh'h'mm").format(calendar.getTime());
     }
     return null;
   }
 
-  /**
-   * Gets the reference node.
-   * 
-   * @return the reference node
-   * 
-   * @throws Exception the exception
-   */
-  public Node getReferenceNode() throws Exception {
-    // Get node by reference
-    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
-    PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
-    String repository = preferences.getValue(UISingleContentViewerPortlet.REPOSITORY, null);    
-    String workspace = preferences.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
-    String nodeIdentifier = preferences.getValue(UISingleContentViewerPortlet.IDENTIFIER, null) ;
-    WCMService wcmService = getApplicationComponent(WCMService.class);
-    Node nodeReference = null;
-    try { 
-      nodeReference = wcmService.getReferencedContent(Utils.getSessionProvider(this), repository, workspace, nodeIdentifier);
-    } catch(ItemNotFoundException e) {
-      return null;
-    }
-    PublicationService publicationService = getApplicationComponent(PublicationService.class);
-    String lifecycleName = null;
-    try {
-      lifecycleName = publicationService.getNodeLifecycleName(nodeReference);
-    } catch (NotInPublicationLifecycleException e) {
-      // You shouldn't throw popup message, because some exception often rise here.
-    }
-    if (lifecycleName == null) return nodeReference;
-    PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
-    HashMap<String,Object> context = new HashMap<String, Object>();    
-    context.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
-    
-    // filter node by current mode
-    return publicationPlugin.getNodeView(nodeReference, context);
-  }
-  
   /**
    * Gets the node.
    * 
@@ -253,32 +110,47 @@ public class UIPresentationContainer extends UIContainer{
    * 
    * @throws Exception the exception
    */
-  public Node getNode() throws Exception {
-    Node nodeView = getReferenceNode();
-    
-    // Set draft for template
-    WCMPublicationService wcmPublicationService = getApplicationComponent(WCMPublicationService.class);
-    String contentState = wcmPublicationService.getContentState(nodeView);
-    if (PublicationDefaultStates.DRAFT.equals(contentState)) isDraftRevision = true;
-    else isDraftRevision = false;
-    
-    // set view draft for template
-    if (WCMComposer.MODE_EDIT.equals(Utils.getCurrentMode())) isShowDraft = true;
-    else isShowDraft = false;
-    
-    // Set original node for UIBaseNodePresentation (in case nodeView is a version node)
-    UIPresentation presentation = getChild(UIPresentation.class);
-    if (nodeView != null && nodeView.isNodeType("nt:frozenNode")) {
-      String nodeUUID = nodeView.getProperty("jcr:frozenUuid").getString();
-      presentation.setOriginalNode(nodeView.getSession().getNodeByUUID(nodeUUID));
-      presentation.setNode(nodeView);
-    } else {
-      presentation.setOriginalNode(nodeView);
-      presentation.setNode(nodeView);
-    }
-    
-    return nodeView;
+  public Node getNodeView() {
+  	try {
+  		PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+  		PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
+  		String repository = preferences.getValue(UISingleContentViewerPortlet.REPOSITORY, null);    
+  		String workspace = preferences.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
+  		String nodeIdentifier = preferences.getValue(UISingleContentViewerPortlet.IDENTIFIER, null) ;
+  		WCMService wcmService = getApplicationComponent(WCMService.class);
+  		Node originalNode = wcmService.getReferencedContent(Utils.getSessionProvider(this), repository, workspace, nodeIdentifier);
+  		Node viewNode = Utils.getNodeView(originalNode);
+  		
+  		// Set original node for UIBaseNodePresentation (in case nodeView is a version node)
+  		UIPresentation presentation = getChild(UIPresentation.class);
+  		if (viewNode != null && viewNode.isNodeType("nt:frozenNode")) {
+  			String nodeUUID = viewNode.getProperty("jcr:frozenUuid").getString();
+  			presentation.setOriginalNode(viewNode.getSession().getNodeByUUID(nodeUUID));
+  			presentation.setNode(viewNode);
+  		} else {
+  			presentation.setOriginalNode(viewNode);
+  			presentation.setNode(viewNode);
+  		}
+  		
+  		return viewNode;
+		} catch (Exception e) {
+			return null;
+		}
   } 
+
+  /**
+   * Get the print's page URL
+   * 
+   * @return <code>true</code> if the Quick Print is shown. Otherwise, <code>false</code>
+   */
+  public String getPrintUrl() {
+  	NodeLocation viewNodeLocation = NodeLocation.make(getNodeView());
+		String portalURI = Util.getPortalRequestContext().getPortalURI();
+		WCMConfigurationService wcmConfigurationService = getApplicationComponent(WCMConfigurationService.class);
+		String printPageUrl = wcmConfigurationService.getRuntimeContextParam("printViewerPage");
+		String printUrl = portalURI + printPageUrl + "/" + viewNodeLocation.getRepository() + "/" + viewNodeLocation.getWorkspace() + viewNodeLocation.getPath() + "?isPrint=true";
+		return printUrl;
+  }
   
   /**
    * The listener interface for receiving quickEditAction events.
@@ -309,39 +181,5 @@ public class UIPresentationContainer extends UIContainer{
       maskPopupContainer.activate(portletConfig,popupProperties.getWidth(),popupProperties.getHeight());            
       context.addUIComponentToUpdateByAjax(maskPopupContainer);
     }
-  }
-
-  /**
-   * Checks if the Portlet shows the Quick Print icon.
-   * 
-   * @return <code>true</code> if the Quick Print is shown. Otherwise, <code>false</code>
-   */
-  public boolean isQuickPrint() {
-    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-    PortletRequestContext porletRequestContext = (PortletRequestContext) context;
-    PortletPreferences prefs = porletRequestContext.getRequest().getPreferences();
-    UIPortal uiPortal = Util.getUIPortal();
-    UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
-
-    if(uiPage == null) {
-      return false;
-    }
-    WCMConfigurationService wcmConfigurationService = getApplicationComponent(WCMConfigurationService.class);
-    List<String> ids = org.exoplatform.services.wcm.publication.PublicationUtil
-    	.getListApplicationIdByPage(PortalDataMapper.toPageModel(uiPage), wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET));
-    List<String> newIds = new ArrayList<String>();
-    int length = ids.size();
-
-    for(int i = 0; i < length; i++) {
-      String temp = ids.get(i);
-      String id = temp.substring(temp.lastIndexOf("/") + 1, temp.length());
-      newIds.add(id);
-    }
-
-    if(newIds.contains(porletRequestContext.getWindowId()) 
-        && "true".equals(prefs.getValue("ShowPrintAction", null))) {
-      return true;
-    }
-    return false;
   }
 }

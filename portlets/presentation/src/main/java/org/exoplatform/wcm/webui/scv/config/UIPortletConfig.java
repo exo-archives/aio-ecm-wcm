@@ -89,7 +89,8 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
       return;
     }    
     try{
-      Node node = presentationContainer.getReferenceNode();
+//      Node node = presentationContainer.getReferenceNode();
+    	Node node = presentationContainer.getNodeView();
       if(uiPresentationPortlet.canEditContent(node)) {
         UIQuickCreationWizard uiQuickCreationWizard = addChild(UIQuickCreationWizard.class, null, null);
         UIContentDialogForm contentDialogForm  = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
@@ -141,7 +142,8 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
   private boolean checkNewConfig() throws Exception {
     UIPresentationContainer presentationContainer = getAncestorOfType(UIPresentationContainer.class);
     if (presentationContainer == null) return true;
-    Node content = presentationContainer.getReferenceNode();
+//    Node content = presentationContainer.getReferenceNode();
+    Node content = presentationContainer.getNodeView();
     if (content == null) return true;
     return false;
   }

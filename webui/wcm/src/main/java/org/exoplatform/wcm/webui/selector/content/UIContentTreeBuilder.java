@@ -56,7 +56,8 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIContentTreeBuilder extends UIContainer {
   
-  private String path;
+  @SuppressWarnings("unused")
+	private String path;
 
   /**
    * Instantiates a new uI web content tree builder.

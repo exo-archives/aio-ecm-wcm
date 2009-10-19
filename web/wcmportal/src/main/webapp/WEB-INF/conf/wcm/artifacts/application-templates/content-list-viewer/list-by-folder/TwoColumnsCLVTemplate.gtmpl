@@ -9,6 +9,7 @@
 	 	import javax.jcr.Node;
 		import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 		import org.exoplatform.wcm.webui.clv.UICLVPortlet;
+		import org.exoplatform.wcm.webui.Utils;
 %>
 
 <div id="$uicomponent.id" class="TwoColumnsCLVTemplate">
@@ -45,7 +46,6 @@
 					def isShowTitle = uicomponent.isShowField(UICLVPortlet.SHOW_TITLE);
 					def isShowDate = uicomponent.isShowField(UICLVPortlet.SHOW_DATE_CREATED);
 					def isShowLink = uicomponent.isShowField(UICLVPortlet.SHOW_LINK);
-					def isShowDraft = uicomponent.showDraftButton(viewNode);
 					def isShowReadmore = uicomponent.isShowField(UICLVPortlet.SHOW_READMORE);
 					
 					def itemLink = uicomponent.getURL(viewNode);			
@@ -80,10 +80,15 @@
 													%><div class="Title">$itemName</div><%
 												}
 											}
-											if(isShowDraft) { 
+											if(Utils.isShowDraft(viewNode)) { 
 												%>
 													<span>[ </span>
-													<a class="CaptionDraft"><%= _ctx.appRes("UIContentListPresentationDefault.label.draft") %></a>, <a class="CaptionEdit" href="$contentEditLink"><%= _ctx.appRes("UIContentListPresentationDefault.action.edit") %></a>
+													<a class="CaptionDraft"><%= _ctx.appRes("UIContentListPresentationDefault.label.draft") %></a>
+													<%
+														if(Utils.isShowQuickEdit(viewNode)) {
+															%>, <a class="CaptionEdit" href="$contentEditLink"><%= _ctx.appRes("UIContentListPresentationDefault.action.edit") %></a><%
+														}
+													%>
 													<span> ]</span>
 												<% 
 											}

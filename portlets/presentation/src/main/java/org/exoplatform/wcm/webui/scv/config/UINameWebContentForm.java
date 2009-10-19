@@ -140,7 +140,11 @@ public class UINameWebContentForm extends UIForm {
       if (nodeType.isNodeType("exo:webContent")) {
       	String label = templateService.getTemplateLabel(contentType,repositoryName);
         String resolveLabel = label;
-        resolveLabel = resourceBundle.getString("ContentType.lable."+ StringUtils.deleteWhitespace(resolveLabel));
+        try {
+        	resolveLabel = resourceBundle.getString("ContentType.label."+ StringUtils.deleteWhitespace(resolveLabel));
+        } catch(Exception e) {
+        	// Don't do anything here
+        } 
     		String templatePath = templateService.getTemplatePathByUser(true, contentType, userName, repositoryName);
     		if ((templatePath != null) && (templatePath.length() > 0)) {
     			options.add(new SelectItemOption<String>(label, contentType));

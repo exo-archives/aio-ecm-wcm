@@ -45,7 +45,6 @@ import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.images.RESTImagesRendererService;
-import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.webui.Utils;
@@ -194,28 +193,6 @@ import org.exoplatform.webui.event.EventListener;
       .get(lifecyleName);
     Node viewNode = publicationPlugin.getNodeView(node, context);
     return viewNode;
-  }
-
-  /**
-   * Show draft button.
-   * 
-   * @param node the node
-   * 
-   * @return true, if successful
-   * 
-   * @throws Exception the exception
-   */
-  public boolean showDraftButton(Node node) throws Exception {
-    String currentState = null;
-    if (Boolean.parseBoolean(Utils.getCurrentMode())) return false;
-    try {
-      currentState = node.getProperty("publication:currentState").getString();
-    } catch (Exception e) {
-      // You shouldn't throw popup message, because some exception often rise here.
-    } 
-    if(PublicationDefaultStates.DRAFT.equals(currentState))
-      return true;
-    return false;
   }
 
   /**

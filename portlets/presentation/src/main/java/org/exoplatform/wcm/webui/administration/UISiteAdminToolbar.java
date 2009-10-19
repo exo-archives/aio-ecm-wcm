@@ -40,7 +40,6 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.UIWelcomeComponent;
-import org.exoplatform.portal.webui.application.UIApplication;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.navigation.PageNavigationUtils;

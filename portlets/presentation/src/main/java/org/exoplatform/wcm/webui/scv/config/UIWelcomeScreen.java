@@ -103,7 +103,8 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
     }else {
       UISingleContentViewerPortlet uiPresentationPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);
       UIPresentationContainer presentationContainer = uiPresentationPortlet.getChild(UIPresentationContainer.class);
-      Node node = presentationContainer.getReferenceNode();
+//      Node node = presentationContainer.getReferenceNode();
+      Node node = presentationContainer.getNodeView();
       if(uiPresentationPortlet.canEditContent(node)) {
         option.add(new SelectItemOption<String>(labelEditContent, "EditCurrentWebContent"));
         option.add(new SelectItemOption<String>(labelSelectExistedContent, "SelectExistedContent"));

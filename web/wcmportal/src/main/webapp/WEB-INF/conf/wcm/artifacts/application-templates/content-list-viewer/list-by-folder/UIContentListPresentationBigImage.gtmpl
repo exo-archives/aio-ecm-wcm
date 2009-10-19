@@ -6,6 +6,7 @@
 	import javax.jcr.Node;
 	import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 	import org.exoplatform.wcm.webui.clv.UICLVPortlet;
+	import org.exoplatform.wcm.webui.Utils;
 %>
 
 <div id="$uicomponent.id" class="UIContentListPresentationDefault">
@@ -60,10 +61,15 @@
 												} else { 
 													%>$itemName<% 
 												} 
-												if(isShowDraft) { 
+												if(Utils.isShowDraft(viewNode)) { 
 													%>
 														<span>[ </span>
-														<a class="CaptionDraft"><%=draftLabel%></a>, <a class="CaptionEdit" href="$contentkEdittingLink"><%=editActionLabel%></a>
+														<a class="CaptionDraft"><%=draftLabel%></a>
+														<%
+															if(Utils.isShowQuickEdit(viewNode)) {
+																%>, <a class="CaptionEdit" href="$contentkEdittingLink"><%=editActionLabel%></a><%
+															}
+														%>
 														<span> ]</span>
 													<% 
 												}

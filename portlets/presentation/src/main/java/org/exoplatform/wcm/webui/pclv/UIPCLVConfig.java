@@ -364,7 +364,7 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
      */
     public void execute(Event<UIPCLVConfig> event) throws Exception {
       UIPCLVConfig viewerManagementForm = event.getSource();
-      if (Utils.isQuickEditmode(viewerManagementForm, UIPCLVPortlet.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW)) {
+      if (Utils.isQuickEditMode(viewerManagementForm, UIPCLVPortlet.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW)) {
         Utils.closePopupWindow(viewerManagementForm, UIPCLVPortlet.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW);
       }
       ((PortletRequestContext)event.getRequestContext()).setApplicationMode(PortletMode.VIEW);
@@ -514,7 +514,7 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
       portletPreferences.setValue(UIPCLVPortlet.TARGET_PAGE, targetPage);
       portletPreferences.store();
       
-      if (Utils.isQuickEditmode(uiParameterizedManagementForm, UIPCLVPortlet.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW)) {
+      if (Utils.isQuickEditMode(uiParameterizedManagementForm, UIPCLVPortlet.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW)) {
         Utils.closePopupWindow(uiParameterizedManagementForm, UIPCLVPortlet.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW);
       } else {
         Utils.createPopupMessage(uiParameterizedManagementForm, "UIPCLVConfig.msg.saving-success", null, ApplicationMessage.INFO);

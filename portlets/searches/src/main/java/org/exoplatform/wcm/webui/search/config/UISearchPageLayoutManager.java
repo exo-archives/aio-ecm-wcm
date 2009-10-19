@@ -263,7 +263,7 @@ public class UISearchPageLayoutManager extends UIForm {
 																	searchPageLayoutTemplatePath);
 			portletPreferences.setValue(UIWCMSearchPortlet.ITEMS_PER_PAGE, itemsPerPage);
 			portletPreferences.store();
-			if (Utils.isQuickEditmode(uiSearchLayoutManager, "nothing")) {
+			if (Utils.isQuickEditMode(uiSearchLayoutManager, "nothing")) {
 				uiApp.addMessage(new ApplicationMessage("UIMessageBoard.msg.saving-success",
 																								null,
 																								ApplicationMessage.INFO));

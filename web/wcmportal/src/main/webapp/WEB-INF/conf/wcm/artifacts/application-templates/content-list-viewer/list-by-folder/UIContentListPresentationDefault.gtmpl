@@ -6,6 +6,7 @@
 	import javax.jcr.Node;
 	import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 	import org.exoplatform.wcm.webui.clv.UICLVPortlet;
+	import org.exoplatform.wcm.webui.Utils;
 %>
 <div id="$uicomponent.id" class="UIContentListPresentationDefault">
 	<%	
@@ -32,11 +33,10 @@
 				for (Node node : currentPageData) {
 					def viewNode = uicomponent.getNodeView(node);
 				  if (viewNode == null)	continue;
-					boolean isShowDraft = uicomponent.showDraftButton(viewNode);
 					String itemLink = uicomponent.getURL(viewNode);			
 					String itemName = viewNode.getName();
 					String itemSummary = uicomponent.getSummary(viewNode);
-			    	String itemTitle = uicomponent.getTitle(viewNode);
+			    String itemTitle = uicomponent.getTitle(viewNode);
 					String itemDateCreated = uicomponent.getCreatedDate(viewNode);
 					String itemOwner = uicomponent.getAuthor(viewNode);			
 					String imgSrc = uicomponent.getIllustrativeImage(viewNode);								
@@ -56,10 +56,15 @@
 												} else { 
 													%>$itemName<% 
 												} 
-												if(isShowDraft) { 
+												if(Utils.isShowDraft(viewNode)) { 
 													%>
 														<span>[ </span>
-														<a class="CaptionDraft"><%=draftLabel%></a>, <a class="CaptionEdit" href="$contentkEdittingLink"><%=editActionLabel%></a>
+														<a class="CaptionDraft"><%=draftLabel%></a>
+														<%
+															if(Utils.isShowQuickEdit(viewNode)) {
+																%>, <a class="CaptionEdit" href="$contentkEdittingLink"><%=editActionLabel%></a><%
+															}
+														%>
 														<span> ]</span>
 													<% 
 												}

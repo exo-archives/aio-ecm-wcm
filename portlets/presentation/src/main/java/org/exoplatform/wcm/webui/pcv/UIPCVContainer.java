@@ -382,19 +382,6 @@ public class UIPCVContainer extends UIContainer {
   }
   
   /**
-   * Checks if is quick edit able.
-   * 
-   * @return true, if is quick edit able
-   * 
-   * @throws Exception the exception
-   */
-  public boolean isQuickEditAble() throws Exception {
-    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext
-        .getCurrentInstance();
-    return Utils.turnOnQuickEditable(context, true);
-  }
-
-  /**
    * The listener interface for receiving quickEditAction events. The class
    * that is interested in processing a quickEditAction event implements this
    * interface, and the object created with that class is registered with a

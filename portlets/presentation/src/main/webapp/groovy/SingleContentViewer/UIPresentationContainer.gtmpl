@@ -1,10 +1,10 @@
 <%
 	import javax.jcr.Node;
-	import javax.portlet.PortletPreferences;
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.portal.webui.util.Util;
 	import org.exoplatform.services.wcm.core.WCMConfigurationService;
 	import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
+	import org.exoplatform.wcm.webui.Utils;
 %>
 <div class="$uicomponent.id">
 	<%
@@ -13,88 +13,44 @@
 		def quickEditingBlockId = portletId + "-QuickEditingBlock";
 		rcontext.getJavascriptManager().addJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '");');
 		
-		def node = uicomponent.getNode();
-		def isQuickEditable = uicomponent.isQuickEditable();
-		def isEditable = uicomponent.isEditable();
-		def isDraftRevision = uicomponent.isDraftRevision();
-		def isShowDraft = uicomponent.isShowDraft();
-		def preferences = rcontext.getRequest().getPreferences();
-		def isShowPrint = Boolean.parseBoolean(preferences.getValue("ShowPrintAction", null)); 
-		def isShowVote = Boolean.parseBoolean(preferences.getValue("ShowVote", null)); 
-		def isShowComments = Boolean.parseBoolean(preferences.getValue("ShowComments", null));
-		def isShowTitle = Boolean.parseBoolean(preferences.getValue("ShowTitle", null));
-		
-		
-		
-		if(isQuickEditable && isEditable) {
-			%>
-				<div style="position: relative; height: 0px;" id="<%=quickEditingBlockId%>">
-					<div style="position: absolute; width: 65px; right: 0px; top: 0px">
-						<a class="QuickEdit" href="<%= uicomponent.event("QuickEdit") %>" title="<%= _ctx.appRes("UIPresentationContainer.title") %>"></a>				
-					</div>
-				</div>
-			<%			
-		}
+		def node = uicomponent.getNodeView();
 		if (node != null) {
-			if(isDraftRevision && isShowDraft) {
+			def preferences = rcontext.getRequest().getPreferences();
+			def isShowPrint = Boolean.parseBoolean(preferences.getValue("ShowPrintAction", null)); 
+			def isShowTitle = Boolean.parseBoolean(preferences.getValue("ShowTitle", null));
+			
+			if(Utils.isShowQuickEdit(node)) {
 				%>
-			 		<div style="padding: 5px 10px; line-height: 16px; ">
-			    	[ <span class="DraftIcon" style="padding-left: 20px"><%= _ctx.appRes("UIPresentationContainer.draft") %></span> ]
-			    </div>  
+					<div style="position: relative; height: 0px;" id="<%=quickEditingBlockId%>">
+						<div style="position: absolute; width: 65px; right: 0px; top: 0px">
+							<a class="QuickEdit" href="<%= uicomponent.event("QuickEdit") %>" title="<%= _ctx.appRes("UIPresentationContainer.title") %>"></a>				
+						</div>
+					</div>
+				<%			
+			}
+			if(Utils.isShowDraft(node)) {
+				%>
+					<div style="padding: 5px 10px; line-height: 16px; ">
+						[ <span class="DraftIcon" style="padding-left: 20px"><%= _ctx.appRes("UIPresentationContainer.draft") %></span> ]
+					</div>  
 				<% 
 			}
-			
 			if (isShowTitle) {
-				def title = uicomponent.getTitle(node);
-				def dateCreated = uicomponent.getCreatedDate(node);
 				%>
-				<div class="PCV">
-					<div class="Title">$title</div>
-					<div class="DateAndMail">$dateCreated</div>
-				</div>
+					<div class="PCV">
+						<div class="Title"><%= uicomponent.getTitle(node) %></div>
+						<div class="DateAndMail"><%= uicomponent.getCreatedDate(node) %></div>
+					</div>
 				<%
 			}
-			
-			if (isShowPrint) {
-//			if (isShowPrint || isShowVote || isShowComments) {
-				%><div class="UIOptionBar"><%     
-			}
 			if (isShowPrint) { 
-				String nodeIdentifier = preferences.getValue(UISingleContentViewerPortlet.IDENTIFIER, null) ;
-				if(nodeIdentifier != null) {
-					nodeIdentifier = nodeIdentifier.indexOf("/") == -1 ? "/" + nodeIdentifier : nodeIdentifier;
-				}
-				String repository = preferences.getValue(UISingleContentViewerPortlet.REPOSITORY, null);    
-				String workspace = preferences.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
-				PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
-				String portalURI = portalRequestContext.getPortalURI();
-				WCMConfigurationService wcmConfigurationService = uicomponent.getApplicationComponent(WCMConfigurationService.class);
-				String printUrl = portalURI + wcmConfigurationService.getRuntimeContextParam("printViewerPage") + "/" + repository + "/" + workspace + nodeIdentifier + "?isPrint=true";
-				%><a class="ActionIcon PrintIcon" href="javascript: void(0);" onclick="window.open('$printUrl')" title="<%= _ctx.appRes("UIPresentationContainer.optionBar.print.info");%>"><%= _ctx.appRes("UIPresentationContainer.optionBar.print.label") %></a><% 
-			}
-			/*
-			if (isShowVote) { 
-				%><a class="ActionIcon VoteIcon" href="javascript: void(0);" onclick="javascript:eXo.wcm.vote.showVoteWindow('scvvote');" title="<%= _ctx.appRes("UIPresentationContainer.optionBar.vote.info") %>"><%= _ctx.appRes("UIPresentationContainer.optionBar.vote.label") %></a><%
+				%>
+					<div class="UIOptionBar">
+						<a class="ActionIcon PrintIcon" href="javascript: void(0);" onclick="window.open('<%= uicomponent.getPrintUrl() %>')" title="<%= _ctx.appRes("UIPresentationContainer.optionBar.print.info");%>"><%= _ctx.appRes("UIPresentationContainer.optionBar.print.label") %></a>
+					</div>
+				<% 
 			} 
-			if (isShowComments) { 
-				%><a class="ActionIcon CommentIcon" href="javascript: void(0);" onclick="" title="<%= _ctx.appRes("UIPresentationContainer.optionBar.comment.info") %>"><%= _ctx.appRes("UIPresentationContainer.optionBar.comment.label") %></a><% 
-			} 
-			*/
-			
-			if (isShowPrint) {
-//			if (isShowPrint || isShowVote || isShowComments) {
-				%></div><%     
-			} 
-			%><div id="scvvote" style="display:none;">&nbsp;</div><% 
 			uicomponent.renderChildren();
-		} else {
-			/* We don't display anything stupid in Live mode because the site is visible by every body, that's the rule ;-) */
-		  %>
-		  	<!--div class="Message">
-		  		<span><%= _ctx.appRes("UIMessageBoard.msg.error-nodetype");%></span>
-		  	</div-->
-			<%
 		}
-		
 	%>
 </div>

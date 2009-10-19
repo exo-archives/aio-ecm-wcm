@@ -16,6 +16,10 @@
  */
 package org.exoplatform.wcm.webui;
 
+import java.util.HashMap;
+
+import javax.jcr.Node;
+
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -23,11 +27,19 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
+import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
+import org.exoplatform.services.ecm.publication.PublicationPlugin;
+import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.jcr.access.PermissionType;
+import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.services.security.IdentityRegistry;
 import org.exoplatform.services.security.MembershipEntry;
+import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.WCMComposer;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -55,9 +67,8 @@ public class Utils {
    * @return true, if is edits the portlet in create page wizard
    */
   public static boolean isEditPortletInCreatePageWizard() {
-    UIPortal uiPortal = Util.getUIPortal();
-    UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
-    UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
+    UIPortalApplication portalApplication = Util.getUIPortalApplication();
+    UIMaskWorkspace uiMaskWS = portalApplication.getChildById(UIPortalApplication.UI_MASK_WS_ID);
     // show maskworkpace is being in Portal page edit mode
     if (uiMaskWS.getWindowWidth() > 0 && uiMaskWS.getWindowHeight() < 0)
       return true;
@@ -78,6 +89,29 @@ public class Utils {
   }
 
   /**
+   * Get node view by publication lifecycle and current mode
+   * 
+   * @param originalNode the original node
+   * 
+   * @return the node is got by publication lifecycle and current mode. Return original node if node doesn't join to any lifecycle.  
+   */
+  public static Node getNodeView(Node originalNode) {
+  	try {
+    	UIPortalApplication portalApplication = Util.getUIPortalApplication();
+    	PublicationService publicationService = portalApplication.getApplicationComponent(PublicationService.class);
+    	String lifecycleName = publicationService.getNodeLifecycleName(originalNode);
+      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
+      HashMap<String,Object> context = new HashMap<String, Object>();    
+      context.put(WCMComposer.FILTER_MODE, getCurrentMode());
+      return publicationPlugin.getNodeView(originalNode, context);
+  	} catch (NotInPublicationLifecycleException e) {
+  		return originalNode;
+  	} catch (Exception e) {
+  		return null;
+  	}
+  }
+  
+  /**
    * Can edit current portal.
    * 
    * @param remoteUser the remote user
@@ -87,13 +121,10 @@ public class Utils {
    * @throws Exception the exception
    */
   public static boolean canEditCurrentPortal(String remoteUser) throws Exception {
-    if (remoteUser == null)
-      return false;
-    IdentityRegistry identityRegistry = Util.getUIPortalApplication()
-    .getApplicationComponent(IdentityRegistry.class);
+    if (remoteUser == null) return false;
+    IdentityRegistry identityRegistry = Util.getUIPortalApplication().getApplicationComponent(IdentityRegistry.class);
     Identity identity = identityRegistry.getIdentity(remoteUser);
-    if (identity == null)
-      return false;
+    if (identity == null) return false;
     UIPortal uiPortal = Util.getUIPortal();
     // this code only work for single edit permission
     String editPermission = uiPortal.getEditPermission();
@@ -102,49 +133,65 @@ public class Utils {
   }
 
   /**
-   * Turn on quick editable.
-   * 
-   * @param context the context
-   * @param showAblePref the show able pref
-   * 
-   * @return true, if successful
-   * 
-   * @throws Exception the exception
-   */
-  public static boolean turnOnQuickEditable(PortletRequestContext context, boolean showAblePref) throws Exception {
-    Object obj = Util.getPortalRequestContext().getRequest().getSession().getAttribute(Utils.TURN_ON_QUICK_EDIT);    
-    boolean turnOnFlag = false;
-    if (obj != null) {      
-      turnOnFlag = Boolean.parseBoolean(obj.toString()); 
-    }    
-    if (showAblePref && turnOnFlag) {
-      return true;
-    } 
-    return false;
-  }
-/*
-  *//**
-   * Checks if is live mode.
-   * 
-   * @return true, if is live mode
-   *//*
-  public static boolean isLiveMode() {
-    Object obj = Util.getPortalRequestContext().getRequest().getSession().getAttribute(Utils.TURN_ON_QUICK_EDIT);
-    if(obj == null)
-      return true;          
-    return !Boolean.parseBoolean(obj.toString());     
-  }*/
-  
-  /**
    * Gets the current mode.
    * 
    * @return the current mode
    */
   public static String getCurrentMode() {
-    Object obj = Util.getPortalRequestContext().getRequest().getSession().getAttribute(Utils.TURN_ON_QUICK_EDIT);
-    if(obj == null) return WCMComposer.MODE_LIVE;
-    boolean turnOnQuickEdit = Boolean.parseBoolean(obj.toString()); 
+    Object isQuickEditable = Util.getPortalRequestContext().getRequest().getSession().getAttribute(Utils.TURN_ON_QUICK_EDIT);
+    if(isQuickEditable == null) return WCMComposer.MODE_LIVE;
+    boolean turnOnQuickEdit = Boolean.parseBoolean(isQuickEditable.toString()); 
     return turnOnQuickEdit ? WCMComposer.MODE_EDIT : WCMComposer.MODE_LIVE;
+  }
+
+  /**
+   * Check if the content is draft and in edit mode
+   * 
+   * @return true, if successful
+   */
+  public static boolean isShowDraft(Node content) {
+  	try {
+  		WCMPublicationService wcmPublicationService = WCMCoreUtils.getService(WCMPublicationService.class);
+  		String contentState = wcmPublicationService.getContentState(content);
+  		boolean isDraftContent = false;
+  		if (PublicationDefaultStates.DRAFT.equals(contentState)) isDraftContent = true;
+  		boolean isShowDraft = false;
+  		if (WCMComposer.MODE_EDIT.equals(getCurrentMode())) isShowDraft = true;
+  		return isDraftContent && isShowDraft;
+		} catch (Exception e) {
+			return false;
+		}
+  }
+  
+  /**
+   * Check if the portlet is in edit mode
+   * 
+   * @return true, if successful
+   */
+  public static boolean isShowQuickEdit() {
+  	try {
+  		boolean isEditMode = false;
+  		if (WCMComposer.MODE_EDIT.equals(getCurrentMode())) isEditMode = true;
+  		return isEditMode;
+		} catch (Exception e) {
+			return false;
+		}
+  }
+  
+  /**
+   * Check if the content is editable and in edit mode
+   * 
+   * @return true, if successful
+   */
+  public static boolean isShowQuickEdit(Node content) {
+  	try {
+  		boolean isEditMode = false;
+  		if (WCMComposer.MODE_EDIT.equals(getCurrentMode())) isEditMode = true;
+  		((ExtendedNode) content).checkPermission(PermissionType.SET_PROPERTY);
+  		return isEditMode;
+		} catch (Exception e) {
+			return false;
+		}
   }
   
   /**
@@ -224,7 +271,7 @@ public class Utils {
    * 
    * @return true, if is quick editmode
    */
-  public static boolean isQuickEditmode(UIContainer container, String popupWindowId) {
+  public static boolean isQuickEditMode(UIContainer container, String popupWindowId) {
     UIPopupContainer popupContainer = getPopupContainer(container);
     if (popupContainer == null) return false;
     UIPopupWindow popupWindow = popupContainer.getChildById(popupWindowId);
@@ -268,8 +315,9 @@ public class Utils {
    * 
    * @return the service
    */
-  public static <T> T getService(UIComponent component, Class<T> clazz) {
-  	return clazz.cast(component.getApplicationComponent(clazz));
+  public static <T> T getService(Class<T> clazz) {
+  	UIPortalApplication portalApplication = Util.getUIPortalApplication();
+  	return clazz.cast(portalApplication.getApplicationComponent(clazz));
   }
   
   /**
