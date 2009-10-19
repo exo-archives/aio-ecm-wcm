@@ -64,7 +64,11 @@ if(uicomponent.userCode != null){
 								</div>
 							</div>
 						</div>
-						<div style="float:left;line-height:26px;padding-left:10px"><%=category.getDescription()%></div>
+						<%
+							def categoryDescription = category.getDescription();
+							if (categoryDescription == null) categoryDescription = "";
+						%>
+						<div style="float:left;line-height:26px;padding-left:10px">$categoryDescription</div>
 						<div class="ClearLeft"><span></span></div>
 					</div>
 					<!-- All subscriptions -->
@@ -90,7 +94,13 @@ if(uicomponent.userCode != null){
 										<tr class="$classTr">
 											<td>
 												<div class="SubscriptionTitle"><%=subScription.getTitle()%></div>
-												<div class="SubscriptionDescription"><%=subScription.getDescription()%></div>
+												<div class="SubscriptionDescription">
+												<%
+													def subscriptionDescription = subScription.getDescription();
+													if (subscriptionDescription == null) subscriptionDescription = "";
+												%>
+												$subscriptionDescription
+												</div>
 											</td>
 											<td style="border:none;text-align:center;">
 												<%
