@@ -32,7 +32,6 @@ import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.version.VersionException;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
-import org.exoplatform.ecm.webui.form.DialogFormActionListeners;
 import org.exoplatform.ecm.webui.form.UIDialogForm;
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
 import org.exoplatform.ecm.webui.utils.LockUtil;
@@ -56,7 +55,6 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.event.Event.Phase;
 
 /**
  * Created by The eXo Platform SAS
@@ -69,8 +67,7 @@ import org.exoplatform.webui.event.Event.Phase;
   lifecycle = UIFormLifecycle.class, events = {
     @EventConfig(listeners = UIPCVContentDialog.SaveDraftActionListener.class),
     @EventConfig(listeners = UIPCVContentDialog.FastPublishActionListener.class),
-    @EventConfig(listeners = UIPCVContentDialog.CancelActionListener.class),
-    @EventConfig(listeners = DialogFormActionListeners.RemoveDataActionListener.class, confirm = "DialogFormField.msg.confirm-delete", phase = Phase.DECODE)
+    @EventConfig(listeners = UIPCVContentDialog.CancelActionListener.class)
   }  
 )
 public class UIPCVContentDialog extends UIDialogForm {

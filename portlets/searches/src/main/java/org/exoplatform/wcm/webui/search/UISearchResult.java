@@ -25,9 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
-import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.portlet.PortletPreferences;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -40,8 +38,6 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.search.QueryCriteria;
@@ -49,7 +45,6 @@ import org.exoplatform.services.wcm.search.SiteSearchService;
 import org.exoplatform.services.wcm.search.WCMPaginatedQueryResult;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
-import org.exoplatform.wcm.webui.search.config.access.UIPermissionManager;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -58,8 +53,6 @@ import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
-import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
@@ -67,8 +60,7 @@ import org.exoplatform.webui.event.EventListener;
  */
 @ComponentConfigs( {
 	@ComponentConfig(
-		lifecycle = Lifecycle.class, 
-		events = @EventConfig(listeners = UISearchResult.EditContentActionListener.class)),
+		lifecycle = Lifecycle.class),
 	@ComponentConfig(
 		type = UICustomizeablePaginator.class, 
 		events = @EventConfig(listeners = UICustomizeablePaginator.ShowPageActionListener.class)) 
@@ -544,53 +536,5 @@ public class UISearchResult extends UIContainer {
 	 */
 	public int getNumberOfPage() {
 		return uiPaginator.getPageList().getAvailablePage();
-	}
-
-	/**
-	 * The listener interface for receiving editContentAction events.
-	 * The class that is interested in processing a editContentAction
-	 * event implements this interface, and the object created
-	 * with that class is registered with a component using the
-	 * component's <code>addEditContentActionListener<code> method. When
-	 * the editContentAction event occurs, that object's appropriate
-	 * method is invoked.
-	 * 
-	 * @see EditContentActionEvent
-	 */
-	public static class EditContentActionListener extends EventListener<UISearchResult> {
-		
-		/* (non-Javadoc)
-		 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-		 */
-		public void execute(Event<UISearchResult> event) throws Exception {
-			UISearchResult uiSearchResult = event.getSource();
-			PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-			PortletPreferences preferences = context.getRequest().getPreferences();
-			String path = event.getRequestContext().getRequestParameter(OBJECTID);
-			String repository = preferences.getValue(UIWCMSearchPortlet.REPOSITORY, null);
-			String worksapce = preferences.getValue(UIWCMSearchPortlet.WORKSPACE, null);
-			if (repository == null || worksapce == null)
-				throw new ItemNotFoundException();
-			RepositoryService repositoryService = uiSearchResult.getApplicationComponent(RepositoryService.class);
-			ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-			Session session = Utils.getSessionProvider(uiSearchResult).getSession(worksapce, manageableRepository);
-			Node node = (Node) session.getItem(path);
-
-			UIDocumentDialogForm uiDocumentDialogForm = uiSearchResult.createUIComponent(	UIDocumentDialogForm.class,
-																																										null,
-																																										null);
-			uiDocumentDialogForm.addNew(false);
-			uiDocumentDialogForm.setRepositoryName(repository);
-			uiDocumentDialogForm.setWorkspace(worksapce);
-			uiDocumentDialogForm.setContentType(node.getPrimaryNodeType().getName());
-			uiDocumentDialogForm.setNodePath(node.getPath());
-			uiDocumentDialogForm.setStoredPath(node.getPath());
-			Utils.createPopupWindow(uiSearchResult,
-																			uiDocumentDialogForm,
-																			"UIContentEdittingPopupWindow",
-																			850,
-																			500);
-			uiSearchResult.addChild(UIPermissionManager.class, null, null).setRendered(false);
-		}
 	}
 }
