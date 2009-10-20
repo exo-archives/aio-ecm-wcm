@@ -21,9 +21,6 @@
 			var FCKConfig = window.opener.FCKConfig;
 			var FCK = window.opener.FCK;
 			var eXoPlugin = FCK.eXoPlugin;
-			//var KLang = null;
-			//eXoPlugin.userLanguage = FCK.Language.GetActiveLanguage() || "en";
-			//eXoPlugin.loadScript(window, "lang/" + eXoPlugin.userLanguage + ".js");
 		</script>
 </head>
 <body>
@@ -356,7 +353,7 @@ var eXp = {
 		disableCreatingFolder: getUrlParam("disableCreatingFolder") || false,
 		command: {
 //			init: "getFoldersAndFiles",
-// 			need todo remove userId
+// 			need todo remove userId and use userId dynamic
 			init: "&workspaceName=collaboration&userId=root",
 			uploadFile: "uploadFile/upload",
 			controlUpload: "uploadFile/control",
@@ -369,34 +366,8 @@ var eXp = {
 			data: {},
 			driverName: "",
 			strConnection: "",
-			rootFolder: ""
-		},
-		buildParam: function() {
-			if (arguments.length < 1) return null;
-			var arr = [];
-			for (var i = 0; i < arguments.length; ++i) {
-				arr.push(arguments[i]);
-			}
-			arr.push("language=" + eXoPlugin.userLanguage);
-			return arr.join("&");
-		},
-		getNodes: function(DomX, nodeName) {
-			if (!DomX || !nodeName) return null;
-			var node = DomX.getElementsByTagName(nodeName);
-			if (node.length) return node;
-			else return null;
-		},
-		getSingleNode: function(DomX, nodeName) {
-			var nodes = this.getNodes(DomX, nodeName);
-			if (nodes[0]) return nodes[0];
-			else return null;
-		},
-		getNodeValue: function(node, name) {
-			if (node || name !== undefined) {
-				var attribute = node.attributes.getNamedItem(name);
-				if (attribute) return attribute.value;
-			}
-			return new String();
+			rootFolder: "",
+			eventNode: ""
 		},
 		getID: function() {
 			return Math.random().toString().substring(2);
@@ -411,22 +382,7 @@ var eXp = {
 		
 		sendRequestUpload: function(connector) {
 			eXoWCM.PluginUtils.request(connector);
-		},
-		
-		sendRequestSave: function(connector) {
-			eXoWCM.PluginUtils.request(connector);
 		}
-	}
-
-	function buildXParam() {
-		var repositoryName = FCKConfig.repositoryName;
-		var workspaceName = FCKConfig.workspaceName;
-		var jcrPath = FCKConfig.jcrPath;
-		var param = '';
-		if (repositoryName !== undefined) param += 'repositoryName=' + repositoryName;
-		if (workspaceName !== undefined) param += '&workspaceName=' + workspaceName;
-		if (jcrPath !== undefined) param += "&jcrPath=" + jcrPath;		
-		return param;
 	}
 
 	function requestInit() {
@@ -435,6 +391,7 @@ var eXp = {
 	}
 
 	function getDir(currentNode, event) {
+		eXp.store.eventNode = event;
 		var strConnector = eXp.connector;
 		var currentFolder;
 		var driverName;

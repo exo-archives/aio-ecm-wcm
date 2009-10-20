@@ -123,7 +123,6 @@ PluginUtils.prototype.renderSubTrees = function(currentNode, event, connector) {
 		}
 	}
 	eXoWCM.PluginUtils.listFiles(fileList);
-	
 };
 
 PluginUtils.prototype.actionColExp = function(objNode) {
@@ -186,6 +185,7 @@ PluginUtils.prototype.getClazzIcon = function(nodeType) {
 PluginUtils.prototype.renderBreadcrumbs = function(currentNode) {
 	if(!currentNode) return;
 	if(typeof(currentNode) == 'string') currentNode = document.getElementById(currentNode);
+	eXp.store.currentNode = currentNode;
 	var breadscrumbsContainer = document.getElementById("BreadcumbsContainer");
 	breadscrumbsContainer.innerHTML = '';
 	var beforeNode = null;
@@ -210,12 +210,12 @@ PluginUtils.prototype.renderBreadcrumbs = function(currentNode) {
 			}
 			beforeNode = tmpNode;
 		}
+		
 		currentNode = currentNode.parentNode;
 		if(currentNode != null && currentNode.className == 'ChildrenContainer'){
 			currentNode = eXo.core.DOMUtil.findPreviousElementByTagName(currentNode, 'div');
 			currentNode = currentNode.getElementsByTagName('div')[0].getElementsByTagName('a')[0];
 		}
-		
 	}
 };
 
@@ -322,8 +322,8 @@ PluginUtils.prototype.showSubMenuSettings = function(obj) {
 };
 
 PluginUtils.prototype.changeFilter = function() {
-	var breadscrumbsContainer = document.getElementById("BreadcumbsContainer");		
-	if(breadscrumbsContainer)	breadscrumbsContainer.innerHTML = '<a class="Nomal" title="Home" href="#">Home</a>';
+	//var breadscrumbsContainer = document.getElementById("BreadcumbsContainer");		
+	//if(breadscrumbsContainer)	breadscrumbsContainer.innerHTML = '<a class="Nomal" title="Home" href="#">Home</a>';
 	var rightWS = document.getElementById('RightWorkspace');
 	var tblRWS	= eXo.core.DOMUtil.findDescendantsByTagName(rightWS, "table")[0];
 	var rowsRWS = eXo.core.DOMUtil.findDescendantsByTagName(tblRWS, "tr");
@@ -332,7 +332,7 @@ PluginUtils.prototype.changeFilter = function() {
 			if(i > 0) tblRWS.deleteRow(rowsRWS[i].rowIndex);
 		}
 	} 
-	requestInit();
+	getDir(eXp.store.currentNode, eXp.store.eventNode);
 }
 if(!window.eXoWCM) eXoWCM = new Object();
 eXoWCM.PluginUtils = new PluginUtils();

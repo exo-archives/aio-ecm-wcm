@@ -81,6 +81,20 @@ UploadForm.prototype.removeMask = function() {
 	eXo.core.UIMaskLayer.removeMask(document.getElementById("MaskLayer")) ;
 };
 
+// used to instead of build string xmlhttp reuqest
+UploadForm.prototype.getStringParam = function() {
+	var repositoryName = FCKConfig.repositoryName;
+	var workspaceName  = FCKConfig.workspaceName;
+	var jcrPath = FCKConfig.jcrPath;
+	var driverName = eXp.store.driverName;
+	var strParam = '';
+	if (repositoryName !== undefined) strParam += "repositoryName="+ repositoryName;
+	if (workspaceName !== undefined)  strParam += "&workspaceName=" + workspaceName;
+	if(driverName) strParam += "&driverName="+ driverName;
+	strParam +="&currentFolder="+eXp.store.currentFolder+"&currentPortal="+eXoPlugin.portalName+"&jcrPath="+jcrPath;
+	return strParam;
+};
+
 UploadForm.prototype.uploadFile = function() {
 	eXoWCM.UploadForm.uploadId = eXp.getID();
 	var popupContainer = document.getElementById("PopupContainer");
@@ -259,7 +273,7 @@ UploadForm.prototype.updateFiles = function(nodeId) {
 	currentFolder = node.getAttribute('currentfolder');
 	driverName = eXp.store.driverName;
 	var strReplace 	= "getFoldersAndFiles?driverName="+driverName+"&currentFolder="+currentFolder+"&";	
-	strConnector 		= strConnector.replace("getDrivers?",strReplace);
+	strConnector 	= strConnector.replace("getDrivers?",strReplace);
 	var filter = '';
 	var dropdownlist = document.getElementById("Pinter");
 	if(dropdownlist) filter = dropdownlist.options[dropdownlist.selectedIndex].value;
