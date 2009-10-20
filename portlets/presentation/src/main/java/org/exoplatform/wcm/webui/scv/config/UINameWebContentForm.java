@@ -145,10 +145,12 @@ public class UINameWebContentForm extends UIForm {
         } catch(Exception e) {
         	// Don't do anything here
         } 
-    		String templatePath = templateService.getTemplatePathByUser(true, contentType, userName, repositoryName);
-    		if ((templatePath != null) && (templatePath.length() > 0)) {
-    			options.add(new SelectItemOption<String>(label, contentType));
-    		}
+    		try{
+    		  String templatePath = templateService.getTemplatePathByUser(true, contentType, userName, repositoryName);
+    		  if ((templatePath != null) && (templatePath.length() > 0)) {
+    		    options.add(new SelectItemOption<String>(label, contentType));
+    		  }
+    		}catch(Exception ex){continue;}
       }
     }    
     Collections.sort(options, new ItemOptionNameComparator()) ;
