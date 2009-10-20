@@ -500,7 +500,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
       if (child.isNodeType(FCKUtils.EXO_HIDDENABLE))
         continue;
 
-      if (child.isNodeType(NodetypeConstant.EXO_WEBCONTENT)) {
+      if (child.isNodeType(NodetypeConstant.EXO_WEBCONTENT) && FILE_TYPE_WEBCONTENT.equals(filterBy)) {
       	Element folder = folderHandler.createFolderElement(document, child, child.getPrimaryNodeType().getName());
       	folders.appendChild(folder);
       	Element file = FCKFileHandler.createFileElement(document, child, FILE_TYPE_WEBCONTENT);
