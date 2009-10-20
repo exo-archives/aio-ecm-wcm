@@ -254,6 +254,7 @@ PluginUtils.prototype.actionBreadcrumbs = function(nodeId) {
 			if(i > 0) tblRWS.deleteRow(rowsRWS[i].rowIndex);
 		}
 	} 
+	eXoWCM.PluginUtils.listFiles();
 };
 
 PluginUtils.prototype.insertContent = function(objContent) {
@@ -332,6 +333,7 @@ PluginUtils.prototype.changeFilter = function() {
 			if(i > 0) tblRWS.deleteRow(rowsRWS[i].rowIndex);
 		}
 	} 
+	eXoWCM.PluginUtils.listFiles();
 	getDir(eXp.store.currentNode, eXp.store.eventNode);
 }
 if(!window.eXoWCM) eXoWCM = new Object();
