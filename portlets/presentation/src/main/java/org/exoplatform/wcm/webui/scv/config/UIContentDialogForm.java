@@ -196,11 +196,9 @@ public class UIContentDialogForm extends UIDialogForm {
   /* (non-Javadoc)
    * @see org.exoplatform.webui.core.UIComponent#getTemplateResourceResolver(org.exoplatform.webui.application.WebuiRequestContext, java.lang.String)
    */
-  @SuppressWarnings("unused")
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     try{
       if (resourceResolver == null) {
-        RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
         DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
         String workspace = dmsConfiguration.getConfig(this.repositoryName).getSystemWorkspace();
         resourceResolver = new JCRResourceResolver(this.repositoryName, workspace, TemplateService.EXO_TEMPLATE_FILE_PROP);

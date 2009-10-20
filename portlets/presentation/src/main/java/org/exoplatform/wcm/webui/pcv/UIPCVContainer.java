@@ -418,6 +418,7 @@ public class UIPCVContainer extends UIContainer {
       uiDocumentDialogForm.setNodePath(nodePath);
       uiDocumentDialogForm.setStoredPath(nodePath);
       uiDocumentDialogForm.addNew(false);
+      uiDocumentDialogForm.resetProperties();
       Utils.createPopupWindow(uiContentViewerContainer, uiDocumentDialogForm, "UIDocumentFormPopupWindow", 800, 600);
     }
   }

@@ -627,6 +627,8 @@ import org.exoplatform.webui.event.EventListener;
       uiDocumentDialogForm.setNodePath(nodePath);
       uiDocumentDialogForm.setStoredPath(nodePath);
       uiDocumentDialogForm.addNew(false);
+      uiDocumentDialogForm.resetProperties();
+      uiDocumentDialogForm.setRendered(true);
       Utils.createPopupWindow(contentListPresentation, uiDocumentDialogForm, "UIDocumentDialogFormPopupWindow", 800, 600);
     }
   }

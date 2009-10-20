@@ -5,7 +5,7 @@
 	def String htmlWYSIWYGFormId = "htmlData[" + uicomponent.hashCode() + "]";
 	def String cssFormId = "ContentCSS[" + uicomponent.hashCode() + "]";
 	def String jsFormId = "ContentJS[" + uicomponent.hashCode() + "]";
-	rcontext.getJavascriptManager().importJavascript('eXo.wcm.Util' , "/eXoWCMResources/javascript");
+	//rcontext.getJavascriptManager().importJavascript('eXo.wcm.Util' , "/eXoWCMResources/javascript");
 	rcontext.getJavascriptManager().addOnLoadJavascript("wcm.insertCSSFromTextArea2FCK('" + htmlWYSIWYGFormId + "', '" + cssFormId + "')");
 	
 	private void setUploadFields() {
@@ -121,6 +121,7 @@
 										<div class="WebContentMain"><%=_ctx.appRes("WebContent.dialog.label.WebContentHtml")%></div>
 					 				</td>
 					  				<td class="FieldComponent">
+					  				<script>var yyy = 0; while (yyy < 10000) {yyy++;}</script>
 										<%
 											String[] htmlHiddenField1 = ["jcrPath=/node/default.html", "nodetype=nt:file", "defaultValues=default.html", "mixintype=exo:htmlFile"];
 					   						String[] htmlHiddenField2 = ["jcrPath=/node/default.html/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"]; 

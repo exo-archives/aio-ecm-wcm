@@ -245,10 +245,10 @@ public class Utils {
     UIPopupContainer popupContainer = getPopupContainer(container);
     popupContainer.removeChildById(popupWindowId);
     UIPopupWindow popupWindow = popupContainer.addChild(UIPopupWindow.class, null, popupWindowId);
-    popupWindow.setShowMask(true);
     popupWindow.setUIComponent(component);
     popupWindow.setWindowSize(width, height);
     popupWindow.setShow(true);
+    popupWindow.setRendered(true);
     popupWindow.setResizable(true);
     WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
     requestContext.addUIComponentToUpdateByAjax(popupContainer);
