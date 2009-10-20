@@ -194,6 +194,7 @@ public class NewsletterManageUserHandler {
       userNode.setProperty(NewsletterConstant.USER_PROPERTY_MAIL, userMail);
       userNode.setProperty(NewsletterConstant.USER_PROPERTY_BANNED, false);
       userNode.setProperty(NewsletterConstant.USER_PROPERTY_VALIDATION_CODE, "PublicUser" + IdGenerator.generate() );
+      userNode.setProperty(NewsletterConstant.USER_PROPERTY_IS_CONFIRM, false);
       session.save();
     } catch (Exception e) {
       log.error("Add user " + userMail + " failed because of ", e.fillInStackTrace());

@@ -137,11 +137,11 @@ public class NewsletterManagerService {
 		return templateHandler;
 	}
 
-  private List<String> getAllBannedUser(Session session)throws Exception{
+  public List<String> getAllBannedUser(Session session)throws Exception{
     try{
       QueryManager queryManager = session.getWorkspace().getQueryManager();
       String sqlQuery = "select * from " + NewsletterConstant.USER_NODETYPE + " where " + 
-                          NewsletterConstant.USER_PROPERTY_BANNED + "='true'";
+                          NewsletterConstant.USER_PROPERTY_BANNED + "='true' or " + NewsletterConstant.USER_PROPERTY_IS_CONFIRM + "='false'";
       Query query = queryManager.createQuery(sqlQuery, Query.SQL);
       QueryResult queryResult = query.execute();
       NodeIterator nodeIterator = queryResult.getNodes();
@@ -151,7 +151,7 @@ public class NewsletterManagerService {
       }
       return listEmails;
     }catch(Exception ex){
-      ex.printStackTrace();
+      log.error("Error when convert values to array: ", ex.fillInStackTrace());
       return null;
     }
   }
@@ -259,10 +259,11 @@ public class NewsletterManagerService {
 	 */
 	private List<String> convertValuesToArray(Value[] values, List<String> listBannedUser) {
 		List<String> listString = new ArrayList<String>();
+		String email="";
 		for (Value value : values) {
 			try {
-			  if(!listBannedUser.contains(value.getString()))
-			    listString.add(value.getString());
+			  email = value.getString();
+			  if(!listBannedUser.contains(email)) listString.add(email);
 			} catch(Exception e) {
 			  log.error("Error when convert values to array: ", e.fillInStackTrace());
 			}

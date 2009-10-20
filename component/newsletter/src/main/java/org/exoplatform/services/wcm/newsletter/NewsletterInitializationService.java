@@ -115,10 +115,9 @@ public class NewsletterInitializationService implements Startable {
             subscriptionHandler.add(sessionProvider, portalName, subscriptionConfig);
           }
 
-          Node userNode = null;
           NewsletterManageUserHandler manageUserHandler = newsletterManagerService.getManageUserHandler();
           for (NewsletterUserConfig userConfig : userConfigs) {
-            userNode = manageUserHandler.add(sessionProvider, portalName, userConfig.getMail());
+            manageUserHandler.add(sessionProvider, portalName, userConfig.getMail());
           }
           ExtendedNode userFolderNode = (ExtendedNode)((Node)session.getItem(NewsletterConstant.generateUserPath(portalName)));
           if(userFolderNode.canAddMixin("exo:privilegeable")) 

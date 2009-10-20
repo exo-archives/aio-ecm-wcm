@@ -94,6 +94,8 @@ public class NewsletterConstant {
   /** The Constant USER_PROPERTY_VALIDATION_CODE. */
   public static final String USER_PROPERTY_VALIDATION_CODE       = "exo:newsletterUserValidationCode";
   
+  public static final String USER_PROPERTY_IS_CONFIRM            = "exo:newsletterUserConfirm";
+  
   // Entry status
   /** The Constant STATUS_DRAFT. */
   public static final String STATUS_DRAFT                        = "draft";

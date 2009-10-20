@@ -245,6 +245,8 @@ public class NewsletterPublicUserHandler {
     QueryResult queryResult = query.execute();
     NodeIterator nodeIterator = queryResult.getNodes();
     while(nodeIterator.hasNext()){
+      nodeIterator.nextNode().setProperty(NewsletterConstant.USER_PROPERTY_IS_CONFIRM, true);
+      session.save();
       return true;
     }
     return false;

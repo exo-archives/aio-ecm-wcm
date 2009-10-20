@@ -260,12 +260,13 @@ public class UINewsletterEntryForm extends UIDialogForm {
         List<String> listEmailAddress = new ArrayList<String>();
         String receiver = "";
         Node subscriptionNode = newsletterNode.getParent();
-        
+        NewsletterManagerService newsletterManagerService = newsletterEntryForm.getApplicationComponent(NewsletterManagerService.class);
         if(subscriptionNode.hasProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER)){
+          List<String> listEmailBanned = newsletterManagerService.getAllBannedUser(subscriptionNode.getSession());
           Property subscribedUserProperty = subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER);
           for(Value value : subscribedUserProperty.getValues()){
             try {
-              listEmailAddress.add(value.getString());
+              if(!listEmailBanned.contains(value.getString()))listEmailAddress.add(value.getString());
             } catch (Exception e) {
               Utils.createPopupMessage(newsletterEntryForm, "UINewsletterEntryForm.msg.add-email-newsletter", null, ApplicationMessage.ERROR);
             }
@@ -279,7 +280,6 @@ public class UINewsletterEntryForm extends UIDialogForm {
           }
           message.setBCC(receiver);
           message.setSubject(newsletterNode.getName()) ;
-          NewsletterManagerService newsletterManagerService = newsletterEntryForm.getApplicationComponent(NewsletterManagerService.class); 
           message.setBody(newsletterManagerService.getEntryHandler().getContent(Utils.getSessionProvider(newsletterEntryForm), newsletterNode)) ;
           message.setMimeType("text/html") ;
           try {
