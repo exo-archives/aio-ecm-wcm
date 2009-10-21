@@ -24,21 +24,6 @@ package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
  */
 public interface StageAndVersionPublicationConstant {
   
-  /** The Constant ENROLLED_STATE. */
-  public static final String ENROLLED_STATE = "enrolled".intern(); 
-  
-  /** The Constant DRAFT_STATE. */
-  public static final String DRAFT_STATE = "draft".intern();
-  
-  /** The Constant AWAITING. */
-  public static final String AWAITING = "awaiting".intern();
-  
-  /** The Constant PUBLISHED_STATE. */
-  public static final String PUBLISHED_STATE = "published".intern();
-  
-  /** The Constant OBSOLETE_STATE. */
-  public static final String OBSOLETE_STATE = "obsolete".intern();
-  
   /** The Constant PUBLICATION_LIFECYCLE_TYPE. */
   public static final String PUBLICATION_LIFECYCLE_TYPE = "publication:stateAndVersionBasedPublication".intern();
   

@@ -217,10 +217,11 @@ public class UIPCVContainer extends UIContainer {
     if (node == null) node = getNodeByCategory(parameters);
     if (node == null) return null;
 
+    boolean isDocumentType = false;
+    if (node.isNodeType("nt:frozenNode")) isDocumentType = true; 
     // check node is a document node
     TemplateService templateService = getApplicationComponent(TemplateService.class);
     List<String> documentTypes = templateService.getDocumentTemplates(this.getRepository());
-    boolean isDocumentType = false;
     for (String documentType : documentTypes) {
       if (node.isNodeType(documentType)) {
         isDocumentType = true;
@@ -248,7 +249,7 @@ public class UIPCVContainer extends UIContainer {
     }
     
     // set node view for UIPCVPresentation
-    if (nodeView != null && nodeView.isNodeType("nt:frozenNode")) {
+    if (nodeView != null && node.isNodeType("nt:frozenNode")) {
       String nodeUUID = nodeView.getProperty("jcr:frozenUuid").getString();
       uiContentViewer.setOrginalNode(node.getSession().getNodeByUUID(nodeUUID));
       uiContentViewer.setNode(nodeView);

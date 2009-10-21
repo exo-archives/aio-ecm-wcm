@@ -34,6 +34,7 @@ import org.exoplatform.ecm.webui.utils.JCRExceptionManager;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.wcm.core.NodeLocation;
+import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.config.VersionData;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -399,7 +400,7 @@ public class UIPublicationPanel extends UIForm {
         context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME,currentRevision.getName()); 
       }      
       try {
-        publicationPlugin.changeState(currentNode,StageAndVersionPublicationConstant.DRAFT_STATE,context);
+        publicationPlugin.changeState(currentNode,PublicationDefaultStates.DRAFT,context);
         publicationPanel.updatePanel();
       } catch (Exception e) {
         UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
@@ -437,7 +438,7 @@ public class UIPublicationPanel extends UIForm {
         context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME,currentRevision.getName()); 
       }
       try {
-        publicationPlugin.changeState(currentNode,StageAndVersionPublicationConstant.PUBLISHED_STATE,context); 
+        publicationPlugin.changeState(currentNode,PublicationDefaultStates.PUBLISHED,context); 
         publicationPanel.updatePanel();
       } catch (Exception e) {        
         UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
@@ -475,7 +476,7 @@ public class UIPublicationPanel extends UIForm {
         context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME,currentRevision.getName()); 
       }
       try {
-        publicationPlugin.changeState(currentNode,StageAndVersionPublicationConstant.OBSOLETE_STATE,context); 
+        publicationPlugin.changeState(currentNode,PublicationDefaultStates.OBSOLETE,context); 
         publicationPanel.updatePanel();
       } catch (Exception e) {
         UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
@@ -554,7 +555,7 @@ public class UIPublicationPanel extends UIForm {
         PublicationService publicationService = publicationPanel.getApplicationComponent(PublicationService.class);
         PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
         HashMap<String,String> context = new HashMap<String,String>();
-        publicationPlugin.changeState(currentNode,StageAndVersionPublicationConstant.ENROLLED_STATE,context);
+        publicationPlugin.changeState(currentNode,PublicationDefaultStates.ENROLLED,context);
         publicationPanel.updatePanel();
       } catch (Exception e) {
         UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);

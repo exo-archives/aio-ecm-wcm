@@ -32,6 +32,7 @@ import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
+import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
@@ -172,7 +173,7 @@ public class TestSearchService extends BaseWCMTestCase {
         wcmPublicationService.publishContentSCV(webContentNode, page, parentNode.getName());
         HashMap<String, String> context = new HashMap<String, String>();
         context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, webContentNode.getName());
-        publicationPlugin.changeState(webContentNode, StageAndVersionPublicationConstant.PUBLISHED_STATE, context);
+        publicationPlugin.changeState(webContentNode, PublicationDefaultStates.PUBLISHED, context);
       }catch(Exception ex){
         ex.printStackTrace();
       }
@@ -187,7 +188,7 @@ public class TestSearchService extends BaseWCMTestCase {
         wcmPublicationService.publishContentSCV(webContentNode, page, parentNode.getName());
         HashMap<String, String> context = new HashMap<String, String>();
         context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, webContentNode.getName());
-        publicationPlugin.changeState(webContentNode, StageAndVersionPublicationConstant.DRAFT_STATE, context);
+        publicationPlugin.changeState(webContentNode, PublicationDefaultStates.DRAFT, context);
       }catch(Exception ex){
         ex.printStackTrace();
       }

@@ -55,12 +55,14 @@ import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.PublicationUtil;
 import org.exoplatform.services.wcm.publication.WCMComposer;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.config.VersionData;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.config.VersionLog;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationContainer;
 import org.exoplatform.services.wcm.publication.listener.navigation.NavigationEventListenerDelegate;
 import org.exoplatform.services.wcm.publication.listener.page.PageEventListenerDelegate;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.form.UIForm;
 
@@ -122,14 +124,14 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     Map<String, VersionData> revisionsMap = getRevisionData(node);
     VersionLog versionLog = null;
     ValueFactory valueFactory = node.getSession().getValueFactory();
-    if(StageAndVersionPublicationConstant.ENROLLED_STATE.equalsIgnoreCase(newState)) {
+    if(PublicationDefaultStates.ENROLLED.equalsIgnoreCase(newState)) {
       versionLog = new VersionLog(logItemName,newState,node.getSession().getUserID(),GregorianCalendar.getInstance(),StageAndVersionPublicationConstant.ENROLLED_TO_LIFECYCLE);            
       node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE,newState);
       VersionData revisionData = new VersionData(node.getUUID(),newState,userId);
       revisionsMap.put(node.getUUID(),revisionData);
       addRevisionData(node,revisionsMap.values());      
       addLog(node,versionLog);
-    } else if(StageAndVersionPublicationConstant.DRAFT_STATE.equalsIgnoreCase(newState)) {
+    } else if(PublicationDefaultStates.DRAFT.equalsIgnoreCase(newState)) {
       node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE,newState);
       versionLog = new VersionLog(logItemName,newState,node.getSession().getUserID(),GregorianCalendar.getInstance(),StageAndVersionPublicationConstant.CHANGE_TO_DRAFT);      
       addLog(node,versionLog);      
@@ -142,7 +144,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
       }
       revisionsMap.put(node.getUUID(),versionData);
       addRevisionData(node,revisionsMap.values());
-    } else if(StageAndVersionPublicationConstant.PUBLISHED_STATE.equals(newState)) {      
+    } else if(PublicationDefaultStates.PUBLISHED.equals(newState)) {      
       if (!node.isCheckedOut()) {
         node.checkout();
       }
@@ -154,52 +156,52 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
 		    VersionData versionData = revisionsMap.get(oldLiveRevision.getUUID());
 		    if(versionData != null) {
 		      versionData.setAuthor(userId);
-		      versionData.setState(StageAndVersionPublicationConstant.OBSOLETE_STATE);
+		      versionData.setState(PublicationDefaultStates.OBSOLETE);
 		    }else {
-		      versionData = new VersionData(oldLiveRevision.getUUID(),StageAndVersionPublicationConstant.OBSOLETE_STATE,userId);
+		      versionData = new VersionData(oldLiveRevision.getUUID(), PublicationDefaultStates.OBSOLETE, userId);
 		    }        
 		    revisionsMap.put(oldLiveRevision.getUUID(),versionData);
-		    versionLog = new VersionLog(oldLiveRevision.getName(),StageAndVersionPublicationConstant.OBSOLETE_STATE, userId, new GregorianCalendar(),StageAndVersionPublicationConstant.CHANGE_TO_OBSOLETE);
+		    versionLog = new VersionLog(oldLiveRevision.getName(), PublicationDefaultStates.OBSOLETE, userId, new GregorianCalendar(), StageAndVersionPublicationConstant.CHANGE_TO_OBSOLETE);
 		    addLog(node,versionLog);
 		  }
 		  versionLog = new VersionLog(liveVersion.getName(),newState,userId,new GregorianCalendar(),StageAndVersionPublicationConstant.CHANGE_TO_LIVE);
 		  addLog(node,versionLog);      
 		  //change base version to published state
-		  node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE,StageAndVersionPublicationConstant.PUBLISHED_STATE);
+		  node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE, PublicationDefaultStates.PUBLISHED);
 		  VersionData editableRevision = revisionsMap.get(node.getUUID());
 		  if(editableRevision != null) {
 		    editableRevision.setAuthor(userId);
-		    editableRevision.setState(StageAndVersionPublicationConstant.ENROLLED_STATE);
+		    editableRevision.setState(PublicationDefaultStates.ENROLLED);
 		  }else {
-		    editableRevision = new VersionData(node.getUUID(),StageAndVersionPublicationConstant.ENROLLED_STATE,userId);
+		    editableRevision = new VersionData(node.getUUID(), PublicationDefaultStates.ENROLLED, userId);
 		  }
 		  revisionsMap.put(node.getUUID(),editableRevision);
-		  versionLog = new VersionLog(node.getBaseVersion().getName(),StageAndVersionPublicationConstant.DRAFT_STATE,userId, new GregorianCalendar(),StageAndVersionPublicationConstant.ENROLLED_TO_LIFECYCLE);
+		  versionLog = new VersionLog(node.getBaseVersion().getName(), PublicationDefaultStates.DRAFT,userId, new GregorianCalendar(),StageAndVersionPublicationConstant.ENROLLED_TO_LIFECYCLE);
 		  //Change all awaiting, live revision to obsolete      
 		  Value  liveVersionValue = valueFactory.createValue(liveVersion);
 		  node.setProperty(StageAndVersionPublicationConstant.LIVE_REVISION_PROP,liveVersionValue);
 		  node.setProperty(StageAndVersionPublicationConstant.LIVE_DATE_PROP,new GregorianCalendar());
-		  VersionData liveRevisionData = new VersionData(liveVersion.getUUID(),StageAndVersionPublicationConstant.PUBLISHED_STATE,userId);
+		  VersionData liveRevisionData = new VersionData(liveVersion.getUUID(), PublicationDefaultStates.PUBLISHED,userId);
 		  revisionsMap.put(liveVersion.getUUID(),liveRevisionData);
 		  addRevisionData(node,revisionsMap.values());
-    } else if(StageAndVersionPublicationConstant.OBSOLETE_STATE.equalsIgnoreCase(newState)) {      
+    } else if(PublicationDefaultStates.OBSOLETE.equalsIgnoreCase(newState)) {      
       Value value = valueFactory.createValue(selectedRevision);
       Value liveRevision = getValue(node,StageAndVersionPublicationConstant.LIVE_REVISION_PROP);
       if(liveRevision != null && value.getString().equals(liveRevision.getString())) {        
         node.setProperty(StageAndVersionPublicationConstant.LIVE_REVISION_PROP,valueFactory.createValue(""));
       }                        
-      versionLog = new VersionLog(selectedRevision.getName(),StageAndVersionPublicationConstant.OBSOLETE_STATE,userId,new GregorianCalendar(),StageAndVersionPublicationConstant.CHANGE_TO_OBSOLETE);
+      versionLog = new VersionLog(selectedRevision.getName(), PublicationDefaultStates.OBSOLETE,userId,new GregorianCalendar(),StageAndVersionPublicationConstant.CHANGE_TO_OBSOLETE);
       VersionData versionData = revisionsMap.get(selectedRevision.getUUID());
       if(versionData != null) {
         versionData.setAuthor(userId);
-        versionData.setState(StageAndVersionPublicationConstant.OBSOLETE_STATE);
+        versionData.setState(PublicationDefaultStates.OBSOLETE);
       }else {
-        versionData = new VersionData(selectedRevision.getUUID(),StageAndVersionPublicationConstant.OBSOLETE_STATE,userId);
+        versionData = new VersionData(selectedRevision.getUUID(), PublicationDefaultStates.OBSOLETE,userId);
       }      
       revisionsMap.put(selectedRevision.getUUID(),versionData);
       addLog(node,versionLog);
       //change base version to published state
-      node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE,StageAndVersionPublicationConstant.OBSOLETE_STATE);
+      node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE, PublicationDefaultStates.OBSOLETE);
       addRevisionData(node,revisionsMap.values());
     }
     if(!node.isNew())
@@ -310,6 +312,11 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
    * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getNodeView(javax.jcr.Node, java.util.Map)
    */
   public Node getNodeView(Node node, Map<String, Object> context) throws Exception {
+  	// don't display content if state is enrolled or obsolete
+  	WCMPublicationService wcmPublicationService = WCMCoreUtils.getService(WCMPublicationService.class);
+  	String currentState = wcmPublicationService.getContentState(node);
+  	if (PublicationDefaultStates.ENROLLED.equals(currentState) || PublicationDefaultStates.OBSOLETE.equals(currentState)) return null;
+  	
     // if current mode is edit mode
     if (context.get(WCMComposer.FILTER_MODE).equals(WCMComposer.MODE_EDIT)) return node;
     
@@ -325,7 +332,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
    * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getPossibleStates()
    */
   public String[] getPossibleStates() {    
-    return new String[] { StageAndVersionPublicationConstant.ENROLLED_STATE, StageAndVersionPublicationConstant.DRAFT_STATE, StageAndVersionPublicationConstant.AWAITING, StageAndVersionPublicationConstant.PUBLISHED_STATE, StageAndVersionPublicationConstant.OBSOLETE_STATE};
+    return new String[] { PublicationDefaultStates.ENROLLED, PublicationDefaultStates.DRAFT, PublicationDefaultStates.PUBLISHED, PublicationDefaultStates.OBSOLETE};
   }
 
   /* (non-Javadoc)
