@@ -281,10 +281,10 @@ public class XSkinService implements Startable {
       LivePortalManagerService livePortalManagerService = 
         (LivePortalManagerService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(LivePortalManagerService.class);
       Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
-      addSharedPortalSkin(sharedPortal,SHARED_CSS_QUERY,null,null,false);
+      addSharedPortalSkin(sharedPortal,SHARED_CSS_QUERY,null,null, true);
       List<Node> livePortals = livePortalManagerService.getLivePortals(sessionProvider);
       for(Node portal: livePortals) {
-        addPortalSkin(portal,SHARED_CSS_QUERY,null, null, false);
+        addPortalSkin(portal,SHARED_CSS_QUERY,null, null, true);
       }
     }catch (Exception e) {
       if(log.isErrorEnabled()) {
