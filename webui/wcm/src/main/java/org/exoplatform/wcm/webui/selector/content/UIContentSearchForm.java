@@ -217,9 +217,9 @@ public class UIContentSearchForm extends UIForm {
     return qCriteria;
   }
 
-  private boolean haveEmptyField(UIApplication uiApp, Event<UIContentSearchForm> event, Object... fields) throws Exception {
-    for(Object field : fields) {
-      if(field == null) {
+  private boolean haveEmptyField(UIApplication uiApp, Event<UIContentSearchForm> event, String... fields) throws Exception {
+    for(String field : fields) {
+      if(field == null || "".equals(field)) {
         uiApp.addMessage(new ApplicationMessage(
             "UIWebContentSearchForm.empty-field", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
@@ -318,7 +318,7 @@ public class UIContentSearchForm extends UIForm {
 					}
 					Calendar startDate = startDateInput.getCalendar();
 					Calendar endDate = endDateInput.getCalendar();
-          if(uiWCSearch.haveEmptyField(uiApp, event, startDate)) return;
+          if(uiWCSearch.haveEmptyField(uiApp, event, startDateInput.getValue())) return;
           if(endDate == null) {
           	if (startDate.getTimeInMillis() > Calendar.getInstance().getTimeInMillis()) {
           		endDate = startDate;
@@ -377,7 +377,7 @@ public class UIContentSearchForm extends UIForm {
 					}
 					Calendar startDate = startDateInput.getCalendar();
 					Calendar endDate = endDateInput.getCalendar();
-          if(uiWCSearch.haveEmptyField(uiApp, event, startDate)) return;
+          if(uiWCSearch.haveEmptyField(uiApp, event, startDateInput.getValue())) return;
           if(endDate == null) {
           	if (startDate.getTimeInMillis() > Calendar.getInstance().getTimeInMillis()) {
           		endDate = startDate;
