@@ -71,8 +71,8 @@
    	</msg>
     <label>
       <DisplaySettingBlock>L'écran de réglage</DisplaySettingBlock>    
-      <ViewerTitle>Afficher le titre</ViewerTitle>
-      <ViewerDateCreated>Voir la date de création</ViewerDateCreated>
+      <ShowTitle>Afficher le titre</ShowTitle>
+      <ShowDateCreated>Voir la date de création</ShowDateCreated>
     </label>
   </UIPCVConfig>
 </bundle>

@@ -292,6 +292,11 @@
 			<value>true</value>
 			<read-only>false</read-only>
 		</preference>
+		<preference>
+	    	<name>basePath</name>
+	    	<value>products/presentation/pcv</value>	    	
+	    	<read-only>false</read-only>
+    	</preference>
   </portlet-preferences>
 
 	<portlet-preferences>
@@ -834,5 +839,31 @@
 			<read-only>false</read-only>
 		</preference>
 	</portlet-preferences>	
+	
+	<portlet-preferences>
+		<owner-type>portal</owner-type>
+		<owner-id>acme</owner-id>
+		<window-id>portal#acme:/presentation/ParameterizedContentViewerPortlet/acme-pcv</window-id>
+		<preference>
+			<name>repository</name>
+			<value>repository</value>
+			<read-only>false</read-only>
+		</preference>
+		<preference>
+			<name>workspace</name>
+			<value>collaboration</value>
+			<read-only>false</read-only>
+		</preference>
+		<preference>
+			<name>showTitle</name>
+			<value>true</value>
+			<read-only>false</read-only>
+		</preference>
+		<preference>
+			<name>showDateCreated</name>
+			<value>true</value>
+			<read-only>false</read-only>
+		</preference>
+	</portlet-preferences>
 	
 </portlet-preferences-set>

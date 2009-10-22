@@ -82,8 +82,8 @@
    	</msg>
     <label>
       <DisplaySettingBlock>Display setting</DisplaySettingBlock>    
-      <ViewerTitle>Show title</ViewerTitle>
-      <ViewerDateCreated>Show date created</ViewerDateCreated>
+      <ShowTitle>Show title</ShowTitle>
+      <ShowDateCreated>Show date created</ShowDateCreated>
     </label>
   </UIPCVConfig>
 </bundle>

@@ -261,6 +261,11 @@
 			<value>false</value>
 			<read-only>false</read-only>
 		</preference>
+		<preference>
+	    	<name>basePath</name>
+	    	<value>parameterizedviewer</value>	    	
+	    	<read-only>false</read-only>
+    	</preference>
   </portlet-preferences>
 	
 	<portlet-preferences>
@@ -321,6 +326,32 @@
 		<preference>
 			<name>nodeIdentifier</name>
 			<value>/sites content/live/classic/web contents/site artifacts/Test</value>
+			<read-only>false</read-only>
+		</preference>
+	</portlet-preferences>
+	
+	<portlet-preferences>
+		<owner-type>portal</owner-type>
+		<owner-id>classic</owner-id>
+		<window-id>portal#classic:/presentation/ParameterizedContentViewerPortlet/classic-pcv</window-id>
+		<preference>
+			<name>repository</name>
+			<value>repository</value>
+			<read-only>false</read-only>
+		</preference>
+		<preference>
+			<name>workspace</name>
+			<value>collaboration</value>
+			<read-only>false</read-only>
+		</preference>
+		<preference>
+			<name>showTitle</name>
+			<value>true</value>
+			<read-only>false</read-only>
+		</preference>
+		<preference>
+			<name>showDateCreated</name>
+			<value>true</value>
 			<read-only>false</read-only>
 		</preference>
 	</portlet-preferences>
