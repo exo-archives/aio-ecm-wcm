@@ -16,6 +16,7 @@
  */
 package org.exoplatform.wcm.webui.selector.content;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -100,10 +101,13 @@ public class UIContentBrowsePanel extends UIBaseNodeTreeSelector implements UIPo
     }else if(contentType.equals(DMSDOCUMENT)){
       String repositoryName = ((ManageableRepository)(currentPortal.getSession().getRepository())).getConfiguration().getName();
       List<String> listAcceptedNodeTypes = getApplicationComponent(TemplateService.class).getDocumentTemplates(repositoryName);
-      listAcceptedNodeTypes.remove("exo:webContent");
-      listAcceptedNodeTypes.remove("exo:pictureOnHeadWebcontent");
-      acceptedNodeTypes = new String[listAcceptedNodeTypes.size()];
-      listAcceptedNodeTypes.toArray(acceptedNodeTypes);
+      List<String> listAcceptedNodeTypesTemp = new ArrayList<String>();
+      for (String acceptedNodetype : listAcceptedNodeTypes) {
+      	if ("exo:webContent".equals(acceptedNodetype) || "exo:pictureOnHeadWebcontent".equals(acceptedNodetype)) continue;
+      	listAcceptedNodeTypesTemp.add(acceptedNodetype);
+      }
+      acceptedNodeTypes = new String[listAcceptedNodeTypesTemp.size()];
+      listAcceptedNodeTypesTemp.toArray(acceptedNodeTypes);
     }
     UISelectPathPanel selectPathPanel = getChild(UISelectPathPanel.class);
     selectPathPanel.setAcceptedNodeTypes(acceptedNodeTypes);       
