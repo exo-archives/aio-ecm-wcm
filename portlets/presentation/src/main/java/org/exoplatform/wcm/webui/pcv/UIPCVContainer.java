@@ -252,9 +252,9 @@ public class UIPCVContainer extends UIContainer {
     }
     
     // set node view for UIPCVPresentation
-    if (nodeView != null && node.isNodeType("nt:frozenNode")) {
+    if (nodeView != null && nodeView.isNodeType("nt:frozenNode")) {
       String nodeUUID = nodeView.getProperty("jcr:frozenUuid").getString();
-      uiContentViewer.setOrginalNode(node.getSession().getNodeByUUID(nodeUUID));
+      uiContentViewer.setOrginalNode(nodeView.getSession().getNodeByUUID(nodeUUID));
       uiContentViewer.setNode(nodeView);
     } else if (nodeView == null) {
       return null;
