@@ -15,7 +15,7 @@
     return false;
   }
   
-  def currentNode = uicomponent.getNodeTest("/sites content/live/classic/web contents/site artifacts/homepage/Default") ; 
+  def currentNode = uicomponent.getNode(); 
   def htmlFile = currentNode.getNode("default.html") ;
   
   def exSkinService = uicomponent.getComponentInstanceOfType("org.exoplatform.services.wcm.skin.XSkinService") ;

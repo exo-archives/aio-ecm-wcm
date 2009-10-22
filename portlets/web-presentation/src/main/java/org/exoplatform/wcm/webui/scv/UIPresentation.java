@@ -215,18 +215,4 @@ public class UIPresentation extends UIBaseNodePresentation {
   public void setNode(Node node) {
 
   }
-  
-  public Node getNodeTest(String path) {
-	  try {
-		  SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
-		  RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-		  ManageableRepository repository = repositoryService.getRepository("repository");
-		  Session session = sessionProvider.getSession("collaboration", repository);
-		  Node node = (Node)session.getItem(path);
-		  return node;
-	} catch (Exception e) {
-		e.printStackTrace();
-		return null;
-	}
-  }
 }

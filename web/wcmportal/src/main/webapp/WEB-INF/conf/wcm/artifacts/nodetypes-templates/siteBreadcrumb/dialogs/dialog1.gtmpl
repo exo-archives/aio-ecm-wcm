@@ -142,7 +142,7 @@
 									String htmlContent = "";
 									if(uicomponent.isEditing()) {
 										Node webContentNode = uicomponent.getNode();
-										if(webContentNode.hasNode("default.html")) {
+										if(webContentNode != null && webContentNode.hasNode("default.html")) {
 											Node htmlNode = webContentNode.getNode("default.html");
 											htmlContent = htmlNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
 										}
@@ -169,7 +169,7 @@
 								<%						
 									if(uicomponent.isEditing()) { 
 										def curNode = uicomponent.getNode() ;
-										if(curNode.hasNode("medias/images/illustration")) {
+										if(curNode != null && curNode.hasNode("medias/images/illustration")) {
 											def imageNode = curNode.getNode("medias/images/illustration") ;
 											def resourceNode = imageNode.getNode("jcr:content");
 											if(resourceNode.getProperty("jcr:data").getStream().available() > 0) {
@@ -209,7 +209,7 @@
 									String summaryContent = "";
 									if(uicomponent.isEditing()) {
 										Node webContentNode = uicomponent.getNode();
-										if (webContentNode.hasProperty("exo:summary")) 
+										if (webContentNode != null && webContentNode.hasProperty("exo:summary")) 
 											summaryContent = webContentNode.getProperty("exo:summary").getValue().getString();
 									}
 									String[] fieldSummary = ["jcrPath=/node/exo:summary", "editable=if-null", summaryContent] ;
@@ -243,7 +243,7 @@
 									String cssContent = "";
 									if(uicomponent.isEditing()) {
 										Node webContentNode = uicomponent.getNode();
-										if(webContentNode.hasNode("css/default.css")) {
+										if(webContentNode != null && webContentNode.hasNode("css/default.css")) {
 											Node cssNode = webContentNode.getNode("css/default.css");
 											cssContent = cssNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
 										}
@@ -309,7 +309,7 @@
 									String jsContent = "";
 									if(uicomponent.isEditing()) {
 										Node webContentNode = uicomponent.getNode();
-										if(webContentNode.hasNode("js/default.js")) {
+										if(webContentNode != null && webContentNode.hasNode("js/default.js")) {
 											Node jsNode = webContentNode.getNode("js/default.js");
 											jsContent = jsNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
 										} 
