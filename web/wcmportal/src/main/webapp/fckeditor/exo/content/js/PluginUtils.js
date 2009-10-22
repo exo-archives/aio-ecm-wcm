@@ -334,7 +334,7 @@ PluginUtils.prototype.changeFilter = function() {
 		}
 	} 
 	eXoWCM.PluginUtils.listFiles();
-	getDir(eXp.store.currentNode, eXp.store.eventNode);
+	if(eXp.store.currentNode)	 getDir(eXp.store.currentNode, eXp.store.eventNode);
 }
 if(!window.eXoWCM) eXoWCM = new Object();
 eXoWCM.PluginUtils = new PluginUtils();

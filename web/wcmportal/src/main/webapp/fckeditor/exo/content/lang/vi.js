@@ -1,33 +1,39 @@
-var KLang = {
-	TreeTitle	 								: "Thư mục",
-	SettingTitle							: "Cấu hình",
-	SetView										: "Xem",
-	SetSort										: "Sắp xếp",
+var UserLanguage = {
+	Filter							:	"Lọc",
+	WebContents						:   "Nội dung Web",
+	DMSDocuments					:	"Tài liệu DMS",
+	Medias							:	"Đa phương tiện",
+	UploadFile						:	"Tải tệp tin lên",
 	
-	SortName									: "Hồ sơ",
-	SortDate									: "Ngày tháng",
-	SortSize									: "Kích thước",
+	SettingTitle					: 	"Cấu hình",
+	SetView							: 	"Xem",
+	SetSort							: 	"Sắp xếp",
 	
-	ViewThumbnail							: "Hình ảnh",
-	ViewList									: "Danh sách",
+	SortName						: 	"Hồ sơ",
+	SortDate						: 	"Ngày tháng",
+	SortSize						: 	"Kích thước",
 	
-	CtxNewDoc									: "Thêm mới",
-	CtxViewItem								: "Xem",
-	CtxSelectItem							: "Chọn",
+	ViewThumbnail					: 	"Hình ảnh",
+	ViewList						: 	"Danh sách",
+
+	Home							:	"Trang chủ",
+
+	FileName						:	"Tên",
+	CreateDate						:	"Ngày",
+	FileSize						:	"Kích thước",
+
+	NoContent						:	"Không có nội dung",
 	
-	BtnCreate									: "Tạo",
-	BtnCancel									: "Hủy",
-	BtnUpload									: "Tải lên",
-	BtnRefresh								: "Làm mới",
-	BtnSetting								: "Setting",
-	BtnHelp										: "Giúp đỡ",
-	BtnClose									: "Đóng",
-	BtnSave										: "Lưu",
-	BtnAbort									: "Hủy bỏ",
-	BtnDelete									: "Xóa",
+	BtnCancel						: 	"Hủy",
+	BtnUpload						: 	"Tải lên",
+	BtnSetting						: 	"Setting",
+	BtnHelp							: 	"Giúp đỡ",
+	BtnClose						: 	"Đóng",
+	BtnSave							: 	"Lưu",
+	BtnAbort						: 	"Hủy bỏ",
+	BtnDelete						: 	"Xóa",
 	
-	LabelFolder								: "Thư mục",
-	LabelName									: "Tên",
-	LabelAlert								: "Hãy chọn file trước khi upload",
-	LNewFolder								: "Thư mục mới"
+	LabelFolder						: 	"Thư mục",
+	LabelName						: 	"Tên",
+	LabelAlert						: 	"Hãy chọn file trước khi upload"
 }

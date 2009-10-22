@@ -21,6 +21,9 @@
 			var FCKConfig = window.opener.FCKConfig;
 			var FCK = window.opener.FCK;
 			var eXoPlugin = FCK.eXoPlugin;
+			var UserLanguage = null;
+			eXoPlugin.userLanguage = FCK.Language.GetActiveLanguage() || "en";
+			window.onload = eXoPlugin.loadScript(window, "lang/" + eXoPlugin.userLanguage + ".js"); 
 		</script>
 </head>
 <body>
@@ -32,27 +35,29 @@
 			</div>
 			<div class="UIWorkingWorkspace">
 				<div class="ActionBar">
-					<div class="FinterTitle">Finter: </div>
+					<div class="FinterTitle" userLanguage="UserLanguage.Filter">Filter: </div>
 					<div class="FinterInput">
 						<select class="Pinter" id="Pinter" onchange="eXoWCM.PluginUtils.changeFilter();">
-							<option value="Web Contents" selected="selected">Web Contents</option>
-							<option value="DMS Documents">DMS Documents</option>
-							<option value="Medias">Medias</option>
+							<option value="Web Contents" selected="selected" userLanguage="UserLanguage.WebContents">Web Contents</option>
+							<option value="DMS Documents" userLanguage="UserLanguage.DMSDocuments">DMS Documents</option>
+							<option value="Medias" userLanguage="UserLanguage.Medias">Medias</option>
 						</select>
 					</div>
 					<div class="SeparatorLineL"><span></span></div>
+					<!--
 					<div class="ControlButton InsertLinksIcon">
 						<a href="javascript: void(0);" class="InseartButton">Insert a links</a>
 					</div>
+					-->
 					<!--====================================== UPLOAD ============================================-->
 					<div class="ControlButton UploadIcon">
-							<a class="Item IconUpload" href="javascript:void(0);" onclick="eXoWCM.UploadForm.showUploadForm();">Upload File</a>
+							<a class="Item IconUpload" href="javascript:void(0);" onclick="eXoWCM.UploadForm.showUploadForm();" userLanguage="UserLanguage.UploadFile">Upload File</a>
 					</div>
 					<!-- ====================================== UPLOAD ============================================-->					
 					<!-- ====================================== SETTING ============================================-->
 					<!-- div class="SettingIcon" onmouseover="eXoWCM.PluginUtils.showSettings(this);" style="position:relative;">  -->
 					<div class="SettingIcon" onmouseover="" style="position:relative;">	
-						<a href="#">Setting</a>
+						<a href="#" userLanguage="UserLanguage.SettingTitle">Setting</a>
 						<div class="SettingContainer">
 				      <div style="display: none; position: absolute;" class="UIRightClickPopupMenu">
 				      	<div class="UIContextMenuContainer">
@@ -65,7 +70,7 @@
 					          <div class="MiddleRightRightClickPopupMenu">
 					            <div class="UIRightPopupMenuContainer">
 					              <div class="MenuItem" style="white-space:nowrap;" onmouseover="eXoWCM.PluginUtils.showSubMenuSettings(this);">   
-					                <a href="#" class="DefaultPageIcon ItemIcon MarkReadIcon">View</a>
+					                <a href="#" class="DefaultPageIcon ItemIcon MarkReadIcon" userLanguage="UserLanguage.SetView">View</a>
 				                	<div class="ChildrenContainer" style="position: relative;">
 														<div style="display: none; position: absolute;" class="UIRightClickPopupMenu">
 															<div class="UIContextMenuContainer">
@@ -78,10 +83,10 @@
 																	<div class="MiddleRightRightClickPopupMenu">
 																		<div class="UIRightPopupMenuContainer">
 																			<div class="MenuItem" style="white-space:nowrap;">   
-																				<a href="#" class="DefaultPageIcon ItemIcon MarkReadIcon">List</a>   
+																				<a href="#" class="DefaultPageIcon ItemIcon MarkReadIcon" userLanguage="UserLanguage.ViewList">List</a>   
 																			</div>
 																			<div class="MenuItem">   
-																				<a href="#" class="DefaultPageIcon ItemIcon MarkReadIcon">Thumbnails</a>  
+																				<a href="#" class="DefaultPageIcon ItemIcon MarkReadIcon" userLanguage="UserLanguage.ViewThumbnail">Thumbnails</a>  
 																			</div>
 																		</div>
 																	</div>
@@ -96,7 +101,7 @@
 													</div>
 					              </div>
 					              <div class="MenuItem">   
-					                <a href="#" class="DefaultPageIcon ItemIcon MarkReadIcon">Sort</a>
+					                <a href="#" class="DefaultPageIcon ItemIcon MarkReadIcon" userLanguage="UserLanguage.SetSort">Sort</a>
 					                	<div class="ChildrenContainer" style="position: relative;">
 															<div style="display: none; position: absolute;" class="UIRightClickPopupMenu">
 																<div class="UIContextMenuContainer">
@@ -109,13 +114,13 @@
 																		<div class="MiddleRightRightClickPopupMenu">
 																			<div class="UIRightPopupMenuContainer">
 																				<div class="MenuItem" style="white-space:nowrap;">   
-																					<a href="#" class="DefaultPageIcon ItemIcon MarkReadIcon">By Name</a>   
+																					<a href="#" class="DefaultPageIcon ItemIcon MarkReadIcon" userLanguage="UserLanguage.SortName">By Name</a>   
 																				</div>
 																				<div class="MenuItem">   
-																					<a href="#" class="DefaultPageIcon ItemIcon MarkReadIcon">By Date</a>  
+																					<a href="#" class="DefaultPageIcon ItemIcon MarkReadIcon" userLanguage="UserLanguage.SortDate">By Date</a>  
 																				</div>
 																				<div class="MenuItem">   
-																					<a href="#" class="DefaultPageIcon ItemIcon MarkReadIcon">By Size</a>  
+																					<a href="#" class="DefaultPageIcon ItemIcon MarkReadIcon" userLanguage="UserLanguage.SortSize">By Size</a>  
 																				</div>
 																			</div>
 																		</div>
@@ -147,7 +152,7 @@
 				<div class="BreadcumbsPortlet">
 					<div class="HomeIcon"><span></span></div> 
 					<div class="BreadcumbsContainer" id="BreadcumbsContainer">
-						<a class="Nomal" title="Home" href="#">Home</a>
+						<a class="Nomal" title="Home" href="#" userLanguage="UserLanguage.Home">Home</a>
 					</div>
 				</div>
 				<div class="ListContainer">
@@ -159,13 +164,13 @@
 						  	<table cellspacing="0" style="table-layout: fixed; width: 100%;" >
 						    	<thead>
 						    		<tr>
-						    		  <th class="THBar"> Name </th>
-							   	      <th class="THBar" style="width: 120px;"> Date </th>
-							   	      <th class="THBar" style="width: 80px;"> Size </th>
+						    		  <th class="THBar" userLanguage="UserLanguage.FileName"> Name </th>
+							   	      <th class="THBar" style="width: 120px;" userLanguage="UserLanguage.CreateDate"> Date </th>
+							   	      <th class="THBar" style="width: 80px;" userLanguage="UserLanguage.FileSize"> Size </th>
 						    	 	</tr>
 						    	</thead>
 						    	<tr>
-						    		<td class="Item TRNoContent" colspan="3">There is no content</td>
+						    		<td class="Item TRNoContent" colspan="3" userLanguage="UserLanguage.NoContent">There is no content</td>
 						    	</tr>
 						  	</table>
 						  </div>
@@ -181,7 +186,7 @@
 		
 	<div class="AlertContainer">
 		<div class="AlertForm">
-			<div align="center"><span userLanguage="KLang.LabelAlert"> Please choose a file before upload !</span></div>
+			<div align="center"><span userLanguage="UserLanguage.LabelAlert"> Please choose a file before upload !</span></div>
 			<div class="UIAction">
 				<table class="ActionContainer LightBlueStyle" align="center">
 					<tr>
@@ -189,7 +194,7 @@
 							<a href="javascript: void(0);" class="ActionButton" style="margin-top: 21px">
 								<div class="ButtonLeft">
 									<div class="ButtonRight">
-										<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.showUploadForm();">
+										<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.showUploadForm();" userLanguage="UserLanguage.BtnClose">
 											Close
 										</div>
 									</div>
@@ -208,7 +213,7 @@
 			<table border="0" bordercolor="red" class="ActionContainer">
 				<tr class="PathFolder">
 					<td colspan="2" style="width: 100%; overflow: hidden;">
-						<span class="PathFolder"> Folder </span>
+						<span class="PathFolder" userLanguage="UserLanguage.LabelFolder"> Folder </span>
 					</td>
 				</tr>
 				<tr class="UploadField">
@@ -240,7 +245,7 @@
 										<a href="javascript: void(0);" class="ActionButton">
 											<div class="ButtonLeft">
 												<div class="ButtonRight">
-													<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFileAbort();">
+													<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFileAbort();" userLanguage="UserLanguage.BtnAbort">
 														Abort
 													</div>
 												</div>
@@ -254,7 +259,7 @@
 						<a href="javascript: void(0);" class="ActionButton Delete">
 							<div class="ButtonLeft">
 								<div class="ButtonRight">
-									<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFileDelete();">
+									<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFileDelete();" userLanguage="UserLanguage.BtnDelete">
 										Delete
 									</div>
 								</div>
@@ -265,7 +270,7 @@
 				<tr class="UploadAction" style="display: none;">
 					<td colspan="2">
 						<div style="margin: 3px 0px 3px 0px">
-							<span> Name </span>:
+							<span userLanguage="UserLanguage.LabelName"> Name </span>:
 							<input type="text" name="fileName" style="width: 238px;" maxlength="128"/>
 						</div>
 						<div class="UIAction">
@@ -275,7 +280,7 @@
 										<a href="javascript: void(0);" class="ActionButton">
 											<div class="ButtonLeft">
 												<div class="ButtonRight">
-													<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFileSave();">
+													<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFileSave();" userLanguage="UserLanguage.BtnSave">
 														Save
 													</div>
 												</div>
@@ -284,7 +289,7 @@
 										<a href="javascript: void(0);" class="ActionButton">
 											<div class="ButtonLeft">
 												<div class="ButtonRight">
-													<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFileCancel();">
+													<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFileCancel();" userLanguage="UserLanguage.BtnCancel">
 														Cancel
 													</div>
 												</div>
@@ -306,7 +311,7 @@
 										<a href="javascript: void(0);" class="ActionButton" style="margin-top: 21px">
 											<div class="ButtonLeft">
 												<div class="ButtonRight">
-													<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFile();">
+													<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFile();" userLanguage="UserLanguage.BtnUpload">
 														Upload
 													</div>
 												</div>
@@ -317,7 +322,7 @@
 										<a href="javascript: void(0);" class="ActionButton" style="margin-top: 21px">
 											<div class="ButtonLeft">
 												<div class="ButtonRight">
-		 											<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.removeMask();">
+		 											<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.removeMask();" userLanguage="UserLanguage.BtnCancel">
 														Cancel
 													</div>
 												</div>
@@ -435,8 +440,30 @@ var eXp = {
 		eXoWCM.PluginUtils.renderBreadcrumbs(currentNode);
 	}
 
+	function languageInit() {
+		if (UserLanguage) {
+			var aElements = document.getElementsByTagName("*");
+			for (var i = 0 ; i < aElements.length; ++i) {
+				if (aElements[i].getAttribute && aElements[i].getAttribute("userLanguage")) {
+					var userLanguage = eval(aElements[i].getAttribute("userLanguage"));
+					if (userLanguage) {
+						var textNode = document.createTextNode(userLanguage);
+						aElements[i].innerHTML = "";
+						aElements[i].appendChild(textNode);
+					}
+				}
+			}
+		} else {
+			eXoPlugin.loadScript(window, "lang/en.js");
+			setTimeout(languageInit, 1000);
+		}
+	}
+
+	
 	window.onload = function() {
 		requestInit();
+		languageInit(); 
 	};
+
 </script>
 </html>
