@@ -52,11 +52,39 @@
   </UIContentEdittingPopupWindow>
   <UIPresentationContainer>
   	<draft>Draft</draft>
+  	<edit>Edit</edit>
   </UIPresentationContainer>
   <UIDocumentFormPopupWindow>
   	<title>
   		<UIPCVContentDialog>UI Parameter Content Viewer</UIPCVContentDialog>
   	</title>
   </UIDocumentFormPopupWindow>
+  
+  <UIPCVConfig>
+  	<title>Parameterized Content Viewer Config</title>
+    <action>
+      <Save>Save</Save>
+      <Cancel>Cancel</Cancel>
+      <Down>Down</Down>
+      <Up>Up</Up>      
+      <Delete>Delete</Delete>            
+    </action>
+   	<msg>
+   		<saving-success>
+   			Parameter Content Viewer has been updated
+   		</saving-success>
+   		<not-a-number>
+   			Item per page is not a number or value is not valid. Please input a valid number.
+   		</not-a-number>
+   		<decode>Unsupport encoding.</decode>
+   		<get-illustration-image>Error when get illustration image.</get-illustration-image>
+   		<get-node-publication>Error when get node publication lifecycle.</get-node-publication>
+   	</msg>
+    <label>
+      <DisplaySettingBlock>Display setting</DisplaySettingBlock>    
+      <ViewerTitle>Show title</ViewerTitle>
+      <ViewerDateCreated>Show date created</ViewerDateCreated>
+    </label>
+  </UIPCVConfig>
 </bundle>
 

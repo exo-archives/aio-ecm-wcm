@@ -121,4 +121,9 @@
       <AddAny>Add any permission</AddAny>
     </title>
   </usersInputSet>
+  <UIWebContentSearchForm>
+  	<empty-field>
+  		Please input valid keyword for search.
+  	</empty-field>
+  </UIWebContentSearchForm>
 </bundle>

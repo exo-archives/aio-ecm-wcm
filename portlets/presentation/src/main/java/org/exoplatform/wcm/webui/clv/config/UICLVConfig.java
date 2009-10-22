@@ -34,6 +34,7 @@ import org.exoplatform.wcm.webui.clv.UICLVContainer;
 import org.exoplatform.wcm.webui.clv.UICLVFolderMode;
 import org.exoplatform.wcm.webui.clv.UICLVManualMode;
 import org.exoplatform.wcm.webui.clv.UICLVPortlet;
+import org.exoplatform.wcm.webui.selector.page.UIPageSelector;
 import org.exoplatform.wcm.webui.validator.ZeroNumberValidator;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -64,6 +65,7 @@ import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
     @EventConfig(listeners = UICLVConfig.SelectFolderPathActionListener.class),
     @EventConfig(listeners = UICLVConfig.IncreaseActionListener.class),
     @EventConfig(listeners = UICLVConfig.DecreaseActionListener.class),
+    @EventConfig(listeners = UICLVConfig.SelectBasePathActionListener.class),
     @EventConfig(listeners = UICLVConfig.DeleteActionListener.class)
   }
 )
@@ -165,6 +167,15 @@ public class UICLVConfig extends UIForm implements UISelectable {
   /** The Constant CORRECT_CONTENT_SELECTOR_POPUP_WINDOW. */
   public static final String CORRECT_CONTENT_SELECTOR_POPUP_WINDOW = "CorrectContentSelectorPopupWindow";
 
+  /** The Constant BASE_PATH_INPUT. */
+  public final static String BASE_PATH_INPUT                 = "UICLVBasePathInput";
+
+  /** The Constant BASE_PATH_SELECTOR_POPUP_WINDOW. */
+  public final static String BASE_PATH_SELECTOR_POPUP_WINDOW = "UICLVBasePathPopupWindow";
+
+  /** The Constant BASE_PATH_INPUT_SET_ACTION. */
+  public final static String BASE_PATH_INPUT_SET_ACTION      = "UICLVBasePathInputSetAction";
+  
   /** The popup id. */
   private String popupId;
   
@@ -287,6 +298,14 @@ public class UICLVConfig extends UIForm implements UISelectable {
       viewerModeRadioBoxInput.setValue(VIEWER_AUTO_MODE);
       orderBySelectBox.setRendered(true);
     }
+    
+    String preferenceBasePath = portletPreferences.getValue(UICLVPortlet.BASE_PATH, null);
+    UIFormInputSetWithAction targetPathFormInputSet = new UIFormInputSetWithAction(BASE_PATH_INPUT_SET_ACTION);
+    UIFormStringInput targetPathFormStringInput = new UIFormStringInput(BASE_PATH_INPUT, BASE_PATH_INPUT, preferenceBasePath);
+    targetPathFormStringInput.setValue(preferenceBasePath);
+    targetPathFormStringInput.setEditable(false);
+    targetPathFormInputSet.setActionInfo(BASE_PATH_INPUT, new String[] {"SelectBasePath"}) ;
+    targetPathFormInputSet.addUIFormInput(targetPathFormStringInput);
 
     addChild(viewerModeRadioBoxInput);
     addChild(folderPathInputSet);
@@ -304,6 +323,7 @@ public class UICLVConfig extends UIForm implements UISelectable {
     addChild(viewerHeader);
     addChild(viewerLink);
     addChild(viewerReadmoreCheckbox);
+    addChild(targetPathFormInputSet);
 
     setActions(new String[] { "Save", "Cancel" });
   }
@@ -446,6 +466,7 @@ public class UICLVConfig extends UIForm implements UISelectable {
       String viewDateCreated = uiViewerManagementForm.getUIFormCheckBoxInput(UICLVConfig.VIEWER_DATE_CREATED).isChecked() ? "true" : "false";
       String viewerHeader = uiViewerManagementForm.getUIFormCheckBoxInput(UICLVConfig.VIEWER_HEADER).isChecked() ? "true" : "false";
       String viewerLink = uiViewerManagementForm.getUIFormCheckBoxInput(UICLVConfig.VIEWER_LINK).isChecked() ? "true" : "false";
+      String basePath = uiViewerManagementForm.getUIStringInput(UICLVConfig.BASE_PATH_INPUT).getValue();
       UIFormRadioBoxInput modeBoxInput = (UIFormRadioBoxInput) uiViewerManagementForm.getChildById(UICLVConfig.VIEWER_MODES);
       String newViewerMode = modeBoxInput.getValue();
       UIFormRadioBoxInput orderTypeBoxInput = (UIFormRadioBoxInput) uiViewerManagementForm.getChildById(UICLVConfig.ORDER_TYPES);
@@ -476,6 +497,8 @@ public class UICLVConfig extends UIForm implements UISelectable {
       portletPreferences.setValue(UICLVPortlet.SHOW_LINK, viewerLink);
       portletPreferences.setValue(UICLVPortlet.VIEWER_MODE, newViewerMode);
       portletPreferences.setValue(UICLVPortlet.ORDER_TYPE, orderType);
+      portletPreferences.setValue(UICLVPortlet.BASE_PATH, basePath);
+
       
       if (uiViewerManagementForm.isManualMode()) {
         String[] sl = (String[]) uiViewerManagementForm.getViewAbleContentList().toArray(new String[0]);
@@ -662,6 +685,31 @@ public class UICLVConfig extends UIForm implements UISelectable {
       int currIndex = Integer.parseInt(event.getRequestContext().getRequestParameter(OBJECTID));
       List<String> contentList = uiForm.getViewAbleContentList();
       contentList.remove(currIndex);
+    }
+  }
+  
+  /**
+   * The listener interface for receiving selectTargetPageAction events.
+   * The class that is interested in processing a selectTargetPageAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSelectTargetPageActionListener<code> method. When
+   * the selectTargetPageAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SelectTargetPageActionEvent
+   */
+  public static class SelectBasePathActionListener extends EventListener<UICLVConfig> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
+    public void execute(Event<UICLVConfig> event) throws Exception {
+      UICLVConfig viewerManagementForm = event.getSource();
+      UIPageSelector pageSelector = viewerManagementForm.createUIComponent(UIPageSelector.class, null, null);
+      pageSelector.setSourceComponent(viewerManagementForm, new String[] {BASE_PATH_INPUT});
+      Utils.createPopupWindow(viewerManagementForm, pageSelector, BASE_PATH_SELECTOR_POPUP_WINDOW, 800, 600);
+      viewerManagementForm.setPopupId(BASE_PATH_SELECTOR_POPUP_WINDOW);
     }
   }
 }

@@ -105,25 +105,34 @@
 			      <td class="FieldLabel">
 				      <%=uicomponent.getLabel(uiform.getChildById(UICLVConfig.HEADER).getName()) %>
 			      </td>
-						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UICLVConfig.HEADER)) %></td>
+						<td class="FieldComponent" colspan="2"><% uiform.renderField(uiform.getChildById(UICLVConfig.HEADER)) %></td>
 					</tr>
 					<tr>
 			      <td class="FieldLabel">
 				      <%=uicomponent.getLabel(uiform.getChildById(UICLVConfig.FORM_VIEW_TEMPLATES_SELECTOR).getName()) %>
 			      </td>
-						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UICLVConfig.FORM_VIEW_TEMPLATES_SELECTOR)) %></td>				
+						<td class="FieldComponent" colspan="2"><% uiform.renderField(uiform.getChildById(UICLVConfig.FORM_VIEW_TEMPLATES_SELECTOR)) %></td>				
 					</tr>
 					<tr>
 			      <td class="FieldLabel">
 				      <%=uicomponent.getLabel(uiform.getChildById(UICLVConfig.PAGINATOR_TEMPLATES_SELECTOR).getName()) %>
 			      </td>
-						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UICLVConfig.PAGINATOR_TEMPLATES_SELECTOR)) %></td>								
+						<td class="FieldComponent" colspan="2"><% uiform.renderField(uiform.getChildById(UICLVConfig.PAGINATOR_TEMPLATES_SELECTOR)) %></td>								
 					</tr>
+					
+					<tr>
+				      <td class="FieldLabel">
+					      <%=uicomponent.getLabel(uiform.getChildById(uicomponent.BASE_PATH_INPUT_SET_ACTION).getName()) %>
+				      </td>
+					  <td class="FieldComponent"><% uiform.renderField(uiform.getChildById(uicomponent.BASE_PATH_INPUT_SET_ACTION)) %></td>
+					  <td class="SelectTargetPageIcon" onclick="<%=uicomponent.event("SelectBasePath")%>"><span></span></td>													
+					</tr>		
+					
 					<tr>
 			      <td class="FieldLabel">
 				      <%=uicomponent.getLabel(uiform.getChildById(UICLVConfig.ITEMS_PER_PAGE_INPUT).getName()) %>
 			      </td>
-						<td class="FieldComponent ItemsPerPage">
+						<td class="FieldComponent ItemsPerPage" colspan="2">
 							<% uiform.renderField(uiform.getChildById(UICLVConfig.ITEMS_PER_PAGE_INPUT)) %>
 						</td>								
 					</tr>					

@@ -10,8 +10,6 @@
 	def node = uicomponent.getNode();
 	def isPrint = uicomponent.getIsPrint();
 	def lblBack = _ctx.appRes("UIContentViewerContainer.action.back");
-	def showTitle = uicomponent.isShowTitle();
-	def showDate = uicomponent.isShowDateCreated();
 	def wcmConfigurationService = uicomponent.getApplicationComponent(WCMConfigurationService.class);
 	def parameterizedPageURI = wcmConfigurationService.getRuntimeContextParam("parameterizedPageURI");
 	def printPreviewPageURI = wcmConfigurationService.getRuntimeContextParam("printPageURI");
@@ -30,31 +28,34 @@
 		if (node != null) {
 			def title = uicomponent.getTitle(node);
 			def dateCreated = uicomponent.getCreatedDate(node);
-			if(showTitle) {
+			boolean isEditMode = false;
+			boolean isDraft = false;
+			if(uicomponent.isShowTitle()) {
 					%>	<div class="Title">$title</div> <%   
 			} 
-			if(showDate) { 
+			if(uicomponent.isShowDateCreated()) { 
 					%>	<div class="DateAndMail">$dateCreated</div> <%   
 			} 
-		
 			if(!isPrint) {
 				%>
 					<div class="UIOptionBar">
 						<div class="BackButton" title="$lblBack" onclick="history.go(-1)"><span></span></div>
-						<a class="ActionIcon PrintIcon" href="javascript: void(0);" onclick="window.open(location.href.replace('<%=parameterizedPageURI%>','<%=printPreviewPageURI%>') + '?isPrint=true')" title="<%= _ctx.appRes("UIContentViewerContainer.quickPrint.title");%>"><%= _ctx.appRes("UIContentViewerContainer.quickPrint.print");%></a>
+						<a class="ActionIcon PrintIcon" href="javascript: void(0);" onclick="window.open(location.href.replace('<%=parameterizedPageURI%>','<%=printPreviewPageURI%>') + '?isPrint=true')" title="<%= _ctx.appRes("UIContentViewerContainer.quickPrint.title")%>"><%= _ctx.appRes("UIContentViewerContainer.quickPrint.print")%></a>
 			  		</div>
 				<%
 			}
 			if (Utils.isShowQuickEdit(node) && !isPrint) {
-				%><a class="DocumentQuickEdit" href="<%= uicomponent.event("QuickEdit") %>" title="<%= _ctx.appRes("UIContentViewerContainer.label.quickEditTitle") %>"></a><% 	
-			}
-			if (Utils.isShowDraft(node)) { 
-	 			%>
-					<div style="padding: 5px 10px; line-height: 16px; ">
-						[ <span class="DraftIcon" style="padding-left: 20px"><%= _ctx.appRes("UIPresentationContainer.draft") %></span> ]
-					</div>  
-	 			<%
-			}
+			  %>
+				 <a class="DocumentQuickEdit" href="<%= uicomponent.event("QuickEdit") %>" title="<%= _ctx.appRes("UIContentViewerContainer.label.quickEditTitle") %>"></a>
+				 
+			<% }
+			if (Utils.isShowDraft(node)) { %>
+				    
+				 <div style="padding: 5px 10px; line-height: 16px; ">
+						[ <span class="DraftIcon" style="padding-left: 20px"><%= _ctx.appRes("UIPresentationContainer.draft") %>, </span>
+						<a style="padding-left: 1px" href="<%= uicomponent.event("Edit") %>" title="<%= _ctx.appRes("UIPresentationContainer.edit") %>"> <%= _ctx.appRes("UIPresentationContainer.edit") %></a>]
+				 </div>  
+			<%}
 			uicomponent.renderChildren();
 			if(isPrint) {
 				%>
@@ -64,13 +65,10 @@
 					</div>
 				<%
 			}
-		} else {
-		  %>
+		} else { %>
 		  	<div style="padding-bottom: 20px; font-size: 13px; text-align: center;">
 		  		<div class="Message"><span><%= _ctx.appRes("UIMessageBoard.msg.content-not-found") %></span></div>
 		  	</div>
-		  <%
-		}
-	%>
+		<%} %>
 	</div>
 </div>

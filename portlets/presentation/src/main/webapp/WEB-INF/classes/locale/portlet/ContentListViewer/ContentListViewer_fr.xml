@@ -46,7 +46,8 @@
       <OrderByDatePublished>Date de publication</OrderByDatePublished>            
       <OrderDesc>Descendant</OrderDesc>
       <OrderAsc>Ascendant</OrderAsc>   
-      <ContentPath>Répertoire</ContentPath>                     
+      <ContentPath>Répertoire</ContentPath>       
+      <UICLVBasePathInputSetAction>Base de chemin</UICLVBasePathInputSetAction>               
     </label>
     <title>Sélectionner un dossier pour montrer ses contenus web ou ses documents</title>
   </UICLVConfig>
@@ -159,4 +160,10 @@
   		<quickEditTitle>Quick Edit</quickEditTitle>
   	</label>
   </UIPresentationContainer>
+  
+  <UICategoryNavigationTargetPathPopupWindow>
+		<title>
+			<UIPageSelector>Page selector</UIPageSelector>
+		</title>
+  </UICategoryNavigationTargetPathPopupWindow>
 </bundle>

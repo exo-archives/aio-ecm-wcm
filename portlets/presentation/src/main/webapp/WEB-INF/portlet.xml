@@ -244,6 +244,11 @@
 				<value></value>
 				<read-only>false</read-only>
 			</preference>
+			<preference>
+				<name>basePath</name>
+				<value>parameterizedviewer</value>
+				<read-only>false</read-only>
+			</preference>
 		</portlet-preferences>
 		<security-role-ref>
 			<role-name>admin</role-name>

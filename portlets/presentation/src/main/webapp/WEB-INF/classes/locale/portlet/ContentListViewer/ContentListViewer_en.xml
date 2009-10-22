@@ -46,8 +46,10 @@
       <OrderByDatePublished>Date published</OrderByDatePublished>      
       <OrderDesc>Descendant</OrderDesc>
       <OrderAsc>Ascendant</OrderAsc>   
-      <ContentPath>Content</ContentPath>   
+      <ContentPath>Content</ContentPath>  
+      <UICLVBasePathInputSetAction>Base path</UICLVBasePathInputSetAction> 
     </label>
+    
     <title>Select folder to display its children documents or webcontent</title>
   </UICLVConfig>
   <UIMessageBoard>
@@ -158,4 +160,9 @@
   		<quickEditTitle>Quick Edit</quickEditTitle>
   	</label>
   </UIPresentationContainer>
+  <UICategoryNavigationTargetPathPopupWindow>
+		<title>
+			<UIPageSelector>Page selector</UIPageSelector>
+		</title>
+  </UICategoryNavigationTargetPathPopupWindow>
 </bundle>

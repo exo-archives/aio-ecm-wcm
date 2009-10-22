@@ -30,6 +30,7 @@ import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.portlet.PortletPreferences;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
@@ -66,7 +67,8 @@ import org.exoplatform.webui.event.EventListener;
   lifecycle = Lifecycle.class, 
   template = "app:/groovy/ParameterizedContentViewer/UIPCVContainer.gtmpl", 
   events = { 
-    @EventConfig(listeners = UIPCVContainer.QuickEditActionListener.class) 
+    @EventConfig(listeners = UIPCVContainer.QuickEditActionListener.class),
+    @EventConfig(listeners = UIPCVContainer.EditActionListener.class)
   }
 )
 public class UIPCVContainer extends UIContainer {
@@ -83,24 +85,12 @@ public class UIPCVContainer extends UIContainer {
   /** The repository. */
   private String repository;
 
-  /** The show title. */
-  private boolean showTitle;
-  
-  /** The show date created. */
-  private boolean showDateCreated;
-  
   /** A flag used to display Print/Close buttons and hide Back one if its' value is <code>true</code>. In <code>false</code> case, the Back button will be shown only */
   private boolean isPrint;
   
   /** The Constant PREFERENCE_REPOSITORY. */
   public static final String PREFERENCE_REPOSITORY = "repository";
   
-  /** The Constant PREFERENCE_SHOW_TITLE. */
-  public static final String PREFERENCE_SHOW_TITLE = "showTitle";
-  
-  /** The Constant PREFERENCE_SHOW_DATE. */
-  public static final String PREFERENCE_SHOW_DATE = "showDateCreated";
-
   /** The date formatter. */
   private DateFormat               dateFormatter = null;
 
@@ -115,8 +105,6 @@ public class UIPCVContainer extends UIContainer {
     uiContentViewer = getChild(UIPCVPresentation.class);
     PortletRequestContext porletRequestContext = WebuiRequestContext.getCurrentInstance();
     repository = porletRequestContext.getRequest().getPreferences().getValue(PREFERENCE_REPOSITORY, "");
-    showDateCreated = Boolean.parseBoolean(porletRequestContext.getRequest().getPreferences().getValue(PREFERENCE_SHOW_DATE, ""));
-    showTitle = Boolean.parseBoolean(porletRequestContext.getRequest().getPreferences().getValue(PREFERENCE_SHOW_TITLE, ""));
     dateFormatter = new SimpleDateFormat();
     ((SimpleDateFormat) dateFormatter).applyPattern("dd.MM.yyyy '|' hh'h'mm");
   }
@@ -127,8 +115,21 @@ public class UIPCVContainer extends UIContainer {
 	 * @return true, if is show title
 	 */
 	public boolean isShowTitle() {
-		return showTitle;
+	  PortletPreferences portletPreferences = getPortletPreferences();
+    String showAble = portletPreferences.getValue(UIPCVPortlet.SHOW_TITLE, null);
+    return (showAble != null) ? Boolean.parseBoolean(showAble) : false;
 	}
+	
+	/**
+   * Gets the portlet preferences.
+   * 
+   * @return the portlet preferences
+   */
+  private PortletPreferences getPortletPreferences() {
+    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    PortletPreferences portletPreferences = context.getRequest().getPreferences();
+    return portletPreferences;
+  }
 
   /**
    * Gets the title.
@@ -164,7 +165,9 @@ public class UIPCVContainer extends UIContainer {
 	 * @return true, if is show date created
 	 */
 	public boolean isShowDateCreated() {
-		return showDateCreated;
+	  PortletPreferences portletPreferences = getPortletPreferences();
+    String showAble = portletPreferences.getValue(UIPCVPortlet.SHOW_DATE_CREATED, null);
+    return (showAble != null) ? Boolean.parseBoolean(showAble) : false;
 	}
 
   /**
@@ -394,6 +397,57 @@ public class UIPCVContainer extends UIContainer {
    * @see QuickEditActionEvent
    */
   public static class QuickEditActionListener extends EventListener<UIPCVContainer> {
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
+    /*public void execute(Event<UIPCVContainer> event) throws Exception {
+      UIPCVContainer uiContentViewerContainer = event.getSource();
+      UIPCVPresentation uiContentViewer = uiContentViewerContainer.getChild(UIPCVPresentation.class);
+      Node orginialNode = uiContentViewer.getOriginalNode();
+      ManageableRepository manageableRepository = (ManageableRepository) orginialNode.getSession().getRepository();
+      String repository = manageableRepository.getConfiguration().getName();
+      String workspace = orginialNode.getSession().getWorkspace().getName();
+      
+      if (repository == null || workspace == null)
+        throw new ItemNotFoundException();
+      String contentType=null, nodePath=null;
+      contentType = orginialNode.getPrimaryNodeType().getName();
+      nodePath = orginialNode.getPath();
+      UIPCVContentDialog uiDocumentDialogForm = uiContentViewerContainer.createUIComponent(UIPCVContentDialog.class, null, null);
+      uiDocumentDialogForm.setRepositoryName(repository);
+      uiDocumentDialogForm.setWorkspace(workspace);
+      uiDocumentDialogForm.setContentType(contentType);
+      uiDocumentDialogForm.setNodePath(nodePath);
+      uiDocumentDialogForm.setStoredPath(nodePath);
+      uiDocumentDialogForm.addNew(false);
+      Utils.createPopupWindow(uiContentViewerContainer, uiDocumentDialogForm, "UIDocumentFormPopupWindow", 800, 600);
+    }*/
+    
+    public void execute(Event<UIPCVContainer> event) throws Exception {
+      UIPCVContainer uiContentViewerContainer = event.getSource();
+      UIPCVConfig pcvConfigForm = uiContentViewerContainer.createUIComponent(UIPCVConfig.class, null, null);
+      Utils.createPopupWindow(uiContentViewerContainer,
+                              pcvConfigForm,
+                              UIPCVPortlet.PCV_CONFIG_POPUP_WINDOW,
+                              600,
+                              450);
+    }
+  }
+  
+  /**
+   * The listener interface for receiving quickEditAction events. The class
+   * that is interested in processing a quickEditAction event implements this
+   * interface, and the object created with that class is registered with a
+   * component using the component's
+   * <code>addQuickEditActionListener<code> method. When
+   * the quickEditAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see EditActionListener
+   */
+  public static class EditActionListener extends EventListener<UIPCVContainer> {
     /*
      * (non-Javadoc)
      * 

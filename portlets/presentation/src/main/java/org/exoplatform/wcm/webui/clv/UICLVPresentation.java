@@ -42,7 +42,6 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
-import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.images.RESTImagesRendererService;
 import org.exoplatform.services.wcm.publication.WCMComposer;
@@ -355,7 +354,7 @@ import org.exoplatform.webui.event.EventListener;
   public String getURL(Node node) throws Exception {
     String link = null;
     PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
-    WCMConfigurationService wcmConfigurationService = getApplicationComponent(WCMConfigurationService.class);
+    PortletPreferences preferences = this.getPortletPreferences();
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     String portalURI = portalRequestContext.getPortalURI();
     PortletPreferences portletPreferences = getPortletPreferences();
@@ -364,9 +363,8 @@ import org.exoplatform.webui.event.EventListener;
     String baseURI = portletRequestContext.getRequest().getScheme() + "://"
     + portletRequestContext.getRequest().getServerName() + ":"
     + String.format("%s", portletRequestContext.getRequest().getServerPort());
-    String parameterizedPageURI = wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.PARAMETERIZED_PAGE_URI);
-    link = baseURI + portalURI + parameterizedPageURI.substring(1, parameterizedPageURI.length())
-    + "/" + repository + "/" + workspace + node.getPath();
+    String basePath = preferences.getValue(UICLVPortlet.BASE_PATH, null);
+    link = baseURI + portalURI + basePath + "/" + repository + "/" + workspace + node.getPath();
     return link;
   }
 

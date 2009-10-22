@@ -190,6 +190,64 @@
     font-size: 13px;
 }
 
+
+.UICLVPortlet .SelectTargetPageIcon {
+	background: url('DefaultSkin/icons/SearchIcon.png') no-repeat;
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+	display: block;
+	margin-top: 8px;
+}
+
 .OneColumnCLVTemplate .Contents .Column1 img {
 	width:51px;
+}
+
+.UICLVPortlet .UIFormGrid {
+	margin: 0;
+}
+
+.UICLVPortlet .HorizontalLayout .UIFormInputSet{
+	padding: 0;
+}
+
+.UICLVPortlet .UIPageSelector {
+	margin: 0;
+	width: auto;
+}
+.UICLVPortlet #UIPageNodeSelector {
+	float: left;
+	width: 49%;
+}
+.UICLVPortlet .MiddleRightContainerOptions {
+	width: 200%;
+}
+
+.UICLVPortlet .UIPageNodeSelector {
+	width: 100%;
+}
+
+.UICLVPortlet #UIPageSelectorPanel {
+	float: left;
+	width: 49%;
+}
+
+.UIPageNodeSelector .UIVerticalSlideTabs {
+	border:medium none;
+	width:100%;
+}
+
+.UIForm .FieldComponent .FieldComponent input {
+	width:220px;
+}
+
+.UIContainerConfigOptions .ContainerConfigOptions {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	background:#F2F2F2 none repeat scroll 0 0;
+	border:1px solid #BCBCBC;
+	padding:5px;
+	width:100%;
 }

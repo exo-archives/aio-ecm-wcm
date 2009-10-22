@@ -58,5 +58,22 @@
   		<FastPublish>Fast Publier</FastPublish>
   	</action>
   </UIPCVContentDialog>
+  <UIPCVConfig>
+  	<title>Paramétrée Content Viewer Config</title>
+    <action>
+      <Save>Sauver</Save>
+      <Cancel>Annuler</Cancel>
+    </action>
+   	<msg>
+   		<saving-success>
+   			Paramètre Content Viewer a été mis à jour
+   		</saving-success>
+   	</msg>
+    <label>
+      <DisplaySettingBlock>L'écran de réglage</DisplaySettingBlock>    
+      <ViewerTitle>Afficher le titre</ViewerTitle>
+      <ViewerDateCreated>Voir la date de création</ViewerDateCreated>
+    </label>
+  </UIPCVConfig>
 </bundle>
 

@@ -237,6 +237,7 @@
   <UIWebContentSearchForm>
   	<msg>
   		<invalid-format>Blancs datetime format dans le champ '{0}'</invalid-format>
+  		<empty-field>S'il vous plaît mot-clé d'entrée valide pour les recherches.</empty-field>
   	</msg>
   </UIWebContentSearchForm>
 </bundle>

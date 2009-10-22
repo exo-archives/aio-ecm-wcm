@@ -99,6 +99,9 @@ public class UICLVPortlet extends UIPortletApplication {
   /** The Constant CONTENT_LIST. */
   public static final String CONTENT_LIST = "contents";
   
+  /** The Constant SHOW_DATE_CREATED. */
+  public final static String  BASE_PATH                          = "basePath";
+  
   /**
    * Instantiates a new uI content list viewer portlet.
    * 

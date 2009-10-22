@@ -37,11 +37,26 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 public class UIPCVPortlet extends UIPortletApplication {
 
   /** The Constant QUICK_EDIT_ABLE. */
-  public final static String QUICK_EDIT_ABLE = "quickEditable";
-  
+  public final static String QUICK_EDIT_ABLE         = "quickEditable";
+
+  /** The Constant PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW. */
+  public static final String PCV_CONFIG_POPUP_WINDOW = "UIPCVConfigPopupWindow";
+
+  /** The Constant REPOSITORY. */
+  public final static String PREFERENCE_REPOSITORY   = "repository";
+
+  /** The Constant REPOSITORY. */
+  public final static String WORKSPACE               = "workspace";
+
+  /** The Constant SHOW_TITLE. */
+  public final static String SHOW_TITLE              = "showTitle";
+
+  /** The Constant SHOW_DATE_CREATED. */
+  public final static String SHOW_DATE_CREATED       = "showDateCreated";
+
   /** The mode_. */
-  private PortletMode mode = PortletMode.VIEW ;
-  
+  private PortletMode        mode                    = PortletMode.VIEW;
+
   /**
    * Instantiates a new uI parameterized content viewer portlet.
    * 

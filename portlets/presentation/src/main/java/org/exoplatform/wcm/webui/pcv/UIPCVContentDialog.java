@@ -32,7 +32,6 @@ import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.version.VersionException;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
-import org.exoplatform.ecm.webui.form.DialogFormActionListeners;
 import org.exoplatform.ecm.webui.form.UIDialogForm;
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
 import org.exoplatform.ecm.webui.utils.LockUtil;
@@ -56,7 +55,6 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.event.Event.Phase;
 
 /**
  * Created by The eXo Platform SAS
@@ -69,8 +67,7 @@ import org.exoplatform.webui.event.Event.Phase;
   lifecycle = UIFormLifecycle.class, events = {
     @EventConfig(listeners = UIPCVContentDialog.SaveDraftActionListener.class),
     @EventConfig(listeners = UIPCVContentDialog.FastPublishActionListener.class),
-    @EventConfig(listeners = UIPCVContentDialog.CancelActionListener.class),
-    @EventConfig(listeners = DialogFormActionListeners.RemoveDataActionListener.class, confirm = "DialogFormField.msg.confirm-delete", phase = Phase.DECODE)
+    @EventConfig(listeners = UIPCVContentDialog.CancelActionListener.class)
   }  
 )
 public class UIPCVContentDialog extends UIDialogForm {
@@ -89,7 +86,6 @@ public class UIPCVContentDialog extends UIDialogForm {
    * @throws ValueFormatException 
    */
   public void setDocumentNode(Node node) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
-    node.setProperty("exo:image", "");
     documentNodeLocation = NodeLocation.make(node);
   }
 
@@ -100,7 +96,6 @@ public class UIPCVContentDialog extends UIDialogForm {
    */
   public Node getDocumentNode() throws Exception {
     Node node = NodeLocation.getNodeByLocation(documentNodeLocation);
-    node.setProperty("exo:image", "");
     return node;
   }
 
@@ -185,10 +180,10 @@ public class UIPCVContentDialog extends UIDialogForm {
       } catch (AccessControlException ace) {
         throw new AccessDeniedException(ace.getMessage());
       } catch (VersionException ve) {
-      	Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.in-versioning", null, ApplicationMessage.WARNING);
+        Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.in-versioning", null, ApplicationMessage.WARNING);
         return;
       } catch (ItemNotFoundException item) {
-      	Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.item-not-found", null, ApplicationMessage.WARNING);
+        Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.item-not-found", null, ApplicationMessage.WARNING);
         return;
       } catch (RepositoryException repo) {
         String key = "UIDocumentForm.msg.repository-exception";
@@ -196,21 +191,21 @@ public class UIPCVContentDialog extends UIDialogForm {
         Utils.createPopupMessage(uiDocumentDialogForm, key, null, ApplicationMessage.WARNING);
         return;
       } catch (NumberFormatException nume) {
-      	Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.numberformat-exception", null, ApplicationMessage.WARNING);
+        Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.numberformat-exception", null, ApplicationMessage.WARNING);
         return;
       } catch (Exception e) {
-      	Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.cannot-save", null, ApplicationMessage.WARNING);
+        Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.cannot-save", null, ApplicationMessage.WARNING);
         return;
       }
       UIPCVPortlet uiportlet = uiDocumentDialogForm.getAncestorOfType(UIPCVPortlet.class);
       if (uiportlet != null) {
-	      UIPCVContainer uiContentViewerContainer = uiportlet.getChild(UIPCVContainer.class);
-	      UIPCVPresentation uiContentViewer = uiContentViewerContainer.getChild(UIPCVPresentation.class);
-	      uiContentViewer.setNode(newNode);
-	      uiContentViewer.setRepository(repository);
-	      uiContentViewer.setWorkspace(workspace);
+        UIPCVContainer uiContentViewerContainer = uiportlet.getChild(UIPCVContainer.class);
+        UIPCVPresentation uiContentViewer = uiContentViewerContainer.getChild(UIPCVPresentation.class);
+        uiContentViewer.setNode(newNode);
+        uiContentViewer.setRepository(repository);
+        uiContentViewer.setWorkspace(workspace);
       }
-			Utils.closePopupWindow(uiDocumentDialogForm, "UIDocumentFormPopupWindow");
+      Utils.closePopupWindow(uiDocumentDialogForm, "UIDocumentFormPopupWindow");
       Utils.updatePortal(context);
     }
   }
@@ -240,11 +235,11 @@ public class UIPCVContentDialog extends UIDialogForm {
       String workspace = session.getWorkspace().getName();
       UIPCVPortlet uiportlet = uiDocumentDialogForm.getAncestorOfType(UIPCVPortlet.class);
       if (uiportlet != null) {
-      	UIPCVContainer uiContentViewerContainer = uiportlet.getChild(UIPCVContainer.class);
-      	UIPCVPresentation uiContentViewer = uiContentViewerContainer.getChild(UIPCVPresentation.class);
-      	uiContentViewer.setNode(documentNode);
-      	uiContentViewer.setRepository(repository);
-      	uiContentViewer.setWorkspace(workspace);
+        UIPCVContainer uiContentViewerContainer = uiportlet.getChild(UIPCVContainer.class);
+        UIPCVPresentation uiContentViewer = uiContentViewerContainer.getChild(UIPCVPresentation.class);
+        uiContentViewer.setNode(documentNode);
+        uiContentViewer.setRepository(repository);
+        uiContentViewer.setWorkspace(workspace);
       }
       Utils.closePopupWindow(uiDocumentDialogForm, "UIDocumentFormPopupWindow");
     }
@@ -295,10 +290,10 @@ public class UIPCVContentDialog extends UIDialogForm {
       } catch (AccessControlException ace) {
         throw new AccessDeniedException(ace.getMessage());
       } catch (VersionException ve) {
-      	Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.in-versioning", null, ApplicationMessage.WARNING);
+        Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.in-versioning", null, ApplicationMessage.WARNING);
         return;
       } catch (ItemNotFoundException item) {
-      	Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.item-not-found", null, ApplicationMessage.WARNING);
+        Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.item-not-found", null, ApplicationMessage.WARNING);
         return;
       } catch (RepositoryException repo) {
         String key = "UIDocumentForm.msg.repository-exception";
@@ -307,16 +302,16 @@ public class UIPCVContentDialog extends UIDialogForm {
         Utils.createPopupMessage(uiDocumentDialogForm, key, null, ApplicationMessage.WARNING);
         return;
       } catch (NumberFormatException nume) {
-      	Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.numberformat-exception", null, ApplicationMessage.WARNING);
+        Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.numberformat-exception", null, ApplicationMessage.WARNING);
         return;
       } catch (Exception e) {
-      	Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.cannot-save", null, ApplicationMessage.WARNING);
+        Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.cannot-save", null, ApplicationMessage.WARNING);
         return;
       }
       
       WCMPublicationService publicationService = uiDocumentDialogForm.getApplicationComponent(WCMPublicationService.class);
       publicationService.updateLifecyleOnChangeContent(newNode, Util.getPortalRequestContext().getPortalOwner(), Util.getPortalRequestContext().getRemoteUser(), 
-      		PublicationDefaultStates.PUBLISHED);
+          PublicationDefaultStates.PUBLISHED);
       
       Utils.closePopupWindow(uiDocumentDialogForm, "UIDocumentFormPopupWindow");
       PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
