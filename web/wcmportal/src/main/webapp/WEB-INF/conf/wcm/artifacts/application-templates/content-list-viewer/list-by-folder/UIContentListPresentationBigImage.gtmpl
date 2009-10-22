@@ -34,7 +34,6 @@
 				for (Node node : currentPageData) {
 				  def viewNode = uicomponent.getNodeView(node);
 				  if (viewNode == null)	continue;
-					def isShowDraft = uicomponent.showDraftButton(viewNode);
 					String itemLink = uicomponent.getURL(viewNode);			
 					String itemName = viewNode.getName();
 					String itemSummary = uicomponent.getSummary(viewNode);
