@@ -31,6 +31,7 @@ import javax.jcr.Session;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainer;
@@ -175,10 +176,11 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
       ManageDriveService manageDriveService = (ManageDriveService)ExoContainerContext.getCurrentContainer()
       	.getComponentInstanceOfType(ManageDriveService.class);
       
-      Node node = (Node)session.getItem(
-      		manageDriveService.getDriveByName(driverName, repositoryName).getHomePath()
-          + ((currentFolder != null && currentFolder.length() != 0) ? "/" : "")
-          + currentFolder);
+      String itemPath = manageDriveService.getDriveByName(driverName, repositoryName).getHomePath()
+                        + ((currentFolder != null && currentFolder.length() != 0) ? "/" : "")
+                        + currentFolder;
+      itemPath = StringUtils.replaceOnce(itemPath, "${userId}", userId);
+      Node node = (Node)session.getItem(itemPath);
       
       return buildXMLResponseForChildren(node, null, repositoryName, filterBy);
 
