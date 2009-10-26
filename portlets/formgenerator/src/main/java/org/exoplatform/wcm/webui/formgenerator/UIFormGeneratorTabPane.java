@@ -395,9 +395,9 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
         viewTemplate.append("           InputStream input = currentNode.getProperty(\"" + propertyName + "\").getStream();\n");
         viewTemplate.append("           InputStreamDownloadResource dresource = new InputStreamDownloadResource(input, \"" + form.getName() + "\");\n");
         viewTemplate.append("           dresource.setDownloadName(currentNode.getName());\n");
-        viewTemplate.append("           def imgSrc = dservice.getDownloadLink(dservice.addDownloadResource(dresource));\n");
+        viewTemplate.append("           def dataSrc = dservice.getDownloadLink(dservice.addDownloadResource(dresource));\n");
         viewTemplate.append("%>\n");
-        viewTemplate.append("           <td style=\"padding:5px\"><image src=\"$imgSrc\" width=\"100px\" height=\"80px\"/></td>\n");
+        viewTemplate.append("           <td style=\"padding:5px\"><a href=\"$dataSrc\"><%= _ctx.appRes(FormGeneratorDialog.label.Download) %></a></td>\n");
       } else {
         viewTemplate.append("           <td style=\"padding:5px\"><%= currentNode.getProperty(\"" + propertyName + "\").getString() %></td>\n");
       }

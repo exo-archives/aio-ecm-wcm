@@ -23,4 +23,9 @@
   		<duplicate-name>Nom du champ label est double, s'il vous plaît le nom de différence d'entrée</duplicate-name>
   	</msg>
   </UIFormGeneratorTabPane>
+  <FormGeneratorDialog>
+  	<label>
+  		<Download>Télécharger ce document</Download>
+  	</label>
+  </FormGeneratorDialog>
 </bundle>

@@ -23,4 +23,9 @@
   		<duplicate-name>Field label's name is duplicated, please input difference name</duplicate-name>
   	</msg>
   </UIFormGeneratorTabPane>
+  <FormGeneratorDialog>
+  	<label>
+  		<Download>Download this document</Download>
+  	</label>
+  </FormGeneratorDialog>
 </bundle>
