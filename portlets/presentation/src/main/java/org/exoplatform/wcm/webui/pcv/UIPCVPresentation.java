@@ -203,4 +203,14 @@ public class UIPCVPresentation extends UIBaseNodePresentation {
   public UIComponent getCommentComponent() {
   	return null;
   }
+
+public UIComponent getRemoveAttach() throws Exception {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+public UIComponent getRemoveComment() throws Exception {
+	// TODO Auto-generated method stub
+	return null;
+}
 }
