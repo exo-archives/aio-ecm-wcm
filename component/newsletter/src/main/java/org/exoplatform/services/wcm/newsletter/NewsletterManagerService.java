@@ -137,7 +137,13 @@ public class NewsletterManagerService {
 		return templateHandler;
 	}
 
-  public List<String> getAllBannedUser(Session session)throws Exception{
+  public List<String> getAllBannedUser()throws Exception{
+    RepositoryService repositoryService =
+      (RepositoryService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
+    ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    Session session = sessionProvider.getSession(workspaceName, manageableRepository);
+    List<String> listEmails = new ArrayList<String>();
     try{
       QueryManager queryManager = session.getWorkspace().getQueryManager();
       String sqlQuery = "select * from " + NewsletterConstant.USER_NODETYPE + " where " + 
@@ -145,15 +151,18 @@ public class NewsletterManagerService {
       Query query = queryManager.createQuery(sqlQuery, Query.SQL);
       QueryResult queryResult = query.execute();
       NodeIterator nodeIterator = queryResult.getNodes();
-      List<String> listEmails = new ArrayList<String>();
       while(nodeIterator.hasNext()){
         listEmails.add(nodeIterator.nextNode().getProperty(NewsletterConstant.USER_PROPERTY_MAIL).getString());
       }
-      return listEmails;
+    }catch(RepositoryException repositoryException){
+      log.info("User node is not created!");
     }catch(Exception ex){
-      log.error("Error when convert values to array: ", ex.fillInStackTrace());
-      return null;
+      log.error("Error when get all users who can't get newsletter: ", ex.fillInStackTrace());
+    }finally{
+      session.logout();
+      sessionProvider.close();
     }
+    return listEmails;
   }
 
 	/**
@@ -180,13 +189,13 @@ public class NewsletterManagerService {
 	 * @throws Exception the exception
 	 */
 	public void sendNewsletter() throws Exception {
+	  List<String> listBannedEmail = this.getAllBannedUser();
+	  
 		RepositoryService repositoryService =
 			(RepositoryService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
 		ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
 		SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
 		Session session = sessionProvider.getSession(workspaceName, manageableRepository);
-		
-		List<String> listBannedEmail = this.getAllBannedUser(session);
 
 		ExoContainer container = ExoContainerContext.getCurrentContainer();
 		MailService mailService = (MailService) container.getComponentInstanceOfType(MailService.class);

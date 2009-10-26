@@ -128,6 +128,28 @@ public class NewsletterManageUserHandler {
     return new ArrayList<String>();
   }
   
+  public boolean isAdministrator(SessionProvider sessionProvider, String portalName, String userName)throws Exception{
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    Session session = sessionProvider.getSession(workspace, manageableRepository);
+    try{
+      Node categoriesNode = (Node) session.getItem(NewsletterConstant.generateCategoryPath(portalName));
+      //ExtendedNode categoriesNodeExtend = (ExtendedNode)categoriesNode;
+      for(Value value : categoriesNode.getProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR).getValues()){
+        try {
+          if(value.getString().equals(userName)) return true;
+        }catch (Exception e) {
+          continue;
+        }
+      }
+    } catch(Exception ex){
+      log.error("getAllAdministrator() failed because of ", ex.fillInStackTrace());
+    }finally{
+      session.logout();
+      sessionProvider.close();
+    }
+    return false;
+  }
+  
   /**
    * Adds the administrator.
    * 
