@@ -60,4 +60,8 @@ public class NewsLetterUtil {
     link = "http://" + url + link;
     return link.replaceFirst("private", "public");
 	}
+	
+	static public String getCurrentUser() throws Exception {
+    return Util.getPortalRequestContext().getRemoteUser();
+  }
 }

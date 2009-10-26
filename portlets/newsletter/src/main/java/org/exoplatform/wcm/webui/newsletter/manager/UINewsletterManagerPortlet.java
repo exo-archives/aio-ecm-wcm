@@ -31,6 +31,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 		lifecycle = UIApplicationLifecycle.class
 )
 public class UINewsletterManagerPortlet extends UIPortletApplication {
+  public boolean isAdmin = false;
   
 	/** The is render ui categories. */
 	private boolean isRenderUICategories = true;

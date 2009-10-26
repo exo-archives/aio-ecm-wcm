@@ -262,7 +262,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
         Node subscriptionNode = newsletterNode.getParent();
         NewsletterManagerService newsletterManagerService = newsletterEntryForm.getApplicationComponent(NewsletterManagerService.class);
         if(subscriptionNode.hasProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER)){
-          List<String> listEmailBanned = newsletterManagerService.getAllBannedUser(subscriptionNode.getSession());
+          List<String> listEmailBanned = newsletterManagerService.getAllBannedUser();
           Property subscribedUserProperty = subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER);
           for(Value value : subscribedUserProperty.getValues()){
             try {
