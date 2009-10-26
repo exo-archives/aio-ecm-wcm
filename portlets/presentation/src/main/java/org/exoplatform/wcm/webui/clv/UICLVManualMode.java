@@ -75,7 +75,9 @@ public class UICLVManualMode extends UICLVContainer {
       for (int i = 0; i < contents.size(); i++) {
         String path = contents.get(i);
         try {
-          nodes.add(root.getNode(path.substring(1, path.length())));    
+        	Node originalNode = root.getNode(path.substring(1, path.length()));
+        	Node viewNode = Utils.getNodeView(originalNode);
+          if (viewNode != null) nodes.add(viewNode);    
         } catch (Exception e) {
           Utils.createPopupMessage(this, "UIMessageBoard.msg.add-node-error", null, ApplicationMessage.ERROR);
         }
@@ -88,14 +90,14 @@ public class UICLVManualMode extends UICLVContainer {
     }    
     getChildren().clear();
     ObjectPageList pageList = new ObjectPageList(nodes, itemsPerPage);    
-    UICLVPresentation contentListPresentation = addChild(UICLVPresentation.class, null, null);
     String templatePath = getFormViewTemplatePath();
-    ResourceResolver resourceResolver = getTemplateResourceResolver();       
-    contentListPresentation.init(templatePath, resourceResolver, pageList);    
-    contentListPresentation.setContentColumn(portletPreferences.getValue(UICLVPortlet.HEADER, null));
-    contentListPresentation.setShowLink(Boolean.parseBoolean(portletPreferences.getValue(UICLVPortlet.SHOW_LINK, null)));
-    contentListPresentation.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UICLVPortlet.SHOW_HEADER, null)));
-    contentListPresentation.setShowReadmore(Boolean.parseBoolean(portletPreferences.getValue(UICLVPortlet.SHOW_READMORE, null)));
-    contentListPresentation.setHeader(portletPreferences.getValue(UICLVPortlet.HEADER, null));
+    ResourceResolver resourceResolver = getTemplateResourceResolver();
+    UICLVPresentation clvPresentation = addChild(UICLVPresentation.class, null, null);
+    clvPresentation.init(templatePath, resourceResolver, pageList);    
+    clvPresentation.setContentColumn(portletPreferences.getValue(UICLVPortlet.HEADER, null));
+    clvPresentation.setShowLink(Boolean.parseBoolean(portletPreferences.getValue(UICLVPortlet.SHOW_LINK, null)));
+    clvPresentation.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UICLVPortlet.SHOW_HEADER, null)));
+    clvPresentation.setShowReadmore(Boolean.parseBoolean(portletPreferences.getValue(UICLVPortlet.SHOW_READMORE, null)));
+    clvPresentation.setHeader(portletPreferences.getValue(UICLVPortlet.HEADER, null));
   }  
 }

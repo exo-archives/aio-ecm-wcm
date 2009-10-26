@@ -19,7 +19,6 @@ package org.exoplatform.wcm.webui.clv;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -34,9 +33,6 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
-import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
-import org.exoplatform.services.ecm.publication.PublicationPlugin;
-import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.organization.OrganizationService;
@@ -44,7 +40,6 @@ import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.images.RESTImagesRendererService;
-import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
@@ -165,33 +160,6 @@ import org.exoplatform.webui.event.EventListener;
     PortletPreferences portletPreferences = getPortletPreferences();
     String showAble = portletPreferences.getValue(field, null);
     return (showAble != null) ? Boolean.parseBoolean(showAble) : false;
-  }
-
-  /**
-   * Gets the node view.
-   * 
-   * @param node the node
-   * 
-   * @return the node view
-   * 
-   * @throws Exception the exception
-   */
-  public Node getNodeView(Node node) throws Exception {
-    PublicationService publicationService = getApplicationComponent(PublicationService.class);
-    HashMap<String, Object> context = new HashMap<String, Object>();
-    context.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
-    String lifecyleName = null;
-    	try {
-    		lifecyleName = publicationService.getNodeLifecycleName(node);
-			} catch (NotInPublicationLifecycleException e) {
-			  // You shouldn't throw popup message, because some exception often rise here.
-			}
-		if (lifecyleName == null) return node;
-			
-    PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
-      .get(lifecyleName);
-    Node viewNode = publicationPlugin.getNodeView(node, context);
-    return viewNode;
   }
 
   /**
