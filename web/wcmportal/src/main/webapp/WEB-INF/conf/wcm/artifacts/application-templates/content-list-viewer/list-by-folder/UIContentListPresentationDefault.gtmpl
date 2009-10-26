@@ -31,7 +31,7 @@
 				String editActionLabel = _ctx.appRes("UIContentListPresentationDefault.action.edit");
 				
 				for (Node node : currentPageData) {
-					def viewNode = uicomponent.getNodeView(node);
+					def viewNode = Utils.getNodeView(node);
 				  if (viewNode == null)	continue;
 					String itemLink = uicomponent.getURL(viewNode);			
 					String itemName = viewNode.getName();

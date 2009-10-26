@@ -40,7 +40,7 @@
 			  def currentPageData = uicomponent.getCurrentPageData();
 				for (def i = 0; i < currentPageData.size(); i++) {
 				  def node = currentPageData.get(i);
-				  def viewNode = uicomponent.getNodeView(node);
+				  def viewNode = Utils.getNodeView(node);
 					if (viewNode == null)	continue;
 					
 					def isShowTitle = uicomponent.isShowField(UICLVPortlet.SHOW_TITLE);

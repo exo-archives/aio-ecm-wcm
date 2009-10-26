@@ -39,7 +39,7 @@
 			  	<div class="Contents">
 			  		<%
 							for (node in currentPageData) {
-							  def viewNode = uicomponent.getNodeView(node);
+							  def viewNode = Utils.getNodeView(node);
 								if (viewNode == null)	continue;
 								
 								def isShowTitle = uicomponent.isShowField(UICLVPortlet.SHOW_TITLE);
