@@ -19,6 +19,7 @@ package org.exoplatform.wcm.webui.scv;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import java.util.HashMap;
 import javax.jcr.Node;
 import javax.portlet.PortletPreferences;
 
@@ -27,6 +28,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.core.WCMService;
+import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
@@ -117,10 +119,19 @@ public class UIPresentationContainer extends UIContainer{
   		String repository = preferences.getValue(UISingleContentViewerPortlet.REPOSITORY, null);    
   		String workspace = preferences.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
   		String nodeIdentifier = preferences.getValue(UISingleContentViewerPortlet.IDENTIFIER, null) ;
+
+                HashMap<String,String> filters = new HashMap<String, String>();
+                filters.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
+
+                WCMComposer wcmComposer = getApplicationComponent(WCMComposer.class);
+                Node viewNode = wcmComposer.getContent(repository, workspace, nodeIdentifier, filters, Utils.getSessionProvider(this));
+  		UIPresentation presentation = getChild(UIPresentation.class);
+                presentation.setOriginalNode(viewNode);
+                presentation.setNode(viewNode);
+                /*
   		WCMService wcmService = getApplicationComponent(WCMService.class);
   		Node originalNode = wcmService.getReferencedContent(Utils.getSessionProvider(this), repository, workspace, nodeIdentifier);
   		Node viewNode = Utils.getNodeView(originalNode);
-  		
   		// Set original node for UIBaseNodePresentation (in case nodeView is a version node)
   		UIPresentation presentation = getChild(UIPresentation.class);
   		if (viewNode != null && viewNode.isNodeType("nt:frozenNode")) {
@@ -131,11 +142,11 @@ public class UIPresentationContainer extends UIContainer{
   			presentation.setOriginalNode(viewNode);
   			presentation.setNode(viewNode);
   		}
-  		
+  		*/
   		return viewNode;
-		} catch (Exception e) {
-			return null;
-		}
+        } catch (Exception e) {
+                return null;
+        }
   } 
 
   /**

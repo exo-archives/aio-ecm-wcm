@@ -124,22 +124,12 @@ public class UICLVFolderMode extends UICLVContainer {
     filters.put(WCMComposer.FILTER_ORDER_BY, orderBy);
     filters.put(WCMComposer.FILTER_ORDER_TYPE, orderType);
     
-    NodeIterator nodeIterator = wcmComposer.getContents(
+    List<Node> nodes = wcmComposer.getViewableContents(
                                    repository,
                                    workspace,
                                    folderPath,
                                    filters,
                                    Utils.getSessionProvider(this));
-    Node node = null;
-    Node viewNode = null;
-    List<Node> nodes = new ArrayList<Node>();
-    while(nodeIterator.hasNext()) {
-      node = nodeIterator.nextNode();
-      viewNode = Utils.getNodeView(node);
-      if(viewNode != null) {
-        nodes.add(viewNode);
-      }
-    }
     return nodes;
   }
 }

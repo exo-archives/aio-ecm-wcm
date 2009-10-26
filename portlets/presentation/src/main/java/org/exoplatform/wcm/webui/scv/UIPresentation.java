@@ -29,6 +29,7 @@ import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.cms.templates.impl.TemplateServiceImpl;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -177,6 +178,7 @@ public class UIPresentation extends UIBaseNodePresentation {
   @Override
   public String getTemplatePath() throws Exception {
     TemplateService templateService = getApplicationComponent(TemplateService.class);
+    TemplateServiceImpl tsi = (TemplateServiceImpl)templateService;
     return templateService.getTemplatePath(getOriginalNode(), false) ;
   }
     
@@ -227,4 +229,12 @@ public class UIPresentation extends UIBaseNodePresentation {
   public UIComponent getCommentComponent() {
   	return null;
   }
+
+    public UIComponent getRemoveAttach() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public UIComponent getRemoveComment() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

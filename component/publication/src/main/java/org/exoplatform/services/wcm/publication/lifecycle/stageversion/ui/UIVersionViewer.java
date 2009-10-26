@@ -144,4 +144,12 @@ public class UIVersionViewer extends UIBaseNodePresentation {
   public UIComponent getCommentComponent() {
   	return null;
   }
+
+    public UIComponent getRemoveAttach() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public UIComponent getRemoveComment() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

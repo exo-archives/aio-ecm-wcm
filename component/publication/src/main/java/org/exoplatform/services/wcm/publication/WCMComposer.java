@@ -49,13 +49,19 @@ public interface WCMComposer {
 	
 	/** Filter parameter to filter results by target mode. ex: editing, approving, live */
 	public final static String FILTER_MODE = "filter-mode";
-	
+
+	/** Filter parameter to search recursively or not. ex: recursive*/
+	public final static String FILTER_RECURSIVE = "filter-recursive";
+
 	/** The Constant MODE_EDIT. */
 	public final static String MODE_EDIT = "Edit";
 	
 	/** The Constant MODE_LIVE. */
 	public final static String MODE_LIVE = "Live";
 	
+	/** The Constant IS RECURSIVE. */
+	public final static String IS_RECURSIVE = "rec";
+
 	/** Filter parameter to filter results by site. ex: classic */
 	public final static String FILTER_SITE_NAME = "filter-site";
 	
@@ -91,6 +97,21 @@ public interface WCMComposer {
 	 * @throws Exception the exception
 	 */
 	public NodeIterator getContents(String repository, String workspace, String path, HashMap<String, String> filters, SessionProvider sessionProvider) throws Exception ;
+
+	/**
+	 * returns contents at the specified path based on filters.
+	 *
+	 * @param repository the repository
+	 * @param workspace the workspace
+	 * @param path the path
+	 * @param filters the filters
+	 * @param sessionProvider the session provider
+	 *
+	 * @return a jcr node list
+	 *
+	 * @throws Exception the exception
+	 */
+	public List<Node> getViewableContents(String repository, String workspace, String path, HashMap<String, String> filters, SessionProvider sessionProvider) throws Exception ;
 
 	/**
 	 * Update content.

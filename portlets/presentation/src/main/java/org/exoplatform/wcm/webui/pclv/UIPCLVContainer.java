@@ -287,38 +287,28 @@ public class UIPCLVContainer extends UIContainer {
 	 */
 	private List<Node> getListSymlinkNode(PortletPreferences portletPreferences, String categoryPath)	throws Exception {
 		String repository = portletPreferences.getValue(UIPCLVPortlet.REPOSITORY, "");
-		String worksapce = portletPreferences.getValue(UIPCLVPortlet.WORKSPACE, "");
+		String workspace = portletPreferences.getValue(UIPCLVPortlet.WORKSPACE, "");
 		String orderType = portletPreferences.getValue(UIPCLVPortlet.ORDER_TYPE, "");
 		String orderBy = portletPreferences.getValue(UIPCLVPortlet.ORDER_BY, "");
 		if ("".equals(orderType)) orderType = "DESC";
 		if ("".equals(orderBy)) orderBy = "exo:dateCreated";
-		String orderQuery = " ORDER BY ";
-		orderQuery += orderBy + " " + orderType;
-		RepositoryService repositoryService = Utils.getService(RepositoryService.class);
-		ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-		Session session = Utils.getSessionProvider(this).getSession(worksapce, manageableRepository);
-		QueryManager queryManager = session.getWorkspace().getQueryManager();
-		StringBuffer sqlQuery = new StringBuffer("select * from exo:taxonomyLink where jcr:path LIKE '")
-  		.append(categoryPath)
-  		.append("/%'")
-  		.append(" AND NOT jcr:path LIKE '")
-  		.append(categoryPath)
-  		.append("/%/%'")
-  		.append(" " + orderQuery);
-		Query query = queryManager.createQuery(sqlQuery.toString(), Query.SQL);
-		QueryResult queryResult = query.execute();
-		NodeIterator iterator = queryResult.getNodes();
-		List<Node> listNodes = new ArrayList<Node>();
-		Node node = null;
-		Node viewNode = null;
-		while(iterator.hasNext()) {
-        node = iterator.nextNode();
-        viewNode = this.getNodeView(node);
-        if(viewNode != null) {
-          listNodes.add(viewNode);
-        }
-		}
-		return listNodes;
+
+                WCMComposer wcmComposer = getApplicationComponent(WCMComposer.class);
+                HashMap<String, String> filters = new HashMap<String, String>();
+                filters.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
+                filters.put(WCMComposer.FILTER_ORDER_BY, orderBy);
+                filters.put(WCMComposer.FILTER_ORDER_TYPE, orderType);
+                filters.put(WCMComposer.FILTER_PRIMARY_TYPE, "exo:taxonomyLink");
+
+                List<Node> nodes = wcmComposer.getViewableContents(
+                                               repository,
+                                               workspace,
+                                               categoryPath,
+                                               filters,
+                                               Utils.getSessionProvider(this));
+
+
+		return nodes;
 	}
 	
 	/**

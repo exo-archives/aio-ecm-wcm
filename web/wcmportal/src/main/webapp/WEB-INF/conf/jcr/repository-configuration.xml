@@ -37,7 +37,7 @@
 					<cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.LinkedWorkspaceStorageCacheImpl">
 						<properties>
 							<property name="max-size" value="500k"/>
-							<property name="live-time" value="1h"/>
+							<property name="live-time" value="5m"/>
 						</properties>
 					</cache>
 					<query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
@@ -91,7 +91,7 @@
 					<cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.LinkedWorkspaceStorageCacheImpl">
 						<properties>
 							<property name="max-size" value="500k"/>
-							<property name="live-time" value="1h"/>
+							<property name="live-time" value="5m"/>
 						</properties>
 					</cache>
 					<query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
@@ -155,7 +155,7 @@
 					<cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.LinkedWorkspaceStorageCacheImpl">
 						<properties>
 							<property name="max-size" value="500k"/>
-							<property name="live-time" value="1h"/>
+							<property name="live-time" value="5m"/>
 						</properties>
 					</cache>
 					<query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
@@ -260,7 +260,7 @@
 					<cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.LinkedWorkspaceStorageCacheImpl">
 						<properties>
 							<property name="max-size" value="500k"/>
-							<property name="live-time" value="1h"/>
+							<property name="live-time" value="5m"/>
 						</properties>
 					</cache>
 					<query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
@@ -314,7 +314,7 @@
 					<cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.LinkedWorkspaceStorageCacheImpl">
 						<properties>
 							<property name="max-size" value="500k"/>
-							<property name="live-time" value="1h"/>
+							<property name="live-time" value="5m"/>
 						</properties>
 					</cache>
 					<query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
