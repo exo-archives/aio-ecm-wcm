@@ -72,7 +72,8 @@
             Node node = bean.getNode();
             String date = dateFormat.format(uicomponent.getCreateDate(node));
             WCMPublicationService wcmPublicationService = uicomponent.getApplicationComponent(WCMPublicationService.class);
-            String publicationState = wcmPublicationService.getContentState(node); 
+            String publicationState = wcmPublicationService.getContentState(node);
+            if (publicationState == null) publicationState = "";
     %>        
           <td>
             <div class="default16x16Icon ItemIcon <%=Utils.getNodeTypeIcon(node, "16x16Icon")%>" style="width: auto; height: auto; background-position: left top; padding-left: 20px">
