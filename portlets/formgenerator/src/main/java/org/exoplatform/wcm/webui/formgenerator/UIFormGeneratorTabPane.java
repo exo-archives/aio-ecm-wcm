@@ -272,7 +272,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       } else {
         dialogTemplate.append("      <tr>\n");
         
-        dialogTemplate.append("        <td class=\"FieldLabel\"><%=_ctx.appRes(\"FormGenerator.dialog.label." + inputFieldName + "\")%></td>\n");
+        dialogTemplate.append("        <td class=\"FieldLabel\"><%=_ctx.appRes(\"FormGenerator.dialog.label." + propertyName + "\")%></td>\n");
         dialogTemplate.append("        <td class=\"FieldComponent\">\n");
         dialogTemplate.append("          <%\n");
         
