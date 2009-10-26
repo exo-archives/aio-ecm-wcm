@@ -129,7 +129,7 @@ PluginUtils.prototype.actionColExp = function(objNode) {
 	if(!objNode) return;
 	var nextElt = eXo.core.DOMUtil.findNextElementByTagName(objNode, "div");
 	var iconElt = eXo.core.DOMUtil.getChildrenByTagName(objNode, "div")[0];
-	if(!nextElt) return;
+	if(!nextElt || nextElt != "ChildrenContainer") return;
 	if(nextElt.style.display != 'block') {
 		nextElt.style.display = 'block';
 		iconElt.className = 'CollapseIcon';
