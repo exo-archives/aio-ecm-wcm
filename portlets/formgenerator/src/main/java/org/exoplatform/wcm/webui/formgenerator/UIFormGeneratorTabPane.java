@@ -200,7 +200,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
    * 
    * @throws Exception the exception
    */
-  private String generateDialogTemplate(List<UIFormGeneratorInputBean> forms) throws Exception {
+  private String generateDialogTemplate(String templateName, List<UIFormGeneratorInputBean> forms) throws Exception {
     StringBuilder dialogTemplate = new StringBuilder();
     dialogTemplate.append("<%\n");
     dialogTemplate.append(" import java.util.Calendar;\n");
@@ -227,7 +227,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
      * (show name, use timestamp, convert from another field like exo:title for example) 
      */
     dialogTemplate.append("        <tr style=\"display:none;\">\n");
-    dialogTemplate.append("          <td class=\"FieldLabel\"><%=_ctx.appRes(\"FormGenerator.dialog.label.Date\")%></td>\n");
+    dialogTemplate.append("          <td class=\"FieldLabel\"><%=_ctx.appRes(\"" + templateName + ".dialog.label.Date\")%></td>\n");
     dialogTemplate.append("          <td class=\"FieldComponent\">\n");
     dialogTemplate.append("            $timestampName \n               <div style=\"display:none;\"><%\n");
     dialogTemplate.append("              String[] fieldName = [\"jcrPath=/node\", \"mixintype=mix:i18n\", \"editable=if-null\", \"validate=empty,name\", timestampName] ;\n");
@@ -272,7 +272,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       } else {
         dialogTemplate.append("      <tr>\n");
         
-        dialogTemplate.append("        <td class=\"FieldLabel\"><%=_ctx.appRes(\"FormGenerator.dialog.label." + propertyName + "\")%></td>\n");
+        dialogTemplate.append("        <td class=\"FieldLabel\"><%=_ctx.appRes(\"" + templateName + ".dialog.label." + propertyName + "\")%></td>\n");
         dialogTemplate.append("        <td class=\"FieldComponent\">\n");
         dialogTemplate.append("          <%\n");
         
@@ -366,7 +366,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
    * 
    * @return the string
    */
-  private String generateViewTemplate(List<UIFormGeneratorInputBean> forms) {
+  private String generateViewTemplate(String templateName, List<UIFormGeneratorInputBean> forms) {
     StringBuilder viewTemplate = new StringBuilder();
     viewTemplate.append("<%\n");
     viewTemplate.append(" import org.exoplatform.download.DownloadService;\n");
@@ -456,8 +456,8 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       String preferenceRepository = UIFormGeneratorUtils.getPreferenceRepository();
       
       formGeneratorTabPane.addNodetype(event.getRequestContext(), preferenceRepository, nodetypeName, forms);
-      String newGTMPLTemplate = formGeneratorTabPane.generateDialogTemplate(forms);
-      String newViewTemplate = formGeneratorTabPane.generateViewTemplate(forms);
+      String newGTMPLTemplate = formGeneratorTabPane.generateDialogTemplate(templateName, forms);
+      String newViewTemplate = formGeneratorTabPane.generateViewTemplate(templateName, forms);
       
       TemplateService templateService = Utils.getService(TemplateService.class);
       templateService.addTemplate(true, nodetypeName, templateName, true, templateName, new String[] {"*"}, newGTMPLTemplate, preferenceRepository) ;
