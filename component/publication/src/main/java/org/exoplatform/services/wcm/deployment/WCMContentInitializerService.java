@@ -24,6 +24,7 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
+import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.services.deployment.DeploymentPlugin;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -54,8 +55,8 @@ public class WCMContentInitializerService implements Startable{
    * 
    * @param repositoryService the repository service
    */
-  public WCMContentInitializerService(RepositoryService repositoryService) {
-    this.repositoryService = repositoryService;
+  public WCMContentInitializerService(UserPortalConfigService userPortalConfigService) {
+    this.repositoryService = WCMCoreUtils.getService(RepositoryService.class);
   }
   
   /**

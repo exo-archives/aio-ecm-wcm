@@ -37,7 +37,6 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
-import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.picocontainer.Startable;
@@ -66,10 +65,9 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService, S
    * @param configService the config service
    * @param repositoryService the repository service
    */
-  //chuong.phan: DO NOT REMOVE WebSchemaConfigService, THIS IS DEPENDENCY FOR DEPLOYMENT
-  public LivePortalManagerServiceImpl(final WCMConfigurationService configService, final RepositoryService repositoryService, WebSchemaConfigService schemaConfigService) {
-    this.wcmConfigService = configService;
-    this.repositoryService = repositoryService;
+  public LivePortalManagerServiceImpl() {
+    this.wcmConfigService = WCMCoreUtils.getService(WCMConfigurationService.class);
+    this.repositoryService = WCMCoreUtils.getService(RepositoryService.class);
   }  
 
   /* (non-Javadoc)

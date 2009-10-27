@@ -28,6 +28,7 @@ import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.wcm.publication.lifecycle.simple.SimplePublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.picocontainer.Startable;
 
 /**
@@ -54,9 +55,9 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
    * 
    * @param publicationService the publication service
    */
-  public WCMPublicationServiceImpl(PublicationService publicationService, WCMComposer wcmComposer) {
-    this.publicationService = publicationService;
-    this.wcmComposer = wcmComposer;
+  public WCMPublicationServiceImpl() {
+    this.publicationService = WCMCoreUtils.getService(PublicationService.class);
+    this.wcmComposer = WCMCoreUtils.getService(WCMComposer.class);
   }
 
   /* (non-Javadoc)

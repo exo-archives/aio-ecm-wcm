@@ -24,11 +24,11 @@ import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.wcm.deployment.WCMContentInitializerService;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
@@ -74,15 +74,14 @@ public class NewsletterInitializationService implements Startable {
    * @param newsletterManagerService the newsletter manager service
    * @param wcmContentInitializerService the wcm content initializer service
    */
-  // chuong.phan: DO NOT REMOVE WCMContentInitializerService, THIS IS DEPENDENCY FOR DEPLOYMENT
   @SuppressWarnings("unchecked")
-  public NewsletterInitializationService(InitParams initParams, NewsletterManagerService newsletterManagerService, LivePortalManagerService livePortalManagerService, WCMContentInitializerService wcmContentInitializerService) {
+  public NewsletterInitializationService(InitParams initParams, UserPortalConfigService userPortalConfigService) {
+  	this.livePortalManagerService = WCMCoreUtils.getService(LivePortalManagerService.class);
+  	this.newsletterManagerService = WCMCoreUtils.getService(NewsletterManagerService.class);
     portalNames = initParams.getValuesParam("portalNames").getValues();
     categoryConfigs = initParams.getObjectParamValues(NewsletterCategoryConfig.class);
     subscriptionConfigs = initParams.getObjectParamValues(NewsletterSubscriptionConfig.class);
     userConfigs = initParams.getObjectParamValues(NewsletterUserConfig.class);
-    this.livePortalManagerService = livePortalManagerService;
-    this.newsletterManagerService = newsletterManagerService;
   }
 
   /* (non-Javadoc)

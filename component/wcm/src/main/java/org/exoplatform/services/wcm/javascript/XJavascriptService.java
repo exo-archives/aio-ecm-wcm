@@ -87,15 +87,11 @@ public class XJavascriptService implements Startable {
    * 
    * @throws Exception the exception
    */
-  public XJavascriptService(RepositoryService repositoryService,
-                            JavascriptConfigService jsConfigService,
-                            ServletContext servletContext,
-                            WebSchemaConfigService schemaConfigService,
-                            WCMConfigurationService configurationService) throws Exception{    
-    this.jsConfigService = jsConfigService ;
-    this.sContext = servletContext ;
-    this.configurationService = configurationService;
-    this.schemaConfigService = schemaConfigService;
+  public XJavascriptService() throws Exception{    
+    this.jsConfigService = WCMCoreUtils.getService(JavascriptConfigService.class);
+    this.sContext = WCMCoreUtils.getService(ServletContext.class);
+    this.schemaConfigService = WCMCoreUtils.getService(WebSchemaConfigService.class);
+    this.configurationService = WCMCoreUtils.getService(WCMConfigurationService.class);
   }
 
   /**

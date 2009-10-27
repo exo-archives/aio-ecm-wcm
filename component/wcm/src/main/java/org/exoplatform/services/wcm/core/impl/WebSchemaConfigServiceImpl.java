@@ -30,12 +30,12 @@ import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.core.WebSchemaHandler;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.picocontainer.Startable;
 
 /**
@@ -62,8 +62,8 @@ public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Start
    * @param configurationService the configuration service
    * @param hierarchyCreator the hierarchy creator
    */
-  public WebSchemaConfigServiceImpl(WCMConfigurationService configurationService, NodeHierarchyCreator hierarchyCreator) {
-    this.wcmConfigService = configurationService;
+  public WebSchemaConfigServiceImpl() {
+    this.wcmConfigService = WCMCoreUtils.getService(WCMConfigurationService.class);
   }     
 
   /* (non-Javadoc)

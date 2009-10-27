@@ -86,15 +86,12 @@ public class XSkinService implements Startable {
    * 
    * @throws Exception the exception
    */
-  public XSkinService(SkinService skinService, 
-                      WebSchemaConfigService schemaConfigService, 
-                      WCMConfigurationService configurationService, 
-                      ServletContext servletContext) throws Exception {
-    this.skinService = skinService ;
+  public XSkinService() throws Exception {
+    this.skinService = WCMCoreUtils.getService(SkinService.class);
     this.skinService.addResourceResolver(new WCMSkinResourceResolver(this.skinService));
-    this.configurationService = configurationService;
-    this.schemaConfigService = schemaConfigService;
-    this.servletContext = servletContext;
+    this.configurationService = WCMCoreUtils.getService(WCMConfigurationService.class);
+    this.schemaConfigService = WCMCoreUtils.getService(WebSchemaConfigService.class);
+    this.servletContext = WCMCoreUtils.getService(ServletContext.class);
   }
 
   /**

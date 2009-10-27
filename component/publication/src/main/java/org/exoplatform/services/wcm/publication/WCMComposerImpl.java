@@ -14,7 +14,6 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 
 import org.apache.commons.logging.Log;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
@@ -22,6 +21,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.picocontainer.Startable;
 
 /**
@@ -40,9 +40,6 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	/** The publication service. */
 	private PublicationService publicationService;
 	
-	/** The wcm publication service. */
-	private WCMPublicationService wcmPublicationService = null;
-	
 	/** The templates filter. */
 	private String templatesFilter = null;
 	
@@ -60,32 +57,11 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	 * 
 	 * @throws Exception the exception
 	 */
-	public WCMComposerImpl(TemplateService templateService, PublicationService publicationService) throws Exception {
-		this.templateService = templateService;
+	public WCMComposerImpl() throws Exception {
+		this.templateService = WCMCoreUtils.getService(TemplateService.class);
+		this.publicationService = WCMCoreUtils.getService(PublicationService.class);
+		this.repositoryService = WCMCoreUtils.getService(RepositoryService.class);
 		this.repository = "repository";
-		this.publicationService = publicationService;
-		init();
-	}
-	
-	/**
-	 * Inits the.
-	 * 
-	 * @throws Exception the exception
-	 */
-	private void init() throws Exception {
-	    repositoryService = RepositoryService.class.cast(ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class));
-	}
-	
-	/**
-	 * Gets the wCM publication service.
-	 * 
-	 * @return the wCM publication service
-	 */
-	private WCMPublicationService getWCMPublicationService() {
-		if (wcmPublicationService==null) {
-			wcmPublicationService = WCMPublicationService.class.cast(ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(WCMPublicationService.class));
-		}
-		return wcmPublicationService;
 	}
 	
 	/* (non-Javadoc)
@@ -103,7 +79,8 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		String lifecycleName = publicationService.getNodeLifecycleName(node);
 		PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
 		Node nodeView = publicationPlugin.getNodeView(node, new HashMap<String, Object>());
-		String state = getWCMPublicationService().getContentState(node);
+		WCMPublicationService wcmPublicationService = WCMCoreUtils.getService(WCMPublicationService.class);
+		String state = wcmPublicationService.getContentState(node);
 		String mode = filters.get(FILTER_MODE);
 		List<String> states = getAllowedStates(mode);
 
