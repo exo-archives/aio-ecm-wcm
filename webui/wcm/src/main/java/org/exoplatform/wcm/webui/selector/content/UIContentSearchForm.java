@@ -294,8 +294,8 @@ public class UIContentSearchForm extends UIForm {
 
       if(typeSearch.equals(UIContentBrowsePanel.WEBCONENT)){
         if(UIContentSearchForm.SEARCH_BY_NAME.equals(radioValue)) {
-          String keyword = uiWCSearch.getUIStringInput(radioValue).getValue().trim();
-          if(uiWCSearch.haveEmptyField(uiApp, event, keyword)) return;
+          String keyword = uiWCSearch.getUIStringInput(radioValue).getValue();
+          if(uiWCSearch.haveEmptyField(uiApp, event, keyword.trim())) return;
           pagResult = uiWCSearch.searchWebContentByName(keyword, qCriteria, pageSize);
         } else if(UIContentSearchForm.SEARCH_BY_CONTENT.equals(radioValue)) {
           String keyword = uiWCSearch.getUIStringInput(radioValue).getValue();
@@ -352,8 +352,8 @@ public class UIContentSearchForm extends UIForm {
         }
       }else if(typeSearch.equals(UIContentBrowsePanel.DMSDOCUMENT)){
         if(UIContentSearchForm.SEARCH_BY_NAME.equals(radioValue)) {
-          String keyword = uiWCSearch.getUIStringInput(radioValue).getValue().trim();
-          if(uiWCSearch.haveEmptyField(uiApp, event, keyword)) return;
+          String keyword = uiWCSearch.getUIStringInput(radioValue).getValue();
+          if(uiWCSearch.haveEmptyField(uiApp, event, keyword.trim())) return;
           pagResult = uiWCSearch.searchDocumentByName(keyword, qCriteria, pageSize);
         } else if(UIContentSearchForm.SEARCH_BY_CONTENT.equals(radioValue)) {
           String keyword = uiWCSearch.getUIStringInput(radioValue).getValue();
