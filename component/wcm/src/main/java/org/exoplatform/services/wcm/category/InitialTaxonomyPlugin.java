@@ -27,7 +27,6 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ObjectParameter;
@@ -52,7 +51,6 @@ import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
-import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin;
 
 /**
@@ -79,32 +77,25 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
   private boolean                 autoCreateInNewRepository_ = true;
 
   /** The repository service_. */
-  private RepositoryService       repositoryService_;
+  private RepositoryService       repositoryService;
 
   /** The taxonomy service_. */
-  private TaxonomyService         taxonomyService_;
+  private TaxonomyService         taxonomyService;
 
   /** The base taxonomies storage_. */
-  private String                  baseTaxonomiesStorage_;
+  private String                  baseTaxonomiesStorage;
 
   /** The action service container_. */
-  private ActionServiceContainer  actionServiceContainer_;
+  private ActionServiceContainer  actionServiceContainer;
 
   /** The params_. */
-  private InitParams              params_;
+  private InitParams              params;
   
   /** The dms configuration_. */
   private DMSConfiguration        dmsConfiguration_;
   
-  /** The portal name. */
-  private String                  portalName;
-  
   /** The name. */
   private String                  name;
-  
-  /** The log. */
-  private static Log log = ExoLogger.getLogger(CategoryInitializationPlugin.class);
-  
   
   /**
    * Instantiates a new initial taxonomy plugin.
@@ -128,19 +119,19 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
                                DMSConfiguration dmsConfiguration) throws Exception {
     super(params, configurationManager, repositoryService);
     
-    repositoryService_ = repositoryService;
-    baseTaxonomiesStorage_ = nodeHierarchyCreator.getJcrPath(BasePath.TAXONOMIES_TREE_STORAGE_PATH);
-    taxonomyService_ = taxonomyService;
-    actionServiceContainer_ = actionServiceContainer;
-    params_ = params;
-    ValueParam autoCreated = params_.getValueParam("autoCreateInNewRepository");
-    ValueParam workspaceParam = params_.getValueParam("workspace");
-    ValueParam pathParam = params_.getValueParam("path");
-    ValueParam nameParam = params_.getValueParam("treeName");
+    this.repositoryService = repositoryService;
+    baseTaxonomiesStorage = nodeHierarchyCreator.getJcrPath(BasePath.TAXONOMIES_TREE_STORAGE_PATH);
+    this.taxonomyService = taxonomyService;
+    this.actionServiceContainer = actionServiceContainer;
+    this.params = params;
+    ValueParam autoCreated = params.getValueParam("autoCreateInNewRepository");
+    ValueParam workspaceParam = params.getValueParam("workspace");
+    ValueParam pathParam = params.getValueParam("path");
+    ValueParam nameParam = params.getValueParam("treeName");
     if (autoCreated != null)
       autoCreateInNewRepository_ = Boolean.parseBoolean(autoCreated.getValue());
     if (pathParam == null || workspaceParam == null || workspaceParam.getValue().trim().length() == 0) {
-      path = baseTaxonomiesStorage_;
+      path = baseTaxonomiesStorage;
     } else {
       path = pathParam.getValue();
       workspace = workspaceParam.getValue();
@@ -155,8 +146,6 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
    * @see org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin#deployToPortal(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
   public void deployToPortal(SessionProvider sessionProvider, String portalName) throws Exception {
-    this.portalName = portalName;
-    // Replace with real data
     String firstCharactor = portalName.substring(0, 1).toUpperCase();
     treeName = StringUtils.replace(treeName, "{treeName}", firstCharactor + portalName.substring(1, portalName.length()));
     path = StringUtils.replace(path, "{portalName}", portalName);
@@ -170,16 +159,16 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
    */
   public void init() throws Exception {
     if (autoCreateInNewRepository_) {
-      for (RepositoryEntry repositoryEntry : repositoryService_.getConfig()
+      for (RepositoryEntry repositoryEntry : repositoryService.getConfig()
           .getRepositoryConfigurations()) {
         importPredefineTaxonomies(repositoryEntry.getName());
       }
       return;
     }
-    ValueParam param = params_.getValueParam("repository");
+    ValueParam param = params.getValueParam("repository");
     String repository = null;
     if (param == null) {
-      repository = repositoryService_.getDefaultRepository().getConfiguration().getName();
+      repository = repositoryService.getDefaultRepository().getConfiguration().getName();
     } else {
       repository = param.getValue();
     }
@@ -276,26 +265,25 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
    */
   @SuppressWarnings("unchecked")
   private void importPredefineTaxonomies(String repository) throws Exception {
-    ManageableRepository manageableRepository = repositoryService_.getRepository(repository);
-    DMSRepositoryConfiguration dmsRepoConfig = dmsConfiguration_.getConfig(repository);
-    if ("".equals(workspace)) {
-      workspace = dmsRepoConfig.getSystemWorkspace();
+    ManageableRepository manageableRepository = this.repositoryService.getRepository(repository);
+    DMSRepositoryConfiguration dmsRepoConfig = this.dmsConfiguration_.getConfig(repository);
+    if (getWorkspace() == null) {
+      setWorkspace(dmsRepoConfig.getSystemWorkspace());
     }
-    Session session = manageableRepository.getSystemSession(workspace);
-    Node taxonomyStorageNode = (Node) session.getItem(path);
-    Node taxonomyStorageNodeSystem = null;
+    Session session = manageableRepository.getSystemSession(getWorkspace());
+    Node taxonomyStorageNode = (Node) session.getItem(getPath());
     if (taxonomyStorageNode.hasProperty("exo:isImportedChildren")) {
       session.logout();
       return;
     }
     taxonomyStorageNode.setProperty("exo:isImportedChildren", true);
-    Iterator<ObjectParameter> it = params_.getObjectParamIterator();
+    Iterator<ObjectParameter> it = params.getObjectParamIterator();
+    Node taxonomyStorageNodeSystem = Utils.makePath(taxonomyStorageNode, treeName, "exo:taxonomy",
+            null);
+    session.save();
     while (it.hasNext()) {
       ObjectParameter objectParam = it.next();
       if (objectParam.getName().equals("permission.configuration")) {
-        taxonomyStorageNodeSystem = Utils.makePath(taxonomyStorageNode, treeName, "exo:taxonomy",
-            null);
-        session.save();
         TaxonomyConfig config = (TaxonomyConfig) objectParam.getObject();
         for (Taxonomy taxonomy : config.getTaxonomies()) {
           Map mapPermissions = getPermissions(taxonomy.getPermissions());
@@ -317,21 +305,10 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
           taxonomyNode.getSession().save();
         }
       } else if (objectParam.getName().equals("predefined.actions")) {
-        taxonomyStorageNodeSystem = Utils.makePath(taxonomyStorageNode, treeName, "exo:taxonomy",
-            null);
-        session.save();
         ActionConfig config = (ActionConfig) objectParam.getObject();
         List actions = config.getActions();
         for (Iterator iter = actions.iterator(); iter.hasNext();) {
           TaxonomyAction action = (TaxonomyAction) iter.next();
-          
-          // Replace with real tree name
-          String homePath = action.getHomePath();
-          homePath = StringUtils.replace(homePath, "{treeName}", treeName);
-          homePath = StringUtils.replace(homePath, "{portalName}", portalName);
-          action.setHomePath(homePath);
-          action.setTargetPath(StringUtils.replace(action.getTargetPath(), "{portalName}", portalName));
-          
           addAction(action, taxonomyStorageNodeSystem, repository);
         }
       }
@@ -339,9 +316,9 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
     }
     taxonomyStorageNode.save();
     try {
-      taxonomyService_.addTaxonomyTree(taxonomyStorageNodeSystem);
+      taxonomyService.addTaxonomyTree(taxonomyStorageNodeSystem);
     } catch (TaxonomyAlreadyExistsException e) {
-      log.error("Error when perform importPredefineTaxonomies: ", e.fillInStackTrace());
+      e.printStackTrace();
     }
     session.save();
     session.logout();
@@ -398,8 +375,8 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
     } else {
       rootProp.setValue((sortedInputs.get("/node/exo:name")).getValue());
     }
-    actionServiceContainer_.addAction(srcNode, repository, action.getType(), sortedInputs);
-    Node actionNode = actionServiceContainer_.getAction(srcNode, action.getName());
+    actionServiceContainer.addAction(srcNode, repository, action.getType(), sortedInputs);
+    Node actionNode = actionServiceContainer.getAction(srcNode, action.getName());
     if (action.getRoles() != null) {
       String[] roles = StringUtils.split(action.getRoles(), ";");
       actionNode.setProperty("exo:roles", roles);

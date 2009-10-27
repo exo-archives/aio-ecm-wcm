@@ -26,7 +26,6 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ObjectParameter;
 import org.exoplatform.container.xml.ValueParam;
@@ -48,7 +47,6 @@ import org.exoplatform.services.jcr.config.RepositoryEntry;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
-import org.exoplatform.services.log.ExoLogger;
 
 /**
  * Created by The eXo Platform SAS
@@ -78,9 +76,6 @@ public class CategoryInitializationPlugin extends TaxonomyPlugin {
   
   /** The params. */
   private InitParams params;
-  
-  /** The log. */
-  private static Log log = ExoLogger.getLogger(CategoryInitializationPlugin.class);
   
   /**
    * Instantiates a new category initialization plugin.
@@ -155,24 +150,23 @@ public class CategoryInitializationPlugin extends TaxonomyPlugin {
   private void importPredefineTaxonomies(String repository) throws Exception {
     ManageableRepository manageableRepository = this.repositoryService.getRepository(repository);
     DMSRepositoryConfiguration dmsRepoConfig = this.dmsConfiguration.getConfig(repository);
-    if ("".equals(getWorkspace())) {
+    if (getWorkspace() == null) {
       setWorkspace(dmsRepoConfig.getSystemWorkspace());
     }
     Session session = manageableRepository.getSystemSession(getWorkspace());
     Node taxonomyStorageNode = (Node) session.getItem(getPath());
-    Node taxonomyStorageNodeSystem = null;
     if (taxonomyStorageNode.hasProperty("exo:isImportedChildren")) {
       session.logout();
       return;
     }
     taxonomyStorageNode.setProperty("exo:isImportedChildren", true);
-    Iterator<ObjectParameter> it = this.params.getObjectParamIterator();
+    Iterator<ObjectParameter> it = params.getObjectParamIterator();
+    Node taxonomyStorageNodeSystem = Utils.makePath(taxonomyStorageNode, treeName, "exo:taxonomy",
+            null);
+    session.save();
     while (it.hasNext()) {
       ObjectParameter objectParam = it.next();
       if (objectParam.getName().equals("permission.configuration")) {
-        taxonomyStorageNodeSystem = Utils.makePath(taxonomyStorageNode, this.treeName, "exo:taxonomy",
-            null);
-        session.save();
         TaxonomyConfig config = (TaxonomyConfig) objectParam.getObject();
         for (Taxonomy taxonomy : config.getTaxonomies()) {
           Map mapPermissions = getPermissions(taxonomy.getPermissions());
@@ -194,9 +188,6 @@ public class CategoryInitializationPlugin extends TaxonomyPlugin {
           taxonomyNode.getSession().save();
         }
       } else if (objectParam.getName().equals("predefined.actions")) {
-        taxonomyStorageNodeSystem = Utils.makePath(taxonomyStorageNode, this.treeName, "exo:taxonomy",
-            null);
-        session.save();
         ActionConfig config = (ActionConfig) objectParam.getObject();
         List actions = config.getActions();
         for (Iterator iter = actions.iterator(); iter.hasNext();) {
@@ -204,12 +195,13 @@ public class CategoryInitializationPlugin extends TaxonomyPlugin {
           addAction(action, taxonomyStorageNodeSystem, repository);
         }
       }
+
     }
     taxonomyStorageNode.save();
     try {
-      this.taxonomyService.addTaxonomyTree(taxonomyStorageNodeSystem);
+      taxonomyService.addTaxonomyTree(taxonomyStorageNodeSystem);
     } catch (TaxonomyAlreadyExistsException e) {
-      log.error("Error when perform importPredefineTaxonomies: ", e.fillInStackTrace());
+      e.printStackTrace();
     }
     session.save();
     session.logout();
