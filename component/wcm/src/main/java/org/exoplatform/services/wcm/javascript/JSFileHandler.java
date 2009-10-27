@@ -94,15 +94,17 @@ public class JSFileHandler extends BaseWebSchemaHandler {
 
   public void onModifyNode(SessionProvider sessionProvider, Node file) throws Exception {
     if(isPortalJSFolder) { 
+    	Node portal = findPortalNode(sessionProvider, file);
       XJavascriptService javascriptService = getService(XJavascriptService.class);
-      javascriptService.updatePortalJSOnModify(sessionProvider, file);
+      javascriptService.updatePortalJSOnModify(portal, file);
     }
   }
 
   public void onRemoveNode(SessionProvider sessionProvider, Node file) throws Exception { 
     if(isPortalJSFolder) { 
+    	Node portal = findPortalNode(sessionProvider, file);
       XJavascriptService javascriptService = getService(XJavascriptService.class);
-      javascriptService.updatePortalJSOnRemove(sessionProvider, file);
+      javascriptService.updatePortalJSOnRemove(portal, file);
     }
   }
 

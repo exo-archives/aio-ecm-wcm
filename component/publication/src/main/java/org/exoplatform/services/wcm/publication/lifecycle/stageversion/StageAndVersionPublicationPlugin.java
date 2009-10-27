@@ -177,7 +177,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
 		  }
 		  revisionsMap.put(node.getUUID(),editableRevision);
 		  versionLog = new VersionLog(node.getBaseVersion().getName(), PublicationDefaultStates.DRAFT,userId, new GregorianCalendar(),StageAndVersionPublicationConstant.ENROLLED_TO_LIFECYCLE);
-		  //Change all awaiting, live revision to obsolete      
+		  //Change all live revision to obsolete      
 		  Value  liveVersionValue = valueFactory.createValue(liveVersion);
 		  node.setProperty(StageAndVersionPublicationConstant.LIVE_REVISION_PROP,liveVersionValue);
 		  node.setProperty(StageAndVersionPublicationConstant.LIVE_DATE_PROP,new GregorianCalendar());

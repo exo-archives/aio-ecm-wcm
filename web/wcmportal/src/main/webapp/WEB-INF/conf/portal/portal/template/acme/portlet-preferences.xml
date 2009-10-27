@@ -4,7 +4,7 @@
 	<portlet-preferences>
 		<owner-type>portal</owner-type>
 		<owner-id>@owner@</owner-id>
-		<window-id>portal#@owner@:/web/NavigationPortlet/@owner@-admintoolbar</window-id>
+		<window-id>portal#template:/web/NavigationPortlet/template-admintoolbar</window-id>
 		<preference>
 			<name>useAJAX</name>
 			<value>false</value>
@@ -15,7 +15,7 @@
 	<portlet-preferences>
 		<owner-type>portal</owner-type>
 		<owner-id>@owner@</owner-id>
-		<window-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-logo</window-id>
+		<window-id>portal#template:/presentation/SingleContentViewer/template-logo</window-id>
 		<preference>
 			<name>repository</name>
 			<value>repository</value>
@@ -46,7 +46,7 @@
 	<portlet-preferences>
 		<owner-type>portal</owner-type>
 		<owner-id>@owner@</owner-id>
-		<window-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-introduce</window-id>
+		<window-id>portal#template:/presentation/SingleContentViewer/template-introduce</window-id>
 		<preference>
 			<name>repository</name>
 			<value>repository</value>
@@ -78,7 +78,7 @@
 	<portlet-preferences>
 		<owner-type>portal</owner-type>
 		<owner-id>@owner@</owner-id>
-		<window-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-signin</window-id>
+		<window-id>portal#template:/presentation/SingleContentViewer/template-signin</window-id>
 		<preference>
 			<name>repository</name>
 			<value>repository</value>
@@ -109,7 +109,7 @@
 	<portlet-preferences>
 		<owner-type>portal</owner-type>
 		<owner-id>@owner@</owner-id>
-		<window-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-searchbox</window-id>
+		<window-id>portal#template:/presentation/SingleContentViewer/template-searchbox</window-id>
 		<preference>
 			<name>repository</name>
 			<value>repository</value>
@@ -140,7 +140,7 @@
 	<portlet-preferences>
 		<owner-type>portal</owner-type>
 		<owner-id>@owner@</owner-id>
-		<window-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-navigation</window-id>
+		<window-id>portal#template:/presentation/SingleContentViewer/template-navigation</window-id>
 		<preference>
 			<name>repository</name>
 			<value>repository</value>
@@ -171,7 +171,7 @@
 	<portlet-preferences>
 		<owner-type>portal</owner-type>
 		<owner-id>@owner@</owner-id>
-		<window-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-footer</window-id>
+		<window-id>portal#template:/presentation/SingleContentViewer/template-footer</window-id>
 		<preference>
 			<name>repository</name>
 			<value>repository</value>

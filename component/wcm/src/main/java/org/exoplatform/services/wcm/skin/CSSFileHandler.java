@@ -144,7 +144,7 @@ public class CSSFileHandler extends BaseWebSchemaHandler {
     if(isInPortalCSSFolder) {
       Node portal = findPortalNode(sessionProvider, file);
       XSkinService skinService = getService(XSkinService.class);      
-      skinService.updatePortalSkinOnModify(file, portal); 
+      skinService.updatePortalSkinOnModify(portal, file); 
     }          
   }
 
@@ -155,7 +155,7 @@ public class CSSFileHandler extends BaseWebSchemaHandler {
     if(isInPortalCSSFolder){          
       XSkinService skinService = getService(XSkinService.class);
       Node portal = findPortalNode(sessionProvider, file);
-      skinService.updatePortalSkinOnRemove(file, portal);
+      skinService.updatePortalSkinOnRemove(portal, file);
     }
   }    
 
