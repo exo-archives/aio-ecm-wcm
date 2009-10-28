@@ -1,8 +1,4 @@
 <% 
-	/* 
-	 * Go to "WCMResources/src/main/webapp/shareskin/content-list-viewer/list-by-folder/defaultFolderListViewer"
-	 * to edit stylesheet if you want.
-	 */
 	import javax.jcr.Node;
 	import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 	import org.exoplatform.wcm.webui.clv.UICLVPortlet;
