@@ -108,10 +108,16 @@ public class XSkinService implements Startable {
   	String cssQuery = StringUtils.replaceOnce(WEBCONTENT_CSS_QUERY, "{path}", webcontent.getPath());
   	
   	// Need re-login to get session because this node is get from template and the session is not live anymore.
+  	// If node is version (which is stored in system workspace) we have to login to system workspace to get data 
   	NodeLocation webcontentLocation = NodeLocation.make(webcontent);
-  	RepositoryService repositoryService = WCMCoreUtils.getService(RepositoryService.class);
+  	RepositoryService repositoryService = WCMCoreUtils.getService(RepositoryService.class);  
   	ManageableRepository repository = repositoryService.getRepository(webcontentLocation.getRepository());
-  	Session session = repository.login(webcontentLocation.getWorkspace());
+  	Session session = null;
+  	if (webcontentLocation.getPath().startsWith("/jcr:system")) 
+  		session = repository.getSystemSession(repository.getConfiguration().getSystemWorkspaceName());
+  	else {
+  		session = repository.getSystemSession(webcontentLocation.getWorkspace());
+  	}
   	
   	QueryManager queryManager = session.getWorkspace().getQueryManager();
   	Query query = queryManager.createQuery(cssQuery, Query.SQL);

@@ -111,7 +111,12 @@ public class XJavascriptService implements Startable {
   	NodeLocation webcontentLocation = NodeLocation.make(webcontent);
   	RepositoryService repositoryService = WCMCoreUtils.getService(RepositoryService.class);
   	ManageableRepository repository = repositoryService.getRepository(webcontentLocation.getRepository());
-  	Session session = repository.login(webcontentLocation.getWorkspace());
+  	Session session = null;
+  	if (webcontentLocation.getPath().startsWith("/jcr:system")) 
+  		session = repository.getSystemSession(repository.getConfiguration().getSystemWorkspaceName());
+  	else {
+  		session = repository.getSystemSession(webcontentLocation.getWorkspace());
+  	}
   	
   	QueryManager queryManager = session.getWorkspace().getQueryManager();
   	Query query = queryManager.createQuery(jsQuery, Query.SQL);
