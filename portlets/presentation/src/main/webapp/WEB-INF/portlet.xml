@@ -246,7 +246,7 @@
 			</preference>
 			<preference>
 				<name>basePath</name>
-				<value>parameterizedviewer</value>
+				<value>products/presentation/pcv</value>
 				<read-only>false</read-only>
 			</preference>
 		</portlet-preferences>
