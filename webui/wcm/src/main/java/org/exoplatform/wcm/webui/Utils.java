@@ -96,16 +96,28 @@ public class Utils {
    * @return the node is got by publication lifecycle and current mode. Return original node if node doesn't join to any lifecycle.  
    */
   public static Node getNodeView(Node originalNode) {
+  	Node realNode = null;
+  	try{
+  		if (originalNode.isNodeType("exo:taxonomyLink")) {
+  			String uuid = originalNode.getProperty("exo:uuid").getString();
+  			realNode = originalNode.getSession().getNodeByUUID(uuid);
+  		} else {
+  			realNode = originalNode;
+  		}
+  	} catch (Exception e) {
+			return null;
+		}
+  	
   	try {
     	UIPortalApplication portalApplication = Util.getUIPortalApplication();
     	PublicationService publicationService = portalApplication.getApplicationComponent(PublicationService.class);
-    	String lifecycleName = publicationService.getNodeLifecycleName(originalNode);
+    	String lifecycleName = publicationService.getNodeLifecycleName(realNode);
       PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
       HashMap<String,Object> context = new HashMap<String, Object>();    
       context.put(WCMComposer.FILTER_MODE, getCurrentMode());
-      return publicationPlugin.getNodeView(originalNode, context);
+      return publicationPlugin.getNodeView(realNode, context);
   	} catch (NotInPublicationLifecycleException e) {
-  		return originalNode;
+  		return realNode;
   	} catch (Exception e) {
   		return null;
   	}

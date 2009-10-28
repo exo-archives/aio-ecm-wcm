@@ -21,7 +21,6 @@ import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -37,12 +36,8 @@ import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
-import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
-import org.exoplatform.services.ecm.publication.PublicationPlugin;
-import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.images.RESTImagesRendererService;
-import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
@@ -220,7 +215,7 @@ public class UIPCLVForm extends UIForm {
 		List<Node> nodes = container.getListNoode();
 		int count = 0;
 		for(Node node : nodes) {
-		  if(this.getNodeView(node) != null) {
+		  if(Utils.getNodeView(node) != null) {
 		    count++;
 		  }
 		}
@@ -637,34 +632,6 @@ public class UIPCLVForm extends UIForm {
 		return templatePath;
 	}
 
-	/**
-	 * Gets the node view.
-	 * 
-	 * @param node the node
-	 * 
-	 * @return the node view
-	 * 
-	 * @throws Exception the exception
-	 */
-	public Node getNodeView(Node node) throws Exception {
-	  String realNodeUUID = node.getProperty("exo:uuid").getString();
-	  Node realNode = node.getSession().getNodeByUUID(realNodeUUID);
-    PublicationService publicationService = getApplicationComponent(PublicationService.class);
-    HashMap<String, Object> context = new HashMap<String, Object>();
-    context.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
-    String lifecyleName = null;
-    try {
-      lifecyleName = publicationService.getNodeLifecycleName(realNode);
-    } catch (NotInPublicationLifecycleException e) {
-      // You shouldn't throw popup message, because some exception often rise here.
-    }
-    if (lifecyleName == null) return realNode;
-      
-    PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecyleName);
-    Node viewNode = publicationPlugin.getNodeView(realNode, context);
-    return viewNode;
-  }
-	
 	/**
 	 * The listener interface for receiving refreshAction events.
 	 * The class that is interested in processing a refreshAction
