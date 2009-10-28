@@ -8,40 +8,40 @@
     
  	<portal-layout> 		
  	  <application>
-	    <instance-id>portal#template:/presentation/SiteAdministrationPortlet/template-admintoolbar</instance-id>
+	    <instance-id>portal#@owner@:/presentation/SiteAdministrationPortlet/@owner@-admintoolbar</instance-id>
 	    <show-info-bar>false</show-info-bar>
   	</application>	  
   	
   	<container id="ACMEBanner" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
   		<container id="ACMELogo" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
   			<application>
-			    <instance-id>portal#template:/presentation/SingleContentViewer/template-logo</instance-id>
+			    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-logo</instance-id>
 			    <title>Banner</title>
 			  </application>
   		</container>
   		<container id="ACMESearch" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  		<application>
-			    <instance-id>portal#template:/presentation/SingleContentViewer/template-searchbox</instance-id>
+			    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-searchbox</instance-id>
 			    <title>Access</title>
 			  </application>
   		</container>
   		<container id="ACMESignin" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  		<application>
-			    <instance-id>portal#template:/presentation/SingleContentViewer/template-signin</instance-id>
+			    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-signin</instance-id>
 			    <title>Search box</title>
 			  </application>
   		</container>
   	</container>
   		
   	<application>
-		 	<instance-id>portal#template:/presentation/SingleContentViewer/template-navigation</instance-id>
+		 	<instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-navigation</instance-id>
   	  <title>Navigation</title>
 		</application>
   	
 	  <page-body> </page-body>
 	  
 	  <application>
-	    <instance-id>portal#template:/presentation/SingleContentViewer/template-footer</instance-id>
+	    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-footer</instance-id>
 	    <title>Footer</title>
 	  </application>
   </portal-layout>

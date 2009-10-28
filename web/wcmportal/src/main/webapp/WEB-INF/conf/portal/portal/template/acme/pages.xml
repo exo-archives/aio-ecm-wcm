@@ -20,7 +20,7 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>editor:/platform/web-contributors</edit-permission>
     <application>
-      <instance-id>portal#template:/searches/WCMAdvanceSearchPortlet/template-searchResult</instance-id>
+      <instance-id>portal#@owner@:/searches/WCMAdvanceSearchPortlet/@owner@-searchResult</instance-id>
       <title>SearchResult</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>
@@ -37,7 +37,7 @@
 		<access-permissions>Everyone</access-permissions>
 		<edit-permission>*:/platform/administrators</edit-permission>
 		<application>
-			<instance-id>portal#template:/presentation/ParameterizedContentViewerPortlet/template-pcv</instance-id>
+			<instance-id>portal#@owner@:/presentation/ParameterizedContentViewerPortlet/@owner@-pcv</instance-id>
 			<title>Parameterized content viewer portlet</title>
 			<show-info-bar>false</show-info-bar>
 			<show-application-state>false</show-application-state>
@@ -55,7 +55,7 @@
 		<edit-permission>*:/platform/administrators</edit-permission>
 		<show-max-window>true</show-max-window>
 		<application>
-			<instance-id>portal#template:/presentation/ParameterizedContentViewerPortlet/template-printviewer</instance-id>
+			<instance-id>portal#@owner@:/presentation/ParameterizedContentViewerPortlet/@owner@-printviewer</instance-id>
 			<title>Print viewer</title>
 			<show-info-bar>false</show-info-bar>
 			<show-application-state>false</show-application-state>
