@@ -1,15 +1,23 @@
-@import url('../shareSkin/portal/defaultPortal/Stylesheet.css');
+@import url('category-navigation-portlet/vertical-hierachy/SimpleVerticalHierachy/Stylesheet.css');
 
-@import url('../shareSkin/pages/Stylesheet.css');
-@import url('../shareSkin/NodeTypes/Stylesheet.css');
-@import url('../shareSkin/publication/Stylesheet.css');
-@import url('../shareSkin/webcontent/Stylesheet.css');
-@import url('../shareSkin/wcm-search/paginator/Stylesheet.css');
-@import url('../shareSkin/wcm-search/search-result/Stylesheet.css');
-@import url('../shareSkin/content-list-viewer/list-by-folder/Stylesheet.css');
-@import url('../shareSkin/content-list-viewer/paginator/Stylesheet.css');
-@import url('../shareSkin/wcm-search/search-box/Stylesheet.css');
-@import url('../shareSkin/wcm-search/search-form/Stylesheet.css');
-@import url('../shareSkin/UIWebContentSearch/Stylesheet.css');
+@import url('content-list-viewer-portlet/list-contents/UIContentListPresentationDefault/Stylesheet.css');
+@import url('content-list-viewer-portlet/list-contents/UIPCLVDefault/Stylesheet.css');
+@import url('content-list-viewer-portlet/list-contents/UIPCLVHotNews/Stylesheet.css');
+@import url('content-list-viewer-portlet/paginator/UIPaginatorDefault/Stylesheet.css');
 
-@import url('../shareSkin/category-navigation/vertical-hierachy/Stylesheet.css');
+@import url('search-portlet/paginator/UIPaginatorDefault/Stylesheet.css');
+@import url('search-portlet/search-form/UISearchForm/Stylesheet.css');
+@import url('search-portlet/search-result/UIAdvanceSearchResultDefault/Stylesheet.css');
+
+@import url('single-content-viewer-portlet/Stylesheet.css');
+
+@import url('wcm-content-selector/Stylesheet.css');
+
+
+@import url('wcm-nodetypes/16x16/Stylesheet.css');
+@import url('wcm-nodetypes/277x182/Stylesheet.css');
+@import url('wcm-nodetypes/48x48/Stylesheet.css');
+
+@import url('wcm-portal/Stylesheet.css');
+
+@import url('wcm-publication/Stylesheet.css');
