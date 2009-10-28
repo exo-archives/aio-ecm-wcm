@@ -65,6 +65,9 @@ public class UIWCMSearchPortlet extends UIPortletApplication {
 
 	/** The Constant ITEMS_PER_PAGE. */
 	public final static String	ITEMS_PER_PAGE										= "itemsPerPage";
+	
+	/** The Constant SHOW_DATE_CREATED. */
+  public final static String  BASE_PATH                          = "basePath";
 
 	/**
 	 * Instantiates a new uIWCM search portlet.

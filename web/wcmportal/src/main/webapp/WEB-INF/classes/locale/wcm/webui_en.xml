@@ -240,4 +240,9 @@
   	</msg>
   	<empty-field>Please input valid keyword for search.</empty-field>
   </UIWebContentSearchForm>
+  <UICategoryNavigationTargetPathPopupWindow>
+		<title>
+			<UIPageSelector>Page selector</UIPageSelector>
+		</title>
+  </UICategoryNavigationTargetPathPopupWindow>
 </bundle>

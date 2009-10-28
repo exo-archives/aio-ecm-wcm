@@ -207,7 +207,7 @@
 			<show-application-mode>false</show-application-mode>
 		</application>
 	</page>
-
+	
 	<page>
 		<page-id>portal::acme::newsletters</page-id>
 		<owner-type>portal</owner-type>

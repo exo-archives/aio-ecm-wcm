@@ -49,7 +49,7 @@ import org.exoplatform.webui.event.Event.Phase;
  */
 @ComponentConfigs({
   @ComponentConfig(
-      template = "app:/groovy/portal/webui/navigation/UIPageNodeSelector.gtmpl" ,
+      template = "classpath:groovy/wcm/webui/selector/page/UIPageNodeSelector.gtmpl" ,
       events = {
         @EventConfig(listeners = CreateNavigationActionListener.class),
         @EventConfig(listeners = UIPageNodeSelector.SelectNavigationActionListener.class, phase=Phase.DECODE) 

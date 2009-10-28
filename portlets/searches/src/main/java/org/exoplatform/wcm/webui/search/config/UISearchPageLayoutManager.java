@@ -23,11 +23,14 @@ import javax.jcr.Node;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
+import org.exoplatform.ecm.webui.form.UIFormInputSetWithAction;
+import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.services.cms.views.ApplicationTemplateManagerService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.search.UIWCMSearchPortlet;
+import org.exoplatform.wcm.webui.selector.page.UIPageSelector;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -40,6 +43,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
+import org.exoplatform.webui.form.UIFormStringInput;
 
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
@@ -50,10 +54,11 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 	template = "app:/groovy/webui/wcm-search/config/UISearchPageLayoutManager.gtmpl", 
 	events = {
 		@EventConfig(listeners = UISearchPageLayoutManager.SaveActionListener.class),
+		@EventConfig(listeners = UISearchPageLayoutManager.SelectBasePathActionListener.class),
 		@EventConfig(listeners = UISearchPageLayoutManager.CancelActionListener.class)
 	}
 )
-public class UISearchPageLayoutManager extends UIForm {
+public class UISearchPageLayoutManager extends UIForm  implements UISelectable {
 
 	/** The Constant PORTLET_NAME. */
 	public static final String	PORTLET_NAME												= "WCM Advance Search".intern();
@@ -103,7 +108,32 @@ public class UISearchPageLayoutManager extends UIForm {
 	/** The Constant ITEMS_PER_PAGE_SELECTOR. */
 	public final static String	ITEMS_PER_PAGE_SELECTOR							= "itemsPerPageSelector";
 
+	/** The Constant BASE_PATH_INPUT. */
+  public final static String BASE_PATH_INPUT                 = "searchResultBasePathInput";
+
+  /** The Constant BASE_PATH_SELECTOR_POPUP_WINDOW. */
+  public final static String BASE_PATH_SELECTOR_POPUP_WINDOW = "searchResultBasePathPopupWindow";
+
+  /** The Constant BASE_PATH_INPUT_SET_ACTION. */
+  public final static String BASE_PATH_INPUT_SET_ACTION      = "searchResultBasePathInputSetAction";
+  
+  /** The popup id. */
+  private String popupId;
 	/**
+   * @return the popupId
+   */
+  public String getPopupId() {
+    return popupId;
+  }
+
+  /**
+   * @param popupId the popupId to set
+   */
+  public void setPopupId(String popupId) {
+    this.popupId = popupId;
+  }
+
+  /**
 	 * Instantiates a new uI search page layout manager.
 	 * 
 	 * @throws Exception the exception
@@ -158,6 +188,14 @@ public class UISearchPageLayoutManager extends UIForm {
 																																		SEARCH_BOX_TEMPLATE_SELECTOR,
 																																		searchBoxTemplateList).setRendered(false);
 
+		String preferenceBasePath = portletPreferences.getValue(UIWCMSearchPortlet.BASE_PATH, null);
+    UIFormInputSetWithAction targetPathFormInputSet = new UIFormInputSetWithAction(BASE_PATH_INPUT_SET_ACTION);
+    UIFormStringInput targetPathFormStringInput = new UIFormStringInput(BASE_PATH_INPUT, BASE_PATH_INPUT, preferenceBasePath);
+    targetPathFormStringInput.setValue(preferenceBasePath);
+    targetPathFormStringInput.setEditable(false);
+    targetPathFormInputSet.setActionInfo(BASE_PATH_INPUT, new String[] {"SelectBasePath"}) ;
+    targetPathFormInputSet.addUIFormInput(targetPathFormStringInput);
+		
 		itemsPerPageSelector.setValue(itemsPerpage);
 		searchBoxTemplateSelector.setValue(searchBoxTemplate);
 		searchFormTemplateSelector.setValue(searchFormTemplate);
@@ -165,18 +203,19 @@ public class UISearchPageLayoutManager extends UIForm {
 		searchPaginatorTemplateSelector.setValue(searchPaginatorTemplate);
 		searchPageLayoutTemplateSelector.setValue(searchPageLayoutTemplate);
 
-		addUIFormInput(itemsPerPageSelector);
-		addUIFormInput(searchBoxTemplateSelector);
-		addUIFormInput(searchFormTemplateSelector);
-		addUIFormInput(searchResultTemplateSelector);
-		addUIFormInput(searchPaginatorTemplateSelector);
-		addUIFormInput(searchPageLayoutTemplateSelector);
+		addChild(itemsPerPageSelector);
+		addChild(searchBoxTemplateSelector);
+		addChild(searchFormTemplateSelector);
+		addChild(searchResultTemplateSelector);
+		addChild(searchPaginatorTemplateSelector);
+		addChild(searchPageLayoutTemplateSelector);
+		addChild(targetPathFormInputSet);
 
-		searchBoxTemplateSelector.setRendered(false);
+		/*searchBoxTemplateSelector.setRendered(false);
 		searchFormTemplateSelector.setRendered(true);
 		searchPaginatorTemplateSelector.setRendered(true);
 		searchResultTemplateSelector.setRendered(true);
-		searchPageLayoutTemplateSelector.setRendered(true);
+		searchPageLayoutTemplateSelector.setRendered(true);*/
 		setActions(new String[] { "Save", "Cancel" });
 	}
 
@@ -248,6 +287,8 @@ public class UISearchPageLayoutManager extends UIForm {
 																																	.getValue();
 			String itemsPerPage = uiSearchLayoutManager	.getUIFormSelectBox(UISearchPageLayoutManager.ITEMS_PER_PAGE_SELECTOR)
 																									.getValue();
+			
+			String basePath = uiSearchLayoutManager.getUIStringInput(UISearchPageLayoutManager.BASE_PATH_INPUT).getValue();
 
 			portletPreferences.setValue(UIWCMSearchPortlet.REPOSITORY, repository);
 			portletPreferences.setValue(UIWCMSearchPortlet.WORKSPACE, workspace);
@@ -262,6 +303,7 @@ public class UISearchPageLayoutManager extends UIForm {
 			portletPreferences.setValue(UIWCMSearchPortlet.SEARCH_PAGE_LAYOUT_TEMPLATE_PATH,
 																	searchPageLayoutTemplatePath);
 			portletPreferences.setValue(UIWCMSearchPortlet.ITEMS_PER_PAGE, itemsPerPage);
+			portletPreferences.setValue(UIWCMSearchPortlet.BASE_PATH, basePath);
 			portletPreferences.store();
 			if (Utils.isQuickEditMode(uiSearchLayoutManager, "nothing")) {
 				uiApp.addMessage(new ApplicationMessage("UIMessageBoard.msg.saving-success",
@@ -296,4 +338,40 @@ public class UISearchPageLayoutManager extends UIForm {
 			context.setApplicationMode(PortletMode.VIEW);
 		}
 	}
+
+	/*
+   * (non-Javadoc)
+   * 
+   * @see org.exoplatform.ecm.webui.selector.UISelectable#doSelect(java.lang.String,
+   *      java.lang.Object)
+   */
+  public void doSelect(String selectField, Object value) throws Exception {
+    getUIStringInput(selectField).setValue((String) value);
+    Utils.closePopupWindow(this, popupId);
+  }
+  
+  /**
+   * The listener interface for receiving selectTargetPageAction events.
+   * The class that is interested in processing a selectTargetPageAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSelectTargetPageActionListener<code> method. When
+   * the selectTargetPageAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SelectTargetPageActionEvent
+   */
+  public static class SelectBasePathActionListener extends EventListener<UISearchPageLayoutManager> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
+    public void execute(Event<UISearchPageLayoutManager> event) throws Exception {
+      UISearchPageLayoutManager viewerManagementForm = event.getSource();
+      UIPageSelector pageSelector = viewerManagementForm.createUIComponent(UIPageSelector.class, null, null);
+      pageSelector.setSourceComponent(viewerManagementForm, new String[] {BASE_PATH_INPUT});
+      Utils.createPopupWindow(viewerManagementForm, pageSelector, BASE_PATH_SELECTOR_POPUP_WINDOW, 800, 600);
+      viewerManagementForm.setPopupId(BASE_PATH_SELECTOR_POPUP_WINDOW);
+    }
+  }
 }

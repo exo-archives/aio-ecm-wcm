@@ -57,6 +57,7 @@
       <itemsPerPageSelector>Items per page</itemsPerPageSelector>
       <searchPageLayoutSelector>Search page layout template</searchPageLayoutSelector>
       <viewerButtonQuickEdit>Show quick edit</viewerButtonQuickEdit>
+      <searchResultBasePathInputSetAction>Base path</searchResultBasePathInputSetAction> 
     </label>
     <message>
       <search-mode-selecting>You should select the search mode.</search-mode-selecting>
@@ -126,4 +127,9 @@
   		Please input valid keyword for search.
   	</empty-field>
   </UIWebContentSearchForm>
+  <UICategoryNavigationTargetPathPopupWindow>
+		<title>
+			<UIPageSelector>Page selector</UIPageSelector>
+		</title>
+  </UICategoryNavigationTargetPathPopupWindow>
 </bundle>

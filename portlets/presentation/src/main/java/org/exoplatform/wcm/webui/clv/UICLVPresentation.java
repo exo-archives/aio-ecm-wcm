@@ -322,7 +322,6 @@ import org.exoplatform.webui.event.EventListener;
   public String getURL(Node node) throws Exception {
     String link = null;
     PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
-    PortletPreferences preferences = this.getPortletPreferences();
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     String portalURI = portalRequestContext.getPortalURI();
     PortletPreferences portletPreferences = getPortletPreferences();
@@ -331,7 +330,7 @@ import org.exoplatform.webui.event.EventListener;
     String baseURI = portletRequestContext.getRequest().getScheme() + "://"
     + portletRequestContext.getRequest().getServerName() + ":"
     + String.format("%s", portletRequestContext.getRequest().getServerPort());
-    String basePath = preferences.getValue(UICLVPortlet.BASE_PATH, null);
+    String basePath = portletPreferences.getValue(UICLVPortlet.BASE_PATH, null);
     link = baseURI + portalURI + basePath + "/" + repository + "/" + workspace + node.getPath();
     return link;
   }

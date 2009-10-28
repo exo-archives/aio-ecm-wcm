@@ -124,4 +124,9 @@
       <AddAny>Ajouter toute autorisation</AddAny>
     </title>
   </usersInputSet>
+  <UICategoryNavigationTargetPathPopupWindow>
+		<title>
+			<UIPageSelector>Page selector</UIPageSelector>
+		</title>
+  </UICategoryNavigationTargetPathPopupWindow>
 </bundle>

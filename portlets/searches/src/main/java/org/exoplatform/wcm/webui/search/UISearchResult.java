@@ -38,7 +38,6 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
-import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.search.QueryCriteria;
 import org.exoplatform.services.wcm.search.SiteSearchService;
@@ -389,7 +388,6 @@ public class UISearchResult extends UIContainer {
 	public String getURL(Node node) throws Exception {
 		String link = null;
 		PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
-		WCMConfigurationService wcmConfigurationService = getApplicationComponent(WCMConfigurationService.class);
 		PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
 		String portalURI = portalRequestContext.getPortalURI();
 		PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
@@ -398,9 +396,8 @@ public class UISearchResult extends UIContainer {
 		String baseURI = portletRequestContext.getRequest().getScheme() + "://"
 				+ portletRequestContext.getRequest().getServerName() + ":"
 				+ String.format("%s", portletRequestContext.getRequest().getServerPort());
-		String parameterizedPageURI = wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.PARAMETERIZED_PAGE_URI);
-		link = baseURI + portalURI + parameterizedPageURI.substring(1, parameterizedPageURI.length())
-				+ "/" + repository + "/" + workspace + node.getPath();
+		String basePath = portletPreferences.getValue(UIWCMSearchPortlet.BASE_PATH, null);
+		link = baseURI + portalURI + basePath + "/" + repository + "/" + workspace + node.getPath();
 		return link;
 	}
 

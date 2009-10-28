@@ -698,7 +698,7 @@ public class UICLVConfig extends UIForm implements UISelectable {
    * the selectTargetPageAction event occurs, that object's appropriate
    * method is invoked.
    * 
-   * @see SelectTargetPageActionEvent
+   * @see SelectBasePathActionEvent
    */
   public static class SelectBasePathActionListener extends EventListener<UICLVConfig> {
     

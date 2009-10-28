@@ -54,23 +54,6 @@ public class UIPCVConfig extends UIForm {
   /** The Constant SHOW_DATE_CREATED. */
   public static final String SHOW_DATE_CREATED               = "ShowDateCreated";
   
-  /** The popup id. */
-  private String popupId;
-  
-  /**
-   * @return the popupId
-   */
-  public String getPopupId() {
-    return popupId;
-  }
-
-  /**
-   * @param popupId the popupId to set
-   */
-  public void setPopupId(String popupId) {
-    this.popupId = popupId;
-  }
-
   @SuppressWarnings("unchecked")
   public UIPCVConfig() {
     PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
