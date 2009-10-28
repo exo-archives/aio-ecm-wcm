@@ -309,10 +309,6 @@
 	width: 100%;
 }
 
-.UISingleContentViewerPortlet .UIFormGrid {
-	widthL 1
-}
-
 .UISingleContentViewerPortlet .UIWizard .UIWCMUserContainer .Icon {
 	background: url(/eXoResources/skin/DefaultSkin/webui/component/UIPageIterator/background/ArrowPageIterator.gif) no-repeat scroll left top;
 	float:left;

@@ -222,3 +222,11 @@
 	cursor:pointer;
 }
 
+
+.UISingleContentViewerPortlet .UIContentNodeTypeSelector .UIFormGrid {
+	width: 50%;
+}
+
+.UISingleContentViewerPortlet .UIContentNodeTypeSelector .UIFormGrid td.FieldLabel { 
+	text-align: left;
+}

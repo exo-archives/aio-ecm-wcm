@@ -1,39 +1,39 @@
 .exo_webContent {
-	background: url('277x182/freeLayoutWebcontent.gif') no-repeat;
+	background: url('icons/freeLayoutWebcontent.gif') no-repeat;
 	width: 277px; height: 182px;
 }
 
 .exo_twoColumnsWebcontent {
-	background: url('277x182/twoColumnsWebcontent.gif') no-repeat;
+	background: url('icons/twoColumnsWebcontent.gif') no-repeat;
 	width: 277px; height: 182px;
 }
 
 .exo_pictureOnHeadWebcontent {
-	background: url('277x182/pictureOnHeadWebcontent.gif') no-repeat;
+	background: url('icons/pictureOnHeadWebcontent.gif') no-repeat;
 	width: 277px; height: 182px;
 }
 
 .exo_siteSearchBox {
-	background: url('277x182/siteSearchBoxWebContent.gif') no-repeat;
+	background: url('icons/siteSearchBoxWebContent.gif') no-repeat;
 	width: 277px; height: 182px;
 }
 
 .exo_siteNavigationWebContent {
-	background: url('277x182/siteNavigationWebContent.gif') no-repeat;
+	background: url('icons/siteNavigationWebContent.gif') no-repeat;
 	width: 277px; height: 182px;
 }
 
 .exo_siteBreadcrumb {
-	background: url('277x182/siteBreadcrumWebContent.gif') no-repeat;
+	background: url('icons/siteBreadcrumWebContent.gif') no-repeat;
 	width: 277px; height: 182px;
 }
 
 .single-content-viewer {
-	background: url('277x182/SingleContentViewer.png') no-repeat;
+	background: url('icons/SingleContentViewer.png') no-repeat;
 	width: 277px; height: 182px;
 }
 
 .content-list-viewer {
-	background: url('277x182/ContentListViewer.png') no-repeat;
+	background: url('icons/ContentListViewer.png') no-repeat;
 	width: 277px; height: 182px;
 }
