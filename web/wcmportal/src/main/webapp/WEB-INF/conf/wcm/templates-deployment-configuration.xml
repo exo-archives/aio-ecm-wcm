@@ -282,14 +282,14 @@
 	        	<name>portlet.template.path</name>
 	        	<value>war:/conf/wcm/artifacts/application-templates/category-navigation</value>
 	        </value-param>	    
-          <object-param>        
+          <!-- object-param>        
             <name>DefaultVerticalHierachy</name>
             <description>Default vertical hierachy with two levels</description>
             <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
               <field  name="templateName"><string>DefaultVerticalHierachy.gtmpl</string></field>  
               <field  name="category"><string>vertical-hierachy</string></field>
             </object>
-          </object-param>		  	      		           	        
+          </object-param -->		  	      		           	        
           <object-param>        
             <name>SimpleVerticalHierachy</name>
             <description>Simple vertical hierachy with all levers</description>

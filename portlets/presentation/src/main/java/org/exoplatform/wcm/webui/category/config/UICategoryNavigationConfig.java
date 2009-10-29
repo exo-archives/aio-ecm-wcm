@@ -217,11 +217,13 @@ public class UICategoryNavigationConfig extends UIForm implements UISelectable {
       String preferenceTreeName = categoryNavigationConfig.getUIFormSelectBox(UICategoryNavigationConstant.TREE_NAME_FORM_SELECTBOX).getValue();
       String preferenceTreeTitle = categoryNavigationConfig.getUIStringInput(UICategoryNavigationConstant.TREE_TITLE_FORM_STRING_INPUT).getValue();
       String preferenceTargetPath = categoryNavigationConfig.getUIStringInput(UICategoryNavigationConstant.TARGET_PATH_FORM_STRING_INPUT).getValue();
+      String preferenceTemplate = categoryNavigationConfig.getUIFormSelectBox(UICategoryNavigationConstant.TEMPLATE_FORM_SELECTBOX).getValue();
       PortletPreferences portletPreferences = UICategoryNavigationUtils.getPortletPreferences();
       portletPreferences.setValue(UICategoryNavigationConstant.PREFERENCE_REPOSITORY, preferenceRepository);
       portletPreferences.setValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, preferenceTreeName);
       portletPreferences.setValue(UICategoryNavigationConstant.PREFERENCE_TREE_TITLE, preferenceTreeTitle);
       portletPreferences.setValue(UICategoryNavigationConstant.PREFERENCE_TARGET_PAGE, preferenceTargetPath);
+      portletPreferences.setValue(UICategoryNavigationConstant.PREFERENCE_TEMPLATE_PATH, preferenceTemplate);
       portletPreferences.store();
 
       if (!Utils.isEditPortletInCreatePageWizard()) { 
