@@ -5,6 +5,7 @@
 	import org.exoplatform.services.cms.folksonomy.FolksonomyService;
 	import org.exoplatform.services.wcm.skin.XSkinService;
 	import org.exoplatform.services.wcm.javascript.XJavascriptService;
+	import org.exoplatform.services.jcr.core.ManageableRepository;
 	
 	public boolean getPortletPreference(String name) {
     String value = _ctx.getRequestContext().getRequest().getPreferences().getValue(name, null);
@@ -13,6 +14,7 @@
   }
   
   def currentNode = uicomponent.getNode() ; 
+  def repositoryName = ((ManageableRepository)currentNode.getSession().getRepository()).getConfiguration().getName();
   def css = uicomponent.getApplicationComponent(XSkinService.class).getActiveStylesheet(currentNode);
   def js =  uicomponent.getApplicationComponent(XJavascriptService.class).getActiveJavaScript(currentNode) ;
   def html = currentNode.getNode("default.html").getNode("jcr:content").getProperty("jcr:data").getString();
