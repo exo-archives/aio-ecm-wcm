@@ -239,6 +239,7 @@
   		<invalid-format>Invalid format datetime in field '{0}'</invalid-format>
   	</msg>
   	<empty-field>Please input valid keyword for search.</empty-field>
+  	<invalid-format>Please input valid format date for search.</invalid-format>
   </UIWebContentSearchForm>
   <UICategoryNavigationTargetPathPopupWindow>
 		<title>

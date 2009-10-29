@@ -219,7 +219,7 @@ public class UIContentSearchForm extends UIForm {
 
   private boolean haveEmptyField(UIApplication uiApp, Event<UIContentSearchForm> event, String... fields) throws Exception {
     for(String field : fields) {
-      if(field == null || "".equals(field)) {
+      if(field == null || "".equals(field) || (field.toString().trim().length() <= 0)) {
         uiApp.addMessage(new ApplicationMessage(
             "UIWebContentSearchForm.empty-field", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
