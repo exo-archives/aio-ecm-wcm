@@ -14,7 +14,6 @@
   }
   
   def currentNode = uicomponent.getNode() ; 
-  def repositoryName = ((ManageableRepository)currentNode.getSession().getRepository()).getConfiguration().getName();
   def css = uicomponent.getApplicationComponent(XSkinService.class).getActiveStylesheet(currentNode);
   def js =  uicomponent.getApplicationComponent(XJavascriptService.class).getActiveJavaScript(currentNode) ;
   def html = currentNode.getNode("default.html").getNode("jcr:content").getProperty("jcr:data").getString();
@@ -63,6 +62,7 @@
 						}
 						if(isShowTags) {
 							FolksonomyService folkService = uicomponent.getApplicationComponent(FolksonomyService.class);
+							def repositoryName = ((ManageableRepository)currentNode.getSession().getRepository()).getConfiguration().getName();
 							List<Node> tagList = folkService.getLinkedTagsOfDocument(currentNode, repositoryName);
 							if(!tagList.isEmpty()) {
 								StringBuffer tagBuff = new StringBuffer("[");

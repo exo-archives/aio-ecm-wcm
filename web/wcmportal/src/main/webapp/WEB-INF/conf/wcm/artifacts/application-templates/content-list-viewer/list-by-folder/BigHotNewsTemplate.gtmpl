@@ -45,7 +45,7 @@
 						def count = 0;
 						def currentPageData = uicomponent.getCurrentPageData();
 						for (node in currentPageData) {
-						  def viewNode = Utils.getNodeView(node);
+						  def viewNode = uicomponent.getNodeView(node);
 							if (viewNode == null) {
 							  continue;
 							}
