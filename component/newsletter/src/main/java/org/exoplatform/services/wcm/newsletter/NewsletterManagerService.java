@@ -213,20 +213,19 @@ public class NewsletterManagerService {
 		QueryResult queryResult = query.execute();
 		NodeIterator nodeIterator = queryResult.getNodes();
 
-		List<String> listEmailAddress = null;
-		String receiver = "";
-
 		while (nodeIterator.hasNext()) {
 			Node newsletterEntry = nodeIterator.nextNode();
 			Node subscriptionNode = newsletterEntry.getParent();
 
+			List<String> listEmailAddress = null;
 			if(subscriptionNode.hasProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER)){
   			listEmailAddress = convertValuesToArray(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER).getValues(), listBannedEmail);
 			}
 
-			if(listEmailAddress!= null && listEmailAddress.size() > 0) {
+			if(listEmailAddress != null && listEmailAddress.size() > 0) {
 				message = new Message();
 				message.setTo(listEmailAddress.get(0));
+				String receiver = "";
 				for (int i = 1; i < listEmailAddress.size(); i++) {
 					receiver += listEmailAddress.get(i) + ",";
 				}
@@ -234,16 +233,16 @@ public class NewsletterManagerService {
 				message.setSubject(newsletterEntry.getProperty("exo:title").getString());
 				message.setBody(entryHandler.getContent(sessionProvider, newsletterEntry));
 				message.setMimeType("text/html");
-
+				
 				try {
 					mailService.sendMessage(message);
-					newsletterEntry.setProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_SENT);
-					session.save();
 				} catch (Exception e) {
-				  log.error("Error when send newsletter: ", e.fillInStackTrace());
+					log.error("Error when send newsletter: ", e.fillInStackTrace());
 				}
 			}
+			newsletterEntry.setProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_SENT);
 		}
+		session.save();
 		session.logout();
 		sessionProvider.close();
 	}
@@ -315,4 +314,5 @@ public class NewsletterManagerService {
 	public void setWorkspaceName(String workspaceName) {
 		this.workspaceName = workspaceName;
 	}
+
 }
