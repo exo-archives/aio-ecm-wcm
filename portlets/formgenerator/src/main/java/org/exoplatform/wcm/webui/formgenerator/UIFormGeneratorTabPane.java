@@ -449,7 +449,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
         }
       }
       UIFormStringInput nameFormStringInput = formGeneratorTabPane.getUIStringInput(UIFormGeneratorConstant.NAME_FORM_STRING_INPUT);
-      String templateName = nameFormStringInput.getValue();
+      String templateName = nameFormStringInput.getValue().trim();
       String nodetypeName = formGeneratorTabPane.getNodetypeName(templateName);
       
       String preferenceRepository = UIFormGeneratorUtils.getPreferenceRepository();
