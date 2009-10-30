@@ -100,11 +100,14 @@ public class UISubcriptionForm extends UIForm {
                                                                       
     UIFormStringInput inputSubcriptionTitle = new UIFormStringInput(INPUT_SUBCRIPTION_TITLE, null);
     inputSubcriptionTitle.addValidator(MandatoryValidator.class);
-                                                                        
+
+    UIFormTextAreaInput subscriptionDescriptionTextarea = new UIFormTextAreaInput(INPUT_SUBCRIPTION_DESCRIPTION, null, null);
+    subscriptionDescriptionTextarea.setMaxLength(100);
+    
     addChild(new UIFormSelectBox(SELECT_CATEGORIES_NAME, SELECT_CATEGORIES_NAME, listCategoriesName));
     addChild(inputSubcriptionName);
     addChild(inputSubcriptionTitle);
-    addChild(new UIFormTextAreaInput(INPUT_SUBCRIPTION_DESCRIPTION, null, null));
+    addChild(subscriptionDescriptionTextarea);
   }
 
   /**

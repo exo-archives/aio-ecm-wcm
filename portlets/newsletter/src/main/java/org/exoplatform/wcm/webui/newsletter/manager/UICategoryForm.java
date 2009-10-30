@@ -94,6 +94,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 		UIFormStringInput inputCateTitle = new UIFormStringInput(INPUT_CATEGORY_TITLE, null, null);
 	  this.getChildren().clear();
 		UIFormTextAreaInput inputCateDescription = new UIFormTextAreaInput(INPUT_CATEGORY_DESCRIPTION, null, null);
+		inputCateDescription.setMaxLength(100);
 		UIFormStringInput inputModerator = new UIFormStringInput(INPUT_CATEGORY_MODERATOR, INPUT_CATEGORY_MODERATOR, null);
 		inputModerator.setEditable(false);
 		UIFormInputSetWithAction formCategoryModerator = new UIFormInputSetWithAction(FORM_CATEGORY_MODERATOR);
