@@ -521,7 +521,7 @@
 		</preference>
 		<preference>
 			<name>templatePath</name>
-			<value>/exo:ecm/views/templates/Category Navigation Portlet/vertical-hierachy/DefaultVerticalHierachy.gtmpl</value>
+			<value>/exo:ecm/views/templates/Category Navigation Portlet/vertical-hierachy/SimpleVerticalHierachy.gtmpl</value>
 			<read-only>false</read-only>
 		</preference>
 		<preference>
