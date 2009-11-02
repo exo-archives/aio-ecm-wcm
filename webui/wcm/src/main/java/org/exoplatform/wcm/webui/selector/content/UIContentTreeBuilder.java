@@ -255,17 +255,19 @@ public class UIContentTreeBuilder extends UIContainer {
    */
   private void addRootDrives(List<UIContentTreeNode> list) throws Exception{
     List<DriveData> listDris = getDrives();
-    // Add Personal Drives into tree view
-    list.add(new UIContentTreeNode("Personal Drives"));
-    addTreeFromDrives("/Personal Drives", list, personalDrives(listDris));
+    // Add General Drives into tree view
+    list.add(new UIContentTreeNode("General Drives"));
+    addTreeFromDrives("/General Drives", list, generalDrives(listDris));
 
     // Add Group Drives into tree view
     list.add(new UIContentTreeNode("Group Drives"));
     addTreeFromDrives("/Group Drives", list, groupDrives(listDris));
+    
+    // Add Personal Drives into tree view
+    list.add(new UIContentTreeNode("Personal Drives"));
+    addTreeFromDrives("/Personal Drives", list, personalDrives(listDris));
 
-    // Add General Drives into tree view
-    list.add(new UIContentTreeNode("General Drives"));
-    addTreeFromDrives("/General Drives", list, generalDrives(listDris));
+
   }
 
   /**
