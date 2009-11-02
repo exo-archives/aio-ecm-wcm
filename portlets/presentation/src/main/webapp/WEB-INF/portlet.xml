@@ -377,8 +377,8 @@
 				<read-only>false</read-only>
 			</preference>
 			<preference>
-				<value>/exo:ecm/views/templates/Category Navigation Portlet/vertical-hierachy/SimpleVerticalHierachy.gtmpl</value>
 				<name>templatePath</name>
+				<value>/exo:ecm/views/templates/Category Navigation Portlet/vertical-hierachy/SimpleVerticalHierachy.gtmpl</value>
 				<read-only>false</read-only>
 			</preference>
 			<preference>
