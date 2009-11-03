@@ -278,7 +278,7 @@ UploadForm.prototype.updateFiles = function(nodeId) {
 	var dropdownlist = document.getElementById("Pinter");
 	if(dropdownlist) filter = dropdownlist.options[dropdownlist.selectedIndex].value;
 	else filter = 'Web Contents';
-	var connector = eXoPlugin.hostName + strConnector+ "&workspaceName=collaboration&userId=root&filterBy="+filter;
+	var connector = eXoPlugin.hostName + strConnector+ "&workspaceName=collaboration&userId=" + getUrlParam("userId") + "&filterBy="+filter;
 	var xmlTreeNodes = eXoWCM.PluginUtils.request(connector);
 	if(!xmlTreeNodes) return;
 	var fileList = xmlTreeNodes.getElementsByTagName('File');

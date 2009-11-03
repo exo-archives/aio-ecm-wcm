@@ -357,9 +357,7 @@ var eXp = {
 		disableUploading: getUrlParam("disableUploading") || false,
 		disableCreatingFolder: getUrlParam("disableCreatingFolder") || false,
 		command: {
-//			init: "getFoldersAndFiles",
-// 			need todo remove userId and use userId dynamic
-			init: "&workspaceName=collaboration&userId=root",
+			init: "&workspaceName=collaboration&userId=" + getUrlParam("userId"),
 			uploadFile: "uploadFile/upload",
 			controlUpload: "uploadFile/control",
 			createFolder: "createFolder"
@@ -433,7 +431,7 @@ var eXp = {
 		var dropdownlist = document.getElementById("Pinter");
 		if(dropdownlist) filter = dropdownlist.options[dropdownlist.selectedIndex].value;
 		else filter = 'Web Contents';
-		var connector = eXoPlugin.hostName + strConnector+ "&workspaceName=collaboration&userId=root&filterBy="+filter;
+		var connector = eXoPlugin.hostName + strConnector+ "&workspaceName=collaboration&userId=" + getUrlParam("userId") + "&filterBy="+filter;
 		if(eXp.strConnection == connector) return;	
 		eXp.strConnection = connector;
 		eXoWCM.PluginUtils.renderSubTrees(currentNode, event, connector);

@@ -10,7 +10,7 @@
 		sOptions += ",height=" + height;
 		sOptions += ",left=" + iLeft;
 		sOptions += ",top=" + iTop;
-		var newWindow = window.open( FCKConfig.eXoPath + "content/content.html?Type=File&Connector=/portal/rest/wcmDriver/getDrivers?repositoryName=repository&workspaceName=collaboration&userId=root", "eXoContent", sOptions );
+		var newWindow = window.open( FCKConfig.eXoPath + "content/content.html?Type=File&Connector=/portal/rest/wcmDriver/getDrivers?repositoryName=repository&workspaceName=collaboration&userId=" + window.parent.eXo.env.portal.userName, "eXoContent", sOptions );
 		newWindow.focus();
 	}
 	FCKCommands.RegisterCommand( "WCMInsertContent", oContent );
