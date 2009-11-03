@@ -141,8 +141,8 @@ public class UIPCLVForm extends UIForm {
 	public void init(String templatePath, ResourceResolver resourceResolver, PageList dataPageList) throws Exception {
 
 		PortletPreferences portletPreferences = getPortletPreferences();
-		String paginatorTemplatePath = portletPreferences.getValue(	UIPCLVPortlet.PAGINATOR_TEMPlATE_PATH,
-																																null);
+		String paginatorTemplatePath = portletPreferences.getValue(	UIPCLVPortlet.PAGINATOR_TEMPlATE_PATH, null);
+		if(dataPageList == null) return;
 		this.templatePath = templatePath;
 		this.resourceResolver = resourceResolver;
 		uiPaginator = addChild(UICustomizeablePaginator.class, null, null);
@@ -212,7 +212,8 @@ public class UIPCLVForm extends UIForm {
 		PortletPreferences portletPreferences = getPortletPreferences();
 		String itemsPerPage = portletPreferences.getValue(UIPCLVPortlet.ITEMS_PER_PAGE, null);
 		UIPCLVContainer container = getAncestorOfType(UIPCLVContainer.class);
-		List<Node> nodes = container.getListNoode();
+		List<Node> nodes = container.getListNode();
+		if(nodes == null) return false;
 		int count = 0;
 		for(Node node : nodes) {
 		  if(Utils.getNodeView(node) != null) {

@@ -64,15 +64,32 @@ import org.exoplatform.webui.event.EventListener;
 public class UIPCLVContainer extends UIContainer {
 
   /** The list noode. */
-  private List<Node> listNoode;
+  private List<Node> listNode;
   
+  /** The boolean isError. */
+  private boolean isError;
+  
+  /**
+   * @return the isError
+   */
+  public boolean isError() {
+    return isError;
+  }
+
+  /**
+   * @param isError the isError to set
+   */
+  public void setError(boolean isError) {
+    this.isError = isError;
+  }
+
   /**
    * Gets the list noode.
    * 
    * @return the listNoode
    */
-  public List<Node> getListNoode() {
-    return listNoode;
+  public List<Node> getListNode() {
+    return listNode;
   }
 
   /**
@@ -80,8 +97,8 @@ public class UIPCLVContainer extends UIContainer {
    * 
    * @param listNoode the listNoode to set
    */
-  public void setListNoode(List<Node> listNoode) {
-    this.listNoode = listNoode;
+  public void setListNode(List<Node> listNode) {
+    this.listNode = listNode;
   }
 
   /**
@@ -130,18 +147,30 @@ public class UIPCLVContainer extends UIContainer {
 		String treeName = null;
 		
 		if(parameters == null || parameters.trim().length() < 1) treeName = preferenceTreeName;
+		if(parameters.indexOf("/") < 0) treeName = parameters;
 		else treeName = parameters.substring(0, parameters.indexOf("/"));
 		
 		TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
-		Node treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, treeName);
+		Node treeNode = null;
+		try {
+		  treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, treeName);
+		} catch(Exception ex){}
 		
 		String categoryPath = parameters.substring(parameters.indexOf("/") + 1);
 		if (treeName.equals(categoryPath))
 			categoryPath = "";
-		
-		Node categoryNode = treeNode.getNode(categoryPath);
-		List<Node> nodes = this.getListSymlinkNode(	portletPreferences, categoryNode.getPath());
-		this.setListNoode(nodes);
+		Node categoryNode = null;
+		List<Node> nodes = null;
+		if(treeNode != null) {
+		  categoryNode = treeNode.getNode(categoryPath);
+		  nodes = this.getListSymlinkNode(portletPreferences, categoryNode.getPath());
+    } else {
+      nodes = this.getListSymlinkNode(portletPreferences, null);
+    }
+		if(nodes == null) {
+		  nodes = new ArrayList<Node>();
+		}
+		this.setListNode(nodes);
 		int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIPCLVPortlet.ITEMS_PER_PAGE, null));
 		PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(nodes, itemsPerPage);
 		getChildren().clear();
@@ -164,13 +193,11 @@ public class UIPCLVContainer extends UIContainer {
 		parameterizedContentListViewer.setShowReadmore(Boolean.parseBoolean(portletPreferences.getValue(UIPCLVPortlet.SHOW_READMORE, null)));
 		parameterizedContentListViewer.setAutoDetection(autoDetect);
 		parameterizedContentListViewer.setShowRSSLink(portletPreferences.getValue(UIPCLVPortlet.SHOW_RSS_LINK, null));
-		String repository = ((ManageableRepository)categoryNode.getSession().getRepository()).getConfiguration().getName();
-		String workspace = categoryNode.getSession().getWorkspace().getName();
-		
+		String workspace = portletPreferences.getValue(UIPCLVPortlet.WORKSPACE, null);
 		String server =  Util.getPortalRequestContext().getRequest().getRequestURL().toString();
 		server = server.substring(0, server.indexOf('/', 8));
 		
-		parameterizedContentListViewer.setRssLink("/rest/rss/generate?repository=" + repository + "&workspace=" + workspace + "&server=" + server + "&siteName=" + siteName + "&categoryPath=" + ("".equals(categoryPath) ? preferenceTreeName : preferenceTreeName + "/" + categoryPath));
+		parameterizedContentListViewer.setRssLink("/rest/rss/generate?repository=" + preferenceRepository + "&workspace=" + workspace + "&server=" + server + "&siteName=" + siteName + "&categoryPath=" + ("".equals(categoryPath) ? preferenceTreeName : preferenceTreeName + "/" + categoryPath));
 	}
 
 	/**
@@ -285,6 +312,7 @@ public class UIPCLVContainer extends UIContainer {
 		String worksapce = portletPreferences.getValue(UIPCLVPortlet.WORKSPACE, "");
 		String orderType = portletPreferences.getValue(UIPCLVPortlet.ORDER_TYPE, "");
 		String orderBy = portletPreferences.getValue(UIPCLVPortlet.ORDER_BY, "");
+		if((categoryPath == null) || (categoryPath.trim().length() <= 0)) return null;
 		if ("".equals(orderType)) orderType = "DESC";
 		if ("".equals(orderBy)) orderBy = "exo:dateCreated";
 		String orderQuery = " ORDER BY ";

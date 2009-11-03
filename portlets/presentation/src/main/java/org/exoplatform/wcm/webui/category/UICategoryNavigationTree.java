@@ -204,9 +204,7 @@ public class UICategoryNavigationTree extends UIContainer {
     if (preferenceTreeName.equals(categoryPath)) categoryPath = "";
     try {
     	currentNode = treeNode.getNode(categoryPath);
-		} catch (Exception e) {
-		  org.exoplatform.wcm.webui.Utils.createPopupMessage(this, "UICategoryNavigationConfig.msg.render", null, ApplicationMessage.ERROR);
-		}
+		} catch (Exception e) {}
     super.processRender(context);
   }
   
