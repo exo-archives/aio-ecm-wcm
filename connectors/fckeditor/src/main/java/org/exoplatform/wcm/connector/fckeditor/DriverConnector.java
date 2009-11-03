@@ -168,7 +168,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
   		@QueryParam("userId") String userId)
   		throws Exception {
     try {
-      SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
       RepositoryService repositoryService = (RepositoryService)ExoContainerContext.getCurrentContainer()
       	.getComponentInstanceOfType(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
