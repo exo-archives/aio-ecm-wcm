@@ -78,6 +78,14 @@
 			<sourceDirectory>src/main/java</sourceDirectory>
 			<outputDirectory>target/classes</outputDirectory>
 			<resources>
+				<!-- This config to run rest service -->
+				<resource>
+					<directory>src/main/java</directory>
+					<includes>
+						<include>**/*.xml</include>
+					</includes>
+				</resource>
+				 
 				<resource>
 				<directory>src/main/resources</directory>
 				<includes>

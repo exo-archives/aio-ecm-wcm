@@ -16,7 +16,10 @@ import org.exoplatform.webui.event.EventListener;
 
 @ComponentConfigs ({
   @ComponentConfig(
-      template = "system:/groovy/webui/core/UITabPane_New.gtmpl"
+      template = "system:/groovy/webui/core/UITabPane_New.gtmpl",
+      events = {
+        @EventConfig(listeners = UIContentSelector.CloseActionListener.class, name = "ClosePopup")
+      }
   ),
   @ComponentConfig(
       type = UIPopupWindow.class,

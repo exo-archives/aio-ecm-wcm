@@ -596,14 +596,14 @@ public class UICLVConfig extends UIForm implements UISelectable {
         UICLVFolderSelector uiFolderPathSelector = uiViewerManagementForm.createUIComponent(UICLVFolderSelector.class, null, null);
         uiFolderPathSelector.setSourceComponent(uiViewerManagementForm, new String[] { UICLVConfig.FOLDER_PATH_INPUT });
         uiFolderPathSelector.init();
-        Utils.createPopupWindow(uiViewerManagementForm, uiFolderPathSelector, FOLDER_PATH_SELECTOR_POPUP_WINDOW, 600, 400);
+        Utils.createPopupWindow(uiViewerManagementForm, uiFolderPathSelector, FOLDER_PATH_SELECTOR_POPUP_WINDOW, 750, 400);
         uiViewerManagementForm.setPopupId(FOLDER_PATH_SELECTOR_POPUP_WINDOW);
       } else {
         orderBySelector.setRendered(false);
         UICLVContentSelector uiCorrectContentSelectorForm = uiViewerManagementForm.createUIComponent(UICLVContentSelector.class, null, null);
         uiCorrectContentSelectorForm.setSourceComponent(uiViewerManagementForm, new String[] { UICLVConfig.FOLDER_PATH_INPUT });
         uiCorrectContentSelectorForm.init(context);
-        Utils.createPopupWindow(uiViewerManagementForm, uiCorrectContentSelectorForm, CORRECT_CONTENT_SELECTOR_POPUP_WINDOW, 600, 400);
+        Utils.createPopupWindow(uiViewerManagementForm, uiCorrectContentSelectorForm, CORRECT_CONTENT_SELECTOR_POPUP_WINDOW, 750, 400);
         uiViewerManagementForm.setPopupId(CORRECT_CONTENT_SELECTOR_POPUP_WINDOW);
       }
     }
