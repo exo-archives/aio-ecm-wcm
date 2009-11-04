@@ -447,6 +447,30 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
             return;
           }
         }
+        if(forms.get(i).getType().equals(UIFormGeneratorConstant.SELECT)) {
+          String[] advance = null;
+          boolean isEmptyValue = false;
+          if((forms.get(i).getAdvanced() != null)) {
+            advance = forms.get(i).getAdvanced().split(",");
+            StringBuffer value = new StringBuffer();
+            if(advance.length == 0) {
+              isEmptyValue = true;
+            } else {
+              for(int count = 0; count < advance.length; count++) {
+                value.append(advance[count]);
+              }
+              if(value.toString().trim().length() <= 0) {
+                isEmptyValue = true;
+              }
+            }
+          } else {
+            isEmptyValue = true;
+          }
+          if(isEmptyValue) {
+            Utils.createPopupMessage(formGeneratorTabPane, "UIFormGeneratorTabPane.msg.select-value-empty", null, ApplicationMessage.INFO);
+            return;
+          }
+        }
       }
       UIFormStringInput nameFormStringInput = formGeneratorTabPane.getUIStringInput(UIFormGeneratorConstant.NAME_FORM_STRING_INPUT);
       String templateName = nameFormStringInput.getValue().trim();
