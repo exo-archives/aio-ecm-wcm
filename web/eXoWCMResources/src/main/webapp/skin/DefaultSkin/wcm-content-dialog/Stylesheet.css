@@ -1,3 +1,7 @@
+#UIContentDialogForm .UIFormGrid {
+	width: 100%;
+}
+
 .UIPermissionManager .SelectUserIcon {
 	width: 16px; height: 16px;
 	background: url('icons/SelectUser.gif') no-repeat;  
