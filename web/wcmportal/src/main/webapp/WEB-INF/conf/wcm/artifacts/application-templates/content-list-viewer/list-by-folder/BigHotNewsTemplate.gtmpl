@@ -51,7 +51,7 @@
 							}
 							
 						  String itemName = viewNode.getName();
-						  String itemLink = uicomponent.generateLink(node);
+						  String itemLink = uicomponent.generateLink(viewNode);
 							String itemSummary = uicomponent.getSummary(viewNode);
 					      String itemTitle = uicomponent.getTitle(viewNode);
 							String itemDateCreated = uicomponent.getCreatedDate(viewNode);
