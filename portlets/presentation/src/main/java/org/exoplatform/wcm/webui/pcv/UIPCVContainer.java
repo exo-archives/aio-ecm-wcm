@@ -22,7 +22,6 @@ import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.jcr.AccessDeniedException;
@@ -41,14 +40,8 @@ import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.cms.templates.TemplateService;
-import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
-import org.exoplatform.services.ecm.publication.PublicationPlugin;
-import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
-import org.exoplatform.services.wcm.publication.WCMComposer;
-import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -221,36 +214,20 @@ public class UIPCVContainer extends UIContainer {
     if (node == null) node = getNodeByCategory(parameters);
     if (node == null) return null;
 
+    Node nodeView = Utils.getNodeView(node);
     boolean isDocumentType = false;
-    if (node.isNodeType("nt:frozenNode")) isDocumentType = true; 
+    if (nodeView.isNodeType("nt:frozenNode")) isDocumentType = true; 
     // check node is a document node
     TemplateService templateService = getApplicationComponent(TemplateService.class);
     List<String> documentTypes = templateService.getDocumentTemplates(this.getRepository());
     for (String documentType : documentTypes) {
-      if (node.isNodeType(documentType)) {
+      if (nodeView.isNodeType(documentType)) {
         isDocumentType = true;
         break;
       }
     }
     if (!isDocumentType) return null;
     if (hasChildren()) removeChild(UIPCVContainer.class);
-    PublicationService publicationService = getApplicationComponent(PublicationService.class);
-    String lifecycleName = null;
-    try {
-      lifecycleName = publicationService.getNodeLifecycleName(node);
-    } catch (NotInPublicationLifecycleException e) {
-      // You shouldn't throw popup message, because some exception often rise here.
-    }
-    Node nodeView = null;
-    // if content doesn't join to any lifecycle (deploy from xml)
-    if (lifecycleName == null) {
-      nodeView = node;
-    } else {
-      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
-      HashMap<String, Object> context = new HashMap<String, Object>();
-      context.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
-      nodeView = publicationPlugin.getNodeView(node, context);
-    }
     
     // set node view for UIPCVPresentation
     if (nodeView != null && nodeView.isNodeType("nt:frozenNode")) {
@@ -265,12 +242,6 @@ public class UIPCVContainer extends UIContainer {
     }
     uiContentViewer.setRepository(this.getRepository());
     uiContentViewer.setWorkspace(nodeView.getSession().getWorkspace().getName());
-    
-    // Set draft for template
-    WCMPublicationService wcmPublicationService = getApplicationComponent(WCMPublicationService.class);
-    String contentState = wcmPublicationService.getContentState(nodeView);
-    if (PublicationDefaultStates.DRAFT.equals(contentState)) isDraftRevision = true;
-    else isDraftRevision = false;
     
     PortletRequestContext porletRequestContext = WebuiRequestContext.getCurrentInstance();
     HttpServletRequest request = (HttpServletRequest) porletRequestContext.getRequest();

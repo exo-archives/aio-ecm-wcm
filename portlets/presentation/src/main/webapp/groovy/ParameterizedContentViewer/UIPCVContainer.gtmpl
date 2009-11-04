@@ -29,7 +29,6 @@
 			def title = uicomponent.getTitle(node);
 			def dateCreated = uicomponent.getCreatedDate(node);
 			boolean isEditMode = false;
-			boolean isDraft = false;
 			if(uicomponent.isShowTitle()) {
 					%>	<div class="Title">$title</div> <%   
 			} 
@@ -44,18 +43,19 @@
 			  		</div>
 				<%
 			}
-			if (Utils.isShowQuickEdit(node) && !isPrint) {
+			if (Utils.isShowQuickEdit() && !isPrint) {
 			  %>
 				 <a class="DocumentQuickEdit" href="<%= uicomponent.event("QuickEdit") %>" title="<%= _ctx.appRes("UIContentViewerContainer.label.quickEditTitle") %>"></a>
-				 
-			<% }
-			if (Utils.isShowDraft(node)) { %>
-				    
-				 <div style="padding: 5px 10px; line-height: 16px; ">
-						[ <span class="DraftIcon" style="padding-left: 20px"><%= _ctx.appRes("UIPresentationContainer.draft") %>, </span>
-						<a style="padding-left: 1px" href="<%= uicomponent.event("Edit") %>" title="<%= _ctx.appRes("UIPresentationContainer.edit") %>"> <%= _ctx.appRes("UIPresentationContainer.edit") %></a>]
-				 </div>  
-			<%}
+				 <%
+	      	}
+			if(Utils.isShowDraft(node)){
+    		%>
+  			<div style="padding: 5px 10px; line-height: 16px; ">
+				[ <span class="DraftIcon" style="padding-left: 20px"><%= _ctx.appRes("UIPresentationContainer.draft") %>, </span>
+				<a style="padding-left: 1px" href="<%= uicomponent.event("Edit") %>" title="<%= _ctx.appRes("UIPresentationContainer.edit") %>"> <%= _ctx.appRes("UIPresentationContainer.edit") %></a>]
+	 		</div>  
+		<% 
+  		}
 			uicomponent.renderChildren();
 			if(isPrint) {
 				%>

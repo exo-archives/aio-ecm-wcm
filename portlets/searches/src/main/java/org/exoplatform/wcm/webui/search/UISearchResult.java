@@ -21,7 +21,6 @@ import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -36,9 +35,6 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
-import org.exoplatform.services.ecm.publication.PublicationPlugin;
-import org.exoplatform.services.ecm.publication.PublicationService;
-import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.search.QueryCriteria;
 import org.exoplatform.services.wcm.search.SiteSearchService;
 import org.exoplatform.services.wcm.search.WCMPaginatedQueryResult;
@@ -324,31 +320,6 @@ public class UISearchResult extends UIContainer {
 			}
 		}
 		return urls;
-	}
-
-	/**
-	 * Gets the node view.
-	 * 
-	 * @param node the node
-	 * 
-	 * @return the node view
-	 * 
-	 * @throws Exception the exception
-	 */
-	public Node getNodeView(Node node) throws Exception {
-		PublicationService publicationService = getApplicationComponent(PublicationService.class);
-		HashMap<String, Object> context = new HashMap<String, Object>();
-		context.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
-		String lifecyleName = null;
-		try {
-		  lifecyleName = publicationService.getNodeLifecycleName(node);
-    } catch (Exception e) {
-      // You shouldn't throw popup message, because some exception often rise here.
-    }
-    if (lifecyleName == null) return node;
-		PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
-																														.get(lifecyleName);
-	  return publicationPlugin.getNodeView(node, context);
 	}
 
 	/**

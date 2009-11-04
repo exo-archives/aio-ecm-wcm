@@ -93,7 +93,7 @@ import org.exoplatform.wcm.webui.Utils;
     <%	
     for (ResultNode resultNode : currentPageData) {
       Node node = resultNode.getNode();    
-			Node viewNode = uicomponent.getNodeView(node);				
+			Node viewNode = Utils.getNodeView(node);				
 			if (viewNode == null) continue;	
       //String itemNodeType = Utils.getNodeTypeIcon(viewNode, "16x16Icon");
       String itemName = viewNode.getName();

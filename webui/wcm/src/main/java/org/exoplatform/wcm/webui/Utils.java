@@ -164,6 +164,7 @@ public class Utils {
   public static boolean isShowDraft(Node content) {
   	if (content == null) return false;
   	try {
+  	  if(content.isNodeType("nt:frozenNode")) return false;
   		WCMPublicationService wcmPublicationService = WCMCoreUtils.getService(WCMPublicationService.class);
   		String contentState = wcmPublicationService.getContentState(content);
   		boolean isDraftContent = false;
