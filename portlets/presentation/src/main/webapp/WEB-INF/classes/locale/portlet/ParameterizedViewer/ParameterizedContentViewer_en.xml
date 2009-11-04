@@ -17,20 +17,7 @@
       <get-node>Error when perform get child node.</get-node>
     </msg>
   </UIMessageBoard>
-  <UIDocumentDialogForm>
-  	<action>
-  		<SaveDraft>Save Draft</SaveDraft>
-  		<Cancel>Close</Cancel>
-  		<FastPublish>Fast Publish</FastPublish>
-  	</action>
-  </UIDocumentDialogForm>
-  <UIPCVContentDialog>
-  	<action>
-  		<SaveDraft>Save Draft</SaveDraft>
-  		<Cancel>Close</Cancel>
-  		<FastPublish>Fast Publish</FastPublish>
-  	</action>
-  </UIPCVContentDialog>
+  
   <UIContentViewerContainer>
     <action>
       <back>Back</back>

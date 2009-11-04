@@ -119,24 +119,7 @@
       <confirm-delete>Etes-vous sûr de vouloir supprimer cette catégorie de la liste?</confirm-delete>
     </msg>
   </UIFormInputSetWithAction>
-  <!--/n  ###################################################################
-          # org.exoplatform.wcm.webui.scv.config.UIContentDialogForm        #
-          ###################################################################
-  -->
-  <UIContentDialogForm>
-    <action>
-      <SaveDraft>Sauver le brouillon</SaveDraft>
-      <Cancel>Annuler</Cancel>
-      <FastPublish>Publication rapide</FastPublish>
-      <Preferences>Préférences</Preferences>
-      <Close>Fermer</Close>
-    </action>
-  </UIContentDialogForm>
-  <!--/n  ###################################################################
-        
-  # org.exoplatform.wcm.presentation.scp.UIMessageBoa               #
-          ###################################################################
-  -->
+  
   <UIMessageBoard>
     <msg>
       <content-not-found>Contenu non trouvé ou cet emplacement n'a pas été configuré!</content-not-found>

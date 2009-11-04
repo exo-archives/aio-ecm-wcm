@@ -119,13 +119,7 @@
   		<UICLVContentDialog>Chỉnh sửa nội dung</UICLVContentDialog>
   	</title>
   </UIDocumentDialogFormPopupWindow>  
-  <UICLVContentDialog>
-  	<action>
-  		<Cancel>Hủy bỏ</Cancel>
-  		<FastPublish>Xuất bản nhanh</FastPublish>
-  		<SaveAsDraft>Lưu lại</SaveAsDraft>  		  		
-  	</action>
-  </UICLVContentDialog>  
+
   <UIMessageBoard>
   	<msg>
   	  <contents-not-found>Không tìm thấy nội dung</contents-not-found>

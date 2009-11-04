@@ -240,6 +240,15 @@
   	</msg>
   </UIWebContentSearchForm>
   
+  <UIContentDialogForm>
+    <action>
+      <SaveDraft>Lưu nháp</SaveDraft>
+      <FastPublish>Xuất bản nhanh</FastPublish>
+      <Preferences>Tùy chọn</Preferences>
+      <Close>Đóng</Close>
+    </action>
+  </UIContentDialogForm>
+  
   <UIPermissionManager>
   	<label>
       <UIPermissionInputSetWithAction>Permission</UIPermissionInputSetWithAction>

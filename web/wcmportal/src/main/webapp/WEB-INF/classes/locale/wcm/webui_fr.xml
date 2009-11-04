@@ -243,6 +243,15 @@
   	<empty-field>S'il vous plaît mot-clé d'entrée valide pour les recherches.</empty-field>
   </UIWebContentSearchForm>
   
+	<UIContentDialogForm>
+    <action>
+      <SaveDraft>Sauver le brouillon</SaveDraft>
+      <FastPublish>Publication rapide</FastPublish>
+      <Preferences>Préférences</Preferences>
+      <Close>Fermer</Close>
+    </action>
+  </UIContentDialogForm>  
+  
   <UIPermissionManager>
   	<label>
   		<UIPermissionInputSetWithAction>Permission</UIPermissionInputSetWithAction>

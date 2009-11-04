@@ -113,23 +113,7 @@
       <confirm-delete>Are you sure to delete this category from list?</confirm-delete>
     </msg>
   </UIFormInputSetWithAction>
-  <!--/n  ###################################################################
-  # org.exoplatform.wcm.webui.scv.config.UIContentDialogForm        #
-  ###################################################################
-  -->
-  <UIContentDialogForm>
-    <action>
-      <SaveDraft>Save Draft</SaveDraft>
-      <Cancel>Cancel</Cancel>
-      <FastPublish>Fast Publish</FastPublish>
-      <Preferences>Preferences</Preferences>
-      <Close>Close</Close>
-    </action>
-  </UIContentDialogForm>
-  <!--/n  ###################################################################
-  #  org.exoplatform.wcm.presentation.scp.UIMessageBoard						#
-  ###################################################################
-  -->
+  
   <UIMessageBoard>
     <msg>
       <content-not-found>Content not found or this portlet has not been configured yet!</content-not-found>

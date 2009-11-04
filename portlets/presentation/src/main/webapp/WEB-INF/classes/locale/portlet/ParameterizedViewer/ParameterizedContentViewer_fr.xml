@@ -16,13 +16,7 @@
       <get-node> erreur lorsque vous effectuez obtenir nœud enfant. </get-node>
     </msg>
   </UIMessageBoard>
-  <UIDocumentDialogForm>
-  	<action>
-  		<SaveDraft>Sauver le brouillon</SaveDraft>
-  		<Cancel>Annuler</Cancel>
-  		<FastPublish>Publication rapide</FastPublish>
-  	</action>
-  </UIDocumentDialogForm>
+  
   <UIContentViewerContainer>
     <action>
       <back>Retour</back>

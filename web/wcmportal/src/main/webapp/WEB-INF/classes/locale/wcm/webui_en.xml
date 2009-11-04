@@ -247,6 +247,16 @@
 		</title>
   </UICategoryNavigationTargetPathPopupWindow>
 
+
+	<UIContentDialogForm>
+    <action>
+      <SaveDraft>Save Draft</SaveDraft>
+      <FastPublish>Fast Publish</FastPublish>
+      <Preferences>Preferences</Preferences>
+      <Close>Close</Close>
+    </action>
+  </UIContentDialogForm>
+
 	<UIPermissionManager>
 		<label>
       <UIPermissionInputSetWithAction>Permission</UIPermissionInputSetWithAction>

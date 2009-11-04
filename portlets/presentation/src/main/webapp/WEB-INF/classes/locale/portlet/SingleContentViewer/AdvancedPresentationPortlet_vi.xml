@@ -108,23 +108,7 @@
       <confirm-delete>Bạn có chắc muốn xoá phân loại này khỏi danh sách?</confirm-delete>
     </msg>
   </UIFormInputSetWithAction>
-  <!--/n  ###################################################################
-  # org.exoplatform.wcm.webui.scv.config.UIContentDialogForm        #
-  ###################################################################
-  -->
-  <UIContentDialogForm>
-    <action>
-      <SaveDraft>Lưu nháp</SaveDraft>
-      <Cancel>Hủy bỏ</Cancel>
-      <FastPublish>Xuất bản nhanh</FastPublish>
-      <Preferences></Preferences>
-      <Close></Close>
-    </action>
-  </UIContentDialogForm>
-  <!--/n  ###################################################################
-  #  org.exoplatform.wcm.presentation.scp.UIMessageBoard						#
-  ###################################################################
-  -->
+  
   <UIMessageBoard>
     <msg>
       <content-not-found>Nội dung không tìm thấy hoặc là ứng dụng hiển thị này chưa được cấu hình!</content-not-found>
