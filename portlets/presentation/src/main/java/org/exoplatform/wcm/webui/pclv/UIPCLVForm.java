@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.jcr.Node;
+import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -36,6 +37,8 @@ import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.images.RESTImagesRendererService;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
@@ -389,6 +392,10 @@ public class UIPCLVForm extends UIForm {
 		String preferenceRepository = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_REPOSITORY, "");
 		String preferenceTreeName = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_TREE_NAME, "");
 		String preferenceTargetPage = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_TARGET_PAGE, "");
+		String workspace = portletPreferences.getValue(UIPCLVPortlet.WORKSPACE, null);
+		String repository = portletPreferences.getValue(UIPCLVPortlet.REPOSITORY, null);
+		RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+		ManageableRepository manageableRepository = repositoryService.getRepository(repository);
 		TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
 
 		Node treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
@@ -396,22 +403,28 @@ public class UIPCLVForm extends UIForm {
 		if (preferenceTreeName.equals(categoryPath)) {
 			categoryPath = "";
 		}
-
 		Node categoryNode = treeNode.getNode(categoryPath);
-
-		Node newNode = categoryNode.getNode(node.getName());
+		String nodeName = null;
+		if(node.getName().equals("jcr:frozenNode")) {
+		  String uuid = node.getProperty("jcr:frozenUuid").getString();
+		  Session session = Utils.getSessionProvider(this).getSession(workspace, manageableRepository);
+		  Node realNode = session.getNodeByUUID(uuid);
+		  if(realNode != null){
+		    nodeName = realNode.getName();
+		  }
+		} else {
+		  nodeName = node.getName();
+		}
+		Node newNode = categoryNode.getNode(nodeName);
 		String path = newNode.getPath();
 
 		String itemPath = path.substring(path.indexOf(preferenceTreeName));
 		String backToCategory = "";
 		if (categoryPath.equals("")) {
-
 			backToCategory = pageNodeSelected;
 		} else {
-
 			backToCategory = itemPath.substring(0, itemPath.indexOf(newNode.getName()) - 1);
 		}
-
 		link = portalURI + preferenceTargetPage + "/" + itemPath + "?back" + "=" + "/" + backToCategory;
 
 		return link;
@@ -632,7 +645,7 @@ public class UIPCLVForm extends UIForm {
 	public String getTemplate() {
 		return templatePath;
 	}
-
+	
 	/**
 	 * The listener interface for receiving refreshAction events.
 	 * The class that is interested in processing a refreshAction
