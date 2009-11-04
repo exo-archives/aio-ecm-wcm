@@ -1,0 +1,30 @@
+.UIPermissionManager .SelectUserIcon {
+	width: 16px; height: 16px;
+	background: url('icons/SelectUser.gif') no-repeat;  
+	cursor: pointer;
+}
+
+.UIPermissionManager .SelectMemberIcon {
+	width: 16px; height: 16px;
+	background: url('icons/SelectMember.gif') no-repeat;  
+	cursor: pointer;
+}
+
+.UIPermissionManager .AddAnyIcon {
+	width: 16px; height: 16px;
+	background: url('icons/SelectAny.gif') no-repeat;  
+	cursor: pointer;
+}
+
+.UIPermissionManager .HorizontalLayout .UIFormInputSet {
+	padding: 0;
+	width: auto;
+}
+
+.UIPermissionManager .HorizontalLayout .UIFormGrid {
+	table-layout: fixed;
+}
+
+.UIPermissionManager .HorizontalLayout td.FieldLabel {
+	width: auto;
+}

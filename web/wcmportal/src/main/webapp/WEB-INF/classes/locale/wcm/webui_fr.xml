@@ -242,4 +242,57 @@
   	<invalid-format>S'il vous plaît le format d'entrée valide la date pour les recherches.</invalid-format>
   	<empty-field>S'il vous plaît mot-clé d'entrée valide pour les recherches.</empty-field>
   </UIWebContentSearchForm>
+  
+  <UIPermissionManager>
+  	<label>
+  		<UIPermissionInputSetWithAction>Permission</UIPermissionInputSetWithAction>
+      <UIPermissionStringInput></UIPermissionStringInput>
+      <UIAccessibleCheckboxInput>Droit de modifier</UIAccessibleCheckboxInput>
+      <UIEditableCheckboxInput>	Droit d'accès</UIEditableCheckboxInput>
+    </label>
+    <action>
+			<Save>Sauver</Save>
+	    <Clear>Reset</Clear>
+		</action>
+  </UIPermissionManager>
+  
+  <UIPermissionManagerGrid>
+    <action>
+      <title>
+        <Edit>Editer</Edit>
+        <Delete>Supprimer</Delete>
+      </title>
+    </action>
+    <header>
+      <owner>Permission</owner>
+      <accessible>Accessible</accessible>
+      <editable>Editable</editable>
+      <action>Action</action>
+    </header>
+    <msg>
+      <confirm-delete-permission>Confirmez-vous vouloir supprimer cette permission ?</confirm-delete-permission>
+      <no-permission-remove>Il n'y a pas de permission à supprimer</no-permission-remove>
+      <access-denied>Accès refusé</access-denied>
+    </msg>
+  </UIPermissionManagerGrid>
+  
+  <UIPermissionInputSetWithAction>
+    <title>
+      <SelectUser>Sélectionnez l'utilisateur</SelectUser>
+      <SelectMember>Sélectionnez membre</SelectMember>
+      <AddAny>Ajouter toute autorisation</AddAny>
+    </title>
+  </UIPermissionInputSetWithAction>
+  
+  <UIUserSelectorPopupWindow>
+  	<title>
+  		<UIUserContainer>Utilisateur sélecteur</UIUserContainer>
+  	</title>
+  </UIUserSelectorPopupWindow>
+  
+  <UIGroupSelectorPopupWindow>
+  	<title>
+  		<UIGroupMemberSelector>Sélecteur de groupe</UIGroupMemberSelector>
+  	</title>
+  </UIGroupSelectorPopupWindow>
 </bundle>

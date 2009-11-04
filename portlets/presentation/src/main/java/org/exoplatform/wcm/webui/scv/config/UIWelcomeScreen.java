@@ -18,12 +18,7 @@ package org.exoplatform.wcm.webui.scv.config;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-import java.util.ResourceBundle;
 
-import javax.jcr.Node;
-
-import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.DataStorage;
@@ -38,18 +33,13 @@ import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.wcm.webui.scv.UIPresentationContainer;
-import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
-import org.exoplatform.web.application.RequestContext;
+import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormRadioBoxInput;
 
 /**
  * Created by The eXo Platform SAS
@@ -66,7 +56,7 @@ import org.exoplatform.webui.form.UIFormRadioBoxInput;
       @EventConfig(listeners = UIWelcomeScreen.AbortActionListener.class)
     }
 )
-public class UIWelcomeScreen extends UIForm implements UISelectable {
+public class UIWelcomeScreen extends UIForm {
 
   /**
    * Instantiates a new uI welcome screen.
@@ -77,80 +67,6 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
     this.setActions(new String[]{"Abort"});
   }
 
-  /** The is new content. */
-  private boolean isNewContent = false;
-  
-  /**
-   * Sets the create mode.
-   * 
-   * @param isNewConfig the is new config
-   * 
-   * @return the uI welcome screen
-   * 
-   * @throws Exception the exception
-   */
-  public UIWelcomeScreen setCreateMode(boolean isNewConfig) throws Exception {
-    getChildren().clear();
-    List<SelectItemOption<String>> option = new ArrayList<SelectItemOption<String>>();
-    RequestContext context = RequestContext.<RequestContext>getCurrentInstance();
-    ResourceBundle res = context.getApplicationResourceBundle();
-    String labelEditContent = res.getString(getId() + ".label.EditWebContent");
-    String labelSelectExistedContent = res.getString(getId() + ".label.ExistedContent");
-    if(isNewConfig) {
-      isNewConfig = true;
-    }else {
-      UISingleContentViewerPortlet uiPresentationPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);
-      UIPresentationContainer presentationContainer = uiPresentationPortlet.getChild(UIPresentationContainer.class);
-      Node node = presentationContainer.getNodeView();
-      if(Utils.isShowQuickEdit(node)) {
-        option.add(new SelectItemOption<String>(labelEditContent, "EditCurrentWebContent"));
-        option.add(new SelectItemOption<String>(labelSelectExistedContent, "SelectExistedContent"));
-        UIFormRadioBoxInput radioInput = new UIFormRadioBoxInput("radio", "radio", option);
-        radioInput.setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN);
-        radioInput.setValue("EditCurrentWebContent");
-        addUIFormInput(radioInput);
-      }
-    }
-    return this ;
-  }
-  
-  /**
-   * Goto edit wizard.
-   * 
-   * @param step the step
-   * 
-   * @throws Exception the exception
-   */
-  public void GotoEditWizard(int step) throws Exception {
-      UIPortletConfig uiPortletConfig = this.getAncestorOfType(UIPortletConfig.class);      
-      this.setRendered(false);
-      UIQuickCreationWizard uiQuickCreationWizard = uiPortletConfig.addChild(UIQuickCreationWizard.class, null, null);
-      UIContentDialogForm contentDialogForm  = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
-      contentDialogForm.setEditNotIntegrity(false);
-      contentDialogForm.init();
-      uiQuickCreationWizard.viewStep(step);
-  }
-
-  /**
-   * Sets the component.
-   * 
-   * @param type the type
-   * @param config the config
-   * @param id the id
-   * 
-   * @throws Exception the exception
-   */
-  public <T extends UIComponent> void setComponent(Class<T> type, String config, String id) throws Exception {
-    UIPortletConfig uiConfig = getParent();
-    uiConfig.getChildren().clear();
-    uiConfig.addChild(type, config, id);
-  }
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.ecm.webui.selector.UISelectable#doSelect(java.lang.String, java.lang.Object)
-   */
-  public void doSelect(String arg0, Object arg1) throws Exception {}
-  
   /**
    * The listener interface for receiving selectContentAction events.
    * The class that is interested in processing a selectContentAction
@@ -168,9 +84,9 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
-      UIWelcomeScreen uiWelcomeScreen = event.getSource();
-      ((UIPortletConfig) uiWelcomeScreen.getParent()).initPopupWebcontentView();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiWelcomeScreen.getParent());
+//      UIWelcomeScreen uiWelcomeScreen = event.getSource();
+//      ((UIPortletConfig) uiWelcomeScreen.getParent()).initPopupWebcontentView();
+//      event.getRequestContext().addUIComponentToUpdateByAjax(uiWelcomeScreen.getParent());
     }
   }
   
@@ -191,12 +107,9 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
-      UIWelcomeScreen uiWelcomeScreen = event.getSource();
-      UIPortletConfig uiPortletConfig = uiWelcomeScreen.getAncestorOfType(UIPortletConfig.class);      
-      uiWelcomeScreen.setRendered(false);
-      UIQuickCreationWizard uiQuickCreationWizard = uiPortletConfig.addChild(UIQuickCreationWizard.class, null, null);
-      uiQuickCreationWizard.getChild(UINameWebContentForm.class).init();
-      uiPortletConfig.showPopup(event.getRequestContext());
+      UIWelcomeScreen welcomeScreen = event.getSource();
+      UINameWebContentForm nameWebContentForm = welcomeScreen.createUIComponent(UINameWebContentForm.class, null, null);
+      Utils.updatePopupWindow(welcomeScreen, nameWebContentForm, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW);
     }
   }
 
@@ -217,16 +130,16 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
-      UIWelcomeScreen uiWelcomeScreen = event.getSource();
-      UserPortalConfigService userPortalConfigService = uiWelcomeScreen.getApplicationComponent(UserPortalConfigService.class);
-      UIPortal uiPortal = Util.getUIPortal();
-      PageNode currentPageNode = uiPortal.getSelectedNode();
+      UIWelcomeScreen welcomeScreen = event.getSource();
+      UserPortalConfigService userPortalConfigService = welcomeScreen.getApplicationComponent(UserPortalConfigService.class);
+      UIPortal portal = Util.getUIPortal();
+      PageNode currentPageNode = portal.getSelectedNode();
       Page currentPage = userPortalConfigService.getPage(currentPageNode.getPageReference());
       ArrayList<Object> applications = new ArrayList<Object>();
       applications.addAll(currentPage.getChildren());
       ArrayList<Object> applicationsTmp = currentPage.getChildren(); 
       Collections.reverse(applicationsTmp);
-      DataStorage dataStorage = uiWelcomeScreen.getApplicationComponent(DataStorage.class);
+      DataStorage dataStorage = welcomeScreen.getApplicationComponent(DataStorage.class);
       for (Object applicationObject : applicationsTmp) {
         if (applicationObject instanceof Container) continue;
         Application application = Application.class.cast(applicationObject);
@@ -247,41 +160,22 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
 
         	if ("nodeIdentifier".equals(preference.getName())) {
         		nodeIdentifier = preference.getValues().get(0).toString();
-        		if (nodeIdentifier == null || nodeIdentifier == "") break;
+        		if (nodeIdentifier == null || "".equals(nodeIdentifier)) break;
         	}
         }
 
-        if (isQuickCreate && (nodeIdentifier == null || nodeIdentifier == "")) {
+        if (isQuickCreate && (nodeIdentifier == null || "".equals(nodeIdentifier))) {
         	applications.remove(applicationObject);
         }
       }
       currentPage.setChildren(applications);
       userPortalConfigService.update(currentPage);
-      UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
+      UIPage uiPage = portal.findFirstComponentOfType(UIPage.class);
       if (uiPage != null) {
       	uiPage.setChildren(null);
       	PortalDataMapper.toUIPage(uiPage, currentPage);
       }
-      UIPortletConfig uiPortletConfig = uiWelcomeScreen.getAncestorOfType(UIPortletConfig.class);      
-      uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
+      Utils.closePopupWindow(welcomeScreen, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW);
     }
-  }
-
-  /**
-   * Checks if is new content.
-   * 
-   * @return true, if is new content
-   */
-  public boolean isNewContent() {
-    return isNewContent;
-  }
-
-  /**
-   * Sets the new content.
-   * 
-   * @param isNewContent the new new content
-   */
-  public void setNewContent(boolean isNewContent) {
-    this.isNewContent = isNewContent;
   }
 }

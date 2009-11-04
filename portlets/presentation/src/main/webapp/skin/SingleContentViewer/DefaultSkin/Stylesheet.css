@@ -85,20 +85,6 @@
 	background: white;
 }
 
-.UISingleContentViewerPortlet .UIPermissionSetting .UIFormInputSet {
-	padding: 10px 0px;
-	width: auto;
-}
-
-.UISingleContentViewerPortlet .UIPermissionSetting .UIFormGrid {
-	width: 600px;
-	table-layout: fixed;
-}
-
-.UISingleContentViewerPortlet .UIPermissionSetting td.FieldLabel {
-	width: auto;
-}
-
 .UISingleContentViewerPortlet .QuickEditToolBar {
 	background: url('background/QuickEditToolBar.gif') repeat-x left top;
 	height: 25px; line-height: 25px;
@@ -217,24 +203,6 @@
 
 .UISingleContentViewerPortlet .UIFormWithTitle {
 	width: 800px;
-}
-
-.UIPermissionSetting .SelectUserIcon {
-	width: 16px; height: 16px;
-	background: url('icons/16x16/SmallUserIcon.gif') no-repeat;  
-	cursor: pointer;
-}
-
-.UIPermissionSetting .SelectMemberIcon {
-	width: 16px; height: 16px;
-	background: url('icons/16x16/SmallMemberIcon.gif') no-repeat;  
-	cursor: pointer;
-}
-
-.UIPermissionSetting .AddAnyIcon {
-	width: 16px; height: 16px;
-	background: url('icons/16x16/SmallGroupIcon.gif') no-repeat;  
-	cursor: pointer;
 }
 
 .UIDMSSelectorForm .BrowsePublicationIcon {

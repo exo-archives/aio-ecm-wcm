@@ -16,15 +16,16 @@
  */
 package org.exoplatform.wcm.webui.scv;
 
+import javax.jcr.Node;
 import javax.portlet.PortletMode;
+import javax.portlet.PortletPreferences;
 
-import org.apache.commons.logging.Log;
-import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.core.WCMService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
+import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
 import org.exoplatform.wcm.webui.scv.config.UIPortletConfig;
-import org.exoplatform.wcm.webui.scv.config.UIStartEditionInPageWizard;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -54,11 +55,8 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
   /** The IDENTIFIER. */
   public static String IDENTIFIER = "nodeIdentifier" ;
 
-  /** The Constant scvLog. */
-  public static final Log scvLog = ExoLogger.getLogger("wcm:SingleContentViewer");
-
   /** The mode_. */
-  private PortletMode mode_ = PortletMode.VIEW ;
+  private PortletMode mode = PortletMode.VIEW ;
 
   /**
    * Instantiates a new uI single content viewer portlet.
@@ -66,7 +64,7 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
    * @throws Exception the exception
    */
   public UISingleContentViewerPortlet() throws Exception {    
-    activateMode(mode_) ;    
+    activateMode(mode) ;    
   }
 
   /**
@@ -77,26 +75,15 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
    * @throws Exception the exception
    */
   public void activateMode(PortletMode mode) throws Exception {       
-    getChildren().clear() ;        
-    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
-    //only add popup container in private mode to pass w3c validator
-    if(portletRequestContext.getRemoteUser() != null) {
-      addChild(UIPopupContainer.class, null, null);
-    }
+    addChild(UIPopupContainer.class, null, null);
     if(PortletMode.VIEW.equals(mode)) {      
-      addChild(UIPresentationContainer.class, null, UIPortletApplication.VIEW_MODE);                   
+    	if (getChild(UIPresentationContainer.class) == null) addChild(UIPresentationContainer.class, null, null);                   
     } else if (PortletMode.EDIT.equals(mode)) {
-      UIPopupContainer maskPopupContainer = getChild(UIPopupContainer.class);
-      UIStartEditionInPageWizard portletEditMode = createUIComponent(UIStartEditionInPageWizard.class,null,null);
-      addChild(portletEditMode);
-      UIPortletConfig portletConfig = portletEditMode.createUIComponent(UIPortletConfig.class,null,null);      
-      portletEditMode.addChild(portletConfig);
-      portletConfig.init();
-      portletConfig.setRendered(true);      
       WebUIPropertiesConfigService propertiesConfigService = getApplicationComponent(WebUIPropertiesConfigService.class);
       PopupWindowProperties popupProperties = (PopupWindowProperties)propertiesConfigService.getProperties(WebUIPropertiesConfigService.SCV_POPUP_SIZE_EDIT_PORTLET_MODE);
-      maskPopupContainer.activate(portletConfig,popupProperties.getWidth(),popupProperties.getHeight());      
-      portletRequestContext.addUIComponentToUpdateByAjax(maskPopupContainer);
+      UIPortletConfig portletConfig = createUIComponent(UIPortletConfig.class,null,null);      
+      Utils.createPopupWindow(this, portletConfig, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW, popupProperties.getWidth(), popupProperties.getHeight());
+      portletConfig.init();
     }
   }
 
@@ -106,24 +93,46 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
   public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
     PortletRequestContext pContext = (PortletRequestContext) context ;
     PortletMode newMode = pContext.getApplicationMode() ;
-    if(!mode_.equals(newMode)) {
+    if(!mode.equals(newMode)) {
       activateMode(newMode) ;
-      mode_ = newMode ;
+      mode = newMode ;
     }
     super.processRender(app, context) ;
   }
 
   /**
-   * Can edit portlet.
+   * Gets the node.
    * 
-   * @return true, if successful
+   * @return the node
    * 
    * @throws Exception the exception
    */
-  public boolean canEditPortlet() throws Exception{
-    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    String userId = context.getRemoteUser();
-    return Utils.canEditCurrentPortal(userId);
+  public Node getNodeView() {
+  	try {
+  		PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+  		PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
+  		String repository = preferences.getValue(REPOSITORY, null);    
+  		String workspace = preferences.getValue(WORKSPACE, null);
+  		String nodeIdentifier = preferences.getValue(IDENTIFIER, null) ;
+  		WCMService wcmService = getApplicationComponent(WCMService.class);
+  		Node originalNode = wcmService.getReferencedContent(Utils.getSessionProvider(this), repository, workspace, nodeIdentifier);
+  		Node viewNode = Utils.getNodeView(originalNode);
+  		
+  		// Set original node for UIBaseNodePresentation (in case nodeView is a version node)
+  		UIPresentation presentation = findFirstComponentOfType(UIPresentation.class);
+  		if (viewNode != null && viewNode.isNodeType("nt:frozenNode")) {
+  			String nodeUUID = viewNode.getProperty("jcr:frozenUuid").getString();
+  			presentation.setOriginalNode(viewNode.getSession().getNodeByUUID(nodeUUID));
+  			presentation.setNode(viewNode);
+  		} else {
+  			presentation.setOriginalNode(viewNode);
+  			presentation.setNode(viewNode);
+  		}
+  		
+  		return viewNode;
+		} catch (Exception e) {
+			return null;
+		}
   }
-
+  
 }

@@ -32,19 +32,19 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
 /**
  * Created by The eXo Platform SAS
- * Author : DANG TAN DUNG
- * dzungdev@gmail.com
- * May 29, 2008
+ * Author : Phan Le Thanh Chuong
+ *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Oct 29, 2009  
  */
 
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
     template = "system:/groovy/webui/form/UIForm.gtmpl",
     events = {
-      @EventConfig(listeners = UIMiscellaneousInfo.SaveToPortletPreferenceActionListener.class)
+      @EventConfig(listeners = UIContentDialogConfig.SaveToPortletPreferenceActionListener.class)
     }
 )
-public class UIMiscellaneousInfo extends UIForm {
+public class UIContentDialogConfig extends UIForm {
 
   /**
    * Instantiates a new uI miscellaneous info.
@@ -52,7 +52,7 @@ public class UIMiscellaneousInfo extends UIForm {
    * @throws Exception the exception
    */
   @SuppressWarnings("unchecked")
-  public UIMiscellaneousInfo() throws Exception {
+  public UIContentDialogConfig() throws Exception {
     PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletPreferences prefs = context.getRequest().getPreferences();
     boolean isShowTitle = Boolean.parseBoolean(prefs.getValue("ShowTitle", null));
@@ -72,13 +72,13 @@ public class UIMiscellaneousInfo extends UIForm {
    * 
    * @see SaveToPortletPreferenceActionEvent
    */
-  static public class SaveToPortletPreferenceActionListener extends EventListener<UIMiscellaneousInfo> {
+  static public class SaveToPortletPreferenceActionListener extends EventListener<UIContentDialogConfig> {
 
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
-    public void execute(Event<UIMiscellaneousInfo> event) throws Exception {
-      UIMiscellaneousInfo uiMiscellaneousInfo = event.getSource();
+    public void execute(Event<UIContentDialogConfig> event) throws Exception {
+      UIContentDialogConfig uiMiscellaneousInfo = event.getSource();
       boolean isShowTitle = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowTitle").isChecked();
       boolean isShowPrint = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowPrintAction").isChecked();
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();

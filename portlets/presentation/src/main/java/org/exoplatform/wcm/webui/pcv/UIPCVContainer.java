@@ -50,6 +50,7 @@ import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -457,24 +458,9 @@ public class UIPCVContainer extends UIContainer {
       UIPCVContainer uiContentViewerContainer = event.getSource();
       UIPCVPresentation uiContentViewer = uiContentViewerContainer.getChild(UIPCVPresentation.class);
       Node orginialNode = uiContentViewer.getOriginalNode();
-      ManageableRepository manageableRepository = (ManageableRepository) orginialNode.getSession().getRepository();
-      String repository = manageableRepository.getConfiguration().getName();
-      String workspace = orginialNode.getSession().getWorkspace().getName();
-      
-      if (repository == null || workspace == null)
-        throw new ItemNotFoundException();
-      String contentType=null, nodePath=null;
-      contentType = orginialNode.getPrimaryNodeType().getName();
-      nodePath = orginialNode.getPath();
-      UIPCVContentDialog uiDocumentDialogForm = uiContentViewerContainer.createUIComponent(UIPCVContentDialog.class, null, null);
-      uiDocumentDialogForm.setRepositoryName(repository);
-      uiDocumentDialogForm.setWorkspace(workspace);
-      uiDocumentDialogForm.setContentType(contentType);
-      uiDocumentDialogForm.setNodePath(nodePath);
-      uiDocumentDialogForm.setStoredPath(nodePath);
-      uiDocumentDialogForm.addNew(false);
-      uiDocumentDialogForm.resetProperties();
-      Utils.createPopupWindow(uiContentViewerContainer, uiDocumentDialogForm, "UIDocumentFormPopupWindow", 800, 600);
+      UIContentDialogForm uiDocumentDialogForm = uiContentViewerContainer.createUIComponent(UIContentDialogForm.class, null, null);
+      uiDocumentDialogForm.init(orginialNode, false);
+      Utils.createPopupWindow(uiContentViewerContainer, uiDocumentDialogForm, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW, 800, 600);
     }
   }
 

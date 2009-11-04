@@ -11,8 +11,9 @@
 
 @import url('single-content-viewer-portlet/Stylesheet.css');
 
-@import url('wcm-content-selector/Stylesheet.css');
+@import url('wcm-content-dialog/Stylesheet.css');
 
+@import url('wcm-content-selector/Stylesheet.css');
 
 @import url('wcm-nodetypes/16x16/Stylesheet.css');
 @import url('wcm-nodetypes/277x182/Stylesheet.css');

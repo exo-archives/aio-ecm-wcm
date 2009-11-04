@@ -20,19 +20,16 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import javax.jcr.Node;
-import javax.portlet.PortletPreferences;
 
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
-import org.exoplatform.services.wcm.core.WCMService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
+import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
 import org.exoplatform.wcm.webui.scv.config.UIPortletConfig;
-import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
@@ -104,47 +101,13 @@ public class UIPresentationContainer extends UIContainer{
   }
 
   /**
-   * Gets the node.
-   * 
-   * @return the node
-   * 
-   * @throws Exception the exception
-   */
-  public Node getNodeView() {
-  	try {
-  		PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
-  		PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
-  		String repository = preferences.getValue(UISingleContentViewerPortlet.REPOSITORY, null);    
-  		String workspace = preferences.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
-  		String nodeIdentifier = preferences.getValue(UISingleContentViewerPortlet.IDENTIFIER, null) ;
-  		WCMService wcmService = getApplicationComponent(WCMService.class);
-  		Node originalNode = wcmService.getReferencedContent(Utils.getSessionProvider(this), repository, workspace, nodeIdentifier);
-  		Node viewNode = Utils.getNodeView(originalNode);
-  		
-  		// Set original node for UIBaseNodePresentation (in case nodeView is a version node)
-  		UIPresentation presentation = getChild(UIPresentation.class);
-  		if (viewNode != null && viewNode.isNodeType("nt:frozenNode")) {
-  			String nodeUUID = viewNode.getProperty("jcr:frozenUuid").getString();
-  			presentation.setOriginalNode(viewNode.getSession().getNodeByUUID(nodeUUID));
-  			presentation.setNode(viewNode);
-  		} else {
-  			presentation.setOriginalNode(viewNode);
-  			presentation.setNode(viewNode);
-  		}
-  		
-  		return viewNode;
-		} catch (Exception e) {
-			return null;
-		}
-  } 
-
-  /**
    * Get the print's page URL
    * 
    * @return <code>true</code> if the Quick Print is shown. Otherwise, <code>false</code>
    */
   public String getPrintUrl() {
-  	NodeLocation viewNodeLocation = NodeLocation.make(getNodeView());
+  	UISingleContentViewerPortlet scvPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);
+  	NodeLocation viewNodeLocation = NodeLocation.make(scvPortlet.getNodeView());
 		String portalURI = Util.getPortalRequestContext().getPortalURI();
 		WCMConfigurationService wcmConfigurationService = getApplicationComponent(WCMConfigurationService.class);
 		String printPageUrl = wcmConfigurationService.getRuntimeContextParam("printViewerPage");
@@ -168,18 +131,12 @@ public class UIPresentationContainer extends UIContainer{
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
     public void execute(Event<UIPresentationContainer> event) throws Exception {
-      UIPresentationContainer uicomp = event.getSource();
-      UISingleContentViewerPortlet uiportlet = uicomp.getAncestorOfType(UISingleContentViewerPortlet.class);
-      PortletRequestContext context = (PortletRequestContext)event.getRequestContext();      
-      org.exoplatform.webui.core.UIPopupContainer maskPopupContainer = uiportlet.getChild(org.exoplatform.webui.core.UIPopupContainer.class);     
-      UIPortletConfig portletConfig = maskPopupContainer.createUIComponent(UIPortletConfig.class,null,null);
-      uicomp.addChild(portletConfig);
-      portletConfig.init();
-      portletConfig.setRendered(true);
-      WebUIPropertiesConfigService propertiesConfigService = uicomp.getApplicationComponent(WebUIPropertiesConfigService.class);
+      UIPresentationContainer presentationContainer = event.getSource();
+      UIPortletConfig portletConfig = presentationContainer.createUIComponent(UIPortletConfig.class, null, null);
+      WebUIPropertiesConfigService propertiesConfigService = presentationContainer.getApplicationComponent(WebUIPropertiesConfigService.class);
       PopupWindowProperties popupProperties = (PopupWindowProperties)propertiesConfigService.getProperties(WebUIPropertiesConfigService.SCV_POPUP_SIZE_QUICK_EDIT);
-      maskPopupContainer.activate(portletConfig,popupProperties.getWidth(),popupProperties.getHeight());            
-      context.addUIComponentToUpdateByAjax(maskPopupContainer);
+      Utils.createPopupWindow(presentationContainer, portletConfig, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW, popupProperties.getWidth(), popupProperties.getHeight());
+      portletConfig.init();
     }
   }
 }

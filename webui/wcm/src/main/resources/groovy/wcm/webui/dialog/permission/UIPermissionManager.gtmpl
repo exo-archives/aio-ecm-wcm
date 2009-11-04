@@ -3,36 +3,31 @@
 	 * Created by The eXo Platform SAS
 	 * Author : eXoPlatform
 	 *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
-	 * Comment: Extends UIForm, add more condition to display fieldset better
-	 * Jun 26, 2009  
+	 * Comment: Extends UIForm, render field manually
+	 * Nov 01, 2009  
 	 */
+	 
+	 import org.exoplatform.wcm.webui.dialog.permission.UIPermissionManager;
 %>
+
 <div class="UIForm $uicomponent.id">
-	<%uiform.begin()%>
+	<% uiform.renderField(UIPermissionManager.PERMISSION_MANAGER_GRID); %>
+	<% uiform.begin(); %>
 		<div class="HorizontalLayout">
 			<div class="FormContainer">
 				<table class="UIFormGrid">
-					<% 
-						for(field in uiform.getChildren()) { 
-							if(field.isRendered()) {
-								%>
-									<tr>
-										<%
-											String fieldName = uicomponent.getLabel(field.getName());
-											if(!"UIFormFieldSet".equals(fieldName) && fieldName != null && fieldName.length() > 0 && !fieldName.equals(uicomponent.getId())) {
-												%>
-													<td class="FieldLabel">$fieldName</td>
-													<td class="FieldComponent"><% uiform.renderField(field) %></td>
-												<%
-											} else {
-												%><td class="FieldComponent" colspan="2"><% uiform.renderField(field) %></td><%
-											}
-										%>
-									</tr>
-								<%
-							}
-						}
-					%>
+					<tr>
+						<td class="FieldLabel"><%= uicomponent.getLabel(UIPermissionManager.PERMISSION_INPUT_SET) %></td>
+						<td class="FieldComponent"><% uiform.renderField(UIPermissionManager.PERMISSION_INPUT_SET); %></td>
+					</tr>
+					<tr>
+						<td class="FieldLabel"><%= uicomponent.getLabel(UIPermissionManager.ACCESSIBLE_CHECKBOX_INPUT) %></td>
+						<td class="FieldComponent"><% uiform.renderField(UIPermissionManager.ACCESSIBLE_CHECKBOX_INPUT); %></td>
+					</tr>
+					<tr>
+						<td class="FieldLabel"><%= uicomponent.getLabel(UIPermissionManager.EDITABLE_CHECKBOX_INPUT) %></td>
+						<td class="FieldComponent"><% uiform.renderField(UIPermissionManager.EDITABLE_CHECKBOX_INPUT); %></td>
+					</tr>
 				</table>
 				<div class="UIAction"> 
 					<table class="ActionContainer">
@@ -61,5 +56,5 @@
 				</div>
 			</div>
 		</div>
-	<%uiform.end()%>
+	<% uiform.end(); %>
 </div>

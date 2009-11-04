@@ -22,7 +22,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -42,6 +41,7 @@ import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.images.RESTImagesRendererService;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
 import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -576,25 +576,13 @@ import org.exoplatform.webui.event.EventListener;
       String path = event.getRequestContext().getRequestParameter(OBJECTID);      
       String repository = preferences.getValue(UICLVPortlet.REPOSITORY, null);
       String worksapce = preferences.getValue(UICLVPortlet.WORKSPACE, null);      
-      if (repository == null || worksapce == null)
-        throw new ItemNotFoundException();
       RepositoryService repositoryService = contentListPresentation.getApplicationComponent(RepositoryService.class);      
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = Utils.getSessionProvider(contentListPresentation).getSession(worksapce, manageableRepository);
-      String contentType=null, nodePath=null;
   	  Node node = (Node) session.getItem(path);
-  	  contentType = node.getPrimaryNodeType().getName();
-  	  nodePath = node.getPath();
-      UICLVContentDialog uiDocumentDialogForm = contentListPresentation.createUIComponent(UICLVContentDialog.class, null, null);
-      uiDocumentDialogForm.setRepositoryName(repository);
-      uiDocumentDialogForm.setWorkspace(worksapce);
-      uiDocumentDialogForm.setContentType(contentType);
-      uiDocumentDialogForm.setNodePath(nodePath);
-      uiDocumentDialogForm.setStoredPath(nodePath);
-      uiDocumentDialogForm.addNew(false);
-      uiDocumentDialogForm.resetProperties();
-      uiDocumentDialogForm.setRendered(true);
-      Utils.createPopupWindow(contentListPresentation, uiDocumentDialogForm, "UIDocumentDialogFormPopupWindow", 800, 600);
+      UIContentDialogForm uiDocumentDialogForm = contentListPresentation.createUIComponent(UIContentDialogForm.class, null, null);
+      uiDocumentDialogForm.init(node, false);
+      Utils.createPopupWindow(contentListPresentation, uiDocumentDialogForm, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW, 800, 600);
     }
   }
 

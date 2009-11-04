@@ -16,12 +16,7 @@
  */
 package org.exoplatform.wcm.webui.scv;
 
-import java.io.Writer;
-
-import javax.jcr.AccessDeniedException;
-import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
-import javax.jcr.RepositoryException;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
@@ -34,7 +29,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
 /**
@@ -49,50 +43,9 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
 public class UIPresentation extends UIBaseNodePresentation {
 
-  /** The resource resolver. */
-  private JCRResourceResolver  resourceResolver ;
-
-  /** Instantiates a new uI presentation. */
   private NodeLocation originalNodeLocation;
   
-  /** The view node. */
   private NodeLocation viewNodeLocation;
-
-  /**
-   * Instantiates a new uI presentation.
-   * 
-   * @throws Exception the exception
-   */
-  public UIPresentation() throws Exception {}
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getNode()
-   */
-  public Node getNode() throws Exception {
-    return NodeLocation.getNodeByLocation(viewNodeLocation);
-  }
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getRepositoryName()
-   */
-  public String getRepositoryName() {return getRepository() ;}
-
-  /**
-   * Gets the portlet preference.
-   * 
-   * @return the portlet preference
-   */
-  private PortletPreferences getPortletPreference() {
-    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
-    return portletRequestContext.getRequest().getPreferences();
-  }
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getRepository()
-   */
-  public String getRepository() {
-    return getPortletPreference().getValue(UISingleContentViewerPortlet.REPOSITORY, "repository");    
-  }    
 
   /* (non-Javadoc)
    * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getOriginalNode()
@@ -101,15 +54,34 @@ public class UIPresentation extends UIBaseNodePresentation {
     return NodeLocation.getNodeByLocation(originalNodeLocation);
   }  
 
-  /**
-   * Sets the original node.
-   * 
-   * @param node the new original node
-   * 
-   * @throws Exception the exception
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getNode()
    */
   public void setOriginalNode(Node node) throws Exception{
     originalNodeLocation = NodeLocation.make(node);
+  }
+  
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getNode()
+   */
+  public Node getNode() throws Exception {
+    return NodeLocation.getNodeByLocation(viewNodeLocation);
+  }
+  
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#setNode(javax.jcr.Node)
+   */
+  public void setNode(Node node) {
+    viewNodeLocation = NodeLocation.make(node);
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getRepositoryName()
+   */
+  public String getRepositoryName() {
+  	PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+    PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
+    return portletPreferences.getValue(UISingleContentViewerPortlet.REPOSITORY, "repository");
   }
   
   /* (non-Javadoc)
@@ -118,86 +90,27 @@ public class UIPresentation extends UIBaseNodePresentation {
   public String getTemplate() {
     try{
       return getTemplatePath() ;
-    }catch (Exception e) {
+    } catch (Exception e) {
       return null ;
     }
   }
 
   /* (non-Javadoc)
-   * @see org.exoplatform.webui.core.UIComponent#processRender(org.exoplatform.webui.application.WebuiRequestContext)
-   */
-  public void processRender(WebuiRequestContext context) throws Exception {
-    try {
-      if (getTemplatePath() == null) throw new NullPointerException();
-    } catch (ItemNotFoundException e) {
-      Writer writer = context.getWriter() ;
-      writer.write("<div style=\"padding-bottom: 20px; font-size: 13px; text-align: center; padding-top: 10px;\">") ;
-      writer.write("<span>") ;
-      writer.write(context.getApplicationResourceBundle().getString("UIMessageBoard.msg.content-not-found")) ;
-      writer.write("</span>") ;
-      writer.write("</div>") ;
-      return ;
-    } catch (AccessDeniedException e) {
-      Writer writer = context.getWriter() ;
-      writer.write("<div class=\"Message\">") ;
-      writer.write("<span>") ;
-      writer.write(context.getApplicationResourceBundle().getString("UIMessageBoard.msg.no-permission")) ;
-      writer.write("</span>") ;
-      writer.write("</div>") ;
-      return;
-    } catch (RepositoryException e) {
-      Writer writer = context.getWriter();
-      writer.write("<div class=\"Message\">");
-      writer.write("<span>");
-      writer.write(context.getApplicationResourceBundle().getString("UIMessageBoard.msg.error-nodetype"));
-      writer.write("</span>");
-      writer.write("</div>");
-      return;
-    } catch (Exception e) {
-      Writer writer = context.getWriter();
-      writer.write("<div class=\"Message\">");
-      writer.write("<span>");
-      writer.write(context.getApplicationResourceBundle().getString("UIMessageBoard.msg.error-nodetype"));
-      writer.write("</span>");
-      writer.write("</div>");
-      return;
-    }      
-    UISingleContentViewerPortlet viewerPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);
-    UIPopupContainer popupContainer = viewerPortlet.getChild(UIPopupContainer.class);
-    if(popupContainer!= null) {
-      popupContainer.deActivate();
-    }
-
-    super.processRender(context) ;
-  }
-
-  /* (non-Javadoc)
    * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getTemplatePath()
    */
-  @Override
   public String getTemplatePath() throws Exception {
     TemplateService templateService = getApplicationComponent(TemplateService.class);
     return templateService.getTemplatePath(getOriginalNode(), false) ;
   }
     
-    
   /* (non-Javadoc)
    * @see org.exoplatform.webui.core.UIComponent#getTemplateResourceResolver(org.exoplatform.webui.application.WebuiRequestContext, java.lang.String)
    */
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
-    try{
-      if(resourceResolver == null) {
-        String repository = getRepository();
-          DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
-          String workspace = dmsConfiguration.getConfig(repository).getSystemWorkspace();
-        resourceResolver = new JCRResourceResolver(repository, workspace, "exo:templateFile");
-      }
-    }catch (Exception e) {
-      if(UISingleContentViewerPortlet.scvLog.isDebugEnabled()) {
-        UISingleContentViewerPortlet.scvLog.debug(e);
-      }
-    }    
-    return resourceResolver ;   
+    String repository = getRepositoryName();
+    DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
+    String workspace = dmsConfiguration.getConfig(repository).getSystemWorkspace();
+    return new JCRResourceResolver(repository, workspace, "exo:templateFile");
   }
 
   /* (non-Javadoc)
@@ -215,26 +128,23 @@ public class UIPresentation extends UIBaseNodePresentation {
   }
 
   /* (non-Javadoc)
-   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#setNode(javax.jcr.Node)
-   */
-  public void setNode(Node node) {
-    viewNodeLocation = NodeLocation.make(node);
-  }
-
-  /* (non-Javadoc)
    * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getCommentComponent()
    */
   public UIComponent getCommentComponent() {
   	return null;
   }
 
-public UIComponent getRemoveAttach() throws Exception {
-	// TODO Auto-generated method stub
-	return null;
-}
-
-public UIComponent getRemoveComment() throws Exception {
-	// TODO Auto-generated method stub
-	return null;
-}
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getCommentComponent()
+   */
+  public UIComponent getRemoveAttach() throws Exception {
+  	return null;
+  }
+  
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getCommentComponent()
+   */
+  public UIComponent getRemoveComment() throws Exception {
+  	return null;
+  }
 }
