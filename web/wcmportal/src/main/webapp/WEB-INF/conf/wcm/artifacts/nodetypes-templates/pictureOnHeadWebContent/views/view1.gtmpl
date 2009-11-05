@@ -7,6 +7,7 @@
 	import org.exoplatform.services.wcm.images.RESTImagesRendererService;
 	import org.exoplatform.services.wcm.skin.XSkinService;
 	import org.exoplatform.services.wcm.javascript.XJavascriptService;
+	import org.exoplatform.services.jcr.core.ManageableRepository;
 	
 	public String getRimOfImage(String property, Node currentNode) throws Exception {
     String rim = "";
@@ -83,6 +84,7 @@
 						}
 						if(isShowTags) {
 							FolksonomyService folkService = uicomponent.getApplicationComponent(FolksonomyService.class);
+							def repositoryName = ((ManageableRepository)currentNode.getSession().getRepository()).getConfiguration().getName();
 							List<Node> tagList = folkService.getLinkedTagsOfDocument(currentNode, repositoryName);
 							if(!tagList.isEmpty()) {
 								StringBuffer tagBuff = new StringBuffer("[");
