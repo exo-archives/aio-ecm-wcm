@@ -109,6 +109,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 					<%
 						def categoryDescription = category.getDescription();
 						if (categoryDescription == null) categoryDescription = "";
+						if (categoryDescription.length() > 100) categoryDescription = categoryDescription.substring(0, 100) + " ...";
 					%>
 					<span style="line-height:26px;padding-left:10px">$categoryDescription</span>
 					<div class="ClearLeft"><span></span></div>
