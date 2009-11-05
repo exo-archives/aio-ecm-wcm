@@ -55,7 +55,6 @@
     <div id="$uicomponent.id">
       <div class="UIRowContainer">
       	<%uicomponent.renderChildren()%>
-      	<div class="ClearBoth"><span></span></div>
       </div>
 	  </div>
 	</div>  
