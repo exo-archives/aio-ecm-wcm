@@ -73,7 +73,12 @@ public class UIContentBrowsePanelOne extends UIContentBrowsePanel{
    * @see org.exoplatform.wcm.webui.selector.content.UIContentBrowsePanel#doSelect(javax.jcr.Node, org.exoplatform.webui.application.WebuiRequestContext)
    */
   public void doSelect(Node node, WebuiRequestContext requestContext) throws Exception{
-    NodeIdentifier nodeIdentifier = NodeIdentifier.make(node);
+  	Node realNode = node;
+  	if (node.isNodeType("exo:symlink")) {
+  		String uuid = node.getProperty("exo:uuid").getString();
+  		realNode = node.getSession().getNodeByUUID(uuid);
+  	}
+    NodeIdentifier nodeIdentifier = NodeIdentifier.make(realNode);
     PortletRequestContext pContext = (PortletRequestContext) requestContext;
     PortletPreferences prefs = pContext.getRequest().getPreferences();
     prefs.setValue("repository", nodeIdentifier.getRepository());
@@ -87,10 +92,10 @@ public class UIContentBrowsePanelOne extends UIContentBrowsePanel{
     WCMPublicationService wcmPublicationService = this.getApplicationComponent(WCMPublicationService.class);
 
     try {
-      wcmPublicationService.isEnrolledInWCMLifecycle(node);
+      wcmPublicationService.isEnrolledInWCMLifecycle(realNode);
     } catch (NotInWCMPublicationException e){
-      wcmPublicationService.unsubcribeLifecycle(node);
-      wcmPublicationService.enrollNodeInLifecycle(node, portalOwner, remoteUser);          
+      wcmPublicationService.unsubcribeLifecycle(realNode);
+      wcmPublicationService.enrollNodeInLifecycle(realNode, portalOwner, remoteUser);          
     }
 
     // Update Page And Close PopUp

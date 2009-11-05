@@ -66,13 +66,13 @@
 					        	</td>
 						        <td>
 									<%
-				          				if(isAcceptedNodeType(node, acceptedNodeTypes)) {
+				          				//if(isAcceptedNodeType(node, acceptedNodeTypes)) {
 				          					%>
 			              						<a href="<%=uicomponent.event("Select", node.getPath())%>">
 			                						<div class="Select16x16Icon" style="margin: 0px auto;"></div>
 			              						</a>
 				          					<%
-				          				}
+				          				//}
 				          			%>
 				        		</td>
 				      		</tr>
