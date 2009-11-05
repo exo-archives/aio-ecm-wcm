@@ -596,7 +596,6 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
       UIFormSelectBox orderBySelector = uiViewerManagementForm.getUIFormSelectBox(ORDER_BY);
       String mode = modeBoxInput.getValue();
       if (mode.equals(UICLVConfig.VIEWER_AUTO_MODE)) {
-//<<<<<<< .mine
       	orderBySelector.setRendered(true);
         UIContentSelectorFolder contentSelector = uiViewerManagementForm.createUIComponent(UIContentSelectorFolder.class, null, null);
         contentSelector.init();
@@ -604,29 +603,15 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
         contentBrowserPanel.setSourceComponent(uiViewerManagementForm, new String[] { UICLVConfig.FOLDER_PATH_INPUT });
         contentBrowserPanel.init();
         Utils.createPopupWindow(uiViewerManagementForm, contentSelector, FOLDER_PATH_SELECTOR_POPUP_WINDOW, 800, 600);
-//=======
-//        orderBySelector.setRendered(true);
-//        UICLVFolderSelector uiFolderPathSelector = uiViewerManagementForm.createUIComponent(UICLVFolderSelector.class, null, null);
-//        uiFolderPathSelector.setSourceComponent(uiViewerManagementForm, new String[] { UICLVConfig.FOLDER_PATH_INPUT });
-//        uiFolderPathSelector.init();
-//        Utils.createPopupWindow(uiViewerManagementForm, uiFolderPathSelector, FOLDER_PATH_SELECTOR_POPUP_WINDOW, 750, 400);
-//>>>>>>> .r39646
         uiViewerManagementForm.setPopupId(FOLDER_PATH_SELECTOR_POPUP_WINDOW);
       } else {
         orderBySelector.setRendered(false);
-//<<<<<<< .mine
         UIContentSelectorMulti contentSelector = uiViewerManagementForm.createUIComponent(UIContentSelectorMulti.class, null, null);
         contentSelector.init();
         UIContentBrowsePanelMulti contentBrowserPanel= contentSelector.getChild(UIContentBrowsePanelMulti.class);
         contentBrowserPanel.setSourceComponent(uiViewerManagementForm, new String[] { UICLVConfig.FOLDER_PATH_INPUT });
         contentBrowserPanel.init();
         Utils.createPopupWindow(uiViewerManagementForm, contentSelector, CORRECT_CONTENT_SELECTOR_POPUP_WINDOW, 800, 600);
-//=======
-//        UICLVContentSelector uiCorrectContentSelectorForm = uiViewerManagementForm.createUIComponent(UICLVContentSelector.class, null, null);
-//        uiCorrectContentSelectorForm.setSourceComponent(uiViewerManagementForm, new String[] { UICLVConfig.FOLDER_PATH_INPUT });
-//        uiCorrectContentSelectorForm.init(context);
-//        Utils.createPopupWindow(uiViewerManagementForm, uiCorrectContentSelectorForm, CORRECT_CONTENT_SELECTOR_POPUP_WINDOW, 750, 400);
-//>>>>>>> .r39646
         uiViewerManagementForm.setPopupId(CORRECT_CONTENT_SELECTOR_POPUP_WINDOW);
       }
     }
