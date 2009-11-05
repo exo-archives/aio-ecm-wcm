@@ -164,6 +164,17 @@ public class UIPCVContainer extends UIContainer {
     return (showAble != null) ? Boolean.parseBoolean(showAble) : false;
 	}
 
+	/**
+	 * Checks if is show date created.
+	 * 
+	 * @return true, if is show date created
+	 */
+	public boolean isShowBar() {
+		PortletPreferences portletPreferences = getPortletPreferences();
+		String showAble = portletPreferences.getValue(UIPCVPortlet.SHOW_BAR, null);
+		return (showAble != null) ? Boolean.parseBoolean(showAble) : false;
+	}
+	
   /**
 	 * Gets the created date.
 	 * 

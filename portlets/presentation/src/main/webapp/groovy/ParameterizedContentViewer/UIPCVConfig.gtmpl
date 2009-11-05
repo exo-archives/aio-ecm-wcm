@@ -38,6 +38,15 @@
 							
 						</td>											
 					</tr>								
+					<tr>
+					<td class="FieldLabel">
+					<%=uicomponent.getLabel(uiform.getChildById(uicomponent.SHOW_BAR).getName()) %>
+					</td>
+					<td class="FieldComponent" colspan="2">
+					<% uiform.renderField(uiform.getChildById(uicomponent.SHOW_BAR)) %>
+					
+					</td>											
+					</tr>								
 	      		</table>   					      	      
       	</fieldset>
       

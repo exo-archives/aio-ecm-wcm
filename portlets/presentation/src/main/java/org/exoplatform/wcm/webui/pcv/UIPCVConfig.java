@@ -53,6 +53,9 @@ public class UIPCVConfig extends UIForm {
 
   /** The Constant SHOW_DATE_CREATED. */
   public static final String SHOW_DATE_CREATED               = "ShowDateCreated";
+
+  /** The Constant SHOW_BAR. */
+  public static final String SHOW_BAR = "ShowBar";
   
   @SuppressWarnings("unchecked")
   public UIPCVConfig() {
@@ -69,8 +72,14 @@ public class UIPCVConfig extends UIForm {
     String dateShowAble = portletPreferences.getValue(UIPCVPortlet.SHOW_DATE_CREATED, null);
     dateCreatedViewerCheckbox.setChecked(Boolean.parseBoolean(dateShowAble));
     
+    UIFormCheckBoxInput barViewerCheckbox = new UIFormCheckBoxInput(SHOW_BAR, SHOW_BAR, null);
+    barViewerCheckbox.setChecked(true);
+    String barShowable = portletPreferences.getValue(UIPCVPortlet.SHOW_BAR, null);
+    barViewerCheckbox.setChecked(Boolean.parseBoolean(barShowable));
+    
     addChild(titleViewerCheckbox);
     addChild(dateCreatedViewerCheckbox);
+    addChild(barViewerCheckbox);
     
     setActions(new String[] { "Save", "Cancel" });
   }
@@ -105,11 +114,13 @@ public class UIPCVConfig extends UIForm {
       
       String showTitle = uiPCVConfigForm.getUIFormCheckBoxInput(UIPCVConfig.SHOW_TITLE).isChecked() ? "true" : "false";
       String showDateCreated = uiPCVConfigForm.getUIFormCheckBoxInput(UIPCVConfig.SHOW_DATE_CREATED).isChecked() ? "true" : "false";
+      String showBar = uiPCVConfigForm.getUIFormCheckBoxInput(UIPCVConfig.SHOW_BAR).isChecked() ? "true" : "false";
 
       portletPreferences.setValue(UIPCVPortlet.PREFERENCE_REPOSITORY, repository);
       portletPreferences.setValue(UIPCVPortlet.WORKSPACE, workspace);
       portletPreferences.setValue(UIPCVPortlet.SHOW_TITLE, showTitle);
       portletPreferences.setValue(UIPCVPortlet.SHOW_DATE_CREATED, showDateCreated);
+      portletPreferences.setValue(UIPCVPortlet.SHOW_BAR, showBar);
       portletPreferences.store();
       Utils.closePopupWindow(uiPCVConfigForm, UIPCVPortlet.PCV_CONFIG_POPUP_WINDOW);
     }

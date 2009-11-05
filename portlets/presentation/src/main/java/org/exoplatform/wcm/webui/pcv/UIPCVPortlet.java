@@ -54,6 +54,9 @@ public class UIPCVPortlet extends UIPortletApplication {
   /** The Constant SHOW_DATE_CREATED. */
   public final static String SHOW_DATE_CREATED       = "showDateCreated";
 
+  /** The Constant SHOW_BAR. */
+  public final static String SHOW_BAR       = "showBar";
+  
   /** The mode_. */
   private PortletMode        mode                    = PortletMode.VIEW;
 
