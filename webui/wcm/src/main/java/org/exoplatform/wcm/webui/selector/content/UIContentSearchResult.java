@@ -24,6 +24,7 @@ import org.exoplatform.services.wcm.publication.NotInWCMPublicationException;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.search.PaginatedQueryResult;
 import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -242,6 +243,7 @@ public class UIContentSearchResult extends UIGrid {
       uiPageBody.setUIComponent(null);
       uiPageBody.setMaximizedUIComponent(null);
       Utils.updatePortal((PortletRequestContext)event.getRequestContext());
+      Utils.closePopupWindow(contentSearchResult.getAncestorOfType(UIContentSelector.class), UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW);
     }
   }
 
