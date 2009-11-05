@@ -24,6 +24,7 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFactory;
+import javax.jcr.ValueFormatException;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
@@ -205,8 +206,12 @@ public class PublicationUtil {
   public static List<String> getValuesAsString(Node node, String propName) throws Exception {
     if(!node.hasProperty(propName)) return new ArrayList<String>();
     List<String> results = new ArrayList<String>();
-    for(Value value: node.getProperty(propName).getValues()) {
-      results.add(value.getString());
+    try{
+      for(Value value: node.getProperty(propName).getValues()) {
+        results.add(value.getString());
+      }
+    }catch(ValueFormatException ex){
+      results.add(node.getProperty(propName).getValue().getString());
     }
     return results;
   }
