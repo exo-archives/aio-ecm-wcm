@@ -1,5 +1,5 @@
 ==============================================
-	eXo WCM 1.2 release candidate
+	eXo WCM 1.2.1
 ==============================================
 
 - Introduction
@@ -10,73 +10,265 @@
 		eXo WCM helps your company to keep its websites under control by providing a complete solution to build and maintain easily 
 	multiple web sites at a time.
 
-Release Notes - exo-ecm-wcm - Version wcm-1.2rc3
-
 ** Bug
-    * [WCM-820] - Create web content by VietNamese text--> display error font.
-    * [WCM-1011] - IE6- Didn't display admin toolbar after login
-    * [WCM-1012] - IE6- when i click on Viewer navigation--> display error index
-    * [WCM-1042] - Bug when view webdav on MAC
-    * [WCM-1215] - IE7-Broken UI when minimise browser
-    * [WCM-1352] - [DEV-JS]-Fix bugs navigations in Safari
+    * [WCM-1244] - User logged out when certain HTML structure inserted into SingleContentViewer
     * [WCM-1443] - Cannot add mix:i18n to exo:webContent
-    * [WCM-1530] - NullPointerException while requesting rss feed
-    * [WCM-1536] - Safari 4 compliance
-    * [WCM-1563] - Error with Abort button in Add/Edit content form
-    * [WCM-1571] - ECM Content Browser portlet does not work with WCM content (Webcontent and associated template)
-    * [WCM-1576] - NullPointerException when opening 'Manage publications' window
+    * [WCM-1529] - Can not see main content when insert portal link and click on preview button 
+    * [WCM-1577] - publication:applicationIDs property not set when creating content from new page wizard
     * [WCM-1578] - Modifying content via WebDav causes 'Save draft' and 'Fast publish' actions to fail
-    * [WCM-1581] - getActiveStylesheet exception when rendering exo:webcontent
-    * [WCM-1660] - NullPointerException when clicking on the manage publications icon in the file explorer.
-    * [WCM-1680] - No one can access "backoffice" & drive of new added site
-    * [WCM-1682] - Safari4: Error popup when abort edit page wizard while selecting Form Generator page
-    * [WCM-1699] - The Page Selector form is shown behind the Config form of Parameterized Content List Viewer in special case
-    * [WCM-1705] - Error when try to edit page by wizard while showing page content in search result
-    * [WCM-1713] - There's no initial values for new added repository in Site Administration
-    * [WCM-1717] - WCM can not FastPublish when some sub-nodes of the site are not in checkouted state
-    * [WCM-1722] - FCKEditor. Link to a navigation entry of the site does not show any entries.
-    * [WCM-1735] - Draft content still display in edit mode
-    * [WCM-1738] - Cannot edit content in PCV portlet
-    * [WCM-1739] - Cannot save draft or fast publish when edit content by CLV
-    * [WCM-1745] - Breadcrumb display wrong in PCV portlet when show PCV from PCLV
-    * [WCM-1749] - Error with the position of search icon in User Selector form
-    * [WCM-1753] - Error when put invalid value in Iterm per page field of PCLV portlet
-    * [WCM-1754] - Unknown error when click icon to choose metadata when search document for SCV
-    * [WCM-1756] - Lose border in form to create Web link
-    * [WCM-1757] - Error when view Web Link in PCLV
-    * [WCM-1759] - Can not set home path of exo:taxonomy action
-    * [WCM-1760] - Error in displaying content of CLV
-    * [WCM-1761] - New added content can not be shown in SCV in edit mode 
-    * [WCM-1762] -  Document is not listed in Document folder of specific site after uploaded
-    * [WCM-1766] - Little error in showing date time in Publication history form
-    * [WCM-1767] - Can not search with both "Page" & "Document" conditions
-    * [WCM-1768] - Broken UI in search form in SCV content selector in create page wizard
-    * [WCM-1769] - Error when creating document using new node type created in Generator Portlet
-    * [WCM-1770] - Can not view found document in SCV after search
-    * [WCM-1772] - Can not edit js/css file
-    * [WCM-1773] - There's no default config for pages in ACME site
-    * [WCM-1774] - Little error in showing text in Content List Viewer management form
-    * [WCM-1775] - Content of CLV disappears after deleted document/web content that was selected to view in that page
-    * [WCM-1776] - Always show subscription1 in form to create new letter
-    * [WCM-1777] - No result found when do advanced search in Sites Explorer
-    * [WCM-1779] - The content of SCV was replaced by user without right
-    * [WCM-1780] - IE7: Little UI error in Permission Settings form when add new content
-    * [WCM-1782] - IE7: Error in displaying document in Category
-    * [WCM-1783] - Content of selected category disappears after choose Help from portlet mode
-    * [WCM-1785] - IE7: Error when showing Admin bar while showing Site Administration page
-    * [WCM-1787] - IE7: Error when display node in Site Explorer with long name
-    * [WCM-1816] - Add products to ACME page.
+    * [WCM-1623] - Upload action in exo:webFolder
+    * [WCM-1744] - Exception when run publication unit test
+    * [WCM-1806] - Restoring previous article version breaks publication properties
+    * [WCM-1807] - Duplicated user/group home folder nodes in collaboration workspace
+    * [WCM-1809] - Article's attachments are not versionable
+    * [WCM-1824] - Manage Publication: Status not shown for published content
+    * [WCM-1843] - Little error in showing label in Add action form when config FCC portlet
+    * [WCM-1856] - Change the Field name in the alert message when generate new form with spcial characters in Name
+    * [WCM-1868] - FF: Search Web content : Position of mini calendar is wrong when is shown
+    * [WCM-1870] - IE7:No effect when edit CSS data
+    * [WCM-1877] - IE7: buttons in popup "Insert link to a site page" are difficult to click
+    * [WCM-1878] - IE7: can not insert gadget in FCK editor
+    * [WCM-1882] - Search result isn't displayed when search mode is Box search
+    * [WCM-1896] - SCV - Invisible PopupWindow (UINonEditable component)
+    * [WCM-1897] - SCV - permitted content editor cannot edit content using "quick edit"
+    * [WCM-1930] - Show message error when edit Category navigation porlet in manage page
+    * [WCM-1931] - Add Content by select existed Content : Unknown error when search Document Type in special case
+    * [WCM-1932] - Can not upload when edit document using new added form
+    * [WCM-1933] - IE7, Form Generator: No component is added when add new form with more than 3 components
+    * [WCM-1934] - IE7, Form Generator: Title are "undefined" when view added form with 2 components
+    * [WCM-1935] - Unknown error when checking Manage Publications that has page is deleted
+    * [WCM-1936] - Content of Web content isn't shown and throw exception when print in special case
+    * [WCM-1937] - Form Generator: Error in displaying label after adding new form with Field label in VNese 
+    * [WCM-1938] - Form Generator: Should display current value when edit component while creating new form
+    * [WCM-1939] - IE7, Form Generator: Little UI error in Form Builder
+    * [WCM-1940] - show error page when add content in special case
+    * [WCM-1941] - Error when add new letter by user has no right to access template
+    * [WCM-1953] - Should allow multi-adding, remove directly Category moderator when edit category of newsletter, currently, replace existing when choose new one
+    * [WCM-1954] - Navigation is inactive
+    * [WCM-1959] - IE7: Set align for label and check-box in PCLV edit mode
+    * [WCM-1965] - Stacktrace when trying to publish content
+    * [WCM-1973] - No field to upload an illustration in newsletter
+    * [WCM-1976] - Can not edit banner/Access portlet 
+    * [WCM-1977] - Error when set "Item per page" is blank or invalid while configuration for Content List Viewer
+    * [WCM-1979] - Replication failure (because of PublicationInitializerService activity)
+    * [WCM-1980] - Sylesheet wrong processing
+    * [WCM-1981] - NPE using LDAP plugin
+    * [WCM-1983] - "The selected node can not be edited"
+    * [WCM-1984] - Error when check on "Show refresh button" while configuration for CLV
+    * [WCM-1985] - Page iterator is not displayed in CLV in special case
+    * [WCM-1986] - Little error in displaying page iterator
+    * [WCM-1989] - Should not allow to edit web content while in print preview
+    * [WCM-1990] - Error after config Category portlet (add page wizard)
+    * [WCM-1991] - Little error when show PCLV in Home page
+    * [WCM-1992] - PCLV, Home page: Page iterator did not disappear after changed from Edit mode to Live mode although there's no document
+    * [WCM-1994] - Welcome 'user' is not shown in new site
+    * [WCM-1995] - Can not do actions in banner of new added site
+    * [WCM-1997] - "Edit this page's node" doesn't work at Site Navigation
+    * [WCM-2010] - Bug in search box when click on Account Settings, Skins Setting, ..
+    * [WCM-2012] - CLONE -Form Generator: Error in displaying label after adding new form with Field label in VNese 
+    * [WCM-2018] - Show both document and web content when filter only document to show
+    * [WCM-2019] - Exception when select draft document when add new content
+    * [WCM-2020] - Can not edit document in SCV
+    * [WCM-2022] - IE7: Session timeout when choose path to select document
+    * [WCM-2023] - Upload icon not visible (in Site explorer) using Firefox under Linux
+    * [WCM-2026] - WCM shutdown takes too much time
+    * [WCM-2027] - Cannot subscribe but user is added in Newsletter manager in special case
+    * [WCM-2029] - Can not select folder at 2 level when try to select a content for SCV in add page wizard
+    * [WCM-2030] - Change title: "selectBoxTitle" in add new content form 
+    * [WCM-2032] - "Debug" log should be remove from the code
+    * [WCM-2033] - Error when do action in Site Editor when user is assigned to web contributor group only
+    * [WCM-2034] - Error when try to edit web content after closed print preview form
+    * [WCM-2035] - Unknown error when add web content into un-existing page
+    * [WCM-2036] - NullPointerException in console when do actions in WCM
+    * [WCM-2037] - Error when edit dfrat content from search result if user does not have edit right
+    * [WCM-2038] - Can not public document/content in Overview page
+    * [WCM-2039] - Can not insert image/document into new added web content
+    * [WCM-2040] - Error relates to public/unpublic content when node links to different pages
+    * [WCM-2043] - Nothing happens when click on Register in banner
+    * [WCM-2045] - Can not edit infor in Preference of web content from search result
+    * [WCM-2046] - Page publication dates does not work
+    * [WCM-2048] - Edit site breaks the layout of the portal
+    * [WCM-2050] - Banner tools (Logout, Change Languages, ...) do not work in newly created site
+    * [WCM-2051] - Fast Content Creator interface looses modifications when opening AddAction SubDialog
+    * [WCM-2052] - Typo in Navigation dialog template
+    * [WCM-2055] - After being selected to public a document/web content, the Overview page is not shown in right pane
+    * [WCM-2057] - Overview, CLV: Should display at least Title when there's no summary
+    * [WCM-2058] - Edit mode: Lack of icon for some kind of documents/web content when they're listed in Overview page
+    * [WCM-2059] - IE7: Can not show Back, First, Next Last icon
+    * [WCM-2060] - WCM publication cause data loss when restoring previous version of content
+    * [WCM-2062] - RGR: Cannot use gadgets in WCM Front Office
+    * [WCM-2064] -  CLV templates (OneColumnCLVTemplate and TwoColumnsCLVTemplate) are not working correclty when user workspace is visible
+    * [WCM-2068] - How to export / import site data (Pages and Navigation)
+    * [WCM-2069] - Error with add new content
+    * [WCM-2073] - Can't deactivate PCV's preferences "showTitle" and "showDateCreated"
+    * [WCM-2074] - JavaScript priority doesn't work
+    * [WCM-2076] - Set alignment = "center" for Main Content form in Content Editing (from search result)
+    * [WCM-2077] - Error when add new content by selecting exiting one right after adding new site
+    * [WCM-2078] - Error when try to select node at level 2 for Add new content use Select a content in Add new page wizard
+    * [WCM-2079] - Remove Show Help or link to move between steps while adding new Content 
+    * [WCM-2081] - Error with form after being created by Form Generator
+    * [WCM-2082] - Error after config Category portlet using Classic Taxonomy tree while standing at ACME
+    * [WCM-2083] - Little error in UI of PCLV in View mode
+    * [WCM-2084] - Choose "Show more link" for PCLV but nothing is shown
+    * [WCM-2085] - The Form Generator fails when using identical field labels
+    * [WCM-2086] - The Form Generator creates invalid resource bundle keys when using non Latin letters.
+    * [WCM-2088] - Should show alert message when try to edit permission  of "root" on a content
+    * [WCM-2089] - Misleading error message on type validation
+    * [WCM-2091] - IE7: Little UI error in Form builder form
+    * [WCM-2094] - Can create new form while editing Form Generator portlet
+    * [WCM-2097] - Should not show edit icon to edit content when user does not have edit right
+    * [WCM-2098] - Nothing happens when select to view a page from nav bar of ACME site
+    * [WCM-2099] - IE7: Remove no needed line in CLV config form
+    * [WCM-2100] - Need some improvement in Edit content form
+    * [WCM-2104] - Uploaded file is not shown in CONTENT SELECTOR (FCK Editor)
+    * [WCM-2105] - IE7: Error in showing documents in CLV for sometimes
+    * [WCM-2106] - Can not search in special case
+    * [WCM-2108] - Error when new added user config SCV while adding new page by wizard
+    * [WCM-2109] - Error in the printviewer page template
+    * [WCM-2114] - Exception in console at the first time click on Register in public mode
+    * [WCM-2115] - Exception in console when anonymous or new added user subscribe new letter
+    * [WCM-2116] - Error in showing button when edit banner
+    * [WCM-2117] - Add new content is closed automatically when choose drive of site that user does not have right 
+    * [WCM-2119] - eXo WCM won't start on Mac if folder logs was not created
+    * [WCM-2122] - Can not create new categories in the File Explorer
+    * [WCM-2123] - Can not select a webcontent in the categories map from WCM assistants
+    * [WCM-2125] - Can not select a content (webcontent, media or document)  in the categories map from the eXo-FCK Editor plug-ins.
+    * [WCM-2127] - Can not easily change template in the form generator
+    * [WCM-2128] - Can not subscribe or unsubscrive to a newsletter
+    * [WCM-2129] - Not validate Items per page field in Content list viewer management form (case 2)
+    * [WCM-2130] - Not validate Items per page field in Content list viewer management form (input text or zero in Items per page field)
+    * [WCM-2131] - Cannot insert image from Illustration when edit WC from content list viewer
+    * [WCM-2132] - UI bug when open Web Content from content list viewer
+    * [WCM-2133] - Keep setting from the previous content list viewer when edit new content list viewer
+    * [WCM-2135] - Still display draft web content in Content list viewer in Live mode
+    * [WCM-2136] - Still validate Title in New category form when input Title having space
+    * [WCM-2137] - Still validate Title in New category form when input Title having some special characters
+    * [WCM-2138] - Not validate some special characters in Name field in New subscribe form
+    * [WCM-2140] - The value of Image type field doesn't change after selecting another
+    * [WCM-2143] - Still upload doc file when upload image in Illustration tab in create web content form
+    * [WCM-2144] - Cannot insert image in Main content  in create web content form
+    * [WCM-2145] - UI error in Upload form
+    * [WCM-2146] - Still save document when its name contains some special characters
+    * [WCM-2151] - Banned user still receives a letter
+    * [WCM-2152] - Add new letter form doesn't display the FCK Editor
+    * [WCM-2153] - Configure the PCV page in classic portal correctly
+    * [WCM-2154] - Drafts are visible in a search results, but still cannot be displayed in pcv
+    * [WCM-2155] - User still access Web content when he/she doesn't have both Edit and Access Right
+    * [WCM-2156] - Cannot continue to edit web content permission for another or for one user in the second time
+    * [WCM-2159] - Wrong alert message when search web content with From date greater than current date
+    * [WCM-2160] - Prompt wrong message when search Web content with invalid date in From/To Date  
+    * [WCM-2161] - Cannot find the existent document when add content
+    * [WCM-2162] - Error when search a document without inputing name
+    * [WCM-2163] - User who didn't check subscription in category but still receives a letter relating to the unchecked subscription
+    * [WCM-2167] - Moderator of Category in Newsletter only can read Newsletter
+    * [WCM-2168] - Accept more than one email address in Your mail field in Newsletter
+    * [WCM-2170] - Cannot display doc file with large size in CLV
+    * [WCM-2171] - Cannot Edit/Delete user permission in Web content form
+    * [WCM-2172] - Can not do searching for the content names containing Space character (ECM 1.0.1)
+    * [WCM-2173] -  NullPointerException when the parsing order is changed
+    * [WCM-2174] - Force the start of SkinService and JavaScriptService after xml deployment
+    * [WCM-2180] - Unknown error when create new web content
+    * [WCM-2181] - Unknown error when search Web content/Document with name including space
+    * [WCM-2183] - User need to confirm before receive the newsletter
+    * [WCM-2195] - Shared css doesn't affect to any portal
+    * [WCM-2200] - Can change web content status from Enrolled/Obsolete into Published
+    * [WCM-2204] - Free layout and Picture on head web content is disappeared
+    * [WCM-2205] - Error when use UIContentListPresentationBigImage.gtmpl as template for CLV
+    * [WCM-2206] - Paginator still displays in live mode when CLV contains all draft web contents
+    * [WCM-2207] - Can not delete illustration image in PCV
+    * [WCM-2208] - Upload problem in Content selector 
+    * [WCM-2212] - User cannot receive the letter after confirming the Newsletter confirmation request
+    * [WCM-2213] - After being created, Web content has no status
+    * [WCM-2215] - Publication state=null in Search form after searching a published document
+    * [WCM-2217] - In Live mode, draft web contents still are listed to select
+    * [WCM-2221] - Still validate when click [Cancel] in CLV management form
+    * [WCM-2222] - Problem of importing CSS when we deploy WCM 1.2 on WAS
+    * [WCM-2227] - Links in viewMode are not underlined
+    * [WCM-2228] - Enlarge window to suppress scrolls
+    * [WCM-2229] - Cannot display Description of Category in Newsletter management form
+    * [WCM-2232] - Error when config SCV while adding new page by wizard (special case)
+    * [WCM-2233] - Still keep the uploaded image in Icon field of the previous form in General tab after creating a template in Form Generator 
+    * [WCM-2235] - Error when add a select box with default value=blank in Form Generator
+    * [WCM-2236] - Cannot distinguish the fields having the same input name in the different forms in Form Generator
+    * [WCM-2237] - Block WCM when click doubly
+    * [WCM-2238] - Do not display name of uploaded file(not image) when use new template with Upload file field
+    * [WCM-2239] - Unknown error when edit document using new added template with Upload field (special case)
+    * [WCM-2240] - Error when select node in Content Selector form while adding new content
+    * [WCM-2242] - Folders in group drive are not shown while adding new content
+    * [WCM-2243] - Uploaded image cannot be downloaded from published page
+    * [WCM-2244] - No notification is displayed in PCLV in live mode when all documents in this PCLV have status=Draft
+    * [WCM-2246] - Registered email is not added in Manage users list when subscribe new letter by anonymous or new added user
+    * [WCM-2247] - Error when edit document (special case)
+    * [WCM-2250] - Set alignment for Nodetype Selector form (search content by document type)
+    * [WCM-2251] - fckeditor selector plugin does not work
+    * [WCM-2252] - CLV : no selector by drive
+    * [WCM-2253] - SCV Selector : inverted list of drives
+    * [WCM-2258] - Read more link in CLV cannot be active
+    * [WCM-2259] - Return blank when view found document after searching while adding new web content
+    * [WCM-2260] - The document/web content is not listed to be selected after being restored
+    * [WCM-2262] - Display draft version in Live mode in  PCLV
+    * [WCM-2263] - New added site is blank
+    * [WCM-2265] - Selected page to public a content is not displayed in right pane in case it's not belongs to current site
+    * [WCM-2269] - Error when select private document/content to be viewed in SCV
+    * [WCM-2270] - Lost stylesheet after Fast publish content 2 times
+    * [WCM-2271] - Improve selecting node in left pane when config SCV while adding page by wizard
+    * [WCM-2274] - Unknown error in case add permission for document/content when edit it while it is being locked by another user
+    * [WCM-2277] - Cannot display the published document in PCLV in News page
+    * [WCM-2278] - Not display default value of Label component in Form Generator
+    * [WCM-2280] - Letter status still is kept as  "awaiting" when time has been left
+    * [WCM-2282] - WCM Navigation Portlet does not render sub menus
+    * [WCM-2283] - When printing the content of a SCV, all buttons disappear.
+    * [WCM-2286] - Form Generator InputField creates a boolean property
+    * [WCM-2287] - Form Generator doesn't generate a unique variables for fields without a name
+    * [WCM-2288] - Garbage on the quick search field
+    * [WCM-2289] - Category Navigation Portlet : preferences is not saved
+    * [WCM-2290] - Exception when want to display a publish content
+    * [WCM-2291] - CLV does not work with exo:article
+    * [WCM-2293] - Still display Draft notification and Edit icon in search result of a published document in Edit mode
+    * [WCM-2294] - In newsletter management, french label exceed the size of the box
+    * [WCM-2296] - PCLV : Process render error
+    * [WCM-2297] - Error when add a category navigation portlet in a new page
+    * [WCM-2299] - Lack of resource bundle for Tree name and template form in category  navigation portlet config form
+    * [WCM-2310] - FCKEDitor : Selector doesn't have a paginator
+    * [WCM-2311] - FCKEDitor : Selector always returns root drives
+    * [WCM-2313] - Check boxes of letters are not align in Subscription form
+    * [WCM-2316] - New site has been lost stylesheet
+    * [WCM-2321] - CLONE -Restoring previous article version breaks publication properties
+
+** Improvement
+    * [WCM-1147] - content wizard selector : possibility to select in other workspaces
+    * [WCM-1402] - Print : Hide Print and Close buttons
+    * [WCM-1723] - SCV new content: Let the user enter any title in step 1
+    * [WCM-1837] - Improvement Content selector for SCV
+    * [WCM-1892] - Search should also find title content
+    * [WCM-1947] - Refactor WCM's Services
+    * [WCM-1948] - Refactor get/set SessionProvider
+    * [WCM-1949] - Improvement Content selector for FCKPlugins
+    * [WCM-1967] - Memory leak
+    * [WCM-1978] - Custom Portlet/Container Id
+    * [WCM-2031] - Form Generator should "format/indent" the template code correctly
+    * [WCM-2042] - The "Close" button in Remove Moderator form should be "Cancel" (Newsletter Manager/Category)
+    * [WCM-2044] - Change title "UIDocumentDialogForm"
+    * [WCM-2053] - Once selected a content in SCV, there's no way to edit portlet settings
+    * [WCM-2056] - Change title: "UIPublishingPanel"
+    * [WCM-2061] - Import all the gadget by default
+    * [WCM-2065] - Use a "user friendly" name for template in WCM Portlets preference
+    * [WCM-2066] - Support Hot deployment of WCM templates
+    * [WCM-2072] - Fix little typo in message
+    * [WCM-2080] - Change the field name "UIFormGeneratorNameFormStringInput" in message when add new form with special character in Name
+    * [WCM-2124] - Apply new Content Selector to CLV
+    * [WCM-2150] - Base path for PCV
+    * [WCM-2166] - Administrator for Newsletter
+    * [WCM-2184] - Don't refresh tree when change the Filter in FCK plugins
+    * [WCM-2185] - Upgrade to DMS 2.5.2
+    * [WCM-2188] - Upgrade to Portal 2.5.6.1
+    * [WCM-2192] - Add UI to config PCV preferences
+    * [WCM-2209] - Add multi-language for the new FCK Plugins
+    * [WCM-2298] - Improve render speed of Content Selector
+
+** New Feature
+    * [WCM-768] - Wehn creating a link in a Web Content we should authorize the user to point it to another WebContent
+    * [WCM-807] - Be able to customize the storage structure
 
 ** Task
-    * [WCM-1790] - Release 1.2rc3
-
-** Sub-task
-    * [WCM-1791] - Update JS poms
-    * [WCM-1792] - Update README.txt, put migrate guide in readme
-    * [WCM-1793] - Make an SVN tag
-    * [WCM-1794] - Make a zip package
-    * [WCM-1795] - Make a sniff test
-    * [WCM-1797] - Ensure artifacts are on eXo/VN maven repository
-    * [WCM-1798] - Announcement
-    * [WCM-1799] - Close JIRA stuffs
-
+    * [WCM-995] - Make sure .properties files are still used for Latin based languages
