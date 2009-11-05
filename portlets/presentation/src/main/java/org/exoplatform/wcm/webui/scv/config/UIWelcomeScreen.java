@@ -34,7 +34,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
-import org.exoplatform.wcm.webui.selector.content.UIContentSelector;
+import org.exoplatform.wcm.webui.selector.content.one.UIContentSelectorOne;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -86,7 +86,7 @@ public class UIWelcomeScreen extends UIForm {
      */
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
       UIWelcomeScreen uiWelcomeScreen = event.getSource();
-      UIContentSelector contentSelector = uiWelcomeScreen.createUIComponent(UIContentSelector.class, null, null);
+      UIContentSelectorOne contentSelector = uiWelcomeScreen.createUIComponent(UIContentSelectorOne.class, null, null);
       contentSelector.init();
       Utils.updatePopupWindow(uiWelcomeScreen, contentSelector, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW);
     }

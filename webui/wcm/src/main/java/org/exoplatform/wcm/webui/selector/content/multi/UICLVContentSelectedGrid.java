@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.wcm.webui.clv.config;
+package org.exoplatform.wcm.webui.selector.content.multi;
 
 import java.util.List;
 
@@ -22,6 +22,7 @@ import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.ecm.webui.tree.selectmany.UISelectedCategoriesGrid;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.selector.UISourceGridUpdatable;
+import org.exoplatform.wcm.webui.selector.content.UIContentBrowsePanel;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -34,14 +35,17 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-  template = "app:/groovy/ContentListViewer/config/UICLVContentSelectedGrid.gtmpl", 
-  events = {
-    @EventConfig(listeners = UICLVContentSelectedGrid.DeleteActionListener.class, confirm = "UISelectedContentGrid.msg.confirm-delete"),
-    @EventConfig(listeners = UICLVContentSelectedGrid.SaveCategoriesActionListener.class),
-    @EventConfig(listeners = UICLVContentSelectedGrid.CancelActionListener.class) 
-  }
+    template = "classpath:groovy/wcm/webui/selector/content/multi/UICLVContentSelectedGrid.gtmpl",
+    events = {
+        @EventConfig(listeners = UICLVContentSelectedGrid.DeleteActionListener.class, confirm = "UISelectedContentGrid.msg.confirm-delete"),
+        @EventConfig(listeners = UICLVContentSelectedGrid.SaveCategoriesActionListener.class),
+        @EventConfig(listeners = UICLVContentSelectedGrid.CancelActionListener.class) 
+      }
 )
 public class UICLVContentSelectedGrid extends UISelectedCategoriesGrid {
+  
+  /** The Constant CORRECT_CONTENT_SELECTOR_POPUP_WINDOW. */
+  public static final String CORRECT_CONTENT_SELECTOR_POPUP_WINDOW = "CorrectContentSelectorPopupWindow";
 
   /**
    * Instantiates a new uICLV content selected grid.
@@ -99,11 +103,11 @@ public class UICLVContentSelectedGrid extends UISelectedCategoriesGrid {
      */
     public void execute(Event<UICLVContentSelectedGrid> event) throws Exception {
       UICLVContentSelectedGrid uiSelectedContentGrid = event.getSource();
-      UICLVContentSelector uiCorrectContentSelectorForm = uiSelectedContentGrid.getAncestorOfType(UICLVContentSelector.class);
-      String returnField = uiCorrectContentSelectorForm.getReturnFieldName();
+      UIContentBrowsePanel uiContentBrowsePanel = uiSelectedContentGrid.getAncestorOfType(UIContentBrowsePanel.class);
+      String returnField = uiContentBrowsePanel.getReturnFieldName();
       List<String> selectedCategories = uiSelectedContentGrid.getSelectedCategories();
       if (selectedCategories.size() == 0 && !uiSelectedContentGrid.isDeleteAllCategory()) {
-      	Utils.createPopupMessage(uiCorrectContentSelectorForm, "UISelectedContentGrid.msg.non-content", null, ApplicationMessage.INFO);
+      	Utils.createPopupMessage(uiContentBrowsePanel, "UISelectedContentGrid.msg.non-content", null, ApplicationMessage.INFO);
         return;
       }
       try {
@@ -111,11 +115,11 @@ public class UICLVContentSelectedGrid extends UISelectedCategoriesGrid {
         for (String item : selectedCategories) {
           contents.append(item).append(";");
         }        
-        UISelectable uiViewerManagementForm = (UISelectable) uiCorrectContentSelectorForm.getSourceComponent();
-        uiViewerManagementForm.doSelect(returnField, contents.toString());        
-        ((UISourceGridUpdatable)uiViewerManagementForm).doSave(selectedCategories);
+        UISelectable contentBrowsePanel = (UISelectable) uiContentBrowsePanel.getSourceComponent();
+        contentBrowsePanel.doSelect(returnField, contents.toString());        
+        ((UISourceGridUpdatable)contentBrowsePanel).doSave(selectedCategories);
       } catch (Exception e) {
-        Utils.createPopupMessage(uiCorrectContentSelectorForm, "UISelectedCategoriesGrid.msg.cannot-save", null, ApplicationMessage.WARNING);
+        Utils.createPopupMessage(uiContentBrowsePanel, "UISelectedCategoriesGrid.msg.cannot-save", null, ApplicationMessage.WARNING);
         return;
       }
     }
@@ -139,8 +143,8 @@ public class UICLVContentSelectedGrid extends UISelectedCategoriesGrid {
      */
     public void execute(Event<UICLVContentSelectedGrid> event) throws Exception {
       UICLVContentSelectedGrid uiSelectedContent = event.getSource();
-      UICLVContentSelector uiCorrectContentSelectorForm = uiSelectedContent.getAncestorOfType(UICLVContentSelector.class);
-      Utils.closePopupWindow(uiCorrectContentSelectorForm, UICLVConfig.CORRECT_CONTENT_SELECTOR_POPUP_WINDOW);    
+      UIContentBrowsePanel uiContentBrowsePanel = uiSelectedContent.getAncestorOfType(UIContentBrowsePanel.class);
+      Utils.closePopupWindow(uiContentBrowsePanel, CORRECT_CONTENT_SELECTOR_POPUP_WINDOW);    
     }
   }
 }

@@ -56,9 +56,8 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIContentTreeBuilder extends UIContainer {
   
-  @SuppressWarnings("unused")
-	private List<String> path = new ArrayList<String>();
-  private String repositoryName;
+	public List<String> path = new ArrayList<String>();
+  protected String repositoryName;
   /**
    * Instantiates a new uI web content tree builder.
    * 
@@ -214,6 +213,23 @@ public class UIContentTreeBuilder extends UIContainer {
   }
 
   /**
+<<<<<<< .mine
+   * Gets the session.
+   * 
+   * @param workSpaceName the work space name
+   * 
+   * @return the session
+   * 
+   * @throws Exception the exception
+   */
+  protected Session getSession(String workSpaceName) throws Exception {  
+    return SessionProviderFactory.createSessionProvider().getSession(workSpaceName, 
+                                                                     getApplicationComponent(RepositoryService.class).getDefaultRepository());
+  }
+
+  /**
+=======
+>>>>>>> .r39646
    * Adds the tree from drives.
    * 
    * @param path the path

@@ -36,18 +36,6 @@ public class UIContentSelector extends UITabPane {
   final static public String WEB_CONTENT_METADATA_POPUP = "WebContentMetadataPopup";
   final static public String WEB_CONTENT_NODETYPE_POPUP = "WebContentNodeTypePopup";
 
-  public UIContentSelector() throws Exception {
-    addChild(UIContentBrowsePanel.class, null, null);
-    addChild(UIContentSearchForm.class,null,null);
-    addChild(UIContentSearchResult.class,null,null);
-    setSelectedTab(1);
-  }
-
-  public void init() throws Exception {
-    getChild(UIContentBrowsePanel.class).init();
-    getChild(UIContentSearchForm.class).init();
-  }
-
   public void initMetadataPopup() throws Exception {
     UIPopupWindow uiPopupWindow = addChild(UIPopupWindow.class, "UIWebContentSearchPopup", WEB_CONTENT_METADATA_POPUP);
     UIContentPropertySelector contentPropertySelector = createUIComponent(UIContentPropertySelector.class, null, null);

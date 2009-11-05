@@ -34,6 +34,11 @@ import org.exoplatform.wcm.webui.clv.UICLVContainer;
 import org.exoplatform.wcm.webui.clv.UICLVFolderMode;
 import org.exoplatform.wcm.webui.clv.UICLVManualMode;
 import org.exoplatform.wcm.webui.clv.UICLVPortlet;
+import org.exoplatform.wcm.webui.selector.UISourceGridUpdatable;
+import org.exoplatform.wcm.webui.selector.content.multi.UIContentBrowsePanelMulti;
+import org.exoplatform.wcm.webui.selector.content.multi.UIContentSelectorMulti;
+import org.exoplatform.wcm.webui.selector.folder.UIContentBrowsePanelFolder;
+import org.exoplatform.wcm.webui.selector.folder.UIContentSelectorFolder;
 import org.exoplatform.wcm.webui.selector.page.UIPageSelector;
 import org.exoplatform.wcm.webui.validator.ZeroNumberValidator;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -70,7 +75,7 @@ import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
     @EventConfig(listeners = UICLVConfig.DeleteActionListener.class)
   }
 )
-public class UICLVConfig extends UIForm implements UISelectable {
+public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpdatable {
 
   /** The content list. */
   private List<String>       contentList                  = new ArrayList<String>();
@@ -587,23 +592,41 @@ public class UICLVConfig extends UIForm implements UISelectable {
      */
     public void execute(Event<UICLVConfig> event) throws Exception {
       UICLVConfig uiViewerManagementForm = event.getSource();
-      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       UIFormRadioBoxInput modeBoxInput = (UIFormRadioBoxInput) uiViewerManagementForm.getChildById(UICLVConfig.VIEWER_MODES);
       UIFormSelectBox orderBySelector = uiViewerManagementForm.getUIFormSelectBox(ORDER_BY);
       String mode = modeBoxInput.getValue();
       if (mode.equals(UICLVConfig.VIEWER_AUTO_MODE)) {
-        orderBySelector.setRendered(true);
-        UICLVFolderSelector uiFolderPathSelector = uiViewerManagementForm.createUIComponent(UICLVFolderSelector.class, null, null);
-        uiFolderPathSelector.setSourceComponent(uiViewerManagementForm, new String[] { UICLVConfig.FOLDER_PATH_INPUT });
-        uiFolderPathSelector.init();
-        Utils.createPopupWindow(uiViewerManagementForm, uiFolderPathSelector, FOLDER_PATH_SELECTOR_POPUP_WINDOW, 750, 400);
+//<<<<<<< .mine
+      	orderBySelector.setRendered(true);
+        UIContentSelectorFolder contentSelector = uiViewerManagementForm.createUIComponent(UIContentSelectorFolder.class, null, null);
+        contentSelector.init();
+        UIContentBrowsePanelFolder contentBrowserPanel= contentSelector.getChild(UIContentBrowsePanelFolder.class);
+        contentBrowserPanel.setSourceComponent(uiViewerManagementForm, new String[] { UICLVConfig.FOLDER_PATH_INPUT });
+        contentBrowserPanel.init();
+        Utils.createPopupWindow(uiViewerManagementForm, contentSelector, FOLDER_PATH_SELECTOR_POPUP_WINDOW, 800, 600);
+//=======
+//        orderBySelector.setRendered(true);
+//        UICLVFolderSelector uiFolderPathSelector = uiViewerManagementForm.createUIComponent(UICLVFolderSelector.class, null, null);
+//        uiFolderPathSelector.setSourceComponent(uiViewerManagementForm, new String[] { UICLVConfig.FOLDER_PATH_INPUT });
+//        uiFolderPathSelector.init();
+//        Utils.createPopupWindow(uiViewerManagementForm, uiFolderPathSelector, FOLDER_PATH_SELECTOR_POPUP_WINDOW, 750, 400);
+//>>>>>>> .r39646
         uiViewerManagementForm.setPopupId(FOLDER_PATH_SELECTOR_POPUP_WINDOW);
       } else {
         orderBySelector.setRendered(false);
-        UICLVContentSelector uiCorrectContentSelectorForm = uiViewerManagementForm.createUIComponent(UICLVContentSelector.class, null, null);
-        uiCorrectContentSelectorForm.setSourceComponent(uiViewerManagementForm, new String[] { UICLVConfig.FOLDER_PATH_INPUT });
-        uiCorrectContentSelectorForm.init(context);
-        Utils.createPopupWindow(uiViewerManagementForm, uiCorrectContentSelectorForm, CORRECT_CONTENT_SELECTOR_POPUP_WINDOW, 750, 400);
+//<<<<<<< .mine
+        UIContentSelectorMulti contentSelector = uiViewerManagementForm.createUIComponent(UIContentSelectorMulti.class, null, null);
+        contentSelector.init();
+        UIContentBrowsePanelMulti contentBrowserPanel= contentSelector.getChild(UIContentBrowsePanelMulti.class);
+        contentBrowserPanel.setSourceComponent(uiViewerManagementForm, new String[] { UICLVConfig.FOLDER_PATH_INPUT });
+        contentBrowserPanel.init();
+        Utils.createPopupWindow(uiViewerManagementForm, contentSelector, CORRECT_CONTENT_SELECTOR_POPUP_WINDOW, 800, 600);
+//=======
+//        UICLVContentSelector uiCorrectContentSelectorForm = uiViewerManagementForm.createUIComponent(UICLVContentSelector.class, null, null);
+//        uiCorrectContentSelectorForm.setSourceComponent(uiViewerManagementForm, new String[] { UICLVConfig.FOLDER_PATH_INPUT });
+//        uiCorrectContentSelectorForm.init(context);
+//        Utils.createPopupWindow(uiViewerManagementForm, uiCorrectContentSelectorForm, CORRECT_CONTENT_SELECTOR_POPUP_WINDOW, 750, 400);
+//>>>>>>> .r39646
         uiViewerManagementForm.setPopupId(CORRECT_CONTENT_SELECTOR_POPUP_WINDOW);
       }
     }
@@ -687,6 +710,10 @@ public class UICLVConfig extends UIForm implements UISelectable {
       List<String> contentList = uiForm.getViewAbleContentList();
       contentList.remove(currIndex);
     }
+  }
+
+	public void doSave(List<String> returnRecords) {
+		setViewAbleContentList(returnRecords);
   }
   
   /**

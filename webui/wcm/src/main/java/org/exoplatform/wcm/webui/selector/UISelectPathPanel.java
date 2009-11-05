@@ -24,29 +24,23 @@ import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
-import javax.portlet.PortletPreferences;
 
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.ecm.webui.tree.selectone.UIOneNodePathSelector;
 import org.exoplatform.ecm.webui.utils.Utils;
 import org.exoplatform.portal.webui.container.UIContainer;
-import org.exoplatform.portal.webui.page.UIPageBody;
-import org.exoplatform.portal.webui.portal.UIPortal;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.BasePath;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
-import org.exoplatform.services.wcm.core.NodeIdentifier;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
-import org.exoplatform.services.wcm.publication.NotInWCMPublicationException;
 import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
+import org.exoplatform.wcm.webui.selector.content.UIContentBrowsePanel;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -62,14 +56,14 @@ import org.exoplatform.webui.event.EventListener;
  * Jun 23, 2008
  */
 @ComponentConfig(
-                 template =  "classpath:groovy/ecm/webui/tree/selectone/UISelectPathPanel.gtmpl",
+                 template =  "classpath:groovy/wcm/webui/selector/UISelectPathPanel.gtmpl",
                  events = {
                      @EventConfig(listeners = UISelectPathPanel.SelectActionListener.class)
                  }
 )
 public class UISelectPathPanel extends UIContainer {
 
-  /** The ui page iterator_. */
+	/** The ui page iterator_. */
   private UIPageIterator uiPageIterator_;
 
   /** The accepted mime types. */
@@ -91,7 +85,7 @@ public class UISelectPathPanel extends UIContainer {
   private boolean allowPublish = false;
 
   /** The publication service_. */
-  private PublicationService publicationService_ = null;
+  protected PublicationService publicationService_ = null;
 
   /** The templates_. */
   private List<String> templates_ = null;
@@ -145,7 +139,7 @@ public class UISelectPathPanel extends UIContainer {
    * 
    * @throws Exception the exception
    */
-  private void addNodePublish(List<Node> listNode, Node node, PublicationService publicationService) throws Exception {
+  protected void addNodePublish(List<Node> listNode, Node node, PublicationService publicationService) throws Exception {
     if (isAllowPublish()) {
       NodeType nt = node.getPrimaryNodeType();
       if (templates_.contains(nt.getName())) { 
@@ -256,7 +250,7 @@ public class UISelectPathPanel extends UIContainer {
    * @throws Exception the exception
    */
   public void updateGrid() throws Exception {
-    ObjectPageList objPageList = new ObjectPageList(getListSelectableNodes(), 10);
+    ObjectPageList objPageList = new ObjectPageList(getListSelectableNodes(), 4);
     uiPageIterator_.setPageList(objPageList);
   }
 
@@ -412,32 +406,8 @@ public class UISelectPathPanel extends UIContainer {
       Session session = uiSelectPathPanel.getApplicationComponent(ThreadLocalSessionProviderService.class).getSessionProvider(null)
                                          .getSession(nodeLocation.getWorkspace(), manageableRepository);
       Node webContent = (Node) session.getItem(value);
-      NodeIdentifier nodeIdentifier = NodeIdentifier.make(webContent);
-      PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
-      PortletPreferences prefs = pContext.getRequest().getPreferences();
-      prefs.setValue("repository", nodeIdentifier.getRepository());
-      prefs.setValue("workspace", nodeIdentifier.getWorkspace());
-      prefs.setValue("nodeIdentifier", nodeIdentifier.getUUID());
-      prefs.store();
-
-      String remoteUser = Util.getPortalRequestContext().getRemoteUser();
-      String portalOwner = Util.getPortalRequestContext().getPortalOwner();
-
-      WCMPublicationService wcmPublicationService = uiSelectPathPanel.getApplicationComponent(WCMPublicationService.class);
-
-      try {
-        wcmPublicationService.isEnrolledInWCMLifecycle(webContent);
-      } catch (NotInWCMPublicationException e){
-        wcmPublicationService.unsubcribeLifecycle(webContent);
-        wcmPublicationService.enrollNodeInLifecycle(webContent, portalOwner, remoteUser);          
-      }
-
-      // Update Page And Close PopUp
-      UIPortal uiPortal = Util.getUIPortal();
-      UIPageBody uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
-      uiPageBody.setUIComponent(null);
-      uiPageBody.setMaximizedUIComponent(null);
-      org.exoplatform.wcm.webui.Utils.updatePortal((PortletRequestContext)event.getRequestContext());
+      UIContentBrowsePanel uiContentBrowsePanel = uiSelectPathPanel.getAncestorOfType(UIContentBrowsePanel.class);
+      uiContentBrowsePanel.doSelect(webContent, event.getRequestContext());
     }
   }
 }

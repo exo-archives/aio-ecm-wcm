@@ -30,6 +30,7 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.wcm.webui.selector.UISelectPathPanel;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -58,13 +59,13 @@ import org.exoplatform.webui.event.EventListener;
       events = @EventConfig(listeners = UISelectPathPanel.SelectActionListener.class)
   )
 })
-public class UIContentBrowsePanel extends UIBaseNodeTreeSelector implements UIPopupComponent{
+public abstract class UIContentBrowsePanel extends UIBaseNodeTreeSelector implements UIPopupComponent{
   public static final String WEBCONENT = "WebContent";
   public static final String DMSDOCUMENT = "DMSDocument";
   public static final String MEDIA = "Media";
   public final String SELECT_TYPE_CONTENT = "selectTypeContent";
   public String[] types = new String[]{WEBCONENT, DMSDOCUMENT, MEDIA};
-  private String selectedValues = WEBCONENT;
+  public String selectedValues = WEBCONENT;
   
   /**
    * Instantiates a new uI web content path selector.
@@ -76,8 +77,6 @@ public class UIContentBrowsePanel extends UIBaseNodeTreeSelector implements UIPo
 
   public UIContentBrowsePanel() throws Exception {
     contentType = WEBCONENT;
-    addChild(UIContentTreeBuilder.class,null, UIContentTreeBuilder.class.getName()+hashCode());
-    addChild(UISelectPathPanel.class, "UIContentBrowsePathSelector", "UIContentBrowsePathSelector");
   }
   
   public void reRenderChild(String typeContent) throws Exception{
@@ -88,13 +87,15 @@ public class UIContentBrowsePanel extends UIBaseNodeTreeSelector implements UIPo
     }
   }
 
+  public abstract void doSelect(Node node, WebuiRequestContext requestContext) throws Exception;
+  
   /**
    * Inits the.
    * 
    * @throws Exception the exception
    */
-  public void init() throws Exception {
     String[] acceptedNodeTypes = null;
+    public void init() throws Exception {
     Node currentPortal = getCurrentPortal();
     if(contentType == null || contentType.equals(WEBCONENT)){
       acceptedNodeTypes = new String[]{"exo:webContent"};
