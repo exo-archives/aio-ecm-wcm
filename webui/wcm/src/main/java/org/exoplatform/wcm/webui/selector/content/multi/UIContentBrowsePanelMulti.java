@@ -73,6 +73,5 @@ public class UIContentBrowsePanelMulti extends UIContentBrowsePanel{
     uiSelectedContentGrid.updateGrid(uiSelectedContentGrid.getUIPageIterator().getCurrentPage());
     uiSelectedContentGrid.setRendered(true);
     requestContext.addUIComponentToUpdateByAjax(this);
-	  
   }
 }

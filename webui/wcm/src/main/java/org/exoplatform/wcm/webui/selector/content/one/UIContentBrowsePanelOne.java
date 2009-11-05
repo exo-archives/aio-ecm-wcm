@@ -25,6 +25,8 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.wcm.core.NodeIdentifier;
 import org.exoplatform.services.wcm.publication.NotInWCMPublicationException;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
+import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
 import org.exoplatform.wcm.webui.selector.UISelectPathPanel;
 import org.exoplatform.wcm.webui.selector.content.UIContentBrowsePanel;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -97,5 +99,6 @@ public class UIContentBrowsePanelOne extends UIContentBrowsePanel{
     uiPageBody.setUIComponent(null);
     uiPageBody.setMaximizedUIComponent(null);
     org.exoplatform.wcm.webui.Utils.updatePortal((PortletRequestContext)requestContext);
+    Utils.closePopupWindow(this, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW);
   }
 }
