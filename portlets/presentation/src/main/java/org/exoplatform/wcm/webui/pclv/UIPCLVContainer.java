@@ -183,7 +183,7 @@ public class UIPCLVContainer extends UIContainer {
 		
 		String autoDetect = portletPreferences.getValue(UIPCLVPortlet.SHOW_AUTO_DETECT, null);
 		String currentHeader = getHeader();
-		if ("true".equals(autoDetect) && currentHeader != null)
+		if (treeNode != null && "true".equals(autoDetect) && currentHeader != null)
 		  parameterizedContentListViewer.setHeader(currentHeader);
 		else 
 		  parameterizedContentListViewer.setHeader(portletPreferences.getValue(UIPCLVPortlet.HEADER, null));
