@@ -52,7 +52,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 						<%
 							def subscriptionDescription = uicomponent.subscriptionConfig.getDescription();
 							if (subscriptionDescription == null) subscriptionDescription = "";
-							if (subscriptionDescription.length() > 100) subscriptionDescription = subscriptionDescription.substring(0, 100) + " ...";
+							if (subscriptionDescription.length() > 60) subscriptionDescription = subscriptionDescription.substring(0, 60) + " ...";
 						%>
 						$subscriptionDescription
 					</div>
