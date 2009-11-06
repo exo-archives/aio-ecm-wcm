@@ -54,6 +54,9 @@ public class UIPCVPortlet extends UIPortletApplication {
   /** The Constant SHOW_DATE_CREATED. */
   public final static String SHOW_DATE_CREATED       = "showDateCreated";
 
+  /** The Constant SHOW_BAR. */
+  public final static String SHOW_BAR       = "showBar";
+  
   /** The mode_. */
   private PortletMode        mode                    = PortletMode.VIEW;
 
@@ -74,9 +77,13 @@ public class UIPCVPortlet extends UIPortletApplication {
    * @throws Exception the exception
    */
   public void activateMode(PortletMode mode) throws Exception {
-    getChildren().clear() ;
-    addChild(UIPopupContainer.class, null, null);
-    addChild(UIPCVContainer.class, null, null);
+  	getChildren().clear();
+		addChild(UIPopupContainer.class, null, null);
+		if (PortletMode.VIEW.equals(mode)) {
+			addChild(UIPCVContainer.class, null, null);
+    } else if (PortletMode.EDIT.equals(mode)) {
+    	addChild(UIPCVConfig.class, null, null);
+    }
   }
   /* (non-Javadoc)
    * @see org.exoplatform.webui.core.UIPortletApplication#processRender(org.exoplatform.webui.application.WebuiApplication, org.exoplatform.webui.application.WebuiRequestContext)

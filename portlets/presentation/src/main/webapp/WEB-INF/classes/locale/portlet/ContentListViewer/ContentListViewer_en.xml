@@ -136,17 +136,7 @@
   		<UICLVContentDialog>Dialog form</UICLVContentDialog>
   	</title>
   </UIDocumentDialogFormPopupWindow>
-  <UICLVContentDialog>
-  	<action>
-  		<Cancel>Close</Cancel>
-  		<FastPublish>Fast Publish</FastPublish>
-  		<SaveAsDraft>Save as Draft</SaveAsDraft>  		  		
-  	</action>
-  	<msg>
-  		<get-template-resource>Error when perform get template resource.</get-template-resource>
-  		<get-node-error>Error when perform get node.</get-node-error>
-  	</msg>
-  </UICLVContentDialog>
+  
   <UIMessageBoard>
   	<msg>  	
   		<contents-not-found>Contents not found</contents-not-found>

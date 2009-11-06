@@ -108,23 +108,7 @@
       <confirm-delete>Bạn có chắc muốn xoá phân loại này khỏi danh sách?</confirm-delete>
     </msg>
   </UIFormInputSetWithAction>
-  <!--/n  ###################################################################
-  # org.exoplatform.wcm.webui.scv.config.UIContentDialogForm        #
-  ###################################################################
-  -->
-  <UIContentDialogForm>
-    <action>
-      <SaveDraft>Lưu nháp</SaveDraft>
-      <Cancel>Hủy bỏ</Cancel>
-      <FastPublish>Xuất bản nhanh</FastPublish>
-      <Preferences></Preferences>
-      <Close></Close>
-    </action>
-  </UIContentDialogForm>
-  <!--/n  ###################################################################
-  #  org.exoplatform.wcm.presentation.scp.UIMessageBoard						#
-  ###################################################################
-  -->
+  
   <UIMessageBoard>
     <msg>
       <content-not-found>Nội dung không tìm thấy hoặc là ứng dụng hiển thị này chưa được cấu hình!</content-not-found>
@@ -210,25 +194,7 @@
       <AddAny>Thêm quyền đầy đủ</AddAny>
     </title>
   </usersInputSet>
-  <UIPermissionInfo>
-    <action>
-      <title>
-        <Edit>Sửa</Edit>
-        <Delete>Xoá</Delete>
-      </title>
-    </action>
-    <header>
-      <usersOrGroups>User Or Group</usersOrGroups>
-      <accessible>Truy cập</accessible>
-      <editable>Chỉnh sửa</editable>
-      <action>Hành động</action>
-    </header>
-    <msg>
-      <confirm-delete-permission>Bạn có chắc để xoá</confirm-delete-permission>
-      <no-permission-remove>Không có quyền</no-permission-remove>
-      <access-denied>Truy cập bị từ chối</access-denied>
-    </msg>
-  </UIPermissionInfo>
+  
   <location>
     <title>
       <Browse />
@@ -283,32 +249,7 @@
       <tagName>(Sử dụng "," để thêm nhiều tag)</tagName>
     </introduction>
   </UITagging>
-  <!--/n  ##############################################################################
-  # 		org.exoplatform.wcm.presentation.acp.config.UIPermissionSetting		 #
-  ##############################################################################
-  -->
-  <UIPermissionSetting>
-    <label>
-      <usersInputSet>UIPermissionSetting</usersInputSet>
-      <usersStringInput>User Or Group</usersStringInput>
-      <editable>Quyền chỉnh sửa</editable>
-      <accessible>Quyền truy cập</accessible>
-    </label>
-    <action>
-      <Save>Lưu lại</Save>
-      <Reset>Làm lại</Reset>
-    </action>
-    <msg>
-      <userOrGroup-required>Yêu cầu chọn nhóm hoặc người dùng</userOrGroup-required>
-      <checkbox-require>Bạn nên thiết lập quyền</checkbox-require>
-    </msg>
-  </UIPermissionSetting>
-  <!--/n  ##############################################################################
-  # 		org.exoplatform.wcm.presentation.acp.config.UIPermissionInfo		 #
-  ##############################################################################
-  -->
-  <!--/n  #############################################################
-  -->
+  
   <UIDocumentForm>
     <msg>
       <not-support>Không hỗ trợ</not-support>
@@ -413,5 +354,6 @@
   <UIStartEditionInPageWizard>
     <link>Nhấn vào đây để chuyển đến giao diện chỉnh sửa nội dung</link>
   </UIStartEditionInPageWizard>
+  
 </bundle>
 

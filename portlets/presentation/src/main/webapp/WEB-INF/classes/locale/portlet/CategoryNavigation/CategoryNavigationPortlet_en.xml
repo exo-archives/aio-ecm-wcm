@@ -25,6 +25,8 @@
 			<UICategoryNavigationTreeNameSelectBox>Taxonomy tree</UICategoryNavigationTreeNameSelectBox>
 			<UICategoryNavigationTreeTitleFormStringInput>Title</UICategoryNavigationTreeTitleFormStringInput>
 			<UICategoryNavigationTargetPathFormInputSet>Target Path</UICategoryNavigationTargetPathFormInputSet>
+			<UICategoryNavigationTreeNameFormSelectBox>Tree name</UICategoryNavigationTreeNameFormSelectBox>
+			<UICategoryNavigationTemplateFormSelectBox>Tree viewer template</UICategoryNavigationTemplateFormSelectBox>
 		</label>
 		<msg>
 			<not-support-encoding>Encoding is not support.</not-support-encoding>

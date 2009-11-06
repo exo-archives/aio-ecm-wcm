@@ -552,10 +552,19 @@ public class UIPublicationPanel extends UIForm {
         currentNode.restore(version,true);
         if(!currentNode.isCheckedOut())
           currentNode.checkout();
-        PublicationService publicationService = publicationPanel.getApplicationComponent(PublicationService.class);
-        PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
-        HashMap<String,String> context = new HashMap<String,String>();
-        publicationPlugin.changeState(currentNode,PublicationDefaultStates.ENROLLED,context);
+        Value[] values = currentNode.getProperty("publication:revisionData").getValues();
+        String currentState = "";
+        for(Value value : values) {
+          String revisionData = value.getString();
+          if(revisionData.indexOf(PublicationDefaultStates.PUBLISHED) > 0) {
+            currentState = PublicationDefaultStates.PUBLISHED;
+            break;
+          } else {
+            currentState = PublicationDefaultStates.OBSOLETE;
+          }
+        }
+        currentNode.setProperty("publication:currentState", currentState);
+        currentNode.save();
         publicationPanel.updatePanel();
       } catch (Exception e) {
         UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);

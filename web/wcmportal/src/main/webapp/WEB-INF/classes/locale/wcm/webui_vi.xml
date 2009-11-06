@@ -239,4 +239,68 @@
   		<invalid-format>Định dạng ngày tháng ở trường '{0}' không đúng</invalid-format>
   	</msg>
   </UIWebContentSearchForm>
+  
+  <UIContentDialogForm>
+    <action>
+      <SaveDraft>Lưu nháp</SaveDraft>
+      <FastPublish>Xuất bản nhanh</FastPublish>
+      <Preferences>Tùy chọn</Preferences>
+      <Close>Đóng</Close>
+    </action>
+  </UIContentDialogForm>
+  
+  <UIPermissionManager>
+  	<label>
+      <UIPermissionInputSetWithAction>Permission</UIPermissionInputSetWithAction>
+      <UIPermissionStringInput></UIPermissionStringInput>
+      <UIAccessibleCheckboxInput>Edit Right</UIAccessibleCheckboxInput>
+      <UIEditableCheckboxInput>Access Right</UIEditableCheckboxInput>
+    </label>
+    <action>
+			<Save>Lưu lại</Save>
+      <Clear>Làm lại</Clear>
+		</action>
+  </UIPermissionManager>
+  
+  <UIPermissionManagerGrid>
+    <action>
+      <title>
+        <Edit>Sửa</Edit>
+        <Delete>Xoá</Delete>
+      </title>
+    </action>
+    <header>
+      <owner>Permission</owner>
+      <accessible>Truy cập</accessible>
+      <editable>Chỉnh sửa</editable>
+      <action>Hành động</action>
+      <userOrGroup-required>Yêu cầu chọn nhóm hoặc người dùng</userOrGroup-required>
+      <checkbox-require>Bạn nên thiết lập quyền</checkbox-require>
+    </header>
+    <msg>
+      <confirm-delete-permission>Bạn có chắc để xoá</confirm-delete-permission>
+      <no-permission-remove>Không có quyền</no-permission-remove>
+      <access-denied>Truy cập bị từ chối</access-denied>
+    </msg>
+  </UIPermissionManagerGrid>
+
+	<UIPermissionInputSetWithAction>
+    <title>
+      <SelectUser>Select user</SelectUser>
+      <SelectMember>Select member</SelectMember>
+      <AddAny>Add any permission</AddAny>
+    </title>
+  </UIPermissionInputSetWithAction>
+  
+  <UIUserSelectorPopupWindow>
+  	<title>
+  		<UIUserContainer>Chọn người dùng</UIUserContainer>
+  	</title>
+  </UIUserSelectorPopupWindow>
+  
+  <UIGroupSelectorPopupWindow>
+  	<title>
+  		<UIGroupMemberSelector>Chọn nhóm</UIGroupMemberSelector>
+  	</title>
+  </UIGroupSelectorPopupWindow>
 </bundle>

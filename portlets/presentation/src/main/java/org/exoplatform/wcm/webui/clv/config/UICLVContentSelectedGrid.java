@@ -18,8 +18,10 @@ package org.exoplatform.wcm.webui.clv.config;
 
 import java.util.List;
 
+import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.ecm.webui.tree.selectmany.UISelectedCategoriesGrid;
 import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.selector.UISourceGridUpdatable;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -109,9 +111,9 @@ public class UICLVContentSelectedGrid extends UISelectedCategoriesGrid {
         for (String item : selectedCategories) {
           contents.append(item).append(";");
         }        
-        UICLVConfig uiViewerManagementForm = (UICLVConfig) uiCorrectContentSelectorForm.getSourceComponent();
+        UISelectable uiViewerManagementForm = (UISelectable) uiCorrectContentSelectorForm.getSourceComponent();
         uiViewerManagementForm.doSelect(returnField, contents.toString());        
-        uiViewerManagementForm.setViewAbleContentList(selectedCategories);
+        ((UISourceGridUpdatable)uiViewerManagementForm).doSave(selectedCategories);
       } catch (Exception e) {
         Utils.createPopupMessage(uiCorrectContentSelectorForm, "UISelectedCategoriesGrid.msg.cannot-save", null, ApplicationMessage.WARNING);
         return;

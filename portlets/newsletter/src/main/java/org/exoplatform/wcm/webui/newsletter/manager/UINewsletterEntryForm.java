@@ -201,7 +201,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
     public void execute(Event<UINewsletterEntryForm> event) throws Exception {
       UINewsletterEntryForm newsletterEntryForm = event.getSource();
       UINewsletterEntryContainer newsletterEntryContainer = newsletterEntryForm.getAncestorOfType(UINewsletterEntryContainer.class);
-      if(newsletterEntryForm.isAddNew() && !newsletterEntryContainer.isUpdated()){
+      if(!newsletterEntryContainer.isUpdated()){
         UIApplication uiApp = newsletterEntryContainer.getAncestorOfType(UIApplication.class);
         uiApp.addMessage(new ApplicationMessage("UINewsletterEntryForm.msg.UpdateBeforeSave", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
@@ -237,7 +237,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
     public void execute(Event<UINewsletterEntryForm> event) throws Exception {
       UINewsletterEntryForm newsletterEntryForm = event.getSource();
       UINewsletterEntryContainer newsletterEntryContainer = newsletterEntryForm.getAncestorOfType(UINewsletterEntryContainer.class);
-      if(newsletterEntryForm.isAddNew() && !newsletterEntryContainer.isUpdated()){
+      if(!newsletterEntryContainer.isUpdated()){
         UIApplication uiApp = newsletterEntryContainer.getAncestorOfType(UIApplication.class);
         uiApp.addMessage(new ApplicationMessage("UINewsletterEntryForm.msg.UpdateBeforeSave", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());

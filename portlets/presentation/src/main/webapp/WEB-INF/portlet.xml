@@ -271,6 +271,7 @@
 		
 		<supports>
 			<mime-type>text/html</mime-type>
+			<portlet-mode>edit</portlet-mode>
 			<portlet-mode>help</portlet-mode>
 		</supports>
 		<supported-locale>en</supported-locale>
@@ -295,6 +296,11 @@
 			</preference>
 			<preference>
 				<name>showDateCreated</name>
+				<value>true</value>
+				<read-only>false</read-only>
+			</preference>
+			<preference>
+				<name>showBar</name>
 				<value>true</value>
 				<read-only>false</read-only>
 			</preference>

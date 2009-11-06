@@ -246,4 +246,71 @@
 			<UIPageSelector>Page selector</UIPageSelector>
 		</title>
   </UICategoryNavigationTargetPathPopupWindow>
+
+
+	<UIContentDialogForm>
+    <action>
+      <SaveDraft>Save Draft</SaveDraft>
+      <FastPublish>Fast Publish</FastPublish>
+      <Preferences>Preferences</Preferences>
+      <Close>Close</Close>
+    </action>
+  </UIContentDialogForm>
+
+	<UIPermissionManager>
+		<label>
+      <UIPermissionInputSetWithAction>Permission</UIPermissionInputSetWithAction>
+      <UIPermissionStringInput></UIPermissionStringInput>
+      <UIAccessibleCheckboxInput>Edit Right</UIAccessibleCheckboxInput>
+      <UIEditableCheckboxInput>Access Right</UIEditableCheckboxInput>
+    </label>
+    <action>
+			<Save>Save</Save>
+	    <Clear>Clear</Clear>
+		</action>
+	</UIPermissionManager>
+	  
+  <UIPermissionManagerGrid>
+    <action>
+    	<Save>Save</Save>
+      <Reset>Reset</Reset>
+      <title>
+        <Edit>Edit</Edit>
+        <Delete>Delete</Delete>
+      </title>
+    </action>
+    <header>
+      <owner>Permission</owner>
+      <accessible>Accessible</accessible>
+      <editable>Editable</editable>
+      <action>Action</action>
+    </header>
+    <msg>
+      <confirm-delete-permission>Are you sure to delete.</confirm-delete-permission>
+      <no-permission-remove>Don't have permission.</no-permission-remove>
+      <access-denied>Access denied.</access-denied>
+      <userOrGroup-required>Require select user or group.</userOrGroup-required>
+      <checkbox-require>You should set right.</checkbox-require>
+    </msg>
+  </UIPermissionManagerGrid>
+  
+  <UIPermissionInputSetWithAction>
+    <title>
+      <SelectUser>Select user</SelectUser>
+      <SelectMember>Select member</SelectMember>
+      <AddAny>Add any permission</AddAny>
+    </title>
+  </UIPermissionInputSetWithAction>
+  
+  <UIUserSelectorPopupWindow>
+  	<title>
+  		<UIUserContainer>User selector</UIUserContainer>
+  	</title>
+  </UIUserSelectorPopupWindow>
+  
+  <UIGroupSelectorPopupWindow>
+  	<title>
+  		<UIGroupMemberSelector>Group selector</UIGroupMemberSelector>
+  	</title>
+  </UIGroupSelectorPopupWindow>
 </bundle>

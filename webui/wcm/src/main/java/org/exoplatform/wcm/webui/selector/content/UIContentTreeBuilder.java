@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 
 import org.exoplatform.ecm.webui.utils.Utils;
@@ -36,8 +35,9 @@ import org.exoplatform.services.cms.drives.DriveData;
 import org.exoplatform.services.cms.drives.ManageDriveService;
 import org.exoplatform.services.cms.link.LinkManager;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
-import org.exoplatform.services.wcm.core.NodetypeConstant;
 import org.exoplatform.wcm.webui.selector.UISelectPathPanel;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -56,15 +56,15 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIContentTreeBuilder extends UIContainer {
   
-  @SuppressWarnings("unused")
-	private String path;
-
+	public List<String> path = new ArrayList<String>();
+  protected String repositoryName;
   /**
    * Instantiates a new uI web content tree builder.
    * 
    * @throws Exception the exception
    */
-  public UIContentTreeBuilder() throws Exception {  }
+  public UIContentTreeBuilder() throws Exception {
+  }
 
   /**
    * Checks if is sym link.
@@ -87,19 +87,20 @@ public class UIContentTreeBuilder extends UIContainer {
    * 
    * @throws Exception the exception
    */
-  private List<DriveData> getDrives() throws Exception {    
-    String repoName = getApplicationComponent(RepositoryService.class).getDefaultRepository().getConfiguration().getName();
+  private List<DriveData> getDrives(RepositoryService repositoryService) throws Exception {    
+    String repoName = repositoryService.getDefaultRepository().getConfiguration().getName();
     ManageDriveService driveService = getApplicationComponent(ManageDriveService.class);      
     List<DriveData> driveList = new ArrayList<DriveData>();    
-    List<String> userRoles = Utils.getMemberships();    
     List<DriveData> allDrives = driveService.getAllDrives(repoName);
     Set<DriveData> temp = new HashSet<DriveData>();
     String userId = Util.getPortalRequestContext().getRemoteUser();
+    String[] allPermission;
     if (userId != null) {
       // We will improve ManageDrive service to allow getAllDriveByUser
+      boolean flag;
       for (DriveData driveData : allDrives) {
-        String[] allPermission = driveData.getAllPermissions();
-        boolean flag = false;
+        allPermission = driveData.getAllPermissions();
+        flag = false;
         for (String permission : allPermission) {
           if (permission.equalsIgnoreCase("${userId}")) {
             temp.add(driveData);
@@ -113,7 +114,7 @@ public class UIContentTreeBuilder extends UIContainer {
           }
           if (flag)
             continue;
-          for (String rolse : userRoles) {
+          for (String rolse : Utils.getMemberships()) {
             if (driveData.hasPermission(allPermission, rolse)) {
               temp.add(driveData);
               break;
@@ -123,7 +124,7 @@ public class UIContentTreeBuilder extends UIContainer {
       }
     } else {
       for (DriveData driveData : allDrives) {
-        String[] allPermission = driveData.getAllPermissions();
+        allPermission = driveData.getAllPermissions();
         for (String permission : allPermission) {
           if (permission.equalsIgnoreCase("*")) {
             temp.add(driveData);
@@ -148,9 +149,8 @@ public class UIContentTreeBuilder extends UIContainer {
    * 
    * @return the list< drive data>
    */
-  private List<DriveData> personalDrives(List<DriveData> driveList) {
+  private List<DriveData> personalDrives(NodeHierarchyCreator nodeHierarchyCreator, List<DriveData> driveList) {
     List<DriveData> personalDrives = new ArrayList<DriveData>();
-    NodeHierarchyCreator nodeHierarchyCreator = getApplicationComponent(NodeHierarchyCreator.class);
     String userPath = nodeHierarchyCreator.getJcrPath(BasePath.CMS_USERS_PATH);
     String currentUser = Util.getPortalRequestContext().getRemoteUser();
     for(DriveData drive : driveList) {
@@ -172,8 +172,7 @@ public class UIContentTreeBuilder extends UIContainer {
    * 
    * @throws Exception the exception
    */
-  private List<DriveData> groupDrives(List<DriveData> driveList) throws Exception {
-    NodeHierarchyCreator nodeHierarchyCreator = getApplicationComponent(NodeHierarchyCreator.class);
+  private List<DriveData> groupDrives(NodeHierarchyCreator nodeHierarchyCreator, List<DriveData> driveList) throws Exception {
     List<DriveData> groupDrives = new ArrayList<DriveData>();
     String groupPath = nodeHierarchyCreator.getJcrPath(BasePath.CMS_GROUPS_PATH);
     List<String> groups = Utils.getGroups();
@@ -200,9 +199,8 @@ public class UIContentTreeBuilder extends UIContainer {
    * 
    * @throws Exception the exception
    */
-  private List<DriveData> generalDrives(List<DriveData> driveList) throws Exception {
+  private List<DriveData> generalDrives(NodeHierarchyCreator nodeHierarchyCreator, List<DriveData> driveList) throws Exception {
     List<DriveData> generalDrives = new ArrayList<DriveData>();
-    NodeHierarchyCreator nodeHierarchyCreator = getApplicationComponent(NodeHierarchyCreator.class);
     String userPath = nodeHierarchyCreator.getJcrPath(BasePath.CMS_USERS_PATH);
     String groupPath = nodeHierarchyCreator.getJcrPath(BasePath.CMS_GROUPS_PATH);
     for(DriveData drive : driveList) {
@@ -215,6 +213,7 @@ public class UIContentTreeBuilder extends UIContainer {
   }
 
   /**
+<<<<<<< .mine
    * Gets the session.
    * 
    * @param workSpaceName the work space name
@@ -223,12 +222,14 @@ public class UIContentTreeBuilder extends UIContainer {
    * 
    * @throws Exception the exception
    */
-  private Session getSession(String workSpaceName) throws Exception {  
+  protected Session getSession(String workSpaceName) throws Exception {  
     return SessionProviderFactory.createSessionProvider().getSession(workSpaceName, 
                                                                      getApplicationComponent(RepositoryService.class).getDefaultRepository());
   }
 
   /**
+=======
+>>>>>>> .r39646
    * Adds the tree from drives.
    * 
    * @param path the path
@@ -237,13 +238,20 @@ public class UIContentTreeBuilder extends UIContainer {
    * 
    * @throws Exception the exception
    */
-  private void addTreeFromDrives(String path, List<UIContentTreeNode> list, List<DriveData> listDris) throws Exception{
+  private void addTreeFromDrives(SessionProvider sessionProvider, ManageableRepository manageableRepository, String path, List<UIContentTreeNode> list, List<DriveData> listDris) throws Exception{
+    Session session = null;
+    String workSpace = null;
     for(DriveData dri : listDris){
       try{
-        Node node = (Node)getSession(dri.getWorkspace()).getItem(dri.getHomePath());
-        list.add(new UIContentTreeNode(path, dri.getName(), dri.getWorkspace(), node, 1));
+        if(dri.getWorkspace().equals(workSpace) == false){
+          if(session != null) session.logout();
+          session = sessionProvider.getSession(dri.getWorkspace(), manageableRepository);
+          workSpace = dri.getWorkspace();
+        }
+        list.add(new UIContentTreeNode(path, dri.getName(), dri.getWorkspace(), (Node)session.getItem(dri.getHomePath()), 1));
       }catch(Exception ex){ }
     }
+    if(session != null) session.logout();
   }
 
   /**
@@ -254,20 +262,26 @@ public class UIContentTreeBuilder extends UIContainer {
    * @throws Exception the exception
    */
   private void addRootDrives(List<UIContentTreeNode> list) throws Exception{
-    List<DriveData> listDris = getDrives();
+    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+    NodeHierarchyCreator nodeHierarchyCreator = getApplicationComponent(NodeHierarchyCreator.class);
+    List<DriveData> listDris = getDrives(repositoryService);
+    ManageableRepository manageableRepository = repositoryService.getDefaultRepository();
+    this.repositoryName = manageableRepository.getConfiguration().getName();
+    SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+
     // Add General Drives into tree view
     list.add(new UIContentTreeNode("General Drives"));
-    addTreeFromDrives("/General Drives", list, generalDrives(listDris));
-
-    // Add Group Drives into tree view
+    addTreeFromDrives(sessionProvider, manageableRepository, "/General Drives", list, generalDrives(nodeHierarchyCreator, listDris));
+    
+    // Add Group Drives into tree view.
     list.add(new UIContentTreeNode("Group Drives"));
-    addTreeFromDrives("/Group Drives", list, groupDrives(listDris));
+    addTreeFromDrives(sessionProvider, manageableRepository, "/Group Drives", list, groupDrives(nodeHierarchyCreator, listDris));
     
     // Add Personal Drives into tree view
     list.add(new UIContentTreeNode("Personal Drives"));
-    addTreeFromDrives("/Personal Drives", list, personalDrives(listDris));
-
-
+    addTreeFromDrives(sessionProvider, manageableRepository, "/Personal Drives", list, personalDrives(nodeHierarchyCreator, listDris));
+    
+    sessionProvider.close();
   }
 
   /**
@@ -280,7 +294,7 @@ public class UIContentTreeBuilder extends UIContainer {
   public List<UIContentTreeNode> getTreeNode() throws Exception{
     List<UIContentTreeNode> list = new ArrayList<UIContentTreeNode>();
     addRootDrives(list);
-    String workSpaceName = null;
+    /*String workSpaceName = null;
     UIContentTreeNode treeNode = null;
     NodeIterator nodeIterator = null;
     Node node = null;
@@ -295,21 +309,20 @@ public class UIContentTreeBuilder extends UIContainer {
         if(deep == 2){
           workSpaceName = treeNode.getWorkSpaceName();
         }
-        nodeIterator = node.getNodes();
-        while(nodeIterator.hasNext()){
+        
+        for(nodeIterator = node.getNodes(); nodeIterator.hasNext();){
           try{
             node = nodeIterator.nextNode();
             if (!node.isNodeType(NodetypeConstant.EXO_WEBCONTENT) && !node.isNodeType(NodetypeConstant.EXO_HIDDENABLE) &&
             		(node.isNodeType(NodetypeConstant.EXO_TAXONOMY) || node.isNodeType(NodetypeConstant.NT_UNSTRUCTURED) || node.isNodeType(NodetypeConstant.NT_FOLDER)) ) {
-              list.add(j, new UIContentTreeNode(treeNode.getTreePath(), workSpaceName, node, deep));
-              j ++;
+              list.add(j ++, new UIContentTreeNode(treeNode.getTreePath(), workSpaceName, node, deep));
             }
           }catch(Exception ex){
-            ex.printStackTrace();
+            continue;
           }
         }
       }
-    }
+    }*/
     return list;
   }
 
@@ -332,15 +345,27 @@ public class UIContentTreeBuilder extends UIContainer {
     public void execute(Event<UIContentTreeBuilder> event) throws Exception {
       UIContentTreeBuilder contentTreeBuilder = event.getSource();      
       String values = event.getRequestContext().getRequestParameter(OBJECTID);
-      contentTreeBuilder.path = values.substring(values.lastIndexOf("/") + 1);
+      String path = values.substring(values.lastIndexOf("/") + 1);
+      while(contentTreeBuilder.path.isEmpty()==false){
+        if(path.contains(contentTreeBuilder.path.get(contentTreeBuilder.path.size() - 1) + "rp")){
+          contentTreeBuilder.path.add(path);
+          break;
+        }else contentTreeBuilder.path.remove(contentTreeBuilder.path.size() - 1);
+      }
+      if(contentTreeBuilder.path.isEmpty())contentTreeBuilder.path.add(path);
       values = values.substring(0, values.lastIndexOf("/"));
       String workSpaceName = values.substring(values.lastIndexOf("/") + 1);
       String nodePath = values.substring(0, values.lastIndexOf("/"));
-      Node rootNode = (Node)contentTreeBuilder.getSession(workSpaceName).getItem(nodePath);
+      ManageableRepository manageableRepository = contentTreeBuilder.getApplicationComponent(RepositoryService.class).getDefaultRepository();
+      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+      Session session = sessionProvider.getSession(workSpaceName, manageableRepository);
+      Node rootNode = (Node)session.getItem(nodePath);
       UISelectPathPanel selectPathPanel = contentTreeBuilder.getAncestorOfType(UIContentBrowsePanel.class).getChild(UISelectPathPanel.class);
       selectPathPanel.setParentNode(rootNode);
       selectPathPanel.updateGrid();
       event.getRequestContext().addUIComponentToUpdateByAjax(selectPathPanel);
+      session.logout();
+      sessionProvider.close();
     }
   }
 }

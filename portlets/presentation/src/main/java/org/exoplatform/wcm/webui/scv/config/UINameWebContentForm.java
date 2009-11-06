@@ -23,7 +23,6 @@ import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.NodeTypeManager;
 import javax.portlet.PortletPreferences;
@@ -45,7 +44,6 @@ import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
@@ -54,9 +52,9 @@ import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -104,27 +102,18 @@ public class UINameWebContentForm extends UIForm {
    * @throws Exception the exception
    */
   public UINameWebContentForm() throws Exception {
-    addUIFormInput(new UIFormStringInput(NAME_WEBCONTENT, NAME_WEBCONTENT, null).addValidator(
-        MandatoryValidator.class).addValidator(ECMNameValidator.class));
-
-    setActions(new String[] {"Save", "Abort"});
-  }
-
-  /**
-   * Inits the.
-   * 
-   * @throws Exception the exception
-   */
-  public void init() throws Exception {
+    addUIFormInput(new UIFormStringInput(NAME_WEBCONTENT, NAME_WEBCONTENT, null).addValidator(MandatoryValidator.class)
+                   																															.addValidator(ECMNameValidator.class));
     UIFormSelectBox templateSelect = new UIFormSelectBox(FIELD_SELECT, FIELD_SELECT, getListFileType()) ;
     templateSelect.setSelectedValues(new String[] {"exo:webContent"});
     templateSelect.setOnChange("ChangeTemplateType");
     templateSelect.setDefaultValue("exo:webContent");    
     setPictureDescribe("exo_webContent");
     addUIFormInput(templateSelect) ;
+    setActions(new String[] {"Save", "Abort"});
   }
-  
-  public List<SelectItemOption<String>> getListFileType() throws Exception {
+
+  private List<SelectItemOption<String>> getListFileType() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();    
     TemplateService templateService = getApplicationComponent(TemplateService.class) ;
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
@@ -157,58 +146,6 @@ public class UINameWebContentForm extends UIForm {
     return options ;
 	}
 
-
-  /**
-   * Back.
-   * 
-   * @throws Exception the exception
-   */
-  public void back() throws Exception {
-    if (!isNewConfig()) {
-      Node currentNode = getNode();
-      UIFormStringInput uiFormStringInput = getChild(UIFormStringInput.class);
-      uiFormStringInput.setValue(currentNode.getName());
-      uiFormStringInput.setEditable(false);
-      return;
-    }
-    UIFormSelectBox templateSelect = getChild(UIFormSelectBox.class);
-    templateSelect.setOnChange("ChangeTemplateType");
-    templateSelect.setSelectedValues(new String[] {"exo:webContent"});       
-    templateSelect.setDefaultValue("exo:webContent");
-    setPictureDescribe("exo_webContent");
-  }
-
-  /**
-   * Gets the node.
-   * 
-   * @return the node
-   * 
-   * @throws Exception the exception
-   */
-  public Node getNode() throws Exception {
-    PortletRequestContext context = WebuiRequestContext.getCurrentInstance();
-    PortletPreferences prefs = context.getRequest().getPreferences();
-    String repositoryName = prefs.getValue(UISingleContentViewerPortlet.REPOSITORY, null);
-    String workspace = prefs.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
-    String UUID = prefs.getValue(UISingleContentViewerPortlet.IDENTIFIER, null);
-    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-    ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-    Session session = Utils.getSessionProvider(this).getSession(workspace,
-        manageableRepository);
-    return session.getNodeByUUID(UUID);
-  }
-
-  /**
-   * Checks if is new config.
-   * 
-   * @return true, if is new config
-   */
-  public boolean isNewConfig() {
-    UIPortletConfig uiPortletConfig = getAncestorOfType(UIPortletConfig.class);
-    return uiPortletConfig.isNewConfig(); 
-  }
-
-
   /**
    * The listener interface for receiving saveAction events.
    * The class that is interested in processing a saveAction
@@ -229,73 +166,52 @@ public class UINameWebContentForm extends UIForm {
       UINameWebContentForm uiNameWebContentForm = event.getSource();
       UIApplication uiApplication = uiNameWebContentForm.getAncestorOfType(UIApplication.class);
       String portalName = Util.getUIPortal().getName();
-      LivePortalManagerService livePortalManagerService = uiNameWebContentForm
-      .getApplicationComponent(LivePortalManagerService.class);
+      LivePortalManagerService livePortalManagerService = uiNameWebContentForm.getApplicationComponent(LivePortalManagerService.class);
       Node portalNode = livePortalManagerService.getLivePortal(Utils.getSessionProvider(uiNameWebContentForm), portalName);
-      WebSchemaConfigService webSchemaConfigService = uiNameWebContentForm
-      .getApplicationComponent(WebSchemaConfigService.class);
-      PortalFolderSchemaHandler handler = webSchemaConfigService
-      .getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
+      WebSchemaConfigService webSchemaConfigService = uiNameWebContentForm.getApplicationComponent(WebSchemaConfigService.class);
+      PortalFolderSchemaHandler handler = webSchemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
       Node webContentStorage = handler.getWebContentStorage(portalNode);
-      String webContentTitle = ((UIFormStringInput) uiNameWebContentForm
-          .getChildById(NAME_WEBCONTENT)).getValue();
+      String webContentTitle = ((UIFormStringInput) uiNameWebContentForm.getChildById(NAME_WEBCONTENT)).getValue();
       String webContentName = Utils.cleanString(webContentTitle);
 
       Node webContentNode = null;
-      UIQuickCreationWizard uiQuickCreationWizard = uiNameWebContentForm
-      .getAncestorOfType(UIQuickCreationWizard.class);
-      UIContentDialogForm uiCDForm = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
       String contentType = uiNameWebContentForm.getUIFormSelectBox(FIELD_SELECT).getValue();
-      if (uiNameWebContentForm.isNewConfig()) {
-        try {
-          webContentNode = webContentStorage.addNode(webContentName, contentType);          
-        } catch (RepositoryException e) {
-          uiApplication.addMessage(new ApplicationMessage("UINameWebContentForm.msg.non-firstwhiteletter", null, ApplicationMessage.WARNING));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
-          return;
-        }
-        WebContentSchemaHandler webContentSchemaHandler = webSchemaConfigService
-        .getWebSchemaHandlerByType(WebContentSchemaHandler.class);
-        webContentSchemaHandler.createDefaultSchema(webContentNode);
-      } else {
-        webContentNode = uiNameWebContentForm.getNode();
+      try {
+        webContentNode = webContentStorage.addNode(webContentName, contentType);          
+      } catch (RepositoryException e) {
+        uiApplication.addMessage(new ApplicationMessage("UINameWebContentForm.msg.non-firstwhiteletter", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+        return;
       }
+      WebContentSchemaHandler webContentSchemaHandler = webSchemaConfigService.getWebSchemaHandlerByType(WebContentSchemaHandler.class);
+      webContentSchemaHandler.createDefaultSchema(webContentNode);
       if (webContentNode.hasProperty("exo:title")) {
     	  webContentNode.setProperty("exo:title", webContentTitle);
-    	  if (!webContentNode.isNew()) webContentNode.save();
       }
       if (webContentNode.canAddMixin("mix:votable"))
         webContentNode.addMixin("mix:votable");
       if (webContentNode.canAddMixin("mix:commentable"))
         webContentNode.addMixin("mix:commentable");
       webContentStorage.getSession().save();
-      String repositoryName = ((ManageableRepository) webContentNode.getSession().getRepository())
-      .getConfiguration().getName();
-      String workspaceName = webContentNode.getSession().getWorkspace().getName();
-      NodeLocation nodeLocation = new NodeLocation();
-      nodeLocation.setRepository(repositoryName);
-      nodeLocation.setWorkspace(workspaceName);
-      nodeLocation.setPath(webContentNode.getParent().getPath());
-      uiCDForm.setStoredLocation(nodeLocation);
-      uiCDForm.setNodePath(webContentNode.getPath());
-      uiCDForm.setContentType(contentType);
-      uiCDForm.addNew(false);
-      uiCDForm.resetProperties();
-      uiCDForm.setWebContent(webContentNode);
+
+      NodeLocation webcontentNodeLocation = NodeLocation.make(webContentNode);
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       PortletPreferences prefs = context.getRequest().getPreferences();
-      prefs.setValue(UISingleContentViewerPortlet.REPOSITORY, repositoryName);
-      prefs.setValue(UISingleContentViewerPortlet.WORKSPACE, workspaceName);
+      prefs.setValue(UISingleContentViewerPortlet.REPOSITORY, webcontentNodeLocation.getRepository());
+      prefs.setValue(UISingleContentViewerPortlet.WORKSPACE, webcontentNodeLocation.getWorkspace());
       prefs.setValue(UISingleContentViewerPortlet.IDENTIFIER, webContentNode.getUUID());
       prefs.store();
+      
       WCMPublicationService wcmPublicationService = uiNameWebContentForm.getApplicationComponent(WCMPublicationService.class);      
-      UIPortletConfig portletConfig = uiQuickCreationWizard.getAncestorOfType(UIPortletConfig.class);
-      if (!portletConfig.isEditPortletInCreatePageWizard()) {
+      if (!Utils.isEditPortletInCreatePageWizard()) {
         String pageId = Util.getUIPortal().getSelectedNode().getPageReference();
         UserPortalConfigService upcService = uiNameWebContentForm.getApplicationComponent(UserPortalConfigService.class);
         wcmPublicationService.updateLifecyleOnChangePage(upcService.getPage(pageId), event.getRequestContext().getRemoteUser());
       }
-      uiQuickCreationWizard.viewStep(2);
+
+      UIPortletConfig portletConfig = uiNameWebContentForm.createUIComponent(UIPortletConfig.class, null, null);
+      Utils.updatePopupWindow(uiNameWebContentForm, portletConfig, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW);
+      portletConfig.init();
     }
   }
 
@@ -358,8 +274,7 @@ public class UINameWebContentForm extends UIForm {
       	uiPage.setChildren(null);
       	PortalDataMapper.toUIPage(uiPage, currentPage);
       }
-      UIPortletConfig uiPortletConfig = event.getSource().getAncestorOfType(UIPortletConfig.class);
-      uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
+      Utils.closePopupWindow(nameWebcontentForm, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW);
     }
   }
 

@@ -13,13 +13,7 @@
       <content-obsolete></content-obsolete>
     </msg>
   </UIMessageBoard>
-  <UIDocumentDialogForm>
-  	<action>
-  		<SaveDraft>Save Draft</SaveDraft>
-  		<Cancel>Cancel</Cancel>
-  		<FastPublish>Fast Publish</FastPublish>
-  	</action>
-  </UIDocumentDialogForm>
+  
   <UIContentViewerContainer>
     <action>
       <back>Quay lại</back>

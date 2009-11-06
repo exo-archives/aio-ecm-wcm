@@ -25,6 +25,8 @@
 			<UICategoryNavigationTreeNameSelectBox>Arbre taxonomique</UICategoryNavigationTreeNameSelectBox>
 			<UICategoryNavigationTreeTitleFormStringInput>Titre</UICategoryNavigationTreeTitleFormStringInput>
 			<UICategoryNavigationTargetPathFormInputSet>Target Path</UICategoryNavigationTargetPathFormInputSet>
+			<UICategoryNavigationTreeNameFormSelectBox>Nom de l'arbre</UICategoryNavigationTreeNameFormSelectBox>
+			<UICategoryNavigationTemplateFormSelectBox>Tree viewer template</UICategoryNavigationTemplateFormSelectBox>
 		</label>
 		<msg>
 			<render> erreur lorsque processus de rendu. </render>

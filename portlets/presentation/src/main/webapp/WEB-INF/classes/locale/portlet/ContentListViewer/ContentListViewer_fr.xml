@@ -130,17 +130,7 @@
   		<UICLVContentDialog>Forme de dialogue</UICLVContentDialog>
   	</title>
   </UIDocumentDialogFormPopupWindow>
-  <UICLVContentDialog>
-  	<action>
-  		<Cancel>Fermer</Cancel>
-  		<FastPublish>Fast Publier</FastPublish>
-  		<SaveAsDraft>Enregistrer en tant que projet de</SaveAsDraft>  		  		
-  	</action>
-  	<msg>
-   		<get-template-resource>erreur lorsque vous effectuez obtenir la ressource template. </get-template-resource>
-   		<get-node-error> d'erreur lorsque vous effectuez obtenir nœud. </get-node-error>
-   </msg>
-  </UICLVContentDialog>
+
   <UIMessageBoard>
   	<msg>  	
   		<contents-not-found>Contenu introuvable</contents-not-found>

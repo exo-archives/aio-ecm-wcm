@@ -146,8 +146,7 @@ public class UIPCLVContainer extends UIContainer {
 		String preferenceTreeName = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_TREE_NAME, "");
 		String treeName = null;
 		
-		if(parameters == null || parameters.trim().length() < 1) treeName = preferenceTreeName;
-		if(parameters.indexOf("/") < 0) treeName = parameters;
+		if(parameters == null || parameters.trim().length() < 1 || (parameters.indexOf("/") < 0)) treeName = preferenceTreeName;
 		else treeName = parameters.substring(0, parameters.indexOf("/"));
 		
 		TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
@@ -184,7 +183,7 @@ public class UIPCLVContainer extends UIContainer {
 		
 		String autoDetect = portletPreferences.getValue(UIPCLVPortlet.SHOW_AUTO_DETECT, null);
 		String currentHeader = getHeader();
-		if ("true".equals(autoDetect) && currentHeader != null)
+		if (treeNode != null && "true".equals(autoDetect) && currentHeader != null)
 		  parameterizedContentListViewer.setHeader(currentHeader);
 		else 
 		  parameterizedContentListViewer.setHeader(portletPreferences.getValue(UIPCLVPortlet.HEADER, null));

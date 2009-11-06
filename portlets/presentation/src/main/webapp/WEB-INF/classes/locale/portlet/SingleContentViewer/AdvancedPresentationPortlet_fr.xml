@@ -119,24 +119,7 @@
       <confirm-delete>Etes-vous sûr de vouloir supprimer cette catégorie de la liste?</confirm-delete>
     </msg>
   </UIFormInputSetWithAction>
-  <!--/n  ###################################################################
-          # org.exoplatform.wcm.webui.scv.config.UIContentDialogForm        #
-          ###################################################################
-  -->
-  <UIContentDialogForm>
-    <action>
-      <SaveDraft>Sauver le brouillon</SaveDraft>
-      <Cancel>Annuler</Cancel>
-      <FastPublish>Publication rapide</FastPublish>
-      <Preferences>Préférences</Preferences>
-      <Close>Fermer</Close>
-    </action>
-  </UIContentDialogForm>
-  <!--/n  ###################################################################
-        
-  # org.exoplatform.wcm.presentation.scp.UIMessageBoa               #
-          ###################################################################
-  -->
+  
   <UIMessageBoard>
     <msg>
       <content-not-found>Contenu non trouvé ou cet emplacement n'a pas été configuré!</content-not-found>
@@ -226,25 +209,7 @@
       <AddAny>Ajouter les permissions à tout le monde</AddAny>
     </title>
   </usersInputSet>
-  <UIPermissionInfo>
-    <action>
-      <title>
-        <Edit>Editer</Edit>
-        <Delete>Supprimer</Delete>
-      </title>
-    </action>
-    <header>
-      <usersOrGroups>Utilisateur ou groupe</usersOrGroups>
-      <accessible>Accessible</accessible>
-      <editable>Editable</editable>
-      <action>Action</action>
-    </header>
-    <msg>
-      <confirm-delete-permission>Confirmez-vous vouloir supprimer cette permission ?</confirm-delete-permission>
-      <no-permission-remove>Il n'y a pas de permission à supprimer</no-permission-remove>
-      <access-denied>Accès refusé</access-denied>
-    </msg>
-  </UIPermissionInfo>
+  
   <location>
     <title>
       <Browse />
@@ -301,39 +266,7 @@
       <tagName>(Utiliser le séparateur "," pour ajouter simultanément plusieurs tags)</tagName>
     </introduction>
   </UITagging>
-  <!--/n  ##############################################################################
-          # org.exoplatform.wcm.presentation.acp.config.UIPermissionSetting            #
-          ##############################################################################
-  -->
-  <UIPermissionSetting>
-    <label>
-      <usersInputSet>UIPermissionSetting</usersInputSet>
-      <usersStringInput>Utilisateur ou groupe</usersStringInput>
-      <editable>Droits d'édition</editable>
-      <accessible>Droits de visualisation</accessible>
-    </label>
-    <action>
-      <Save>Sauver</Save>
-      <Reset>Réinitialiser</Reset>
-    </action>
-    <msg>
-      <userOrGroup-required>Un utilisateur ou un groupe est requis.</userOrGroup-required>
-      <checkbox-require>Un droit est requis.</checkbox-require>
-    </msg>
-  </UIPermissionSetting>
-  <usersInputSet>
-    <title>
-      <SelectUser>Sélectionnez l'utilisateur</SelectUser>
-      <SelectMember>Sélectionnez membre</SelectMember>
-      <AddAny>Ajouter toute autorisation</AddAny>
-    </title>
-  </usersInputSet>
-  <!--/n  ##############################################################################
-          # org.exoplatform.wcm.presentation.acp.config.UIPermissionInfo               #
-          ##############################################################################
-  -->
-  <!--/n  #############################################################
-  -->
+  
   <UIDocumentForm>
     <msg>
       <not-support>Non supporté</not-support>
@@ -442,5 +375,6 @@
 
     <link>Cliquer ici pour accéder au dialogue d'édition du contenu!</link>
   </UIStartEditionInPageWizard>
+  
 </bundle>
 

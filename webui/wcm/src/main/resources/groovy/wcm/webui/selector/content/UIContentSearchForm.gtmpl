@@ -16,7 +16,7 @@
     </div>
     <input type="hidden" class="hidden" id="<%=UIContentSearchForm.CHECKED_RADIO_ID%>" name="<%=UIContentSearchForm.CHECKED_RADIO_ID%>" />
     <div class="ContentSearchForm"> 
-      <input type="radio" class="radioboxes" id="<%=UIContentSearchForm.SEARCH_BY_NAME%>" name="<%=UIContentSearchForm.RADIO_NAME%>" value="<%=UIContentSearchForm.SEARCH_BY_NAME%>"/>
+      <input type="radio" checked="checked" class="radioboxes" id="<%=UIContentSearchForm.SEARCH_BY_NAME%>" name="<%=UIContentSearchForm.RADIO_NAME%>" value="<%=UIContentSearchForm.SEARCH_BY_NAME%>"/>
       <span><%= _ctx.appRes("UIContentSearchForm.title.SearchByName")%></span> <%uicomponent.renderChild(UIContentSearchForm.SEARCH_BY_NAME);%>
     </div>
 

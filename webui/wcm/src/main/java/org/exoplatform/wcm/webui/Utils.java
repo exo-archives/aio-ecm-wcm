@@ -40,6 +40,7 @@ import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
+import org.exoplatform.wcm.webui.core.UIPopupWindow;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -47,7 +48,6 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupContainer;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIPortletApplication;
 
 import com.ibm.icu.text.Transliterator;
@@ -162,7 +162,9 @@ public class Utils {
    * @return true, if successful
    */
   public static boolean isShowDraft(Node content) {
+  	if (content == null) return false;
   	try {
+  	  if(content.isNodeType("nt:frozenNode")) return false;
   		WCMPublicationService wcmPublicationService = WCMCoreUtils.getService(WCMPublicationService.class);
   		String contentState = wcmPublicationService.getContentState(content);
   		boolean isDraftContent = false;
@@ -196,6 +198,7 @@ public class Utils {
    * @return true, if successful
    */
   public static boolean isShowQuickEdit(Node content) {
+  	if (content == null) return true;
   	try {
   		boolean isEditMode = false;
   		if (WCMComposer.MODE_EDIT.equals(getCurrentMode())) isEditMode = true;
@@ -275,6 +278,18 @@ public class Utils {
   public static void closePopupWindow(UIContainer container, String popupWindowId) {
     UIPopupContainer popupContainer = getPopupContainer(container);
     popupContainer.removeChildById(popupWindowId);
+  }
+  
+  /**
+   * Update popup window.
+   * 
+   * @param container the container
+   * @param popupWindowId the popup window id
+   */
+  public static void updatePopupWindow(UIContainer container, UIComponent component, String popupWindowId) {
+    UIPopupContainer popupContainer = getPopupContainer(container);
+    UIPopupWindow popupWindow = popupContainer.getChildById(popupWindowId);
+    popupWindow.setUIComponent(component);
   }
   
   /**

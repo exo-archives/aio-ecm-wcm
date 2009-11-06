@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <configuration>
+	<component>    
+    <type>org.exoplatform.wcm.webui.selector.content.UpdateTreeConnector</type>    
+  </component>
+  <!-- 
 	<component>
     <key>org.exoplatform.wcm.webui.WebUIPropertiesConfigService</key>
     <type>org.exoplatform.wcm.webui.WebUIPropertiesConfigService</type>
@@ -30,6 +34,6 @@
 			  <property name="height" value="650"/>			                             
 			</properties-param>	   			      
 	 	</init-params>    
-  </component>	   
-    
+  </component>	
+  -->   
 </configuration>

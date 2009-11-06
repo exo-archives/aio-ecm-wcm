@@ -22,7 +22,6 @@ import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.jcr.AccessDeniedException;
@@ -41,15 +40,10 @@ import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.cms.templates.TemplateService;
-import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
-import org.exoplatform.services.ecm.publication.PublicationPlugin;
-import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
-import org.exoplatform.services.wcm.publication.WCMComposer;
-import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -170,6 +164,17 @@ public class UIPCVContainer extends UIContainer {
     return (showAble != null) ? Boolean.parseBoolean(showAble) : false;
 	}
 
+	/**
+	 * Checks if is show date created.
+	 * 
+	 * @return true, if is show date created
+	 */
+	public boolean isShowBar() {
+		PortletPreferences portletPreferences = getPortletPreferences();
+		String showAble = portletPreferences.getValue(UIPCVPortlet.SHOW_BAR, null);
+		return (showAble != null) ? Boolean.parseBoolean(showAble) : false;
+	}
+	
   /**
 	 * Gets the created date.
 	 * 
@@ -220,36 +225,20 @@ public class UIPCVContainer extends UIContainer {
     if (node == null) node = getNodeByCategory(parameters);
     if (node == null) return null;
 
+    Node nodeView = Utils.getNodeView(node);
     boolean isDocumentType = false;
-    if (node.isNodeType("nt:frozenNode")) isDocumentType = true; 
+    if (nodeView.isNodeType("nt:frozenNode")) isDocumentType = true; 
     // check node is a document node
     TemplateService templateService = getApplicationComponent(TemplateService.class);
     List<String> documentTypes = templateService.getDocumentTemplates(this.getRepository());
     for (String documentType : documentTypes) {
-      if (node.isNodeType(documentType)) {
+      if (nodeView.isNodeType(documentType)) {
         isDocumentType = true;
         break;
       }
     }
     if (!isDocumentType) return null;
     if (hasChildren()) removeChild(UIPCVContainer.class);
-    PublicationService publicationService = getApplicationComponent(PublicationService.class);
-    String lifecycleName = null;
-    try {
-      lifecycleName = publicationService.getNodeLifecycleName(node);
-    } catch (NotInPublicationLifecycleException e) {
-      // You shouldn't throw popup message, because some exception often rise here.
-    }
-    Node nodeView = null;
-    // if content doesn't join to any lifecycle (deploy from xml)
-    if (lifecycleName == null) {
-      nodeView = node;
-    } else {
-      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
-      HashMap<String, Object> context = new HashMap<String, Object>();
-      context.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
-      nodeView = publicationPlugin.getNodeView(node, context);
-    }
     
     // set node view for UIPCVPresentation
     if (nodeView != null && nodeView.isNodeType("nt:frozenNode")) {
@@ -264,12 +253,6 @@ public class UIPCVContainer extends UIContainer {
     }
     uiContentViewer.setRepository(this.getRepository());
     uiContentViewer.setWorkspace(nodeView.getSession().getWorkspace().getName());
-    
-    // Set draft for template
-    WCMPublicationService wcmPublicationService = getApplicationComponent(WCMPublicationService.class);
-    String contentState = wcmPublicationService.getContentState(nodeView);
-    if (PublicationDefaultStates.DRAFT.equals(contentState)) isDraftRevision = true;
-    else isDraftRevision = false;
     
     PortletRequestContext porletRequestContext = WebuiRequestContext.getCurrentInstance();
     HttpServletRequest request = (HttpServletRequest) porletRequestContext.getRequest();
@@ -402,29 +385,6 @@ public class UIPCVContainer extends UIContainer {
      * 
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
-    /*public void execute(Event<UIPCVContainer> event) throws Exception {
-      UIPCVContainer uiContentViewerContainer = event.getSource();
-      UIPCVPresentation uiContentViewer = uiContentViewerContainer.getChild(UIPCVPresentation.class);
-      Node orginialNode = uiContentViewer.getOriginalNode();
-      ManageableRepository manageableRepository = (ManageableRepository) orginialNode.getSession().getRepository();
-      String repository = manageableRepository.getConfiguration().getName();
-      String workspace = orginialNode.getSession().getWorkspace().getName();
-      
-      if (repository == null || workspace == null)
-        throw new ItemNotFoundException();
-      String contentType=null, nodePath=null;
-      contentType = orginialNode.getPrimaryNodeType().getName();
-      nodePath = orginialNode.getPath();
-      UIPCVContentDialog uiDocumentDialogForm = uiContentViewerContainer.createUIComponent(UIPCVContentDialog.class, null, null);
-      uiDocumentDialogForm.setRepositoryName(repository);
-      uiDocumentDialogForm.setWorkspace(workspace);
-      uiDocumentDialogForm.setContentType(contentType);
-      uiDocumentDialogForm.setNodePath(nodePath);
-      uiDocumentDialogForm.setStoredPath(nodePath);
-      uiDocumentDialogForm.addNew(false);
-      Utils.createPopupWindow(uiContentViewerContainer, uiDocumentDialogForm, "UIDocumentFormPopupWindow", 800, 600);
-    }*/
-    
     public void execute(Event<UIPCVContainer> event) throws Exception {
       UIPCVContainer uiContentViewerContainer = event.getSource();
       UIPCVConfig pcvConfigForm = uiContentViewerContainer.createUIComponent(UIPCVConfig.class, null, null);
@@ -457,24 +417,9 @@ public class UIPCVContainer extends UIContainer {
       UIPCVContainer uiContentViewerContainer = event.getSource();
       UIPCVPresentation uiContentViewer = uiContentViewerContainer.getChild(UIPCVPresentation.class);
       Node orginialNode = uiContentViewer.getOriginalNode();
-      ManageableRepository manageableRepository = (ManageableRepository) orginialNode.getSession().getRepository();
-      String repository = manageableRepository.getConfiguration().getName();
-      String workspace = orginialNode.getSession().getWorkspace().getName();
-      
-      if (repository == null || workspace == null)
-        throw new ItemNotFoundException();
-      String contentType=null, nodePath=null;
-      contentType = orginialNode.getPrimaryNodeType().getName();
-      nodePath = orginialNode.getPath();
-      UIPCVContentDialog uiDocumentDialogForm = uiContentViewerContainer.createUIComponent(UIPCVContentDialog.class, null, null);
-      uiDocumentDialogForm.setRepositoryName(repository);
-      uiDocumentDialogForm.setWorkspace(workspace);
-      uiDocumentDialogForm.setContentType(contentType);
-      uiDocumentDialogForm.setNodePath(nodePath);
-      uiDocumentDialogForm.setStoredPath(nodePath);
-      uiDocumentDialogForm.addNew(false);
-      uiDocumentDialogForm.resetProperties();
-      Utils.createPopupWindow(uiContentViewerContainer, uiDocumentDialogForm, "UIDocumentFormPopupWindow", 800, 600);
+      UIContentDialogForm uiDocumentDialogForm = uiContentViewerContainer.createUIComponent(UIContentDialogForm.class, null, null);
+      uiDocumentDialogForm.init(orginialNode, false);
+      Utils.createPopupWindow(uiContentViewerContainer, uiDocumentDialogForm, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW, 800, 600);
     }
   }
 

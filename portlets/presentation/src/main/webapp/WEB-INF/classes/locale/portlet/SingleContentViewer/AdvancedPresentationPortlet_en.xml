@@ -113,23 +113,7 @@
       <confirm-delete>Are you sure to delete this category from list?</confirm-delete>
     </msg>
   </UIFormInputSetWithAction>
-  <!--/n  ###################################################################
-  # org.exoplatform.wcm.webui.scv.config.UIContentDialogForm        #
-  ###################################################################
-  -->
-  <UIContentDialogForm>
-    <action>
-      <SaveDraft>Save Draft</SaveDraft>
-      <Cancel>Cancel</Cancel>
-      <FastPublish>Fast Publish</FastPublish>
-      <Preferences>Preferences</Preferences>
-      <Close>Close</Close>
-    </action>
-  </UIContentDialogForm>
-  <!--/n  ###################################################################
-  #  org.exoplatform.wcm.presentation.scp.UIMessageBoard						#
-  ###################################################################
-  -->
+  
   <UIMessageBoard>
     <msg>
       <content-not-found>Content not found or this portlet has not been configured yet!</content-not-found>
@@ -214,25 +198,6 @@
       <selectMembership>Select membership</selectMembership>
     </label>
   </UIGroupMemberSelector>
-  <UIPermissionInfo>
-    <action>
-      <title>
-        <Edit>Edit</Edit>
-        <Delete>Delete</Delete>
-      </title>
-    </action>
-    <header>
-      <usersOrGroups>User Or Group</usersOrGroups>
-      <accessible>Access</accessible>
-      <editable>Edit</editable>
-      <action>Action</action>
-    </header>
-    <msg>
-      <confirm-delete-permission>Are you sure to delete.</confirm-delete-permission>
-      <no-permission-remove>Don't have permission.</no-permission-remove>
-      <access-denied>Access denied.</access-denied>
-    </msg>
-  </UIPermissionInfo>
   <location>
     <title>
       <Browse />
@@ -287,39 +252,7 @@
       <tagName>(Use "," separator to add multiple tag)</tagName>
     </introduction>
   </UITagging>
-  <!--/n  ##############################################################################
-  # 		org.exoplatform.wcm.presentation.acp.config.UIPermissionSetting		 #
-  ##############################################################################
-  -->
-  <UIPermissionSetting>
-    <label>
-      <usersInputSet>UIPermissionSetting</usersInputSet>
-      <usersStringInput>User Or Group</usersStringInput>
-      <editable>Edit Right</editable>
-      <accessible>Access Right</accessible>
-    </label>
-    <action>
-      <Save>Save</Save>
-      <Reset>Reset</Reset>
-    </action>
-    <msg>
-      <userOrGroup-required>Require select user or group.</userOrGroup-required>
-      <checkbox-require>You should set right.</checkbox-require>
-    </msg>
-  </UIPermissionSetting>
-  <usersInputSet>
-    <title>
-      <SelectUser>Select user</SelectUser>
-      <SelectMember>Select member</SelectMember>
-      <AddAny>Add any permission</AddAny>
-    </title>
-  </usersInputSet>
-  <!--/n  ##############################################################################
-  # 		org.exoplatform.wcm.presentation.acp.config.UIPermissionInfo		 #
-  ##############################################################################
-  -->
-  <!--/n  #############################################################
-  -->
+  
   <UIDocumentForm>
     <msg>
       <not-support>Not-support</not-support>
@@ -425,5 +358,6 @@
   <UIStartEditionInPageWizard>
     <link>Click here to change into edit content interface!</link>
   </UIStartEditionInPageWizard>
+  
 </bundle>
 

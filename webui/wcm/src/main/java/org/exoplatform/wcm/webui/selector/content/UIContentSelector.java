@@ -16,7 +16,10 @@ import org.exoplatform.webui.event.EventListener;
 
 @ComponentConfigs ({
   @ComponentConfig(
-      template = "system:/groovy/webui/core/UITabPane_New.gtmpl"
+      template = "system:/groovy/webui/core/UITabPane_New.gtmpl",
+      events = {
+        @EventConfig(listeners = UIContentSelector.CloseActionListener.class, name = "ClosePopup")
+      }
   ),
   @ComponentConfig(
       type = UIPopupWindow.class,
@@ -32,18 +35,6 @@ public class UIContentSelector extends UITabPane {
 
   final static public String WEB_CONTENT_METADATA_POPUP = "WebContentMetadataPopup";
   final static public String WEB_CONTENT_NODETYPE_POPUP = "WebContentNodeTypePopup";
-
-  public UIContentSelector() throws Exception {
-    addChild(UIContentBrowsePanel.class, null, null);
-    addChild(UIContentSearchForm.class,null,null);
-    addChild(UIContentSearchResult.class,null,null);
-    setSelectedTab(1);
-  }
-
-  public void init() throws Exception {
-    getChild(UIContentBrowsePanel.class).init();
-    getChild(UIContentSearchForm.class).init();
-  }
 
   public void initMetadataPopup() throws Exception {
     UIPopupWindow uiPopupWindow = addChild(UIPopupWindow.class, "UIWebContentSearchPopup", WEB_CONTENT_METADATA_POPUP);

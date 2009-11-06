@@ -114,7 +114,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       return PropertyType.BINARY;
     else if (UIFormGeneratorConstant.DATE.equals(formType))
       return PropertyType.DATE;
-    else if (size == 1)
+    else if (UIFormGeneratorConstant.CHECKBOX.equals(formType))
       return PropertyType.BOOLEAN;
     else
       return PropertyType.STRING;
@@ -311,7 +311,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
           dialogTemplate.append("           }\n");
         } else {
           dialogTemplate.append("           String[] " + inputFieldName + " = [\"jcrPath=/node/" + propertyName + "\", \"defaultValues=" + value + "\", \"" + validate + "\", \"options=" + form.getAdvanced() + "\"];\n");
-          dialogTemplate.append("           uicomponent.add" + inputField + "(\"" + inputFieldName + "\", " + inputFieldName + ");\n");
+          dialogTemplate.append("           uicomponent.add" + inputField + "(\"" + inputName + "\", " + inputFieldName + ");\n");
         }
         dialogTemplate.append("          %>\n");
         dialogTemplate.append("        </td>\n");
@@ -398,7 +398,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
         viewTemplate.append("%>\n");
         viewTemplate.append("           <td style=\"padding:5px\"><a href=\"$dataSrc\"><%= _ctx.appRes(\"FormGeneratorDialog.label.Download\") %></a></td>\n");
       } else {
-        viewTemplate.append("           <td style=\"padding:5px\"><%= currentNode.getProperty(\"" + propertyName + "\").getString() %></td>\n");
+        viewTemplate.append("           <td style=\"padding:5px\"><%=currentNode.getProperty(\"" + propertyName + "\").getString()%></td>\n");
       }
       viewTemplate.append("         <%\n");
       viewTemplate.append("       }\n");
@@ -444,6 +444,28 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
         for(int j = i + 1; j < forms.size(); j++){
           if(forms.get(i).getName().equals(forms.get(j).getName())) {
             Utils.createPopupMessage(formGeneratorTabPane, "UIFormGeneratorTabPane.msg.duplicate-name", null, ApplicationMessage.INFO);
+            return;
+          }
+        }
+        if(forms.get(i).getType().equals(UIFormGeneratorConstant.SELECT)) {
+          String[] advance = null;
+          boolean isEmptyValue = false;
+          if((forms.get(i).getAdvanced() != null)) {
+            advance = forms.get(i).getAdvanced().split(",");
+            if(advance.length == 0) {
+              isEmptyValue = true;
+            } else {
+              for(int count = 0; count < advance.length; count++) {
+                if(advance[count] == null || advance[count].trim().length() <= 0){
+                  isEmptyValue = true;
+                }
+              }
+            }
+          } else {
+            isEmptyValue = true;
+          }
+          if(isEmptyValue) {
+            Utils.createPopupMessage(formGeneratorTabPane, "UIFormGeneratorTabPane.msg.select-value-empty", null, ApplicationMessage.INFO);
             return;
           }
         }
