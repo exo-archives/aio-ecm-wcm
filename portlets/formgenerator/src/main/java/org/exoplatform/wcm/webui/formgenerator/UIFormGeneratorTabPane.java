@@ -114,7 +114,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       return PropertyType.BINARY;
     else if (UIFormGeneratorConstant.DATE.equals(formType))
       return PropertyType.DATE;
-    else if (size == 1)
+    else if (UIFormGeneratorConstant.CHECKBOX.equals(formType))
       return PropertyType.BOOLEAN;
     else
       return PropertyType.STRING;
@@ -398,7 +398,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
         viewTemplate.append("%>\n");
         viewTemplate.append("           <td style=\"padding:5px\"><a href=\"$dataSrc\"><%= _ctx.appRes(\"FormGeneratorDialog.label.Download\") %></a></td>\n");
       } else {
-        viewTemplate.append("           <td style=\"padding:5px\"><%= currentNode.getProperty(\"" + propertyName + "\").getString() %></td>\n");
+        viewTemplate.append("           <td style=\"padding:5px\"><%=currentNode.getProperty(\"" + propertyName + "\").getString()%></td>\n");
       }
       viewTemplate.append("         <%\n");
       viewTemplate.append("       }\n");
@@ -452,15 +452,13 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
           boolean isEmptyValue = false;
           if((forms.get(i).getAdvanced() != null)) {
             advance = forms.get(i).getAdvanced().split(",");
-            StringBuffer value = new StringBuffer();
             if(advance.length == 0) {
               isEmptyValue = true;
             } else {
               for(int count = 0; count < advance.length; count++) {
-                value.append(advance[count]);
-              }
-              if(value.toString().trim().length() <= 0) {
-                isEmptyValue = true;
+                if(advance[count] == null || advance[count].trim().length() <= 0){
+                  isEmptyValue = true;
+                }
               }
             }
           } else {

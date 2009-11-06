@@ -385,29 +385,6 @@ public class UIPCVContainer extends UIContainer {
      * 
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
-    /*public void execute(Event<UIPCVContainer> event) throws Exception {
-      UIPCVContainer uiContentViewerContainer = event.getSource();
-      UIPCVPresentation uiContentViewer = uiContentViewerContainer.getChild(UIPCVPresentation.class);
-      Node orginialNode = uiContentViewer.getOriginalNode();
-      ManageableRepository manageableRepository = (ManageableRepository) orginialNode.getSession().getRepository();
-      String repository = manageableRepository.getConfiguration().getName();
-      String workspace = orginialNode.getSession().getWorkspace().getName();
-      
-      if (repository == null || workspace == null)
-        throw new ItemNotFoundException();
-      String contentType=null, nodePath=null;
-      contentType = orginialNode.getPrimaryNodeType().getName();
-      nodePath = orginialNode.getPath();
-      UIPCVContentDialog uiDocumentDialogForm = uiContentViewerContainer.createUIComponent(UIPCVContentDialog.class, null, null);
-      uiDocumentDialogForm.setRepositoryName(repository);
-      uiDocumentDialogForm.setWorkspace(workspace);
-      uiDocumentDialogForm.setContentType(contentType);
-      uiDocumentDialogForm.setNodePath(nodePath);
-      uiDocumentDialogForm.setStoredPath(nodePath);
-      uiDocumentDialogForm.addNew(false);
-      Utils.createPopupWindow(uiContentViewerContainer, uiDocumentDialogForm, "UIDocumentFormPopupWindow", 800, 600);
-    }*/
-    
     public void execute(Event<UIPCVContainer> event) throws Exception {
       UIPCVContainer uiContentViewerContainer = event.getSource();
       UIPCVConfig pcvConfigForm = uiContentViewerContainer.createUIComponent(UIPCVConfig.class, null, null);
