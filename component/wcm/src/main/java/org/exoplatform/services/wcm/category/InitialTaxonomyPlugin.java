@@ -120,11 +120,18 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
     super(params, configurationManager, repositoryService);
     
     this.repositoryService = repositoryService;
-    baseTaxonomiesStorage = nodeHierarchyCreator.getJcrPath(BasePath.TAXONOMIES_TREE_STORAGE_PATH);
+    this.baseTaxonomiesStorage = nodeHierarchyCreator.getJcrPath(BasePath.TAXONOMIES_TREE_STORAGE_PATH);
     this.taxonomyService = taxonomyService;
     this.actionServiceContainer = actionServiceContainer;
     this.params = params;
-    ValueParam autoCreated = params.getValueParam("autoCreateInNewRepository");
+    this.dmsConfiguration_ = dmsConfiguration;
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin#deployToPortal(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
+   */
+  public void deployToPortal(SessionProvider sessionProvider, String portalName) throws Exception {
+  	ValueParam autoCreated = params.getValueParam("autoCreateInNewRepository");
     ValueParam workspaceParam = params.getValueParam("workspace");
     ValueParam pathParam = params.getValueParam("path");
     ValueParam nameParam = params.getValueParam("treeName");
@@ -139,13 +146,7 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
     if (nameParam != null) {
       treeName = nameParam.getValue();
     }
-    dmsConfiguration_ = dmsConfiguration;
-  }
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin#deployToPortal(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
-   */
-  public void deployToPortal(SessionProvider sessionProvider, String portalName) throws Exception {
+    
     String firstCharactor = portalName.substring(0, 1).toUpperCase();
     treeName = StringUtils.replace(treeName, "{treeName}", firstCharactor + portalName.substring(1, portalName.length()));
     path = StringUtils.replace(path, "{portalName}", portalName);
