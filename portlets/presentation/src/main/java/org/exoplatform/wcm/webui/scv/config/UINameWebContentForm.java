@@ -202,7 +202,8 @@ public class UINameWebContentForm extends UIForm {
       prefs.setValue(UISingleContentViewerPortlet.IDENTIFIER, webContentNode.getUUID());
       prefs.store();
       
-      WCMPublicationService wcmPublicationService = uiNameWebContentForm.getApplicationComponent(WCMPublicationService.class);      
+      WCMPublicationService wcmPublicationService = uiNameWebContentForm.getApplicationComponent(WCMPublicationService.class);
+      wcmPublicationService.updateLifecyleOnChangeContent(webContentNode, Util.getPortalRequestContext().getPortalOwner(), Util.getPortalRequestContext().getRemoteUser(), null);
       if (!Utils.isEditPortletInCreatePageWizard()) {
         String pageId = Util.getUIPortal().getSelectedNode().getPageReference();
         UserPortalConfigService upcService = uiNameWebContentForm.getApplicationComponent(UserPortalConfigService.class);
