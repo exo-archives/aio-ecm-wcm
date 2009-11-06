@@ -43,7 +43,7 @@ public class UIPortletConfig extends UIContainer {
    */
   public void init() throws Exception {
   	UISingleContentViewerPortlet scvPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);
-    Node webcontent = scvPortlet.getNodeView();
+    Node webcontent = scvPortlet.getNodeByPreference();
     if (webcontent == null) {
     	UIWelcomeScreen welcomeScreen = createUIComponent(UIWelcomeScreen.class, null, null);
     	Utils.updatePopupWindow(this, welcomeScreen, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW);

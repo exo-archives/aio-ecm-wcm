@@ -100,6 +100,20 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
     super.processRender(app, context) ;
   }
 
+  public Node getNodeByPreference() {
+    try {
+      PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+      PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
+      String repository = preferences.getValue(REPOSITORY, null);    
+      String workspace = preferences.getValue(WORKSPACE, null);
+      String nodeIdentifier = preferences.getValue(IDENTIFIER, null) ;
+      WCMService wcmService = getApplicationComponent(WCMService.class);
+      return wcmService.getReferencedContent(Utils.getSessionProvider(this), repository, workspace, nodeIdentifier);
+    } catch (Exception e) {
+      return null;
+    }
+  }
+  
   /**
    * Gets the node.
    * 
@@ -109,13 +123,7 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
    */
   public Node getNodeView() {
   	try {
-  		PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
-  		PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
-  		String repository = preferences.getValue(REPOSITORY, null);    
-  		String workspace = preferences.getValue(WORKSPACE, null);
-  		String nodeIdentifier = preferences.getValue(IDENTIFIER, null) ;
-  		WCMService wcmService = getApplicationComponent(WCMService.class);
-  		Node originalNode = wcmService.getReferencedContent(Utils.getSessionProvider(this), repository, workspace, nodeIdentifier);
+  		Node originalNode = getNodeByPreference();
   		Node viewNode = Utils.getNodeView(originalNode);
   		
   		// Set original node for UIBaseNodePresentation (in case nodeView is a version node)
