@@ -426,10 +426,10 @@ public abstract class BaseConnector {
    * @return the jcr content
    * @throws Exception the exception
    */
-  protected Node getContent(String repositoryName, String workspaceName, String jcrPath, String NodeTypeFilter) throws Exception {
+  protected Node getContent(String repositoryName, String workspaceName, String jcrPath, String NodeTypeFilter, boolean isSystemSession) throws Exception {
     if (jcrPath == null || jcrPath.trim().length() == 0)
       return null;
-    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    SessionProvider sessionProvider = isSystemSession?WCMCoreUtils.getSessionProvider():WCMCoreUtils.getUserSessionProvider();
     Session session = null;
     try {
       ManageableRepository repository = repositoryService.getRepository(repositoryName);
@@ -460,7 +460,7 @@ public abstract class BaseConnector {
    * @throws Exception the exception
    */
   protected Node getContent(String repositoryName, String workspaceName, String jcrPath) throws Exception {
-	  return getContent(repositoryName, workspaceName, jcrPath, null);
+	  return getContent(repositoryName, workspaceName, jcrPath, null, true);
   }
   
   /**
@@ -473,7 +473,7 @@ public abstract class BaseConnector {
    * @throws Exception the exception
    */
   protected Node getWebContent(String repositoryName, String workspaceName, String jcrPath) throws Exception {
-	  return getContent(repositoryName, workspaceName, jcrPath, "exo:webContent");
+	  return getContent(repositoryName, workspaceName, jcrPath, "exo:webContent", true);
   }
   
   protected Node getCurrentPortalNode(String repositoryName,

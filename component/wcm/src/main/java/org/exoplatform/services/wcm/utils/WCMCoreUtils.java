@@ -42,14 +42,25 @@ public class WCMCoreUtils {
   }
   
   /**
-   * Gets the session provider.
+   * Gets the system session provider.
    * 
-   * @return the session provider
+   * @return the system session provider
    */
   public static SessionProvider getSessionProvider() {
     SessionProviderService sessionProviderService = getService(SessionProviderService.class);
     SessionProvider sessionProvider = sessionProviderService.getSystemSessionProvider(null);
     return sessionProvider;
+  }
+  
+  /**
+   * Gets the session provider.
+   * 
+   * @return the session provider
+   */
+  public static SessionProvider getUserSessionProvider() {
+	  SessionProviderService sessionProviderService = getService(SessionProviderService.class);
+	  SessionProvider sessionProvider = sessionProviderService.getSessionProvider(null);
+	  return sessionProvider;
   }
   
 }
