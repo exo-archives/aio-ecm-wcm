@@ -144,25 +144,24 @@ public class UIPCLVContainer extends UIContainer {
 		PortletPreferences portletPreferences = portletRequest.getPreferences();
 		String preferenceRepository = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_REPOSITORY, "");
 		String preferenceTreeName = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_TREE_NAME, "");
-		String treeName = null;
-		
-		if(parameters == null || parameters.trim().length() < 1 || (parameters.indexOf("/") < 0)) treeName = preferenceTreeName;
-		else treeName = parameters.substring(0, parameters.indexOf("/"));
-		
 		TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
 		Node treeNode = null;
 		try {
-		  treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, treeName);
+		  treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
 		} catch(Exception ex){}
 		
 		String categoryPath = parameters.substring(parameters.indexOf("/") + 1);
-		if (treeName.equals(categoryPath))
+		if (preferenceTreeName.equals(categoryPath))
 			categoryPath = "";
 		Node categoryNode = null;
 		List<Node> nodes = null;
 		if(treeNode != null) {
-		  categoryNode = treeNode.getNode(categoryPath);
-		  nodes = this.getListSymlinkNode(portletPreferences, categoryNode.getPath());
+			try {
+				categoryNode = treeNode.getNode(categoryPath);
+				nodes = this.getListSymlinkNode(portletPreferences, categoryNode.getPath());
+			} catch (Exception e) {
+				nodes = this.getListSymlinkNode(portletPreferences, null);
+			}
     } else {
       nodes = this.getListSymlinkNode(portletPreferences, null);
     }
