@@ -57,13 +57,13 @@ public class SmallPaginatedQueryResult extends WCMPaginatedQueryResult{
    * 
    * @throws Exception the exception
    */
-  public SmallPaginatedQueryResult(QueryResult queryResult, QueryCriteria queryCriteria, int pageSize) throws Exception {
-    super(queryResult,queryCriteria,pageSize);   
+  public SmallPaginatedQueryResult(QueryResult queryResult, QueryCriteria queryCriteria, int pageSize, boolean isSearchContent) throws Exception {
+      super(queryResult, queryCriteria, pageSize, isSearchContent);   
       RowIterator rowIterator = queryResult.getRows();
       NodeIterator nodeIterator = queryResult.getNodes();
       while(nodeIterator.hasNext()) {
         Node node = nodeIterator.nextNode();
-        Node viewNode = filterNodeToDisplay(node);
+        Node viewNode = filterNodeToDisplay(node, isSearchContent);
         if(viewNode == null) continue;  
         //Skip back 1 position to get current row mapping to the node
         long position = nodeIterator.getPosition();

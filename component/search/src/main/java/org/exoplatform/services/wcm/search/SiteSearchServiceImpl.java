@@ -109,7 +109,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.search.SiteSearchService#searchSiteContents(org.exoplatform.services.wcm.search.QueryCriteria, org.exoplatform.services.jcr.ext.common.SessionProvider, int)
    */
-  public WCMPaginatedQueryResult searchSiteContents(SessionProvider sessionProvider, QueryCriteria queryCriteria, int pageSize) throws Exception {
+  public WCMPaginatedQueryResult searchSiteContents(SessionProvider sessionProvider, QueryCriteria queryCriteria, int pageSize, boolean isSearchContent) throws Exception {
     ManageableRepository currentRepository = repositoryService.getCurrentRepository();
     NodeLocation location = configurationService.getLivePortalsLocation(currentRepository.getConfiguration().getName());    
     Session session = sessionProvider.getSession(location.getWorkspace(),currentRepository);
@@ -120,9 +120,9 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     long queryTime = System.currentTimeMillis() - startTime;
     WCMPaginatedQueryResult paginatedQueryResult = null;
     if(queryResult.getNodes().getSize()>250) {
-      paginatedQueryResult = new WCMPaginatedQueryResult( queryResult, queryCriteria, pageSize); 
+      paginatedQueryResult = new WCMPaginatedQueryResult( queryResult, queryCriteria, pageSize, isSearchContent); 
     }else {      
-      paginatedQueryResult = new SmallPaginatedQueryResult(queryResult, queryCriteria, pageSize);
+      paginatedQueryResult = new SmallPaginatedQueryResult(queryResult, queryCriteria, pageSize, isSearchContent);
     }       
     paginatedQueryResult.setQueryTime(queryTime);    
     paginatedQueryResult.setSpellSuggestion(suggestion);    
