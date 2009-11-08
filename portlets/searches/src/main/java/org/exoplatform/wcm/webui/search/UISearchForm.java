@@ -272,7 +272,7 @@ public class UISearchForm extends UIForm {
 				WCMPaginatedQueryResult paginatedQueryResult = siteSearchService.searchSiteContents(
 				                                                                                    Utils.getSessionProvider(uiSearchForm),
 				                                                                                    queryCriteria,
-																																														itemsPerPage);
+																																														itemsPerPage, false);
 				uiSearchResult.setKeyword(keyword);
 				uiSearchResult.setPageList(paginatedQueryResult);
 				float timeSearch = paginatedQueryResult.getQueryTimeInSecond();

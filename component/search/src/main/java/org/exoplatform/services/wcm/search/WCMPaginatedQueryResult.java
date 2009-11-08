@@ -57,7 +57,7 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
    * 
    * @throws Exception the exception
    */
-  public WCMPaginatedQueryResult(QueryResult queryResult, QueryCriteria queryCriteria, int pageSize) throws Exception {
+  public WCMPaginatedQueryResult(QueryResult queryResult, QueryCriteria queryCriteria, int pageSize, boolean isSearchContent) throws Exception {
     super(queryResult, pageSize);
     this.queryCriteria = queryCriteria;
   }
@@ -105,9 +105,10 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
    * org.exoplatform.wcm.webui.paginator.PaginatedQueryResult#filterNodeToDisplay
    * (javax.jcr.Node)
    */
-  protected Node filterNodeToDisplay(Node node) throws Exception {
+  protected Node filterNodeToDisplay(Node node, boolean isSearchContent) throws Exception {
     Node displayNode = getNodeToCheckState(node);
     if(displayNode == null) return null;
+    if (isSearchContent) return displayNode;
     PublicationService publicationService = (PublicationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(PublicationService.class);
     String lifecycleName = null;
     try {

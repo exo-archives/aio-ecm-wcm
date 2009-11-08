@@ -171,7 +171,7 @@ public class UISearchResult extends UIContainer {
 				WCMPaginatedQueryResult paginatedQueryResult = siteSearchService.searchSiteContents(
 				                                                                                    Utils.getSessionProvider(this),
 				                                                                                    queryCriteria,
-																																														itemsPerPage);
+																																														itemsPerPage, false);
 				setSearchTime(paginatedQueryResult.getQueryTimeInSecond());
 				setSuggestion(paginatedQueryResult.getSpellSuggestion());
 				String suggestionURL = Util.getPortalRequestContext().getRequestURI();
