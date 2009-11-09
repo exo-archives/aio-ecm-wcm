@@ -36,6 +36,8 @@ import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -206,7 +208,7 @@ public class UICategoryNavigationTreeBase extends UITree {
     String parameters = null;
     try {
       // parameters: Classic/News/France/Blah/Bom
-      parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected + "/")),"UTF-8");
+      parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected)),"UTF-8");
     } catch (UnsupportedEncodingException e) {}
     
     // categoryPath: /News/France/Blah/Bom
@@ -259,21 +261,12 @@ public class UICategoryNavigationTreeBase extends UITree {
     PortletPreferences portletPreferences = UICategoryNavigationUtils.getPortletPreferences();
     String preferenceTargetPage = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TARGET_PAGE, "");
     
-    PortletRequestContext porletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
-    
-    // requestURI: /portal/private/acme/products/presentation/category
-    String requestURI = requestWrapper.getRequestURI();
+    LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
+    Node portalNode = livePortalManagerService.getLivePortalByChild(node);
     String preferenceTreeName = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, "");
-    String categoryPath = String.valueOf(node.getPath());
-    // shortPath: /Classic/News
-    String shortPath = "";
-    if (requestURI.indexOf(preferenceTreeName) >= 0) {
-      shortPath = categoryPath.substring(categoryPath.indexOf(preferenceTreeName) - 1);  
-    } else {
-      shortPath = "/" + preferenceTreeName + categoryPath.substring(categoryPath.lastIndexOf("/"));
-    }
+    String categoryPath = node.getPath().replaceFirst(portalNode.getPath(), "");
+    categoryPath = categoryPath.substring(categoryPath.indexOf(preferenceTreeName) + preferenceTreeName.length());
     
-    return portalURI + preferenceTargetPage +  shortPath;
+    return portalURI + preferenceTargetPage + categoryPath;
   }
 }
