@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
-import javax.jcr.Property;
 import javax.jcr.Value;
 
 import org.exoplatform.portal.webui.container.UIContainer;
