@@ -97,6 +97,8 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
   /** The name. */
   private String                  name;
   
+  private String 									portalName;
+  
   /**
    * Instantiates a new initial taxonomy plugin.
    * 
@@ -131,7 +133,8 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
    * @see org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin#deployToPortal(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
   public void deployToPortal(SessionProvider sessionProvider, String portalName) throws Exception {
-    ValueParam autoCreated = params.getValueParam("autoCreateInNewRepository");
+  	this.portalName = portalName;
+  	ValueParam autoCreated = params.getValueParam("autoCreateInNewRepository");
     ValueParam workspaceParam = params.getValueParam("workspace");
     ValueParam pathParam = params.getValueParam("path");
     ValueParam nameParam = params.getValueParam("treeName");
@@ -354,7 +357,10 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
     
     JcrInputProperty jcrInputHomePath = new JcrInputProperty();
     jcrInputHomePath.setJcrPath("/node/exo:storeHomePath");
-    jcrInputHomePath.setValue(action.getHomePath());
+    String homepath = action.getHomePath();
+    homepath = StringUtils.replace(homepath, "{portalName}", portalName);
+    homepath = StringUtils.replace(homepath, "{treeName}", treeName);
+    jcrInputHomePath.setValue(homepath);
     sortedInputs.put("/node/exo:storeHomePath", jcrInputHomePath);
 
     JcrInputProperty jcrInputTargetWspace = new JcrInputProperty();
@@ -364,7 +370,9 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
 
     JcrInputProperty jcrInputTargetPath = new JcrInputProperty();
     jcrInputTargetPath.setJcrPath("/node/exo:targetPath");
-    jcrInputTargetPath.setValue(action.getTargetPath());
+    String targetPath = action.getTargetPath();
+    targetPath = StringUtils.replace(targetPath, "{portalName}", portalName);
+    jcrInputTargetPath.setValue(targetPath);
     sortedInputs.put("/node/exo:targetPath", jcrInputTargetPath);
     
     JcrInputProperty rootProp = sortedInputs.get("/node");
