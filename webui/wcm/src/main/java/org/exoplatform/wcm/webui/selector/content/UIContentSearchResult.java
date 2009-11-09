@@ -25,6 +25,7 @@ import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.search.PaginatedQueryResult;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
+import org.exoplatform.wcm.webui.viewer.UIContentViewer;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -265,11 +266,21 @@ public class UIContentSearchResult extends UIGrid {
      */
     public void execute(Event<UIContentSearchResult> event) throws Exception {
       UIContentSearchResult contentSearchResult = event.getSource();
+      String webcontentPath = event.getRequestContext().getRequestParameter(OBJECTID);
+      RepositoryService repositoryService = contentSearchResult.getApplicationComponent(RepositoryService.class);
+      String repoName = repositoryService.getCurrentRepository().getConfiguration().getName();
+      WCMConfigurationService configurationService = contentSearchResult.getApplicationComponent(WCMConfigurationService.class);
+      NodeLocation portalLocation = configurationService.getLivePortalsLocation(repoName);
+      ManageableRepository manageableRepository = repositoryService.getRepository(portalLocation.getRepository());
+      Session session = Utils.getSessionProvider(contentSearchResult).getSession(portalLocation.getWorkspace(), manageableRepository);
+      Node originalNode = (Node) session.getItem(webcontentPath);
+      Node viewNode = Utils.getNodeView(originalNode);
+      
       UIContentSelector contentSelector = contentSearchResult.getAncestorOfType(UIContentSelector.class);
-      UIContentResultViewer contentResultViewer = contentSelector.getChild(UIContentResultViewer.class);
-      if(contentResultViewer == null) {
-        contentResultViewer = contentSelector.addChild(UIContentResultViewer.class, null, null);
-      }
+      UIContentViewer contentResultViewer = contentSelector.getChild(UIContentViewer.class);
+      if (contentResultViewer == null) contentResultViewer = contentSelector.addChild(UIContentViewer.class, null, null);
+      contentResultViewer.setNode(viewNode);
+      contentResultViewer.setOriginalNode(originalNode);
       event.getRequestContext().addUIComponentToUpdateByAjax(contentSelector);
       contentSelector.setSelectedTab(contentResultViewer.getId());
     }
