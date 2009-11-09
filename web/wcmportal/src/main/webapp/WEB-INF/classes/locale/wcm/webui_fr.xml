@@ -256,8 +256,8 @@
   	<label>
   		<UIPermissionInputSetWithAction>Permission</UIPermissionInputSetWithAction>
       <UIPermissionStringInput></UIPermissionStringInput>
-      <UIAccessibleCheckboxInput>Droit de modifier</UIAccessibleCheckboxInput>
-      <UIEditableCheckboxInput>	Droit d'accès</UIEditableCheckboxInput>
+      <UIAccessibleCheckboxInput>Droit d'accès</UIAccessibleCheckboxInput>
+      <UIEditableCheckboxInput>Droit de modifier</UIEditableCheckboxInput>
     </label>
     <action>
 			<Save>Sauver</Save>

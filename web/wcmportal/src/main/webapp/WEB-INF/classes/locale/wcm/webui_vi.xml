@@ -253,8 +253,8 @@
   	<label>
       <UIPermissionInputSetWithAction>Permission</UIPermissionInputSetWithAction>
       <UIPermissionStringInput></UIPermissionStringInput>
-      <UIAccessibleCheckboxInput>Edit Right</UIAccessibleCheckboxInput>
-      <UIEditableCheckboxInput>Access Right</UIEditableCheckboxInput>
+      <UIAccessibleCheckboxInput>Access Right</UIAccessibleCheckboxInput>
+      <UIEditableCheckboxInput>Edit Right</UIEditableCheckboxInput>
     </label>
     <action>
 			<Save>Lưu lại</Save>
