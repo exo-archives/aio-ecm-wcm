@@ -10,22 +10,22 @@ import org.w3c.dom.Element;
 
 public class FCKFileHandler {
 
-  public static Element createFileElement(Document document, Node child, String fileType) throws Exception {   
+  public static Element createFileElement(Document document, String fileType, Node sourceNode, Node displayNode) throws Exception {   
   	Element file = document.createElement("File");
-    file.setAttribute("name", child.getName());     
+    file.setAttribute("name", displayNode.getName());     
     SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.SHORT, SimpleDateFormat.SHORT);    
-    file.setAttribute("dateCreated", formatter.format(child.getProperty("exo:dateCreated").getDate().getTime()));    
-    file.setAttribute("dateModified", formatter.format(child.getProperty("exo:dateModified").getDate().getTime()));      
-    file.setAttribute("creator", child.getProperty("exo:owner").getString());
-    if (child.isNodeType("nt:file")) {
-    	Node content = child.getNode("jcr:content");
+    file.setAttribute("dateCreated", formatter.format(sourceNode.getProperty("exo:dateCreated").getDate().getTime()));    
+    file.setAttribute("dateModified", formatter.format(sourceNode.getProperty("exo:dateModified").getDate().getTime()));      
+    file.setAttribute("creator", sourceNode.getProperty("exo:owner").getString());
+    if (sourceNode.isNodeType("nt:file")) {
+    	Node content = sourceNode.getNode("jcr:content");
     	file.setAttribute("nodeType", content.getProperty("jcr:mimeType").getString());
     } else {
-    	file.setAttribute("nodeType", child.getPrimaryNodeType().getName());
+    	file.setAttribute("nodeType", sourceNode.getPrimaryNodeType().getName());
     }
-    file.setAttribute("url",getFileURL(child));        
-    if(child.isNodeType(FCKUtils.NT_FILE)) {
-      long size = child.getNode("jcr:content").getProperty("jcr:data").getLength();
+    file.setAttribute("url",getFileURL(displayNode));        
+    if(sourceNode.isNodeType(FCKUtils.NT_FILE)) {
+      long size = sourceNode.getNode("jcr:content").getProperty("jcr:data").getLength();
       file.setAttribute("size", "" + size / 1000);      
     }else {
       file.setAttribute("size", "");

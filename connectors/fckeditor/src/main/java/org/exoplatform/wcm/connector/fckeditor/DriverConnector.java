@@ -99,6 +99,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    * Instantiates a new driver connector.
    * 
    * @param container the container
+   * @param params the params
    */
   public DriverConnector(ExoContainer container, InitParams params) {
     super(container);
@@ -182,7 +183,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
       itemPath = StringUtils.replaceOnce(itemPath, "${userId}", userId);
       Node node = (Node)session.getItem(itemPath);
       
-      return buildXMLResponseForChildren(node, null, repositoryName, filterBy);
+      return buildXMLResponseForChildren(node, null, repositoryName, filterBy, session);
 
     } catch (Exception e) {
       log.error("Error when perform getFoldersAndFiles: ", e.fillInStackTrace());
@@ -204,6 +205,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    * @param contentType the content type
    * @param contentLength the content length
    * @param currentPortal the current portal
+   * @param driverName the driver name
    * 
    * @return the response
    * 
@@ -242,6 +244,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    * @param fileName the file name
    * @param uploadId the upload id
    * @param currentPortal the current portal
+   * @param driverName the driver name
    * 
    * @return the response
    * 
@@ -485,42 +488,49 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    * @param command the command
    * @param repositoryName the repository name
    * @param filterBy the filter by
+   * @param session TODO
    * 
    * @return the response
    * 
    * @throws Exception the exception
    */
-  private Response buildXMLResponseForChildren(Node node, String command, String repositoryName, String filterBy) throws Exception {
+  private Response buildXMLResponseForChildren(Node node, String command, String repositoryName, String filterBy, Session session) throws Exception {
     Element rootElement = FCKUtils.createRootElement(command, node, folderHandler.getFolderType(node));
     Document document = rootElement.getOwnerDocument();
     Element folders = document.createElement("Folders");
     Element files = document.createElement("Files");
+    Node sourceNode = null;
+    Node checkNode = null;
     
     for (NodeIterator iterator = node.getNodes(); iterator.hasNext();) {
       Node child = iterator.nextNode();
       
       if (child.isNodeType(FCKUtils.EXO_HIDDENABLE))
         continue;
+      
+      if(child.isNodeType("exo:symlink") && child.hasProperty("exo:uuid")) {
+      	sourceNode = session.getNodeByUUID(child.getProperty("exo:uuid").getString());
+      }
 
-      if (child.isNodeType(NodetypeConstant.EXO_WEBCONTENT) && FILE_TYPE_WEBCONTENT.equals(filterBy)) {
-      	Element folder = folderHandler.createFolderElement(document, child, child.getPrimaryNodeType().getName());
+      checkNode = sourceNode != null ? sourceNode : child;
+      
+      if (checkNode.isNodeType(NodetypeConstant.EXO_WEBCONTENT) && FILE_TYPE_WEBCONTENT.equals(filterBy)) {
+      	Element folder = createFolderElement(document, checkNode, checkNode.getPrimaryNodeType().getName(), child.getName());
       	folders.appendChild(folder);
-      	Element file = FCKFileHandler.createFileElement(document, child, FILE_TYPE_WEBCONTENT);
+      	Element file = FCKFileHandler.createFileElement(document, FILE_TYPE_WEBCONTENT, checkNode, child);
       	files.appendChild(file);
-      } else if (child.isNodeType(FCKUtils.NT_UNSTRUCTURED) || child.isNodeType(FCKUtils.NT_FOLDER) || child.isNodeType(NodetypeConstant.EXO_TAXONOMY)) {
-        Element folder = folderHandler.createFolderElement(document, child, child.getPrimaryNodeType().getName());
+      } else if (checkNode.isNodeType(FCKUtils.NT_UNSTRUCTURED) || checkNode.isNodeType(FCKUtils.NT_FOLDER) || checkNode.isNodeType(NodetypeConstant.EXO_TAXONOMY)) {
+        Element folder = createFolderElement(document, checkNode, checkNode.getPrimaryNodeType().getName(), child.getName());
         folders.appendChild(folder);
       } else {
       	String fileType = null;
-      	if (child.isNodeType(NodetypeConstant.EXO_WEBCONTENT) && FILE_TYPE_WEBCONTENT.equals(filterBy)) {
-      		fileType = FILE_TYPE_WEBCONTENT;
-      	} else if (isDMSDocument(child, repositoryName)&& FILE_TYPE_DMSDOC.equals(filterBy)) {
+      	if (isDMSDocument(checkNode, repositoryName)&& FILE_TYPE_DMSDOC.equals(filterBy)) {
       		fileType = FILE_TYPE_DMSDOC;
       	} else if (FILE_TYPE_MEDIAS.equals(filterBy)){
       		fileType = FILE_TYPE_MEDIAS;
       	} 
       	if (fileType != null) {
-      		Element file = FCKFileHandler.createFileElement(document, child, fileType);
+      		Element file = FCKFileHandler.createFileElement(document, fileType, checkNode, child);
       		files.appendChild(file);
       	}
       }
@@ -584,14 +594,17 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    * @param inputStream the input stream
    * @param repositoryName the repository name
    * @param workspaceName the workspace name
-   * @param currentFolder the current folder
-   * @param runningPortalName
+   * @param runningPortalName the running portal name
    * @param jcrPath the jcr path
    * @param uploadId the upload id
    * @param language the language
    * @param contentType the content type
    * @param contentLength the content length
+   * @param currentFolderNode the current folder node
+   * @param limit the limit
+   * 
    * @return the response
+   * 
    * @throws Exception the exception
    */
   protected Response createUploadFileResponse(InputStream inputStream,
@@ -627,14 +640,16 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    * 
    * @param repositoryName the repository name
    * @param workspaceName the workspace name
-   * @param currentFolder the current folder
    * @param jcrPath the jcr path
    * @param action the action
    * @param language the language
    * @param fileName the file name
    * @param uploadId the upload id
    * @param runningPortalName the portal name
+   * @param currentFolderNode the current folder node
+   * 
    * @return the response
+   * 
    * @throws Exception the exception
    */
   protected Response createProcessUploadResponse(String repositoryName,
@@ -662,6 +677,18 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     return fileUploadHandler.control(uploadId, action);
   }
   
+  /**
+   * Gets the parent folder node.
+   * 
+   * @param repositoryName the repository name
+   * @param workspaceName the workspace name
+   * @param driverName the driver name
+   * @param currentFolder the current folder
+   * 
+   * @return the parent folder node
+   * 
+   * @throws Exception the exception
+   */
   private Node getParentFolderNode(
   		String repositoryName, String workspaceName, String driverName, String currentFolder) throws Exception{
     SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
@@ -672,9 +699,33 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     ManageDriveService manageDriveService = (ManageDriveService)ExoContainerContext.getCurrentContainer()
     	.getComponentInstanceOfType(ManageDriveService.class);
     
-    return (Node)session.getItem(
-    		manageDriveService.getDriveByName(driverName, repositoryName).getHomePath()
-        + ((currentFolder != null && currentFolder.length() != 0) ? "/" : "")
-        + currentFolder);
+    try {
+	    return (Node)session.getItem(
+	    		manageDriveService.getDriveByName(driverName, repositoryName).getHomePath()
+	        + ((currentFolder != null && currentFolder.length() != 0) ? "/" : "")
+	        + currentFolder);
+    } catch (Exception e) {
+	    return null;
+    }
+  }
+  
+  /**
+   * Creates the folder element.
+   * 
+   * @param document the document
+   * @param child the child
+   * @param folderType the folder type
+   * @param childName the child name
+   * 
+   * @return the element
+   * 
+   * @throws Exception the exception
+   */
+  private Element createFolderElement(Document document, Node child, String folderType, String childName) throws Exception {
+  	Element folder = document.createElement("Folder");
+  	folder.setAttribute("name", childName);
+  	folder.setAttribute("url", FCKUtils.createWebdavURL(child));
+  	folder.setAttribute("folderType", folderType);
+  	return folder;
   }
 }

@@ -271,6 +271,7 @@ UploadForm.prototype.updateFiles = function(nodeId) {
 	var node = document.getElementById(nodeId);
 	var strConnector = eXp.connector;
 	currentFolder = node.getAttribute('currentfolder');
+	if (currentFolder == null) currentFolder = '';
 	driverName = eXp.store.driverName;
 	var strReplace 	= "getFoldersAndFiles?driverName="+driverName+"&currentFolder="+currentFolder+"&";	
 	strConnector 	= strConnector.replace("getDrivers?",strReplace);
