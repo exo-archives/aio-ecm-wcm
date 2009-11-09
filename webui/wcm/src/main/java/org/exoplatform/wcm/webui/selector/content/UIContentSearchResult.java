@@ -16,8 +16,6 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
-import org.exoplatform.services.wcm.core.NodeIdentifier;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.NotInWCMPublicationException;
@@ -25,6 +23,7 @@ import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.search.PaginatedQueryResult;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
+import org.exoplatform.wcm.webui.viewer.UIContentViewer;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -207,22 +206,19 @@ public class UIContentSearchResult extends UIGrid {
      */
     public void execute(Event<UIContentSearchResult> event) throws Exception {
       UIContentSearchResult contentSearchResult = event.getSource();
-      String nodePath = event.getRequestContext().getRequestParameter(OBJECTID);
+      String webcontentPath = event.getRequestContext().getRequestParameter(OBJECTID);
       RepositoryService repositoryService = contentSearchResult.getApplicationComponent(RepositoryService.class);
       String repoName = repositoryService.getCurrentRepository().getConfiguration().getName();
       WCMConfigurationService configurationService = contentSearchResult.getApplicationComponent(WCMConfigurationService.class);
-      NodeLocation nodeLocation = configurationService.getLivePortalsLocation(repoName);
-
-      ManageableRepository manageableRepository = repositoryService.getRepository(nodeLocation.getRepository());
-      Session session = contentSearchResult.getApplicationComponent(ThreadLocalSessionProviderService.class).getSessionProvider(null)
-      .getSession(nodeLocation.getWorkspace(), manageableRepository);
-      Node webContent = (Node) session.getItem(nodePath);
-      NodeIdentifier nodeIdentifier = NodeIdentifier.make(webContent);
+      NodeLocation portalLocation = configurationService.getLivePortalsLocation(repoName);
+      ManageableRepository manageableRepository = repositoryService.getRepository(portalLocation.getRepository());
+      Session session = Utils.getSessionProvider(contentSearchResult).getSession(portalLocation.getWorkspace(), manageableRepository);
+      Node webcontent = (Node) session.getItem(webcontentPath);
       PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
       PortletPreferences prefs = pContext.getRequest().getPreferences();
-      prefs.setValue("repository", nodeIdentifier.getRepository());
-      prefs.setValue("workspace", nodeIdentifier.getWorkspace());
-      prefs.setValue("nodeIdentifier", nodeIdentifier.getUUID());
+      prefs.setValue("repository", portalLocation.getRepository());
+      prefs.setValue("workspace", portalLocation.getWorkspace());
+      prefs.setValue("nodeIdentifier", webcontentPath);
       prefs.store();
 
       String remoteUser = Util.getPortalRequestContext().getRemoteUser();
@@ -231,10 +227,10 @@ public class UIContentSearchResult extends UIGrid {
       WCMPublicationService wcmPublicationService = contentSearchResult.getApplicationComponent(WCMPublicationService.class);
 
       try {
-        wcmPublicationService.isEnrolledInWCMLifecycle(webContent);
+        wcmPublicationService.isEnrolledInWCMLifecycle(webcontent);
       } catch (NotInWCMPublicationException e){
-        wcmPublicationService.unsubcribeLifecycle(webContent);
-        wcmPublicationService.enrollNodeInLifecycle(webContent, currentSite, remoteUser);          
+        wcmPublicationService.unsubcribeLifecycle(webcontent);
+        wcmPublicationService.enrollNodeInLifecycle(webcontent, currentSite, remoteUser);          
       }
       
       // Update and Close
@@ -265,11 +261,21 @@ public class UIContentSearchResult extends UIGrid {
      */
     public void execute(Event<UIContentSearchResult> event) throws Exception {
       UIContentSearchResult contentSearchResult = event.getSource();
+      String webcontentPath = event.getRequestContext().getRequestParameter(OBJECTID);
+      RepositoryService repositoryService = contentSearchResult.getApplicationComponent(RepositoryService.class);
+      String repoName = repositoryService.getCurrentRepository().getConfiguration().getName();
+      WCMConfigurationService configurationService = contentSearchResult.getApplicationComponent(WCMConfigurationService.class);
+      NodeLocation portalLocation = configurationService.getLivePortalsLocation(repoName);
+      ManageableRepository manageableRepository = repositoryService.getRepository(portalLocation.getRepository());
+      Session session = Utils.getSessionProvider(contentSearchResult).getSession(portalLocation.getWorkspace(), manageableRepository);
+      Node originalNode = (Node) session.getItem(webcontentPath);
+      Node viewNode = Utils.getNodeView(originalNode);
+      
       UIContentSelector contentSelector = contentSearchResult.getAncestorOfType(UIContentSelector.class);
-      UIContentResultViewer contentResultViewer = contentSelector.getChild(UIContentResultViewer.class);
-      if(contentResultViewer == null) {
-        contentResultViewer = contentSelector.addChild(UIContentResultViewer.class, null, null);
-      }
+      UIContentViewer contentResultViewer = contentSelector.getChild(UIContentViewer.class);
+      if (contentResultViewer == null) contentResultViewer = contentSelector.addChild(UIContentViewer.class, null, null);
+      contentResultViewer.setNode(viewNode);
+      contentResultViewer.setOriginalNode(originalNode);
       event.getRequestContext().addUIComponentToUpdateByAjax(contentSelector);
       contentSelector.setSelectedTab(contentResultViewer.getId());
     }
