@@ -27,6 +27,7 @@ import java.util.Map;
 import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.Value;
+import javax.jcr.ValueFactory;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionIterator;
 
@@ -564,7 +565,15 @@ public class UIPublicationPanel extends UIForm {
           }
         }
         currentNode.setProperty("publication:currentState", currentState);
-        currentNode.save();
+        Map<String, VersionData> revisionsDataMap = publicationPanel.getRevisionData(currentNode);
+        revisionsDataMap.get(currentNode.getUUID()).setState(PublicationDefaultStates.ENROLLED);
+        List<Value> valueList = new ArrayList<Value>();
+        ValueFactory factory = currentNode.getSession().getValueFactory();
+        for(VersionData versionData: revisionsDataMap.values()) {
+          valueList.add(factory.createValue(versionData.toStringValue()));
+        }
+        currentNode.setProperty(StageAndVersionPublicationConstant.REVISION_DATA_PROP,valueList.toArray(new Value[]{}));
+        currentNode.getSession().save();
         publicationPanel.updatePanel();
       } catch (Exception e) {
         UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
