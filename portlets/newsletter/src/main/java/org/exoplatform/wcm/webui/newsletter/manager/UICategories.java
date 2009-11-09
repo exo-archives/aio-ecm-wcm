@@ -63,6 +63,9 @@ public class UICategories extends UIContainer {
 	/** The portal name. */
 	String portalName;
 	
+	/** is administrator of newsletter*/
+	boolean isAdmin = false;
+	
 	/**
 	 * Instantiates a new uI categories.
 	 * 
@@ -74,6 +77,14 @@ public class UICategories extends UIContainer {
 		subscriptionHandler = newsletterManagerService.getSubscriptionHandler();
 		userHandler = newsletterManagerService.getManageUserHandler();
 		portalName = NewsLetterUtil.getPortalName();
+	}
+	
+	/**
+	 * Set permission of user is administrator or not
+	 * @param isAdmin <code>True</code> if user is administrator and <code>False</code> if not
+	 */
+	public void setAdmin(boolean isAdmin){
+	  this.isAdmin = isAdmin;
 	}
 	
 	/**

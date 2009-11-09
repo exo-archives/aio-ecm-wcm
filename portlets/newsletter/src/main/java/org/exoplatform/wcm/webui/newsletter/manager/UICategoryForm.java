@@ -223,7 +223,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
         return;
       }
 
-			categoryConfig.setModerator(((UIFormStringInput)inputSetWithAction.getChildById(INPUT_CATEGORY_MODERATOR)).getValue());
+			categoryConfig.setModerator(inputMderatorValue);
 			
 			UIApplication uiApp = uiCategoryForm.getAncestorOfType(UIApplication.class);
 			NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();

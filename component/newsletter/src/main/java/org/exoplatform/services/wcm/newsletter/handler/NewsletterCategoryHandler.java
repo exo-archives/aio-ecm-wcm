@@ -17,8 +17,11 @@
 package org.exoplatform.services.wcm.newsletter.handler;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -35,6 +38,7 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
+import org.pdfbox.cmapparser.CMapParser;
 
 /**
  * Created by The eXo Platform SAS
@@ -67,6 +71,39 @@ public class NewsletterCategoryHandler {
     this.repository = repository;
     this.workspace = workspace;
   }
+  
+  @SuppressWarnings("unchecked")
+  private List<String> getAllPermissionOfCategoryNode(Node categoryNode) throws Exception{
+    ExtendedNode webContent = (ExtendedNode)categoryNode;
+    Iterator permissionIterator = webContent.getACL().getPermissionEntries().iterator();
+    List<String> listPermission = new ArrayList<String>();
+    String currentIdentity;
+    AccessControlEntry accessControlEntry;
+    Map<String, List<String>> mapPermission = new HashMap<String, List<String>>();
+    List<String> values = new ArrayList<String>();
+    while (permissionIterator.hasNext()) {
+      accessControlEntry = (AccessControlEntry) permissionIterator.next();
+      currentIdentity = accessControlEntry.getIdentity();
+      if(mapPermission.containsKey(currentIdentity)){
+        values = mapPermission.get(currentIdentity);
+        values.add(accessControlEntry.getPermission());
+        mapPermission.put(currentIdentity, values);
+      } else {
+        values = new ArrayList<String>();
+        values.add(accessControlEntry.getPermission());
+        mapPermission.put(currentIdentity, values);
+        listPermission.add(currentIdentity);
+      }
+    }
+    int size = PermissionType.ALL.length;
+    for(int i = 0; i < listPermission.size();){
+      if(mapPermission.get(listPermission.get(i)).size() == size)
+        i ++;
+      else
+        listPermission.remove(i);
+    }
+    return listPermission;
+  }
 
   /**
    * Gets the category from node.
@@ -87,21 +124,34 @@ public class NewsletterCategoryHandler {
   	  categoryConfig.setDescription(categoryNode.getProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION).getString());
   	}
   	// get permission for this category
-  	ExtendedNode webContent = (ExtendedNode)categoryNode;
-    Iterator permissionIterator = webContent.getACL().getPermissionEntries().iterator();
-    List<String> listPermission = new ArrayList<String>();
-    String permission = "";
-    while (permissionIterator.hasNext()) {
-      AccessControlEntry accessControlEntry = (AccessControlEntry) permissionIterator.next();
-      String currentIdentity = accessControlEntry.getIdentity();
-      if(!listPermission.contains(currentIdentity)){
-        listPermission.add(currentIdentity);
-        if(permission.length() > 0) permission += ",";
-        permission += currentIdentity;
-      }
-    }
+  	String permission = "";
+  	for(String per : getAllPermissionOfCategoryNode(categoryNode)){
+  	  if(permission.length() > 0) permission += ",";
+      permission += per;
+  	}
     categoryConfig.setModerator(permission);
   	return categoryConfig;
+  }
+  
+  private void updatePermissionForCategoryNode(Node categoryNode, NewsletterCategoryConfig categoryConfig) throws Exception{
+    ExtendedNode extendedCategoryNode = ExtendedNode.class.cast(categoryNode);
+    if (extendedCategoryNode.canAddMixin("exo:privilegeable") || extendedCategoryNode.isNodeType("exo:privilegeable")) {
+      if(extendedCategoryNode.canAddMixin("exo:privilegeable"))
+        extendedCategoryNode.addMixin("exo:privilegeable");
+      List<String> listPermissions = Arrays.asList(categoryConfig.getModerator().split(",")); 
+      for(String permission : listPermissions){
+        extendedCategoryNode.setPermission(permission, PermissionType.ALL);
+      }
+      for(String oldPer : getAllPermissionOfCategoryNode(categoryNode)){
+        if(!listPermissions.contains(oldPer)){
+          extendedCategoryNode.removePermission(oldPer, PermissionType.ADD_NODE);
+          extendedCategoryNode.removePermission(oldPer, PermissionType.REMOVE);
+          extendedCategoryNode.removePermission(oldPer, PermissionType.SET_PROPERTY);
+          extendedCategoryNode.removePermission(oldPer, PermissionType.CHANGE_PERMISSION);
+          extendedCategoryNode.setPermission(oldPer, new String[]{PermissionType.READ});
+        }
+      }
+    }
   }
   
   /**
@@ -124,15 +174,13 @@ public class NewsletterCategoryHandler {
       ExtendedNode extendedCategoryNode = ExtendedNode.class.cast(categoryNode);
       extendedCategoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_TITLE, categoryConfig.getTitle());
       extendedCategoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION, categoryConfig.getDescription());
-      if (extendedCategoryNode.canAddMixin("exo:privilegeable")) {
-        extendedCategoryNode.addMixin("exo:privilegeable");
-        extendedCategoryNode.setPermission(categoryConfig.getModerator(), PermissionType.ALL);
-      }
+      this.updatePermissionForCategoryNode(categoryNode, categoryConfig);
       session.save();
     } catch(Exception e) {
       log.error("Add category " + categoryConfig.getName() + " failed because of: ", e.fillInStackTrace());
     } finally {
       if (session != null) session.logout();
+      sessionProvider.close();
     }
   }
   
@@ -152,13 +200,7 @@ public class NewsletterCategoryHandler {
       Node categoryNode = ((Node)session.getItem(categoryPath)).getNode(categoryConfig.getName());
       categoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION, categoryConfig.getDescription());
       categoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_TITLE, categoryConfig.getTitle());
-      
-      ExtendedNode extendedCategoryNode = ExtendedNode.class.cast(categoryNode);
-      if (extendedCategoryNode.canAddMixin("exo:privilegeable")) {
-        extendedCategoryNode.addMixin("exo:privilegeable");
-        extendedCategoryNode.setPermission(categoryConfig.getModerator(), PermissionType.ALL);
-      }
-      
+      this.updatePermissionForCategoryNode(categoryNode, categoryConfig);
       session.save();
     } catch (Exception e) {
       log.info("Edit category " + categoryConfig.getName() + " failed because of ", e.fillInStackTrace());
