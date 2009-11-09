@@ -17,18 +17,9 @@
 package org.exoplatform.wcm.webui.newsletter.manager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.config.UserPortalConfigService;
-import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.organization.Membership;
-import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.User;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
 import org.exoplatform.services.wcm.publication.PublicationUtil;
@@ -102,10 +93,10 @@ public class UINewsletterManagerPortlet extends UIPortletApplication {
     /*UserPortalConfigService userService = (UserPortalConfigService)this.getApplicationComponent(UserPortalConfigService.class);
     Page page = userService.getPage(Util.getUIPortal().getSelectedNode().getPageReference());
     editPermission.add(page.getOwnerId());
-    editPermission.addAll(Arrays.asList(page.getEditPermission()));
+    editPermission.addAll(Arrays.asList(page.getEditPermission()));*/
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     NewsletterManageUserHandler managerUserHandler = newsletterManagerService.getManageUserHandler();
-    editPermission.addAll(managerUserHandler.getAllAdministrator(Utils.getSessionProvider(this), NewsLetterUtil.getPortalName()));*/
+    editPermission.addAll(managerUserHandler.getAllAdministrator(Utils.getSessionProvider(this), NewsLetterUtil.getPortalName()));
     return editPermission;
 	}
 	
