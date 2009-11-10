@@ -16,6 +16,14 @@
  */
 package org.exoplatform.wcm.webui.newsletter.manager;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
+import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
+import org.exoplatform.services.wcm.publication.PublicationUtil;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPortletApplication;
@@ -31,7 +39,15 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 		lifecycle = UIApplicationLifecycle.class
 )
 public class UINewsletterManagerPortlet extends UIPortletApplication {
-  public boolean isAdmin = false;
+  private boolean isAdmin = false;
+  
+  public boolean isAdmin() {
+    return isAdmin;
+  }
+
+  public void setAdmin(boolean isAdmin) {
+    this.isAdmin = isAdmin;
+  }
   
 	/** The is render ui categories. */
 	private boolean isRenderUICategories = true;
@@ -70,14 +86,42 @@ public class UINewsletterManagerPortlet extends UIPortletApplication {
 	  isRenderUINewsLetters = true;
 	}
 	
+	private List<String> getAllAdministrators() throws Exception{
+    List<String> editPermission = new ArrayList<String>();
+    editPermission.add(PublicationUtil.getServices(UserACL.class).getSuperUser());
+    // Add all user who have edit portlet permission into list administrators
+    /*UserPortalConfigService userService = (UserPortalConfigService)this.getApplicationComponent(UserPortalConfigService.class);
+    Page page = userService.getPage(Util.getUIPortal().getSelectedNode().getPageReference());
+    editPermission.add(page.getOwnerId());
+    editPermission.addAll(Arrays.asList(page.getEditPermission()));*/
+    NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
+    NewsletterManageUserHandler managerUserHandler = newsletterManagerService.getManageUserHandler();
+    editPermission.addAll(managerUserHandler.getAllAdministrator(Utils.getSessionProvider(this), NewsLetterUtil.getPortalName()));
+    return editPermission;
+	}
+	
 	/**
 	 * Instantiates a new uI newsletter manager portlet.
 	 * 
 	 * @throws Exception the exception
 	 */
 	public UINewsletterManagerPortlet() throws Exception {
-		addChild(UICategories.class, null, null).setRendered(isRenderUICategories);
-		addChild(UISubscriptions.class, null, null).setRendered(isRenderUICategories);
+	  try{
+	    List<String> currentUsers = NewsLetterUtil.getAllGroupAndMembershipOfCurrentUser();
+	    List<String> editPermission = getAllAdministrators();
+      for(String str : currentUsers){
+        if(editPermission.contains(str)){
+          this.isAdmin = true;
+          break;
+        }
+      }
+	  }catch(Exception ex){
+	    ex.printStackTrace();
+	  }
+	  UICategories categories = addChild(UICategories.class, null, null).setRendered(isRenderUICategories);
+	  categories.setAdmin(isAdmin);
+	  UISubscriptions subscriptions = addChild(UISubscriptions.class, null, null).setRendered(isRenderUICategories);
+	  subscriptions.setAdmin(this.isAdmin);
 		addChild(UINewsletterEntryManager.class, null, null).setRendered(isRenderUINewsLetters);
 		addChild(UIPopupContainer.class, null, null);
 	}
