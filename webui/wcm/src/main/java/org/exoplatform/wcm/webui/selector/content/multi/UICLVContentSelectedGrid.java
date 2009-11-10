@@ -56,15 +56,11 @@ public class UICLVContentSelectedGrid extends UISelectedCategoriesGrid {
     super();
   }
   
-  public void init(List<String> contents) {
+  public void init(List<String> contents) throws Exception {
     for(String content : contents) {
       if(!getSelectedCategories().contains(content)) {
         addCategory(content);
-        try {
-          updateGrid(getUIPageIterator().getCurrentPage());
-        } catch (Exception e) {
-          System.out.println("\n\n\nFucking the: " + e.fillInStackTrace());
-        }
+        updateGrid(getUIPageIterator().getCurrentPage());
       }
     }
   }
