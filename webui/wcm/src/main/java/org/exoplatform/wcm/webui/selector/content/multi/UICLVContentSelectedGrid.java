@@ -55,6 +55,15 @@ public class UICLVContentSelectedGrid extends UISelectedCategoriesGrid {
   public UICLVContentSelectedGrid() throws Exception {
     super();
   }
+  
+  public void init(List<String> contents) throws Exception {
+    for(String content : contents) {
+      if(!getSelectedCategories().contains(content)) {
+        addCategory(content);
+        updateGrid(getUIPageIterator().getCurrentPage());
+      }
+    }
+  }
 
   /**
    * The listener interface for receiving deleteAction events.
