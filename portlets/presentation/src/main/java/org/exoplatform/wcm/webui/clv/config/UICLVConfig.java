@@ -17,6 +17,7 @@
 package org.exoplatform.wcm.webui.clv.config;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -295,11 +296,9 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
     if (isManualMode()) {
       orderBySelectBox.setRendered(false);
       viewerModeRadioBoxInput.setValue(VIEWER_MANUAL_MODE);
-      String[] arr = portletPreferences.getValues(UICLVPortlet.CONTENT_LIST, null);
-      if (arr != null && arr.length != 0) {
-        for (int i = 0; i < arr.length; i++) {
-          this.contentList.add(arr[i]);
-        }        
+      String [] listContent = UICLVPortlet.getContentsByPreference();
+      if (listContent != null && listContent.length != 0) {
+      	contentList = Arrays.asList(listContent);         
       }
     } else {
       viewerModeRadioBoxInput.setValue(VIEWER_AUTO_MODE);
@@ -612,7 +611,8 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
         UIContentBrowsePanelMulti contentBrowserPanel= contentSelector.getChild(UIContentBrowsePanelMulti.class);
         contentBrowserPanel.setSourceComponent(uiViewerManagementForm, new String[] { UICLVConfig.FOLDER_PATH_INPUT });
         contentBrowserPanel.init();
-		UICLVContentSelectedGrid uiclvContentSelectedGrid = contentBrowserPanel.getChild(UICLVContentSelectedGrid.class);
+        
+        UICLVContentSelectedGrid uiclvContentSelectedGrid = contentBrowserPanel.getChild(UICLVContentSelectedGrid.class);
         uiclvContentSelectedGrid.init(uiViewerManagementForm.getViewAbleContentList());
         Utils.createPopupWindow(uiViewerManagementForm, contentSelector, CORRECT_CONTENT_SELECTOR_POPUP_WINDOW, 800, 600);
         uiViewerManagementForm.setPopupId(CORRECT_CONTENT_SELECTOR_POPUP_WINDOW);

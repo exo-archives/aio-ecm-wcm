@@ -17,7 +17,6 @@
 package org.exoplatform.wcm.webui.clv;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -52,7 +51,7 @@ public class UICLVManualMode extends UICLVContainer {
   /* (non-Javadoc)
    * @see org.exoplatform.wcm.webui.clv.UICLVContainer#init()
    */
-  public void init() throws Exception {                       
+	public void init() throws Exception {                       
     PortletPreferences portletPreferences = getPortletPreference();
     setViewAbleContent(true);
     String repositoryName = portletPreferences.getValue(UICLVPortlet.REPOSITORY, null);
@@ -61,19 +60,16 @@ public class UICLVManualMode extends UICLVContainer {
     ManageableRepository repository = repositoryService.getRepository(repositoryName);
     Session session = Utils.getSessionProvider(this).getSession(workspaceName, repository);
     Node root = session.getRootNode();
-
-    String [] listContent = portletPreferences.getValues(UICLVPortlet.CONTENT_LIST, null);
+    String[] listContent = UICLVPortlet.getContentsByPreference();
     if (listContent == null || listContent.length == 0) {
       messageKey = "UIMessageBoard.msg.contents-not-found";
       setViewAbleContent(false);
       return;
     }
-    List<String> contents = Arrays.asList(listContent);
     int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UICLVPortlet.ITEMS_PER_PAGE, null));
     List<Node> nodes = new ArrayList<Node>();
-    if (contents != null && contents.size() != 0) {
-      for (int i = 0; i < contents.size(); i++) {
-        String path = contents.get(i);
+    if (listContent != null && listContent.length != 0) {
+      for (String path : listContent) {
         try {
         	Node originalNode = root.getNode(path.substring(1, path.length()));
         	Node viewNode = Utils.getNodeView(originalNode);

@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
-import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector;
 import org.exoplatform.ecm.webui.tree.selectmany.UICategoriesSelectPanel;
@@ -35,6 +34,8 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+
+import edu.emory.mathcs.backport.java.util.Arrays;
 
 /**
  * Created by The eXo Platform SAS Author : anh.do anh.do@exoplatform.com,
@@ -68,7 +69,8 @@ public class UICLVContentSelector extends UIBaseNodeTreeSelector {
    * 
    * @throws Exception the exception
    */
-  public void init(PortletRequestContext context) throws Exception {
+  @SuppressWarnings("unchecked")
+	public void init(PortletRequestContext context) throws Exception {
     UICLVContentTree treeBuilder = getChild(UICLVContentTree.class);
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     String currentPortalName = Util.getUIPortal().getName();
@@ -80,14 +82,11 @@ public class UICLVContentSelector extends UIBaseNodeTreeSelector {
     treeBuilder.setRootTreeNode(currentPortal.getParent());
     UICLVContentSelectionPanel uiMultiSelectionPanel = getChild(UICLVContentSelectionPanel.class);
     uiMultiSelectionPanel.updateGrid();
-    UICLVContentSelectedGrid contentsGrid = getChild(UICLVContentSelectedGrid.class);
-    PortletPreferences preferences = context.getRequest().getPreferences();
-    String [] contents = preferences.getValues(UICLVPortlet.CONTENT_LIST, null);
-    if (contents != null && contents.length > 0) {
-      for (int i = 0; i < contents.length; i++) {
-        if (contents[i] != null) existedCategoryList.add(contents[i]);
-      }
+    String [] listContent = UICLVPortlet.getContentsByPreference();
+    if (listContent != null && listContent.length > 0) {
+    	existedCategoryList = Arrays.asList(listContent);
     }
+    UICLVContentSelectedGrid contentsGrid = getChild(UICLVContentSelectedGrid.class);
     contentsGrid.setSelectedCategories(existedCategoryList);    
     if (existedCategoryList.size() > 0) {
       contentsGrid.setRendered(true);
