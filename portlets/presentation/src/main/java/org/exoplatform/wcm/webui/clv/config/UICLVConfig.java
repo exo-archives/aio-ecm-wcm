@@ -35,6 +35,7 @@ import org.exoplatform.wcm.webui.clv.UICLVFolderMode;
 import org.exoplatform.wcm.webui.clv.UICLVManualMode;
 import org.exoplatform.wcm.webui.clv.UICLVPortlet;
 import org.exoplatform.wcm.webui.selector.UISourceGridUpdatable;
+import org.exoplatform.wcm.webui.selector.content.multi.UICLVContentSelectedGrid;
 import org.exoplatform.wcm.webui.selector.content.multi.UIContentBrowsePanelMulti;
 import org.exoplatform.wcm.webui.selector.content.multi.UIContentSelectorMulti;
 import org.exoplatform.wcm.webui.selector.folder.UIContentBrowsePanelFolder;
@@ -611,6 +612,9 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
         UIContentBrowsePanelMulti contentBrowserPanel= contentSelector.getChild(UIContentBrowsePanelMulti.class);
         contentBrowserPanel.setSourceComponent(uiViewerManagementForm, new String[] { UICLVConfig.FOLDER_PATH_INPUT });
         contentBrowserPanel.init();
+        
+        UICLVContentSelectedGrid uiclvContentSelectedGrid = contentBrowserPanel.getChild(UICLVContentSelectedGrid.class);
+        uiclvContentSelectedGrid.init(uiViewerManagementForm.getViewAbleContentList());
         Utils.createPopupWindow(uiViewerManagementForm, contentSelector, CORRECT_CONTENT_SELECTOR_POPUP_WINDOW, 800, 600);
         uiViewerManagementForm.setPopupId(CORRECT_CONTENT_SELECTOR_POPUP_WINDOW);
       }
