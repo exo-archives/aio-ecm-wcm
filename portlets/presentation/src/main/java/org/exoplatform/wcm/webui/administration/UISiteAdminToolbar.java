@@ -446,6 +446,8 @@ public class UISiteAdminToolbar extends UIContainer {
       String pageId = uiPortal.getSelectedNode().getPageReference();
       UserPortalConfigService portalConfigService = uiApp.getApplicationComponent(UserPortalConfigService.class);
       Page currentPage = portalConfigService.getPage(pageId, remoteUser);
+      if (currentPage == null)
+      	return;
       if (!userACL.hasAccessControlWorkspacePermission(remoteUser) || !userACL.hasEditPermission(currentPage, remoteUser)) {
       	Utils.createPopupMessage(event.getSource(), UISiteAdminToolbar.MESSAGE, null, ApplicationMessage.WARNING);
         return;
