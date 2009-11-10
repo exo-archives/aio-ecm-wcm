@@ -106,11 +106,13 @@
   <FolderPathSelectorPopupWindow>
   	<title>
   		<UICLVFolderSelector>Sélectionner un dossier à visualiser</UICLVFolderSelector>
+  		<UIContentSelectorFolder>Contenu du dossier de sélection</UIContentSelectorFolder>
   	</title>
   </FolderPathSelectorPopupWindow>
   <CorrectContentSelectorPopupWindow>
   	<title>
   		<UICLVContentSelector>Sélectionnez le contenu manuellement</UICLVContentSelector>
+  		<UIContentSelectorMulti>Multi sélecteur de contenu</UIContentSelectorMulti>
   	</title>
   </CorrectContentSelectorPopupWindow>
   <UICLVFolderSelector>

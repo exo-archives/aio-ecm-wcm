@@ -98,6 +98,8 @@
   		<UIContentSearchForm>Web content search form</UIContentSearchForm>
   		<UIContentSearchResult>Result form</UIContentSearchResult>
   		<WebContentMetadataPopup></WebContentMetadataPopup>
+  		<UIContentBrowsePanelMulti>Content browse panel multi</UIContentBrowsePanelMulti>
+  		<UIContentBrowsePanelFolder>Content browse panel folder</UIContentBrowsePanelFolder>
   	</title>
   </UITabPane>
   <UIContentBrowsePanel>
@@ -313,4 +315,28 @@
   		<UIGroupMemberSelector>Group selector</UIGroupMemberSelector>
   	</title>
   </UIGroupSelectorPopupWindow>
+  
+  <FolderPathSelectorPopupWindow>
+  	<title>
+  		<UICLVFolderSelector>Select a folder to view it's content</UICLVFolderSelector>
+  	</title>
+  </FolderPathSelectorPopupWindow>
+  <CorrectContentSelectorPopupWindow>
+  	<title>
+  		<UICLVContentSelector>Contents manually selection</UICLVContentSelector>
+  	</title>
+  </CorrectContentSelectorPopupWindow>
+  <UICLVFolderSelector>
+  	<action>
+  		<Close>Close</Close>
+  	</action>
+  </UICLVFolderSelector>
+  <UIContentSelectionPanel>
+  	<label>
+  		<header>Contents bellow can be selected</header>
+  		<name>Name</name>
+  		<add>Add</add>  		  		
+  	</label>
+  </UIContentSelectionPanel>
+  
 </bundle>
