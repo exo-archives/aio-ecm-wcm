@@ -18,7 +18,7 @@
   <%uiform.begin()%>
   <div class="HorizontalLayout">
     <div class="FormContainer">
-      <fieldset style=" margin-bottom: 10px; overflow: hidden: height: 100%; border: 1px solid #b7b7b7;" maxHeight="350">
+      <fieldset style=" margin-bottom: 10px; overflow: hidden; border: 1px solid #b7b7b7;" maxHeight="350">
 				<legend class="StyleLegend">$contentSelectionBlockTitle</legend>
 	      <table class="UIFormGrid">
 	      	<tr>
@@ -94,7 +94,7 @@
 	      </table>                 
       </fieldset>   
       
-			<fieldset style=" margin-bottom: 10px; overflow: hidden: height: 100%; border: 1px solid #b7b7b7;" maxHeight="350">
+			<fieldset style=" margin-bottom: 10px; overflow: hidden; border: 1px solid #b7b7b7;" maxHeight="350">
 				<legend class="StyleLegend">$displaySettingBlockTitle</legend>        
 	      <table class="UIFormGrid">
 	      	<tr>
