@@ -26,7 +26,7 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.wcm.publication.PublicationUtil;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -54,30 +54,11 @@ public class UIPublicationPagesContainer extends UIContainer {
   public void init(Node node) throws Exception {
     UIPublicationPages publicationPages = addChild(UIPublicationPages.class, null, null);
     List<String> runningPortals = getRunningPortals(node.getSession().getUserID());
-    String portalName = getPortalForContent(node);
+    String portalName = Util.getPortalRequestContext().getPortalOwner();
     publicationPages.init(node, portalName, runningPortals);
     UIPopupWindow popupWindow = null;
     popupWindow = getChildById("UIClvPopupContainer");
     if (popupWindow == null ) popupWindow = addChild(UIPopupWindow.class, null, "UIClvPopupContainer");
-  }
-  
-  /**
-   * Gets the portal for content.
-   * 
-   * @param contentNode the content node
-   * 
-   * @return the portal for content
-   * 
-   * @throws Exception the exception
-   */
-  private String getPortalForContent(Node contentNode) throws Exception {
-    LivePortalManagerService livePortalManagerService = PublicationUtil.getServices(LivePortalManagerService.class);
-    for(String portalPath:livePortalManagerService.getLivePortalsPath()) {
-      if(contentNode.getPath().startsWith(portalPath)) {
-        return livePortalManagerService.getPortalNameByPath(portalPath);
-      }
-    }
-    return null;
   }
   
   /**
