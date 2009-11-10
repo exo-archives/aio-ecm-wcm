@@ -98,6 +98,8 @@
   		<UIContentSearchForm>Recherche</UIContentSearchForm>
   		<UIContentSearchResult>Résultats</UIContentSearchResult>
   		<WebContentMetadataPopup></WebContentMetadataPopup>
+		<UIContentBrowsePanelMulti>Contenu parcourir Multi Panel</UIContentBrowsePanelMulti>
+  		<UIContentBrowsePanelFolder>Contenu explorer un dossier du panneau</UIContentBrowsePanelFolder>
   	</title>
   </UITabPane>
   <UIContentBrowsePanel>

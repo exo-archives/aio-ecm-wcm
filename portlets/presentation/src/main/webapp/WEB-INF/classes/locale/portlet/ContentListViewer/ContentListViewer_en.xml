@@ -112,11 +112,13 @@
   <FolderPathSelectorPopupWindow>
   	<title>
   		<UICLVFolderSelector>Select a folder to view it's content</UICLVFolderSelector>
+		<UIContentSelectorFolder>Content folder selector</UIContentSelectorFolder>
   	</title>
   </FolderPathSelectorPopupWindow>
   <CorrectContentSelectorPopupWindow>
   	<title>
   		<UICLVContentSelector>Contents manually selection</UICLVContentSelector>
+		<UIContentSelectorMulti>Content multi selector</UIContentSelectorMulti>
   	</title>
   </CorrectContentSelectorPopupWindow>
   <UICLVFolderSelector>
