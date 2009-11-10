@@ -21,21 +21,26 @@ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 								<%=_ctx.appRes("UICategories.title.NewsLetter")%>
 							</a>
 						</div>
-						<div class="Line FloatLeft">
-							<a href="javaScript:void(0);" onclick="<%=uicomponent.event("AddSubcription")%>" class="NewsSubcript">
-								<%=_ctx.appRes("UICategories.title.NewsSubscription")%>
-							</a>
-						</div>
-						<div class="Line FloatLeft">
-							<a href="javaScript:void(0);" onclick="<%=uicomponent.event("AddCategory")%>" class="NewsCategory">
-								<%=_ctx.appRes("UICategories.title.NewsCategory")%>
-							</a>
-						</div>
-						<div class="Line FloatLeft">
-							<a href="javaScript:void(0);" onclick="<%=uicomponent.event("ManagerUsers")%>" class="NewsAdmin">
-								<%=_ctx.appRes("UISubscription.title.ManageUsers")%>
-							</a>
-						</div>
+						<%
+						if(uicomponent.isAdmin){
+						%>
+							<div class="Line FloatLeft">
+								<a href="javaScript:void(0);" onclick="<%=uicomponent.event("AddSubcription")%>" class="NewsSubcript">
+									<%=_ctx.appRes("UICategories.title.NewsSubscription")%>
+								</a>
+							</div>
+							<div class="Line FloatLeft">
+								<a href="javaScript:void(0);" onclick="<%=uicomponent.event("AddCategory")%>" class="NewsCategory">
+									<%=_ctx.appRes("UICategories.title.NewsCategory")%>
+								</a>
+							</div>
+							<div class="Line FloatLeft">
+								<a href="javaScript:void(0);" onclick="<%=uicomponent.event("ManagerUsers")%>" class="NewsAdmin">
+									<%=_ctx.appRes("UISubscription.title.ManageUsers")%>
+								</a>
+							</div>
+						<%
+						}%>
 						<!-- action of this category -->
 						<!-- WE COMMENT THIS PART UNTIL WCM 1.3 with NEWSLETTER V2 IMPROVMENTS
 						<div class="Line FloatLeft" style="background: none;" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">

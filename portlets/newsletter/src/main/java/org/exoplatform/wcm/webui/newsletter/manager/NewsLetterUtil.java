@@ -16,14 +16,44 @@
  */
 package org.exoplatform.wcm.webui.newsletter.manager;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.organization.Membership;
+import org.exoplatform.services.organization.OrganizationService;
 
 /**
  * The Class NewsLetterUtil.
  */
 public class NewsLetterUtil {
+  /**
+   * Get all group and membership of current user
+   * @return
+   * @throws Exception
+   */
+  public static List<String> getAllGroupAndMembershipOfCurrentUser() throws Exception{
+    String userId = getCurrentUser();
+    List<String> userGroupMembership = new ArrayList<String>();
+    userGroupMembership.add(userId);
+    String value = "";
+    String id = "";
+    Membership membership = null;
+    OrganizationService organizationService_ = (OrganizationService) PortalContainer.getComponent(OrganizationService.class);
+    for(Object object : organizationService_.getMembershipHandler().findMembershipsByUser(userId).toArray()){
+      id = object.toString();
+      id = id.replace("Membership[", "").replace("]", "");
+      membership = organizationService_.getMembershipHandler().findMembership(id);
+      value = membership.getGroupId();
+      userGroupMembership.add(value);
+      value = membership.getMembershipType() + ":" + value;
+      userGroupMembership.add(value);
+    }
+    return userGroupMembership;
+  }
 	
 	/**
 	 * Gets the portal name.

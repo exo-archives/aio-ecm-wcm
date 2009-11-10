@@ -17,7 +17,10 @@
 package org.exoplatform.wcm.webui.newsletter.manager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import javax.swing.ListModel;
 
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
@@ -64,6 +67,8 @@ import org.exoplatform.webui.form.UIFormSelectBox;
     }
 )
 public class UISubscriptions extends UIForm {
+  boolean isAdmin = false;
+  boolean isModerator = false;
   
   /** The subscription handler. */
   NewsletterSubscriptionHandler subscriptionHandler;
@@ -93,6 +98,10 @@ public class UISubscriptions extends UIForm {
     portalName = NewsLetterUtil.getPortalName();
   }
   
+  public void setAdmin(boolean isAdmin){
+    this.isAdmin = isAdmin;
+  }
+  
   /**
    * Sets the category.
    * 
@@ -100,6 +109,19 @@ public class UISubscriptions extends UIForm {
    */
   public void setCategory(NewsletterCategoryConfig categoryConfig){
     this.categoryConfig = categoryConfig;
+    if(isAdmin == false){
+      try{
+        List<String> listModerators = Arrays.asList(this.categoryConfig.getModerator().split(","));
+        if(listModerators.contains("any")) this.isModerator = true;
+        else{
+          for(String str : NewsLetterUtil.getAllGroupAndMembershipOfCurrentUser()){
+            if(listModerators.contains(str))this.isModerator = true;
+          }
+        }
+      }catch(Exception ex){
+        this.isModerator = false;
+      }
+    }
   }
   
   /**

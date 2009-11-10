@@ -17,26 +17,40 @@
 package org.exoplatform.wcm.webui.newsletter.manager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterUserInfor;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
+import org.exoplatform.services.wcm.publication.PublicationUtil;
 import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.core.UIPopupWindow;
 import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.UIPageIterator;
+import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UITabPane;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -114,6 +128,98 @@ public class UIManagerUsers extends UITabPane {
     }
   }
   
+  private void updateListUserInfor(UserHandler userHandler, List<NewsletterUserInfor> listUserInfor, List<String> listUser, String role){
+    NewsletterUserInfor userInfor;
+    User user;
+    for(String userName : listUser){
+      try{
+        user = (User) userHandler.findUserByName(userName);
+        userInfor = new NewsletterUserInfor();
+        userInfor.setEmail(user.getEmail());
+        userInfor.setFirstName(user.getFirstName());
+        userInfor.setLastName(user.getLastName());
+        userInfor.setUserName(user.getUserName());
+        userInfor.setRole(role);
+        listUserInfor.add(userInfor);
+      }catch(Exception ex){}
+    }
+  }
+  
+  private void addArrayToList(List<String> list1, String[] list2){
+    for(String str : list2){
+      if(!list1.contains(str)) list1.add(str);
+    }
+  }
+  
+  private List<String> getAllAccesPermissions() throws Exception{
+    UserPortalConfigService userService = (UserPortalConfigService)this.getApplicationComponent(UserPortalConfigService.class);
+    Page page = userService.getPage(Util.getUIPortal().getSelectedNode().getPageReference());
+    List<String> userGroupMembership = new ArrayList<String>();
+    userGroupMembership.add(page.getOwnerId());
+    addArrayToList(userGroupMembership, new String[]{page.getEditPermission()});
+    addArrayToList(userGroupMembership, page.getAccessPermissions());
+    return getAllUsersFromGroupMemebers(userGroupMembership);
+  }
+  
+  private List<String> getAllEditPermission() throws Exception {
+    List<String> userGroupMembership = new ArrayList<String>();
+    userGroupMembership.add(PublicationUtil.getServices(UserACL.class).getSuperUser());
+    /*UserPortalConfigService userService = (UserPortalConfigService)this.getApplicationComponent(UserPortalConfigService.class);
+    Page page = userService.getPage(Util.getUIPortal().getSelectedNode().getPageReference());
+    userGroupMembership.add(page.getOwnerId());
+    userGroupMembership.addAll(Arrays.asList(page.getEditPermission()));*/
+    return getAllUsersFromGroupMemebers(userGroupMembership);
+  }
+  
+  @SuppressWarnings("unchecked")
+  private List<String> getAllUsersFromGroupMemebers(List<String> userGroupMembership) throws Exception{
+    List<String> users = new ArrayList<String> () ;
+    if(userGroupMembership == null || userGroupMembership.size() <= 0 ) return users ; 
+    OrganizationService organizationService = (OrganizationService) PortalContainer.getComponent(OrganizationService.class);
+    for(String str : userGroupMembership) {
+      str = str.trim();
+      if(str.indexOf("/") >= 0) {
+        if(str.indexOf(":") >= 0) { //membership
+          String[] array = str.split(":") ;
+          List<User> userList = organizationService.getUserHandler().findUsersByGroup(array[1]).getAll() ;
+          if(array[0].length() > 1){
+            for(User user: userList) {
+              if(!users.contains(user.getUserName())){
+                Collection<Membership> memberships = organizationService.getMembershipHandler().findMembershipsByUser(user.getUserName()) ;
+                for(Membership member : memberships){
+                  if(member.getMembershipType().equals(array[0])) {
+                    users.add(user.getUserName()) ;
+                    break ;
+                  }
+                }           
+              }
+            }
+          }else {
+            if(array[0].charAt(0)== 42) {
+              for(User user: userList) {
+                if(!users.contains(user.getUserName())){
+                  users.add(user.getUserName()) ;
+                }
+              }
+            }
+          }
+        }else { //group
+          List<User> userList = organizationService.getUserHandler().findUsersByGroup(str).getAll() ;
+          for(User user: userList) {
+            if(!users.contains(user.getUserName())){
+              users.add(user.getUserName()) ;
+            }
+          }
+        }
+      }else {//user
+        if(!users.contains(str)){
+          users.add(str) ;
+        }
+      }
+    }
+    return users ;
+  }
+  
   /**
    * Update list user.
    * 
@@ -121,31 +227,42 @@ public class UIManagerUsers extends UITabPane {
    */
   private void updateListUser() throws Exception{
     // get all administrator of newsletter
-    List<String> listAdministrator = managerUserHandler.getAllAdministrator(Utils.getSessionProvider(this), NewsLetterUtil.getPortalName());
+    List<String> listUserAccess = this.getAllAccesPermissions();
+    List<String> listUserEdit = this.getAllEditPermission();
     
+    // get list of moderator
+    NewsletterCategoryHandler categoryHandler = getApplicationComponent(NewsletterManagerService.class).getCategoryHandler();
+    for(NewsletterCategoryConfig categoryConfig : categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), Utils.getSessionProvider(this))){
+      for(String str : categoryConfig.getModerator().split(",")){
+        if(!listModerator.contains(str)) {
+          listModerator.add(str);
+        }
+      }
+    }
+    listModerator = getAllUsersFromGroupMemebers(listModerator);
+    
+    // Remove all user who is administrator from moderators and accesspermission\
+    for(String uId : managerUserHandler.getAllAdministrator(Utils.getSessionProvider(this), NewsLetterUtil.getPortalName())){
+      if(!listUserEdit.contains(uId)) listUserEdit.add(uId);
+    }
+    for(String uid : listUserEdit){
+      listModerator.remove(uid);
+      listUserAccess.remove(uid);
+    }
+    for(String uId:listModerator){
+      listUserAccess.remove(uId);
+    }
+    
+    List<NewsletterUserInfor> userInfors = new ArrayList<NewsletterUserInfor>();
+    UserHandler userHandler = getApplicationComponent(OrganizationService.class).getUserHandler() ;
+    updateListUserInfor(userHandler, userInfors, listUserEdit, permissions[0]);
+    updateListUserInfor(userHandler, userInfors, listModerator, permissions[1]);
+    updateListUserInfor(userHandler, userInfors, listUserAccess, permissions[2]);
+    // set all user into grid
+    ObjectPageList objPageList = new ObjectPageList(userInfors, 5) ;
     UIGrid uiGrid = this.getChildById(UIGRID_MANAGER_MODERATOR);
     UIPageIterator uiIterator_ = uiGrid.getUIPageIterator();
     uiIterator_.setPageList(null);
-    // get list of users
-    OrganizationService service = getApplicationComponent(OrganizationService.class) ;
-    service.getUserHandler().findUsers(new Query()).getAll();
-    List<NewsletterUserInfor> userInfors = new ArrayList<NewsletterUserInfor>();
-    User user;
-    NewsletterUserInfor userInfor;
-    for(Object obj : service.getUserHandler().findUsers(new Query()).getAll()){
-      user = (User) obj;
-      userInfor = new NewsletterUserInfor();
-      userInfor.setEmail(user.getEmail());
-      userInfor.setFirstName(user.getFirstName());
-      userInfor.setLastName(user.getLastName());
-      userInfor.setUserName(user.getUserName());
-      if(listAdministrator.contains(user.getUserName())) userInfor.setRole(permissions[0]);
-      else if(listModerator.contains(userInfor.getUserName())) userInfor.setRole(permissions[1]);
-      else userInfor.setRole(permissions[2]);
-      userInfors.add(userInfor);
-    }
-    // set all user into grid
-    ObjectPageList objPageList = new ObjectPageList(userInfors, 5) ;
     uiIterator_.setPageList(objPageList) ;
     
     this.setSelectedTab(UIGRID_MANAGER_USERS);
@@ -159,13 +276,7 @@ public class UIManagerUsers extends UITabPane {
   public UIManagerUsers() throws Exception{
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     managerUserHandler = newsletterManagerService.getManageUserHandler();
-    NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
-    // get list of moderator
-    for(NewsletterCategoryConfig categoryConfig : categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), Utils.getSessionProvider(this))){
-      for(String str : categoryConfig.getModerator().split(",")){
-        if(!listModerator.contains(str)) listModerator.add(str);
-      }
-    }
+    
     // get name of permission from resource bundle
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     ResourceBundle res = context.getApplicationResourceBundle() ;
@@ -202,7 +313,8 @@ public class UIManagerUsers extends UITabPane {
         
         updateListUser();
       }catch(Exception ex){
-        Utils.createPopupMessage(this, "UIManagerUsers.msg.set-infor-users", null, ApplicationMessage.ERROR);
+        ex.printStackTrace();
+        //Utils.createPopupMessage(this, "UIManagerUsers.msg.set-infor-users", null, ApplicationMessage.ERROR);
       }
     }
   }
