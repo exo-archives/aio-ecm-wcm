@@ -133,9 +133,9 @@ public class UIPCLVContainer extends UIContainer {
 		String pageNodeSelected = uiPortal.getSelectedNode().getUri();
 		String siteName = uiPortal.getOwner();
 		
-		String parameters = null;
+		String categoryPath = null;
 		try {
-			parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected + "/")), "UTF-8");
+			categoryPath = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected + "/")), "UTF-8");
 		} catch (Exception e) {
 		  Utils.createPopupMessage(this, "UIPCLVConfig.msg.decode", null, ApplicationMessage.ERROR);
 		}
@@ -150,7 +150,6 @@ public class UIPCLVContainer extends UIContainer {
 		  treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
 		} catch(Exception ex){}
 		
-		String categoryPath = parameters.substring(parameters.indexOf("/") + 1);
 		if (preferenceTreeName.equals(categoryPath))
 			categoryPath = "";
 		Node categoryNode = null;

@@ -379,10 +379,10 @@ public class UIPCLVForm extends UIForm {
 		String portalURI = portalRequestContext.getPortalURI();
 		String requestURI = requestWrapper.getRequestURI();
 		String pageNodeSelected = uiPortal.getSelectedNode().getUri();
-		String parameters = null;
+		String categoryPath = null;
 
 		try {
-			parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected+ "/")), "UTF-8");
+			categoryPath = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected+ "/")), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 		  Utils.createPopupMessage(this, "UIPCLVConfig.msg.decode", null, ApplicationMessage.ERROR);
 		}
@@ -399,7 +399,6 @@ public class UIPCLVForm extends UIForm {
 		TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
 
 		Node treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
-		String categoryPath = parameters.substring(parameters.indexOf("/") + 1);
 		if (preferenceTreeName.equals(categoryPath)) {
 			categoryPath = "";
 		}
