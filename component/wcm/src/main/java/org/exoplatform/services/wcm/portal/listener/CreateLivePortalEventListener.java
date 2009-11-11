@@ -98,12 +98,11 @@ public class CreateLivePortalEventListener extends Listener<DataStorageImpl, Por
     .getConfiguration().getName();
     String workspace = session.getWorkspace().getName();
     DriveData mainDriveData = wcmConfigService.getSiteDriveConfig();
-    String drive = portal.getName().substring(0, 1).toUpperCase()+portal.getName().substring(1);
     String permission = portalConfig.getEditPermission();
     String portalPath = portal.getPath();
     
     String homePath = mainDriveData.getHomePath(); 
-    homePath = homePath.replaceAll(WCMConfigurationService.SITE_NAME_EXP, drive);
+    homePath = homePath.replaceAll(WCMConfigurationService.SITE_NAME_EXP, portal.getName());
     homePath = homePath.replaceAll(WCMConfigurationService.SITE_PATH_EXP, portalPath);
     
     String views = mainDriveData.getViews();
@@ -113,7 +112,7 @@ public class CreateLivePortalEventListener extends Listener<DataStorageImpl, Por
     boolean viewSideBar = mainDriveData.getViewSideBar();
     boolean showHiddenNode = mainDriveData.getShowHiddenNode();
     String allowCreateFolder = mainDriveData.getAllowCreateFolder();
-    driveService.addDrive(drive, workspace, permission, homePath, views, icon,
+    driveService.addDrive(portal.getName(), workspace, permission, homePath, views, icon,
         viewReferences, viewNonDocument, viewSideBar, showHiddenNode, repository,
         allowCreateFolder);
     log.info("Create new drive for portal: " + portalConfig.getName());
