@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
 import org.exoplatform.services.wcm.publication.PublicationUtil;
@@ -88,15 +89,21 @@ public class UINewsletterManagerPortlet extends UIPortletApplication {
 	
 	private List<String> getAllAdministrators() throws Exception{
     List<String> editPermission = new ArrayList<String>();
-    editPermission.add(PublicationUtil.getServices(UserACL.class).getSuperUser());
+    NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
+    NewsletterManageUserHandler managerUserHandler = newsletterManagerService.getManageUserHandler();
+    editPermission.addAll(managerUserHandler.getAllAdministrator(Utils.getSessionProvider(this), NewsLetterUtil.getPortalName()));
+    String supperUser = PublicationUtil.getServices(UserACL.class).getSuperUser(); 
+    if(!editPermission.contains(supperUser)){
+      editPermission.add(supperUser);
+      SessionProvider sessionProvider = Utils.getSessionProvider(this);
+      managerUserHandler.addAdministrator(sessionProvider, NewsLetterUtil.getPortalName(), supperUser);
+      sessionProvider.close();
+    }
     // Add all user who have edit portlet permission into list administrators
     /*UserPortalConfigService userService = (UserPortalConfigService)this.getApplicationComponent(UserPortalConfigService.class);
     Page page = userService.getPage(Util.getUIPortal().getSelectedNode().getPageReference());
     editPermission.add(page.getOwnerId());
     editPermission.addAll(Arrays.asList(page.getEditPermission()));*/
-    NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
-    NewsletterManageUserHandler managerUserHandler = newsletterManagerService.getManageUserHandler();
-    editPermission.addAll(managerUserHandler.getAllAdministrator(Utils.getSessionProvider(this), NewsLetterUtil.getPortalName()));
     return editPermission;
 	}
 	
