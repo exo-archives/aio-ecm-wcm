@@ -98,7 +98,7 @@
   		<UIContentSearchForm>Recherche</UIContentSearchForm>
   		<UIContentSearchResult>Résultats</UIContentSearchResult>
   		<WebContentMetadataPopup></WebContentMetadataPopup>
-		<UIContentBrowsePanelMulti>Contenu parcourir Multi Panel</UIContentBrowsePanelMulti>
+  		<UIContentBrowsePanelMulti>Contenu parcourir Multi Panel</UIContentBrowsePanelMulti>
   		<UIContentBrowsePanelFolder>Contenu explorer un dossier du panneau</UIContentBrowsePanelFolder>
   	</title>
   </UITabPane>
@@ -252,7 +252,10 @@
       <Preferences>Préférences</Preferences>
       <Close>Fermer</Close>
     </action>
-  </UIContentDialogForm>  
+    <msg>
+        <node-locked>L'élément de chemin {0} ou l'un de ses parents est verrouillé.</node-locked>
+  	</msg>
+  </UIContentDialogForm>
   
   <UIPermissionManager>
   	<label>
@@ -284,6 +287,7 @@
       <confirm-delete-permission>Confirmez-vous vouloir supprimer cette permission ?</confirm-delete-permission>
       <no-permission-remove>Il n'y a pas de permission à supprimer</no-permission-remove>
       <access-denied>Accès refusé</access-denied>
+      <node-locked>L'élément de chemin {0} ou l'un de ses parents est verrouillé.</node-locked>
     </msg>
   </UIPermissionManagerGrid>
   

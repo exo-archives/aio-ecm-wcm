@@ -25,6 +25,7 @@ import javax.jcr.ItemExistsException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
+import javax.jcr.lock.LockException;
 import javax.jcr.version.VersionException;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
@@ -226,6 +227,9 @@ public class UIContentDialogForm extends UIDialogForm {
       	Map<String, JcrInputProperty> inputProperties = DialogFormUtil.prepareMap(inputs, contentDialogForm.getInputProperties());
         CmsService cmsService = contentDialogForm.getApplicationComponent(CmsService.class);
         cmsService.storeNode(contentDialogForm.contentType, contentDialogForm.getNode().getParent(), inputProperties, contentDialogForm.isAddNew, contentDialogForm.repositoryName);
+      } catch(LockException le) {
+      	Object[] args = {contentDialogForm.getNode().getPath()};
+      	Utils.createPopupMessage(contentDialogForm, "UIContentDialogForm.msg.node-locked", args, ApplicationMessage.WARNING);
       } catch(AccessControlException ace) {
       } catch(VersionException ve) {
       	Utils.createPopupMessage(contentDialogForm, "UIDocumentForm.msg.in-versioning", null, ApplicationMessage.WARNING);
@@ -280,6 +284,9 @@ public class UIContentDialogForm extends UIDialogForm {
 	      }
 	      publicationPlugin.changeState(webContentNode, PublicationDefaultStates.PUBLISHED, context);
 	      
+      } catch(LockException le) {
+      	Object[] args = {contentDialogForm.getNode().getPath()};
+      	Utils.createPopupMessage(contentDialogForm, "UIContentDialogForm.msg.node-locked", args, ApplicationMessage.WARNING);
       } catch(AccessControlException ace) {
       } catch(VersionException ve) {
       	Utils.createPopupMessage(contentDialogForm, "UIDocumentForm.msg.in-versioning", null, ApplicationMessage.WARNING);

@@ -247,6 +247,9 @@
       <Preferences>Tùy chọn</Preferences>
       <Close>Đóng</Close>
     </action>
+    <msg>
+      <node-locked>Nội dung tại đường dẫn {0} hoặc cấp độ cao hơn bị khoá</node-locked>
+    </msg>
   </UIContentDialogForm>
   
   <UIPermissionManager>
@@ -281,6 +284,7 @@
       <confirm-delete-permission>Bạn có chắc để xoá</confirm-delete-permission>
       <no-permission-remove>Không có quyền</no-permission-remove>
       <access-denied>Truy cập bị từ chối</access-denied>
+      <node-locked>Nội dung tại đường dẫn {0} hoặc cấp độ cao hơn bị khoá</node-locked>
     </msg>
   </UIPermissionManagerGrid>
 

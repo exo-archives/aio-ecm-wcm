@@ -98,7 +98,7 @@
   		<UIContentSearchForm>Web content search form</UIContentSearchForm>
   		<UIContentSearchResult>Result form</UIContentSearchResult>
   		<WebContentMetadataPopup></WebContentMetadataPopup>
-		<UIContentBrowsePanelMulti>Content browse panel multi</UIContentBrowsePanelMulti>
+  		<UIContentBrowsePanelMulti>Content browse panel multi</UIContentBrowsePanelMulti>
   		<UIContentBrowsePanelFolder>Content browse panel folder</UIContentBrowsePanelFolder>
   	</title>
   </UITabPane>
@@ -257,6 +257,9 @@
       <Preferences>Preferences</Preferences>
       <Close>Close</Close>
     </action>
+    <msg>
+          <node-locked>The item with path {0} or upper level is locked.</node-locked>
+    </msg>
   </UIContentDialogForm>
 
 	<UIPermissionManager>
@@ -293,6 +296,7 @@
       <access-denied>Access denied.</access-denied>
       <userOrGroup-required>Require select user or group.</userOrGroup-required>
       <checkbox-require>You should set right.</checkbox-require>
+      <node-locked>The item with path {0} or upper level is locked.</node-locked>
     </msg>
   </UIPermissionManagerGrid>
   
