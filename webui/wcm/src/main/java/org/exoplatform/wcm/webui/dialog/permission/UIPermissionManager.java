@@ -379,7 +379,12 @@ public class UIPermissionManager extends UIForm implements UISelectable {
     	 webcontent.addMixin("exo:privilegeable");
     	 webcontent.setPermission(webcontent.getProperty("exo:owner").getString(), PermissionType.ALL);
      }
-     webcontent.setPermission(identity, permsArray);
+     try {
+	    webcontent.setPermission(identity, permsArray);
+    } catch (AccessControlException e) {
+    	Utils.createPopupMessage(permissionManager, "UIPermissionManagerGrid.msg.access-denied", null, ApplicationMessage.WARNING);
+    	return;
+    }
      session.save();
      
      permissionManager.updateGrid();
