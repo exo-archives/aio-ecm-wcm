@@ -186,6 +186,10 @@ public class VersionData {
     return builder.toString();
   }
   
+  public String toString() {
+    return toStringValue();
+  }
+  
   /**
    * To version data.
    * 
