@@ -113,7 +113,7 @@ public class NewsletterSubscriptionHandler {
 
       ExtendedNode extSubscriptionNode = (ExtendedNode)subscriptionNode ;
       if (extSubscriptionNode.canAddMixin("exo:privilegeable")) extSubscriptionNode.addMixin("exo:privilegeable");
-      String[] arrayPers = {PermissionType.READ, PermissionType.SET_PROPERTY} ;
+      String[] arrayPers = {PermissionType.READ, PermissionType.SET_PROPERTY, PermissionType.ADD_NODE} ;
       extSubscriptionNode.setPermission("any", arrayPers) ;
       
       session.save();

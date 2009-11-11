@@ -31,7 +31,10 @@ import javax.jcr.query.QueryResult;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.access.PermissionType;
+import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.util.IdGenerator;
@@ -128,28 +131,6 @@ public class NewsletterManageUserHandler {
     return new ArrayList<String>();
   }
   
-  public boolean isAdministrator(SessionProvider sessionProvider, String portalName, String userName)throws Exception{
-    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    Session session = sessionProvider.getSession(workspace, manageableRepository);
-    try{
-      Node categoriesNode = (Node) session.getItem(NewsletterConstant.generateCategoryPath(portalName));
-      //ExtendedNode categoriesNodeExtend = (ExtendedNode)categoriesNode;
-      for(Value value : categoriesNode.getProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR).getValues()){
-        try {
-          if(value.getString().equals(userName)) return true;
-        }catch (Exception e) {
-          continue;
-        }
-      }
-    } catch(Exception ex){
-      log.error("getAllAdministrator() failed because of ", ex.fillInStackTrace());
-    }finally{
-      session.logout();
-      sessionProvider.close();
-    }
-    return false;
-  }
-  
   /**
    * Adds the administrator.
    * 
@@ -161,16 +142,36 @@ public class NewsletterManageUserHandler {
   public void addAdministrator(SessionProvider sessionProvider, String portalName, String userId) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     Session session = sessionProvider.getSession(workspace, manageableRepository);
-    Node categoriesNode = (Node) session.getItem(NewsletterConstant.generateCategoryPath(portalName));
-    List<String> listUsers = new ArrayList<String>();
-    if(categoriesNode.hasProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR))
-      listUsers.addAll(convertValuesToArray(categoriesNode.getProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR).getValues()));
-    if(listUsers.contains(userId)) {
-      return;
+    try{
+      Node categoriesNode = (Node) session.getItem(NewsletterConstant.generateCategoryPath(portalName));
+      List<String> listUsers = new ArrayList<String>();
+      if(categoriesNode.hasProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR))
+        listUsers.addAll(convertValuesToArray(categoriesNode.getProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR).getValues()));
+      if(listUsers.contains(userId)) {
+        return;
+      }
+      listUsers.add(userId);
+      categoriesNode.setProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR, listUsers.toArray(new String[]{}));
+      Node categoryNode;
+      ExtendedNode extendedCategoryNode ;
+      for(NodeIterator iterator = categoriesNode.getNodes(); iterator.hasNext(); ){
+        categoryNode = iterator.nextNode();
+        if(categoryNode.isNodeType(NewsletterConstant.CATEGORY_NODETYPE)){
+          extendedCategoryNode = ExtendedNode.class.cast(categoryNode);
+          if (extendedCategoryNode.canAddMixin("exo:privilegeable") || extendedCategoryNode.isNodeType("exo:privilegeable")) {
+            if(extendedCategoryNode.canAddMixin("exo:privilegeable"))
+              extendedCategoryNode.addMixin("exo:privilegeable");
+            extendedCategoryNode.setPermission(userId, new String[]{PermissionType.ADD_NODE, PermissionType.SET_PROPERTY, PermissionType.REMOVE});
+          }
+        }
+      }
+      session.save();
+    }catch(Exception ex){
+      log.info("Add administrator for newsletter failed because of ", ex.fillInStackTrace());
+    }finally{
+      session.logout();
+      sessionProvider.close();
     }
-    listUsers.add(userId);
-    categoriesNode.setProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR, listUsers.toArray(new String[]{}));
-    session.save();
   }
   
   /**

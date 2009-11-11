@@ -16,6 +16,7 @@
  */
 package org.exoplatform.services.wcm.newsletter.handler;
 
+import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -26,9 +27,11 @@ import java.util.Map;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
+import javax.jcr.Value;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.access.AccessControlEntry;
 import org.exoplatform.services.jcr.access.PermissionType;
@@ -38,7 +41,6 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
-import org.pdfbox.cmapparser.CMapParser;
 
 /**
  * Created by The eXo Platform SAS
@@ -71,36 +73,28 @@ public class NewsletterCategoryHandler {
     this.repository = repository;
     this.workspace = workspace;
   }
-  
+
   @SuppressWarnings("unchecked")
   private List<String> getAllPermissionOfCategoryNode(Node categoryNode) throws Exception{
     ExtendedNode webContent = (ExtendedNode)categoryNode;
     Iterator permissionIterator = webContent.getACL().getPermissionEntries().iterator();
-    List<String> listPermission = new ArrayList<String>();
     String currentIdentity;
     AccessControlEntry accessControlEntry;
-    Map<String, List<String>> mapPermission = new HashMap<String, List<String>>();
-    List<String> values = new ArrayList<String>();
+    Map<String, Integer> mapPermission = new HashMap<String, Integer>();
     while (permissionIterator.hasNext()) {
       accessControlEntry = (AccessControlEntry) permissionIterator.next();
       currentIdentity = accessControlEntry.getIdentity();
       if(mapPermission.containsKey(currentIdentity)){
-        values = mapPermission.get(currentIdentity);
-        values.add(accessControlEntry.getPermission());
-        mapPermission.put(currentIdentity, values);
+        mapPermission.put(currentIdentity, mapPermission.get(currentIdentity) + 1);
       } else {
-        values = new ArrayList<String>();
-        values.add(accessControlEntry.getPermission());
-        mapPermission.put(currentIdentity, values);
-        listPermission.add(currentIdentity);
+        mapPermission.put(currentIdentity, 1);
       }
     }
     int size = PermissionType.ALL.length;
-    for(int i = 0; i < listPermission.size();){
-      if(mapPermission.get(listPermission.get(i)).size() == size)
-        i ++;
-      else
-        listPermission.remove(i);
+    List<String> listPermission = new ArrayList<String>();
+    for(String key : mapPermission.keySet().toArray(new String[]{})){
+      if(mapPermission.get(key) == size)
+        listPermission.add(key);
     }
     return listPermission;
   }
@@ -133,17 +127,55 @@ public class NewsletterCategoryHandler {
   	return categoryConfig;
   }
   
-  private void updatePermissionForCategoryNode(Node categoryNode, NewsletterCategoryConfig categoryConfig) throws Exception{
+  private List<String> convertValuesToArray(Value[] values){
+    List<String> listString = new ArrayList<String>();
+    for(Value value : values){
+      try {
+        listString.add(value.getString());
+      }catch (Exception e) {
+        log.error("Error when convert values to array: ", e.fillInStackTrace());
+      }
+    }
+    return listString;
+  }
+  
+  /**
+   * Update permission for category node.
+   * 
+   * @param categoryNode    node which is will be updated
+   * @param categoryConfig  Category Object
+   * @param isAddNew        is <code>True</code> if is add new category node and <code>False</code> if only update
+   * @throws Exception      The Exception
+   */
+  private void updatePermissionForCategoryNode(Node categoryNode, NewsletterCategoryConfig categoryConfig, boolean isAddNew) throws Exception{
     ExtendedNode extendedCategoryNode = ExtendedNode.class.cast(categoryNode);
     if (extendedCategoryNode.canAddMixin("exo:privilegeable") || extendedCategoryNode.isNodeType("exo:privilegeable")) {
       if(extendedCategoryNode.canAddMixin("exo:privilegeable"))
         extendedCategoryNode.addMixin("exo:privilegeable");
-      List<String> listPermissions = Arrays.asList(categoryConfig.getModerator().split(",")); 
-      for(String permission : listPermissions){
+      // get all administrator of newsletter
+      List<String> listAddministrators = new ArrayList<String>();
+      Node categoriesNode = categoryNode.getParent();
+      if(categoriesNode.hasProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR)) {
+        Value[] values = categoriesNode.getProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR).getValues();
+        listAddministrators = convertValuesToArray(values);
+      }
+      // Set permission is all for moderators
+      List<String> newModerators = new ArrayList<String>();
+      newModerators.addAll(Arrays.asList(categoryConfig.getModerator().split(","))); 
+      for(String permission : newModerators){
         extendedCategoryNode.setPermission(permission, PermissionType.ALL);
       }
+      // Set permission is addNode, remove and setProperty for administrators
+      if(isAddNew){
+        for(String per : listAddministrators){
+          if(newModerators.contains(per)) continue;
+          extendedCategoryNode.setPermission(per, new String[]{PermissionType.ADD_NODE, PermissionType.REMOVE, PermissionType.SET_PROPERTY});
+          newModerators.add(per);
+        }
+      }
+      // set only read permission for normal users who are not administrator or moderator.
       for(String oldPer : getAllPermissionOfCategoryNode(categoryNode)){
-        if(!listPermissions.contains(oldPer)){
+        if(!newModerators.contains(oldPer)){
           extendedCategoryNode.removePermission(oldPer, PermissionType.ADD_NODE);
           extendedCategoryNode.removePermission(oldPer, PermissionType.REMOVE);
           extendedCategoryNode.removePermission(oldPer, PermissionType.SET_PROPERTY);
@@ -174,10 +206,11 @@ public class NewsletterCategoryHandler {
       ExtendedNode extendedCategoryNode = ExtendedNode.class.cast(categoryNode);
       extendedCategoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_TITLE, categoryConfig.getTitle());
       extendedCategoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION, categoryConfig.getDescription());
-      this.updatePermissionForCategoryNode(categoryNode, categoryConfig);
+      this.updatePermissionForCategoryNode(categoryNode, categoryConfig, true);
       session.save();
     } catch(Exception e) {
-      log.error("Add category " + categoryConfig.getName() + " failed because of: ", e.fillInStackTrace());
+      e.printStackTrace();
+      //log.error("Add category " + categoryConfig.getName() + " failed because of: ", e.fillInStackTrace());
     } finally {
       if (session != null) session.logout();
       sessionProvider.close();
@@ -200,10 +233,14 @@ public class NewsletterCategoryHandler {
       Node categoryNode = ((Node)session.getItem(categoryPath)).getNode(categoryConfig.getName());
       categoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION, categoryConfig.getDescription());
       categoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_TITLE, categoryConfig.getTitle());
-      this.updatePermissionForCategoryNode(categoryNode, categoryConfig);
+      this.updatePermissionForCategoryNode(categoryNode, categoryConfig, false);
       session.save();
+      session.logout();
     } catch (Exception e) {
-      log.info("Edit category " + categoryConfig.getName() + " failed because of ", e.fillInStackTrace());
+      e.printStackTrace();
+      //log.info("Edit category " + categoryConfig.getName() + " failed because of ", e.fillInStackTrace());
+    }finally{
+      sessionProvider.close();
     }
   }
   
