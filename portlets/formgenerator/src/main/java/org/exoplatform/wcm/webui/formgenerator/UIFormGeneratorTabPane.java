@@ -70,13 +70,13 @@ import org.exoplatform.ws.frameworks.json.value.JsonValue;
 public class UIFormGeneratorTabPane extends UIFormTabPane {
   
   /** The Constant PROPERTY_PREFIX. */
-  static final String PROPERTY_PREFIX = "exo:fg_p_";
+	public static final String PROPERTY_PREFIX = "exo:fg_p_";
   
   /** The Constant NODE_PREFIX. */
-  static final String NODE_PREFIX = "exo:";
+  public static final String NODE_PREFIX = "exo:";
   
   /** The Constant NODE_SUFFIX. */
-  static final String NODE_SUFFIX = "_fg_n";
+  public static final String NODE_SUFFIX = "_fg_n";
 
   /**
    * Instantiates a new uI form generator tab pane.
@@ -226,7 +226,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
      * (show name, use timestamp, convert from another field like exo:title for example) 
      */
     dialogTemplate.append("        <tr style=\"display:none;\">\n");
-    dialogTemplate.append("          <td class=\"FieldLabel\"><%=_ctx.appRes(\"" + templateName + ".dialog.label.Date\")%></td>\n");
+    dialogTemplate.append("          <td class=\"FieldLabel\"><%=_ctx.appRes(\"" + templateName + ".label.Date\")%></td>\n");
     dialogTemplate.append("          <td class=\"FieldComponent\">\n");
     dialogTemplate.append("            $timestampName \n               <div style=\"display:none;\"><%\n");
     dialogTemplate.append("              String[] fieldName = [\"jcrPath=/node\", \"mixintype=mix:i18n\", \"editable=if-null\", \"validate=empty,name\", timestampName] ;\n");
@@ -246,7 +246,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       String value = form.getValue();
       if (value==null || "null".equals(value)) value="";
       if (form.isMandatory())
-        validate += "empty,";
+        validate += "org.exoplatform.wcm.webui.validator.MandatoryValidator,";
       if (UIFormGeneratorConstant.TEXTAREA.equals(inputType)) {
         inputField = "TextAreaField";
       } else if (UIFormGeneratorConstant.WYSIWYG.equals(inputType)) {
@@ -271,7 +271,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       } else {
         dialogTemplate.append("      <tr>\n");
         
-        dialogTemplate.append("        <td class=\"FieldLabel\"><%=_ctx.appRes(\"" + templateName + ".dialog.label." + inputName + "\")%></td>\n");
+        dialogTemplate.append("        <td class=\"FieldLabel\"><%=_ctx.appRes(\"" + templateName + ".label." + inputName + "\")%></td>\n");
         dialogTemplate.append("        <td class=\"FieldComponent\">\n");
         dialogTemplate.append("          <%\n");
         
