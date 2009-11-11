@@ -19,6 +19,7 @@ package org.exoplatform.wcm.webui.selector.content.one;
 import javax.jcr.Node;
 import javax.portlet.PortletPreferences;
 
+import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
@@ -97,13 +98,20 @@ public class UIContentBrowsePanelOne extends UIContentBrowsePanel{
       wcmPublicationService.unsubcribeLifecycle(realNode);
       wcmPublicationService.enrollNodeInLifecycle(realNode, portalOwner, remoteUser);          
     }
+    
+    wcmPublicationService.updateLifecyleOnChangeContent(realNode, portalOwner, remoteUser, null);
+    if (!Utils.isEditPortletInCreatePageWizard()) {
+      String pageId = Util.getUIPortal().getSelectedNode().getPageReference();
+      UserPortalConfigService upcService = getApplicationComponent(UserPortalConfigService.class);
+      wcmPublicationService.updateLifecyleOnChangePage(upcService.getPage(pageId), remoteUser);
+    }
 
     // Update Page And Close PopUp
     UIPortal uiPortal = Util.getUIPortal();
     UIPageBody uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
     uiPageBody.setUIComponent(null);
     uiPageBody.setMaximizedUIComponent(null);
-    org.exoplatform.wcm.webui.Utils.updatePortal((PortletRequestContext)requestContext);
+    Utils.updatePortal((PortletRequestContext)requestContext);
     Utils.closePopupWindow(this, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW);
   }
 }
