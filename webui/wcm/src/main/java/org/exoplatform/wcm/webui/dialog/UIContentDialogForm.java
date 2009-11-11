@@ -236,7 +236,6 @@ public class UIContentDialogForm extends UIDialogForm {
       } catch(ItemNotFoundException item) {
       	Utils.createPopupMessage(contentDialogForm, "UIDocumentForm.msg.item-not-found", null, ApplicationMessage.WARNING);
       } catch(RepositoryException repo) {
-      	repo.printStackTrace();
         String key = "UIDocumentForm.msg.repository-exception";
         if (ItemExistsException.class.isInstance(repo)) key = "UIDocumentForm.msg.not-allowed-same-name-sibling";
         Utils.createPopupMessage(contentDialogForm, key, null, ApplicationMessage.WARNING);
