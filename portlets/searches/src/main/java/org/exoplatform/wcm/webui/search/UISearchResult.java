@@ -156,7 +156,7 @@ public class UISearchResult extends UIContainer {
 			SiteSearchService siteSearchService = getApplicationComponent(SiteSearchService.class);
 			QueryCriteria queryCriteria = new QueryCriteria();
 			queryCriteria.setSiteName(currentPortal);
-			queryCriteria.setKeyword(keyword);
+			queryCriteria.setKeyword(keyword.toLowerCase());
 			queryCriteria.setSearchWebpage(true);
 			queryCriteria.setSearchDocument(true);
 			queryCriteria.setSearchWebContent(true);
