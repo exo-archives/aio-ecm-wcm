@@ -140,6 +140,7 @@ PluginUtils.prototype.actionColExp = function(objNode) {
 };
 
 PluginUtils.prototype.listFiles = function(list) {
+
 	var rightWS = document.getElementById('RightWorkspace');
 	var tblRWS  = eXo.core.DOMUtil.findDescendantsByTagName(rightWS, "table")[0];
 	var rowsRWS = eXo.core.DOMUtil.findDescendantsByTagName(tblRWS, "tr");
@@ -153,6 +154,7 @@ PluginUtils.prototype.listFiles = function(list) {
 		tdNoContent.innerHTML = "There is no content";
 		tdNoContent.className = "Item TRNoContent";
 		tdNoContent.setAttribute('colspan', 3);
+		document.getElementById("pageNavPosition").innerHTML = "";
 		return;
 	}
 	var listItem = '';
@@ -171,8 +173,117 @@ PluginUtils.prototype.listFiles = function(list) {
 		newRow.className = clazz;
 		newRow.insertCell(0).innerHTML = '<div class="Item '+clazzItem+'" url="'+url+'" nodeType="'+nodeType+'" onclick="eXoWCM.PluginUtils.insertContent(this);">'+node+'</div>';
 		newRow.insertCell(1).innerHTML = '<div class="Item">'+ list[i].getAttribute("dateCreated") +'</div>';
-		newRow.insertCell(2).innerHTML =	'<div class="Item">'+ list[i].getAttribute("size")+'&nbsp;kb' +'</div>';
+		newRow.insertCell(2).innerHTML = '<div class="Item">'+ list[i].getAttribute("size")+'&nbsp;kb' +'</div>';
+		
+		if(i > 13) {
+			var numberRecords = 0;
+			if(eXo.core.Browser.isFF()) numberRecords = 14;
+			else numberRecords = 13;
+			eXoWCM.Pager = new Pager("ListRecords", numberRecords);
+			eXoWCM.Pager.init(); 
+			eXoWCM.Pager.showPageNav('pageNavPosition');
+			eXoWCM.Pager.showPage(1);	
+		} else {
+			document.getElementById("pageNavPosition").innerHTML = "";
+		}
 	}
+};
+
+function Pager(objTable, itemsPerPage) {
+	this.tableName = objTable;
+    this.itemsPerPage = itemsPerPage;
+    this.currentPage = 1;
+    this.pages = 0;
+    this.inited = false;
+}
+
+Pager.prototype.setHeightRightWS = function(list) {
+	var leftWorkSpace = document.getElementById("LeftWorkspace");
+	var rightWorkSpace = document.getElementById("RightWorkspace");
+	if(leftWorkSpace) rightWorkSpace.style.height = leftWorkSpace.offsetHeight + "px";
+};
+
+Pager.prototype.init = function() {
+	this.setHeightRightWS();
+	var len = 0;
+	var table = document.getElementById(eXoWCM.Pager.tableName);
+	if(eXo.core.Browser.isFF()) {
+		var tHead = eXo.core.DOMUtil.getChildrenByTagName(table, "thead")[0];
+		var rowsTHead = eXo.core.DOMUtil.getChildrenByTagName(tHead, "tr");
+		len = rowsTHead.length;
+	}	else {
+		var tBody = eXo.core.DOMUtil.getChildrenByTagName(table, "tbody")[0];
+		len = tBody.childNodes.length -1;
+	}
+    var records = len; 
+    this.pages = Math.ceil(records / eXoWCM.Pager.itemsPerPage);
+	if(this.pages < 0) this.page =1;
+    this.inited = true;
+};
+
+Pager.prototype.showRecords = function(from, to) {
+	var rows = null;
+	var table = document.getElementById(eXoWCM.Pager.tableName);
+	if(eXo.core.Browser.isFF()) {
+		var tHead = eXo.core.DOMUtil.getChildrenByTagName(table, "thead")[0];
+		rows = eXo.core.DOMUtil.getChildrenByTagName(tHead ,"tr");
+	}	else {
+		var tBody = eXo.core.DOMUtil.getChildrenByTagName(table, "tbody")[0];
+		rows =tBody.childNodes;
+	}
+	var len = rows.length;
+	if(len <= 14) { document.getElementById("pageNavPosition").innerHTML = "";	return;}
+
+	// i starts from 1 to skip table header row
+
+	for (var i = 1; i < len; i++) {
+		if (i < from || i > to)  {
+		    rows[i].style.display = 'none';
+		} else {
+		    rows[i].style.display = '';
+		}
+	}
+};
+
+Pager.prototype.showPage = function(pageNumber) {
+	if (! this.inited) {
+		alert("not inited");
+		return;
+    }
+
+    var oldPageAnchor = document.getElementById('pg'+eXoWCM.Pager.currentPage);
+    if(oldPageAnchor) oldPageAnchor.className = 'pg-normal';
+    
+    this.currentPage = pageNumber;
+    var newPageAnchor = document.getElementById('pg'+eXoWCM.Pager.currentPage);
+	if(newPageAnchor)  newPageAnchor.className = 'pg-selected';
+    
+    var from = (pageNumber - 1) * eXoWCM.Pager.itemsPerPage + 1;
+    var to = from +  eXoWCM.Pager.itemsPerPage - 1;
+    eXoWCM.Pager.showRecords(from, to);
+};
+
+Pager.prototype.previousPage = function() {
+	if (this.currentPage > 1)  eXoWCM.Pager.showPage(this.currentPage - 1);
+};
+
+Pager.prototype.nextPage = function() {
+	if (this.currentPage < this.pages) eXoWCM.Pager.showPage(this.currentPage + 1);
+};
+
+Pager.prototype.showPageNav = function(positionId) {
+	if (! this.inited) {
+		alert("not inited");
+		return;
+	}
+	var element = document.getElementById(positionId);
+	var pagerHtml = '<span>Total page : '+this.pages+'</span> ';
+	pagerHtml += '<span onclick="eXoWCM.Pager.previousPage();" class="pg-normal"> &#171 Prev </span> | ';
+    for (var page = 1; page <= this.pages; page++) {
+        pagerHtml += '<span id="pg' + page + '" class="pg-normal" onclick="eXoWCM.Pager.showPage(' + page + ');">' + page + '</span> | ';
+    }
+	pagerHtml += '<span onclick="eXoWCM.Pager.nextPage();" class="pg-normal"> Next &#187;</span>';            
+    element.innerHTML = pagerHtml;
 };
 
 PluginUtils.prototype.getClazzIcon = function(nodeType) {
@@ -323,8 +434,6 @@ PluginUtils.prototype.showSubMenuSettings = function(obj) {
 };
 
 PluginUtils.prototype.changeFilter = function() {
-	//var breadscrumbsContainer = document.getElementById("BreadcumbsContainer");		
-	//if(breadscrumbsContainer)	breadscrumbsContainer.innerHTML = '<a class="Nomal" title="Home" href="#">Home</a>';
 	var rightWS = document.getElementById('RightWorkspace');
 	var tblRWS	= eXo.core.DOMUtil.findDescendantsByTagName(rightWS, "table")[0];
 	var rowsRWS = eXo.core.DOMUtil.findDescendantsByTagName(tblRWS, "tr");
