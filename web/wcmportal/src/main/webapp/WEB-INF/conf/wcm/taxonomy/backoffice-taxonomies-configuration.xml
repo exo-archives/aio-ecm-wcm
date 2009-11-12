@@ -25,7 +25,7 @@
 				</value-param>
 				<value-param>
 					<name>treeName</name>
-					<value>Backoffice</value>
+					<value>backoffice</value>
 				</value-param>
 				<object-param>
 					<name>permission.configuration</name>
