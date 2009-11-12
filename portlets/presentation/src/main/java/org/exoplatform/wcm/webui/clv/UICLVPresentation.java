@@ -25,6 +25,7 @@ import java.util.Locale;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.version.Version;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.commons.utils.PageList;
@@ -273,13 +274,22 @@ import org.exoplatform.webui.event.EventListener;
 		    try {
 		      title = content.getProperty("dc:title").getValues()[0].getString();
 		    } catch(Exception ex) {
-		      return null;
+//		      return null;
 		    }
 		  }
 	  } else if (node.hasProperty("exo:title")) {
 		  title = node.getProperty("exo:title").getValue().getString();
 	  }
-	  if (title==null) title = node.getName();
+	  if (title==null) {
+	  	if (node.isNodeType("nt:frozenNode")){
+	  		String uuid = node.getProperty("jcr:frozenUuid").getString();
+	  		Node originalNode = node.getSession().getNodeByUUID(uuid);
+	  		title = originalNode.getName();
+	  	} else {
+	  		title = node.getName();
+	  	}
+	  	
+	  }
 	  
 	  return title;
   }
@@ -345,16 +355,22 @@ import org.exoplatform.webui.event.EventListener;
    * @throws Exception the exception
    */
   public String getWebdavURL(Node node) throws Exception {
-	  String link = null;
-	  PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
-	  PortletPreferences portletPreferences = getPortletPreferences();
-	  String repository = portletPreferences.getValue(UICLVPortlet.REPOSITORY, null);
-	  String workspace = portletPreferences.getValue(UICLVPortlet.WORKSPACE, null);
-	  String baseURI = portletRequestContext.getRequest().getScheme() + "://"
-	  + portletRequestContext.getRequest().getServerName() + ":"
-	  + String.format("%s", portletRequestContext.getRequest().getServerPort());
-	  link = baseURI + "/rest/jcr/" + repository + "/" + workspace + node.getPath();
-	  return link;
+  	PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+  	PortletPreferences portletPreferences = getPortletPreferences();
+  	String repository = portletPreferences.getValue(UICLVPortlet.REPOSITORY, null);
+  	String workspace = portletPreferences.getValue(UICLVPortlet.WORKSPACE, null);
+  	String baseURI = portletRequestContext.getRequest().getScheme() + "://"
+  									+ portletRequestContext.getRequest().getServerName() + ":"
+  									+ String.format("%s", portletRequestContext.getRequest().getServerPort());
+  	
+  	if (node.isNodeType("nt:frozenNode")){
+  		String uuid = node.getProperty("jcr:frozenUuid").getString();
+  		Node originalNode = node.getSession().getNodeByUUID(uuid);
+  		return baseURI + "/rest/jcr/" + repository + "/" + workspace + originalNode.getPath() + "?version=" + node.getParent().getName();
+  	} else {
+  		return baseURI + "/rest/jcr/" + repository + "/" + workspace + node.getPath();
+  	}
+	  
   }
   
   /**
@@ -430,11 +446,18 @@ import org.exoplatform.webui.event.EventListener;
    * @return the content icon
    */
   public String getContentIcon(Node node) {
-	  try {
-		return "Icon16x16 default16x16Icon "+org.exoplatform.ecm.webui.utils.Utils.getNodeTypeIcon(node, "16x16Icon");
-	} catch (RepositoryException e) {
-	  Utils.createPopupMessage(this, "UIMessageBoard.msg.get-content-icon", null, ApplicationMessage.ERROR);
-	}
+  	try {
+    	if (node.isNodeType("nt:frozenNode")){
+    		String uuid = node.getProperty("jcr:frozenUuid").getString();
+    		Node originalNode = node.getSession().getNodeByUUID(uuid);  		
+    		return "Icon16x16 default16x16Icon " + org.exoplatform.ecm.webui.utils.Utils.getNodeTypeIcon(originalNode, "16x16Icon");
+    	} else {
+    		return "Icon16x16 default16x16Icon "+org.exoplatform.ecm.webui.utils.Utils.getNodeTypeIcon(node, "16x16Icon");
+    	}
+  		
+  	} catch (RepositoryException e) {
+  	  Utils.createPopupMessage(this, "UIMessageBoard.msg.get-content-icon", null, ApplicationMessage.ERROR);
+  	}
     return null;
   }
 
