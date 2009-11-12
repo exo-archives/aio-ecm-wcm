@@ -260,6 +260,10 @@ public class UIPermissionManager extends UIForm implements UISelectable {
         	webcontent.removePermission(name);
           session.save();
           permissionManager.updateGrid();
+        } catch (AccessControlException e) {
+        	Object[] args = {webcontent.getPath()};
+        	Utils.createPopupMessage(permissionManager, "UIPermissionManagerGrid.msg.node-locked", args, ApplicationMessage.WARNING);
+        	return;
         } catch (AccessDeniedException ace) {
         	Utils.createPopupMessage(permissionManager, "UIPermissionManagerGrid.msg.access-denied", null, ApplicationMessage.WARNING);
           return;
