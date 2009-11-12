@@ -150,8 +150,7 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
       treeName = nameParam.getValue();
     }
     
-    String firstCharactor = portalName.substring(0, 1).toUpperCase();
-    treeName = StringUtils.replace(treeName, "{treeName}", firstCharactor + portalName.substring(1, portalName.length()));
+    treeName = StringUtils.replace(treeName, "{treeName}", portalName);
     path = StringUtils.replace(path, "{portalName}", portalName);
     init();
   }
