@@ -109,6 +109,11 @@
   		<UIContentSelectorFolder>Contenu du dossier de sélection</UIContentSelectorFolder>
   	</title>
   </FolderPathSelectorPopupWindow>
+  <UIContentDialogFormPopupWindow>
+  	<title>
+  		<UIContentSelectorOne>Sélecteur de contenu</UIContentSelectorOne>
+  	</title>
+  </UIContentDialogFormPopupWindow>
   <CorrectContentSelectorPopupWindow>
   	<title>
   		<UICLVContentSelector>Sélectionnez le contenu manuellement</UICLVContentSelector>

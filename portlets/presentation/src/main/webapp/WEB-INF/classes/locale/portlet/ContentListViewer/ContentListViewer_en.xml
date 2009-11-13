@@ -121,6 +121,13 @@
   		<UIContentSelectorMulti>Content multi selector</UIContentSelectorMulti>
   	</title>
   </CorrectContentSelectorPopupWindow>
+  
+  <UIContentDialogFormPopupWindow>
+  	<title>
+  		<UIContentSelectorOne>Content selector</UIContentSelectorOne>
+  	</title>
+  </UIContentDialogFormPopupWindow>
+  
   <UICLVFolderSelector>
   	<action>
   		<Close>Close</Close>

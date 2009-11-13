@@ -100,6 +100,7 @@
   		<WebContentMetadataPopup></WebContentMetadataPopup>
   		<UIContentBrowsePanelMulti>Contenu parcourir Multi Panel</UIContentBrowsePanelMulti>
   		<UIContentBrowsePanelFolder>Contenu explorer un dossier du panneau</UIContentBrowsePanelFolder>
+  		<UIContentBrowsePanelOne>Parcourir le contenu du panneau</UIContentBrowsePanelOne>
   	</title>
   </UITabPane>
   <UIContentBrowsePanel>
