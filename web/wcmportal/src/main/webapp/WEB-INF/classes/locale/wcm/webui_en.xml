@@ -100,6 +100,7 @@
   		<WebContentMetadataPopup></WebContentMetadataPopup>
   		<UIContentBrowsePanelMulti>Content browse panel multi</UIContentBrowsePanelMulti>
   		<UIContentBrowsePanelFolder>Content browse panel folder</UIContentBrowsePanelFolder>
+		<UIContentBrowsePanelOne>Content browse panel</UIContentBrowsePanelOne>
   	</title>
   </UITabPane>
   <UIContentBrowsePanel>

@@ -109,6 +109,11 @@
 			<confirm-delete>Are you sure to delete this content from selected list?</confirm-delete>
 		</msg>
   </UISelectedContentGrid>
+  <UIContentDialogFormPopupWindow>
+  	<title>
+  		<UIContentSelectorOne>Content selector</UIContentSelectorOne>
+  	</title>
+  </UIContentDialogFormPopupWindow>
   <FolderPathSelectorPopupWindow>
   	<title>
   		<UICLVFolderSelector>Select a folder to view it's content</UICLVFolderSelector>

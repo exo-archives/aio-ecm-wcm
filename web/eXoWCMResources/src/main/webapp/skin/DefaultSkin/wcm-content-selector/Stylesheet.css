@@ -70,13 +70,17 @@
 }	
 
 .UIWCMSearchContainer .UISelectPathPanel .UITreeList {
-	padding: 20px;
+	padding: 16px;
 	margin: 0px;
 }
 
 .UIWCMSearchContainer .UIContentSelected .UICLVContentSelectedGrid {
-	padding: 20px;
+	padding: 16px;
 	margin: 0px;
+}
+
+.ClearLeft{
+	clear: none;
 }
 
 .UIWCMSearchContainer .SelectContent .Title {
