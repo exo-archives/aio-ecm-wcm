@@ -23,11 +23,13 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.jcr.Node;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.version.Version;
 import javax.portlet.PortletPreferences;
 
+import org.apache.commons.logging.Log;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
@@ -35,6 +37,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
@@ -96,6 +99,9 @@ import org.exoplatform.webui.event.EventListener;
 
   /** The date formatter. */
   private DateFormat               dateFormatter = null;
+  
+  /** The log. */
+  private static Log log = ExoLogger.getLogger(UICLVPresentation.class);
   
   /**
    * Instantiates a new uI content list presentation.
@@ -481,17 +487,19 @@ import org.exoplatform.webui.event.EventListener;
    * 
    * @throws Exception the exception
    */
-  public String getIllustrativeImage(Node node) throws Exception {
+  public String getIllustrativeImage(Node node) {
     WebSchemaConfigService schemaConfigService = getApplicationComponent(WebSchemaConfigService.class);
     WebContentSchemaHandler contentSchemaHandler = schemaConfigService.getWebSchemaHandlerByType(WebContentSchemaHandler.class);
-    Node illustrativeImage = null;
     RESTImagesRendererService imagesRendererService = getApplicationComponent(RESTImagesRendererService.class);
+    Node illustrativeImage = null;
     String uri = null;
-    try {
+    try{
       illustrativeImage = contentSchemaHandler.getIllustrationImage(node);
-      uri = imagesRendererService.generateURI(illustrativeImage);      
+      uri = imagesRendererService.generateURI(illustrativeImage);
+    } catch(PathNotFoundException ex) {
+      // We don't do anything here because so many documents doesn't have illustration image
     } catch (Exception e) {
-      // You shouldn't throw popup message, because some exception often rise here.
+      log.error("Error when get illustration image: ", e.fillInStackTrace());
     }
     return uri;
   }
