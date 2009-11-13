@@ -119,7 +119,7 @@
 											<string></string>
 										</field>
 										<field name="homePath">
-											<string>collaboration:/sites content/live/acme/categories/Acme</string>
+											<string>collaboration:/sites content/live/acme/categories/acme</string>
 										</field>
 										<field name="targetWspace">
 											<string>collaboration</string>
