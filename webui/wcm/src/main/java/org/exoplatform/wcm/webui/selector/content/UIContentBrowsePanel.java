@@ -60,12 +60,14 @@ import org.exoplatform.webui.event.EventListener;
   )
 })
 public abstract class UIContentBrowsePanel extends UIBaseNodeTreeSelector implements UIPopupComponent{
-  public static final String WEBCONENT = "WebContent";
+  public static final String[] WEBCONTENT_NODERTYPE = new String[]{"exo:webContent", "exo:article"};
+  public static final String[] MEDIA_MIMETYPE = new String[]{"application", "image", "audio", "video"};
+  public static final String WEBCONTENT = "WebContent";
   public static final String DMSDOCUMENT = "DMSDocument";
   public static final String MEDIA = "Media";
   public final String SELECT_TYPE_CONTENT = "selectTypeContent";
-  public String[] types = new String[]{WEBCONENT, DMSDOCUMENT, MEDIA};
-  public String selectedValues = WEBCONENT;
+  public String[] types = new String[]{WEBCONTENT, DMSDOCUMENT, MEDIA};
+  public String selectedValues = WEBCONTENT;
   
   /**
    * Instantiates a new uI web content path selector.
@@ -76,14 +78,16 @@ public abstract class UIContentBrowsePanel extends UIBaseNodeTreeSelector implem
   public String contentType;
 
   public UIContentBrowsePanel() throws Exception {
-    contentType = WEBCONENT;
+    contentType = WEBCONTENT;
   }
   
   public void reRenderChild(String typeContent) throws Exception{
-    if(typeContent == null || typeContent.equals(WEBCONENT)){
-      this.contentType = WEBCONENT;
+    if(typeContent == null || typeContent.equals(WEBCONTENT)){
+      this.contentType = WEBCONTENT;
     }else if(typeContent.equals(DMSDOCUMENT)){
       this.contentType = DMSDOCUMENT;
+    } else {
+      this.contentType = MEDIA;
     }
   }
 
@@ -94,24 +98,38 @@ public abstract class UIContentBrowsePanel extends UIBaseNodeTreeSelector implem
    * 
    * @throws Exception the exception
    */
-    String[] acceptedNodeTypes = null;
-    public void init() throws Exception {
+  public void init() throws Exception {
     Node currentPortal = getCurrentPortal();
-    if(contentType == null || contentType.equals(WEBCONENT)){
-      acceptedNodeTypes = new String[]{"exo:webContent"};
-    }else if(contentType.equals(DMSDOCUMENT)){
+    UISelectPathPanel selectPathPanel = getChild(UISelectPathPanel.class);
+    String[] acceptedNodeTypes = null;
+    String[] acceptedMimeTypes = null;
+    if(contentType == null || contentType.equals(WEBCONTENT)){
+      acceptedNodeTypes = WEBCONTENT_NODERTYPE;
+      acceptedMimeTypes = null;
+      selectPathPanel.setWebContent(true);
+      selectPathPanel.setDMSDocument(false);
+    } else if(contentType.equals(MEDIA)){
+      acceptedNodeTypes = new String[]{"nt:file"};
+      acceptedMimeTypes = MEDIA_MIMETYPE;
+      selectPathPanel.setWebContent(false);
+      selectPathPanel.setDMSDocument(false);
+    } else if(contentType.equals(DMSDOCUMENT)){
       String repositoryName = ((ManageableRepository)(currentPortal.getSession().getRepository())).getConfiguration().getName();
       List<String> listAcceptedNodeTypes = getApplicationComponent(TemplateService.class).getDocumentTemplates(repositoryName);
       List<String> listAcceptedNodeTypesTemp = new ArrayList<String>();
-      for (String acceptedNodetype : listAcceptedNodeTypes) {
-      	if ("exo:webContent".equals(acceptedNodetype) || "exo:pictureOnHeadWebcontent".equals(acceptedNodetype)) continue;
-      	listAcceptedNodeTypesTemp.add(acceptedNodetype);
+      for(String nodeType : listAcceptedNodeTypes) {
+        for(int i = 0; i < WEBCONTENT_NODERTYPE.length; i++) {
+          if(nodeType.equalsIgnoreCase(WEBCONTENT_NODERTYPE[i])) continue;
+        }
+        listAcceptedNodeTypesTemp.add(nodeType);
       }
       acceptedNodeTypes = new String[listAcceptedNodeTypesTemp.size()];
       listAcceptedNodeTypesTemp.toArray(acceptedNodeTypes);
+      selectPathPanel.setWebContent(false);
+      selectPathPanel.setDMSDocument(true);
     }
-    UISelectPathPanel selectPathPanel = getChild(UISelectPathPanel.class);
-    selectPathPanel.setAcceptedNodeTypes(acceptedNodeTypes);       
+    selectPathPanel.setAcceptedNodeTypes(acceptedNodeTypes);
+    selectPathPanel.setAcceptedMimeTypes(acceptedMimeTypes);
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     String currentPortalName = Util.getUIPortal().getName();
     SessionProvider provider = SessionProviderFactory.createSessionProvider();

@@ -204,7 +204,7 @@ public class UIContentSearchForm extends UIForm {
   private QueryCriteria getInitialQueryCriteria(String siteName) {
     QueryCriteria qCriteria = new QueryCriteria();
     String contentType = getAncestorOfType(UIContentSelector.class).getChild(UIContentBrowsePanel.class).contentType;
-    if (UIContentBrowsePanel.WEBCONENT.equals(contentType)) {
+    if (UIContentBrowsePanel.WEBCONTENT.equals(contentType)) {
     	qCriteria.setSearchDocument(false);
     	qCriteria.setSearchWebContent(true);
     } else if (UIContentBrowsePanel.DMSDOCUMENT.equals(contentType)) {
@@ -292,7 +292,7 @@ public class UIContentSearchForm extends UIForm {
       QueryCriteria qCriteria = uiWCSearch.getInitialQueryCriteria(siteName);
       PaginatedQueryResult pagResult = null; 
 
-      if(typeSearch.equals(UIContentBrowsePanel.WEBCONENT)){
+      if(typeSearch.equals(UIContentBrowsePanel.WEBCONTENT)){
         if(UIContentSearchForm.SEARCH_BY_NAME.equals(radioValue)) {
           String keyword = uiWCSearch.getUIStringInput(radioValue).getValue();
           if(uiWCSearch.haveEmptyField(uiApp, event, keyword)) return;

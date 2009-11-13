@@ -21,8 +21,10 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.ValueFormatException;
 import javax.jcr.nodetype.NodeType;
 
 import org.exoplatform.commons.utils.ObjectPageList;
@@ -91,6 +93,26 @@ public class UISelectPathPanel extends UIContainer {
   private List<String> templates_ = null;
 
   final static String PATH = "path".intern();
+  
+  private boolean isDMSDocument;
+  
+  private boolean isWebContent;
+
+  public boolean isWebContent() {
+    return isWebContent;
+  }
+
+  public void setWebContent(boolean isWebContent) {
+    this.isWebContent = isWebContent;
+  }
+
+  public boolean isDMSDocument() {
+    return isDMSDocument;
+  }
+
+  public void setDMSDocument(boolean isDMSDocument) {
+    this.isDMSDocument = isDMSDocument;
+  }
 
   /**
    * Instantiates a new uI select path panel.
@@ -269,7 +291,7 @@ public class UISelectPathPanel extends UIContainer {
       Node child = iterator.nextNode();
       if(child.isNodeType("exo:hiddenable")) continue;
       Node symChild= Utils.getNodeSymLink(child);
-      if(matchMimeType(symChild) && matchNodeType(symChild) && isValidState(symChild)) {
+      if(filterNode(symChild) && isValidState(symChild)) {
         list.add(child);
       }
     }
@@ -299,23 +321,6 @@ public class UISelectPathPanel extends UIContainer {
   }
 
   /**
-   * Match node type.
-   * 
-   * @param node the node
-   * 
-   * @return true, if successful
-   * 
-   * @throws Exception the exception
-   */
-  protected boolean matchNodeType(Node node) throws Exception {
-    if(acceptedNodeTypes == null || acceptedNodeTypes.length == 0) return true;
-    for(String nodeType: acceptedNodeTypes) {
-      if((node != null) && node.isNodeType(nodeType)) return true;
-    }
-    return false;
-  }
-
-  /**
    * Checks if is excepted node type.
    * 
    * @param node the node
@@ -337,26 +342,72 @@ public class UISelectPathPanel extends UIContainer {
     return false;
   }
 
-  /**
-   * Match mime type.
-   * 
-   * @param node the node
-   * 
-   * @return true, if successful
-   * 
-   * @throws Exception the exception
-   */
-  protected boolean matchMimeType(Node node) throws Exception {
-    if(acceptedMimeTypes == null || acceptedMimeTypes.length == 0) return true;
-    if(!node.isNodeType("nt:file")) return true;
-    String mimeType = node.getNode("jcr:content").getProperty("jcr:mimeType").getString();
-    for(String type: acceptedMimeTypes) {
-      if(type.equalsIgnoreCase(mimeType))
-        return true;
+  private boolean filterNode(Node node) throws RepositoryException{
+    if(acceptedNodeTypes == null || acceptedNodeTypes.length == 0) return false;
+    NodeType[] superTypes = null;
+    if(isWebContent()) {
+      superTypes = node.getPrimaryNodeType().getSupertypes();
+      for(String nodeType : acceptedNodeTypes) {
+        if(node.isNodeType(nodeType)) {
+          return true;
+        }
+        for(NodeType superType : superTypes) {
+          if(superType.isNodeType(nodeType)) {
+            return true;
+          }
+        }
+      }
+    } else if(isDMSDocument()) {
+      superTypes = node.getPrimaryNodeType().getSupertypes();
+      String[] webContentNodeTypes = UIContentBrowsePanel.WEBCONTENT_NODERTYPE;
+      for(String webContentNodeType : webContentNodeTypes) {
+        if(node.isNodeType(webContentNodeType)) {
+          return false;
+        }
+        for(NodeType superType : superTypes) {
+          if(superType.isNodeType(webContentNodeType)) {
+            return false;
+          }
+        }
+      }
+      for(String nodeType : acceptedNodeTypes) {
+        if(!node.isNodeType(nodeType)) {
+          return false;
+        } else if(node.isNodeType("nt:file")) {
+          return filterDMSDocumentMimeType(node);
+        }
+      }
+      return true;
+    } else {
+      return this.filterMediaMimetype(node);
     }
     return false;
   }
-
+  
+  private boolean filterDMSDocumentMimeType(Node node) throws ValueFormatException, PathNotFoundException, RepositoryException {
+    String mimeType = node.getNode("jcr:content").getProperty("jcr:mimeType").getString();
+    String[] mediaMimeTypes = UIContentBrowsePanel.MEDIA_MIMETYPE;
+    if(mediaMimeTypes == null || mediaMimeTypes.length == 0) return false;
+    for(String type: mediaMimeTypes) {
+      if(mimeType.contains(type)){
+        return false;
+      }
+    }
+    return true;
+  }
+  
+  private boolean filterMediaMimetype(Node node) throws RepositoryException {
+    if(!node.isNodeType("nt:file")) return false;
+    if(acceptedMimeTypes == null || acceptedMimeTypes.length == 0) return false;
+    String mimeType = node.getNode("jcr:content").getProperty("jcr:mimeType").getString();
+    for(String type: acceptedMimeTypes) {
+      if(mimeType.contains(type)){
+        return true;
+      }
+    }
+    return false;
+  }
+  
   /**
    * Gets the path taxonomy.
    * 
