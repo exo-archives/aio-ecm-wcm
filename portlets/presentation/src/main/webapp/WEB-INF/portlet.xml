@@ -369,7 +369,7 @@
 			</preference>
 			<preference>
 				<name>treeName</name>
-				<value>Acme</value>
+				<value>acme</value>
 				<read-only>false</read-only>
 			</preference>
 			<preference>
