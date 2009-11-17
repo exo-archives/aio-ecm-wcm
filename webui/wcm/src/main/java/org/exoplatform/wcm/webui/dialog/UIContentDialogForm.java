@@ -86,7 +86,7 @@ public class UIContentDialogForm extends UIDialogForm {
 	public void setWebcontentNodeLocation(NodeLocation webcontentNodeLocation) {
 		this.webcontentNodeLocation = webcontentNodeLocation;
 	}
-
+	
 	public Class<? extends UIContentDialogPreference> getPreferenceComponent() {
 		return preferenceComponent;
 	}
@@ -121,6 +121,10 @@ public class UIContentDialogForm extends UIDialogForm {
     resetProperties();
   }
 
+  public Node getCurrentNode() {
+    return NodeLocation.getNodeByLocation(webcontentNodeLocation);
+  }
+  
   /* (non-Javadoc)
    * @see org.exoplatform.ecm.webui.form.UIDialogForm#getTemplate()
    */

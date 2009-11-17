@@ -26,7 +26,6 @@ import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.version.Version;
 import javax.portlet.PortletPreferences;
 
 import org.apache.commons.logging.Log;
