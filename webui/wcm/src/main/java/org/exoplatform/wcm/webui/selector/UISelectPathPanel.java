@@ -371,10 +371,10 @@ public class UISelectPathPanel extends UIContainer {
         }
       }
       for(String nodeType : acceptedNodeTypes) {
-        if(!node.isNodeType(nodeType)) {
-          return false;
-        } else if(node.isNodeType("nt:file")) {
+        if(node.isNodeType("nt:file")) {
           return filterDMSDocumentMimeType(node);
+        } else if(node.isNodeType(nodeType)) {
+          return true;
         }
       }
       return true;
