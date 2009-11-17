@@ -83,6 +83,8 @@ public class UICLVContentSelectedGrid extends UISelectedCategoriesGrid {
      */
     public void execute(Event<UICLVContentSelectedGrid> event) throws Exception {
       UICLVContentSelectedGrid uiSelectedContentGrid = event.getSource();
+	  UIContentBrowsePanel uiContentBrowsePanel = uiSelectedContentGrid.getAncestorOfType(UIContentBrowsePanel.class);
+      UISelectable contentBrowsePanel = (UISelectable) uiContentBrowsePanel.getSourceComponent();
       String value = event.getRequestContext().getRequestParameter(OBJECTID);
       uiSelectedContentGrid.removeCategory(value);
       if (uiSelectedContentGrid.getSelectedCategories().size() == 0) uiSelectedContentGrid.setDeleteAllCategory(true);
@@ -90,6 +92,7 @@ public class UICLVContentSelectedGrid extends UISelectedCategoriesGrid {
       if (uiSelectedContentGrid.getSelectedCategories().size() == 0) {
         uiSelectedContentGrid.setRendered(false);
       }
+	  ((UISourceGridUpdatable)contentBrowsePanel).doSave(uiSelectedContentGrid.getSelectedCategories());
       event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectedContentGrid.getParent());      
     }
   }
