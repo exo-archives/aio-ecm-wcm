@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<configuration>
+
+	<external-component-plugins>
+	  <target-component>org.exoplatform.services.wcm.publication.WCMPublicationService</target-component>
+		<component-plugin>
+			<name>Date time publication</name>
+			<set-method>addPublicationPlugin</set-method>
+			<type>org.exoplatform.services.wcm.publication.lifecycle.datetime.DateTimePublicationPlugin</type>
+			<description>This publication lifecycle publish a web content or DMS document to a portal page with more states, version and date time.</description>	    	    	   
+		</component-plugin>
+	</external-component-plugins>
+	
+	<!--external-component-plugins>
+  	<target-component>org.exoplatform.services.jcr.RepositoryService</target-component>		
+	  <component-plugin>
+	    <name>add.nodeType</name>
+	    <set-method>addPlugin</set-method>
+	    <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
+	    <priority>99</priority>
+	    <init-params>
+	      <values-param>
+	        <name>autoCreatedInNewRepository</name>
+	        <description>Node types configuration file</description>
+	        <value>jar:/conf/wcm-publication-nodetypes.xml</value>
+	      </values-param>
+	    </init-params>
+	  </component-plugin>
+	</external-component-plugins-->	
+	
+</configuration>
