@@ -41,7 +41,7 @@
 					</div>
 				<%
 			}
-			if (isShowPrint) { 
+			if (!Utils.isEditPortletInCreatePageWizard() && isShowPrint) { 
 				%>
 					<div class="UIOptionBar">
 						<a class="ActionIcon PrintIcon" href="javascript: void(0);" onclick="window.open('<%= uicomponent.getPrintUrl() %>')" title="<%= _ctx.appRes("UIPresentationContainer.optionBar.print.info");%>"><%= _ctx.appRes("UIPresentationContainer.optionBar.print.label") %></a>
