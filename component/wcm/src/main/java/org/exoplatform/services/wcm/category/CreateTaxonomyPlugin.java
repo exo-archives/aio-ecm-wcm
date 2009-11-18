@@ -51,7 +51,7 @@ import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
-import org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin;
+import org.exoplatform.services.wcm.portal.artifacts.CreatePortalPlugin;
 
 /**
  * Created by The eXo Platform SAS
@@ -59,7 +59,7 @@ import org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin;
  * chuong_phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
  * Aug 11, 2009
  */
-public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
+public class CreateTaxonomyPlugin extends CreatePortalPlugin {
 
   /** The workspace. */
   private String                  workspace                  = "";
@@ -112,7 +112,7 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
    * 
    * @throws Exception the exception
    */
-  public InitialTaxonomyPlugin(InitParams params, 
+  public CreateTaxonomyPlugin(InitParams params, 
                                ConfigurationManager configurationManager,
                                RepositoryService repositoryService,
                                NodeHierarchyCreator nodeHierarchyCreator, 

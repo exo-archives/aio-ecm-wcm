@@ -24,7 +24,7 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
  * hoa.phamvu@exoplatform.com
  * Oct 22, 2008
  */
-public interface PortalArtifactsInitializerService {
+public interface RemovePortalArtifactsService {
   
   /**
    * Adds the plugin.
@@ -33,7 +33,7 @@ public interface PortalArtifactsInitializerService {
    * 
    * @throws Exception the exception
    */
-  public void addPlugin(BasePortalArtifactsPlugin artifactsPlugin) throws Exception;
+  public void addPlugin(RemovePortalPlugin artifactsPlugin) throws Exception;
   
   /**
    * Deploy artifacts to portal.
@@ -43,5 +43,5 @@ public interface PortalArtifactsInitializerService {
    * 
    * @throws Exception the exception
    */
-  public void deployArtifactsToPortal(SessionProvider sessionProvider, String portalName) throws Exception;  
+  public void invalidateArtifactsFromPortal(SessionProvider sessionProvider, String portalName) throws Exception;  
 }

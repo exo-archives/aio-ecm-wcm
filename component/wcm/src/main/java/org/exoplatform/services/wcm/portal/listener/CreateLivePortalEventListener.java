@@ -33,7 +33,7 @@ import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
-import org.exoplatform.services.wcm.portal.artifacts.PortalArtifactsInitializerService;
+import org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService;
 import org.exoplatform.services.wcm.skin.XSkinService;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
@@ -77,8 +77,8 @@ public class CreateLivePortalEventListener extends Listener<DataStorageImpl, Por
                 e.fillInStackTrace());
     }      
     //Deploy initial artifacts for this portal 
-    PortalArtifactsInitializerService artifactsInitializerService = (PortalArtifactsInitializerService)
-    container.getComponentInstanceOfType(PortalArtifactsInitializerService.class);
+    CreatePortalArtifactsService artifactsInitializerService = (CreatePortalArtifactsService)
+    container.getComponentInstanceOfType(CreatePortalArtifactsService.class);
     try {      
       artifactsInitializerService.deployArtifactsToPortal(sessionProvider, portalConfig.getName());
     } catch (Exception e) {
