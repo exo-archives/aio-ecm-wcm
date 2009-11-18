@@ -18,6 +18,7 @@
       <Back>Cancel</Back>
       <Next>Next</Next>
       <Abort>Abort</Abort>
+      
     </action>
     <WelcomeLable>Welcome to the Single Content Viewer</WelcomeLable>
     <Text>Make your choice</Text>
@@ -234,6 +235,11 @@
   # 		org.exoplatform.wcm.presentation.acp.config.UITagging		 #
   ######################################################################
   -->
+  <UIContentDialogConfig>
+  	<action>
+  		<SaveToPortletPreference>Save</SaveToPortletPreference>
+  	</action>
+  </UIContentDialogConfig>
   <UITagging>
     <label>
       <TagNames>Tag names</TagNames>
@@ -318,6 +324,7 @@
       <non-lifecyclename>Please select a lifecycle name!</non-lifecyclename>
       <non-firstwhiteletter>can not use space letter in the first letter of name field!</non-firstwhiteletter>
     </msg>
+    UI Name web content dialog form
   </UINameWebContentForm>
   <!--/n  ##########################################################################
   -->
@@ -359,5 +366,13 @@
     <link>Click here to change into edit content interface!</link>
   </UIStartEditionInPageWizard>
   
+  <UIContentDialogFormPopupWindow>
+  	<title>
+  		<UIContentDialogPreference>UI Content dialog preference</UIContentDialogPreference>
+  		<UIContentDialogConfig>UI Content dialog configuration</UIContentDialogConfig>
+  		<UIContentDialogForm>UI Content dialog form</UIContentDialogForm>
+  		<UINameWebContentForm>UI Name web content form</UINameWebContentForm>
+  	</title>
+  </UIContentDialogFormPopupWindow>
 </bundle>
 

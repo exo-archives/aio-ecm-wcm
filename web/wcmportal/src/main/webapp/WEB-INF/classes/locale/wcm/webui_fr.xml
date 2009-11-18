@@ -101,6 +101,7 @@
   		<UIContentBrowsePanelMulti>Contenu parcourir Multi Panel</UIContentBrowsePanelMulti>
   		<UIContentBrowsePanelFolder>Contenu explorer un dossier du panneau</UIContentBrowsePanelFolder>
   		<UIContentBrowsePanelOne>Parcourir le contenu du panneau</UIContentBrowsePanelOne>
+  		<UIContentDialogConfig>Contenu de dialogue de configuration</UIContentDialogConfig>
   	</title>
   </UITabPane>
   <UIContentBrowsePanel>
