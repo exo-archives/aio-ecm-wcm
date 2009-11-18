@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.wcm.portal.artifacts;
+package org.exoplatform.services.wcm.webcontent;
 
 import java.io.InputStream;
 import java.util.Iterator;
@@ -40,6 +40,7 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.services.wcm.portal.artifacts.CreatePortalPlugin;
 
 /**
  * Created by The eXo Platform SAS
@@ -47,10 +48,10 @@ import org.exoplatform.services.wcm.portal.LivePortalManagerService;
  * hoa.phamvu@exoplatform.com
  * Oct 22, 2008
  */
-public class InitialWebContentPlugin extends BasePortalArtifactsPlugin {
+public class InitialWebContentPlugin extends CreatePortalPlugin {
   
   @SuppressWarnings("unused")
-  private static Log log = ExoLogger.getLogger(BasePortalArtifactsPlugin.class);   
+  private static Log log = ExoLogger.getLogger(CreatePortalPlugin.class);   
   private InitParams initParams;   
   private ConfigurationManager configurationManager;  
   private RepositoryService repositoryService;
