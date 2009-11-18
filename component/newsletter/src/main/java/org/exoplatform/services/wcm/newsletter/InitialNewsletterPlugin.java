@@ -31,7 +31,7 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
-import org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin;
+import org.exoplatform.services.wcm.portal.artifacts.CreatePortalPlugin;
 
 /**
  * Created by The eXo Platform SAS
@@ -39,7 +39,7 @@ import org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin;
  * chuong_phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
  * Aug 21, 2009
  */
-public class InitialNewsletterPlugin extends BasePortalArtifactsPlugin {
+public class InitialNewsletterPlugin extends CreatePortalPlugin {
 
   /** The category configs. */
   private List<NewsletterCategoryConfig> categoryConfigs;

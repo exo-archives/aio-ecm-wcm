@@ -19,17 +19,16 @@ package org.exoplatform.services.wcm.portal.listener;
 import javax.jcr.Node;
 
 import org.apache.commons.logging.Log;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.jcr.DataStorageImpl;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.cms.drives.ManageDriveService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.services.wcm.portal.artifacts.RemovePortalArtifactsService;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
@@ -46,24 +45,34 @@ public class RemoveLivePortalEventListener extends Listener<DataStorageImpl, Por
    * @see org.exoplatform.services.listener.Listener#onEvent(org.exoplatform.services.listener.Event)
    */
   public void onEvent(Event<DataStorageImpl, PortalConfig> event) throws Exception {
-    PortalConfig portalConfig = event.getData();
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    LivePortalManagerService livePortalManagerService = (LivePortalManagerService) container
-    .getComponentInstanceOfType(LivePortalManagerService.class);
-    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();    
-    ManageDriveService manageDriveService = (ManageDriveService) container
-    .getComponentInstanceOfType(ManageDriveService.class);    
-    String drive = portalConfig.getName();        
-    try {      
-      Node portal = livePortalManagerService.getLivePortal(sessionProvider, portalConfig.getName());
-      String repository = ((ManageableRepository)portal.getSession().getRepository()).getConfiguration().getName();      
-      manageDriveService.removeDrive(drive, repository);
-      livePortalManagerService.removeLivePortal(sessionProvider, portalConfig);
-      log.info("Resources storage of portal: " + portalConfig.getName() + " was invalid");
-    } catch (Exception e) {
-      log.error("Exception when remove resources storage for portal: " + portalConfig.getName(),
-                e.fillInStackTrace());
-    }    
+  	PortalConfig portalConfig = event.getData();
+  	String portalName = portalConfig.getName();
+  	LivePortalManagerService livePortalManagerService = WCMCoreUtils.getService(LivePortalManagerService.class);
+  	SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();    
+  	Node portal = livePortalManagerService.getLivePortal(sessionProvider, portalName);
+  	
+  	// Remove drive for the site content storage
+  	ManageDriveService manageDriveService = WCMCoreUtils.getService(ManageDriveService.class);    
+  	String repository = NodeLocation.make(portal).getRepository();
+  	try {
+  		manageDriveService.removeDrive(portalName, repository);
+  		log.info("Removed drive for portal: " + portalName);
+		} catch (Exception e) {
+			log.error("Error when remove drive for portal: " + portalName, e.fillInStackTrace());
+		}
+  	
+  	// Remove initial artifacts for this portal
+  	RemovePortalArtifactsService removePortalArtifactsService = WCMCoreUtils.getService(RemovePortalArtifactsService.class);
+  	removePortalArtifactsService.invalidateArtifactsFromPortal(sessionProvider, portalName);
+		
+  	// Remove site content storage for the portal
+  	try {
+  		livePortalManagerService.removeLivePortal(sessionProvider, portalConfig);
+  		log.info("Removed resource storage for portal: " + portalName);
+		} catch (Exception e) {
+			log.error("Error when remove resource storage: " + portalName, e.fillInStackTrace());
+		}
+  	
     sessionProvider.close();
   }
 

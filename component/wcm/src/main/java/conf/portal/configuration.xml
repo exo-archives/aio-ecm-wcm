@@ -16,8 +16,8 @@
   </component>
     
   <component>
-    <key>org.exoplatform.services.wcm.portal.artifacts.PortalArtifactsInitializerService</key>
-    <type>org.exoplatform.services.wcm.portal.artifacts.PortalArtifactsInitializerServiceImpl</type>
+    <key>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService</key>
+    <type>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsServiceImpl</type>
     <init-params>
       <values-param>
         <name>ignored.portals</name>
@@ -26,6 +26,11 @@
         <value>acme</value>	        
       </values-param>
 	  </init-params>    
+  </component>
+  
+  <component>
+    <key>org.exoplatform.services.wcm.portal.artifacts.RemovePortalArtifactsService</key>
+    <type>org.exoplatform.services.wcm.portal.artifacts.RemovePortalArtifactsServiceImpl</type>
   </component>
   
   <component>

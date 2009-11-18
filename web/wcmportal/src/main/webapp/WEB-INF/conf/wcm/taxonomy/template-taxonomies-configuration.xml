@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <configuration>
 	<external-component-plugins>
-		<target-component>org.exoplatform.services.wcm.portal.artifacts.PortalArtifactsInitializerService</target-component>
+		<target-component>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService</target-component>
 		<component-plugin>
 			<name>Initial taxonomy tree for each site</name>
 			<set-method>addPlugin</set-method>
-			<type>org.exoplatform.services.wcm.category.InitialTaxonomyPlugin</type>
+			<type>org.exoplatform.services.wcm.category.CreateTaxonomyPlugin</type>
 			<description>This plugin deploy taxonomy tree to categories folder of portal when a portal is created</description>
 			<init-params>
 				<value-param>
@@ -297,4 +297,15 @@
 			</init-params>
 		</component-plugin>
 	</external-component-plugins>
+	
+	<external-component-plugins>
+		<target-component>org.exoplatform.services.wcm.portal.artifacts.RemovePortalArtifactsService</target-component>
+		<component-plugin>
+			<name>Remove taxonomy tree</name>
+			<set-method>addPlugin</set-method>
+			<type>org.exoplatform.services.wcm.category.RemoveTaxonomyPlugin</type>
+			<description>This plugin invalidate taxonomy tree to categories folder of portal when a portal is removed</description>
+		</component-plugin>
+	</external-component-plugins>
+	
 </configuration>

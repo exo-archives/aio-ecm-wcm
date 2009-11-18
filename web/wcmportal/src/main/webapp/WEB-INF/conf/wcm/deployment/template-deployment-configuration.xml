@@ -2,25 +2,12 @@
 
 <configuration>
 
-	<component>
-    <key>org.exoplatform.services.wcm.portal.artifacts.PortalArtifactsInitializerService</key>
-    <type>org.exoplatform.services.wcm.portal.artifacts.PortalArtifactsInitializerServiceImpl</type>
-    <init-params>
-      <values-param>
-        <name>ignored.portals</name>
-        <description>initial portals. the service will not deploy data to the initial portal</description>
-        <value>classic</value>
-        <value>acme</value>
-        <value>backoffice</value>	        
-      </values-param>
-	  </init-params>    
-  </component>         
    <external-component-plugins>
-   		<target-component>org.exoplatform.services.wcm.portal.artifacts.PortalArtifactsInitializerService</target-component>    
+   		<target-component>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService</target-component>    
       <component-plugin> 
         <name>Initial webcontent artifact for each site</name>
         <set-method>addPlugin</set-method>
-        <type>org.exoplatform.services.wcm.portal.artifacts.InitialWebContentPlugin</type>
+        <type>org.exoplatform.services.wcm.webcontent.InitialWebContentPlugin</type>
         <description>This plugin deploy some initial webcontent as site artifact to site artifact folder of portal when a portal is created</description>
         <init-params>
           <object-param>        

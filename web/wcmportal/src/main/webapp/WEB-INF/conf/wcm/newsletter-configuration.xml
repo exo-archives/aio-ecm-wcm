@@ -8,7 +8,6 @@
         <name>portalNames</name>
         <value>classic</value>
         <value>acme</value>
-        <!-- value>backoffice</value -->	        
       </values-param>
 			<object-param>
 				<name>marketing</name>
@@ -78,7 +77,7 @@
 	</component>
 	
 	<external-component-plugins>
-		<target-component>org.exoplatform.services.wcm.portal.artifacts.PortalArtifactsInitializerService</target-component>
+		<target-component>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService</target-component>
 		<component-plugin>
 			<name>Initial newsletter data for each site</name>
 			<set-method>addPlugin</set-method>
@@ -154,11 +153,11 @@
 	</external-component-plugins>
 	
 	<external-component-plugins>
-		<target-component>org.exoplatform.services.wcm.portal.artifacts.PortalArtifactsInitializerService</target-component>    
+		<target-component>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService</target-component>    
 			<component-plugin> 
 				<name>Initial demo newsletter for each site</name>
 				<set-method>addPlugin</set-method>
-				<type>org.exoplatform.services.wcm.portal.artifacts.InitialWebContentPlugin</type>
+				<type>org.exoplatform.services.wcm.webcontent.InitialWebContentPlugin</type>
 				<description>This plugin deploy demo newsletter for portal when a portal is created</description>
         <init-params>
           <object-param>        
@@ -180,5 +179,4 @@
 			</init-params>
 		</component-plugin> 
 	</external-component-plugins>
-	
 </configuration>
