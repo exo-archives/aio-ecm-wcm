@@ -79,10 +79,6 @@
 	margin: 0px;
 }
 
-.ClearLeft{
-	clear: none;
-}
-
 .UIWCMSearchContainer .SelectContent .Title {
 	background: #D2DDF1 url(/eXoResources/skin/DefaultSkin/webui/component/UIGrid/background/ThGridRepeatBg1x19.jpg) repeat-x;
 	height: 20px;
