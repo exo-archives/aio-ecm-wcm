@@ -35,7 +35,6 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
 					<dependentWarExcludes>
-						index.jsp,
 						templates/,
 						WEB-INF/conf/mail/,
 						WEB-INF/conf/*.xml,
