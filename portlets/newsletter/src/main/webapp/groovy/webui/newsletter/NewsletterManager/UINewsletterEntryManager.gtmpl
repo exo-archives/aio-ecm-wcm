@@ -67,11 +67,11 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 				        	  	<div class="ButtonRight">
 				          	  	<div class="ButtonMiddle">
 				          	  	
-													<div class="ContentAction ActionTitle" style="float:right;" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+													<div class="ContentAction ActionTitle" style="float:right;" onclick="showPopupCategory(this, event);">
 														
 														
 														<!-- action of this category -->
-														<div class="Line" style="background: none;" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+														<div class="Line" style="background: none;" onclick="showPopupCategory(this, event);">
 															<a href="#" class="NewsAdmin"><%=_ctx.appRes("NewsletterPortlet.action.Moderation")%></a>
 															<div style="position:absolute;">
 																<div class="UIPopupCategory" style="display:none; top:-2px; ">
@@ -193,3 +193,42 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 	</div>
 <%uiform.end()%>
 </div>
+<script type="text/javascript">
+function hidePopupCategory() {
+	var ln = eXo.core.DOMUtil.hideElementList.length ;
+	if (ln > 0) {
+		for (var i = 0 ; i < ln ; i++) {
+			eXo.core.DOMUtil.hideElementList[i].style.display = "none" ;
+		}
+	}
+} 
+
+function showPopupCategory(obj, evt) {
+	if(!evt) evt = window.event ;
+	evt.cancelBubble = true ;
+	var DOMUtil = eXo.core.DOMUtil ;
+	var btnAction = DOMUtil.findAncestorByClass(obj, "ActionButton");
+	var uiPopupCategory = DOMUtil.findFirstDescendantByClass(obj, 'div', 'UIPopupCategory') ;	
+	if (!uiPopupCategory) return ;	
+	if(uiPopupCategory.style.display == "none") {
+		hidePopupCategory();
+		uiPopupCategory.style.display = "block" ;
+		eXo.core.DOMUtil.listHideElements(uiPopupCategory) ;	
+		if(eXo.env.portal.language == "fr") {
+			if(eXo.core.Browser.isFF()) uiPopupCategory.style.left = btnAction.offsetLeft - uiPopupCategory.offsetWidth + 'px';
+			else {
+				uiPopupCategory.style.top = obj.offsetHeight - 7 + 'px';
+				uiPopupCategory.style.left = -(uiPopupCategory.offsetWidth*2) + 'px';
+			}
+		} else {
+			if(eXo.core.Browser.browserType == 'ie') {
+				uiPopupCategory.style.top = obj.offsetHeight - 7 + 'px';
+				uiPopupCategory.style.left = '-200px';
+			}
+		}
+	}	
+	else {
+		uiPopupCategory.style.display = "none" ;
+	}
+}
+</script>

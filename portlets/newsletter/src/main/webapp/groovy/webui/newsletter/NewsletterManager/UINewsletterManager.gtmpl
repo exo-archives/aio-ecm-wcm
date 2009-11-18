@@ -61,7 +61,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 				        	  	<div class="ButtonRight">
 				          	  	<div class="ButtonMiddle">
 				          	  	
-													<div class="ContentAction ActionTitle" style="float:right;" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+													<div class="ContentAction ActionTitle" style="float:right;" onclick="eXo.ecm.UINewsletterUtil.show(this, event);">
 														<div class="Name" style="float:none; cursor:pointer;">
 						          	  		<a href="javascript:void(0);">
 						          	  			<%=_ctx.appRes("NewsletterPortlet.action.Moderation")%>
