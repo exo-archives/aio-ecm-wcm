@@ -375,6 +375,19 @@
 
     <link>Cliquer ici pour accéder au dialogue d'édition du contenu!</link>
   </UIStartEditionInPageWizard>
-  
+  <UIContentDialogFormPopupWindow>
+  	<title>
+  		<UIContentDialogPreference>Interface de dialogue des préférences de contenu</UIContentDialogPreference>
+  		<UIContentDialogConfig>Interface de configuration du contenu de dialogue</UIContentDialogConfig>
+  		<UIContentDialogForm>Interface utilisateur sous forme de contenu de dialogue</UIContentDialogForm>
+  		<UINameWebContentForm>Interface utilisateur Web Nom contenu d'un formulaire</UINameWebContentForm>
+  	</title>
+  	
+  </UIContentDialogFormPopupWindow>
+  <UIContentDialogConfig>
+  	<action>
+  		<SaveToPortletPreference>Sauver</SaveToPortletPreference>
+  	</action>
+  </UIContentDialogConfig>
 </bundle>
 

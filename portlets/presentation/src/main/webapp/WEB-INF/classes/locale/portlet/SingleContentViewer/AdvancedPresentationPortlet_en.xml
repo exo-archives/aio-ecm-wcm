@@ -358,6 +358,18 @@
   <UIStartEditionInPageWizard>
     <link>Click here to change into edit content interface!</link>
   </UIStartEditionInPageWizard>
-  
+  <UIContentDialogFormPopupWindow>
+  	<title>
+  		<UIContentDialogPreference>UI Content dialog preference</UIContentDialogPreference>
+  		<UIContentDialogConfig>UI Content dialog configuration</UIContentDialogConfig>
+  		<UIContentDialogForm>UI Content dialog form</UIContentDialogForm>
+  		<UINameWebContentForm>UI Name web content form</UINameWebContentForm>
+  	</title>
+  </UIContentDialogFormPopupWindow>
+  <UIContentDialogConfig>
+  	<action>
+  		<SaveToPortletPreference>Save</SaveToPortletPreference>
+  	</action>
+  </UIContentDialogConfig>
 </bundle>
 

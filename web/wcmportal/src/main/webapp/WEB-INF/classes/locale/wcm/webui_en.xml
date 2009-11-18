@@ -101,6 +101,7 @@
   		<UIContentBrowsePanelMulti>Content browse panel multi</UIContentBrowsePanelMulti>
   		<UIContentBrowsePanelFolder>Content browse panel folder</UIContentBrowsePanelFolder>
 		<UIContentBrowsePanelOne>Content browse panel</UIContentBrowsePanelOne>
+		<UIContentDialogConfig>Content dialog configuration</UIContentDialogConfig>
   	</title>
   </UITabPane>
   <UIContentBrowsePanel>
