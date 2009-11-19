@@ -238,7 +238,6 @@ public class UINewsletterEntryForm extends UIDialogForm {
     public void execute(Event<UINewsletterEntryForm> event) throws Exception {
       UINewsletterEntryForm newsletterEntryForm = event.getSource();
       UINewsletterEntryContainer newsletterEntryContainer = newsletterEntryForm.getAncestorOfType(UINewsletterEntryContainer.class);
-      //PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
       PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();
       if(!newsletterEntryContainer.isUpdated()){
         UIApplication uiApp = newsletterEntryContainer.getAncestorOfType(UIApplication.class);
