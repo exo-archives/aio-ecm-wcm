@@ -9,7 +9,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.exoplatform.ecm</groupId>
 	<artifactId>wcm</artifactId>
-	<name>eXo WCM Config</name>
+        <name>eXo ECM - WCM</name>
+        <description>eXo Enterprise Content Management - Web Content Management</description>
 	<version>1.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
