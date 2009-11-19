@@ -55,12 +55,16 @@
 }
 
 .UINewLetterPopup .BottomCenterRightClickPopupMenu {
-	background: url('background/PopupBg.gif') repeat-x left -10px;
+	background: url('background/PopupBg.gif') repeat-x center -10px;
 	height: 5px;
 }
 
 .UINewLetterPopup .MenuItem .ItemIcon {
 	background-repeat: no-repeat;
+}
+
+.UINewLetterPopup .MenuItem .Remove16x16Icon {
+	height: auto;
 }
 
 .UINewsletterPortlet .BreadCumbs {
@@ -281,7 +285,6 @@
 }
 
 .UINewsletterPortlet .UIRightClickPopupMenu .UIContextMenuContainer {
-	width: 160px;
 }
 
 .UINewsletterPortlet .UIRightClickPopupMenu .UIRightPopupMenuContainer {
