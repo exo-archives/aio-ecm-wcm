@@ -49,6 +49,7 @@ import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -237,6 +238,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
     public void execute(Event<UINewsletterEntryForm> event) throws Exception {
       UINewsletterEntryForm newsletterEntryForm = event.getSource();
       UINewsletterEntryContainer newsletterEntryContainer = newsletterEntryForm.getAncestorOfType(UINewsletterEntryContainer.class);
+	  PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();
       if(!newsletterEntryContainer.isUpdated()){
         UIApplication uiApp = newsletterEntryContainer.getAncestorOfType(UIApplication.class);
         uiApp.addMessage(new ApplicationMessage("UINewsletterEntryForm.msg.UpdateBeforeSave", null, ApplicationMessage.WARNING));
@@ -278,9 +280,41 @@ public class UINewsletterEntryForm extends UIDialogForm {
           for (int i = 1; i < listEmailAddress.size(); i ++) {
             receiver += listEmailAddress.get(i) + ",";
           }
+		  
+		  String content = newsletterManagerService.getEntryHandler().getContent(Utils.getSessionProvider(newsletterEntryForm), newsletterNode);
+          String baseURI = portletRequestContext.getRequest().getScheme() + "://"
+          + portletRequestContext.getRequest().getServerName() + ":"
+          + String.format("%s", portletRequestContext.getRequest().getServerPort());
+          String data = newsletterNode.getNode("default.html").getNode("jcr:content").getProperty("jcr:data").getString();
+          String url = "";
+          int index= 0;
+          do{
+            if(data.indexOf("<a", index) >= 0) {
+              index = data.indexOf("href=", index) + "href=".length() + 1;
+              int indexEndLink = data.indexOf(">", index);
+              String link = data.substring(index, indexEndLink);
+              if(link.startsWith("/")) {
+                url = baseURI + link;
+                url = url.replaceAll(" ", "%20");
+                content = content.replaceAll(link, url);
+              }
+            } else if(data.indexOf("<img", index) >= 0) {
+              index = data.indexOf("src=", index) + "src=".length() + 1;
+              int indexEndImg = data.indexOf("/>", index);
+              String imgSrc = data.substring(index, indexEndImg);
+              if(imgSrc.startsWith("/")) {
+                url = baseURI + imgSrc;
+                url = url.replaceAll(" ", "%20");
+                content = content.replaceAll(imgSrc, url);
+              }
+            } else {
+              break;
+            }
+          } while(index >= 0);
+		  
           message.setBCC(receiver);
           message.setSubject(newsletterNode.getName()) ;
-          message.setBody(newsletterManagerService.getEntryHandler().getContent(Utils.getSessionProvider(newsletterEntryForm), newsletterNode)) ;
+          message.setBody(content) ;
           message.setMimeType("text/html") ;
           try {
             mailService.sendMessage(message);
