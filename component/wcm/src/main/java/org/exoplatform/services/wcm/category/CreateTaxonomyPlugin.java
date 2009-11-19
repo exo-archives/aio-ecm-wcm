@@ -25,6 +25,7 @@ import java.util.Set;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
+import javax.jcr.Workspace;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.container.configuration.ConfigurationManager;
@@ -39,6 +40,7 @@ import org.exoplatform.services.cms.actions.impl.ActionConfig.TaxonomyAction;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.impl.DMSRepositoryConfiguration;
 import org.exoplatform.services.cms.impl.Utils;
+import org.exoplatform.services.cms.link.LinkManager;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.cms.taxonomy.impl.TaxonomyAlreadyExistsException;
 import org.exoplatform.services.cms.taxonomy.impl.TaxonomyConfig;
@@ -81,9 +83,15 @@ public class CreateTaxonomyPlugin extends CreatePortalPlugin {
 
   /** The taxonomy service_. */
   private TaxonomyService         taxonomyService;
+  
+  /** The link manager service_. */
+  private LinkManager 						linkManager;
 
   /** The base taxonomies storage_. */
   private String                  baseTaxonomiesStorage;
+  
+  /** The base taxonomies definition_. */
+  private String                  baseTaxonomiesDefinition;
 
   /** The action service container_. */
   private ActionServiceContainer  actionServiceContainer;
@@ -92,7 +100,7 @@ public class CreateTaxonomyPlugin extends CreatePortalPlugin {
   private InitParams              params;
   
   /** The dms configuration_. */
-  private DMSConfiguration        dmsConfiguration_;
+  private DMSConfiguration        dmsConfiguration;
   
   /** The name. */
   private String                  name;
@@ -118,15 +126,18 @@ public class CreateTaxonomyPlugin extends CreatePortalPlugin {
                                NodeHierarchyCreator nodeHierarchyCreator, 
                                TaxonomyService taxonomyService,
                                ActionServiceContainer actionServiceContainer, 
-                               DMSConfiguration dmsConfiguration) throws Exception {
+                               DMSConfiguration dmsConfiguration, 
+                               LinkManager linkManager) throws Exception {
     super(params, configurationManager, repositoryService);
     
     this.repositoryService = repositoryService;
     this.baseTaxonomiesStorage = nodeHierarchyCreator.getJcrPath(BasePath.TAXONOMIES_TREE_STORAGE_PATH);
+    this.baseTaxonomiesDefinition = nodeHierarchyCreator.getJcrPath(BasePath.TAXONOMIES_TREE_DEFINITION_PATH);
     this.taxonomyService = taxonomyService;
     this.actionServiceContainer = actionServiceContainer;
     this.params = params;
-    this.dmsConfiguration_ = dmsConfiguration;
+    this.dmsConfiguration = dmsConfiguration;
+    this.linkManager = linkManager;
   }
 
   /* (non-Javadoc)
@@ -143,16 +154,56 @@ public class CreateTaxonomyPlugin extends CreatePortalPlugin {
     if (pathParam == null || workspaceParam == null || workspaceParam.getValue().trim().length() == 0) {
       path = baseTaxonomiesStorage;
     } else {
-      path = pathParam.getValue();
+      path = pathParam.getValue();  
       workspace = workspaceParam.getValue();
     }
     if (nameParam != null) {
       treeName = nameParam.getValue();
     }
-    
+
     treeName = StringUtils.replace(treeName, "{treeName}", portalName);
     path = StringUtils.replace(path, "{portalName}", portalName);
-    init();
+
+    Session session = null;
+    try {
+    	// Get source information
+    	String repositoryName = repositoryService.getCurrentRepository().getConfiguration().getName();
+    	Node srcTaxonomy = taxonomyService.getTaxonomyTree(repositoryName, portalName);
+    	String srcWorkspace = srcTaxonomy.getSession().getWorkspace().getName();
+    	
+    	// Get destination information
+    	ManageableRepository repository = repositoryService.getRepository(repositoryName);
+    	session = sessionProvider.getSession(this.workspace, repository);
+    	Workspace destWorkspace = session.getWorkspace();
+    	String destPath = path + "/" + srcTaxonomy.getName();
+    	
+    	// If same workspace
+    	if (srcWorkspace.equals(destWorkspace.getName())) {
+    		destWorkspace.move(srcTaxonomy.getPath(), destPath);
+    	} else {
+    		// Clone taxonomy tree across workspace
+    		destWorkspace.clone(srcWorkspace, srcTaxonomy.getPath(), destPath, true);
+    		
+    		// Remove old link taxonomy tree in definition
+    		String dmsSystemWorkspaceName = dmsConfiguration.getConfig(repositoryName).getSystemWorkspace();
+    		Node taxonomyDefinition = (Node) sessionProvider.getSession(dmsSystemWorkspaceName, repository).getItem(baseTaxonomiesDefinition);
+    		Node srcLinkTaxonomy = taxonomyDefinition.getNode(srcTaxonomy.getName());
+    		srcLinkTaxonomy.remove();
+    		
+    		// Remove old taxonomy tree
+    		srcTaxonomy.remove();
+    		
+    		// Register new taxonomy tree in definition
+    		Node destTaxonomy = (Node) session.getItem(destPath);
+    		linkManager.createLink(taxonomyDefinition, destTaxonomy);
+    	}
+    	session.save();
+    	return;
+    } catch (Exception e) {
+    	init();
+    } finally {
+    	if (session != null) session.logout();
+    }
   }
 
   /**
@@ -269,7 +320,7 @@ public class CreateTaxonomyPlugin extends CreatePortalPlugin {
   @SuppressWarnings("unchecked")
   private void importPredefineTaxonomies(String repository) throws Exception {
     ManageableRepository manageableRepository = this.repositoryService.getRepository(repository);
-    DMSRepositoryConfiguration dmsRepoConfig = this.dmsConfiguration_.getConfig(repository);
+    DMSRepositoryConfiguration dmsRepoConfig = this.dmsConfiguration.getConfig(repository);
     if (getWorkspace() == null) {
       setWorkspace(dmsRepoConfig.getSystemWorkspace());
     }
