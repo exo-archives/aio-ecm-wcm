@@ -22,14 +22,20 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.jcr.Node;
+import javax.jcr.Session;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.webui.form.UIFormInputSetWithAction;
 import org.exoplatform.ecm.webui.selector.UISelectable;
+import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.webui.application.UIPortlet;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.views.ApplicationTemplateManagerService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.clv.UICLVContainer;
 import org.exoplatform.wcm.webui.clv.UICLVFolderMode;
@@ -64,6 +70,9 @@ import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 15, 2008
  */
+/**
+ * The Class UICLVConfig.
+ */
 @ComponentConfig(
   lifecycle = UIFormLifecycle.class, 
   template = "app:/groovy/ContentListViewer/config/UICLVConfig.gtmpl", 
@@ -81,6 +90,9 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
 
   /** The content list. */
   private List<String>       contentList                  = new ArrayList<String>();
+  
+  /** The old content list. */
+  private List<String>       oldContentList                  = new ArrayList<String>();
 
   /** The Constant HEADER. */
   public final static String HEADER                       = "Header";
@@ -298,7 +310,8 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
       viewerModeRadioBoxInput.setValue(VIEWER_MANUAL_MODE);
       String [] listContent = UICLVPortlet.getContentsByPreference();
       if (listContent != null && listContent.length != 0) {
-      	contentList = Arrays.asList(listContent);         
+      	contentList = Arrays.asList(listContent);   
+      	oldContentList = contentList;
       }
     } else {
       viewerModeRadioBoxInput.setValue(VIEWER_AUTO_MODE);
@@ -350,6 +363,15 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
    */
   public List<String> getViewAbleContentList() {
     return this.contentList;
+  }
+  
+  /**
+   * Gets the old content list.
+   * 
+   * @return the old content list
+   */
+  public List<String> getOldContentList() {
+  	return this.oldContentList;
   }
   
   /*
@@ -451,7 +473,17 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
      */
     public void execute(Event<UICLVConfig> event) throws Exception {
       UICLVConfig uiViewerManagementForm = event.getSource();
+
+      List<String> selectedList = uiViewerManagementForm.getViewAbleContentList();
+      List<String> oldContentList = uiViewerManagementForm.getOldContentList();
       PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();
+      
+      UIPortlet uiPortlet = Util.getUIPortal().findComponentById(portletRequestContext.getWindowId());
+      String portletId = "";
+      if (uiPortlet != null) {
+      	portletId = uiPortlet.getWindowId();
+      }
+      
       PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
       String currentViewerMode = portletPreferences.getValue(UICLVPortlet.VIEWER_MODE, null);
       if (currentViewerMode == null) currentViewerMode = UICLVConfig.VIEWER_AUTO_MODE;
@@ -485,7 +517,7 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
       if ((folderPath.endsWith(";") && newViewerMode.equals(VIEWER_AUTO_MODE)) || (!folderPath.endsWith(";") && newViewerMode.equals(VIEWER_MANUAL_MODE))) {
       	Utils.createPopupMessage(uiViewerManagementForm, "UIMessageBoard.msg.not-valid-action", null, ApplicationMessage.WARNING);
         return;
-      }      
+      }
       portletPreferences.setValue(UICLVPortlet.REPOSITORY, repository);
       portletPreferences.setValue(UICLVPortlet.WORKSPACE, workspace);
       portletPreferences.setValue(UICLVPortlet.FOLDER_PATH, folderPath);
@@ -506,7 +538,7 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
       portletPreferences.setValue(UICLVPortlet.BASE_PATH, basePath);
 
       
-      if (uiViewerManagementForm.isManualMode()) {
+      if (!uiViewerManagementForm.isManualMode()) {
         String[] sl = (String[]) uiViewerManagementForm.getViewAbleContentList().toArray(new String[0]);
         portletPreferences.setValues(UICLVPortlet.CONTENT_LIST, sl);
       } else {
@@ -529,13 +561,17 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
           } else if (newViewerMode.equals(UICLVConfig.VIEWER_MANUAL_MODE)) {                       
             uiContentListViewerPortlet.removeChild(UICLVFolderMode.class);
             uiCorrectContentsViewer = uiContentListViewerPortlet.addChild(UICLVManualMode.class, null, null);            
-            uiCorrectContentsViewer.init();            
+            uiCorrectContentsViewer.init();
+            uiViewerManagementForm.doPublication(repository, workspace, portletRequestContext, selectedList, portletId);
           }
-        } else if (currentViewerMode.equals(UICLVConfig.VIEWER_MANUAL_MODE)) {
+         } else if (currentViewerMode.equals(UICLVConfig.VIEWER_MANUAL_MODE)) {
+        	 uiViewerManagementForm.doSuspendPublication(repository, workspace,
+        			 portletRequestContext, oldContentList, portletId);
           if (newViewerMode.equals(UICLVConfig.VIEWER_MANUAL_MODE)) {
             uiCorrectContentsViewer = uiContentListViewerPortlet.getChild(UICLVManualMode.class);            
             uiCorrectContentsViewer.getChildren().clear();
             uiCorrectContentsViewer.init();
+            uiViewerManagementForm.doPublication(repository, workspace, portletRequestContext, selectedList, portletId);
           } else if (newViewerMode.equals(UICLVConfig.VIEWER_AUTO_MODE)) {            
             uiContentListViewerPortlet.removeChild(UICLVManualMode.class);
             uiFolderViewer = uiContentListViewerPortlet.addChild(UICLVFolderMode.class, null, null);
@@ -547,6 +583,71 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
     }
   }
 
+  /**
+   * Do publication.
+   * 
+   * @param repository the repository
+   * @param workspaceName the workspace name
+   * @param portletRequestContext the portlet request context
+   * @param selectedList the selected list
+   * @param portletId the portlet id
+   * 
+   * @throws Exception the exception
+   */
+  private void doPublication(
+  		String repository, String workspaceName, PortletRequestContext portletRequestContext,
+  		List<String> selectedList, String portletId)
+  throws Exception {
+  	RepositoryService repositoryService = (RepositoryService)getApplicationComponent(RepositoryService.class);
+  	ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+  	Session session = Utils.getSessionProvider(this).getSession(workspaceName, manageableRepository);
+  	WCMPublicationService publicationService = this.getApplicationComponent(WCMPublicationService.class);
+  	String pageId = Util.getUIPortal().getSelectedNode().getPageReference();
+  	UserPortalConfigService upcService = getApplicationComponent(UserPortalConfigService.class);
+  	Page page = upcService.getPage(pageId);
+
+  	Node tempNode;
+  	String siteName = Util.getPortalRequestContext().getPortalOwner();
+  	String remoteUser = portletRequestContext.getRemoteUser();
+  	
+  	for(String nodePath : selectedList) {
+  		tempNode = (Node)session.getItem(nodePath);
+  		if (!publicationService.isEnrolledInWCMLifecycle(tempNode)) {
+  			publicationService.updateLifecyleOnChangeContent(tempNode, siteName, remoteUser);
+  		}
+  		publicationService.publishContentCLV(tempNode, page, portletId, siteName, remoteUser);
+  	}
+  }
+  
+  /**
+   * Do suspend publication.
+   * 
+   * @param repository the repository
+   * @param workspaceName the workspace name
+   * @param portletRequestContext the portlet request context
+   * @param oldList the old list
+   * @param portletId the portlet id
+   * 
+   * @throws Exception the exception
+   */
+  private void doSuspendPublication(
+  		String repository, String workspaceName, PortletRequestContext portletRequestContext,
+  		List<String> oldList, String portletId)
+  throws Exception {
+  	RepositoryService repositoryService = (RepositoryService)getApplicationComponent(RepositoryService.class);
+  	ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+  	Session session = Utils.getSessionProvider(this).getSession(workspaceName, manageableRepository);
+  	WCMPublicationService publicationService = this.getApplicationComponent(WCMPublicationService.class);
+  	String pageId = Util.getUIPortal().getSelectedNode().getPageReference();
+  	UserPortalConfigService upcService = getApplicationComponent(UserPortalConfigService.class);
+  	Page page = upcService.getPage(pageId);
+
+  	for(String nodePath : oldList) {
+  		publicationService.suspendPublishedContentFromPage(
+  				(Node)session.getItem(nodePath), page, portletRequestContext.getRemoteUser());
+  	}
+  }
+  
   /**
    * The listener interface for receiving cancelAction events. The class that is
    * interested in processing a cancelAction event implements this interface,
@@ -700,6 +801,9 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
     }
   }
 
+	/* (non-Javadoc)
+	 * @see org.exoplatform.wcm.webui.selector.UISourceGridUpdatable#doSave(java.util.List)
+	 */
 	public void doSave(List<String> returnRecords) {
 		setViewAbleContentList(returnRecords);
   }
