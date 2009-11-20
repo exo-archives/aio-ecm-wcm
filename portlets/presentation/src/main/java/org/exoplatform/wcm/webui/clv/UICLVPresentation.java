@@ -27,6 +27,7 @@ import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.commons.utils.PageList;
@@ -278,9 +279,7 @@ import org.exoplatform.webui.event.EventListener;
 		  if (content.hasProperty("dc:title")) {
 		    try {
 		      title = content.getProperty("dc:title").getValues()[0].getString();
-		    } catch(Exception ex) {
-//		      return null;
-		    }
+		    } catch(Exception ex) {}
 		  }
 	  } else if (node.hasProperty("exo:title")) {
 		  title = node.getProperty("exo:title").getValue().getString();
@@ -338,13 +337,12 @@ import org.exoplatform.webui.event.EventListener;
     String link = null;
     PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+    PortletRequest portletRequest = portletRequestContext.getRequest();
     String portalURI = portalRequestContext.getPortalURI();
     PortletPreferences portletPreferences = getPortletPreferences();
     String repository = portletPreferences.getValue(UICLVPortlet.REPOSITORY, null);
     String workspace = portletPreferences.getValue(UICLVPortlet.WORKSPACE, null);
-    String baseURI = portletRequestContext.getRequest().getScheme() + "://"
-    + portletRequestContext.getRequest().getServerName() + ":"
-    + String.format("%s", portletRequestContext.getRequest().getServerPort());
+    String baseURI = portletRequest.getScheme() + "://" + portletRequest.getServerName() + ":" + String.format("%s", portletRequest.getServerPort());
     String basePath = portletPreferences.getValue(UICLVPortlet.BASE_PATH, null);
     link = baseURI + portalURI + basePath + "/" + repository + "/" + workspace + node.getPath();
     return link;
@@ -361,12 +359,11 @@ import org.exoplatform.webui.event.EventListener;
    */
   public String getWebdavURL(Node node) throws Exception {
   	PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+  	PortletRequest portletRequest = portletRequestContext.getRequest();
   	PortletPreferences portletPreferences = getPortletPreferences();
   	String repository = portletPreferences.getValue(UICLVPortlet.REPOSITORY, null);
   	String workspace = portletPreferences.getValue(UICLVPortlet.WORKSPACE, null);
-  	String baseURI = portletRequestContext.getRequest().getScheme() + "://"
-  									+ portletRequestContext.getRequest().getServerName() + ":"
-  									+ String.format("%s", portletRequestContext.getRequest().getServerPort());
+  	String baseURI = portletRequest.getScheme() + "://" + portletRequest.getServerName() + ":" + String.format("%s", portletRequest.getServerPort());
   	
   	if (node.isNodeType("nt:frozenNode")){
   		String uuid = node.getProperty("jcr:frozenUuid").getString();

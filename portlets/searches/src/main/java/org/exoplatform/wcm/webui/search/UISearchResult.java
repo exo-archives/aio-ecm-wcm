@@ -27,6 +27,7 @@ import java.util.ResourceBundle;
 import javax.jcr.Node;
 import javax.jcr.Value;
 import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.exoplatform.commons.utils.ISO8601;
@@ -331,6 +332,7 @@ public class UISearchResult extends UIContainer {
 	 */
 	public String getPublishedNodeURI(String navNodeURI) {
 		PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
+		PortletRequest portletRequest = getPortletRequest();
 		String accessMode = null;
 		if (portalRequestContext.getAccessPath() == PortalRequestContext.PUBLIC_ACCESS) {
 			accessMode = "public";
@@ -338,10 +340,7 @@ public class UISearchResult extends UIContainer {
 			accessMode = "private";
 		}
 
-		PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
-		String baseURI = portletRequestContext.getRequest().getScheme() + "://"
-				+ portletRequestContext.getRequest().getServerName() + ":"
-				+ String.format("%s", portletRequestContext.getRequest().getServerPort());
+		String baseURI = portletRequest.getScheme() + "://" + portletRequest.getServerName() + ":" + String.format("%s", portletRequest.getServerPort());
 		if (navNodeURI.startsWith(baseURI))
 			return navNodeURI;
 		return baseURI + portalRequestContext.getRequestContextPath() + "/" + accessMode + navNodeURI;
@@ -359,19 +358,22 @@ public class UISearchResult extends UIContainer {
 	public String getURL(Node node) throws Exception {
 		String link = null;
 		PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
-		PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+		PortletRequest portletRequest = getPortletRequest();
 		String portalURI = portalRequestContext.getPortalURI();
-		PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
+		PortletPreferences portletPreferences = portletRequest.getPreferences();
 		String repository = portletPreferences.getValue(UIWCMSearchPortlet.REPOSITORY, null);
 		String workspace = portletPreferences.getValue(UIWCMSearchPortlet.WORKSPACE, null);
-		String baseURI = portletRequestContext.getRequest().getScheme() + "://"
-				+ portletRequestContext.getRequest().getServerName() + ":"
-				+ String.format("%s", portletRequestContext.getRequest().getServerPort());
+		String baseURI = portletRequest.getScheme() + "://"	+ portletRequest.getServerName() + ":" + String.format("%s", portletRequest.getServerPort());
 		String basePath = portletPreferences.getValue(UIWCMSearchPortlet.BASE_PATH, null);
 		link = baseURI + portalURI + basePath + "/" + repository + "/" + workspace + node.getPath();
 		return link;
 	}
 
+	private PortletRequest getPortletRequest() {
+	  PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+    return portletRequestContext.getRequest();
+	}
+	
 	/**
 	 * Gets the created date.
 	 * 

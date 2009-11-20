@@ -27,6 +27,7 @@ import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.Session;
 import javax.jcr.Value;
+import javax.portlet.PortletRequest;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
@@ -239,6 +240,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
       UINewsletterEntryForm newsletterEntryForm = event.getSource();
       UINewsletterEntryContainer newsletterEntryContainer = newsletterEntryForm.getAncestorOfType(UINewsletterEntryContainer.class);
       PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();
+      PortletRequest portletRequest = portletRequestContext.getRequest();
       if(!newsletterEntryContainer.isUpdated()){
         UIApplication uiApp = newsletterEntryContainer.getAncestorOfType(UIApplication.class);
         uiApp.addMessage(new ApplicationMessage("UINewsletterEntryForm.msg.UpdateBeforeSave", null, ApplicationMessage.WARNING));
@@ -281,9 +283,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
             receiver += listEmailAddress.get(i) + ",";
           }
           String content = newsletterManagerService.getEntryHandler().getContent(Utils.getSessionProvider(newsletterEntryForm), newsletterNode);
-          String baseURI = portletRequestContext.getRequest().getScheme() + "://"
-          + portletRequestContext.getRequest().getServerName() + ":"
-          + String.format("%s", portletRequestContext.getRequest().getServerPort());
+          String baseURI = portletRequest.getScheme() + "://" + portletRequest.getServerName() + ":" + String.format("%s", portletRequest.getServerPort());
           String data = newsletterNode.getNode("default.html").getNode("jcr:content").getProperty("jcr:data").getString();
           String url = "";
           int index= 0;
