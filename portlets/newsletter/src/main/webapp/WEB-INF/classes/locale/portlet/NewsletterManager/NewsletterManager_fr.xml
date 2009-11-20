@@ -193,6 +193,7 @@
     	<SubcriptionTitle>Titre</SubcriptionTitle>
     	<SubcriptionDescription>Description</SubcriptionDescription>
     	<CategoryName>Catégorie</CategoryName>
+    	<UIWCMFormSubscriptionRedactor>Redactor</UIWCMFormSubscriptionRedactor>
     </title>
   </UISubcriptionForm>
 	
@@ -266,6 +267,7 @@
 			<Administrator>Administrateur</Administrator>
 			<Moderator>Modérateur</Moderator>
 			<Redactor>Rédacteur</Redactor>
+			<User>Utilisateur</User>
 		</role>
 		<msg>
 			<get-list-users> erreur lorsque obtenir la liste des utilisateurs publics. </get-list-users>

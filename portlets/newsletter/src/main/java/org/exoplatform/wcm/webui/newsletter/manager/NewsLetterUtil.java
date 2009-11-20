@@ -17,14 +17,19 @@
 package org.exoplatform.wcm.webui.newsletter.manager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
+import org.exoplatform.webui.core.UIComponent;
 
 /**
  * The Class NewsLetterUtil.
@@ -53,6 +58,25 @@ public class NewsLetterUtil {
       userGroupMembership.add(value);
     }
     return userGroupMembership;
+  }
+  
+  /**
+   * Update access  permissions 
+   * @param accessPermissions   list of user will be set access permission
+   * @param component           UIComponent
+   * @throws Exception          The exception
+   */
+  public static void updateAccessPermission(String[] accessPermissions, UIComponent component) throws Exception{
+    UserPortalConfigService userService = (UserPortalConfigService)component.getApplicationComponent(UserPortalConfigService.class);
+    Page page = userService.getPage(Util.getUIPortal().getSelectedNode().getPageReference());
+    List<String> listAccess = new ArrayList<String>();
+    listAccess.addAll(Arrays.asList(page.getAccessPermissions()));
+    for(String acc : accessPermissions){
+      if(listAccess.contains(acc)) continue;
+      listAccess.add(acc);
+    }
+    page.setAccessPermissions(listAccess.toArray(new String[]{}));
+    userService.update(page);
   }
 	
 	/**
@@ -91,7 +115,31 @@ public class NewsLetterUtil {
     return link.replaceFirst("private", "public");
 	}
 	
+	/**
+	 * Get current user
+	 * @return
+	 * @throws Exception
+	 */
 	static public String getCurrentUser() throws Exception {
     return Util.getPortalRequestContext().getRemoteUser();
+  }
+	
+	/**
+	 * Check permission of current user with category.
+	 * @param categoryConfig   The category which you want check
+	 * @return                 <code>True</code> if current user is moderator of the category and <code>False</code> if not
+	 * @throws Exception       The Exception
+	 */
+  public static boolean isModeratorOfCategory(NewsletterCategoryConfig categoryConfig) throws Exception{
+    List<String> listModerators = Arrays.asList(categoryConfig.getModerator().split(","));
+    if(listModerators.contains("any")) return true;
+    else{
+      for(String str : getAllGroupAndMembershipOfCurrentUser()){
+        if(listModerators.contains(str)){
+          return true;
+        }
+      }
+    }
+    return false;
   }
 }

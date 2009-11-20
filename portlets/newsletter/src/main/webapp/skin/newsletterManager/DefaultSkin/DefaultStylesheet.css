@@ -244,6 +244,27 @@
 	cursor: pointer;
 }
 
+.UIWCMFormSubscriptionRedactor .SelectUserIcon {
+	background: url('icons/16x16/SmallUserIcon.gif') no-repeat left center;
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+}
+
+.UIWCMFormSubscriptionRedactor .SelectMemberIcon {
+	background: url('icons/16x16/SmallMemberIcon.gif') no-repeat left center;
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+}
+
+.UIWCMFormSubscriptionRedactor .DeleteModeratorIcon {
+	background: url('icons/16x16/DustBin.gif') no-repeat left center;
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+}
+
 .UINewsletterManagerPortlet .BanUserIcon {
 	background:transparent url('icons/16x16/ban-user.gif') repeat scroll 0 0;
 }

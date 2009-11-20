@@ -33,6 +33,8 @@ public class NewsletterSubscriptionConfig {
   
   /** The category name. */
   private String categoryName;
+  
+  private String redactor;
 
   /**
    * Gets the category name.
@@ -104,5 +106,13 @@ public class NewsletterSubscriptionConfig {
    */
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public String getRedactor() {
+    return redactor;
+  }
+
+  public void setRedactor(String redactor) {
+    this.redactor = redactor;
   }
 }

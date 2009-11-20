@@ -106,9 +106,6 @@ public class UIManagerUsers extends UITabPane {
   /** The is view tab. */
   public boolean isViewTab = false;
   
-  /** The list moderator. */
-  private List<String> listModerator = new ArrayList<String>();
-  
   /** The permissions. */
   private String[] permissions ;
 
@@ -164,10 +161,6 @@ public class UIManagerUsers extends UITabPane {
   private List<String> getAllEditPermission() throws Exception {
     List<String> userGroupMembership = new ArrayList<String>();
     userGroupMembership.add(PublicationUtil.getServices(UserACL.class).getSuperUser());
-    /*UserPortalConfigService userService = (UserPortalConfigService)this.getApplicationComponent(UserPortalConfigService.class);
-    Page page = userService.getPage(Util.getUIPortal().getSelectedNode().getPageReference());
-    userGroupMembership.add(page.getOwnerId());
-    userGroupMembership.addAll(Arrays.asList(page.getEditPermission()));*/
     return getAllUsersFromGroupMemebers(userGroupMembership);
   }
   
@@ -229,9 +222,12 @@ public class UIManagerUsers extends UITabPane {
     // get all administrator of newsletter
     List<String> listUserAccess = this.getAllAccesPermissions();
     List<String> listUserEdit = this.getAllEditPermission();
+    List<String> listModerator = new ArrayList<String>();
+    List<String> listRedactor = new ArrayList<String>();
     
     // get list of moderator
-    NewsletterCategoryHandler categoryHandler = getApplicationComponent(NewsletterManagerService.class).getCategoryHandler();
+    NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
+    NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
     for(NewsletterCategoryConfig categoryConfig : categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), Utils.getSessionProvider(this))){
       for(String str : categoryConfig.getModerator().split(",")){
         if(!listModerator.contains(str)) {
@@ -241,23 +237,32 @@ public class UIManagerUsers extends UITabPane {
     }
     listModerator = getAllUsersFromGroupMemebers(listModerator);
     
-    // Remove all user who is administrator from moderators and accesspermission\
+    // get list redactor from subscriptions
+    listRedactor.addAll(getAllUsersFromGroupMemebers(newsletterManagerService.getSubscriptionHandler().
+                                                     getAllRedactor(NewsLetterUtil.getPortalName(), 
+                                                                    Utils.getSessionProvider(this))));
+    
+    // Remove all user who is administrator from moderators and accesspermission
     for(String uId : managerUserHandler.getAllAdministrator(Utils.getSessionProvider(this), NewsLetterUtil.getPortalName())){
       if(!listUserEdit.contains(uId)) listUserEdit.add(uId);
     }
-    for(String uid : listUserEdit){
-      listModerator.remove(uid);
-      listUserAccess.remove(uid);
-    }
-    for(String uId:listModerator){
-      listUserAccess.remove(uId);
-    }
     
+    // Filter permission of users
+    listModerator.removeAll(listUserEdit);
+    listRedactor.removeAll(listUserEdit);
+    listRedactor.removeAll(listModerator);
+    listUserAccess.removeAll(listUserEdit);
+    listUserAccess.removeAll(listModerator);
+    listUserAccess.removeAll(listRedactor);
+    
+    // Set permission for user to view in UI
     List<NewsletterUserInfor> userInfors = new ArrayList<NewsletterUserInfor>();
     UserHandler userHandler = getApplicationComponent(OrganizationService.class).getUserHandler() ;
     updateListUserInfor(userHandler, userInfors, listUserEdit, permissions[0]);
     updateListUserInfor(userHandler, userInfors, listModerator, permissions[1]);
-    updateListUserInfor(userHandler, userInfors, listUserAccess, permissions[2]);
+    updateListUserInfor(userHandler, userInfors, listRedactor, permissions[2]);
+    updateListUserInfor(userHandler, userInfors, listUserAccess, permissions[3]);
+    
     // set all user into grid
     ObjectPageList objPageList = new ObjectPageList(userInfors, 5) ;
     UIGrid uiGrid = this.getChildById(UIGRID_MANAGER_MODERATOR);
@@ -282,7 +287,8 @@ public class UIManagerUsers extends UITabPane {
     ResourceBundle res = context.getApplicationResourceBundle() ;
     permissions = new String[]{res.getString("UIManagerUsers.role.Administrator"),
                                 res.getString("UIManagerUsers.role.Moderator"),
-                                res.getString("UIManagerUsers.role.Redactor")};
+                                res.getString("UIManagerUsers.role.Redactor"),
+                                res.getString("UIManagerUsers.role.User")};
     // add public user grid
     UIGrid uiGrid = createUIComponent(UIGrid.class, null, UIGRID_MANAGER_USERS);
     uiGrid.getUIPageIterator().setId("UsersIterator");

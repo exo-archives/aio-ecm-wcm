@@ -102,7 +102,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 																						</div>
 																						<div class="MenuItem" onclick="javaScript:void(0)">
 																							<div class="ItemIcon Remove16x16Icon" style="padding-left:30px;text-align:left;">
-																								<a href="javaScript:if(confirm('<%=_ctx.appRes("UINewsletterEntryManager.msg.confirmDeleteNewsletter")%>')){<%=uicomponent.event("DeleteNewsletterEntry")%>}">
+																								<a href="javaScript:if(eXo.ecm.UINewsletterUtil.checkBeforeDelete('UIWCMNewsletterEntryManagerCheckAll', '<%=_ctx.appRes("UISubscription.msg.checkOnlyOneNewsletterToDelete")%>', '<%=_ctx.appRes("UINewsletterEntryManager.msg.confirmDeleteNewsletter")%>')){<%=uicomponent.event("DeleteNewsletterEntry")%>}">
 																									<%=_ctx.appRes("NewsletterPortlet.action.Delete")%>
 																								</a>
 																							</div>
@@ -159,7 +159,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 								<%=_ctx.appRes("UINewsletterEntryManager.title.Status")%>
 							</th>
 							<th class="thContent Title" style="border-right:none;">
-								<input type="checkbox" onclick="eXo.ecm.UINewsletterUtil.checkAllSelected(this);">
+								<input id="UIWCMNewsletterEntryManagerCheckAll" type="checkbox" onclick="eXo.ecm.UINewsletterUtil.checkAllSelected(this);">
 							</th>
 						</tr>
 						<%int count = 0;

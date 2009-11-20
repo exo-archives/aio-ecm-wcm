@@ -93,17 +93,12 @@ public class UINewsletterManagerPortlet extends UIPortletApplication {
     NewsletterManageUserHandler managerUserHandler = newsletterManagerService.getManageUserHandler();
     editPermission.addAll(managerUserHandler.getAllAdministrator(Utils.getSessionProvider(this), NewsLetterUtil.getPortalName()));
     String supperUser = PublicationUtil.getServices(UserACL.class).getSuperUser(); 
-    if(!editPermission.contains(supperUser)){
+    if(!editPermission.contains(supperUser) && supperUser.equals(NewsLetterUtil.getCurrentUser())){
       editPermission.add(supperUser);
       SessionProvider sessionProvider = Utils.getSessionProvider(this);
       managerUserHandler.addAdministrator(sessionProvider, NewsLetterUtil.getPortalName(), supperUser);
       sessionProvider.close();
     }
-    // Add all user who have edit portlet permission into list administrators
-    /*UserPortalConfigService userService = (UserPortalConfigService)this.getApplicationComponent(UserPortalConfigService.class);
-    Page page = userService.getPage(Util.getUIPortal().getSelectedNode().getPageReference());
-    editPermission.add(page.getOwnerId());
-    editPermission.addAll(Arrays.asList(page.getEditPermission()));*/
     return editPermission;
 	}
 	
@@ -123,7 +118,7 @@ public class UINewsletterManagerPortlet extends UIPortletApplication {
         }
       }
 	  }catch(Exception ex){
-	    ex.printStackTrace();
+	    this.isAdmin = false;
 	  }
 	  UICategories categories = addChild(UICategories.class, null, null).setRendered(isRenderUICategories);
 	  categories.setAdmin(isAdmin);

@@ -16,6 +16,22 @@
  */
 package org.exoplatform.services.wcm.newsletter;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.services.jcr.access.AccessControlEntry;
+import org.exoplatform.services.jcr.access.PermissionType;
+import org.exoplatform.services.jcr.core.ExtendedNode;
+import org.exoplatform.services.organization.Membership;
+import org.exoplatform.services.organization.OrganizationService;
+
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -191,5 +207,103 @@ public class NewsletterConstant {
    */
   public static String generateNewsletterPath(String portalName, String categoryName, String subscriptionName, String newsletterName) {
     return generateSubscriptionPath(portalName, categoryName, subscriptionName).concat("/" + newsletterName);
+  }
+  
+  /**
+   * Get all permission of node, only get users, groups or membership who have all permissions per this node
+   * @param node        Node which you want to get
+   * @return            List of permission include: users, groups or membership
+   * @throws Exception  The exception
+   */
+  @SuppressWarnings("unchecked")
+  public static List<String> getAllPermissionOfNode(Node node) throws Exception{
+    ExtendedNode webContent = (ExtendedNode)node;
+    Iterator permissionIterator = webContent.getACL().getPermissionEntries().iterator();
+    String currentIdentity;
+    AccessControlEntry accessControlEntry;
+    Map<String, Integer> mapPermission = new HashMap<String, Integer>();
+    while (permissionIterator.hasNext()) {
+      accessControlEntry = (AccessControlEntry) permissionIterator.next();
+      currentIdentity = accessControlEntry.getIdentity();
+      if(mapPermission.containsKey(currentIdentity)){
+        mapPermission.put(currentIdentity, mapPermission.get(currentIdentity) + 1);
+      } else {
+        mapPermission.put(currentIdentity, 1);
+      }
+    }
+    int size = PermissionType.ALL.length;
+    List<String> listPermission = new ArrayList<String>();
+    for(String key : mapPermission.keySet().toArray(new String[]{})){
+      if(mapPermission.get(key) == size)
+        listPermission.add(key);
+    }
+    return listPermission;
+  }
+  
+  /**
+   * Get all groups and membership where user is member
+   * @param userId      User name
+   * @return            List groups and memberships of <code>userId</code>
+   * @throws Exception  The exception
+   */
+  public static List<String> getAllGroupAndMembershipOfCurrentUser(String userId) throws Exception{
+    List<String> userGroupMembership = new ArrayList<String>();
+    userGroupMembership.add(userId);
+    String value = "";
+    String id = "";
+    Membership membership = null;
+    OrganizationService organizationService_ = (OrganizationService) PortalContainer.getComponent(OrganizationService.class);
+    for(Object object : organizationService_.getMembershipHandler().findMembershipsByUser(userId).toArray()){
+      id = object.toString();
+      id = id.replace("Membership[", "").replace("]", "");
+      membership = organizationService_.getMembershipHandler().findMembership(id);
+      value = membership.getGroupId();
+      userGroupMembership.add(value);
+      value = membership.getMembershipType() + ":" + value;
+      userGroupMembership.add(value);
+    }
+    return userGroupMembership;
+  }
+  
+  /**
+   * Check permission by comparing two lists permission. If in <code>list1</code> have any element of <code>list2</code>
+   * will return <code>true</code> and return false if don't have any element which contained in <code>list1</code> but 
+   * don't contained in <code>list2</code>
+   * @param list1   List of permission
+   * @param list2   List of Permission
+   * @return        return <code>true</code> and return false if don't have any element which contained in <code>list1</code> but 
+   *                don't contained in <code>list2</code>
+   */
+  public static boolean havePermission(List<String> list1, List<String> list2){
+    for(String str : list1){
+      if(list2.contains(str)) return true;
+    }
+    return false;
+  }
+  
+  /**
+   * Add all permissions of category into subscriptions of this category. All moderators after added into
+   * category will be updated into subscription. All users will have permissions which you wanted in <code>permissions</code>
+   * @param categoryNode  Category Node which have just updated
+   * @param userIds       Arrays of users
+   * @param permissions   Arrays of permission
+   * @throws Exception    The exception
+   */
+  public static void addPermissionsFromCateToSubs(Node categoryNode, String[] userIds, String[] permissions) throws Exception{
+    Node subscriptionNode;
+    ExtendedNode extendSubscriptionNode;
+    for(NodeIterator ni = categoryNode.getNodes(); ni.hasNext();){
+      subscriptionNode = ni.nextNode();
+      if(subscriptionNode.isNodeType(NewsletterConstant.SUBSCRIPTION_NODETYPE)){
+        extendSubscriptionNode = ExtendedNode.class.cast(subscriptionNode);
+        if (extendSubscriptionNode.canAddMixin("exo:privilegeable") || extendSubscriptionNode.isNodeType("exo:privilegeable")) {
+          if(extendSubscriptionNode.canAddMixin("exo:privilegeable"))
+            extendSubscriptionNode.addMixin("exo:privilegeable");
+          for(String userId : userIds){
+            extendSubscriptionNode.setPermission(userId, permissions);
+          }
+        }
+      }
+    }
   }
 }
