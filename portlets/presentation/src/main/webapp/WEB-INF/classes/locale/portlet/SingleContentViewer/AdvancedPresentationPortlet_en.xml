@@ -239,6 +239,10 @@
   	<action>
   		<SaveToPortletPreference>Save</SaveToPortletPreference>
   	</action>
+  	<label>
+  		<ShowTitle>Show title</ShowTitle>
+  		<ShowPrintAction>Show print icon</ShowPrintAction>
+  	</label>
   </UIContentDialogConfig>
   <UITagging>
     <label>
@@ -365,13 +369,12 @@
   <UIStartEditionInPageWizard>
     <link>Click here to change into edit content interface!</link>
   </UIStartEditionInPageWizard>
-  
   <UIContentDialogFormPopupWindow>
   	<title>
-  		<UIContentDialogPreference>UI Content dialog preference</UIContentDialogPreference>
-  		<UIContentDialogConfig>UI Content dialog configuration</UIContentDialogConfig>
-  		<UIContentDialogForm>UI Content dialog form</UIContentDialogForm>
-  		<UINameWebContentForm>UI Name web content form</UINameWebContentForm>
+  		<UIContentDialogPreference>Content Dialog Preference</UIContentDialogPreference>
+  		<UIContentDialogConfig>Content Dialog Configuration</UIContentDialogConfig>
+  		<UIContentDialogForm>Content Dialog Form</UIContentDialogForm>
+  		<UINameWebContentForm>Web Content Form</UINameWebContentForm>
   	</title>
   </UIContentDialogFormPopupWindow>
 </bundle>
