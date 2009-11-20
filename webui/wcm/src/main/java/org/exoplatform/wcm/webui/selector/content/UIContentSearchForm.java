@@ -401,7 +401,13 @@ public class UIContentSearchForm extends UIForm {
         } else if(UIContentSearchForm.DOC_TYPE.equals(radioValue)) {
           String documentType = uiWCSearch.getUIStringInput(UIContentSearchForm.DOC_TYPE).getValue();
           if(uiWCSearch.haveEmptyField(uiApp, event, documentType)) return;
-          pagResult = uiWCSearch.searchDocumentByType(documentType, qCriteria, pageSize);
+          try{
+            pagResult = uiWCSearch.searchDocumentByType(documentType, qCriteria, pageSize);
+          }catch(Exception exception){
+            uiApp.addMessage(new ApplicationMessage("UIWebContentSearchForm.invalid-nodeType", null, ApplicationMessage.WARNING));
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+            return;
+          }
         }
       }
       UIContentSearchResult uiWCSearchResult = uiWCTabSelector.getChild(UIContentSearchResult.class);
