@@ -57,9 +57,7 @@
       <Delete>Delete</Delete>            
     </action>
    	<msg>
-   		<saving-success>
-   			Parameter Content Viewer has been updated
-   		</saving-success>
+   		<saving-success>This portlet has been updated</saving-success>
    		<not-a-number>
    			Item per page is not a number or value is not valid. Please input a valid number.
    		</not-a-number>

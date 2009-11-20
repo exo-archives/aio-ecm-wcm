@@ -23,9 +23,7 @@
       <Delete>Supprimer</Delete>            
     </action>
     <msg>
-   		<saving-success>
-   			Parameterized Contenu Liste Viewer a été mis à jour!
-   		</saving-success>
+   		<saving-success>Ce portlet a été mis à jour</saving-success>
    		<not-a-number>
    			Item per page n'est pas un nombre ou la valeur n'est pas valide. S'il vous plaît entrer un numéro valide.
    		</not-a-number>

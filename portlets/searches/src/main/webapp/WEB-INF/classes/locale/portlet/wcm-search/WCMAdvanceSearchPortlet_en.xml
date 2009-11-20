@@ -132,4 +132,10 @@
 			<UIPageSelector>Page selector</UIPageSelector>
 		</title>
   </UICategoryNavigationTargetPathPopupWindow>
+  
+  <UISearchConfig>
+  	<msg>
+  		<saving-success>This portlet has been updated</saving-success>
+  	</msg>
+  </UISearchConfig>
 </bundle>

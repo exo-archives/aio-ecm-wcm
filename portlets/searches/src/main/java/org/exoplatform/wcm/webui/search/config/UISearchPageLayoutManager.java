@@ -305,10 +305,9 @@ public class UISearchPageLayoutManager extends UIForm  implements UISelectable {
 			portletPreferences.setValue(UIWCMSearchPortlet.ITEMS_PER_PAGE, itemsPerPage);
 			portletPreferences.setValue(UIWCMSearchPortlet.BASE_PATH, basePath);
 			portletPreferences.store();
-			if (Utils.isQuickEditMode(uiSearchLayoutManager, "nothing")) {
-				uiApp.addMessage(new ApplicationMessage("UIMessageBoard.msg.saving-success",
-																								null,
-																								ApplicationMessage.INFO));
+			
+			if (Utils.isEditPortletInCreatePageWizard()) {
+				uiApp.addMessage(new ApplicationMessage("UISearchConfig.msg.saving-success", null,ApplicationMessage.INFO));
 			} else {
 				portletRequestContext.setApplicationMode(PortletMode.VIEW);
 			}

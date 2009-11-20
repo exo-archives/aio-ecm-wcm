@@ -22,6 +22,8 @@ import javax.portlet.PortletPreferences;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.pclv.UIPCLVPortlet;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -122,7 +124,12 @@ public class UIPCVConfig extends UIForm {
       portletPreferences.setValue(UIPCVPortlet.SHOW_DATE_CREATED, showDateCreated);
       portletPreferences.setValue(UIPCVPortlet.SHOW_BAR, showBar);
       portletPreferences.store();
-      Utils.closePopupWindow(uiPCVConfigForm, UIPCVPortlet.PCV_CONFIG_POPUP_WINDOW);
+      
+      if (Utils.isQuickEditMode(uiPCVConfigForm, UIPCVPortlet.PCV_CONFIG_POPUP_WINDOW)) {
+        Utils.closePopupWindow(uiPCVConfigForm, UIPCVPortlet.PCV_CONFIG_POPUP_WINDOW);
+      } else {
+        Utils.createPopupMessage(uiPCVConfigForm, "UIPCVConfig.msg.saving-success", null, ApplicationMessage.INFO);
+      }
     }
   }
   
