@@ -478,11 +478,8 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
       List<String> oldContentList = uiViewerManagementForm.getOldContentList();
       PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();
       
-      UIPortlet uiPortlet = Util.getUIPortal().findComponentById(portletRequestContext.getWindowId());
-      String portletId = "";
-      if (uiPortlet != null) {
-      	portletId = uiPortlet.getWindowId();
-      }
+      String portletId  = 
+      	((UIPortlet)Util.getUIPortal().findComponentById(portletRequestContext.getWindowId())).getWindowId();
       
       PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
       String currentViewerMode = portletPreferences.getValue(UICLVPortlet.VIEWER_MODE, null);
@@ -536,7 +533,6 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
       portletPreferences.setValue(UICLVPortlet.VIEWER_MODE, newViewerMode);
       portletPreferences.setValue(UICLVPortlet.ORDER_TYPE, orderType);
       portletPreferences.setValue(UICLVPortlet.BASE_PATH, basePath);
-
       
       if (!uiViewerManagementForm.isManualMode()) {
         String[] sl = (String[]) uiViewerManagementForm.getViewAbleContentList().toArray(new String[0]);
