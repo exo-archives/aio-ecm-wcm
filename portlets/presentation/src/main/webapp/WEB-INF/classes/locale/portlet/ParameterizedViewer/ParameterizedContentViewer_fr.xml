@@ -59,9 +59,7 @@
       <Cancel>Annuler</Cancel>
     </action>
    	<msg>
-   		<saving-success>
-   			Paramètre Content Viewer a été mis à jour
-   		</saving-success>
+   		<saving-success>Ce portlet a été mis à jour</saving-success>
    	</msg>
     <label>
       <DisplaySettingBlock>L'écran de réglage</DisplaySettingBlock>    

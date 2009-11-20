@@ -31,6 +31,7 @@
 		<msg>
 			<render> erreur lorsque processus de rendu. </render>
 			<not-support-encoding>L'encodage est prend pas en charge.</not-support-encoding>
+			<saving-success>Ce portlet a été mis à jour</saving-success>
 		</msg>
 		<action>
 			<Save>Sauver</Save>
