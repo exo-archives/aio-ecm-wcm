@@ -133,9 +133,6 @@ public class UISearchResult extends UIContainer {
 		}
 		HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
 		String queryString = requestWrapper.getQueryString();
-		String message1 = bundle.getString("UISearchResult.msg.your-search");
-		String message2 = bundle.getString("UISearchResult.msg.did-not-match");
-		String suggestions = bundle.getString("UISearchResult.msg.suggestions");
 		String keyword_entered = bundle.getString("UISearchResult.msg.keyword_entered");
 
 		if (queryString != null && queryString.trim().length() != 0
@@ -190,33 +187,6 @@ public class UISearchResult extends UIContainer {
 			writer.write("<div class=\"ResultHeader\"><div class=\"CaptionSearchType\"><b>"
 					+ getResultType() + "</b></div><div style=\"clear: left;\"><span></span></div></div>");
 			writer.write("<p>" + keyword_entered + "</p>");
-			return;
-		}
-		if (uiPaginator.getTotalItems() == 0) {
-			String keyword = getKeyword();
-			writer.write("<div class=\"UIAdvanceSearchResultDefault\">");
-			writer.write("<div class=\"ResultHeader\"><div class=\"CaptionSearchType\"><b>"
-					+ getResultType() + "</b></div><div style=\"clear: left;\"><span></span></div></div>");
-			if (keyword == null || keyword.trim().length() == 0) {
-				// for case "click button search in search form"
-				writer.write("<p>" + keyword_entered + "</p>");
-			} else { // suggestion-------------------------------------->
-				writer.write("<p>");
-				writer.write(message1 + " - <b style=\"font-size: 15px; font-style: italic;\">" + keyword
-						+ "</b> - " + message2 + "&nbsp;" + getResultType().toLowerCase() + "&nbsp;"
-						+ "<br><br>");
-				writer.write(suggestions + "<br>");
-				String keySuggestion = getSuggestion();
-				if (keySuggestion == null || keySuggestion.equals("null")) {
-					String newKeyword = bundle.getString("UISearchResult.msg.try-different-key");
-					writer.write("<ul><li>" + newKeyword + "</li></ul>");
-				} else {
-					writer.write("<ul><li><a class=\"KeySuggestions\" style=\"cursor: pointer;\">"
-							+ keySuggestion + "</a></li></ul>");
-				}
-				writer.write("</p>");
-			}
-			writer.write("</div>");
 			return;
 		}
 		super.processRender(context);
