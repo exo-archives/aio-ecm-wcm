@@ -377,17 +377,20 @@
   </UIStartEditionInPageWizard>
   <UIContentDialogFormPopupWindow>
   	<title>
-  		<UIContentDialogPreference>Interface de dialogue des préférences de contenu</UIContentDialogPreference>
-  		<UIContentDialogConfig>Interface de configuration du contenu de dialogue</UIContentDialogConfig>
-  		<UIContentDialogForm>Interface utilisateur sous forme de contenu de dialogue</UIContentDialogForm>
-  		<UINameWebContentForm>Interface utilisateur Web Nom contenu d'un formulaire</UINameWebContentForm>
+  		<UIContentDialogPreference>Contenu dialogue des préférences</UIContentDialogPreference>
+  		<UIContentDialogConfig>Contenu de dialogue de configuration</UIContentDialogConfig>
+  		<UIContentDialogForm>Contenu de dialogue Formulaire</UIContentDialogForm>
+  		<UINameWebContentForm>Contenu Web Form</UINameWebContentForm>
   	</title>
-  	
   </UIContentDialogFormPopupWindow>
   <UIContentDialogConfig>
   	<action>
   		<SaveToPortletPreference>Sauver</SaveToPortletPreference>
   	</action>
+  	<label>
+  		<ShowTitle>Afficher le titre</ShowTitle>
+  		<ShowPrintAction>Afficher l'icône d'impression</ShowPrintAction>
+  	</label>
   </UIContentDialogConfig>
 </bundle>
 
