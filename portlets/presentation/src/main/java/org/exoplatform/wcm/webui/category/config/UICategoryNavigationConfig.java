@@ -32,6 +32,7 @@ import org.exoplatform.services.cms.views.ApplicationTemplateManagerService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.config.RepositoryEntry;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.category.UICategoryNavigationConstant;
 import org.exoplatform.wcm.webui.category.UICategoryNavigationPortlet;
@@ -175,10 +176,13 @@ public class UICategoryNavigationConfig extends UIForm implements UISelectable {
    */
   private List<SelectItemOption<String>> getTaxonomyTrees(String repository) throws Exception {
     TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
+    LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     List<Node> taxonomyNodes = taxonomyService.getAllTaxonomyTrees(repository);
     List<SelectItemOption<String>> taxonomyTrees = new ArrayList<SelectItemOption<String>>();
-    for(Node itemNode : taxonomyNodes) {
-      taxonomyTrees.add(new SelectItemOption<String>(itemNode.getName(), itemNode.getName()));
+    for(Node taxonomyNode : taxonomyNodes) {
+    	Node portalNode = livePortalManagerService.getLivePortalByChild(taxonomyNode);
+    	if (portalNode != null)
+    		taxonomyTrees.add(new SelectItemOption<String>(taxonomyNode.getName(), taxonomyNode.getName()));
     }
     return taxonomyTrees;
   }
