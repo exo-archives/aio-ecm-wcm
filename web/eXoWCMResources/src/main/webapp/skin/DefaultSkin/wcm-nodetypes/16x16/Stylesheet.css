@@ -54,3 +54,11 @@
   height: 16px;
   background: url('icons/exo-twoColumnContent.png') no-repeat;
 }
+
+.UIJCRExplorerPortlet .WCMContentView .UIListGrid .LeftColumn .Icon16x16 {
+	position: static;
+}
+
+.UIJCRExplorerPortlet .WCMCategoryView .UIListGrid .LeftColumn .Icon16x16 {
+	position: static;
+}
