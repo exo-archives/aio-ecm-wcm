@@ -17,10 +17,7 @@
 package org.exoplatform.wcm.webui.newsletter.manager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import javax.swing.ListModel;
 
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
@@ -111,13 +108,7 @@ public class UISubscriptions extends UIForm {
     this.categoryConfig = categoryConfig;
     if(isAdmin == false){
       try{
-        List<String> listModerators = Arrays.asList(this.categoryConfig.getModerator().split(","));
-        if(listModerators.contains("any")) this.isModerator = true;
-        else{
-          for(String str : NewsLetterUtil.getAllGroupAndMembershipOfCurrentUser()){
-            if(listModerators.contains(str))this.isModerator = true;
-          }
-        }
+        this.isModerator = NewsLetterUtil.isModeratorOfCategory(categoryConfig);
       }catch(Exception ex){
         this.isModerator = false;
       }
@@ -163,8 +154,16 @@ public class UISubscriptions extends UIForm {
   private List<NewsletterSubscriptionConfig> getListSubscription(){
     List<NewsletterSubscriptionConfig> listSubs = new ArrayList<NewsletterSubscriptionConfig>();
     try{
-      listSubs = 
-        subscriptionHandler.getSubscriptionsByCategory(Utils.getSessionProvider(this), NewsLetterUtil.getPortalName(), this.categoryConfig.getName());
+      if(isAdmin || isModerator){
+        listSubs = subscriptionHandler.getSubscriptionsByCategory(Utils.getSessionProvider(this), 
+                                                                  NewsLetterUtil.getPortalName(), 
+                                                                  this.categoryConfig.getName());
+      } else {
+        listSubs = subscriptionHandler.getSubscriptionByRedactor(NewsLetterUtil.getPortalName(), 
+                                                                 this.categoryConfig.getName(), 
+                                                                 NewsLetterUtil.getCurrentUser(), 
+                                                                 Utils.getSessionProvider(this));
+      }
       init(listSubs);
     }catch(Exception e){
       Utils.createPopupMessage(this, "UISubscription.msg.get-list-subscriptions", null, ApplicationMessage.ERROR);
@@ -312,7 +311,7 @@ public class UISubscriptions extends UIForm {
       UIFormSelectBox selectedCategoryName = subcriptionForm.getChildById("CategoryName");
       selectedCategoryName.setValue(subsriptions.categoryConfig.getName());
       selectedCategoryName.setDisabled(true);
-      Utils.createPopupWindow(subsriptions, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 450, 300);
+      Utils.createPopupWindow(subsriptions, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 500, 350);
     }
   }
 
@@ -345,7 +344,7 @@ public class UISubscriptions extends UIForm {
       NewsletterSubscriptionConfig subscriptionConfig 
       = subsriptions.subscriptionHandler.getSubscriptionsByName(Utils.getSessionProvider(subsriptions), NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(), subId);
       subcriptionForm.setSubscriptionInfor(subscriptionConfig);
-      Utils.createPopupWindow(subsriptions, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 435, 230);
+      Utils.createPopupWindow(subsriptions, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 500, 350);
     }
   }
 

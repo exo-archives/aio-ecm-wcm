@@ -31,7 +31,6 @@ import javax.jcr.query.QueryResult;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
@@ -154,16 +153,19 @@ public class NewsletterManageUserHandler {
       categoriesNode.setProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR, listUsers.toArray(new String[]{}));
       Node categoryNode;
       ExtendedNode extendedCategoryNode ;
+      String[] permissions = new String[]{PermissionType.ADD_NODE, PermissionType.SET_PROPERTY, PermissionType.REMOVE};
       for(NodeIterator iterator = categoriesNode.getNodes(); iterator.hasNext(); ){
         categoryNode = iterator.nextNode();
-        if(categoryNode.isNodeType(NewsletterConstant.CATEGORY_NODETYPE)){
-          extendedCategoryNode = ExtendedNode.class.cast(categoryNode);
-          if (extendedCategoryNode.canAddMixin("exo:privilegeable") || extendedCategoryNode.isNodeType("exo:privilegeable")) {
-            if(extendedCategoryNode.canAddMixin("exo:privilegeable"))
-              extendedCategoryNode.addMixin("exo:privilegeable");
-            extendedCategoryNode.setPermission(userId, new String[]{PermissionType.ADD_NODE, PermissionType.SET_PROPERTY, PermissionType.REMOVE});
-          }
+        // Update permission for category node
+        extendedCategoryNode = ExtendedNode.class.cast(categoryNode);
+        if (extendedCategoryNode.canAddMixin("exo:privilegeable") || extendedCategoryNode.isNodeType("exo:privilegeable")) {
+          if(extendedCategoryNode.canAddMixin("exo:privilegeable"))
+            extendedCategoryNode.addMixin("exo:privilegeable");
+          extendedCategoryNode.setPermission(userId, permissions);
         }
+        
+        // update permission for subscriptions node which are contained in this category
+        NewsletterConstant.addPermissionsFromCateToSubs(categoryNode, new String[]{userId}, permissions);
       }
       session.save();
     }catch(Exception ex){

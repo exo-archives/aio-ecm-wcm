@@ -25,6 +25,7 @@ import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
@@ -49,6 +50,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 )
 
 public class UIRemoveModerators extends UIForm {
+  private boolean setForCategoryForm = true;
   private List<String> listModerators = new ArrayList<String>();
   public void init(String input){
     listModerators.clear();
@@ -57,6 +59,10 @@ public class UIRemoveModerators extends UIForm {
     for(String str : listModerators){
       this.addChild(new UIFormCheckBoxInput<Boolean>(str, str, false ));
     }
+  }
+  
+  public void permissionForSubscriptionForm(){
+    this.setForCategoryForm = false;
   }
 
   static  public class RemoveModeratorsActionListener extends EventListener<UIRemoveModerators> {
@@ -76,9 +82,18 @@ public class UIRemoveModerators extends UIForm {
         }
       }
       UIPopupContainer popupContainer = (UIPopupContainer)removeModerators.getAncestorOfType(UIPopupContainer.class);
-      UICategoryForm categoryForm = popupContainer.findFirstComponentOfType(UICategoryForm.class);
-      UIFormInputSetWithAction formInputSetWithAction = (UIFormInputSetWithAction)categoryForm.getChildById(UICategoryForm.FORM_CATEGORY_MODERATOR);
-      UIFormStringInput formStringInput = (UIFormStringInput)formInputSetWithAction.getChildById(UICategoryForm.INPUT_CATEGORY_MODERATOR);
+      UIFormInputSetWithAction formInputSetWithAction;
+      String inputId;
+      if(removeModerators.setForCategoryForm) {
+        UICategoryForm componentForm = popupContainer.findFirstComponentOfType(UICategoryForm.class);
+        formInputSetWithAction = (UIFormInputSetWithAction)componentForm.getChildById(UICategoryForm.FORM_CATEGORY_MODERATOR);
+        inputId = UICategoryForm.INPUT_CATEGORY_MODERATOR;
+      } else {
+        UISubcriptionForm componentForm = popupContainer.findFirstComponentOfType(UISubcriptionForm.class);
+        formInputSetWithAction = (UIFormInputSetWithAction)componentForm.getChildById(UISubcriptionForm.FORM_SUBSCRIPTION_REDACTOR);
+        inputId = UISubcriptionForm.SELECT_REDACTOR;
+      }
+      UIFormStringInput formStringInput = (UIFormStringInput)formInputSetWithAction.getChildById(inputId);
       formStringInput.setValue(result);
       event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer);
       Utils.closePopupWindow(removeModerators, UINewsletterConstant.REMOVE_MODERATORS_FORM_POPUP_WINDOW);

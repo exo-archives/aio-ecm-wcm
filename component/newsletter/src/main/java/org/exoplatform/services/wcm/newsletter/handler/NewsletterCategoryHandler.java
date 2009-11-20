@@ -16,13 +16,11 @@
  */
 package org.exoplatform.services.wcm.newsletter.handler;
 
-import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -31,9 +29,7 @@ import javax.jcr.Value;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.access.AccessControlEntry;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -74,31 +70,6 @@ public class NewsletterCategoryHandler {
     this.workspace = workspace;
   }
 
-  @SuppressWarnings("unchecked")
-  private List<String> getAllPermissionOfCategoryNode(Node categoryNode) throws Exception{
-    ExtendedNode webContent = (ExtendedNode)categoryNode;
-    Iterator permissionIterator = webContent.getACL().getPermissionEntries().iterator();
-    String currentIdentity;
-    AccessControlEntry accessControlEntry;
-    Map<String, Integer> mapPermission = new HashMap<String, Integer>();
-    while (permissionIterator.hasNext()) {
-      accessControlEntry = (AccessControlEntry) permissionIterator.next();
-      currentIdentity = accessControlEntry.getIdentity();
-      if(mapPermission.containsKey(currentIdentity)){
-        mapPermission.put(currentIdentity, mapPermission.get(currentIdentity) + 1);
-      } else {
-        mapPermission.put(currentIdentity, 1);
-      }
-    }
-    int size = PermissionType.ALL.length;
-    List<String> listPermission = new ArrayList<String>();
-    for(String key : mapPermission.keySet().toArray(new String[]{})){
-      if(mapPermission.get(key) == size)
-        listPermission.add(key);
-    }
-    return listPermission;
-  }
-
   /**
    * Gets the category from node.
    * 
@@ -119,7 +90,7 @@ public class NewsletterCategoryHandler {
   	}
   	// get permission for this category
   	String permission = "";
-  	for(String per : getAllPermissionOfCategoryNode(categoryNode)){
+  	for(String per : NewsletterConstant.getAllPermissionOfNode(categoryNode)){
   	  if(permission.length() > 0) permission += ",";
       permission += per;
   	}
@@ -152,29 +123,34 @@ public class NewsletterCategoryHandler {
     if (extendedCategoryNode.canAddMixin("exo:privilegeable") || extendedCategoryNode.isNodeType("exo:privilegeable")) {
       if(extendedCategoryNode.canAddMixin("exo:privilegeable"))
         extendedCategoryNode.addMixin("exo:privilegeable");
-      // get all administrator of newsletter
-      List<String> listAddministrators = new ArrayList<String>();
-      Node categoriesNode = categoryNode.getParent();
-      if(categoriesNode.hasProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR)) {
-        Value[] values = categoriesNode.getProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR).getValues();
-        listAddministrators = convertValuesToArray(values);
-      }
+      
       // Set permission is all for moderators
       List<String> newModerators = new ArrayList<String>();
       newModerators.addAll(Arrays.asList(categoryConfig.getModerator().split(","))); 
       for(String permission : newModerators){
         extendedCategoryNode.setPermission(permission, PermissionType.ALL);
       }
+      
+      String[] permissions = new String[]{PermissionType.ADD_NODE, PermissionType.REMOVE, PermissionType.SET_PROPERTY};
+      
+      //Update permissions for subscriptions of this category node
+      NewsletterConstant.addPermissionsFromCateToSubs(categoryNode, newModerators.toArray(new String[]{}), permissions);
+      
       // Set permission is addNode, remove and setProperty for administrators
       if(isAddNew){
-        for(String per : listAddministrators){
-          if(newModerators.contains(per)) continue;
-          extendedCategoryNode.setPermission(per, new String[]{PermissionType.ADD_NODE, PermissionType.REMOVE, PermissionType.SET_PROPERTY});
-          newModerators.add(per);
+        Node categoriesNode = categoryNode.getParent();
+        if(categoriesNode.hasProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR)) {
+          Value[] values = categoriesNode.getProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR).getValues();
+          for(String per : convertValuesToArray(values)){
+            if(newModerators.contains(per)) continue;
+            extendedCategoryNode.setPermission(per, permissions);
+            newModerators.add(per);
+          }
         }
       }
+      
       // set only read permission for normal users who are not administrator or moderator.
-      for(String oldPer : getAllPermissionOfCategoryNode(categoryNode)){
+      for(String oldPer : NewsletterConstant.getAllPermissionOfNode(categoryNode)){
         if(!newModerators.contains(oldPer)){
           extendedCategoryNode.removePermission(oldPer, PermissionType.ADD_NODE);
           extendedCategoryNode.removePermission(oldPer, PermissionType.REMOVE);
@@ -202,10 +178,20 @@ public class NewsletterCategoryHandler {
       String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
       Node categoriesNode = (Node)session.getItem(categoryPath);
       Node categoryNode = categoriesNode.addNode(categoryConfig.getName(), NewsletterConstant.CATEGORY_NODETYPE);
-      categoryNode.addNode("Templates", "nt:unstructured");
+      
+      // Add template node into this category node and set Read, Add_node permission for "any".
+      ExtendedNode extendedTemplateNode = ExtendedNode.class.cast(categoryNode.addNode("Templates", "nt:unstructured"));
+      if(extendedTemplateNode.canAddMixin("exo:privilegeable")){
+        extendedTemplateNode.addMixin("exo:privilegeable");
+        extendedTemplateNode.setPermission("any", new String[]{PermissionType.ADD_NODE, PermissionType.READ});
+      }
+      
+      // Set properties for category node
       ExtendedNode extendedCategoryNode = ExtendedNode.class.cast(categoryNode);
       extendedCategoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_TITLE, categoryConfig.getTitle());
       extendedCategoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION, categoryConfig.getDescription());
+      
+      // add permissions for this category node
       this.updatePermissionForCategoryNode(categoryNode, categoryConfig, true);
       session.save();
     } catch(Exception e) {
@@ -316,6 +302,37 @@ public class NewsletterCategoryHandler {
   	}catch(Exception e){
   	  log.error("Get list categories  failed because of ", e.fillInStackTrace());
 	  }
+    return listCategories;
+  }
+  
+  public List<NewsletterCategoryConfig> getListCategoriesCanView(String portalName, String userName, 
+                                                                 SessionProvider sessionProvider) throws Exception {
+    List<NewsletterCategoryConfig> listCategories = new ArrayList<NewsletterCategoryConfig>();
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    Session session = sessionProvider.getSession(workspace, manageableRepository);
+    String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
+    Node categoriesNode = (Node)session.getItem(categoryPath);
+    List<String> userGroupMembers = NewsletterConstant.getAllGroupAndMembershipOfCurrentUser(userName);
+    List<String> allPermission;
+    Node categoryNode;
+    Node subNode;
+    for(NodeIterator nodeIterator = categoriesNode.getNodes(); nodeIterator.hasNext();){
+      categoryNode = nodeIterator.nextNode();
+      allPermission = NewsletterConstant.getAllPermissionOfNode(categoryNode);
+      if(NewsletterConstant.havePermission(allPermission, userGroupMembers)) listCategories.add(getCategoryFromNode(categoryNode));
+      else{
+        for(NodeIterator ni = categoryNode.getNodes(); ni.hasNext();){
+          subNode = ni.nextNode();
+          if(subNode.isNodeType(NewsletterConstant.SUBSCRIPTION_NODETYPE)){
+            allPermission = NewsletterConstant.getAllPermissionOfNode(subNode);
+            if(NewsletterConstant.havePermission(allPermission, userGroupMembers)){
+              listCategories.add(getCategoryFromNode(categoryNode));
+              break;
+            }
+          }
+        }
+      }
+    }
     return listCategories;
   }
 }

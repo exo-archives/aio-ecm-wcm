@@ -126,7 +126,9 @@ public class UICategories extends UIContainer {
 	private List<NewsletterCategoryConfig> getListCategories(){
 	  List<NewsletterCategoryConfig> listCategories = new ArrayList<NewsletterCategoryConfig>();
 		try{
-			listCategories = categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), Utils.getSessionProvider(this));
+		  String portalName = NewsLetterUtil.getPortalName();
+			if(isAdmin)listCategories = categoryHandler.getListCategories(portalName, Utils.getSessionProvider(this));
+			else listCategories = categoryHandler.getListCategoriesCanView(portalName, NewsLetterUtil.getCurrentUser(), Utils.getSessionProvider(this));
 		}catch(Exception e){
 		  Utils.createPopupMessage(this, "UICategories.msg.get-list-categories", null, ApplicationMessage.ERROR);
 		}
@@ -144,7 +146,14 @@ public class UICategories extends UIContainer {
   private List<NewsletterSubscriptionConfig> getListSubscription(String categoryName){
 	  List<NewsletterSubscriptionConfig> listSubscription = new ArrayList<NewsletterSubscriptionConfig>();
     try{
-      listSubscription = subscriptionHandler.getSubscriptionsByCategory(Utils.getSessionProvider(this), NewsLetterUtil.getPortalName(), categoryName);
+      if(isAdmin || 
+          NewsLetterUtil.isModeratorOfCategory(categoryHandler.getCategoryByName(Utils.getSessionProvider(this), portalName, categoryName)))
+        listSubscription = subscriptionHandler.getSubscriptionsByCategory(Utils.getSessionProvider(this), 
+                                                                          NewsLetterUtil.getPortalName(), categoryName);
+      else{
+        listSubscription = subscriptionHandler.getSubscriptionByRedactor(portalName, categoryName, NewsLetterUtil.getCurrentUser(), 
+                                                                         Utils.getSessionProvider(this));
+      }
     }catch(Exception e){
       Utils.createPopupMessage(this, "UICategories.msg.get-list-subscriptions", null, ApplicationMessage.ERROR);
     }
@@ -193,7 +202,7 @@ public class UICategories extends UIContainer {
     public void execute(Event<UICategories> event) throws Exception {
       UICategories uiCategories = event.getSource();
       UISubcriptionForm subcriptionForm = uiCategories.createUIComponent(UISubcriptionForm.class, null, null);
-      Utils.createPopupWindow(uiCategories, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 450, 300);
+      Utils.createPopupWindow(uiCategories, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 500, 350);
     }
   }
 	

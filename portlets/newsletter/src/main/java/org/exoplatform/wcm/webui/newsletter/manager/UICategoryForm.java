@@ -222,12 +222,13 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
-
-			categoryConfig.setModerator(inputMderatorValue);
+      categoryConfig.setModerator(inputMderatorValue); 
+      
+      // Update access permission into newsletter manager page for moderators
+      NewsLetterUtil.updateAccessPermission(inputMderatorValue.split(","), uiCategoryForm);
 			
 			UIApplication uiApp = uiCategoryForm.getAncestorOfType(UIApplication.class);
 			NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
-
 			String portalName = NewsLetterUtil.getPortalName(); 
 			try{
 				SessionProvider sessionProvider = Utils.getSessionProvider(uiCategoryForm);

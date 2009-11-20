@@ -17,11 +17,13 @@
 package org.exoplatform.services.wcm.newsletter.handler;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -57,6 +59,79 @@ public class NewsletterSubscriptionHandler {
   /** The workspace. */
   private String workspace;
   
+  private List<String> convertValuesToArray(Value[] values){
+    List<String> listString = new ArrayList<String>();
+    for(Value value : values){
+      try {
+        listString.add(value.getString());
+      }catch (Exception e) {
+        log.error("Error when convert values to array: ", e.fillInStackTrace());
+      }
+    }
+    return listString;
+  }
+  
+  /**
+   * Update permission for category node.
+   * 
+   * @param subscriptionNode    node which is will be updated
+   * @param subscriptionConfig  Category Object
+   * @param isAddNew        is <code>True</code> if is add new category node and <code>False</code> if only update
+   * @throws Exception      The Exception
+   */
+  private void updatePermissionForSubscriptionNode(Node subscriptionNode, NewsletterSubscriptionConfig subscriptionConfig, 
+                                                   boolean isAddNew) throws Exception{
+    ExtendedNode extendedSubscriptionNode = ExtendedNode.class.cast(subscriptionNode);
+    if (extendedSubscriptionNode.canAddMixin("exo:privilegeable") || extendedSubscriptionNode.isNodeType("exo:privilegeable")) {
+      if(extendedSubscriptionNode.canAddMixin("exo:privilegeable"))
+        extendedSubscriptionNode.addMixin("exo:privilegeable");
+      List<String> newRedactors = new ArrayList<String>();
+      try{
+        newRedactors.addAll(Arrays.asList(subscriptionConfig.getRedactor().split(","))); 
+      }catch(NullPointerException ex){
+        return;
+      }
+      // get all administrator of newsletter and moderator of category which contain this subscription
+      Node categoryNode = subscriptionNode.getParent();
+      Node categoriesNode = categoryNode.getParent();
+      List<String> listAddministrators = new ArrayList<String>();
+      List<String> listModerators = NewsletterConstant.getAllPermissionOfNode(categoryNode);
+      if(categoriesNode.hasProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR)) {
+        Value[] values = categoriesNode.getProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR).getValues();
+        listAddministrators = convertValuesToArray(values);
+      }
+      listAddministrators.addAll(listModerators);
+      
+      // Set permission is all for Redactors
+      ExtendedNode categoryExtend = ExtendedNode.class.cast(categoryNode);
+      for(String permission : newRedactors){
+        extendedSubscriptionNode.setPermission(permission, PermissionType.ALL);
+        // Set read permission in category which contain subscription for this redactor
+        if(!listModerators.contains(permission))categoryExtend.setPermission(permission, new String[]{PermissionType.READ});
+      }
+      
+      // Set permission is addNode, remove and setProperty for administrators
+      if(isAddNew){
+        for(String per : listAddministrators){
+          if(newRedactors.contains(per)) continue;
+          extendedSubscriptionNode.setPermission(per, new String[]{PermissionType.ADD_NODE, PermissionType.REMOVE, PermissionType.SET_PROPERTY});
+          newRedactors.add(per);
+        }
+      }
+      
+      // set only read permission for normal users who are not administrator ,moderator or redactor.
+      for(String oldPer : NewsletterConstant.getAllPermissionOfNode(subscriptionNode)){
+        if(!newRedactors.contains(oldPer)){
+          extendedSubscriptionNode.removePermission(oldPer, PermissionType.ADD_NODE);
+          extendedSubscriptionNode.removePermission(oldPer, PermissionType.REMOVE);
+          extendedSubscriptionNode.removePermission(oldPer, PermissionType.SET_PROPERTY);
+          extendedSubscriptionNode.removePermission(oldPer, PermissionType.CHANGE_PERMISSION);
+          extendedSubscriptionNode.setPermission(oldPer, new String[]{PermissionType.READ});
+        }
+      }
+    }
+  }
+  
   /**
    * Instantiates a new newsletter subscription handler.
    * 
@@ -86,6 +161,13 @@ public class NewsletterSubscriptionHandler {
     if(subscriptionNode.hasProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_DECRIPTION))
       subscriptionConfig.setDescription(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_DECRIPTION).getString());
     subscriptionConfig.setCategoryName(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_CATEGORY_NAME).getString());
+    // get permission for this category
+    String permission = "";
+    for(String per : NewsletterConstant.getAllPermissionOfNode(subscriptionNode)){
+      if(permission.length() > 0) permission += ",";
+      permission += per;
+    }
+    subscriptionConfig.setRedactor(permission);
     return subscriptionConfig;
   }
   
@@ -111,11 +193,7 @@ public class NewsletterSubscriptionHandler {
       subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_DECRIPTION, subscription.getDescription());
       subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_CATEGORY_NAME, subscription.getCategoryName());
 
-      ExtendedNode extSubscriptionNode = (ExtendedNode)subscriptionNode ;
-      if (extSubscriptionNode.canAddMixin("exo:privilegeable")) extSubscriptionNode.addMixin("exo:privilegeable");
-      String[] arrayPers = {PermissionType.READ, PermissionType.SET_PROPERTY, PermissionType.ADD_NODE} ;
-      extSubscriptionNode.setPermission("any", arrayPers) ;
-      
+      this.updatePermissionForSubscriptionNode(subscriptionNode, subscription, true);
       session.save();
     } catch (Exception e) {
       log.error("Add subcription " + subscription.getName() + " failed because of ", e.fillInStackTrace());
@@ -143,7 +221,7 @@ public class NewsletterSubscriptionHandler {
       subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_TITLE, subscription.getTitle());
       subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_DECRIPTION, subscription.getDescription());
       subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_CATEGORY_NAME, subscription.getCategoryName());
-      
+      this.updatePermissionForSubscriptionNode(subscriptionNode, subscription, false);
       categoryNode.save();
     } catch (Exception e) {
       log.error("Edit subcription " + subscription.getName() + " failed because of ", e.fillInStackTrace());
@@ -209,6 +287,28 @@ public class NewsletterSubscriptionHandler {
       }
     }
     return listSubscriptions;
+  }
+
+  public List<NewsletterSubscriptionConfig> getSubscriptionByRedactor(String portalName, String categoryName,
+                                                                      String userName, SessionProvider sessionProvider) throws Exception{
+    List<NewsletterSubscriptionConfig> listSubs = new ArrayList<NewsletterSubscriptionConfig>();
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    Session session = sessionProvider.getSession(workspace, manageableRepository);
+    String path = NewsletterConstant.generateCategoryPath(portalName);
+    List<String> userPermissionMembership = NewsletterConstant.getAllGroupAndMembershipOfCurrentUser(userName);
+    List<String> allPermission;
+    Node childNode;
+    for(NodeIterator nodeIterator = ((Node)session.getItem(path)).getNode(categoryName).getNodes();nodeIterator.hasNext();){
+      try{
+        childNode = nodeIterator.nextNode();
+        if(!childNode.isNodeType(NewsletterConstant.SUBSCRIPTION_NODETYPE)) continue;
+        allPermission = NewsletterConstant.getAllPermissionOfNode(childNode);
+        if(NewsletterConstant.havePermission(allPermission, userPermissionMembership)) listSubs.add(getSubscriptionFormNode(childNode));
+      }catch(Exception ex){
+        log.error("Error when get subcriptions by category " + categoryName + " failed because of ", ex.fillInStackTrace());
+      }
+    }
+    return listSubs;
   }
   
   /**
@@ -306,5 +406,33 @@ public class NewsletterSubscriptionHandler {
     QueryResult queryResult = query.execute();
     NodeIterator nodeIterator = queryResult.getNodes();
     return nodeIterator.getSize();
+  }
+  
+  /**
+   * Get all redactors in all subscriptions of newsletter
+   * @param portalName        name of portal
+   * @param sessionProvider   The SessionProvider
+   * @return                  List of redactor
+   * @throws Exception        The exception
+   */
+  public List<String> getAllRedactor(String portalName, SessionProvider sessionProvider)throws Exception{
+    List<String> list = new ArrayList<String>();
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    Session session = sessionProvider.getSession(workspace, manageableRepository);
+    String path = NewsletterConstant.generateCategoryPath(portalName);
+    QueryManager queryManager = session.getWorkspace().getQueryManager();
+    String sqlQuery = "select * from " + NewsletterConstant.SUBSCRIPTION_NODETYPE + 
+                      " where jcr:path LIKE '" + path + "[%]/%'";
+    Query query = queryManager.createQuery(sqlQuery, Query.SQL);
+    QueryResult queryResult = query.execute();
+    Node subNode;
+    for(NodeIterator nodeIterator = queryResult.getNodes(); nodeIterator.hasNext();){
+      subNode = nodeIterator.nextNode();
+      for(String str : NewsletterConstant.getAllPermissionOfNode(subNode)){
+        if(list.contains(str)) continue;
+        list.add(str);
+      }
+    }
+    return list;
   }
 }
