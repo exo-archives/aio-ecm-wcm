@@ -235,3 +235,7 @@
 .UISingleContentViewerPortlet .UIContentNodeTypeSelector .UIFormGrid td.FieldLabel { 
 	text-align: left;
 }
+
+.UIMaskWorkspace .UISingleContentViewerPortlet .UITabContent {
+	height: auto;
+}
