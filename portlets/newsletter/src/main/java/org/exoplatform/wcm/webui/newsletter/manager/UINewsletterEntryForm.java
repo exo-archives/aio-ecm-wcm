@@ -50,6 +50,7 @@ import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
+import javax.portlet.PortletRequest;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -238,7 +239,8 @@ public class UINewsletterEntryForm extends UIDialogForm {
     public void execute(Event<UINewsletterEntryForm> event) throws Exception {
       UINewsletterEntryForm newsletterEntryForm = event.getSource();
       UINewsletterEntryContainer newsletterEntryContainer = newsletterEntryForm.getAncestorOfType(UINewsletterEntryContainer.class);
-	  PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();
+      PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();
+      PortletRequest portletRequest = portletRequestContext.getRequest();
       if(!newsletterEntryContainer.isUpdated()){
         UIApplication uiApp = newsletterEntryContainer.getAncestorOfType(UIApplication.class);
         uiApp.addMessage(new ApplicationMessage("UINewsletterEntryForm.msg.UpdateBeforeSave", null, ApplicationMessage.WARNING));
@@ -280,11 +282,8 @@ public class UINewsletterEntryForm extends UIDialogForm {
           for (int i = 1; i < listEmailAddress.size(); i ++) {
             receiver += listEmailAddress.get(i) + ",";
           }
-		  
-		  String content = newsletterManagerService.getEntryHandler().getContent(Utils.getSessionProvider(newsletterEntryForm), newsletterNode);
-          String baseURI = portletRequestContext.getRequest().getScheme() + "://"
-          + portletRequestContext.getRequest().getServerName() + ":"
-          + String.format("%s", portletRequestContext.getRequest().getServerPort());
+          String content = newsletterManagerService.getEntryHandler().getContent(Utils.getSessionProvider(newsletterEntryForm), newsletterNode);
+          String baseURI = portletRequest.getScheme() + "://" + portletRequest.getServerName() + ":" + String.format("%s", portletRequest.getServerPort());
           String data = newsletterNode.getNode("default.html").getNode("jcr:content").getProperty("jcr:data").getString();
           String url = "";
           int index= 0;
@@ -311,7 +310,6 @@ public class UINewsletterEntryForm extends UIDialogForm {
               break;
             }
           } while(index >= 0);
-		  
           message.setBCC(receiver);
           message.setSubject(newsletterNode.getName()) ;
           message.setBody(content) ;
