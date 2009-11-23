@@ -57,9 +57,8 @@ public abstract class UICLVContainer extends UIContainer implements RefreshDeleg
    * 
    * @throws Exception the exception
    */
-  public String getMessage() throws Exception {
-    WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
-    return requestContext.getApplicationResourceBundle().getString(messageKey);
+  public String getMessageKey() throws Exception {
+    return messageKey;
   }
 
   /**

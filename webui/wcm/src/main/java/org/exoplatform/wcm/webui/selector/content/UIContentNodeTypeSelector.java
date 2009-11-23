@@ -2,8 +2,6 @@ package org.exoplatform.wcm.webui.selector.content;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.NodeTypeIterator;
@@ -44,17 +42,6 @@ public class UIContentNodeTypeSelector extends UIForm {
    * @throws Exception the exception
    */
   public UIContentNodeTypeSelector() throws Exception {
-  }
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.webui.form.UIForm#getLabel(java.util.ResourceBundle, java.lang.String)
-   */
-  public String getLabel(ResourceBundle res, String id)  {
-    try {
-      return res.getString("UIWCMNodeTypeSelectForm.label." + id) ;
-    } catch (MissingResourceException ex) {
-      return id ;
-    }
   }
 
   /**

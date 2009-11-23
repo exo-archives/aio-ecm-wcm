@@ -18,7 +18,6 @@ package org.exoplatform.wcm.webui.fastcontentcreator.config;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
@@ -41,8 +40,6 @@ import org.exoplatform.wcm.webui.fastcontentcreator.UIFCCConstant;
 import org.exoplatform.wcm.webui.fastcontentcreator.UIFCCUtils;
 import org.exoplatform.wcm.webui.fastcontentcreator.config.action.UIFCCActionList;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -170,10 +167,7 @@ public class UIFCCConfig extends UIForm implements UISelectable {
       }
       getUIStringInput(UIFCCConstant.LOCATION_FORM_STRING_INPUT).setValue(preferencePath) ;
     } catch(RepositoryException repo) {
-      PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance() ;
-      ResourceBundle resourceBundle = portletRequestContext.getApplicationResourceBundle() ;
-      String label = resourceBundle.getString(getId() + ".label.select-repository") ;
-      repositories.add(new SelectItemOption<String>(label, "")) ;
+      repositories.add(new SelectItemOption<String>("select-repository", "")) ;
       uiRepositoryList.setValue("") ;
     }
     

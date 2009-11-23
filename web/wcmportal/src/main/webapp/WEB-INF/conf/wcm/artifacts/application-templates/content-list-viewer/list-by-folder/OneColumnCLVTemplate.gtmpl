@@ -82,10 +82,10 @@
 													if(Utils.isShowDraft(viewNode)) { 
 														%>
 															<span>[ </span>
-															<a class="CaptionDraft"><%= _ctx.appRes("UIContentListPresentationDefault.label.draft") %></a>
+															<a class="CaptionDraft"><%= _ctx.appRes("UICLVPresentation.label.draft") %></a>
 															<%
 																if(Utils.isShowQuickEdit(viewNode)) {
-																	%>, <a class="CaptionEdit" href="$contentEditLink"><%= _ctx.appRes("UIContentListPresentationDefault.action.edit") %></a><%
+																	%>, <a class="CaptionEdit" href="$contentEditLink"><%= _ctx.appRes("UICLVPresentation.action.edit") %></a><%
 																}
 															%>
 															<span> ]</span>
@@ -98,7 +98,7 @@
 														%><div class="Summary">$itemSummary</div><% 
 													}
 													if (isShowReadmore) {
-													  %><div class="ReadLink"><a href="$itemLink"><%= _ctx.appRes("UIContentListPresentationDefault.label.readmore") %></a></div><%
+													  %><div class="ReadLink"><a href="$itemLink"><%= _ctx.appRes("UICLVPresentation.label.readmore") %></a></div><%
 													}
 													%>
 												</div>
@@ -114,7 +114,7 @@
 		%>
 		<div class="CaptionFunc">
 			<% 	
-				String labelRefreshAction = _ctx.appRes("UIContentListPresentationDefault.action.refresh");
+				String labelRefreshAction = _ctx.appRes("UICLVPresentation.action.refresh");
 				if (uicomponent.showRefreshButton()) { 
 					String link = uicomponent.event("Refresh");
 					%>				

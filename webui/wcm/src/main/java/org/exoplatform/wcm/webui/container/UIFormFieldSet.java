@@ -17,7 +17,6 @@
 package org.exoplatform.wcm.webui.container;
 
 import java.io.Writer;
-import java.util.ResourceBundle;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
@@ -58,7 +57,6 @@ public class UIFormFieldSet extends UIContainer {
       super.processRender(context);
       return;
     }
-    ResourceBundle ressourceBundle = context.getApplicationResourceBundle() ;
     UIForm uiForm = getAncestorOfType(UIForm.class);
     Writer writer = context.getWriter() ;
     writer.write("<div class=\"" + getId() + "\">") ;
@@ -68,7 +66,7 @@ public class UIFormFieldSet extends UIContainer {
     for(UIComponent component : getChildren()) {
       if(component.isRendered()) {
         writer.write("<tr>") ;
-        String componentName = uiForm.getLabel(ressourceBundle, component.getId());
+        String componentName = uiForm.getLabel(component.getId());
         if(componentName != null && componentName.length() > 0 && !componentName.equals(getId())) {
           writer.write("<td class=\"FieldLabel\">" + componentName + "</td>") ;
           writer.write("<td class=\"FieldComponent\">") ; 

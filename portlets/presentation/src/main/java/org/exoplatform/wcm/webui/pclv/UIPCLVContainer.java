@@ -43,6 +43,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
 import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.pclv.config.UIPCLVConfig;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;

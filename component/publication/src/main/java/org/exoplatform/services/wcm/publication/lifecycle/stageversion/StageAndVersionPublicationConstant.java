@@ -31,22 +31,22 @@ public interface StageAndVersionPublicationConstant {
   public static final String LIFECYCLE_NAME = "States and versions based publication".intern();   
   
   /** The Constant LOCALIZATION. */
-  public static final String LOCALIZATION = "artifacts.lifecycle.stageversion.StageAndVersionPublication".intern();
+  public static final String LOCALIZATION = "locale.services.publication.lifecycle.simple.SimplePublication".intern();
   
   /** The Constant ENROLLED_TO_LIFECYCLE. */
-  public static final String ENROLLED_TO_LIFECYCLE = "Publication.log.description.enrolled".intern();
+  public static final String PUBLICATION_LOG_LIFECYCLE = "PublicationService.StageAndVersionPublicationPlugin.changeState.enrolled".intern();
   
   /** The Constant CHANGE_TO_DRAFT. */
-  public static final String CHANGE_TO_DRAFT = "Publication.log.description.change-to-draft-state".intern();
+  public static final String PUBLICATION_LOG_DRAFT = "PublicationService.StageAndVersionPublicationPlugin.changeState.draft".intern();
   
   /** The Constant CHANGE_TO_AWAITNG. */
-  public static final String CHANGE_TO_AWAITNG = "Publication.log.description.change-to-awaiting-state".intern();
+  public static final String PUBLICATION_LOG_AWAITNG = "PublicationService.StageAndVersionPublicationPlugin.changeState.awaiting".intern();
   
   /** The Constant CHANGE_TO_LIVE. */
-  public static final String CHANGE_TO_LIVE = "Publication.log.description.change-to-live-state".intern();
+  public static final String PUBLICATION_LOG_LIVE = "PublicationService.StageAndVersionPublicationPlugin.changeState.published".intern();
   
   /** The Constant CHANGE_TO_OBSOLETE. */
-  public static final String CHANGE_TO_OBSOLETE = "Publication.log.description.change-to-obsolete-state".intern();
+  public static final String PUBLICATION_LOG_OBSOLETE = "PublicationService.StageAndVersionPublicationPlugin.changeState.obsolete".intern();
   
   /** The Constant PUBLICATION_LIFECYCLE_NAME. */
   public static final String PUBLICATION_LIFECYCLE_NAME = "publication:lifecycleName".intern();

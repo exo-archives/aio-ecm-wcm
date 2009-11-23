@@ -16,10 +16,7 @@
  */
 package org.exoplatform.wcm.webui.selector.page;
 
-import java.util.ResourceBundle;
-
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -53,19 +50,12 @@ public class UIPageSelector extends UIForm {
   /** The return field name. */
   private String returnFieldName ;
   
-  /** The page title. */
-  private String pageTitle;
-  
   /**
    * Instantiates a new uI page selector.
    * 
    * @throws Exception the exception
    */
   public UIPageSelector() throws Exception {
-    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    ResourceBundle bundle = context.getApplicationResourceBundle();
-    String rootBundleKey = "UICategoryNavigationTargetPathPopupWindow.title.UIPageSelector";
-    setPageTitle(bundle.getString(rootBundleKey));
     UIPageNodeSelector pageNodeSelector = addChild(UIPageNodeSelector.class, null, null);
     UITree uiTree = pageNodeSelector.getChild(UITree.class);
     uiTree.setUIRightClickPopupMenu(null);
@@ -125,24 +115,6 @@ public class UIPageSelector extends UIForm {
     if(event != null) event.broadcast() ;   
   }
   
-  /**
-   * Sets the page title.
-   * 
-   * @param pageTitle the new page title
-   */
-  public void setPageTitle(String pageTitle) {
-    this.pageTitle = pageTitle;
-  }
-
-  /**
-   * Gets the page title.
-   * 
-   * @return the page title
-   */
-  public String getPageTitle() {
-    return pageTitle;
-  }
-
   /**
    * The listener interface for receiving changeNodeAction events.
    * The class that is interested in processing a changeNodeAction

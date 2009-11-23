@@ -20,7 +20,7 @@
 			<portlet-mode>edit</portlet-mode>
 		</supports>
 		<supported-locale>en</supported-locale>
-		<resource-bundle>locale.portlet.wcm-search.WCMAdvanceSearchPortlet</resource-bundle>
+		<resource-bundle>locale.portlet.search.AdvanceSearch</resource-bundle>
 		
 		<portlet-info>
 			<title>WCM Advance Search Portlet</title>

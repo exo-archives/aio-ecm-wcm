@@ -19,7 +19,6 @@ package org.exoplatform.wcm.webui.clv.config;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
@@ -225,8 +224,6 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
   public UICLVConfig() throws Exception {
     PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletPreferences portletPreferences = context.getRequest().getPreferences();
-    ResourceBundle bundle = context.getApplicationResourceBundle();
-    String rootBundleKey = "UICLVConfig.label.";
     String folderPath = portletPreferences.getValue(UICLVPortlet.FOLDER_PATH, UICLVPortlet.FOLDER_PATH);
     UIFormStringInput headerInput = new UIFormStringInput(HEADER, HEADER, null);
     String headerValue = portletPreferences.getValue(UICLVPortlet.HEADER, null);
@@ -234,12 +231,12 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
     List<SelectItemOption<String>> formViewerTemplateList = getTemplateList(PORTLET_NAME, FORM_VIEW_TEMPLATE_CATEGORY);
     List<SelectItemOption<String>> paginatorTemplateList = getTemplateList(PORTLET_NAME, PAGINATOR_TEMPLATE_CATEGORY);
     List<SelectItemOption<String>> viewerModeOptions = new ArrayList<SelectItemOption<String>>();
-    viewerModeOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + VIEWER_AUTO_MODE), VIEWER_AUTO_MODE));
-    viewerModeOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + VIEWER_MANUAL_MODE), VIEWER_MANUAL_MODE));
+    viewerModeOptions.add(new SelectItemOption<String>(VIEWER_AUTO_MODE, VIEWER_AUTO_MODE));
+    viewerModeOptions.add(new SelectItemOption<String>(VIEWER_MANUAL_MODE, VIEWER_MANUAL_MODE));
     
     List<SelectItemOption<String>> orderTypeOptions = new ArrayList<SelectItemOption<String>>();
-    orderTypeOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_DESC), "DESC"));
-    orderTypeOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_ASC), "ASC"));
+    orderTypeOptions.add(new SelectItemOption<String>(ORDER_DESC, "DESC"));
+    orderTypeOptions.add(new SelectItemOption<String>(ORDER_ASC, "ASC"));
     UIFormRadioBoxInput orderTypeRadioBoxInput = new UIFormRadioBoxInput(ORDER_TYPES, ORDER_TYPES, orderTypeOptions);
     String orderTypePref = portletPreferences.getValue(UICLVPortlet.ORDER_TYPE, null);
     if (orderTypePref == null) {
@@ -249,10 +246,10 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
     }
     
     List<SelectItemOption<String>> orderByOptions = new ArrayList<SelectItemOption<String>>();
-    orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_TITLE), "exo:title"));
-    orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_DATE_CREATED), "exo:dateCreated"));
-    orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_DATE_MODIFIED), "exo:dateModified"));
-    orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_DATE_PUBLISHED),"publication:liveDate"));    
+    orderByOptions.add(new SelectItemOption<String>(ORDER_BY_TITLE, "exo:title"));
+    orderByOptions.add(new SelectItemOption<String>(ORDER_BY_DATE_CREATED, "exo:dateCreated"));
+    orderByOptions.add(new SelectItemOption<String>(ORDER_BY_DATE_MODIFIED, "exo:dateModified"));
+    orderByOptions.add(new SelectItemOption<String>(ORDER_BY_DATE_PUBLISHED,"publication:liveDate"));    
     UIFormRadioBoxInput viewerModeRadioBoxInput = new UIFormRadioBoxInput(VIEWER_MODES, VIEWER_MODES, viewerModeOptions);
     UIFormSelectBox orderBySelectBox = new UIFormSelectBox(ORDER_BY, ORDER_BY, orderByOptions);
     String orderByPref = portletPreferences.getValue(UICLVPortlet.ORDER_BY, null);

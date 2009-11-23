@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import javax.jcr.Node;
@@ -125,7 +126,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     VersionLog versionLog = null;
     ValueFactory valueFactory = node.getSession().getValueFactory();
     if(PublicationDefaultStates.ENROLLED.equalsIgnoreCase(newState)) {
-      versionLog = new VersionLog(logItemName,newState,node.getSession().getUserID(),GregorianCalendar.getInstance(),StageAndVersionPublicationConstant.ENROLLED_TO_LIFECYCLE);            
+      versionLog = new VersionLog(logItemName,newState,node.getSession().getUserID(),GregorianCalendar.getInstance(),StageAndVersionPublicationConstant.PUBLICATION_LOG_LIFECYCLE);            
       node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE,newState);
       VersionData revisionData = new VersionData(node.getUUID(),newState,userId);
       revisionsMap.put(node.getUUID(),revisionData);
@@ -133,7 +134,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
       addLog(node,versionLog);
     } else if(PublicationDefaultStates.DRAFT.equalsIgnoreCase(newState)) {
       node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE,newState);
-      versionLog = new VersionLog(logItemName,newState,node.getSession().getUserID(),GregorianCalendar.getInstance(),StageAndVersionPublicationConstant.CHANGE_TO_DRAFT);      
+      versionLog = new VersionLog(logItemName,newState,node.getSession().getUserID(),GregorianCalendar.getInstance(),StageAndVersionPublicationConstant.PUBLICATION_LOG_DRAFT);      
       addLog(node,versionLog);      
       VersionData versionData = revisionsMap.get(node.getUUID());
       if(versionData != null) {
@@ -161,10 +162,10 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
 		      versionData = new VersionData(oldLiveRevision.getUUID(), PublicationDefaultStates.OBSOLETE, userId);
 		    }        
 		    revisionsMap.put(oldLiveRevision.getUUID(),versionData);
-		    versionLog = new VersionLog(oldLiveRevision.getName(), PublicationDefaultStates.OBSOLETE, userId, new GregorianCalendar(), StageAndVersionPublicationConstant.CHANGE_TO_OBSOLETE);
+		    versionLog = new VersionLog(oldLiveRevision.getName(), PublicationDefaultStates.OBSOLETE, userId, new GregorianCalendar(), StageAndVersionPublicationConstant.PUBLICATION_LOG_OBSOLETE);
 		    addLog(node,versionLog);
 		  }
-		  versionLog = new VersionLog(liveVersion.getName(),newState,userId,new GregorianCalendar(),StageAndVersionPublicationConstant.CHANGE_TO_LIVE);
+		  versionLog = new VersionLog(liveVersion.getName(),newState,userId,new GregorianCalendar(),StageAndVersionPublicationConstant.PUBLICATION_LOG_LIVE);
 		  addLog(node,versionLog);      
 		  //change base version to published state
 		  node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE, PublicationDefaultStates.PUBLISHED);
@@ -176,7 +177,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
 		    editableRevision = new VersionData(node.getUUID(), PublicationDefaultStates.ENROLLED, userId);
 		  }
 		  revisionsMap.put(node.getUUID(),editableRevision);
-		  versionLog = new VersionLog(node.getBaseVersion().getName(), PublicationDefaultStates.DRAFT,userId, new GregorianCalendar(),StageAndVersionPublicationConstant.ENROLLED_TO_LIFECYCLE);
+		  versionLog = new VersionLog(node.getBaseVersion().getName(), PublicationDefaultStates.DRAFT,userId, new GregorianCalendar(),StageAndVersionPublicationConstant.PUBLICATION_LOG_LIFECYCLE);
 		  //Change all live revision to obsolete      
 		  Value  liveVersionValue = valueFactory.createValue(liveVersion);
 		  node.setProperty(StageAndVersionPublicationConstant.LIVE_REVISION_PROP,liveVersionValue);
@@ -190,7 +191,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
       if(liveRevision != null && value.getString().equals(liveRevision.getString())) {        
         node.setProperty(StageAndVersionPublicationConstant.LIVE_REVISION_PROP,valueFactory.createValue(""));
       }                        
-      versionLog = new VersionLog(selectedRevision.getName(), PublicationDefaultStates.OBSOLETE,userId,new GregorianCalendar(),StageAndVersionPublicationConstant.CHANGE_TO_OBSOLETE);
+      versionLog = new VersionLog(selectedRevision.getName(), PublicationDefaultStates.OBSOLETE,userId,new GregorianCalendar(),StageAndVersionPublicationConstant.PUBLICATION_LOG_OBSOLETE);
       VersionData versionData = revisionsMap.get(selectedRevision.getUUID());
       if(versionData != null) {
         versionData.setAuthor(userId);
@@ -301,7 +302,12 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
   public String getLocalizedAndSubstituteMessage(Locale locale, String key, String[] values) throws Exception {
     ClassLoader cl=this.getClass().getClassLoader();    
     ResourceBundle resourceBundle= ResourceBundle.getBundle(StageAndVersionPublicationConstant.LOCALIZATION, locale, cl);
-    String result = resourceBundle.getString(key);
+    String result = "";
+    try {
+    	result = resourceBundle.getString(key);
+		} catch (MissingResourceException e) {
+			result = key;
+		}
     if(values != null) {
       return String.format(result, (Object[])values); 
     }        

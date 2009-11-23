@@ -13,7 +13,7 @@ UIFormStringInput uiKeywordInput = uicomponent.getUIStringInput(UISearchForm.KEY
 UIFormSelectBox uiPortalSelectBox = uicomponent.getUIFormSelectBox(UISearchForm.PORTALS_SELECTOR);
 UIFormCheckBoxInput uiPageCheckBox = uicomponent.getUIFormCheckBoxInput(UISearchForm.PAGE_CHECKING);
 UIFormCheckBoxInput uiDocumentCheckBox = uicomponent.getUIFormCheckBoxInput(UISearchForm.DOCUMENT_CHECKING);
-String actionLabel = _ctx.appRes(uicomponent.getName() + ".action.Search");
+String actionLabel = _ctx.appRes("UIDefaultSearchForm.action.Search");
 String link = uicomponent.event("Search");
 def context = _ctx.getRequestContext();
 context.getJavascriptManager().addJavascript('search("' + uicomponent.id + '");');
@@ -26,7 +26,7 @@ context.getJavascriptManager().addJavascript('search("' + uicomponent.id + '");'
         <table class="UIFormGrid">
           <tr>
             <td class="FieldLabel">
-              <%= _ctx.appRes(uicomponent.id + "." + uiKeywordInput.getName() + "." + "label" ) %>
+              <%= _ctx.appRes("UIDefaultSearchForm.label.keyword") %>
             </td>
             <td class="FieldComponent">
               <%
@@ -36,7 +36,7 @@ context.getJavascriptManager().addJavascript('search("' + uicomponent.id + '");'
           </tr>
           <tr>
             <td class="FieldLabel">
-              <%= _ctx.appRes(uicomponent.id + "." + uiPortalSelectBox.getName() + "." + "label" ) %>
+              <%= _ctx.appRes("UIDefaultSearchForm.label.portal") %>
             </td>
             <td class="FieldComponent">
               <div style="float: left;">
@@ -51,7 +51,7 @@ context.getJavascriptManager().addJavascript('search("' + uicomponent.id + '");'
                   %>
                 </div>
                 <div class="CheckboxText">
-                  <%= _ctx.appRes(uicomponent.id + "." + uiPageCheckBox.getName() + "." + "label" ) %>
+                  <%= _ctx.appRes("UIDefaultSearchForm.label.Page") %>
                 </div>
                 <div class="CheckboxField">
                   <%
@@ -59,7 +59,7 @@ context.getJavascriptManager().addJavascript('search("' + uicomponent.id + '");'
                   %>
                 </div>
                 <div class="CheckboxText">
-                  <%= _ctx.appRes(uicomponent.id + "." + uiDocumentCheckBox.getName() + "." + "label" ) %>
+                  <%= _ctx.appRes("UIDefaultSearchForm.label.Document") %>
                 </div>
               </div>
             </td>

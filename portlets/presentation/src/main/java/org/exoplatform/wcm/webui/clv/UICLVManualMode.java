@@ -41,7 +41,7 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
  */
 @ComponentConfig(      
   lifecycle = Lifecycle.class,                 
-   template = "app:/groovy/ContentListViewer/UICLVManualMode.gtmpl",
+   template = "app:/groovy/ContentListViewer/UICLVContainer.gtmpl",
    events = { 
      @EventConfig(listeners = UICLVManualMode.QuickEditActionListener.class) 
    }

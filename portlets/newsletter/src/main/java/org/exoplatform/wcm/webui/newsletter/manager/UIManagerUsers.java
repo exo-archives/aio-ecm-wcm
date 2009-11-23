@@ -17,12 +17,8 @@
 package org.exoplatform.wcm.webui.newsletter.manager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Set;
 
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.container.PortalContainer;
@@ -41,16 +37,12 @@ import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
 import org.exoplatform.services.wcm.publication.PublicationUtil;
 import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.wcm.webui.core.UIPopupWindow;
 import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.UIPageIterator;
-import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UITabPane;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -282,13 +274,7 @@ public class UIManagerUsers extends UITabPane {
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     managerUserHandler = newsletterManagerService.getManageUserHandler();
     
-    // get name of permission from resource bundle
-    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-    ResourceBundle res = context.getApplicationResourceBundle() ;
-    permissions = new String[]{res.getString("UIManagerUsers.role.Administrator"),
-                                res.getString("UIManagerUsers.role.Moderator"),
-                                res.getString("UIManagerUsers.role.Redactor"),
-                                res.getString("UIManagerUsers.role.User")};
+    permissions = new String[]{"Administrator","Moderator", "Redactor", "User"};
     // add public user grid
     UIGrid uiGrid = createUIComponent(UIGrid.class, null, UIGRID_MANAGER_USERS);
     uiGrid.getUIPageIterator().setId("UsersIterator");

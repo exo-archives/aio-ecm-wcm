@@ -16,13 +16,11 @@
  */
 package org.exoplatform.wcm.webui.search;
 
-import java.io.Writer;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 import javax.jcr.Value;
@@ -123,33 +121,20 @@ public class UISearchResult extends UIContainer {
 	 * .application.WebuiRequestContext)
 	 */
 	public void processRender(WebuiRequestContext context) throws Exception {
-		Writer writer = context.getWriter();
 		PortletRequestContext porletRequestContext = (PortletRequestContext) context;
-		ResourceBundle bundle = context.getApplicationResourceBundle();
 		PortletPreferences portletPreferences = porletRequestContext.getRequest().getPreferences();
 		if (resultType == null || resultType.length() == 0) {
-			resultType = bundle.getString("UISearchForm.documentCheckBox.label") + " & "
-					+ bundle.getString("UISearchForm.pageCheckBox.label");
+			resultType = "DocumentAndPage";
 		}
 		HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
 		String queryString = requestWrapper.getQueryString();
-		String keyword_entered = bundle.getString("UISearchResult.msg.keyword_entered");
-
-		if (queryString != null && queryString.trim().length() != 0
-				&& queryString.matches(PARAMETER_REGX)) {
+		if (queryString != null && queryString.trim().length() != 0 && queryString.matches(PARAMETER_REGX)) {
 			queryString = URLDecoder.decode(queryString, "UTF-8");
 			String[] params = queryString.split("&");
 			String portalParam = params[0];
 			String currentPortal = portalParam.split("=")[1];
 			String keywordParam = queryString.substring(portalParam.length() + 1);
 			String keyword = keywordParam.substring("keyword=".length());
-			if (keyword == null || keyword.trim().length() == 0) { // keyword empty
-				writer.write("<div class=\"UIAdvanceSearchResultDefault\">");
-				writer.write("<div class=\"ResultHeader\"><div class=\"CaptionSearchType\"><b>"
-						+ getResultType() + "</b></div><div style=\"clear: left;\"><span></span></div></div>");
-				writer.write("<p>" + keyword_entered + "</p>");
-				return;
-			}
 			setKeyword(keyword);
 			SiteSearchService siteSearchService = getApplicationComponent(SiteSearchService.class);
 			QueryCriteria queryCriteria = new QueryCriteria();
@@ -163,8 +148,7 @@ public class UISearchResult extends UIContainer {
       } else {
         queryCriteria.setLiveMode(false);
       }
-			int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIWCMSearchPortlet.ITEMS_PER_PAGE,
-																																			null));
+			int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIWCMSearchPortlet.ITEMS_PER_PAGE, null));
 			try {
 				WCMPaginatedQueryResult paginatedQueryResult = siteSearchService.searchSiteContents(
 				                                                                                    Utils.getSessionProvider(this),
@@ -178,16 +162,8 @@ public class UISearchResult extends UIContainer {
 				setPageList(paginatedQueryResult);
 			} catch (Exception e) {
 				UIApplication uiApp = getAncestorOfType(UIApplication.class);
-				uiApp.addMessage(new ApplicationMessage(UISearchForm.MESSAGE_NOT_SUPPORT_KEYWORD,
-																								null,
-																								ApplicationMessage.WARNING));
+				uiApp.addMessage(new ApplicationMessage(UISearchForm.MESSAGE_NOT_SUPPORT_KEYWORD, null, ApplicationMessage.WARNING));
 			}
-		} else if (queryString == null || queryString.trim().length() == 0) {
-			writer.write("<div class=\"UIAdvanceSearchResultDefault\">");
-			writer.write("<div class=\"ResultHeader\"><div class=\"CaptionSearchType\"><b>"
-					+ getResultType() + "</b></div><div style=\"clear: left;\"><span></span></div></div>");
-			writer.write("<p>" + keyword_entered + "</p>");
-			return;
 		}
 		super.processRender(context);
 	}

@@ -38,7 +38,7 @@
 					if (uicomponent.getUIPageIterator().getAvailable() == 0) {
 						%>
 							<div style="height: 20px; text-align: center; font-size: 13px; background: white; padding: 10px; margin: 5px;">
-								<%= _ctx.appRes("UIContentListPresentationDefault.label.content-not-found") %>
+								<%= _ctx.appRes("UIPCLVConfig.label.content-not-found") %>
 							</div>
 						<%
 					} else {
@@ -153,7 +153,7 @@
 						if (uicomponent.showRefreshButton()) {
 							%>				
 								<div class="CaptionRefresh">
-									<a href="<%=uicomponent.event("Refresh")%>"><%= _ctx.appRes("UIContentListPresentationDefault.action.refresh") %></a>
+									<a href="<%=uicomponent.event("Refresh")%>"><%= _ctx.appRes("UIPCLVConfig.action.refresh") %></a>
 								</div>
 							<% 
 						}

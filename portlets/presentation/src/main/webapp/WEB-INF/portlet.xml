@@ -19,7 +19,7 @@
 			<portlet-mode>edit</portlet-mode>
 		</supports>
 		<supported-locale>en</supported-locale>
-		<resource-bundle>locale.portlet.SingleContentViewer.AdvancedPresentationPortlet</resource-bundle>
+		<resource-bundle>locale.portlet.SingleContentViewer.SingleContentViewer</resource-bundle>
 		
 		<portlet-info>
 			<title>Single Content Viewer</title>
@@ -100,7 +100,7 @@
 			<portlet-mode>help</portlet-mode>
 		</supports>
 		<supported-locale>en</supported-locale>
-		<resource-bundle>locale.portlet.SiteAdministration.SiteAdministrationToolBar</resource-bundle>
+		<resource-bundle>locale.portlet.SiteAdministration.SiteAdministration</resource-bundle>
 		
 		<portlet-info>
 			<title>Site Administration ToolBar</title>
@@ -275,7 +275,7 @@
 			<portlet-mode>help</portlet-mode>
 		</supports>
 		<supported-locale>en</supported-locale>
-		<resource-bundle>locale.portlet.ParameterizedViewer.ParameterizedContentViewer</resource-bundle>
+		<resource-bundle>locale.portlet.ParameterizedContentViewer.ParameterizedContentViewer</resource-bundle>
 		
 		<portlet-info>
 			<title>Parameterized Content Viewer</title>
@@ -350,7 +350,7 @@
 			<portlet-mode>edit</portlet-mode>
 		</supports>
 		<supported-locale>en</supported-locale>
-		<resource-bundle>locale.portlet.CategoryNavigation.CategoryNavigationPortlet</resource-bundle>
+		<resource-bundle>locale.portlet.CategoryNavigation.CategoryNavigation</resource-bundle>
 		<portlet-info>
 			<title>Category Navigation Portlet</title>
 			<short-title>Category Navigation Portlet</short-title>
@@ -410,7 +410,7 @@
 			<portlet-mode>edit</portlet-mode>
 		</supports>
 		<supported-locale>en</supported-locale>
-		<resource-bundle>locale.portlet.ParameterizedContentListViewer.ParameterizedContentListViewerPortlet</resource-bundle>
+		<resource-bundle>locale.portlet.ParameterizedContentListViewer.ParameterizedContentListViewer</resource-bundle>
 		<portlet-info>
 			<title>Parameterized Content List Viewer</title>
 			<short-title>Parameterized Content List Viewer</short-title>
