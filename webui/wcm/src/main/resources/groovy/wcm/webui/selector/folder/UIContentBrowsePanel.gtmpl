@@ -11,11 +11,11 @@
 	</div>
 	<div class="SelectContent"> 
 		<div class="UITreeBuilder">
-			<div class="Title" title="<%= _ctx.appRes("UIContentBrowsePanel.SelectContent.leftcolumn.title") %>"><%= _ctx.appRes("UIContentBrowsePanel.SelectContent.leftcolumn.title") %></div>
+			<div class="Title"><%= _ctx.appRes("UIContentBrowsePanelFolder.label.LeftColumn") %></div>
 			<% uicomponent.renderChild(UIContentTreeBuilder.class); %>
 		</div>
 		<div class="UISelectPathPanel">
-			<div class="Title" title="<%= _ctx.appRes("UIContentBrowsePanel.SelectContent.rightcolumn.title") %>"><%= _ctx.appRes("UIContentBrowsePanel.SelectContent.rightcolumn.title") %></div>
+			<div class="Title"><%= _ctx.appRes("UIContentBrowsePanelFolder.label.RightColumn") %></div>
 			<% uicomponent.renderChild(UISelectPathPanel.class); %>
 		</div>
 	</div>

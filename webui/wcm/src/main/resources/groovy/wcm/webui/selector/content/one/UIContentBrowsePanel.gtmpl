@@ -6,7 +6,7 @@
 	<div style="padding:10px;float:left">
 		<%String selected = "";%>
 		<div style="float:left;padding:5px;">
-			<%= _ctx.appRes("UIContentBrowsePanel.selectBoxValues.FilterBy")%> :
+			<%= _ctx.appRes("UIContentBrowsePanelOne.selectBoxValues.FilterBy")%> :
 		</div>
 		<div style="float:left;padding:5px;">
 			<select>
@@ -16,7 +16,7 @@
 						else selected = "";
 				%>
 						<option id="$type" $selected value="$type" onclick="<%=uicomponent.event("ChangeContentType", type)%>">
-							<%= _ctx.appRes("UIContentBrowsePanel.selectBoxValues." + type) %>
+							<%= _ctx.appRes("UIContentBrowsePanelOne.selectBoxValues." + type) %>
 						</option>
 				<%}%>
 			</select>
@@ -31,11 +31,11 @@
 	</div>
 	<div class="SelectContent"> 
 		<div class="UITreeBuilder">
-			<div class="Title" title="<%= _ctx.appRes("UIContentBrowsePanel.SelectContent.leftcolumn.title") %>"><%= _ctx.appRes("UIContentBrowsePanel.SelectContent.leftcolumn.title") %></div>
+			<div class="Title"><%= _ctx.appRes("UIContentBrowsePanelOne.label.LeftColumn") %></div>
 			<% uicomponent.renderChild(UIContentTreeBuilder.class); %>
 		</div>
 		<div class="UISelectPathPanel">
-			<div class="Title" title="<%= _ctx.appRes("UIContentBrowsePanel.SelectContent.rightcolumn.title") %>"><%= _ctx.appRes("UIContentBrowsePanel.SelectContent.rightcolumn.title") %></div>
+			<div class="Title"><%= _ctx.appRes("UIContentBrowsePanelOne.label.RightColumn") %></div>
 			<% uicomponent.renderChild(UISelectPathPanel.class); %>
 		</div>
 	</div>

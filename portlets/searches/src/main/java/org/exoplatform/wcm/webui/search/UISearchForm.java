@@ -14,7 +14,6 @@ package org.exoplatform.wcm.webui.search;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.portlet.PortletPreferences;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -209,7 +208,6 @@ public class UISearchForm extends UIForm {
 		public void execute(Event<UISearchForm> event) throws Exception {
 			UISearchForm uiSearchForm = event.getSource();
 			PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();
-			ResourceBundle bundle = portletRequestContext.getApplicationResourceBundle();
 			PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
 			UIApplication uiApp = uiSearchForm.getAncestorOfType(UIApplication.class);
 			SiteSearchService siteSearchService = uiSearchForm.getApplicationComponent(SiteSearchService.class);
@@ -236,12 +234,11 @@ public class UISearchForm extends UIForm {
 			}
 			String resultType = null;
 			if (uiPageCheckbox.isChecked() && uiDocumentCheckbox.isChecked()) {
-				resultType = bundle.getString("UISearchForm.pageCheckBox.label") + " & "
-						+ bundle.getString("UISearchForm.documentCheckBox.label");
+				resultType = "DocumentAndPage";
 			} else if (uiPageCheckbox.isChecked() && !uiDocumentCheckbox.isChecked()) {
-				resultType = bundle.getString("UISearchForm.pageCheckBox.label");
+				resultType = "Page";
 			} else if (!uiPageCheckbox.isChecked() && uiDocumentCheckbox.isChecked()) {
-				resultType = bundle.getString("UISearchForm.documentCheckBox.label");
+				resultType = "Document";
 			}
 			String newKey = event.getRequestContext().getRequestParameter(OBJECTID);
 			if (newKey != null)

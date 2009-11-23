@@ -30,9 +30,9 @@
   	<table class="UIGrid">
 	  	<thead>
 	    	<tr>
-	      		<th><%=_ctx.appRes("UITreeList.header.name")%></th>
-	      		<th style="white-space: nowrap"><%=_ctx.appRes("UITreeList.header.publicationstate")%></th>
-		    	<th><%=_ctx.appRes("UITreeList.header.action")%></th>
+	      		<th><%=_ctx.appRes("UIContentBrowsePathSelector.header.name")%></th>
+	      		<th style="white-space: nowrap"><%=_ctx.appRes("UIContentBrowsePathSelector.header.publicationstate")%></th>
+		    	<th><%=_ctx.appRes("UIContentBrowsePathSelector.header.action")%></th>
 	    	</tr>
 	  	</thead>
 	  	<tbody>
@@ -81,7 +81,7 @@
 		    	} else {
 		  			%>
 		  				<tr class="EvenRow">
-		  					<td colspan="3" style="color:blue; font-style:italic; text-align:center;"><%=_ctx.appRes("UITreeList.info.child-not-found")%></td>
+		  					<td colspan="3" style="color:blue; font-style:italic; text-align:center;"><%=_ctx.appRes("UIContentBrowsePathSelector.msg.child-not-found")%></td>
 		  				</tr>
 		  			<%  	
 		    	}

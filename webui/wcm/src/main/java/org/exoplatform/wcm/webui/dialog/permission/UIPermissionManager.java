@@ -358,7 +358,7 @@ public class UIPermissionManager extends UIForm implements UISelectable {
      String identity = ((UIFormStringInput) formInputSet.getChildById(PERMISSION_STRING_INPUT)).getValue();
      List<String> permsList = new ArrayList<String>();
      if (!webcontent.isCheckedOut()) {
-       Utils.createPopupMessage(permissionManager, "UIActionBar.msg.node-checkedin", null, ApplicationMessage.WARNING);
+       Utils.createPopupMessage(permissionManager, "UIPermissionManagerGrid.msg.node-checkedin", null, ApplicationMessage.WARNING);
        return;
      }
      if (permissionManager.getUIFormCheckBoxInput(ACCESSIBLE_CHECKBOX_INPUT).isChecked()) {

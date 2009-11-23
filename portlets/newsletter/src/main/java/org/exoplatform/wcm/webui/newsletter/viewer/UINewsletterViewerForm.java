@@ -18,7 +18,6 @@ package org.exoplatform.wcm.webui.newsletter.viewer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
@@ -328,10 +327,7 @@ public class UINewsletterViewerForm extends UIForm {
           contentOfMessage = "UINewsletterViewerForm.msg.checkSubscriptionToProcess";
         }else{
           // get email's content to create mail confirm
-          WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-          ResourceBundle res = context.getApplicationResourceBundle() ;
-          String emailContent[] = new String[]{ res.getString("UINewsletterViewerForm.Email.ConfirmUser.Subject"),
-                                                res.getString("UINewsletterViewerForm.Email.ConfirmUser.Content")};
+          String emailContent[] = new String[]{"Subject", "Content"};
           try{
             newsletterForm.publicUserHandler.subscribe(
                                                        Utils.getSessionProvider(newsletterForm),

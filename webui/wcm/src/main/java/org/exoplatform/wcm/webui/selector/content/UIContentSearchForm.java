@@ -221,7 +221,7 @@ public class UIContentSearchForm extends UIForm {
     for(String field : fields) {
       if(field == null || "".equals(field) || (field.toString().trim().length() <= 0)) {
         uiApp.addMessage(new ApplicationMessage(
-            "UIWebContentSearchForm.empty-field", null, ApplicationMessage.WARNING));
+            "UIContentSearchForm.msg.empty-field", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return true;
       }
@@ -312,7 +312,7 @@ public class UIContentSearchForm extends UIForm {
         	try {
         		new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").parse(startDateInput.getValue());
 					} catch (ParseException e) {
-						uiApp.addMessage(new ApplicationMessage("UIWebContentSearchForm.invalid-format", null, ApplicationMessage.WARNING));
+						uiApp.addMessage(new ApplicationMessage("UIContentSearchForm.msg.invalid-format", null, ApplicationMessage.WARNING));
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
 						return;
 					}
@@ -327,7 +327,7 @@ public class UIContentSearchForm extends UIForm {
           	}
           }
           if (startDate.getTimeInMillis() > endDate.getTimeInMillis()) {
-            uiApp.addMessage(new ApplicationMessage("UIWebContentSearchForm.invalid-date", null, ApplicationMessage.WARNING));
+            uiApp.addMessage(new ApplicationMessage("UIContentSearchForm.msg.invalid-date", null, ApplicationMessage.WARNING));
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             return;
           }
@@ -345,7 +345,7 @@ public class UIContentSearchForm extends UIForm {
           try{
             pagResult = uiWCSearch.searchWebContentByDocumentType(documentType, qCriteria, pageSize);
           }catch(NoSuchNodeTypeException ex){
-            uiApp.addMessage(new ApplicationMessage("UIWebContentSearchForm.invalid-nodeType", new Object[]{documentType}, ApplicationMessage.ERROR));
+            uiApp.addMessage(new ApplicationMessage("UIContentSearchForm.msg.invalid-nodeType", new Object[]{documentType}, ApplicationMessage.ERROR));
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             return;
           }
@@ -371,7 +371,7 @@ public class UIContentSearchForm extends UIForm {
         		new SimpleDateFormat(startDateInput.getDatePattern_()).parse(startDateInput.getValue());
         		new SimpleDateFormat(endDateInput.getDatePattern_()).parse(endDateInput.getValue());
 					} catch (Exception e) {
-						uiApp.addMessage(new ApplicationMessage("UIWebContentSearchForm.invalid-format", null, ApplicationMessage.WARNING));
+						uiApp.addMessage(new ApplicationMessage("UIContentSearchForm.msg.invalid-format", null, ApplicationMessage.WARNING));
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
 						return;
 					}
@@ -386,7 +386,7 @@ public class UIContentSearchForm extends UIForm {
           	}
           }
           if (startDate.getTimeInMillis() > endDate.getTimeInMillis()) {
-            uiApp.addMessage(new ApplicationMessage("UIWebContentSearchForm.invalid-date", null, ApplicationMessage.WARNING));
+            uiApp.addMessage(new ApplicationMessage("UIContentSearchForm.msg.invalid-date", null, ApplicationMessage.WARNING));
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             return;
           }
@@ -404,7 +404,7 @@ public class UIContentSearchForm extends UIForm {
           try{
             pagResult = uiWCSearch.searchDocumentByType(documentType, qCriteria, pageSize);
           }catch(Exception exception){
-            uiApp.addMessage(new ApplicationMessage("UIWebContentSearchForm.invalid-nodeType", null, ApplicationMessage.WARNING));
+            uiApp.addMessage(new ApplicationMessage("UIContentSearchForm.msg.invalid-nodeType", null, ApplicationMessage.WARNING));
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             return;
           }

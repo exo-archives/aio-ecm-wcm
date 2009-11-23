@@ -22,6 +22,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -169,10 +170,16 @@ public class GadgetConnector implements ResourceContainer {
         locale = new Locale(language);
       }
       ResourceBundle resourceBundle = ResourceBundle.getBundle(FCK_RESOURCE_BUNDLE_FILE, locale);
+      String message = "";
+      try {
+				message = resourceBundle.getString("fckeditor.no-gadget");
+			} catch (MissingResourceException e) {
+				message = "fckeditor.no-gadget";
+			}
       Element rootElement = document.createElement("Message");
       document.appendChild(rootElement);
       rootElement.setAttribute("number", "555");
-      rootElement.setAttribute("text", resourceBundle.getString("fckeditor.no-gadget"));
+      rootElement.setAttribute("text", message);
       rootElement.setAttribute("type", "Error");
       return rootElement;
     } else {

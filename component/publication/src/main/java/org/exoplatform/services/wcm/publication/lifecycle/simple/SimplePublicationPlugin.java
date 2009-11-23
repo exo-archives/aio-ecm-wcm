@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import javax.jcr.Node;
@@ -97,7 +98,7 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
   public static final String LIFECYCLE_NAME = "Simple publication".intern();
 
   /** The Constant LOCALE_FILE. */
-  private static final String LOCALE_FILE = "artifacts.lifecycle.simple.SimplePublication".intern();  
+  private static final String LOCALE_FILE = "locale.services.publication.lifecycle.simple.SimplePublication".intern();  
   
   /** The Constant IMG_PATH. */
   public static final String IMG_PATH = "artifacts/".intern();
@@ -157,13 +158,13 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
 
     if (newState.equals(PublicationDefaultStates.DRAFT)) {
       String lifecycleName = node.getProperty("publication:lifecycleName").getString();
-      String[] logs = new String[] {new Date().toString(), PublicationDefaultStates.DRAFT, session.getUserID(), "PublicationService.WCMPublicationPlugin.changeState.enrolled", lifecycleName};
+      String[] logs = new String[] {new Date().toString(), PublicationDefaultStates.DRAFT, session.getUserID(), "PublicationService.SimplePublicationPlugin.changeState.enrolled", lifecycleName};
       publicationService.addLog(node, logs);
     } else if (newState.equals(PublicationDefaultStates.PUBLISHED)) {
-      String[] logs = new String[] {new Date().toString(), PublicationDefaultStates.PUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.changeState.published"};
+      String[] logs = new String[] {new Date().toString(), PublicationDefaultStates.PUBLISHED, session.getUserID(), "PublicationService.SimplePublicationPlugin.changeState.published"};
       publicationService.addLog(node, logs);  
     } else if (newState.equals(PublicationDefaultStates.ENROLLED)) {
-    	String[] logs = new String[] {new Date().toString(), PublicationDefaultStates.ENROLLED, session.getUserID(), "PublicationService.WCMPublicationPlugin.changeState.published"};
+    	String[] logs = new String[] {new Date().toString(), PublicationDefaultStates.ENROLLED, session.getUserID(), "PublicationService.SimplePublicationPlugin.changeState.published"};
     	publicationService.addLog(node, logs);  
     } else {
       throw new Exception("WCMPublicationPlugin.changeState : Unknown state : " + node.getProperty(CURRENT_STATE).getString());
@@ -492,7 +493,12 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
   throws Exception {    
     ClassLoader cl=this.getClass().getClassLoader();    
     ResourceBundle resourceBundle= ResourceBundle.getBundle(LOCALE_FILE, locale, cl);
-    String result = resourceBundle.getString(key);
+    String result = "";
+    try {
+    	result = resourceBundle.getString(key);
+		} catch (MissingResourceException e) {
+			result = key;
+		}
     if(values != null) {
       return String.format(result, (Object[])values); 
     }        

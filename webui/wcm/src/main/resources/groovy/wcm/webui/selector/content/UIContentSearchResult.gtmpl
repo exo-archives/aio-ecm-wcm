@@ -12,7 +12,6 @@
   String[] beanFields =  uicomponent.getBeanFields();  
   String[] beanActions =  uicomponent.getBeanActions();
   UIComponent uiParent = uicomponent.getParent() ;
-  String name = uicomponent.getLabel();
   UIForm uiForm = uicomponent.getAncestorOfType(UIForm.class);
   DateFormat dateFormat = uicomponent.getDateFormat();
 %>
@@ -22,27 +21,16 @@
       <tr class="UIWCMSearchContent">
         <%
 	        int count = 0;
-        	if(name != null) {
         		for(field in beanFields) {
        	%>
-              		<th class="$field"><%=_ctx.appRes(name + ".header." + field)%></th>
+              		<th class="$field"><%=_ctx.appRes("UIContentSearchResult.header." + field)%></th>
         <%		}
         		if(beanActions != null) { 
         %>
-        			<th class="action"><%=_ctx.appRes(name + ".header.action")%></th>
+        			<th class="action"><%=_ctx.appRes("UIContentSearchResult.header.action")%></th>
         <%		
         		}
-        	} else 	{
-          		for(field in beanFields) { 
-        %>
-          			<th class="$field"><%=_ctx.appRes(uiParent.getName() + ".header." + field)%></th>
-        <%		}	
-          		if(beanActions != null && beanActions.length > 0) { 
-        %>
-              		<th class="action"><%=_ctx.appRes(uiParent.getName() + ".header.action")%></th>
-        <%		
-          		}		
-          	}	
+        		
         %>
       </tr>
     </thead>
@@ -101,7 +89,7 @@
                 for(action in beanActions) { 
                   def beanId = uicomponent.getFieldValue(bean, beanIdField)  ;
                   if(action == null) continue;
-                  String title = _ctx.appRes(uicomponent.getParent().getName() + ".action.title." + action);
+                  String title = _ctx.appRes("UIContentSearchResult.title." + action);
                   String actionLink = uicomponent.event(action, beanId);
               %>             
                   <img onclick="$actionLink" alt="" title="$title" src="/eXoResources/skin/sharedImages/Blank.gif" class="${action}Icon" />

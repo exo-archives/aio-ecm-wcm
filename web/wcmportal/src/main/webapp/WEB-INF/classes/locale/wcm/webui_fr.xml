@@ -1,315 +1,290 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
-  <UIWizardPageSelectLayoutForm>
-    <label>
-      <appPages>
-        <Presentation>Visualiseur de contenu simple</Presentation>
-        <ContentListViewer>Visualiseur de contenus multiples</ContentListViewer>
-        <Search>Recherche</Search>
-        <Sitemap>Plan du site</Sitemap>
-      </appPages>
-    </label>
-  </UIWizardPageSelectLayoutForm>
-  <ClassicSite>
-    <label>Site Classic</label>
-  </ClassicSite>
-  <ACMESite>
-    <label>Site ACME</label>
-  </ACMESite>
-  <Views>
-    <label>
-      <wcm-view>Vue WCM</wcm-view>
-      <admin-view>Vue administration</admin-view>
-      <icon-view>Vue icônes</icon-view>
-      <thumbails-view>Vue vignettes</thumbails-view>
-      <cover-flow>Vue défilé</cover-flow>
-    </label>
-  </Views>
-  <!--/n  ####################################################################################
-          # ../src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates              #
-          #	/content-list-viewer/paginators/UIDefaultPaginator.gtmpl                         #
-          ####################################################################################
-  -->
-  <UIPaginatorDefault>
-    <label>
-      <previous>Précédent</previous>
-      <next>Suivant</next>
-    </label>
-  </UIPaginatorDefault>
-  <UIDefaultSearchResult>
-    <label>
-      <resutlsCaption>Résultats</resutlsCaption>
-      <ofAboutCaption>de environ</ofAboutCaption>
-      <forCaption>pour</forCaption>
-      <timeUnitCaption>secondes</timeUnitCaption>
-      <kb>kB</kb>
-      <noresult>Pas de résultat</noresult>
-      <similar>Pages où le même contenu apparait</similar>
-	    <draft></draft>
-    </label>
-    <action>
-    	<edit></edit>
-    </action>
-  </UIDefaultSearchResult>
-  <!--/n  ####################################################################################
-          # ../src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates              #
-          # /content-list-viewer/list-by-folder/UIContentListPresentationDefault.gtmpl       #
-          ####################################################################################
-  -->
-	<UIContentListPresentationDefault>
-      <action>
-        <refresh>Rafraîchir</refresh>
-        <edit></edit>
-      </action>
-      <label>
-	      <readmore>En savoir plus</readmore>
-	      <draft>Esquisse</draft>
-	      <content-not-found>Le dossier est vide.</content-not-found>     
-      </label>
-  </UIContentListPresentationDefault>  
-  <!--/n  ####################################################################################
-  -->
-  <UITabPane>
-    <title>
-      <metadata>
-        <siteMetadata>Métadonnées du site</siteMetadata>
-      </metadata>
-    </title>
-  </UITabPane>
-  <ContentType>
-    <lable>
-      <SiteBreadcrum>Fil d'ariane</SiteBreadcrum>
-      <SiteNavigation>Navigation</SiteNavigation>
-      <Twocolumnslayoutwebcontent>Deux colonnes</Twocolumnslayoutwebcontent>
-      <Pictureonheadlayoutwebcontent>Image en entête</Pictureonheadlayoutwebcontent>
-      <Sitesearchboxwebcontent>Recherche</Sitesearchboxwebcontent>
-      <Freelayoutwebcontent>Disposition libre</Freelayoutwebcontent>
-      <Tablelayoutwebcontent>Table Layout</Tablelayoutwebcontent>
-    </lable>
-  </ContentType>
-   <!--  
-  ##########################################################################################
-  # exo.ecm.wcm.webui.wcm.groovy.wcm.webui                                                 # 
-  ##########################################################################################
-  -->
-  <UITabPane>
-  	<title>
-  		<UIContentBrowsePanel>Sélectionner</UIContentBrowsePanel>
-  		<UIContentSearchForm>Recherche</UIContentSearchForm>
-  		<UIContentSearchResult>Résultats</UIContentSearchResult>
-  		<WebContentMetadataPopup></WebContentMetadataPopup>
-  		<UIContentBrowsePanelMulti>Contenu parcourir Multi Panel</UIContentBrowsePanelMulti>
-  		<UIContentBrowsePanelFolder>Contenu explorer un dossier du panneau</UIContentBrowsePanelFolder>
-		<UIContentBrowsePanelOne>Parcourir le contenu du panneau</UIContentBrowsePanelOne>
-		<UIContentDialogConfig>Contenu de dialogue de configuration</UIContentDialogConfig>
-  	</title>
-  </UITabPane>
-  <UIContentBrowsePanel>
-    <SelectContent>
-      <leftcolumn>
-        <title>Ci-dessous sont les dossiers possibles oÃ¹ le contenu peut Ãªtre affichÃ©</title>
-      </leftcolumn>
-      <rightcolumn>
-        <title>Ci-dessous sont les content oÃ¹ le contenu est affichÃ©</title>
-      </rightcolumn>
-      <searchbox>
-        <title>Recherche</title>
-      </searchbox>
-    </SelectContent>
-    <selectBoxValues>
-    	<FilterBy>Filtrer par</FilterBy>
-    	<WebContent>Contenu Web</WebContent>
-    	<DMSDocument>Document</DMSDocument>
-    	<Media>MÃ©dias</Media>
-    </selectBoxValues>
-  </UIContentBrowsePanel>
-  <UIContentSearchForm>
-  	<empty-field>La valeur de ce champ est nulle ou vide!</empty-field>
-		<invalid-date>"To Date" have to greater than "From Date"</invalid-date>
-		<invalid-nodeType>Type de noeud "(0)" n'est pas valide! S'il vous plaît vérifiez à nouveau.</invalid-nodeType>
-  	<action>
-  		<SearchWebContent>Recherche</SearchWebContent>
-  	</action>
+ <UIExoStart>
+  <tooltip>
+   <homepage>Page d'accueil</homepage>
+  </tooltip>
+ </UIExoStart>
+ 
+ <UIFormInputSetWithAction>
+  <msg>
+   <confirm-delete>Êtes-vous sûr de vouloir supprimer ?</confirm-delete>
+  </msg>
+ </UIFormInputSetWithAction>
+ 
+ <Drives>
+  <label>
+   <ManagedSites>Gestion des Sites</ManagedSites>
+   <SharedSite>Espace Partagé</SharedSite>
+  </label>
+ </Drives>
+ 
+ <Views>
+  <label>
+   <wcm-view>Vue WCM</wcm-view>
+   <admin-view>Vue administration</admin-view>
+   <icon-view>Vue icônes</icon-view>
+   <thumbails-view>Vue vignettes</thumbails-view>
+   <cover-flow>Vue défilé</cover-flow>
+  </label>
+ </Views>
+ 
+ <UIPageSelectorPanel>
+  <header>
+   <path>Chemin</path>
+   <action>Action</action>
+  </header>
+  <msg>
+   <child-not-found>Aucune page trouvée</child-not-found>
+  </msg>
+ </UIPageSelectorPanel>
+ 
+ <UIContentDialogFormPopupWindow>
+  <title>
+   <UIContentDialogPreference>Webcontent préférence</UIContentDialogPreference>
+  </title>
+ </UIContentDialogFormPopupWindow>
+ 
+ <UITabPane>
+  <title>
+   <UIContentBrowsePanelOne>Contenu navigateur</UIContentBrowsePanelOne>
+   <UIContentBrowsePanelMulti>Contenu navigateur</UIContentBrowsePanelMulti>
+   <UIContentBrowsePanelFolder>Dossier navigateur</UIContentBrowsePanelFolder>
+   <UIContentSearchForm>Contenu formulaire de recherche</UIContentSearchForm>
+   <UIContentSearchResult>Le résultat de recherche</UIContentSearchResult>
+   <UIContentViewer>Aperçu du contenu</UIContentViewer>
+   <WebContentMetadataPopup>Propriété sélecteur</WebContentMetadataPopup>
+   <WebContentNodeTypePopup>Nodetype selector</WebContentNodeTypePopup>
+   <UIPermissionManager>Permission gestionnaire</UIPermissionManager>
+  </title>
+ </UITabPane>
+ 
+ <UIContentBrowsePanelOne>
+  <selectBoxValues>
+   <FilterBy>Filtrer par</FilterBy>
+   <WebContent>Webcontent</WebContent>
+   <DMSDocument>Document</DMSDocument>
+   <Media>Média</Media>
+  </selectBoxValues>
+ </UIContentBrowsePanelOne>
+ 
+ <UIContentBrowsePanelMulti>
+  <selectBoxValues>
+   <FilterBy>Filtrer par</FilterBy>
+   <WebContent>Webcontent</WebContent>
+   <DMSDocument>Document</DMSDocument>
+   <Media>Média</Media>
+  </selectBoxValues>
+ </UIContentBrowsePanelMulti>
+  
+ <UIContentBrowsePanelOne>
+  <label>
+   <LeftColumn>Sélectionnez un dossier pour afficher ses enfants en tant que contenu</LeftColumn>
+   <RightColumn>Ci-dessous le contenu possible peut être sélectionné</RightColumn>
+  </label>
+ </UIContentBrowsePanelOne>
+ 
+ <UIContentBrowsePanelMulti>
+  <label>
+   <LeftColumn>Sélectionnez un dossier pour afficher ses enfants en tant que contenu</LeftColumn>
+   <RightColumn>Ci-dessous le contenu possible peut être sélectionné</RightColumn>
+  </label>
+ </UIContentBrowsePanelMulti>
+ 
+ <UIContentBrowsePanelFolder>
+  <label>
+   <LeftColumn>Sélectionnez un dossier pour afficher ses enfants en tant que contenu</LeftColumn>
+   <RightColumn>Ci-dessous le dossier possible peut être sélectionné</RightColumn>
+  </label>
+ </UIContentBrowsePanelFolder>
+ 
+ <UISelectedContentGrid>
+  <label>
+   <header>Sommaire ci-dessous peuvent être sélectionnés</header>
+   <name>Nom</name>
+   <add>Ajouter</add>  		  		
+  </label>
+ </UISelectedContentGrid>
+ 
+ <UICLVContentSelectedGrid>
+  <action>
+   <SaveCategories>Sauver</SaveCategories>
+   <Cancel>Annuler</Cancel>
+  </action>
+ </UICLVContentSelectedGrid>
+ 
+ <UIContentBrowsePathSelector>
+  <header>
+   <name>Nom</name>
+   <publicationstate>L'état de parution</publicationstate>
+   <action>Action</action>
+  </header>
+  <msg>
+   <child-not-found>Aucun contenu trouvé</child-not-found>
+  </msg>
+ </UIContentBrowsePathSelector>
+ 
+ <UIContentBrowsePathSelectorFolder>
+  <header>
+   <name>Nom</name>
+   <publicationstate>L'état de parution</publicationstate>
+   <action>Action</action>
+  </header>
+  <msg>
+   <child-not-found>Aucun dossier trouvé</child-not-found>
+  </msg>
+ </UIContentBrowsePathSelectorFolder>
+ 
+ <UIContentSearchForm>
+   <title>
+    <Location>Site nom</Location>
+    <SearchByName>Recherche par nom</SearchByName>
+    <Fulltext>Mots à rechercher</Fulltext>
+    <Property>Propriété</Property>
+    <Contain>Contain</Contain>
+    <FromDate>De</FromDate>
+    <ToDate>à</ToDate>
+    <DocumentType>Type de document</DocumentType>
+   </title>
+   <label>
+    <option>
+     <CREATED>Créé</CREATED>
+     <MODIFIED>Modifié</MODIFIED>
+    </option>
+   </label>
+   <action>
+    <SearchWebContent>Recherche</SearchWebContent>
+   </action>
+   <msg>
+    <empty-field>La valeur de ce champ est nulle ou vide!</empty-field>
+    <invalid-date>"To Date" have to greater than "From Date"</invalid-date>
+    <invalid-nodeType>Type de noeud "(0)" n'est pas valide! S'il vous plaît vérifiez à nouveau.</invalid-nodeType>
+    <invalid-format>Blancs datetime format dans le champ '{0}'</invalid-format>
+   </msg>
   </UIContentSearchForm>
-  <UIContentSelector>
-  	<header>
-  		<title>Titre</title>
-  		<score>Score</score>
-  		<action>Action</action>
-  		<publicationstate>État de publication</publicationstate>
-  	</header>
-  	<action>
-  		<title>
-  			<Select>Sélectionner</Select>
-  			<View>Voir</View>
-  		</title>
-  	</action>
-  </UIContentSelector>
-  <UIContentSearchForm>
-  	<title>
-  		<Location>Site nom</Location>
-  		<SearchByName>Recherche par nom</SearchByName>
-  		<Fulltext>Mots à rechercher</Fulltext>
-  		<Property>Propriété</Property>
-  		<Contain>Contain</Contain>
-  		<FromDate>De</FromDate>
-  		<ToDate>à</ToDate>
-  		<DocumentType>Type de document</DocumentType>
-  	</title>
-  </UIContentSearchForm>
-  <WebContentNodeTypePopup>
-  	<title>
-  		<UIContentNodeTypeSelector>Veuillez sélectionner un type de noeud</UIContentNodeTypeSelector>
-  	</title>
-  </WebContentNodeTypePopup>
-  <UIWCMNodeTypeSelectForm>
-  	<action>
-  		<Save>Sauver</Save>
-  		<Cancel>Annuer</Cancel>
-  	</action>
-  </UIWCMNodeTypeSelectForm>
+  
   <WebContentMetadataPopup>
-  	<title>
-  		<UIContentPropertySelector>Veuillez sélectionner propriété</UIContentPropertySelector>
-  	</title>
+   <title>
+    <UIContentPropertySelector>Sélecteur de la propriété</UIContentPropertySelector>
+   </title>
   </WebContentMetadataPopup>
+  
   <UIContentPropertySelector>
-  	<action>
-  		<Add>Ajouter</Add>
-  		<Cancel>Annuer</Cancel>
-  	</action>
-  	<label>
-			<metadataType>Type de metadata</metadataType>
-			<property_select>Propriété</property_select>
-		</label>
+   <action>
+    <Add>Ajouter</Add>
+    <Cancel>Annuler</Cancel>
+   </action>
+   <label>
+    <metadataType>Métadonnées de type</metadataType>
+    <property_select>Propriété</property_select>
+   </label>
   </UIContentPropertySelector>
-  <WCMContentView>
-  	<header>
-	  	<title>Titre</title>
-	  	<author>Auteur</author>
-	  	<date>Date</date>
-	  	<status>État</status>
-  	</header>
-  </WCMContentView>
-	<UISearchPageLayoutDefault>
-		<label>
-			<quickEditTitle></quickEditTitle>
-		</label>
-	</UISearchPageLayoutDefault>
-	<UIExoStart>
-		<tooltip>
-			<homepage>Page d'accueil</homepage>
-		</tooltip>
-	</UIExoStart>  
-	<UIPageSelectorPanel>
-		<header>
-			<path>Chemin</path>
-			<action>Action</action>
-		</header>
-		<msg>
-			<child-not-found>Aucune page trouvée</child-not-found>
-		</msg>
-	</UIPageSelectorPanel>
-	<UIMessageBoard>
-		<msg>
-			<get-resource-resolver>erreur lorsque vous template résolveur de ressources.</get-resource-resolver>
-			<render>erreur lorsque de processus de rendu.</render>
-			<select-navigation>erreur lorsque vous effectuez une action de navigation sélectionner.</select-navigation>
-			<get-tree-node>erreur lorsque vous effectuez obtenir nœud de l'arbre. </get-tree-node>
-		</msg>
-	</UIMessageBoard>
-	
-	<ECMNameValidator>
-    <msg>
-      <Invalid-char>Caractères invalide détectés dans le champ '{0}'.</Invalid-char>
-      <empty-input>La valeur du champ '{0}' est nulle ou vide !</empty-input>
-    </msg>
-  </ECMNameValidator>
-  <ZeroValidator>
-  	<msg>
-  		<Invalid-number>Zéro n'est pas acceptée dans le champ '{0}'</Invalid-number>
-  	</msg>
-  </ZeroValidator>
   
-  <Drives>
-  	<label>
-  		<ManagedSites>Gestion des Sites</ManagedSites>
-  		<SharedSite>Espace Partagé</SharedSite>
-  	</label>
-  </Drives>
+  <WebContentNodeTypePopup>
+   <title>
+    <UIContentNodeTypeSelector>Sélecteur de la Nodetype</UIContentNodeTypeSelector>
+   </title>
+  </WebContentNodeTypePopup>
   
-  <UIWebContentSearchForm>
-  	<msg>
-  		<invalid-format>Blancs datetime format dans le champ '{0}'</invalid-format>
-  		<empty-field>S'il vous plaît mot-clé d'entrée valide pour les recherches.</empty-field>
-  	</msg>
-  	<invalid-format>S'il vous plaît le format d'entrée valide la date pour les recherches.</invalid-format>
-  	<empty-field>S'il vous plaît mot-clé d'entrée valide pour les recherches.</empty-field>
-  </UIWebContentSearchForm>
+  <UIContentNodeTypeSelector>
+   <action>
+    <Save>Sauver</Save>
+    <Cancel>Annuler</Cancel>
+   </action>
+  </UIContentNodeTypeSelector>
   
-	<UIContentDialogForm>
-    <action>
-      <SaveDraft>Sauver le brouillon</SaveDraft>
-      <FastPublish>Publication rapide</FastPublish>
-      <Preferences>Préférences</Preferences>
-      <Close>Fermer</Close>
-    </action>
-    <msg>
-        <node-locked>L'élément de chemin {0} ou l'un de ses parents est verrouillé.</node-locked>
-  	</msg>
+  <UIContentSearchResult>
+   <header>
+    <title>Titre</title>
+    <score>Score</score>
+    <publicationstate>L'état de parution</publicationstate>
+    <action>Action</action>
+   </header>
+   <title>
+    <Select>Sélectionnez</Select>
+    <View>Affichage</View>
+   </title>
+  </UIContentSearchResult>
+  
+  <UIContentDialogForm>
+   <action>
+    <SaveDraft>Sauver le brouillon</SaveDraft>
+    <FastPublish>Publication rapide</FastPublish>
+    <Preferences>Préférences</Preferences>
+    <Close>Fermer</Close>
+   </action>
   </UIContentDialogForm>
   
   <UIPermissionManager>
-  	<label>
-  		<UIPermissionInputSetWithAction>Permission</UIPermissionInputSetWithAction>
-      <UIPermissionStringInput></UIPermissionStringInput>
-      <UIAccessibleCheckboxInput>Droit d'accès</UIAccessibleCheckboxInput>
-      <UIEditableCheckboxInput>Droit de modifier</UIEditableCheckboxInput>
-    </label>
-    <action>
-			<Save>Sauver</Save>
-	    <Clear>Reset</Clear>
-		</action>
+   <label>
+    <UIPermissionInputSetWithAction>Permission</UIPermissionInputSetWithAction>
+    <UIPermissionStringInput></UIPermissionStringInput>
+    <UIAccessibleCheckboxInput>Droit d'accès</UIAccessibleCheckboxInput>
+    <UIEditableCheckboxInput>Droit de modifié</UIEditableCheckboxInput>
+   </label>
+   <action>
+    <Save>Sauver</Save>
+    <Clear>Clair</Clear>
+    <title>
+     <Edit>Modifier</Edit>
+     <Delete>Supprimer</Delete>
+    </title>
+   </action>
   </UIPermissionManager>
   
   <UIPermissionManagerGrid>
-    <action>
-      <title>
-        <Edit>Editer</Edit>
-        <Delete>Supprimer</Delete>
-      </title>
-    </action>
-    <header>
-      <owner>Permission</owner>
-      <accessible>Accessible</accessible>
-      <editable>Editable</editable>
-      <action>Action</action>
-    </header>
-    <msg>
-      <confirm-delete-permission>Confirmez-vous vouloir supprimer cette permission ?</confirm-delete-permission>
-      <no-permission-remove>Il n'y a pas de permission à supprimer</no-permission-remove>
-      <access-denied>Accès refusé</access-denied>
-      <node-locked>L'élément de chemin {0} ou l'un de ses parents est verrouillé.</node-locked>
-    </msg>
+   <header>
+    <owner>Permission</owner>
+    <accessible>Accessible</accessible>
+    <editable>Editable</editable>
+    <action>Action</action>
+   </header>
+   <msg>
+    <confirm-delete-permission>Confirmez-vous vouloir supprimer cette permission ?</confirm-delete-permission>
+    <no-permission-remove>Il n'y a pas de permission à supprimer</no-permission-remove>
+    <access-denied>Accès refusé</access-denied>
+    <node-locked>L'élément de chemin {0} ou l'un de ses parents est verrouillé.</node-locked>
+    <checkbox-require>Vous devriez droit prévu.</checkbox-require>
+    <node-checkedin>Vous devez vérifier en premier</node-checkedin>
+   </msg>
   </UIPermissionManagerGrid>
   
   <UIPermissionInputSetWithAction>
-    <title>
-      <SelectUser>Sélectionnez l'utilisateur</SelectUser>
-      <SelectMember>Sélectionnez membre</SelectMember>
-      <AddAny>Ajouter toute autorisation</AddAny>
-    </title>
+   <title>
+    <SelectUser>Sélectionner l'utilisateur</SelectUser>
+    <SelectMember>Sélectionne le membre</SelectMember>
+    <AddAny>Ajouter toute autorisation</AddAny>
+   </title>
   </UIPermissionInputSetWithAction>
   
   <UIUserSelectorPopupWindow>
-  	<title>
-  		<UIUserContainer>Utilisateur sélecteur</UIUserContainer>
-  	</title>
+   <title>
+    <UIUserContainer>Utilisateur sélecteur</UIUserContainer>
+   </title>
   </UIUserSelectorPopupWindow>
   
   <UIGroupSelectorPopupWindow>
-  	<title>
-  		<UIGroupMemberSelector>Sélecteur de groupe</UIGroupMemberSelector>
-  	</title>
+   <title>
+    <UIGroupMemberSelector>Sélecteur de groupe</UIGroupMemberSelector>
+   </title>
   </UIGroupSelectorPopupWindow>
+  
+  <UIGroupMemberSelector>
+   <label>
+    <selectGroup>Sélectionner le groupe</selectGroup>
+    <selectMembership>Sélectionnez l'adhésion</selectMembership>
+   </label>
+  </UIGroupMemberSelector>
+  
+  <UIContentDialogPreference>
+   <action>
+    <Back>Retour</Back>
+   </action>
+  </UIContentDialogPreference>
+  
+  <ZeroValidator>
+   <msg>
+    <Invalid-number>Zéro n'est pas acceptée dans le domaine '{0}'</Invalid-number>
+   </msg>
+  </ZeroValidator>
 </bundle>

@@ -17,7 +17,6 @@
 package org.exoplatform.wcm.webui.pcv;
 
 import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -44,6 +43,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
+import org.exoplatform.wcm.webui.pcv.config.UIPCVConfig;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -421,28 +421,6 @@ public class UIPCVContainer extends UIContainer {
       uiDocumentDialogForm.init(orginialNode, false);
       Utils.createPopupWindow(uiContentViewerContainer, uiDocumentDialogForm, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW, 800, 600);
     }
-  }
-
-  /**
-   * Render error message.
-   * 
-   * @param context the context
-   * @param keyBundle the key bundle
-   * 
-   * @throws Exception the exception
-   */
-  public void renderErrorMessage(WebuiRequestContext context, String keyBundle)
-      throws Exception {
-    Writer writer = context.getWriter();
-    String message = context.getApplicationResourceBundle().getString(
-        keyBundle);
-    writer
-        .write("<div style=\"height: 55px; font-size: 13px; text-align: center; padding-top: 10px;\">");
-    writer.write("<span>");
-    writer.write(message);
-    writer.write("</span>");
-    writer.write("</div>");
-    writer.close();
   }
 
   /**

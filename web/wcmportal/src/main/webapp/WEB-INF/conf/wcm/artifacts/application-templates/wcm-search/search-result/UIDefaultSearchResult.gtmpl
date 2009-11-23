@@ -25,9 +25,11 @@
   def resultType = uicomponent.getResultType();
   %>
    <div class="ResultHeader">
-    <div class="CaptionSearchType"><b><%= resultType %></b></div>
+    <div class="CaptionSearchType"><b><%= _ctx.appRes("UIDefaultSearchResult.label." + resultType) %></b></div>
     <% 
      if (!currentPageData.isEmpty()) {
+    	def currentPage = uicomponent.getCurrentPage();
+    	def itemsPerPage = uicomponent.getItemsPerPage();
       def totalItem = uicomponent.getTotalItem();
       def startItemIndex = (currentPage - 1) * itemsPerPage + 1;
       def endItemIndex = currentPage* itemsPerPage;
@@ -51,7 +53,7 @@
     def suggestionURL = uiSearchForm.event("Search", suggestion);
      %>
      <p>
-      <%= _ctx.appRes("UISearchResult.msg.new-suggestion") %> : <b style="font-size: 15px; font-style: italic;"><a href="<%= suggestionURL %>"><%= suggestion %></a></b>
+      <%= _ctx.appRes("UIDefaultSearchResult.msg.new-suggestion") %> : <b style="font-size: 15px; font-style: italic;"><a href="<%= suggestionURL %>"><%= suggestion %></a></b>
      </p>
     <%
    }
@@ -59,13 +61,11 @@
    if (currentPageData.isEmpty()) {
     %>
      <p>
-      <%= _ctx.appRes("UISearchResult.msg.your-search") %> <b style="font-size: 15px; font-style: italic;"> <%= keyword %> </b> - 
-      <%= _ctx.appRes("UISearchResult.msg.did-not-match") %> <%= resultType.toLowerCase() %>
+      <%= _ctx.appRes("UIDefaultSearchResult.msg.your-search") %> <b style="font-size: 15px; font-style: italic;"> <%= keyword %> </b> - 
+      <%= _ctx.appRes("UIDefaultSearchResult.msg.did-not-match") %> <%= resultType.toLowerCase() %>
      </p>
     <%
    } else {
-    def currentPage = uicomponent.getCurrentPage();
-    def itemsPerPage = uicomponent.getItemsPerPage();
     for (ResultNode resultNode : currentPageData) {
      Node node = resultNode.getNode();
      Node viewNode = Utils.getNodeView(node);

@@ -2,7 +2,6 @@ package org.exoplatform.wcm.webui.selector.content;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -56,14 +55,6 @@ public class UIContentPropertySelector extends UIForm{
 
   public UIContentPropertySelector() throws Exception {
     setActions(new String[] {"Add", "Cancel"}) ;
-  }
-
-  public String getLabel(ResourceBundle res, String id)  {
-    try {
-      return super.getLabel(res, id) ;
-    } catch (Exception ex) {
-      return id ;
-    }
   }
 
   public void init() throws Exception {

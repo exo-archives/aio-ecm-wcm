@@ -19,7 +19,6 @@ package org.exoplatform.wcm.webui.scv.config;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -27,10 +26,8 @@ import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.NodeTypeManager;
 import javax.portlet.PortletPreferences;
 
-import org.apache.commons.lang.StringUtils;
 import org.exoplatform.ecm.webui.comparator.ItemOptionNameComparator;
 import org.exoplatform.ecm.webui.form.validator.ECMNameValidator;
-import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
@@ -119,8 +116,6 @@ public class UINameWebContentForm extends UIForm {
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     String repositoryName = repositoryService.getCurrentRepository().getConfiguration().getName();
     NodeTypeManager nodeTypeManager = repositoryService.getRepository(repositoryName).getNodeTypeManager();
-    PortalRequestContext requestContext = Util.getPortalRequestContext();
-    ResourceBundle resourceBundle = requestContext.getApplicationResourceBundle();
     List<String> acceptableContentTypes = templateService.getDocumentTemplates(repositoryName);
     if(acceptableContentTypes.size() == 0) return options;
     String userName = Util.getPortalRequestContext().getRemoteUser();
@@ -128,12 +123,6 @@ public class UINameWebContentForm extends UIForm {
       NodeType nodeType = nodeTypeManager.getNodeType(contentType);
       if (nodeType.isNodeType("exo:webContent")) {
       	String label = templateService.getTemplateLabel(contentType,repositoryName);
-        String resolveLabel = label;
-        try {
-        	resolveLabel = resourceBundle.getString("ContentType.label."+ StringUtils.deleteWhitespace(resolveLabel));
-        } catch(Exception e) {
-        	// Don't do anything here
-        } 
     		try{
     		  String templatePath = templateService.getTemplatePathByUser(true, contentType, userName, repositoryName);
     		  if ((templatePath != null) && (templatePath.length() > 0)) {

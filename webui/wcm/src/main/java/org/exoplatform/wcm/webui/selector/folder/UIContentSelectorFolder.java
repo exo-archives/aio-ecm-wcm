@@ -35,8 +35,6 @@ public class UIContentSelectorFolder extends UIContentSelector {
    */
   public UIContentSelectorFolder() throws Exception {
     addChild(UIContentBrowsePanelFolder.class, null, null);
-    addChild(org.exoplatform.wcm.webui.selector.content.UIContentSearchForm.class,null,null);
-    addChild(org.exoplatform.wcm.webui.selector.content.UIContentSearchResult.class,null,null);
     setSelectedTab(1);
   }
 
@@ -47,6 +45,5 @@ public class UIContentSelectorFolder extends UIContentSelector {
    */
   public void init() throws Exception {
     getChild(UIContentBrowsePanelFolder.class).init();
-    getChild(org.exoplatform.wcm.webui.selector.content.UIContentSearchForm.class).init();
   }
 }

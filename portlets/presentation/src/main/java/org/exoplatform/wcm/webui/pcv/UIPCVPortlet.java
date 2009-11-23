@@ -19,6 +19,7 @@ package org.exoplatform.wcm.webui.pcv;
 import javax.portlet.PortletMode;
 
 import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.pcv.config.UIPCVConfig;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;

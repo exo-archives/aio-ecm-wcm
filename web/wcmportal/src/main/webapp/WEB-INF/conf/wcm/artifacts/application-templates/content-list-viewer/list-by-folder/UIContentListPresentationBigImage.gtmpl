@@ -5,7 +5,7 @@
 	import org.exoplatform.wcm.webui.Utils;
 %>
 
-<div id="$uicomponent.id" class="UIContentListPresentationDefault">
+<div id="$uicomponent.id" class="UICLVPresentation">
 	<%	
 		String header = uicomponent.getHeader();
 		if (uicomponent.isShowHeader() && header != null && header.trim().length() != 0 ) {
@@ -14,7 +14,7 @@
 	%>
 	<div class="Caption">
 		<% 	
-			String labelRefreshAction = _ctx.appRes("UIContentListPresentationDefault.action.refresh");		
+			String labelRefreshAction = _ctx.appRes("UICLVPresentation.action.refresh");		
 			if (uicomponent.getUIPageIterator().getAvailable() == 0) {
 				%>
 					<div style="height: 20px; text-align: center; font-size: 13px; background: white; padding: 10px; margin: 5px;">
@@ -23,9 +23,9 @@
 				<%
 			} else {			
 				def currentPageData = uicomponent.getCurrentPageData();							
-				String labelReadMore = _ctx.appRes("UIContentListPresentationDefault.label.readmore");
-				String draftLabel = _ctx.appRes("UIContentListPresentationDefault.label.draft");
-				String editActionLabel = _ctx.appRes("UIContentListPresentationDefault.action.edit");
+				String labelReadMore = _ctx.appRes("UICLVPresentation.label.readmore");
+				String draftLabel = _ctx.appRes("UICLVPresentation.label.draft");
+				String editActionLabel = _ctx.appRes("UICLVPresentation.action.edit");
 				
 				for (Node node : currentPageData) {
 				  def viewNode = Utils.getNodeView(node);
