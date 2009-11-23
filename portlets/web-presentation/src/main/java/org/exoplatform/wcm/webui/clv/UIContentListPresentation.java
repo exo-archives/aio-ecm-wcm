@@ -28,6 +28,7 @@ import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.commons.utils.PageList;
@@ -348,6 +349,33 @@ import org.exoplatform.webui.event.EventListener;
     return link;
   }
 
+  /**
+   * Gets the WebDAV uRL.
+   * 
+   * @param node the node
+   * 
+   * @return the WebDAV URL
+   * 
+   * @throws Exception the exception
+   */
+  public String getWebdavURL(Node node) throws Exception {
+  	PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+  	PortletRequest portletRequest = portletRequestContext.getRequest();
+  	PortletPreferences portletPreferences = getPortletPreferences();
+  	String repository = portletPreferences.getValue(UIContentListViewerPortlet.REPOSITORY, null);
+  	String workspace = portletPreferences.getValue(UIContentListViewerPortlet.WORKSPACE, null);
+  	String baseURI = portletRequest.getScheme() + "://" + portletRequest.getServerName() + ":" + String.format("%s", portletRequest.getServerPort());
+  	
+  	if (node.isNodeType("nt:frozenNode")){
+  		String uuid = node.getProperty("jcr:frozenUuid").getString();
+  		Node originalNode = node.getSession().getNodeByUUID(uuid);
+  		return baseURI + "/rest/jcr/" + repository + "/" + workspace + originalNode.getPath() + "?version=" + node.getParent().getName();
+  	} else {
+  		return baseURI + "/rest/jcr/" + repository + "/" + workspace + node.getPath();
+  	}
+	  
+  }
+  
   /**
    * Gets the author.
    * 
