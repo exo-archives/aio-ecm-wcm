@@ -401,6 +401,16 @@ public class UINewsletterEntryManager extends UIForm {
       if(subIds == null || subIds.size() != 1){
         Utils.createPopupMessage(uiNewsletterEntryManager, "UISubscription.msg.checkOnlyOneNewsletterToEdit", null, ApplicationMessage.WARNING);
         return;
+      } else {
+        NewsletterManagerConfig newsletterName = uiNewsletterEntryManager.newsletterEntryHandler.
+                                                            getNewsletterEntry(Utils.getSessionProvider(uiNewsletterEntryManager), NewsLetterUtil.getPortalName(), 
+                                                                              uiNewsletterEntryManager.categoryConfig.getName(), 
+                                                                              uiNewsletterEntryManager.getSubscriptionConfig().getName(), 
+                                                                              subIds.get(0));
+        if(newsletterName.getStatus().equals(NewsletterConstant.STATUS_SENT)){
+          Utils.createPopupMessage(uiNewsletterEntryManager, "UINewsletterEntryManager.msg.canNotEditNewsletter", null, ApplicationMessage.WARNING);
+          return;
+        }
       }
       UINewsletterEntryContainer entryContainer = uiNewsletterEntryManager.createUIComponent(UINewsletterEntryContainer.class, null, null);
       entryContainer.setNewsletterInfor(NewsletterConstant.generateCategoryPath(NewsLetterUtil.getPortalName()) + "/"

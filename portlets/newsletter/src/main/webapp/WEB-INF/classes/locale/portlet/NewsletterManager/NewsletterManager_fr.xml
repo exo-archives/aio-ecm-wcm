@@ -134,8 +134,7 @@
     	<checkOnlyOneNewsletterToConvert>S'il vous plaît cocher une seule lettre d'information pour convertir!</checkOnlyOneNewsletterToConvert>
     	<convertSuccessful>Lettre convertie en tant que modèle avec succès</convertSuccessful>
     	<templateIsExist>Il existe déjà un modèle avec le même nom! Merci de modifier le titre et de réessayer.</templateIsExist>
-    		
-<get-list-subscriptions>erreur lorsque vous effectuez obtenir abonnements liste. </get-list-subscriptions>
+			<get-list-subscriptions>erreur lorsque vous effectuez obtenir abonnements liste. </get-list-subscriptions>
     </msg>
     <title>
     	<ManageCategory>Gérer la catégorie</ManageCategory>
@@ -280,8 +279,8 @@
 			<confirmDeleteNewsletter>Êtes-vous sûr de vouloir supprimer cette Newsletter ?</confirmDeleteNewsletter>
 			<get-checked>erreur lorsque vous effectuez obtenir un bulletin ou de souscription est cochée. </get-checked>
 			<set-list-newsletter>erreur lorsque vous effectuez ensemble des entrées newsletter liste. </set-list-newsletter>
+			<canNotEditNewsletter>Ce bulletin a été transmis, ne peut pas modifier. Vous ne convertir que ce modèle au fur et à ajouter de nouveaux Newsletter avec ce modèle.</canNotEditNewsletter>
 		</msg>
-		
 		<title>
 			<ConvertAsTemplate>Convertir en tant que modèle</ConvertAsTemplate>
 			<Letter>Lettre</Letter>
