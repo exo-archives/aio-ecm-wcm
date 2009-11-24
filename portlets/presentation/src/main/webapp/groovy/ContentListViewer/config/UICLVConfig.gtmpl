@@ -119,7 +119,6 @@
 					      <%=uicomponent.getLabel(uiform.getChildById(uicomponent.BASE_PATH_INPUT_SET_ACTION).getName()) %>
 				      </td>
 					  <td class="FieldComponent"><% uiform.renderField(uiform.getChildById(uicomponent.BASE_PATH_INPUT_SET_ACTION)) %></td>
-					  <td class="SelectTargetPageIcon" onclick="<%=uicomponent.event("SelectBasePath")%>"><span></span></td>													
 					</tr>		
 					
 					<tr>

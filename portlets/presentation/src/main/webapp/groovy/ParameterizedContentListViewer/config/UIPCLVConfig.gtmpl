@@ -142,7 +142,6 @@
 				      <%=uicomponent.getLabel(uiform.getChildById(uicomponent.TARGET_PAGE_INPUT_SET_ACTION).getName()) %>
 			      </td>
 				  <td class="FieldComponent"><% uiform.renderField(uiform.getChildById(uicomponent.TARGET_PAGE_INPUT_SET_ACTION)) %></td>
-				  <td class="quickSearchAction" onclick="<%=uicomponent.event("SelectTargetPage")%>"><span></span></td>													
 				</tr>
 	      </table>                 
       </fieldset>   
