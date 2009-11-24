@@ -12,8 +12,8 @@ FCKConfig.Plugins.Add('insertContent', 'en,fr,vi', FCKConfig.eXoPath + "plugins/
 
 //config style
 FCKConfig.EditorAreaCSS = '';
-FCKConfig.EditorAreaStyles = 'body{background: #ffffff; margin: 0px;} a{color: #0000CC; text-decoration: none;}' ;
 FCKConfig.InsertedLinkColor = 'green';
+FCKConfig.EditorAreaStyles = 'body{background: #ffffff; margin: 0px;} a{color:' + FCKConfig.InsertedLinkColor + '; text-decoration: none;}' ;
 
 FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/default/' ;
 
