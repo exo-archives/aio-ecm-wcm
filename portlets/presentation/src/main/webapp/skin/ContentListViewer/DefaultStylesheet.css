@@ -191,13 +191,11 @@
 }
 
 
-.UICLVPortlet .SelectTargetPageIcon {
+.UICLVPortlet .SelectBasePathIcon {
 	background: url('DefaultSkin/icons/SearchIcon.png') no-repeat;
 	width: 16px;
 	height: 16px;
 	cursor: pointer;
-	display: block;
-	margin-top: 8px;
 }
 
 .OneColumnCLVTemplate .Contents .Column1 img {
