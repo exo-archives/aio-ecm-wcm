@@ -279,7 +279,7 @@
 			<confirmDeleteNewsletter>Are you sure you want to delete this newsletter?</confirmDeleteNewsletter>
 			<set-list-newsletter>Error when perform set list newsletter entries.</set-list-newsletter>
 			<get-checked>Error when perform get newsletter or subscription are checked.</get-checked>
-			<canNotEditNewsletter>This Newsletter has been sent, can't edit.<br/>You only convert it as template and add new Newsletter with this template.</canNotEditNewsletter>
+			<canNotEditNewsletter>This Newsletter has been sent, can't edit. You only convert it as template and add new Newsletter with this template.</canNotEditNewsletter>
 		</msg>
 		<title>
 			<ConvertAsTemplate>Convert As Template</ConvertAsTemplate>
