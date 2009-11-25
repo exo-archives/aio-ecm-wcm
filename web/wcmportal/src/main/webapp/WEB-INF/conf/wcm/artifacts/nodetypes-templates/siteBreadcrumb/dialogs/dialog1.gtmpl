@@ -210,7 +210,7 @@
 											summaryContent = webContentNode.getProperty("exo:summary").getValue().getString();
 									}
 									String[] fieldSummary = ["jcrPath=/node/exo:summary", "editable=if-null", summaryContent] ;
-									uicomponent.addTextAreaField("exo:summary", fieldSummary) ;
+									uicomponent.addWYSIWYGField("exo:summary", fieldSummary) ;
 								%>
 								</td>
 							</tr>
