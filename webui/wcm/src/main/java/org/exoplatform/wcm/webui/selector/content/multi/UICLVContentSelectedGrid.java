@@ -87,11 +87,7 @@ public class UICLVContentSelectedGrid extends UISelectedCategoriesGrid {
       UISelectable contentBrowsePanel = (UISelectable) uiContentBrowsePanel.getSourceComponent();
       String value = event.getRequestContext().getRequestParameter(OBJECTID);
       uiSelectedContentGrid.removeCategory(value);
-      if (uiSelectedContentGrid.getSelectedCategories().size() == 0) uiSelectedContentGrid.setDeleteAllCategory(true);
       uiSelectedContentGrid.updateGrid(uiSelectedContentGrid.getUIPageIterator().getCurrentPage());
-      if (uiSelectedContentGrid.getSelectedCategories().size() == 0) {
-        uiSelectedContentGrid.setRendered(false);
-      }
       ((UISourceGridUpdatable)contentBrowsePanel).doSave(uiSelectedContentGrid.getSelectedCategories());
       event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectedContentGrid.getParent());      
     }
@@ -118,7 +114,7 @@ public class UICLVContentSelectedGrid extends UISelectedCategoriesGrid {
       UIContentBrowsePanel uiContentBrowsePanel = uiSelectedContentGrid.getAncestorOfType(UIContentBrowsePanel.class);
       String returnField = uiContentBrowsePanel.getReturnFieldName();
       List<String> selectedCategories = uiSelectedContentGrid.getSelectedCategories();
-      if (selectedCategories.size() == 0 && !uiSelectedContentGrid.isDeleteAllCategory()) {
+      if (selectedCategories.size() == 0) {
       	Utils.createPopupMessage(uiContentBrowsePanel, "UISelectedContentGrid.msg.non-content", null, ApplicationMessage.INFO);
         return;
       }

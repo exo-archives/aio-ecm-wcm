@@ -100,10 +100,14 @@
  
  <UISelectedContentGrid>
   <label>
-   <header>Những nội dung dưới đây có thể được chọn</header>
    <name>Tên</name>
-   <add>Hành động</add>  		  		
+   <add>Hành động</add>
+   <delete>Xóa</delete>  		  		
   </label>
+  <msg>
+   <no-content-found>Không có nội dung nào được tìm thấy</no-content-found>
+   <non-content>Bạn chưa chọn nội dung nào</non-content>
+  </msg>
  </UISelectedContentGrid>
  
  <UICLVContentSelectedGrid>

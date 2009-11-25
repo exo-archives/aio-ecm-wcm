@@ -100,10 +100,14 @@
  
  <UISelectedContentGrid>
   <label>
-   <header>Sommaire ci-dessous peuvent être sélectionnés</header>
    <name>Nom</name>
-   <add>Ajouter</add>  		  		
+   <add>Ajouter</add>
+   <delete>Supprimer</delete>  		  		
   </label>
+  <msg>
+   <no-content-found>Aucun contenu trouvé</no-content-found>
+   <non-content>Vous n'avez pas choisi n'importe quel contenu</non-content>
+  </msg>
  </UISelectedContentGrid>
  
  <UICLVContentSelectedGrid>
