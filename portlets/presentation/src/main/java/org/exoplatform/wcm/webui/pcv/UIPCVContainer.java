@@ -26,6 +26,7 @@ import java.util.List;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
@@ -360,10 +361,19 @@ public class UIPCVContainer extends UIContainer {
     String[] params = parameters.split("/");
     try {
     	Node taxonomyTree = taxonomyService.getTaxonomyTree(this.getRepository(), params[0]);
-    	String symLinkPath = parameters.substring(parameters.indexOf("/") + 1);
-      Node symLink = taxonomyTree.getNode(symLinkPath);
+      Node symLink = null;
+      parameters = parameters.substring(parameters.indexOf("/") + 1);
+      while(taxonomyTree != null){
+        try{
+          symLink = taxonomyTree.getNode(parameters);
+          break;
+        }catch(PathNotFoundException exception){
+          taxonomyTree = taxonomyTree.getParent();
+        }
+      }
       return taxonomyTree.getSession().getNodeByUUID(symLink.getProperty("exo:uuid").getString());
     } catch (Exception e) {
+      e.printStackTrace();
       return null;
     }
   }
