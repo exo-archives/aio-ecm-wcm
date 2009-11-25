@@ -33,9 +33,12 @@
 }
 
 .UINewLetterPopup .TopRightRightClickPopupMenu {
-	background: url('background/PopupBg.gif') no-repeat top right;
-	height: 5px;
+	background: url('background/PopupBg.gif') no-repeat right top;
 	padding-right: 5px;
+}
+
+.UINewLetterPopup .TopCenterRightClickPopupMenu {
+	height: 5px;
 }
 
 .UINewLetterPopup .MiddleRightRightClickPopupMenu {
@@ -56,7 +59,10 @@
 
 .UINewLetterPopup .BottomCenterRightClickPopupMenu {
 	background: url('background/PopupBg.gif') repeat-x center -10px;
-	height: 5px;
+}
+
+.UINewLetterPopup .BottomCenterCenterRightClickPopupMenu {
+	height: 5px; /* fix for IE7*/
 }
 
 .UINewLetterPopup .MenuItem .ItemIcon {

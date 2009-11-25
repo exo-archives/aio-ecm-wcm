@@ -121,7 +121,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 																			</div>
 																			<div class="BottomLeftRightClickPopupMenu PopupRightBg">
 																				<div class="BottomRightRightClickPopupMenu ">
-																					<div class="BottomCenterRightClickPopupMenu"><span></span></div>
+																					<div class="BottomCenterRightClickPopupMenu"><div class="BottomCenterCenterRightClickPopupMenu"><span></span></div></div>
 																				</div>
 																			</div>
 																		</div>
