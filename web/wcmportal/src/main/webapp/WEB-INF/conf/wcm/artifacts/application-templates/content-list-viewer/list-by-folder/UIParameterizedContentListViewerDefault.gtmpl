@@ -92,7 +92,7 @@
 															}
 														%>
 													</div>
-													<div class="ClearRight"><span></span></div>
+													<div class="ClearBoth"><span></span></div>
 													<% if (isShowReadmore) { %>
 												  		<div class="ReadLink"><a href="$itemLink"><%= _ctx.appRes("UIPCLVConfig.label.readmore") %></a></div><%
 													}%>
