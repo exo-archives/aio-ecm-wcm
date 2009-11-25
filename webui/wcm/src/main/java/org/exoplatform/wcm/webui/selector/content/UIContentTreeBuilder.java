@@ -214,7 +214,6 @@ public class UIContentTreeBuilder extends UIContainer {
   }
 
   /**
-<<<<<<< .mine
    * Gets the session.
    * 
    * @param workSpaceName the work space name
@@ -229,8 +228,6 @@ public class UIContentTreeBuilder extends UIContainer {
   }
 
   /**
-=======
->>>>>>> .r39646
    * Adds the tree from drives.
    * 
    * @param path the path
@@ -295,35 +292,6 @@ public class UIContentTreeBuilder extends UIContainer {
   public List<UIContentTreeNode> getTreeNode() throws Exception{
     List<UIContentTreeNode> list = new ArrayList<UIContentTreeNode>();
     addRootDrives(list);
-    /*String workSpaceName = null;
-    UIContentTreeNode treeNode = null;
-    NodeIterator nodeIterator = null;
-    Node node = null;
-    int j = 0;
-    int deep = 0;
-    for(int i = 0; i < list.size(); i ++){
-      treeNode = list.get(i);
-      node = treeNode.getNode();
-      if(node != null){
-        j = i + 1;
-        deep = treeNode.getDeep() + 1;
-        if(deep == 2){
-          workSpaceName = treeNode.getWorkSpaceName();
-        }
-        
-        for(nodeIterator = node.getNodes(); nodeIterator.hasNext();){
-          try{
-            node = nodeIterator.nextNode();
-            if (!node.isNodeType(NodetypeConstant.EXO_WEBCONTENT) && !node.isNodeType(NodetypeConstant.EXO_HIDDENABLE) &&
-            		(node.isNodeType(NodetypeConstant.EXO_TAXONOMY) || node.isNodeType(NodetypeConstant.NT_UNSTRUCTURED) || node.isNodeType(NodetypeConstant.NT_FOLDER)) ) {
-              list.add(j ++, new UIContentTreeNode(treeNode.getTreePath(), workSpaceName, node, deep));
-            }
-          }catch(Exception ex){
-            continue;
-          }
-        }
-      }
-    }*/
     return list;
   }
 
