@@ -70,6 +70,7 @@ import org.exoplatform.wcm.connector.FileUploadHandler;
 import org.exoplatform.wcm.connector.handler.FCKFileHandler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  * Created by The eXo Platform SEA
@@ -134,6 +135,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     Element rootElement = document.createElement("Connector");
     document.appendChild(rootElement);
 
+    createAtributeUpload(rootElement, false);
     rootElement.appendChild(appendDrivers(document, generalDrivers(listDriver), "General Drives"));
     rootElement.appendChild(appendDrivers(document, groupDrivers(listDriver, userId), "Group Drives"));
     rootElement.appendChild(appendDrivers(document, personalDrivers(listDriver), "Personal Drives"));
@@ -347,10 +349,12 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
 	private Element appendDrivers(Document document, List<DriveData> driversList, String groupName) {
 	  Element folders = document.createElement("Folders");
 	  folders.setAttribute("name", groupName);
+	  createAtributeUpload(folders, false);
     for (DriveData driver : driversList) {
       Element folder = document.createElement("Folder");
       folder.setAttribute("name", driver.getName());
       folder.setAttribute("driverPath", driver.getHomePath());
+      createAtributeUpload(folder, true);
       folders.appendChild(folder);  
     }
 	  return folders;
@@ -488,7 +492,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    * @param command the command
    * @param repositoryName the repository name
    * @param filterBy the filter by
-   * @param session TODO
+   * @param session
    * 
    * @return the response
    * 
@@ -496,9 +500,14 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    */
   private Response buildXMLResponseForChildren(Node node, String command, String repositoryName, String filterBy, Session session) throws Exception {
     Element rootElement = FCKUtils.createRootElement(command, node, folderHandler.getFolderType(node));
+    NodeList nodeList = rootElement.getElementsByTagName("CurrentFolder");
+    Element currentFolder = (Element) nodeList.item(0);
+    createAtributeUpload(currentFolder, true);
     Document document = rootElement.getOwnerDocument();
     Element folders = document.createElement("Folders");
+    createAtributeUpload(folders, true);
     Element files = document.createElement("Files");
+    createAtributeUpload(files, true);
     Node sourceNode = null;
     Node checkNode = null;
     
@@ -535,7 +544,6 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
       	}
       }
     }
-    
     rootElement.appendChild(folders);
     rootElement.appendChild(files);
     return getResponse(document);
@@ -664,14 +672,6 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     if (FileUploadHandler.SAVE_ACTION.equals(action)) {
       CacheControl cacheControl = new CacheControl();
       cacheControl.setNoCache(true);
-//      SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
-//      Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
-//      Node currentPortal = getCurrentPortalNode(repositoryName,
-//                                                jcrPath,
-//                                                runningPortalName,
-//                                                sharedPortal);
-//      Node webContent = getWebContent(repositoryName, workspaceName, jcrPath);
-//      sessionProvider.close();
       return fileUploadHandler.saveAsNTFile(currentFolderNode, uploadId, fileName, language);
     }
     return fileUploadHandler.control(uploadId, action);
@@ -726,6 +726,15 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
   	folder.setAttribute("name", childName);
   	folder.setAttribute("url", FCKUtils.createWebdavURL(child));
   	folder.setAttribute("folderType", folderType);
+  	createAtributeUpload(folder, true);
   	return folder;
+  }
+  
+  private void createAtributeUpload(Element element, boolean isUpload) {
+    try{
+      element.setAttribute("isUpload", String.valueOf(isUpload));
+    }catch(Exception e) {
+      element.setAttribute("isUpload", String.valueOf(false));
+    }
   }
 }
