@@ -113,34 +113,5 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
       return null;
     }
   }
-  
-  /**
-   * Gets the node.
-   * 
-   * @return the node
-   * 
-   * @throws Exception the exception
-   */
-  public Node getNodeView() {
-  	try {
-  		Node originalNode = getNodeByPreference();
-  		Node viewNode = Utils.getNodeView(originalNode);
-  		
-  		// Set original node for UIBaseNodePresentation (in case nodeView is a version node)
-  		UIPresentation presentation = findFirstComponentOfType(UIPresentation.class);
-  		if (viewNode != null && viewNode.isNodeType("nt:frozenNode")) {
-  			String nodeUUID = viewNode.getProperty("jcr:frozenUuid").getString();
-  			presentation.setOriginalNode(viewNode.getSession().getNodeByUUID(nodeUUID));
-  			presentation.setNode(viewNode);
-  		} else {
-  			presentation.setOriginalNode(viewNode);
-  			presentation.setNode(viewNode);
-  		}
-  		
-  		return viewNode;
-		} catch (Exception e) {
-			return null;
-		}
-  }
-  
+    
 }

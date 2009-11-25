@@ -267,14 +267,15 @@ public class UIContentSearchResult extends UIGrid {
     public void execute(Event<UIContentSearchResult> event) throws Exception {
       UIContentSearchResult contentSearchResult = event.getSource();
       String webcontentPath = event.getRequestContext().getRequestParameter(OBJECTID);
-      RepositoryService repositoryService = contentSearchResult.getApplicationComponent(RepositoryService.class);
-      String repoName = repositoryService.getCurrentRepository().getConfiguration().getName();
-      WCMConfigurationService configurationService = contentSearchResult.getApplicationComponent(WCMConfigurationService.class);
-      NodeLocation portalLocation = configurationService.getLivePortalsLocation(repoName);
-      ManageableRepository manageableRepository = repositoryService.getRepository(portalLocation.getRepository());
-      Session session = Utils.getSessionProvider(contentSearchResult).getSession(portalLocation.getWorkspace(), manageableRepository);
-      Node originalNode = (Node) session.getItem(webcontentPath);
-      Node viewNode = Utils.getNodeView(originalNode);
+//      RepositoryService repositoryService = contentSearchResult.getApplicationComponent(RepositoryService.class);
+//      String repoName = repositoryService.getCurrentRepository().getConfiguration().getName();
+//      WCMConfigurationService configurationService = contentSearchResult.getApplicationComponent(WCMConfigurationService.class);
+//      NodeLocation portalLocation = configurationService.getLivePortalsLocation(repoName);
+//      ManageableRepository manageableRepository = repositoryService.getRepository(portalLocation.getRepository());
+//      Session session = Utils.getSessionProvider(contentSearchResult).getSession(portalLocation.getWorkspace(), manageableRepository);
+
+      Node originalNode = Utils.getNodeView(null, null, webcontentPath);
+      Node viewNode = originalNode;
       
       UIContentSelector contentSelector = contentSearchResult.getAncestorOfType(UIContentSelector.class);
       UIContentViewer contentResultViewer = contentSelector.getChild(UIContentViewer.class);

@@ -82,6 +82,7 @@ public class UIPCVPresentation extends UIBaseNodePresentation {
    */
   @Override
   public Node getNode() throws Exception {
+//	  return Utils.getNodeView(contentNodeLocation.getRepository(), contentNodeLocation.getWorkspace(), contentNodeLocation.getPath());
     return NodeLocation.getNodeByLocation(contentNodeLocation);
   }
 
@@ -90,6 +91,7 @@ public class UIPCVPresentation extends UIBaseNodePresentation {
    */
   @Override
   public Node getOriginalNode() throws Exception {
+//	  return Utils.getNodeView(originalNodeLocation.getRepository(), originalNodeLocation.getWorkspace(), originalNodeLocation.getPath());
     return NodeLocation.getNodeByLocation(originalNodeLocation);
   }
   
@@ -98,7 +100,7 @@ public class UIPCVPresentation extends UIBaseNodePresentation {
    * 
    * @param orginalNode the new orginal node
    */
-  public void setOrginalNode(Node originalNode) {
+  public void setOriginalNode(Node originalNode) {
     originalNodeLocation = NodeLocation.make(originalNode);
   }
 

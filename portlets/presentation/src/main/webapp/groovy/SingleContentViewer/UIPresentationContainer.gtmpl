@@ -10,8 +10,8 @@
 		def quickEditingBlockId = portletId + "-QuickEditingBlock";
 		rcontext.getJavascriptManager().addJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '");');
 		
-		def scvPortlet = uicomponent.getAncestorOfType(UISingleContentViewerPortlet.class); 
-		def node = scvPortlet.getNodeView();
+		//def scvPortlet = uicomponent.getAncestorOfType(UISingleContentViewerPortlet.class); 
+		def node = uicomponent.getNodeView();
 		if (node != null) {
 			def preferences = rcontext.getRequest().getPreferences();
 			def isShowPrint = Boolean.parseBoolean(preferences.getValue("ShowPrintAction", null)); 
