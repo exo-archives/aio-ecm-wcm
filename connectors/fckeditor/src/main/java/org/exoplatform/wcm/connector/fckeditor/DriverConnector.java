@@ -553,7 +553,9 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    */
   private boolean isDMSDocument(Node node, String repositoryName) throws Exception {
   	TemplateService templateService = (TemplateService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(TemplateService.class);
-  	List<String> dmsDocumentList = templateService.getDocumentTemplates(repositoryName);
+  	List<String> dmsDocumentListTmp = templateService.getDocumentTemplates(repositoryName);
+  	List<String> dmsDocumentList = new ArrayList<String>();
+  	dmsDocumentList.addAll(dmsDocumentListTmp);
   	dmsDocumentList.remove(NodetypeConstant.EXO_WEBCONTENT);
   	for (String documentType : dmsDocumentList) {
 	    if (node.getPrimaryNodeType().isNodeType(documentType)) {
