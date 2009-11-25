@@ -84,7 +84,9 @@
 .WCMPublication .PanelContainer .ContainerConfigOptions {
 	border: none;
 	padding: 0;
+	background: none;
 }
+
 /* ===== Overwrite stylesheet ===== */
 
 /*.UISelectedPages .Container {
