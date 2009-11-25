@@ -16,19 +16,34 @@
  */
 package org.exoplatform.services.wcm.publication.lifecycle.datetime;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.Session;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
+import javax.jcr.query.QueryResult;
 
-import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.services.ecm.publication.IncorrectStateUpdateLifecycleException;
-import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
+import org.apache.commons.logging.Log;
+import org.exoplatform.commons.utils.ISO8601;
+import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.core.NodetypeConstant;
+import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
+import org.exoplatform.services.wcm.publication.lifecycle.datetime.ui.UIPublicationContainer;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.form.UIForm;
 
@@ -38,145 +53,106 @@ import org.exoplatform.webui.form.UIForm;
  *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
  * Nov 17, 2009  
  */
-public class DateTimePublicationPlugin extends WebpagePublicationPlugin {
+public class DateTimePublicationPlugin extends StageAndVersionPublicationPlugin {
+	
+	private Log log = ExoLogger.getLogger("wcm:DateTimePublicationPlugin");
+	
+	public static final String LIFECYCLE_NAME = "Date time publication";
 
-	@Override
-	public String getLifecycleType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public static final String LIFECYCLE_TYPE = "publication:dateTimePublication";
 
-	@Override
-	public List<String> getListPageNavigationUri(Page page, String remoteUser) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void publishContentToCLV(Node content,
-																	Page page,
-																	String clvPortletId,
-																	String portalOwnerName,
-																	String remoteUser) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void publishContentToSCV(Node content, Page page, String portalOwnerName) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void suspendPublishedContentFromPage(Node content, Page page, String remoteUser) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateLifecycleOnChangeNavigation(PageNavigation navigation, String remoteUser) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateLifecycleOnRemovePage(Page page, String remoteUser) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateLifecyleOnChangeContent(Node node, String remoteUser) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateLifecyleOnChangeContent(Node node, String remoteUser, String newState) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateLifecyleOnChangePage(Page page, String remoteUser) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateLifecyleOnCreateNavigation(PageNavigation navigation) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateLifecyleOnCreatePage(Page page, String remoteUser) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateLifecyleOnRemoveNavigation(PageNavigation navigation) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void addMixin(Node node) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean canAddMixin(Node node) throws Exception {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void changeState(Node node, String newState, HashMap<String, String> context) throws IncorrectStateUpdateLifecycleException,
-																																											Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String getLocalizedAndSubstituteMessage(Locale locale, String key, String[] values) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Node getNodeView(Node node, Map<String, Object> context) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String[] getPossibleStates() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public byte[] getStateImage(Node node, Locale locale) throws IOException,
-																											 FileNotFoundException,
-																											 Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public UIForm getStateUI(Node node, UIComponent component) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getUserInfo(Node node, Locale locale) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public static final String START_TIME_PROPERTY = "publication:startPublishDate";
+	
+	public static final String END_TIME_PROPERTY = "publication:endPublishDate";
+	
+	private List<String> repositories;
+	
+	private List<String> workspaces;
+	
+	@SuppressWarnings("unchecked")
+	public DateTimePublicationPlugin(InitParams initParams) {
+		super();
+		repositories = initParams.getValuesParam("repository").getValues();
+		workspaces = initParams.getValuesParam("workspace").getValues();
 	}
 	
+	public String getLifecycleType() {
+		return LIFECYCLE_TYPE;
+	}
+	
+  public void addMixin(Node node) throws Exception {
+    node.addMixin(LIFECYCLE_TYPE);
+    if(!node.isNodeType(NodetypeConstant.MIX_VERSIONABLE)) {
+      node.addMixin(NodetypeConstant.MIX_VERSIONABLE);
+    }            
+  }
+
+  public boolean canAddMixin(Node node) throws Exception {
+    return node.canAddMixin(LIFECYCLE_TYPE);   
+  }
+	
+  public UIForm getStateUI(Node node, UIComponent component) throws Exception {
+  	UIPublicationContainer publicationContainer = component.createUIComponent(UIPublicationContainer.class, null, null);
+    publicationContainer.initContainer(node);
+    return publicationContainer;
+  }
+  
+  public String getLocalizedAndSubstituteMessage(Locale locale, String key, String[] values) throws Exception {
+  	ClassLoader cl=this.getClass().getClassLoader();    
+    ResourceBundle resourceBundle= ResourceBundle.getBundle(StageAndVersionPublicationConstant.LOCALIZATION, locale, cl);
+    String result = "";
+    try {
+    	result = resourceBundle.getString(key);
+		} catch (MissingResourceException e) {
+			result = key;
+		}
+    if(values != null) {
+      return String.format(result, (Object[])values); 
+    }        
+    return result;
+  }
+  
+	public void publishContent() {
+		RepositoryService repositoryService = WCMCoreUtils.getService(RepositoryService.class);
+		WCMPublicationService wcmPublicationService = WCMCoreUtils.getService(WCMPublicationService.class);
+		SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+		try {
+			for (String repository : repositories) {
+				for (String workspace : workspaces) {
+					Session session = null;
+					try {
+						ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+						session = sessionProvider.getSession(workspace, manageableRepository);
+						String timestamp = ISO8601.format(Calendar.getInstance());
+						String sqlQuery = "select * from nt:base where " +
+															"(publication:startPublishDate <= TIMESTAMP '" + timestamp + "' AND publication:currentState = '" + PublicationDefaultStates.DRAFT + "') OR " +
+															"(publication:endPublishDate <= TIMESTAMP '" + timestamp + "' AND publication:currentState = '" + PublicationDefaultStates.PUBLISHED + "')";
+						QueryManager queryManager = session.getWorkspace().getQueryManager();
+						Query query = queryManager.createQuery(sqlQuery, Query.SQL);
+						QueryResult result = query.execute();
+						NodeIterator results = result.getNodes(); 
+						while(results.hasNext()) {
+							Node node = results.nextNode();
+							String publicationState = wcmPublicationService.getContentState(node);
+							HashMap<String, String> context = new HashMap<String, String>();
+							context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, node.getName());
+							if (PublicationDefaultStates.DRAFT.equals(publicationState)) {
+								changeState(node, PublicationDefaultStates.PUBLISHED, context);
+							} else {
+								changeState(node, PublicationDefaultStates.OBSOLETE, context);
+							}
+						}
+					} catch (Exception e) {
+						log.error("Exception when publish content by date time", e);
+					} finally {
+						if (session != null) session.logout();
+					}
+				}
+			}
+		} catch (Exception e) {
+			log.error("Exception when publish content by date time", e);
+		} finally {
+			sessionProvider.close();
+		}
+	}
 }

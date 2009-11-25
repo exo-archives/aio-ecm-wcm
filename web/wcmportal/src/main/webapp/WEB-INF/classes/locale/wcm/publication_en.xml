@@ -62,9 +62,9 @@
   </label>
  </UIPublishedPages>
  <UIPublicationPanel>
-  <button>
-   <close>Close</close>
-  </button>
+  <action>
+   <Close>Close</Close>
+  </action>
   <revisions>
    <version>Revisions</version>
    <date>Date</date>
@@ -109,4 +109,18 @@
    <description>Description</description>
   </header>
  </UIPublicationHistory>
+ 
+ <UIPublicationPanel>
+  <label>
+   <header>Publication date time</header>
+   <start>Start publication</start>
+   <end>End publication</end>
+  </label>
+  <action>
+   <Save>Save</Save>
+  </action>
+  <msg>
+   <invalid-format>Invalid datetime format. Please check again</invalid-format>
+  </msg>
+ </UIPublicationPanel>
 </bundle>

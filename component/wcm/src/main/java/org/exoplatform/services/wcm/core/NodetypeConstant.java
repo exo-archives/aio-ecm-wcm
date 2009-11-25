@@ -70,6 +70,8 @@ public class NodetypeConstant {
   
   public static final String MIX_REFERENCEABLE              = "mix:referenceable";
   
+  public static final String MIX_VERSIONABLE              	= "mix:versionable";
+  
   
   
   public static final String EXO_OWNER                      = "exo:owner";
