@@ -49,7 +49,7 @@
 				 <a class="DocumentQuickEdit" href="<%= uicomponent.event("QuickEdit") %>" title="<%= _ctx.appRes("UIPCVContainer.title.QuickEdit") %>"></a>
 				 <%
 	      	}
-			if(Utils.isShowDraft(node)){
+			if(Utils.isShowDraft(node) && !isPrint){
     		%>
   			<div style="padding: 5px 10px; line-height: 16px; ">
 				[ <span class="DraftIcon" style="padding-left: 20px"><%= _ctx.appRes("UIPCVContainer.label.draft") %>, </span>
