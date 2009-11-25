@@ -109,4 +109,18 @@
    <description>Mô tả</description>
   </header>
  </UIPublicationHistory>
+ 
+ <UIPublicationPanel>
+  <label>
+   <header>Thời gian xuất bản</header>
+   <start>Bắt đầu xuất bản</start>
+   <end>Kết thúc xuất bản</end>
+  </label>
+  <action>
+   <Save>Lưu</Save>
+  </action>
+  <msg>
+   <invalid-format>Sai định dạng ngày tháng, hãy kiểm tra lại</invalid-format>
+  </msg>
+ </UIPublicationPanel>
 </bundle>

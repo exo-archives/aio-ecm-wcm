@@ -109,4 +109,18 @@
    <description>La description</description>
   </header>
  </UIPublicationHistory>
+ 
+ <UIPublicationPanel>
+  <label>
+   <header>Le temps de publication</header>
+   <start>Début de la publication</start>
+   <end>Fin de la publication</end>
+  </label>
+  <action>
+   <Save>Sauver</Save>
+  </action>
+  <msg>
+   <invalid-format>Format incorrect. S'il vous plaît vérifier à nouveau</invalid-format>
+  </msg>
+ </UIPublicationPanel>
 </bundle>
