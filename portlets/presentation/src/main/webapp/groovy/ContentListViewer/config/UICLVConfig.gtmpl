@@ -26,7 +26,8 @@
 						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UICLVConfig.VIEWER_MODES)) %></td>
 					</tr>
 					<tr>
-						<td class="FieldComponent" colspan="2"><% uiform.renderField(uiform.getChildById(UICLVConfig.FOLDER_PATH_INPUTSET)) %></td>				
+						<td class="FieldLabel"><span></span></td>
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UICLVConfig.FOLDER_PATH_INPUTSET)) %></td>				
 					</tr>
 					<% if (uiform.getChildById(UICLVConfig.ORDER_BY).isRendered()) { %>
 					<tr class="OrderBlock">
