@@ -265,6 +265,7 @@ public class UINameWebContentForm extends UIForm {
       	PortalDataMapper.toUIPage(uiPage, currentPage);
       }
       Utils.closePopupWindow(nameWebcontentForm, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW);
+      Utils.updatePortal((PortletRequestContext)event.getRequestContext());
     }
   }
 
