@@ -84,6 +84,12 @@
 .WCMPublication .PanelContainer .ContainerConfigOptions {
 	border: none;
 	padding: 0;
+	background: none;
+}
+
+.WCMPublication .PanelContainer .ContainerConfigOptions {
+	border: none;
+	padding: 0;
 }
 /* ===== Overwrite stylesheet ===== */
 
