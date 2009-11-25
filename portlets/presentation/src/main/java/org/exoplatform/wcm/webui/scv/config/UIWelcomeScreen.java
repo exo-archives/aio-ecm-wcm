@@ -35,6 +35,7 @@ import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
 import org.exoplatform.wcm.webui.selector.content.one.UIContentSelectorOne;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -178,6 +179,7 @@ public class UIWelcomeScreen extends UIForm {
       	PortalDataMapper.toUIPage(uiPage, currentPage);
       }
       Utils.closePopupWindow(welcomeScreen, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW);
+      Utils.updatePortal((PortletRequestContext)event.getRequestContext());
     }
   }
 }
