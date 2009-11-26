@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
-import javax.jcr.Property;
 import javax.jcr.Value;
 
 import org.exoplatform.portal.webui.container.UIContainer;
@@ -100,7 +99,8 @@ public class UIPublishedPages extends UIContainer {
       }
       for (Value value : values) {
       	if (PublicationUtil.isNodeContentPublishedToPageNode(contentNode, value.getString())) {
-      		listNavigationNodeURI.add(value.getString()); 
+      		if(!listNavigationNodeURI.contains(value.getString()))
+      			listNavigationNodeURI.add(value.getString()); 
       	}
       }
     } else {
