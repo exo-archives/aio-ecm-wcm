@@ -136,9 +136,14 @@ public class PageEventListenerDelegate {
   private void updateRemovedApplication(Page page, String remoteUser, WebpagePublicationPlugin plugin) throws Exception {
     List<Node> listNode = getListNodeByApplicationId(page, plugin);
     WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
-    List<String> listApplicationId = PublicationUtil.getListApplicationIdByPage(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET));
-    List<String> listCLVApplicationId = PublicationUtil.getListApplicationIdByPage(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.CLV_PORTLET));
-    listApplicationId.addAll(listCLVApplicationId);
+    List<String>	listApplicationId = new ArrayList<String>();
+    listApplicationId.addAll(
+    		PublicationUtil.getListApplicationIdByPage(
+    				page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET)));
+    listApplicationId.addAll(
+    		PublicationUtil.getListApplicationIdByPage(
+    				page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.CLV_PORTLET)));
+    
     for (Node content : listNode) {
       for (Value value : content.getProperty("publication:applicationIDs").getValues()) {
         String[] tmp = PublicationUtil.parseMixedApplicationId(value.getString());
