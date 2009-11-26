@@ -9,6 +9,10 @@
   <label>
    <print>In</print>
   </label>
+  <action>
+   <Print>In</Print>
+   <Close>Đóng</Close>
+  </action>
  </UIPCVContainer>
  
  <UIPCVConfigPopupWindow>
