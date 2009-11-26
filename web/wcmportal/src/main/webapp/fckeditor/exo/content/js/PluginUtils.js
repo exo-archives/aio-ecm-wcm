@@ -23,12 +23,15 @@ PluginUtils.prototype.renderTree = function(objXML) {
 	var	xmlTreeNodes = eXoWCM.PluginUtils.request(objXML);
 	var nodeList = xmlTreeNodes.getElementsByTagName('Folders');
 	var treeHTML = '';
+	var isUpload = "";
 	for(var i = 0 ; i < nodeList.length; i++)	 {
+		if(nodeList[i].getAttribute("isUpload")) isUpload = nodeList[i].getAttribute("isUpload");
+		else isUpload = "";
 		var strName = nodeList[i].getAttribute("name") ;
 		var id = eXoWCM.PluginUtils.generateIdDriver(nodeList[i]);
 		treeHTML += '<div class="Node" onclick="eXoWCM.PluginUtils.actionColExp(this);">';
 		treeHTML += 	'<div class="ExpandIcon">';		
-		treeHTML += 		'<a title="'+strName+'" class="NodeIcon DefaultPageIcon" href="javascript:void(0);" onclick="eXoWCM.PluginUtils.renderBreadcrumbs(this);" name="'+strName+'" id="'+id+'">';
+		treeHTML += 		'<a title="'+strName+'" class="NodeIcon DefaultPageIcon" href="javascript:void(0);" isUpload="'+isUpload+'" onclick="eXoWCM.PluginUtils.renderBreadcrumbs(this);" name="'+strName+'" id="'+id+'">';
 		treeHTML +=			strName;	
 		treeHTML +=			'</a>';
 		treeHTML += 	'</div>';			
@@ -44,6 +47,7 @@ PluginUtils.prototype.renderTree = function(objXML) {
 PluginUtils.prototype.renderSubTree = function(currentNode) {
 	if(!currentNode) return;
 	var nodeList = currentNode.getElementsByTagName('Folder');
+	var nodeListParent = currentNode.getElementsByTagName('Folders');
 	var treeHTML = '';
 	if(nodeList && nodeList.length > 0) {
 		treeHTML += '<div class="ChildrenContainer" style="display:none;">'	;
@@ -296,6 +300,7 @@ PluginUtils.prototype.getClazzIcon = function(nodeType) {
 PluginUtils.prototype.renderBreadcrumbs = function(currentNode) {
 	if(!currentNode) return;
 	if(typeof(currentNode) == 'string') currentNode = document.getElementById(currentNode);
+	if(currentNode.getAttribute("isUpload")) document.getElementById("UploadItem").style.display = "none";
 	eXp.store.currentNode = currentNode;
 	var breadscrumbsContainer = document.getElementById("BreadcumbsContainer");
 	breadscrumbsContainer.innerHTML = '';
