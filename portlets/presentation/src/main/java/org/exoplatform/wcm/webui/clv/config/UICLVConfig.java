@@ -28,11 +28,14 @@ import javax.portlet.PortletPreferences;
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.views.ApplicationTemplateManagerService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.publication.PublicationUtil;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.clv.UICLVContainer;
@@ -474,9 +477,14 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
       List<String> selectedList = uiViewerManagementForm.getViewAbleContentList();
       List<String> oldContentList = uiViewerManagementForm.getOldContentList();
       PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();
-      
-      String portletId  = 
-      	((UIPortlet)Util.getUIPortal().findComponentById(portletRequestContext.getWindowId())).getWindowId();
+
+      String portletId = "";
+      UIPortlet uiPortlet = Util.getUIPortal().findComponentById(portletRequestContext.getWindowId());
+      if (uiPortlet != null) {
+      	portletId = uiPortlet.getWindowId();
+      } else if (!portletRequestContext.getWindowId().contains("#")) {
+      	portletId = generatePorletId(portletRequestContext.getWindowId(), portletRequestContext);
+      }
       
       PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
       String currentViewerMode = portletPreferences.getValue(UICLVPortlet.VIEWER_MODE, null);
@@ -540,6 +548,14 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
       }
       portletPreferences.store();
       if (!Utils.isQuickEditMode(uiViewerManagementForm, "UIViewerManagementPopupWindow")) {
+      	if (currentViewerMode.equals(UICLVConfig.VIEWER_MANUAL_MODE)) {
+      		uiViewerManagementForm.doSuspendPublication(repository, workspace,
+      				portletRequestContext, oldContentList, portletId);
+      	}
+      	if (newViewerMode.equals(UICLVConfig.VIEWER_MANUAL_MODE)) {
+      		uiViewerManagementForm.doPublication(repository, workspace,
+      				portletRequestContext, selectedList, portletId);
+      	}
       	Utils.createPopupMessage(uiViewerManagementForm, "UIMessageBoard.msg.saving-success", null, ApplicationMessage.INFO);
       } else {
         portletRequestContext.setApplicationMode(PortletMode.VIEW);
@@ -639,6 +655,27 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
   		publicationService.suspendPublishedContentFromPage(
   				(Node)session.getItem(nodePath), page, portletRequestContext.getRemoteUser());
   	}
+  }
+  
+  /**
+   * Generate porlet id.
+   * 
+   * @param windowId the window id
+   * @param portletRequestContext the portlet request context
+   * 
+   * @return the string
+   */
+  private static String generatePorletId(String windowId, PortletRequestContext portletRequestContext) {
+    WCMConfigurationService configurationService = PublicationUtil.getServices(WCMConfigurationService.class);
+    StringBuilder porletId = new StringBuilder();
+    porletId.append(PortalConfig.PORTAL_TYPE)
+            .append("#")
+            .append(Util.getPortalRequestContext().getPortalOwner())
+            .append(":")
+            .append(configurationService.getRuntimeContextParam(WCMConfigurationService.CLV_PORTLET))
+            .append("/")
+            .append(windowId);
+    return porletId.toString();
   }
   
   /**
