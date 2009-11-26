@@ -50,7 +50,7 @@
 					</div>
 					-->
 					<!--====================================== UPLOAD ============================================-->
-					<div class="ControlButton UploadIcon">
+					<div class="ControlButton UploadIcon" id="UploadItem" style="display:none;">
 							<a class="Item IconUpload" href="javascript:void(0);" onclick="eXoWCM.UploadForm.showUploadForm();" userLanguage="UserLanguage.UploadFile">Upload File</a>
 					</div>
 					<!-- ====================================== UPLOAD ============================================-->					
@@ -399,6 +399,8 @@ var eXp = {
 		var currentFolder;
 		var driverName;
 		var driverPath = currentNode.getAttribute("driverPath");
+		var uploadItem = document.getElementById("UploadItem");	
+		if(uploadItem) uploadItem.style.display = "block";
 		if(driverPath && driverPath != "") {
 			driverName =	currentNode.getAttribute('name');
 			eXp.store.driverName = driverName;
