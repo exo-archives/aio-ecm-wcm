@@ -424,6 +424,7 @@ public class UIPermissionManager extends UIForm implements UISelectable {
      permissionManager.getUIFormCheckBoxInput(ACCESSIBLE_CHECKBOX_INPUT).setChecked(false);
      permissionManager.getUIFormCheckBoxInput(EDITABLE_CHECKBOX_INPUT).setChecked(false);
      permissionManager.setActions(new String[] {"Save", "Clear"});
+     permissionInputSet.setActionInfo(PERMISSION_STRING_INPUT, new String[] {"SelectUser", "SelectMember", "AddAny"});
    }
   }
 
