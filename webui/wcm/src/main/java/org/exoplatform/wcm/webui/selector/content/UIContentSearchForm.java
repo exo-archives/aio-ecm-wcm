@@ -292,7 +292,7 @@ public class UIContentSearchForm extends UIForm {
       QueryCriteria qCriteria = uiWCSearch.getInitialQueryCriteria(siteName);
       PaginatedQueryResult pagResult = null; 
 
-      if(typeSearch.equals(UIContentBrowsePanel.WEBCONTENT)){
+      if(typeSearch.equals(UIContentBrowsePanel.WEBCONTENT) || typeSearch.equals(UIContentBrowsePanel.MEDIA)){
         if(UIContentSearchForm.SEARCH_BY_NAME.equals(radioValue)) {
           String keyword = uiWCSearch.getUIStringInput(radioValue).getValue();
           if(uiWCSearch.haveEmptyField(uiApp, event, keyword)) return;
@@ -344,7 +344,7 @@ public class UIContentSearchForm extends UIForm {
           if(uiWCSearch.haveEmptyField(uiApp, event, documentType)) return;
           try{
             pagResult = uiWCSearch.searchWebContentByDocumentType(documentType, qCriteria, pageSize);
-          }catch(NoSuchNodeTypeException ex){
+          }catch(Exception ex){
             uiApp.addMessage(new ApplicationMessage("UIContentSearchForm.msg.invalid-nodeType", new Object[]{documentType}, ApplicationMessage.ERROR));
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             return;
@@ -404,7 +404,7 @@ public class UIContentSearchForm extends UIForm {
           try{
             pagResult = uiWCSearch.searchDocumentByType(documentType, qCriteria, pageSize);
           }catch(Exception exception){
-            uiApp.addMessage(new ApplicationMessage("UIContentSearchForm.msg.invalid-nodeType", null, ApplicationMessage.WARNING));
+            uiApp.addMessage(new ApplicationMessage("UIContentSearchForm.msg.invalid-nodeType", new Object[]{documentType}, ApplicationMessage.ERROR));
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             return;
           }
