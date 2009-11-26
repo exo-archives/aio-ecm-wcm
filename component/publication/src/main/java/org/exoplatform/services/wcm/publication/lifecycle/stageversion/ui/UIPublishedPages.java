@@ -99,7 +99,8 @@ public class UIPublishedPages extends UIContainer {
       }
       for (Value value : values) {
       	if (PublicationUtil.isNodeContentPublishedToPageNode(contentNode, value.getString())) {
-      		listNavigationNodeURI.add(value.getString()); 
+      		if(!listNavigationNodeURI.contains(value.getString()))
+      			listNavigationNodeURI.add(value.getString()); 
       	}
       }
     } else {
