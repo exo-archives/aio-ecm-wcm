@@ -24,8 +24,9 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 //============================================ Begin of render component ===============================================	
 
 	switch(typeComp){
-		case "label"		: 
-			fieldComponent  +=		"<td class='FieldLabel' colspan='2' value='Label'>Label</td>";
+		case "label"		:
+			fieldComponent  +=		"<td class='FieldLabel' value='Label'>Label</td>";
+			fieldComponent  +=		"<td class='FieldComponent'></td>";
 			break;
 		case "input"		: 
 			fieldComponent  +=		"<td class='FieldLabel' value='Input Text'>Input field</td>";
@@ -305,6 +306,8 @@ UIFormGeneratorPortlet.prototype.updateValue = function(evt) {
 	if(!eltName) return;
 	switch(eltName) {
 		case "Label" :
+			var labelNode = DOMUtil.findFirstDescendantByClass(componentNode, 'td', 'FieldComponent');
+			labelNode.innerHTML = srcEle.value;
 			break;
 		case "Input Text" :
 			var inputNode = DOMUtil.findFirstDescendantByClass(componentNode, 'input', 'InputText');
