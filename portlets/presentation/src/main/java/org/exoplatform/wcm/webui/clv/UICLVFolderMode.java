@@ -16,14 +16,12 @@
  */
 package org.exoplatform.wcm.webui.clv;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.jcr.AccessDeniedException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.resolver.ResourceResolver;
@@ -124,22 +122,12 @@ public class UICLVFolderMode extends UICLVContainer {
     filters.put(WCMComposer.FILTER_ORDER_BY, orderBy);
     filters.put(WCMComposer.FILTER_ORDER_TYPE, orderType);
     
-    NodeIterator nodeIterator = wcmComposer.getContents(
+    List<Node> nodes = wcmComposer.getContents(
                                    repository,
                                    workspace,
                                    folderPath,
                                    filters,
                                    Utils.getSessionProvider(this));
-    Node node = null;
-    Node viewNode = null;
-    List<Node> nodes = new ArrayList<Node>();
-    while(nodeIterator.hasNext()) {
-      node = nodeIterator.nextNode();
-      viewNode = Utils.getNodeView(node);
-      if(viewNode != null) {
-        nodes.add(viewNode);
-      }
-    }
     return nodes;
   }
 }

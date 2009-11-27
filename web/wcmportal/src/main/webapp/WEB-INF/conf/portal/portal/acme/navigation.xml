@@ -49,6 +49,13 @@
 			</node>
 		</node>
 
+		<node>
+			<uri>detail</uri>
+			<name>detail</name>
+			<label>#{portal.acme.pcv}</label>
+			<visible>false</visible>
+			<page-reference>portal::acme::pcv</page-reference>
+		</node>
 		
 		<node>
 			<uri>products</uri>

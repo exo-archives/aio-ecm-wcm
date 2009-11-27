@@ -219,7 +219,7 @@ public class UIPCLVForm extends UIForm {
 		if(nodes == null) return false;
 		int count = 0;
 		for(Node node : nodes) {
-		  if(Utils.getNodeView(node) != null) {
+		  if(node != null) {
 		    count++;
 		  }
 		}

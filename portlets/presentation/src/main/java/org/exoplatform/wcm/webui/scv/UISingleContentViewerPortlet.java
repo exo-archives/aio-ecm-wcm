@@ -101,46 +101,17 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
   }
 
   public Node getNodeByPreference() {
-  	try {
-  		PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
-  		PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
-  		String repository = preferences.getValue(REPOSITORY, null);    
-  		String workspace = preferences.getValue(WORKSPACE, null);
-  		String nodeIdentifier = preferences.getValue(IDENTIFIER, null) ;
-  		WCMService wcmService = getApplicationComponent(WCMService.class);
-  		return wcmService.getReferencedContent(Utils.getSessionProvider(this), repository, workspace, nodeIdentifier);
-		} catch (Exception e) {
-			return null;
-		}
+    try {
+      PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+      PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
+      String repository = preferences.getValue(REPOSITORY, null);    
+      String workspace = preferences.getValue(WORKSPACE, null);
+      String nodeIdentifier = preferences.getValue(IDENTIFIER, null) ;
+      WCMService wcmService = getApplicationComponent(WCMService.class);
+      return wcmService.getReferencedContent(Utils.getSessionProvider(this), repository, workspace, nodeIdentifier);
+    } catch (Exception e) {
+      return null;
+    }
   }
-  
-  /**
-   * Gets the node.
-   * 
-   * @return the node
-   * 
-   * @throws Exception the exception
-   */
-  public Node getNodeView() {
-  	try {
-  		Node originalNode = getNodeByPreference();
-  		Node viewNode = Utils.getNodeView(originalNode);
-  		
-  		// Set original node for UIBaseNodePresentation (in case nodeView is a version node)
-  		UIPresentation presentation = findFirstComponentOfType(UIPresentation.class);
-  		if (viewNode != null && viewNode.isNodeType("nt:frozenNode")) {
-  			String nodeUUID = viewNode.getProperty("jcr:frozenUuid").getString();
-  			presentation.setOriginalNode(viewNode.getSession().getNodeByUUID(nodeUUID));
-  			presentation.setNode(viewNode);
-  		} else {
-  			presentation.setOriginalNode(viewNode);
-  			presentation.setNode(viewNode);
-  		}
-  		
-  		return viewNode;
-		} catch (Exception e) {
-			return null;
-		}
-  }
-  
+    
 }

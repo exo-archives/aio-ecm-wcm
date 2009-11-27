@@ -23,12 +23,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
-import javax.jcr.AccessDeniedException;
-import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
-import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -38,10 +34,7 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.cms.templates.TemplateService;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
 import org.exoplatform.wcm.webui.pcv.config.UIPCVConfig;
@@ -222,11 +215,11 @@ public class UIPCVContainer extends UIContainer {
    */
   public Node getNode() throws Exception {
     String parameters = getRequestParameters();
-    Node node = getNodebyPath(parameters);
-    if (node == null) node = getNodeByCategory(parameters);
-    if (node == null) return null;
+//    Node node = getNodebyPath(parameters);
+//    if (node == null) node = getNodeByCategory(parameters);
+//    if (node == null) return null;
 
-    Node nodeView = Utils.getNodeView(node);
+    Node nodeView = Utils.getNodeView(null, null, parameters);
     boolean isDocumentType = false;
     if (nodeView.isNodeType("nt:frozenNode")) isDocumentType = true; 
     // check node is a document node
@@ -244,12 +237,12 @@ public class UIPCVContainer extends UIContainer {
     // set node view for UIPCVPresentation
     if (nodeView != null && nodeView.isNodeType("nt:frozenNode")) {
       String nodeUUID = nodeView.getProperty("jcr:frozenUuid").getString();
-      uiContentViewer.setOrginalNode(nodeView.getSession().getNodeByUUID(nodeUUID));
+      uiContentViewer.setOriginalNode(nodeView.getSession().getNodeByUUID(nodeUUID));
       uiContentViewer.setNode(nodeView);
     } else if (nodeView == null) {
       return null;
     } else {
-      uiContentViewer.setOrginalNode(nodeView);
+      uiContentViewer.setOriginalNode(nodeView);
       uiContentViewer.setNode(nodeView);
     }
     uiContentViewer.setRepository(this.getRepository());
@@ -289,93 +282,6 @@ public class UIPCVContainer extends UIContainer {
       return null;
     }
     return parameters;
-  }
-  
-  /**
-   * Gets the nodeby path.
-   * 
-   * @param parameters the parameters
-   * 
-   * @return the nodeby path
-   * 
-   * @throws Exception the exception
-   */
-  private Node getNodebyPath(String parameters) throws Exception {
-    if (parameters == null) return null;
-    ManageableRepository manageableRepository = null;
-    String[] params = parameters.split("/");
-    String repository = params[0];
-    String workspace = params[1];
-    try {
-      RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-      manageableRepository = repositoryService.getRepository(repository);
-    } catch(Exception e) {
-      return null;
-    }
-    String nodeIdentifier = null;
-    Node currentNode = null;
-    Session session = Utils.getSessionProvider(this).getSession(workspace, manageableRepository);
-    if (params.length > 2) {
-      StringBuffer identifier = new StringBuffer();
-      for (int i = 2; i < params.length; i++) {
-        identifier.append("/").append(params[i]);
-      }
-      nodeIdentifier = identifier.toString();
-      boolean isUUID = false;
-      // try to get node by path
-      try {
-        currentNode = (Node) session.getItem(nodeIdentifier);
-      } catch (Exception e) {
-        isUUID = true;
-      }
-      if (isUUID) {
-        // try to get node by uuid
-        try {
-          String uuid = params[params.length - 1];
-          currentNode = session.getNodeByUUID(uuid);
-        } catch (ItemNotFoundException exc) {
-          return null;
-        } catch (AccessDeniedException ex) {
-        	return null;
-        }
-      }
-    } else if (params.length == 2) {
-      currentNode = session.getRootNode();
-    }
-    
-    return currentNode;  
-  }
-  
-  /**
-   * Gets the node by category.
-   * 
-   * @param parameters the parameters
-   * 
-   * @return the node by category
-   * 
-   * @throws Exception the exception
-   */
-  private Node getNodeByCategory(String parameters) throws Exception {
-    if (parameters == null) return null;
-    TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
-    String[] params = parameters.split("/");
-    try {
-    	Node taxonomyTree = taxonomyService.getTaxonomyTree(this.getRepository(), params[0]);
-      Node symLink = null;
-      parameters = parameters.substring(parameters.indexOf("/") + 1);
-      while(taxonomyTree != null){
-        try{
-          symLink = taxonomyTree.getNode(parameters);
-          break;
-        }catch(PathNotFoundException exception){
-          taxonomyTree = taxonomyTree.getParent();
-        }
-      }
-      return taxonomyTree.getSession().getNodeByUUID(symLink.getProperty("exo:uuid").getString());
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
-    }
   }
   
   /**

@@ -16,6 +16,8 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
+import org.exoplatform.services.wcm.core.NodeIdentifier;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.NotInWCMPublicationException;
@@ -206,19 +208,22 @@ public class UIContentSearchResult extends UIGrid {
      */
     public void execute(Event<UIContentSearchResult> event) throws Exception {
       UIContentSearchResult contentSearchResult = event.getSource();
-      String webcontentPath = event.getRequestContext().getRequestParameter(OBJECTID);
+      String nodePath = event.getRequestContext().getRequestParameter(OBJECTID);
       RepositoryService repositoryService = contentSearchResult.getApplicationComponent(RepositoryService.class);
       String repoName = repositoryService.getCurrentRepository().getConfiguration().getName();
       WCMConfigurationService configurationService = contentSearchResult.getApplicationComponent(WCMConfigurationService.class);
-      NodeLocation portalLocation = configurationService.getLivePortalsLocation(repoName);
-      ManageableRepository manageableRepository = repositoryService.getRepository(portalLocation.getRepository());
-      Session session = Utils.getSessionProvider(contentSearchResult).getSession(portalLocation.getWorkspace(), manageableRepository);
-      Node webcontent = (Node) session.getItem(webcontentPath);
+      NodeLocation nodeLocation = configurationService.getLivePortalsLocation(repoName);
+
+      ManageableRepository manageableRepository = repositoryService.getRepository(nodeLocation.getRepository());
+      Session session = contentSearchResult.getApplicationComponent(ThreadLocalSessionProviderService.class).getSessionProvider(null)
+      .getSession(nodeLocation.getWorkspace(), manageableRepository);
+      Node webContent = (Node) session.getItem(nodePath);
+      NodeIdentifier nodeIdentifier = NodeIdentifier.make(webContent);
       PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
       PortletPreferences prefs = pContext.getRequest().getPreferences();
-      prefs.setValue("repository", portalLocation.getRepository());
-      prefs.setValue("workspace", portalLocation.getWorkspace());
-      prefs.setValue("nodeIdentifier", webcontentPath);
+      prefs.setValue("repository", nodeIdentifier.getRepository());
+      prefs.setValue("workspace", nodeIdentifier.getWorkspace());
+      prefs.setValue("nodeIdentifier", nodeIdentifier.getUUID());
       prefs.store();
 
       String remoteUser = Util.getPortalRequestContext().getRemoteUser();
@@ -227,10 +232,10 @@ public class UIContentSearchResult extends UIGrid {
       WCMPublicationService wcmPublicationService = contentSearchResult.getApplicationComponent(WCMPublicationService.class);
 
       try {
-        wcmPublicationService.isEnrolledInWCMLifecycle(webcontent);
+        wcmPublicationService.isEnrolledInWCMLifecycle(webContent);
       } catch (NotInWCMPublicationException e){
-        wcmPublicationService.unsubcribeLifecycle(webcontent);
-        wcmPublicationService.enrollNodeInLifecycle(webcontent, currentSite, remoteUser);          
+        wcmPublicationService.unsubcribeLifecycle(webContent);
+        wcmPublicationService.enrollNodeInLifecycle(webContent, currentSite, remoteUser);          
       }
       
       // Update and Close
@@ -262,14 +267,15 @@ public class UIContentSearchResult extends UIGrid {
     public void execute(Event<UIContentSearchResult> event) throws Exception {
       UIContentSearchResult contentSearchResult = event.getSource();
       String webcontentPath = event.getRequestContext().getRequestParameter(OBJECTID);
-      RepositoryService repositoryService = contentSearchResult.getApplicationComponent(RepositoryService.class);
-      String repoName = repositoryService.getCurrentRepository().getConfiguration().getName();
-      WCMConfigurationService configurationService = contentSearchResult.getApplicationComponent(WCMConfigurationService.class);
-      NodeLocation portalLocation = configurationService.getLivePortalsLocation(repoName);
-      ManageableRepository manageableRepository = repositoryService.getRepository(portalLocation.getRepository());
-      Session session = Utils.getSessionProvider(contentSearchResult).getSession(portalLocation.getWorkspace(), manageableRepository);
-      Node originalNode = (Node) session.getItem(webcontentPath);
-      Node viewNode = Utils.getNodeView(originalNode);
+//      RepositoryService repositoryService = contentSearchResult.getApplicationComponent(RepositoryService.class);
+//      String repoName = repositoryService.getCurrentRepository().getConfiguration().getName();
+//      WCMConfigurationService configurationService = contentSearchResult.getApplicationComponent(WCMConfigurationService.class);
+//      NodeLocation portalLocation = configurationService.getLivePortalsLocation(repoName);
+//      ManageableRepository manageableRepository = repositoryService.getRepository(portalLocation.getRepository());
+//      Session session = Utils.getSessionProvider(contentSearchResult).getSession(portalLocation.getWorkspace(), manageableRepository);
+
+      Node originalNode = Utils.getNodeView(null, null, webcontentPath);
+      Node viewNode = originalNode;
       
       UIContentSelector contentSelector = contentSearchResult.getAncestorOfType(UIContentSelector.class);
       UIContentViewer contentResultViewer = contentSelector.getChild(UIContentViewer.class);

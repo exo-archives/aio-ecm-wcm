@@ -18,14 +18,10 @@ package org.exoplatform.wcm.webui.pclv;
 
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.Session;
-import javax.jcr.query.Query;
-import javax.jcr.query.QueryManager;
-import javax.jcr.query.QueryResult;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -39,8 +35,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.pclv.config.UIPCLVConfig;
@@ -307,39 +302,56 @@ public class UIPCLVContainer extends UIContainer {
 	 */
 	private List<Node> getListSymlinkNode(PortletPreferences portletPreferences, String categoryPath)	throws Exception {
 		String repository = portletPreferences.getValue(UIPCLVPortlet.REPOSITORY, "");
-		String worksapce = portletPreferences.getValue(UIPCLVPortlet.WORKSPACE, "");
+		String workspace = portletPreferences.getValue(UIPCLVPortlet.WORKSPACE, "");
 		String orderType = portletPreferences.getValue(UIPCLVPortlet.ORDER_TYPE, "");
 		String orderBy = portletPreferences.getValue(UIPCLVPortlet.ORDER_BY, "");
-		if((categoryPath == null) || (categoryPath.trim().length() <= 0)) return null;
 		if ("".equals(orderType)) orderType = "DESC";
 		if ("".equals(orderBy)) orderBy = "exo:dateCreated";
-		String orderQuery = " ORDER BY ";
-		orderQuery += orderBy + " " + orderType;
-		RepositoryService repositoryService = Utils.getService(RepositoryService.class);
-		ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-		Session session = Utils.getSessionProvider(this).getSession(worksapce, manageableRepository);
-		QueryManager queryManager = session.getWorkspace().getQueryManager();
-		StringBuffer sqlQuery = new StringBuffer("select * from exo:taxonomyLink where jcr:path LIKE '")
-  		.append(categoryPath)
-  		.append("/%'")
-  		.append(" AND NOT jcr:path LIKE '")
-  		.append(categoryPath)
-  		.append("/%/%'")
-  		.append(" " + orderQuery);
-		Query query = queryManager.createQuery(sqlQuery.toString(), Query.SQL);
-		QueryResult queryResult = query.execute();
-		NodeIterator iterator = queryResult.getNodes();
-		List<Node> listNodes = new ArrayList<Node>();
-		Node node = null;
-		Node viewNode = null;
-		while(iterator.hasNext()) {
-        node = iterator.nextNode();
-        viewNode = Utils.getNodeView(node);
-        if(viewNode != null) {
-          listNodes.add(viewNode);
-        }
+
+                WCMComposer wcmComposer = getApplicationComponent(WCMComposer.class);
+                HashMap<String, String> filters = new HashMap<String, String>();
+                filters.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
+                filters.put(WCMComposer.FILTER_ORDER_BY, orderBy);
+                filters.put(WCMComposer.FILTER_ORDER_TYPE, orderType);
+                filters.put(WCMComposer.FILTER_PRIMARY_TYPE, "exo:taxonomyLink");
+
+                List<Node> nodes = wcmComposer.getContents(
+                                               repository,
+                                               workspace,
+                                               categoryPath,
+                                               filters,
+                                               Utils.getSessionProvider(this));
+
+
+		return nodes;
 		}
-		return listNodes;
-	}
 	
+	/**
+	 * Gets the node view.
+	 * 
+	 * @param node the node
+	 * 
+	 * @return the node view
+	 * 
+	 * @throws Exception the exception
+	 */
+	/*
+	private Node getNodeView(Node node) throws Exception {
+    PublicationService publicationService = getApplicationComponent(PublicationService.class);
+    HashMap<String, Object> context = new HashMap<String, Object>();
+    context.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
+    String lifecyleName = null;
+      try {
+        lifecyleName = publicationService.getNodeLifecycleName(node);
+      } catch (NotInPublicationLifecycleException e) {
+        // You shouldn't throw popup message, because some exception often rise here.
+	}
+    if (lifecyleName == null) return node;
+	
+    PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
+      .get(lifecyleName);
+    Node viewNode = publicationPlugin.getNodeView(node, context);
+    return viewNode;
+  }
+  */
 }

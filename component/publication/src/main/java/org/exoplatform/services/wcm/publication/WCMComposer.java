@@ -49,6 +49,18 @@ public interface WCMComposer {
 	
 	/** Filter parameter to filter results by target mode. ex: editing, approving, live */
 	public final static String FILTER_MODE = "filter-mode";
+
+	/** Filter parameter to search recursively or not. ex: recursive*/
+	public final static String FILTER_RECURSIVE = "filter-recursive";
+
+	/** Filter parameter to filter result by a decicated version. ex: base, 1, 2, 3, etc */
+	public final static String FILTER_VERSION = "filter-version";
+	
+	/** Filter parameter to filter results by site. ex: classic */
+	public final static String FILTER_SITE_NAME = "filter-site";
+	
+	/** Filter parameter to filter results by user. We will return only contents authored by this user. ex: */
+	public final static String FILTER_REMOTE_USER = "filter-remote-user";
 	
 	/** The Constant MODE_EDIT. */
 	public final static String MODE_EDIT = "Edit";
@@ -56,11 +68,11 @@ public interface WCMComposer {
 	/** The Constant MODE_LIVE. */
 	public final static String MODE_LIVE = "Live";
 	
-	/** Filter parameter to filter results by site. ex: classic */
-	public final static String FILTER_SITE_NAME = "filter-site";
-	
-	/** Filter parameter to filter results by user. We will return only contents authored by this user. ex: */
-	public final static String FILTER_REMOTE_USER = "filter-remote-user";
+	/** The Constant IS_RECURSIVE. */
+	public final static String IS_RECURSIVE = "rec";
+
+	/** The Constant for base version. */
+	public final static String BASE_VERSION = "base";
 	
 	/**
 	 * returns content at the specified path based on filters.
@@ -90,7 +102,8 @@ public interface WCMComposer {
 	 * 
 	 * @throws Exception the exception
 	 */
-	public NodeIterator getContents(String repository, String workspace, String path, HashMap<String, String> filters, SessionProvider sessionProvider) throws Exception ;
+	public List<Node> getContents(String repository, String workspace, String path, HashMap<String, String> filters, SessionProvider sessionProvider) throws Exception ;
+
 
 	/**
 	 * Update content.
@@ -102,7 +115,7 @@ public interface WCMComposer {
 	 * 
 	 * @return true, if successful
 	 */
-	public boolean updateContent(String repository, String workspace, String path, HashMap<String, String> filters);
+	public boolean updateContent(String repository, String workspace, String path, HashMap<String, String> filters) throws Exception;
 	
 	/**
 	 * Update contents.
@@ -114,7 +127,7 @@ public interface WCMComposer {
 	 * 
 	 * @return true, if successful
 	 */
-	public boolean updateContents(String repository, String workspace, String path, HashMap<String, String> filters);
+	public boolean updateContents(String repository, String workspace, String path, HashMap<String, String> filters) throws Exception;
 	
 	/**
 	 * returns allowed states for a specified mode.

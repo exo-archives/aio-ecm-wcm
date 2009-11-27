@@ -45,15 +45,15 @@
 						def count = 0;
 						def currentPageData = uicomponent.getCurrentPageData();
 						for (node in currentPageData) {
-						  def viewNode = Utils.getNodeView(node);
-							if (viewNode == null) {
-							  continue;
-							}
+						    def viewNode = node;
+							//if (viewNode == null) {
+							//  continue;
+							//}
 							
-						  String itemName = viewNode.getName();
-						  String itemLink = uicomponent.generateLink(viewNode);
+						    String itemName = viewNode.getName();
+						    String itemLink = uicomponent.generateLink(viewNode);
 							String itemSummary = uicomponent.getSummary(viewNode);
-					      String itemTitle = uicomponent.getTitle(viewNode);
+					        String itemTitle = uicomponent.getTitle(viewNode);
 							String itemDateCreated = uicomponent.getCreatedDate(viewNode);
 							String imgSrc = uicomponent.getIllustrativeImage(viewNode);
 							
