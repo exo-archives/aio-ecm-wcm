@@ -217,6 +217,15 @@
     <Preferences>Preferences</Preferences>
     <Close>Close</Close>
    </action>
+   <msg>
+   	<access-denied>
+   		You don't have permission add categories for this document.
+   	</access-denied>
+   	<exception>
+   		Have any exception raising while perform add categories for this document.
+   	</exception>
+	<non-categories>Categories are wrong. Please select good categories.</non-categories>
+   </msg>
   </UIContentDialogForm>
   
   <UIPermissionManager>
