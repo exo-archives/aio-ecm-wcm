@@ -241,8 +241,10 @@ public class UISearchForm extends UIForm {
 				resultType = "Document";
 			}
 			String newKey = event.getRequestContext().getRequestParameter(OBJECTID);
-			if (newKey != null)
+			if (newKey != null) {
 				keyword = newKey;
+				uiKeywordInput.setValue(newKey);
+			}
 			keyword = keyword.replace('-', ' ').toLowerCase(portletRequestContext.getLocale());
 			uiSearchResult.setResultType(resultType);
 			String selectedPortal = (uiPortalSelectBox.getValue().equals(UISearchForm.ALL_OPTION)) ? null
