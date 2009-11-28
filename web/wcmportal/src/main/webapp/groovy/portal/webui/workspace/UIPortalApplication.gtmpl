@@ -13,11 +13,7 @@
 <%
 	import org.exoplatform.webui.core.UIComponent;
 	import java.util.Iterator;
-	import org.exoplatform.services.wcm.skin.XSkinService;
-	import org.exoplatform.services.wcm.javascript.XJavascriptService;
 
-	uicomponent.getApplicationComponent(XSkinService.class).start();
-	uicomponent.getApplicationComponent(XJavascriptService.class).start();
   def rcontext = _ctx.getRequestContext() ;
   String docBase =  rcontext.getRequestContextPath() ;  
   String skin = uicomponent.getSkin();
