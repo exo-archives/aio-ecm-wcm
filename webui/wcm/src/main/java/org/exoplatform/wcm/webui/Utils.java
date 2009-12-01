@@ -27,6 +27,9 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
+import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
+import org.exoplatform.services.ecm.publication.PublicationPlugin;
+import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -92,8 +95,7 @@ public class Utils {
    * 
    * @return the node is got by publication lifecycle and current mode. Return original node if node doesn't join to any lifecycle.  
    */
-  
-  /*
+  @Deprecated
   public static Node getNodeView(Node originalNode) {
   	Node realNode = null;
   	try{
@@ -121,7 +123,7 @@ public class Utils {
   		return null;
   	}
   }
-  */
+  
   
 	/**
 	 * Gets the node.
@@ -131,11 +133,23 @@ public class Utils {
 	 * @throws Exception the exception
 	 */
 	public static Node getNodeView(String repository, String workspace, String nodeIdentifier) {
-		try {
+		return getNodeView(repository, workspace, nodeIdentifier, null);
+	} 
 
+	/**
+	 * Gets the node.
+	 * 
+	 * @return the node
+	 * 
+	 * @throws Exception the exception
+	 */
+	public static Node getNodeView(String repository, String workspace, String nodeIdentifier, String version) {
+		try {
+			
 			HashMap<String,String> filters = new HashMap<String, String>();
 			filters.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
-
+			if (version!=null) filters.put(WCMComposer.FILTER_VERSION, version);
+			
 			UIPortalApplication portalApplication = Util.getUIPortalApplication();
 			WCMComposer wcmComposer = portalApplication.getApplicationComponent(WCMComposer.class);
 			Node viewNode = wcmComposer.getContent(repository, workspace, nodeIdentifier, filters, getSessionProvider(null));
@@ -144,7 +158,7 @@ public class Utils {
 			return null;
 		}
 	} 
-
+	
   
   /**
    * Can edit current portal.

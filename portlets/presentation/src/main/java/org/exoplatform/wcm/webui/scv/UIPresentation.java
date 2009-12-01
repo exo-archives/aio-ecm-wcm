@@ -25,6 +25,8 @@ import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.wcm.core.NodeLocation;
+import org.exoplatform.services.wcm.publication.WCMComposer;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -56,9 +58,9 @@ public class UIPresentation extends UIBaseNodePresentation {
    */
   public Node getOriginalNode() throws Exception {
 
-//	  return Utils.getNodeView(originalNodeLocation.getRepository(), originalNodeLocation.getWorkspace(), originalNodeLocation.getPath());
+	  return Utils.getNodeView(originalNodeLocation.getRepository(), originalNodeLocation.getWorkspace(), originalNodeLocation.getPath(), WCMComposer.BASE_VERSION);
 
-    return NodeLocation.getNodeByLocation(originalNodeLocation);
+//    return NodeLocation.getNodeByLocation(originalNodeLocation);
   }  
 
   /* (non-Javadoc)
@@ -73,9 +75,9 @@ public class UIPresentation extends UIBaseNodePresentation {
    */
   public Node getNode() throws Exception {
 	  
-//	  	return Utils.getNodeView(viewNodeLocation.getRepository(), viewNodeLocation.getWorkspace(), viewNodeLocation.getPath());
+	  	return Utils.getNodeView(viewNodeLocation.getRepository(), viewNodeLocation.getWorkspace(), viewNodeLocation.getPath());
 	  
-    return NodeLocation.getNodeByLocation(viewNodeLocation);
+//    return NodeLocation.getNodeByLocation(viewNodeLocation);
   }
   
   /* (non-Javadoc)

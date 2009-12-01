@@ -220,42 +220,44 @@ public class UIPCVContainer extends UIContainer {
 //    if (node == null) return null;
 
     Node nodeView = Utils.getNodeView(null, null, parameters);
-    boolean isDocumentType = false;
-    if (nodeView.isNodeType("nt:frozenNode")) isDocumentType = true; 
-    // check node is a document node
-    TemplateService templateService = getApplicationComponent(TemplateService.class);
-    List<String> documentTypes = templateService.getDocumentTemplates(this.getRepository());
-    for (String documentType : documentTypes) {
-      if (nodeView.isNodeType(documentType)) {
-        isDocumentType = true;
-        break;
-      }
-    }
-    if (!isDocumentType) return null;
-    if (hasChildren()) removeChild(UIPCVContainer.class);
     
-    // set node view for UIPCVPresentation
-    if (nodeView != null && nodeView.isNodeType("nt:frozenNode")) {
-      String nodeUUID = nodeView.getProperty("jcr:frozenUuid").getString();
-      uiContentViewer.setOriginalNode(nodeView.getSession().getNodeByUUID(nodeUUID));
-      uiContentViewer.setNode(nodeView);
-    } else if (nodeView == null) {
-      return null;
-    } else {
-      uiContentViewer.setOriginalNode(nodeView);
-      uiContentViewer.setNode(nodeView);
-    }
-    uiContentViewer.setRepository(this.getRepository());
-    uiContentViewer.setWorkspace(nodeView.getSession().getWorkspace().getName());
-    
-    PortletRequestContext porletRequestContext = WebuiRequestContext.getCurrentInstance();
-    HttpServletRequest request = (HttpServletRequest) porletRequestContext.getRequest();
-    if(request.getQueryString() == null) {
-      isPrint = false;
-    } else {
-      isPrint = request.getQueryString().endsWith("isPrint=true") ? true : false;
-    }
-    
+    if (nodeView!=null) {
+	    boolean isDocumentType = false;
+	    if (nodeView.isNodeType("nt:frozenNode")) isDocumentType = true; 
+	    // check node is a document node
+	    TemplateService templateService = getApplicationComponent(TemplateService.class);
+	    List<String> documentTypes = templateService.getDocumentTemplates(this.getRepository());
+	    for (String documentType : documentTypes) {
+	      if (nodeView.isNodeType(documentType)) {
+	        isDocumentType = true;
+	        break;
+	      }
+	    }
+	    if (!isDocumentType) return null;
+	    if (hasChildren()) removeChild(UIPCVContainer.class);
+	    
+	    // set node view for UIPCVPresentation
+	    if (nodeView != null && nodeView.isNodeType("nt:frozenNode")) {
+	      String nodeUUID = nodeView.getProperty("jcr:frozenUuid").getString();
+	      uiContentViewer.setOriginalNode(nodeView.getSession().getNodeByUUID(nodeUUID));
+	      uiContentViewer.setNode(nodeView);
+	    } else if (nodeView == null) {
+	      return null;
+	    } else {
+	      uiContentViewer.setOriginalNode(nodeView);
+	      uiContentViewer.setNode(nodeView);
+	    }
+	    uiContentViewer.setRepository(this.getRepository());
+	    uiContentViewer.setWorkspace(nodeView.getSession().getWorkspace().getName());
+	    
+	    PortletRequestContext porletRequestContext = WebuiRequestContext.getCurrentInstance();
+	    HttpServletRequest request = (HttpServletRequest) porletRequestContext.getRequest();
+	    if(request.getQueryString() == null) {
+	      isPrint = false;
+	    } else {
+	      isPrint = request.getQueryString().endsWith("isPrint=true") ? true : false;
+	    }
+    }    
     return nodeView;
   }
   

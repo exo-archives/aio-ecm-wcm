@@ -24,6 +24,7 @@ import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.wcm.core.NodeLocation;
+import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -82,8 +83,8 @@ public class UIPCVPresentation extends UIBaseNodePresentation {
    */
   @Override
   public Node getNode() throws Exception {
-//	  return Utils.getNodeView(contentNodeLocation.getRepository(), contentNodeLocation.getWorkspace(), contentNodeLocation.getPath());
-    return NodeLocation.getNodeByLocation(contentNodeLocation);
+	  return Utils.getNodeView(contentNodeLocation.getRepository(), contentNodeLocation.getWorkspace(), contentNodeLocation.getPath());
+//    return NodeLocation.getNodeByLocation(contentNodeLocation);
   }
 
   /* (non-Javadoc)
@@ -91,8 +92,8 @@ public class UIPCVPresentation extends UIBaseNodePresentation {
    */
   @Override
   public Node getOriginalNode() throws Exception {
-//	  return Utils.getNodeView(originalNodeLocation.getRepository(), originalNodeLocation.getWorkspace(), originalNodeLocation.getPath());
-    return NodeLocation.getNodeByLocation(originalNodeLocation);
+	  return Utils.getNodeView(originalNodeLocation.getRepository(), originalNodeLocation.getWorkspace(), originalNodeLocation.getPath(), WCMComposer.BASE_VERSION);
+//    return NodeLocation.getNodeByLocation(originalNodeLocation);
   }
   
   /**
