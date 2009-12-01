@@ -17,7 +17,7 @@
     <WebContentHtml>Contenu principal</WebContentHtml>
     <Illustration>Illustration</Illustration>
     <hintIllustration>Dans ce panneau, vous pouvez spécifier une image qui sera affichée lorsque votre contenu web sera affiché dans les listes. En plus, vous pouvez spécifier un résumé accompagnant cette image.</hintIllustration>
-    <illustrationImage>Illustration</illustrationImage>
+    <illustrationImage>Illustration Vignette</illustrationImage>
     <imageMimeType>Type d'image</imageMimeType>
     <image>Transférer l'image</image>
     <imageWidth>Largeur de l'image</imageWidth>
