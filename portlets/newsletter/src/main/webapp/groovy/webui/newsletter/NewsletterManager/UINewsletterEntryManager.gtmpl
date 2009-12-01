@@ -70,7 +70,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 													<div class="ContentAction ActionTitle" style="float:right;" onclick="showPopupCategory(this, event);">
 														
 														
-														<!-- action of this category -->
+														<!-- action of this subscription -->
 														<div class="Line" style="background: none;" onclick="showPopupCategory(this, event);">
 															<a href="#" class="NewsAdmin"><%=_ctx.appRes("NewsletterPortlet.action.Moderation")%></a>
 															<div style="position:absolute;">
@@ -86,6 +86,14 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 																				<div class="MiddleRightRightClickPopupMenu">
 																					<div class="UIRightPopupMenuContainer" style="background: none;margin: 0px; padding-left: 8px; padding-right: 8px;">
 																						<!-- Detail action -->
+																						<div class="MenuItem" onclick="javaScript:void(0)">
+																							<div class="ItemIcon Pencil" style="padding-left:30px;text-align:left;">
+																								<a href="<%=uicomponent.event("EditSubscription")%>">
+																									<%=_ctx.appRes("UINewsletterEntryManager.title.EditSubscription")%>
+																								</a>
+																							</div>
+																						</div>
+																						<div><hr></div>
 																						<div class="MenuItem" onclick="javaScript:void(0)">
 																							<div class="ItemIcon openFolder" style="padding-left:30px;text-align:left;">
 																								<a href="<%=uicomponent.event("OpenNewsletter")%>">
@@ -129,7 +137,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 																</div>
 															</div>
 														</div>
-														<!-- end action of this category -->
+														<!-- end action of this subscription -->
 														
 				          	  	</div>
 				            		</div>
