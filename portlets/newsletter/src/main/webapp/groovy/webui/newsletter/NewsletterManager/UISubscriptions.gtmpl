@@ -60,8 +60,6 @@ if(uicomponent.categoryConfig != null){
 						if (categoryDescription.length() > 60) categoryDescription = categoryDescription.substring(0, 60) + " ...";
 					%>
 					<div style="float:left;line-height:26px;padding-left:10px">$categoryDescription</div>
-					<%
-					if(uicomponent.isAdmin || uicomponent.isModerator){%>
 						<!-- ----------------------------------- Button -------------------------------------------------- -->
 						<div class="UIAction" style="float:right; padding:0px 10px; width: 120px;"> 
 							<table class="ActionContainer" style="text-align:center">
@@ -73,14 +71,12 @@ if(uicomponent.categoryConfig != null){
 					          	  	<div class="ButtonMiddle">
 					          	  	
 														<div class="ContentAction ActionTitle" style="float:right;" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
-															
-															
 															<!-- action of this category -->
 															<div class="Line" style="background: none;" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 																<a href="#" class="NewsAdmin"><%=_ctx.appRes("UICategories.title.Administration")%></a>
 																<div style="position:absolute;">
 																	<div class="UIPopupCategory" style="display:none; left:-46px; top:-2px; ">
-																		<div class="UIRightClickPopupMenu UINewLetterPopup" style="display:block;">
+																		<div class="UIRightClickPopupMenu UINewLetterPopup" style="display:block;min-width:130px;">
 																			<div class="UIContextMenuContainer BorderOutline">											
 																				<div class="TopLeftRightClickPopupMenu">
 																					<div class="TopRightRightClickPopupMenu ">
@@ -91,24 +87,27 @@ if(uicomponent.categoryConfig != null){
 																					<div class="MiddleRightRightClickPopupMenu">
 																						<div class="UIRightPopupMenuContainer" style="background: none;margin: 0px; padding-left: 8px; padding-right: 8px;">
 																							<!-- Detail action -->
-																							<div class="MenuItem" onclick="javaScript:void(0)">
-																								<div class="ItemIcon Pencil" style="padding-left:30px;text-align:left;">
-																									<a href="<%=uicomponent.event("EditCategory")%>"><%=_ctx.appRes("UISubscription.title.EditCategory")%></a>
-																								</div>
-																							</div>
-																							<% 
-																							if(uicomponent.isAdmin){
-																							%>
+																							<%
+																							if(uicomponent.isAdmin || uicomponent.isModerator){%>
 																								<div class="MenuItem" onclick="javaScript:void(0)">
-																									<div class="ItemIcon Remove16x16Icon" style="padding-left:30px;text-align:left;">
-																										<a href="javascript:if (confirm('<%=_ctx.appRes("UISubscription.msg.confirmDeleteCategory")%>')) <%=uicomponent.event("DeleteCategory")%>">
-																											<%=_ctx.appRes("UISubscription.title.DeleteCategory")%>
-																										</a>
+																									<div class="ItemIcon Pencil" style="padding-left:30px;text-align:left;">
+																										<a href="<%=uicomponent.event("EditCategory")%>"><%=_ctx.appRes("UISubscription.title.EditCategory")%></a>
 																									</div>
 																								</div>
-																							<%
-																							}%>
-																							<div><hr></div>
+																								<% 
+																								if(uicomponent.isAdmin){
+																								%>
+																									<div class="MenuItem" onclick="javaScript:void(0)">
+																										<div class="ItemIcon Remove16x16Icon" style="padding-left:30px;text-align:left;">
+																											<a href="javascript:if (confirm('<%=_ctx.appRes("UISubscription.msg.confirmDeleteCategory")%>')) <%=uicomponent.event("DeleteCategory")%>">
+																												<%=_ctx.appRes("UISubscription.title.DeleteCategory")%>
+																											</a>
+																										</div>
+																									</div>
+																								<%
+																								}%>
+																								<div><hr></div>
+																							<%}%>
 																							<div class="MenuItem" onclick="javaScript:void(0)">
 																								<div class="ItemIcon openFolder" style="padding-left:30px;text-align:left;">
 																									<a href="<%=uicomponent.event("OpenSubscription")%>">
@@ -123,21 +122,24 @@ if(uicomponent.categoryConfig != null){
 																									</a>
 																								</div>
 																							</div>
-																							<div class="MenuItem" onclick="javaScript:void(0)">
-																								<div class="ItemIcon Remove16x16Icon" style="padding-left:30px;text-align:left;">
-																									<a href="javascript:if(eXo.ecm.UINewsletterUtil.checkBeforeDelete('UISubscriptionsCheckAll', '<%=_ctx.appRes("UISubscription.msg.checkOnlyOneSubScriptionToDelete")%>', '<%=_ctx.appRes("UISubscription.msg.confirmDeleteSubscription")%>')) <%=uicomponent.event("DeleteSubscription")%>">
-																										<%=_ctx.appRes("UISubscription.title.Delete")%>
-																									</a>
+																							<%
+																							if(uicomponent.isAdmin || uicomponent.isModerator){%>
+																								<div class="MenuItem" onclick="javaScript:void(0)">
+																									<div class="ItemIcon Remove16x16Icon" style="padding-left:30px;text-align:left;">
+																										<a href="javascript:if(eXo.ecm.UINewsletterUtil.checkBeforeDelete('UISubscriptionsCheckAll', '<%=_ctx.appRes("UISubscription.msg.checkOnlyOneSubScriptionToDelete")%>', '<%=_ctx.appRes("UISubscription.msg.confirmDeleteSubscription")%>')) <%=uicomponent.event("DeleteSubscription")%>">
+																											<%=_ctx.appRes("UISubscription.title.Delete")%>
+																										</a>
+																									</div>
 																								</div>
-																							</div>
-																							<div><hr></div>
-																							<div class="MenuItem" onclick="javaScript:void(0)">
-																								<div class="ItemIcon SmallGroup16x16Icon" style="padding-left:30px;text-align:left;">
-																									<a href="<%=uicomponent.event("ManagerUsers")%>">
-																										<%=_ctx.appRes("UISubscription.title.ManageUsers")%>
-																									</a>
+																								<div><hr></div>
+																								<div class="MenuItem" onclick="javaScript:void(0)">
+																									<div class="ItemIcon SmallGroup16x16Icon" style="padding-left:30px;text-align:left;">
+																										<a href="<%=uicomponent.event("ManagerUsers")%>">
+																											<%=_ctx.appRes("UISubscription.title.ManageUsers")%>
+																										</a>
+																									</div>
 																								</div>
-																							</div>
+																							<%}%>
 																							<!-- Finish detail action -->
 																						</div>
 																					</div>
@@ -164,8 +166,6 @@ if(uicomponent.categoryConfig != null){
 						  </table> 
 						</div>
 						<!-- end action of this category -->
-					<%
-					}%>
 					<div class="ClearLeft"><span></span></div>
 				</div>
 				<!-- All subscriptions -->

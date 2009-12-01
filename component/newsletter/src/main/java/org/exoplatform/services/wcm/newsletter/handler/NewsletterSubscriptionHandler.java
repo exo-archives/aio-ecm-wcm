@@ -101,20 +101,20 @@ public class NewsletterSubscriptionHandler {
         listAddministrators = convertValuesToArray(values);
       }
       listAddministrators.addAll(listModerators);
-      
+      String[] permissions = new String[]{PermissionType.ADD_NODE, PermissionType.REMOVE, PermissionType.SET_PROPERTY};
       // Set permission is all for Redactors
       ExtendedNode categoryExtend = ExtendedNode.class.cast(categoryNode);
       for(String permission : newRedactors){
         extendedSubscriptionNode.setPermission(permission, PermissionType.ALL);
         // Set read permission in category which contain subscription for this redactor
-        if(!listModerators.contains(permission))categoryExtend.setPermission(permission, new String[]{PermissionType.READ});
+        if(!listModerators.contains(permission))categoryExtend.setPermission(permission, permissions);
       }
       
       // Set permission is addNode, remove and setProperty for administrators
       if(isAddNew){
         for(String per : listAddministrators){
           if(newRedactors.contains(per)) continue;
-          extendedSubscriptionNode.setPermission(per, new String[]{PermissionType.ADD_NODE, PermissionType.REMOVE, PermissionType.SET_PROPERTY});
+          extendedSubscriptionNode.setPermission(per, permissions);
           newRedactors.add(per);
         }
       }

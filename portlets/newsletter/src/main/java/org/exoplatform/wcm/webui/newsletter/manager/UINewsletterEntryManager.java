@@ -61,7 +61,6 @@ import org.exoplatform.webui.form.UIFormSelectBox;
          @EventConfig(listeners = UINewsletterEntryManager.AddEntryActionListener.class),
          @EventConfig(listeners = UINewsletterEntryManager.BackToSubcriptionsActionListener.class),
          @EventConfig(listeners = UINewsletterEntryManager.BackToCategoriesActionListener.class),
-         @EventConfig(listeners = UINewsletterEntryManager.EditSubscriptionActionListener.class),
          @EventConfig(listeners = UINewsletterEntryManager.OpenNewsletterActionListener.class),
          @EventConfig(listeners = UINewsletterEntryManager.ConvertTemplateActionListener.class),
          @EventConfig(listeners = UINewsletterEntryManager.EditNewsletterEntryActionListener.class),
@@ -484,43 +483,6 @@ public class UINewsletterEntryManager extends UIForm {
       UIApplication uiApp = newsletterEntryManager.getAncestorOfType(UIApplication.class);
       uiApp.addMessage(new ApplicationMessage(message, null, messageType));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-    }
-  }
-  
-  /**
-   * The listener interface for receiving editSubscriptionAction events.
-   * The class that is interested in processing a editSubscriptionAction
-   * event implements this interface, and the object created
-   * with that class is registered with a component using the
-   * component's <code>addEditSubscriptionActionListener<code> method. When
-   * the editSubscriptionAction event occurs, that object's appropriate
-   * method is invoked.
-   * 
-   * @see EditSubscriptionActionEvent
-   */
-  static  public class EditSubscriptionActionListener extends EventListener<UINewsletterEntryManager> {
-    
-    /* (non-Javadoc)
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-     */
-    public void execute(Event<UINewsletterEntryManager> event) throws Exception {
-      UINewsletterEntryManager entryManager = event.getSource();
-      String subId = entryManager.subscriptionConfig.getName();
-      if(subId == null){
-        UIApplication uiApp = entryManager.getAncestorOfType(UIApplication.class);
-        uiApp.addMessage(new ApplicationMessage("UISubscription.msg.checkOnlyOneSubScriptionToEdit", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-        return;
-      }
-      UISubcriptionForm subcriptionForm = entryManager.createUIComponent(UISubcriptionForm.class, null, null);
-      NewsletterManagerService newsletterManagerService = entryManager.getApplicationComponent(NewsletterManagerService.class);
-      NewsletterSubscriptionConfig subscriptionConfig = newsletterManagerService.getSubscriptionHandler().
-                                                        getSubscriptionsByName(Utils.getSessionProvider(entryManager), 
-                                                                               NewsLetterUtil.getPortalName(), 
-                                                                               entryManager.categoryConfig.getName(), 
-                                                                               subId);
-      subcriptionForm.setSubscriptionInfor(subscriptionConfig);
-      Utils.createPopupWindow(entryManager, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 500, 350);
     }
   }
 }

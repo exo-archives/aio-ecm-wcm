@@ -311,6 +311,7 @@
 		</title>
 		<msg>
 			<checkToRemove>S'il vous plaît, cocher une ou plusieurs autorisations dans la liste à supprimer</checkToRemove>
+			<donotMoveYourSelt>Vous avez seulement retirer votre autorisation dans la liste, s'il vous plaît vérifier à nouveau!</donotMoveYourSelt>
 		</msg>
 	</UIRemoveModeratorsFormPopupWindow>
 </bundle>
