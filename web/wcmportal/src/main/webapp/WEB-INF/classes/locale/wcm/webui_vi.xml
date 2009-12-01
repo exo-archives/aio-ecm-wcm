@@ -217,6 +217,15 @@
     <Preferences>Tùy chọn</Preferences>
     <Close>Đóng</Close>
    </action>
+   <msg>
+   	<access-denied>
+   		Bạn không được quyền thêm phân loại cho tài liệu này.
+   	</access-denied>
+   	<exception>
+   		Có lỗi xảy ra trong khi thực hiện thêm phân loại cho tài liệu này.
+   	</exception>
+   	<non-categories>Phân loại này không đúng. Xin hãy chọn phân loại khác.</non-categories>
+   </msg>
   </UIContentDialogForm>
   
   <UIPermissionManager>
