@@ -23,7 +23,7 @@
   <Email>
    <ConfirmUser>
     <Subject>Yêu cầu xác nhận hệ thống nhận thư tự động</Subject>
-    <Content>Click chuột vào #đây# để xác nhận đăng ký của bạn</Content>
+    <Content>Bấm vào #đây# để xác nhận đăng ký của bạn</Content>
    </ConfirmUser>
   </Email>
  </UINewsletterViewerForm>
