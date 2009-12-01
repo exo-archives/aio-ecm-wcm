@@ -240,6 +240,7 @@ UploadForm.prototype.uploadFileSave = function() {
 		if(driverName) strParam += "&driverName=" + driverName;
 		strParam += "&currentFolder="+eXp.store.currentFolder;
 		strParam += "&currentPortal="+eXoPlugin.portalName;
+		strParam += "&userId="+eXoPlugin.userId;
 		if(jcrPath) strParam += "&jcrPath="+jcrPath; 				
 		var uploadId = eXoWCM.UploadForm.uploadId;
 		strParam +="&action=save&uploadId="+uploadId+"&filename="+nodeName;
@@ -279,7 +280,7 @@ UploadForm.prototype.updateFiles = function(nodeId) {
 	var dropdownlist = document.getElementById("Pinter");
 	if(dropdownlist) filter = dropdownlist.options[dropdownlist.selectedIndex].value;
 	else filter = 'Web Contents';
-	var connector = eXoPlugin.hostName + strConnector+ "&workspaceName=collaboration&userId=" + getUrlParam("userId") + "&filterBy="+filter;
+	var connector = eXoPlugin.hostName + strConnector+ "&workspaceName=collaboration&userId=" + eXoPlugin.userId + "&filterBy="+filter;
 	var xmlTreeNodes = eXoWCM.PluginUtils.request(connector);
 	if(!xmlTreeNodes) return;
 	var fileList = xmlTreeNodes.getElementsByTagName('File');

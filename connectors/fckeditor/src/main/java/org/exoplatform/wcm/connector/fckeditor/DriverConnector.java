@@ -245,7 +245,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    * @param language the language
    * @param fileName the file name
    * @param uploadId the upload id
-   * @param currentPortal the current portal
+   * @param siteName the current portal
    * @param driverName the driver name
    * 
    * @return the response
@@ -260,7 +260,8 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
       @QueryParam("workspaceName") String workspaceName,
       @QueryParam("driverName") String driverName,
       @QueryParam("currentFolder") String currentFolder,
-      @QueryParam("currentPortal") String currentPortal,
+      @QueryParam("currentPortal") String siteName,
+      @QueryParam("userId") String userId,
       @QueryParam("jcrPath") String jcrPath,
       @QueryParam("action") String action,
       @QueryParam("language") String language,
@@ -268,7 +269,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
       @QueryParam("uploadId") String uploadId) throws Exception {
     try {
     	Node currentFolderNode = getParentFolderNode(repositoryName, workspaceName, driverName, currentFolder);
-      return createProcessUploadResponse(repositoryName, workspaceName, currentFolderNode,currentPortal ,jcrPath,
+      return createProcessUploadResponse(repositoryName, workspaceName, currentFolderNode, siteName, userId, jcrPath,
           action, language, fileName, uploadId);  
     } catch (Exception e) {
       log.error("Error when perform processUpload: ", e.fillInStackTrace());
@@ -561,7 +562,9 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    */
   private boolean isDMSDocument(Node node, String repositoryName) throws Exception {
   	TemplateService templateService = (TemplateService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(TemplateService.class);
-  	List<String> dmsDocumentList = templateService.getDocumentTemplates(repositoryName);
+  	List<String> dmsDocumentListTmp = templateService.getDocumentTemplates(repositoryName);
+  	List<String> dmsDocumentList = new ArrayList<String>();
+  	dmsDocumentList.addAll(dmsDocumentListTmp);
   	dmsDocumentList.remove(NodetypeConstant.EXO_WEBCONTENT);
   	for (String documentType : dmsDocumentList) {
 	    if (node.getPrimaryNodeType().isNodeType(documentType)) {
@@ -653,7 +656,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    * @param language the language
    * @param fileName the file name
    * @param uploadId the upload id
-   * @param runningPortalName the portal name
+   * @param siteName the portal name
    * @param currentFolderNode the current folder node
    * 
    * @return the response
@@ -663,7 +666,8 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
   protected Response createProcessUploadResponse(String repositoryName,
                                                  String workspaceName,
                                                  Node currentFolderNode,
-                                                 String runningPortalName,
+                                                 String siteName,
+                                                 String userId,
                                                  String jcrPath,
                                                  String action,
                                                  String language,
@@ -672,7 +676,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     if (FileUploadHandler.SAVE_ACTION.equals(action)) {
       CacheControl cacheControl = new CacheControl();
       cacheControl.setNoCache(true);
-      return fileUploadHandler.saveAsNTFile(currentFolderNode, uploadId, fileName, language);
+      return fileUploadHandler.saveAsNTFile(currentFolderNode, uploadId, fileName, language, siteName, userId);
     }
     return fileUploadHandler.control(uploadId, action);
   }

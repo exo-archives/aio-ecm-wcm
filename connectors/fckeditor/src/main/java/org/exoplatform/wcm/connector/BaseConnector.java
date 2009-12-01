@@ -16,7 +16,6 @@
  */
 package org.exoplatform.wcm.connector;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,8 +102,6 @@ public abstract class BaseConnector {
    */
   public BaseConnector(ExoContainer container) {
     livePortalManagerService = (LivePortalManagerService) container.getComponentInstanceOfType(LivePortalManagerService.class);
-    //sessionProviderService = (ThreadLocalSessionProviderService) container.getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
-    //sessionProviderService = (SessionProviderService)container.getComponentInstanceOfType(SessionProviderService.class);
     repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
     webSchemaConfigService = (WebSchemaConfigService) container.getComponentInstanceOfType(WebSchemaConfigService.class);
     votingService = (VotingService) container.getComponentInstanceOfType(VotingService.class);
@@ -160,43 +157,6 @@ public abstract class BaseConnector {
     } else {
       return buildXMLResponseCommon(sharedPortalNode, webContent, currentFolder, command);
     }
-  }
-
-  /**
-   * Builds the xml document on create folder.
-   * 
-   * @param newFolderName the new folder name
-   * @param currentFolder the current folder
-   * @param jcrPath the jcr path
-   * @param repositoryName the repository name
-   * @param workspaceName the workspace name
-   * @param command the command
-   * @param language the language
-   * @param runningPortal the current portal
-   * @return the response
-   * @throws Exception the exception
-   */
-  protected Response buildXMLDocumentOnCreateFolder(String newFolderName,
-                                                    String currentFolder,
-                                                    String runningPortal,
-                                                    String jcrPath,
-                                                    String repositoryName,
-                                                    String workspaceName,
-                                                    String command,
-                                                    String language) throws Exception {
-    CacheControl cacheControl = new CacheControl();
-    cacheControl.setNoCache(true);
-    Node currentNode = null;
-    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
-    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider, repositoryName);
-    Node currentPortalNode = getCurrentPortalNode(repositoryName,
-                                                  jcrPath,
-                                                  runningPortal,
-                                                  sharedPortal);
-    Node webContent = getWebContent(repositoryName, workspaceName, jcrPath);
-    currentNode = getActiveFolder(currentFolder, currentPortalNode, sharedPortal, webContent);
-    sessionProvider.close();
-    return folderHandler.createNewFolder(currentNode, newFolderName, language);
   }
 
   /**
@@ -341,45 +301,6 @@ public abstract class BaseConnector {
     return getResponse(document);
   }
 
-  /**
-   * Gets the active folder.
-   * 
-   * @param currentFolder the current folder
-   * @param currentPortal the current portal
-   * @param sharedPortal the shared portal
-   * @param webContent the web content
-   * @return the active folder
-   * @throws Exception the exception
-   */
-  private Node getActiveFolder(String currentFolder,
-                               Node currentPortal,
-                               Node sharedPortal,
-                               Node webContent) throws Exception {
-    if (currentFolder == null || currentFolder.trim().length() == 0)
-      return null;
-    String sharedPortalRelPath = "/" + sharedPortal.getName() + "/";
-    String currentPortalRelPath = "/" + currentPortal.getName() + "/";
-    Node currentNode = null;
-    Node activePortal = null;
-    if (currentFolder.startsWith(currentPortalRelPath)
-        && !currentFolder.equals(currentPortalRelPath))
-      activePortal = currentPortal;
-    else if (currentFolder.startsWith(sharedPortalRelPath)
-        && !currentFolder.equals(sharedPortalRelPath))
-      activePortal = sharedPortal;
-    String webContentRelPath = null;
-    if (webContent != null)
-      webContentRelPath = currentPortalRelPath + webContent.getName() + "/";
-    if (webContent != null && currentFolder.startsWith(webContentRelPath)
-        && !currentFolder.equals(webContentRelPath)) {
-      currentNode = getCorrectContentStorage(activePortal, webContent, currentFolder);
-    } else if ((webContent == null)
-        || (webContent != null && !currentFolder.startsWith(webContentRelPath))) {
-      currentNode = getCorrectContentStorage(activePortal, null, currentFolder);
-    }
-    return currentNode;
-  }
-
   protected Node getCorrectContentStorage(Node activePortal, Node webContent, String currentFolder) throws Exception {
     if (currentFolder == null || currentFolder.trim().length() == 0)
       return null;
@@ -426,10 +347,10 @@ public abstract class BaseConnector {
    * @return the jcr content
    * @throws Exception the exception
    */
-  protected Node getContent(String repositoryName, String workspaceName, String jcrPath, String NodeTypeFilter) throws Exception {
+  protected Node getContent(String repositoryName, String workspaceName, String jcrPath, String NodeTypeFilter, boolean isSystemSession) throws Exception {
     if (jcrPath == null || jcrPath.trim().length() == 0)
       return null;
-    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    SessionProvider sessionProvider = isSystemSession?WCMCoreUtils.getSessionProvider():WCMCoreUtils.getUserSessionProvider();
     Session session = null;
     try {
       ManageableRepository repository = repositoryService.getRepository(repositoryName);
@@ -460,7 +381,7 @@ public abstract class BaseConnector {
    * @throws Exception the exception
    */
   protected Node getContent(String repositoryName, String workspaceName, String jcrPath) throws Exception {
-	  return getContent(repositoryName, workspaceName, jcrPath, null);
+	  return getContent(repositoryName, workspaceName, jcrPath, null, true);
   }
   
   /**
@@ -473,7 +394,7 @@ public abstract class BaseConnector {
    * @throws Exception the exception
    */
   protected Node getWebContent(String repositoryName, String workspaceName, String jcrPath) throws Exception {
-	  return getContent(repositoryName, workspaceName, jcrPath, "exo:webContent");
+	  return getContent(repositoryName, workspaceName, jcrPath, "exo:webContent", true);
   }
   
   protected Node getCurrentPortalNode(String repositoryName,
@@ -503,90 +424,5 @@ public abstract class BaseConnector {
       return null;
     }
   }
-
-  /**
-   * Creates the upload file response.
-   * 
-   * @param inputStream the input stream
-   * @param repositoryName the repository name
-   * @param workspaceName the workspace name
-   * @param currentFolder the current folder
-   * @param runningPortalName
-   * @param jcrPath the jcr path
-   * @param uploadId the upload id
-   * @param language the language
-   * @param contentType the content type
-   * @param contentLength the content length
-   * @return the response
-   * @throws Exception the exception
-   */
-  protected Response createUploadFileResponse(InputStream inputStream,
-                                              String repositoryName,
-                                              String workspaceName,
-                                              String currentFolder,
-                                              String runningPortalName,
-                                              String jcrPath,
-                                              String uploadId,
-                                              String language,
-                                              String contentType,
-                                              String contentLength,
-                                              int limit) throws Exception {
-    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
-    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
-    Node currentPortal = getCurrentPortalNode(repositoryName,
-                                              jcrPath,
-                                              runningPortalName,
-                                              sharedPortal);
-    Node webContent = getWebContent(repositoryName, workspaceName, jcrPath);
-    Node currentNode = getActiveFolder(currentFolder, currentPortal, sharedPortal, webContent);
-    sessionProvider.close();
-    return fileUploadHandler.upload(uploadId,
-                                    contentType,
-                                    Double.parseDouble(contentLength),
-                                    inputStream,
-                                    currentNode,
-                                    language,
-                                    limit);
-  }
-
-  /**
-   * Creates the process upload response.
-   * 
-   * @param repositoryName the repository name
-   * @param workspaceName the workspace name
-   * @param currentFolder the current folder
-   * @param jcrPath the jcr path
-   * @param action the action
-   * @param language the language
-   * @param fileName the file name
-   * @param uploadId the upload id
-   * @param runningPortalName the portal name
-   * @return the response
-   * @throws Exception the exception
-   */
-  protected Response createProcessUploadResponse(String repositoryName,
-                                                 String workspaceName,
-                                                 String currentFolder,
-                                                 String runningPortalName,
-                                                 String jcrPath,
-                                                 String action,
-                                                 String language,
-                                                 String fileName,
-                                                 String uploadId) throws Exception {
-    if (FileUploadHandler.SAVE_ACTION.equals(action)) {
-      CacheControl cacheControl = new CacheControl();
-      cacheControl.setNoCache(true);
-      SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
-      Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
-      Node currentPortal = getCurrentPortalNode(repositoryName,
-                                                jcrPath,
-                                                runningPortalName,
-                                                sharedPortal);
-      Node webContent = getWebContent(repositoryName, workspaceName, jcrPath);
-      Node currentNode = getActiveFolder(currentFolder, currentPortal, sharedPortal, webContent);
-      sessionProvider.close();
-      return fileUploadHandler.saveAsNTFile(currentNode, uploadId, fileName, language);
-    }
-    return fileUploadHandler.control(uploadId, action);
-  }
+  
 }
