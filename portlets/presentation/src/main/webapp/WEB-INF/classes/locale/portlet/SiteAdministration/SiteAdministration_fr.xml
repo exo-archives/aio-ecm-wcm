@@ -3,12 +3,12 @@
  <UISiteAdminToolbar>
   <action>
    <AddPage>Ajouter une page</AddPage>
-   <EditPage>Editer la mise en page</EditPage>
+   <EditPage>Editer cette page</EditPage>
    <BrowsePage>Gérer les pages</BrowsePage>
    <EditPortal>Editer le site</EditPortal>
    <CreatePortal>Créer un site</CreatePortal>
    <ChangePortal>Changer de site</ChangePortal>
-   <BrowsePortal>Parcourir le site</BrowsePortal>
+   <BrowsePortal>Gestion des sites</BrowsePortal>
    <SkinSettings>Habillage du site</SkinSettings>
    <LanguageSettings>Langues</LanguageSettings>
    <AccountSettings>Paramètres du compte</AccountSettings>
@@ -20,7 +20,7 @@
    <Sites>Sites</Sites>
    <Groups>Groupes</Groups>
    <Editor>Éditeur du site</Editor>
-   <Administrator>Administrateur du site</Administrator>
+   <Administrator>Administrateur</Administrator>
   </action>
   <label>
    <LiveModeTitle>Mode surf</LiveModeTitle>
