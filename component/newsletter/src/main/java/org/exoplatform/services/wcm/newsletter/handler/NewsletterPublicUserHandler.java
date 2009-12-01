@@ -205,7 +205,6 @@ public class NewsletterPublicUserHandler {
       String mailContent = (emailContent[1].replaceFirst("#", openTag)).replace("#", "</a>");
       Message  message = new Message(); 
       message.setMimeType("text/html") ;
-      //message.setFrom("maivanha1610@gmail.com") ;
       message.setTo(userMail) ;
       message.setSubject(emailContent[0]) ;
       message.setBody(mailContent) ;

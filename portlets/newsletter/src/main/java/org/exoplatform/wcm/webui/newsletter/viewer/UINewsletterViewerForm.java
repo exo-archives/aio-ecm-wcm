@@ -18,6 +18,8 @@ package org.exoplatform.wcm.webui.newsletter.viewer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
@@ -55,6 +57,10 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
         @EventConfig(listeners = UINewsletterViewerForm.ChangeSubcriptionsActionListener.class) }
 )
 public class UINewsletterViewerForm extends UIForm {
+  
+  public static String SUBJECT_KEY = "UINewsletterViewerForm.Email.ConfirmUser.Subject";
+  
+  public static String CONTENT_KEY = "UINewsletterViewerForm.Email.ConfirmUser.Content";
   
   /** The user code. */
   public String userCode;
@@ -249,6 +255,7 @@ public class UINewsletterViewerForm extends UIForm {
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
+    @SuppressWarnings("unchecked")
     public void execute(Event<UINewsletterViewerForm> event) throws Exception {
       UINewsletterViewerForm newsletterForm = event.getSource();
       newsletterForm.publicUserHandler.forgetEmail(Utils.getSessionProvider(newsletterForm), NewsLetterUtil.getPortalName(), newsletterForm.userMail);
@@ -257,6 +264,15 @@ public class UINewsletterViewerForm extends UIForm {
       newsletterForm.inputEmail.setValue("");
       newsletterForm.inputEmail.setRendered(true);
       newsletterForm.userMail = "";
+      for(UIComponent component : newsletterForm.getChildren()){
+        try{
+          UIFormCheckBoxInput<Boolean> uiFormCheckBoxInput = (UIFormCheckBoxInput<Boolean>) component;
+          if(uiFormCheckBoxInput.isChecked())
+            uiFormCheckBoxInput.setChecked(false);
+        }catch(ClassCastException ex){
+          // You shouldn't throw popup message, because some exception often rise here.
+        }
+      }
       newsletterForm.setActions(new String[] {"Subcribe"});
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterForm);
     }
@@ -326,8 +342,19 @@ public class UINewsletterViewerForm extends UIForm {
         if(listCategorySubscription.size() < 1){
           contentOfMessage = "UINewsletterViewerForm.msg.checkSubscriptionToProcess";
         }else{
+          WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+          ResourceBundle resourceBundle = context.getApplicationResourceBundle() ;
+          String Subject = "";
+          String Content = "";
+          try {
+            Subject = resourceBundle.getString(SUBJECT_KEY);
+            Content = resourceBundle.getString(CONTENT_KEY);
+          } catch (MissingResourceException e) {
+            Subject = SUBJECT_KEY;
+            Content = CONTENT_KEY;
+          }
           // get email's content to create mail confirm
-          String emailContent[] = new String[]{"Subject", "Content"};
+          String emailContent[] = new String[]{Subject, Content};
           try{
             newsletterForm.publicUserHandler.subscribe(
                                                        Utils.getSessionProvider(newsletterForm),
