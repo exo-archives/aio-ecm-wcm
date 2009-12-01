@@ -31,6 +31,8 @@ import org.exoplatform.ecm.connector.fckeditor.FCKMessage;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
 import org.exoplatform.services.rest.CacheControl;
 import org.exoplatform.services.rest.Response;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
 import org.w3c.dom.Document;
@@ -138,7 +140,7 @@ public class FileUploadHandler {
    * 
    * @throws Exception the exception
    */
-  public Response saveAsNTFile(Node parent, String uploadId, String fileName, String language) throws Exception {
+  public Response saveAsNTFile(Node parent, String uploadId, String fileName, String language, String siteName, String userId) throws Exception {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     UploadResource resource = uploadService.getUploadResource(uploadId);
@@ -173,6 +175,8 @@ public class FileUploadHandler {
     jcrContent.setProperty("jcr:mimeType",mimetype);
     parent.getSession().save();
     uploadService.removeUpload(uploadId);
+    WCMPublicationService wcmPublicationService = WCMCoreUtils.getService(WCMPublicationService.class);
+    wcmPublicationService.updateLifecyleOnChangeContent(file, siteName, userId);
     return Response.Builder.ok().mediaType("text/xml").cacheControl(cacheControl).build();
   }
   

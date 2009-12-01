@@ -80,6 +80,13 @@
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
+  
+    <dependency>
+      <groupId>org.exoplatform.ecm</groupId>
+      <artifactId>exo.ecm.wcm.component.publication</artifactId>
+      <version>${project.version}</version>
+      <scope>compile</scope>
+    </dependency>
 			 
 		<dependency>
 			<groupId>groovy</groupId>

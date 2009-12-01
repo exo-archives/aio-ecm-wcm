@@ -357,7 +357,7 @@ var eXp = {
 		disableUploading: getUrlParam("disableUploading") || false,
 		disableCreatingFolder: getUrlParam("disableCreatingFolder") || false,
 		command: {
-			init: "&workspaceName=collaboration&userId=" + getUrlParam("userId"),
+			init: "&workspaceName=collaboration&userId=" + eXoPlugin.userId,
 			uploadFile: "uploadFile/upload",
 			controlUpload: "uploadFile/control",
 			createFolder: "createFolder"
@@ -433,7 +433,7 @@ var eXp = {
 		var dropdownlist = document.getElementById("Pinter");
 		if(dropdownlist) filter = dropdownlist.options[dropdownlist.selectedIndex].value;
 		else filter = 'Web Contents';
-		var connector = eXoPlugin.hostName + strConnector+ "&workspaceName=collaboration&userId=" + getUrlParam("userId") + "&filterBy="+filter;
+		var connector = eXoPlugin.hostName + strConnector+ "&workspaceName=collaboration&userId=" + eXoPlugin.userId + "&filterBy="+filter;
 		if(eXp.strConnection == connector) return;	
 		eXp.strConnection = connector;
 		eXoWCM.PluginUtils.renderSubTrees(currentNode, event, connector);

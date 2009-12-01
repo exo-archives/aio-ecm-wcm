@@ -20,7 +20,7 @@ FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/default/' ;
 FCKConfig.ToolbarSets["CompleteWCM"] = [
 	['Source','Templates','-','FitWindow','ShowBlocks'],
 	['Cut','Copy','PasteText','-','SpellCheck','-','Undo','Redo'],
-	['WCMInsertGadget', 'WCMInsertImage','WCMInsertDocument','Flash','Table','SpecialChar', 'WCMInsertContent'],
+	['WCMInsertGadget','Flash','Table','SpecialChar', 'WCMInsertContent'],
 	'/',
 	['Bold','Italic','Underline','StrikeThrough','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','TextColor','BGColor','-','RemoveFormat'],
 	['Link','WCMInsertPortalLink','Unlink','Anchor'],
@@ -31,30 +31,24 @@ FCKConfig.ToolbarSets["CompleteWCM"] = [
 FCKConfig.ToolbarSets["BasicWCM"] = [
 	['Source','-','Bold','Italic','Underline','StrikeThrough','-','OrderedList','UnorderedList','Outdent','Indent'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-	['Blockquote','-','Link','Unlink','WCMInsertPortalLink','WCMInsertImage','WCMInsertDocument','-','FitWindow','ShowBlocks'],	
+	['Blockquote','-','Link','Unlink','WCMInsertPortalLink','WCMInsertContent','-','FitWindow','ShowBlocks'],	
 	['Style','FontFormat','FontName','FontSize']
 ] ;
 
 FCKConfig.ToolbarSets["SuperBasicWCM"] = [
      ['Source','-','Bold','Italic','Underline'],
      ['-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-     ['-','Link','Unlink','WCMInsertPortalLink','WCMInsertGadget','WCMInsertImage','WCMInsertDocument'],	
+     ['-','Link','Unlink','WCMInsertPortalLink','WCMInsertGadget','WCMInsertContent'],	
 ] ;
 
-FCKConfig.ToolbarSets["CSSToolBar"] = [
-	['WCMInsertImage']
-];
-
-FCKConfig.ToolbarSets["JSToolBar"] = [ ];
-
-FCKConfig.SourceModeCommands = ['Insert Image'];
 //eXoPlugin config
 window.eXoPlugin = {
 	init: function() {
 		with (window.parent.eXo.env.portal) {
-   this.originPortalName = this.portalName = portalName;
+			this.portalName = portalName;
 			this.context = context;
 			this.accessMode = accessMode;
+			this.userId = userName;
 		}
 		
 		var parentLocation = window.parent.location;
