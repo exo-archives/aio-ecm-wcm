@@ -180,6 +180,7 @@ public class UICategories extends UIContainer {
 			UICategories uiCategories = event.getSource();
       UICategoryForm categoryForm = uiCategories.createUIComponent(UICategoryForm.class, null, null);
       Utils.createPopupWindow(uiCategories, categoryForm, UINewsletterConstant.CATEGORY_FORM_POPUP_WINDOW, 450, 298);
+      categoryForm.setCategoryInfo(null, uiCategories.isAdmin);
 		}
 	}
   
@@ -203,6 +204,7 @@ public class UICategories extends UIContainer {
       UICategories uiCategories = event.getSource();
       UISubcriptionForm subcriptionForm = uiCategories.createUIComponent(UISubcriptionForm.class, null, null);
       Utils.createPopupWindow(uiCategories, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 500, 350);
+      subcriptionForm.setSubscriptionInfor(null, uiCategories.isAdmin);
     }
   }
 	

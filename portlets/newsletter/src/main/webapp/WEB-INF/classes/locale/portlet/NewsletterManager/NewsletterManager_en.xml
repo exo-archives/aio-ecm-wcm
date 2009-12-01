@@ -311,6 +311,7 @@
 		</title>
 		<msg>
 			<checkToRemove>Please, tick one or more permissions in list to remove.</checkToRemove>
+			<donotMoveYourSelt>You have just removed your permission from list, please check again!</donotMoveYourSelt>
 		</msg>
 	</UIRemoveModeratorsFormPopupWindow>
 </bundle>

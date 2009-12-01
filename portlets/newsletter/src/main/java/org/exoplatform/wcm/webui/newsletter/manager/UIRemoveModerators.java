@@ -27,7 +27,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
@@ -54,7 +53,9 @@ import org.exoplatform.webui.form.UIFormStringInput;
 public class UIRemoveModerators extends UIForm {
   private boolean setForCategoryForm = true;
   private List<String> listModerators = new ArrayList<String>();
-  public void init(String input){
+  private boolean isAdmin = false;
+  public void init(String input, boolean isAdmin){
+    this.isAdmin = isAdmin;
     listModerators.clear();
     listModerators.addAll(Arrays.asList(input.split(",")));
     this.removeChild(UIFormCheckBoxInput.class);
@@ -86,11 +87,26 @@ public class UIRemoveModerators extends UIForm {
           isChecked = true;  
         }
       }
+      UIApplication uiApp = removeModerators.getAncestorOfType(UIApplication.class);
       if(!isChecked){
-        UIApplication uiApp = removeModerators.getAncestorOfType(UIApplication.class);
         uiApp.addMessage(new ApplicationMessage("UIRemoveModeratorsFormPopupWindow.msg.checkToRemove", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
+      }
+      if(!removeModerators.isAdmin){
+        boolean havePermission = false;
+        List<String> listGrouptMembers = NewsLetterUtil.getAllGroupAndMembershipOfCurrentUser();
+        for(String str : result.split(",")){
+          if(listGrouptMembers.contains(str)){
+            havePermission = true;
+            break;
+          }
+        }
+        if(havePermission == false){
+          uiApp.addMessage(new ApplicationMessage("UIRemoveModeratorsFormPopupWindow.msg.donotMoveYourSelt", null, ApplicationMessage.WARNING));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          return;
+        }
       }
       UIPopupContainer popupContainer = (UIPopupContainer)removeModerators.getAncestorOfType(UIPopupContainer.class);
       UIFormInputSetWithAction formInputSetWithAction;

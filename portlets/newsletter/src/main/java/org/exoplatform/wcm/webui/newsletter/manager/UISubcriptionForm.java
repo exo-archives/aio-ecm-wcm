@@ -91,6 +91,8 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent, UISel
   private NewsletterSubscriptionConfig subscriptionConfig            = null;
   
   private String popupId;
+  
+  private boolean isAdmin = false;
 
   /**
    * Instantiates a new uI subcription form.
@@ -172,8 +174,9 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent, UISel
    * 
    * @param subscriptionConfig the new subscription infor
    */
-  public void setSubscriptionInfor(NewsletterSubscriptionConfig subscriptionConfig){
-
+  public void setSubscriptionInfor(NewsletterSubscriptionConfig subscriptionConfig, boolean isAdmin){
+    this.isAdmin = isAdmin;
+    if(subscriptionConfig == null) return;
     this.subscriptionConfig = subscriptionConfig;
 
     UIFormStringInput inputName = this.getChildById(INPUT_SUBCRIPTION_NAME);
@@ -361,20 +364,21 @@ public static class SelectUserActionListener extends EventListener<UISubcription
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
     public void execute(Event<UISubcriptionForm> event) throws Exception {
-      UISubcriptionForm categoryForm = event.getSource();
-      UIFormInputSetWithAction formCategoryModerator = categoryForm.getChildById(FORM_SUBSCRIPTION_REDACTOR);
+      UISubcriptionForm subscriptionForm = event.getSource();
+      UIFormInputSetWithAction formCategoryModerator = subscriptionForm.getChildById(FORM_SUBSCRIPTION_REDACTOR);
       UIFormStringInput stringInput = formCategoryModerator.getChildById(SELECT_REDACTOR);
       if(stringInput.getValue() == null || stringInput.getValue().trim().length() < 1) {
-        UIApplication uiApp = categoryForm.getAncestorOfType(UIApplication.class);
+        UIApplication uiApp = subscriptionForm.getAncestorOfType(UIApplication.class);
         uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.doNotHaveModerators", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       };
-      UIRemoveModerators removeModerators = categoryForm.createUIComponent(UIRemoveModerators.class, null, null);
+      UIRemoveModerators removeModerators = subscriptionForm.createUIComponent(UIRemoveModerators.class, null, null);
       removeModerators.permissionForSubscriptionForm();
-      removeModerators.init(((UIFormStringInput)((UIFormInputSetWithAction)categoryForm.getChildById(FORM_SUBSCRIPTION_REDACTOR)).getChildById(SELECT_REDACTOR)).getValue());
-      Utils.createPopupWindow(categoryForm, removeModerators, UINewsletterConstant.REMOVE_MODERATORS_FORM_POPUP_WINDOW, 480, 300);
-      categoryForm.setPopupId(UINewsletterConstant.REMOVE_MODERATORS_FORM_POPUP_WINDOW);
+      removeModerators.init(((UIFormStringInput)((UIFormInputSetWithAction)subscriptionForm.getChildById(FORM_SUBSCRIPTION_REDACTOR)).
+                              getChildById(SELECT_REDACTOR)).getValue(), subscriptionForm.isAdmin);
+      Utils.createPopupWindow(subscriptionForm, removeModerators, UINewsletterConstant.REMOVE_MODERATORS_FORM_POPUP_WINDOW, 480, 300);
+      subscriptionForm.setPopupId(UINewsletterConstant.REMOVE_MODERATORS_FORM_POPUP_WINDOW);
     }
   }
 

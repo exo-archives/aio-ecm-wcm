@@ -84,6 +84,8 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 	/** The Constant INPUT_CATEGORY_MODERATOR. */
 	public static final String INPUT_CATEGORY_MODERATOR      = "CategoryModerator"; 
 	
+	private boolean isAdmin = false;
+	
 	/**
 	 * Instantiates a new uI category form.
 	 * 
@@ -167,7 +169,9 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 	 * 
 	 * @param categoryConfig the new category info
 	 */
-	public void setCategoryInfo(NewsletterCategoryConfig categoryConfig){
+	public void setCategoryInfo(NewsletterCategoryConfig categoryConfig, boolean isAdmin){
+	  this.isAdmin = isAdmin;
+	  if(categoryConfig == null) return;
 	  this.categoryConfig = categoryConfig;
 	  UIFormStringInput inputCateName = this.getChildById(INPUT_CATEGORY_NAME);
 	  inputCateName.setValue(categoryConfig.getName());
@@ -342,7 +346,9 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
         return;
 	    };
 	    UIRemoveModerators removeModerators = categoryForm.createUIComponent(UIRemoveModerators.class, null, null);
-	    removeModerators.init(((UIFormStringInput)((UIFormInputSetWithAction)categoryForm.getChildById(FORM_CATEGORY_MODERATOR)).getChildById(INPUT_CATEGORY_MODERATOR)).getValue());
+	    removeModerators.init(((UIFormStringInput)((UIFormInputSetWithAction)categoryForm.
+	                          getChildById(FORM_CATEGORY_MODERATOR)).getChildById(INPUT_CATEGORY_MODERATOR)).getValue(),
+	                          categoryForm.isAdmin);
 	    Utils.createPopupWindow(categoryForm, removeModerators, UINewsletterConstant.REMOVE_MODERATORS_FORM_POPUP_WINDOW, 480, 300);
 	    categoryForm.setPopupId(UINewsletterConstant.REMOVE_MODERATORS_FORM_POPUP_WINDOW);
 	  }
