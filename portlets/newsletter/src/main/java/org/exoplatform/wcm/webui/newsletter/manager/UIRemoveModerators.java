@@ -23,8 +23,10 @@ import java.util.List;
 import org.exoplatform.ecm.webui.form.UIFormInputSetWithAction;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -74,12 +76,21 @@ public class UIRemoveModerators extends UIForm {
       UIRemoveModerators removeModerators = event.getSource();
       UIFormCheckBoxInput<Boolean> checkBoxInput;
       String result = "";
+      boolean isChecked = false;
       for(String str : removeModerators.listModerators){
         checkBoxInput = removeModerators.getChildById(str);
         if(!checkBoxInput.isChecked()){
           if(result.trim().length() > 0) result += ",";
           result += str;
+        } else {
+          isChecked = true;  
         }
+      }
+      if(!isChecked){
+        UIApplication uiApp = removeModerators.getAncestorOfType(UIApplication.class);
+        uiApp.addMessage(new ApplicationMessage("UIRemoveModeratorsFormPopupWindow.msg.checkToRemove", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
       }
       UIPopupContainer popupContainer = (UIPopupContainer)removeModerators.getAncestorOfType(UIPopupContainer.class);
       UIFormInputSetWithAction formInputSetWithAction;

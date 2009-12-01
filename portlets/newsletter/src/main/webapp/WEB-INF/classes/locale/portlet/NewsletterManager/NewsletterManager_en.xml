@@ -186,6 +186,7 @@
       <subcriptionNameIsNotEmpty>Subcription name cannot be empty!</subcriptionNameIsNotEmpty>
       <subcriptionTitleIsNotEmpty>Subcription title cannot be empty!</subcriptionTitleIsNotEmpty>
       <subcriptionNameIsAlreadyExist>This subcription's name is already exist!</subcriptionNameIsAlreadyExist>
+      <selectRedactorPermission>You must select user or member redactor! </selectRedactorPermission>
     </msg>
     <title>
     	<SubcriptionName>Name</SubcriptionName>
@@ -286,6 +287,7 @@
 			<Letter>Letter</Letter>
 			<Date>Date</Date>
 			<Status>Status</Status>
+			<EditSubscription>Edit Subscription</EditSubscription>
 		</title>
 	</UINewsletterEntryManager>
 
@@ -307,5 +309,8 @@
 		<title>
 			<UIRemoveModerators>Remove Moderators</UIRemoveModerators>
 		</title>
+		<msg>
+			<checkToRemove>Please, tick one or more permissions in list to remove.</checkToRemove>
+		</msg>
 	</UIRemoveModeratorsFormPopupWindow>
 </bundle>
