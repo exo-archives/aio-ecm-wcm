@@ -246,7 +246,7 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent, UISel
       
       String inputRedactorValue = inputModerator.getValue();
       if (("".equals(inputRedactorValue)) || (inputRedactorValue == null)) {
-        uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.inputModeratorEmpty", null, ApplicationMessage.WARNING));
+        uiApp.addMessage(new ApplicationMessage("UISubcriptionForm.msg.selectRedactorPermission", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }

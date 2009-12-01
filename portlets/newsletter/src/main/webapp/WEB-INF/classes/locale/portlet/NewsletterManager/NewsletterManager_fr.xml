@@ -186,6 +186,7 @@
       <subcriptionNameIsNotEmpty>Le nom d'abonnement ne peut pas être vide!</subcriptionNameIsNotEmpty>
       <subcriptionTitleIsNotEmpty>le titre d'abonnement ne peut pas être vide!</subcriptionTitleIsNotEmpty>
       <subcriptionNameIsAlreadyExist>Le nom de cet abonnement existe déjà!</subcriptionNameIsAlreadyExist>
+      <selectRedactorPermission>Vous devez sélectionner l'utilisateur ou rédacteur membre!</selectRedactorPermission>
     </msg>
     <title>
     	<SubcriptionName>Nom</SubcriptionName>
@@ -286,6 +287,7 @@
 			<Letter>Lettre</Letter>
 			<Date>Date</Date>
 			<Status>État</Status>
+			<EditSubscription>Modifier l'abonnement</EditSubscription>
 		</title>
 	</UINewsletterEntryManager>
 	
@@ -307,5 +309,8 @@
 		<title>
 			<UIRemoveModerators>Retirer Modérateurs</UIRemoveModerators>
 		</title>
+		<msg>
+			<checkToRemove>S'il vous plaît, cocher une ou plusieurs autorisations dans la liste à supprimer</checkToRemove>
+		</msg>
 	</UIRemoveModeratorsFormPopupWindow>
 </bundle>
