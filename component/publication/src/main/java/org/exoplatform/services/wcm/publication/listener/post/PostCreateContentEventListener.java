@@ -18,13 +18,11 @@ package org.exoplatform.services.wcm.publication.listener.post;
 
 import javax.jcr.Node;
 
-import org.apache.commons.logging.Log;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
-import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
@@ -47,9 +45,6 @@ public class PostCreateContentEventListener extends Listener<CmsService, Node>{
   
   /** The web content schema handler. */
   private WebContentSchemaHandler webContentSchemaHandler;
-  
-  /** The log. */
-  private static Log log = ExoLogger.getLogger(PostCreateContentEventListener.class);
   
   /**
    * Instantiates a new post create content event listener.
@@ -87,14 +82,8 @@ public class PostCreateContentEventListener extends Listener<CmsService, Node>{
     if(!currentNode.getPath().startsWith(nodeLocation.getPath()))
       return;
 
-    String siteName = null, remoteUser = null;
-    try {
-    	siteName = Util.getPortalRequestContext().getPortalOwner();
-    	remoteUser = Util.getPortalRequestContext().getRemoteUser();    	
-    } catch (Exception e) {
-      log.error("Error when perform onEvent: ", e.fillInStackTrace());
-    }
-    
-    publicationService.updateLifecyleOnChangeContent(currentNode, siteName, remoteUser);
+    String siteName = Util.getPortalRequestContext().getPortalOwner();
+    String remoteUser = Util.getPortalRequestContext().getRemoteUser();    	
+    if (remoteUser != null) publicationService.updateLifecyleOnChangeContent(currentNode, siteName, remoteUser);
   }
 }

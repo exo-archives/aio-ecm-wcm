@@ -39,7 +39,6 @@ import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.ecm.webui.tree.selectone.UIOneNodePathSelector;
 import org.exoplatform.ecm.webui.tree.selectone.UIOneTaxonomySelector;
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
-import org.exoplatform.ecm.webui.utils.LockUtil;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
@@ -350,8 +349,6 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       }
-      String lockToken = LockUtil.getLockToken(homeNode);
-      if(lockToken != null) homeNode.getSession().addLockToken(lockToken);
       try {
         String addedPath = cmsService.storeNode(preferenceType, homeNode, inputProperties, true, preferenceRepository);
         homeNode.getSession().save() ;
@@ -400,6 +397,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       } catch(AccessDeniedException e) {
+      	e.printStackTrace();
         Object[] args = { preferencePath } ;
         String key = "UIFCCForm.msg.access-denied" ;
         uiApp.addMessage(new ApplicationMessage(key, args, ApplicationMessage.WARNING)) ;
