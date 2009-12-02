@@ -91,11 +91,11 @@ public class UINewsletterManagerPortlet extends UIPortletApplication {
     List<String> editPermission = new ArrayList<String>();
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     NewsletterManageUserHandler managerUserHandler = newsletterManagerService.getManageUserHandler();
-    editPermission.addAll(managerUserHandler.getAllAdministrator(Utils.getSessionProvider(this), NewsLetterUtil.getPortalName()));
+    editPermission.addAll(managerUserHandler.getAllAdministrator(Utils.getSessionProvider(), NewsLetterUtil.getPortalName()));
     String supperUser = PublicationUtil.getServices(UserACL.class).getSuperUser(); 
     if(!editPermission.contains(supperUser) && supperUser.equals(NewsLetterUtil.getCurrentUser())){
       editPermission.add(supperUser);
-      SessionProvider sessionProvider = Utils.getSessionProvider(this);
+      SessionProvider sessionProvider = Utils.getSessionProvider();
       managerUserHandler.addAdministrator(sessionProvider, NewsLetterUtil.getPortalName(), supperUser);
       sessionProvider.close();
     }

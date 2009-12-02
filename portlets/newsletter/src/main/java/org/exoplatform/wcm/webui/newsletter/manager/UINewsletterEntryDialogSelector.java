@@ -113,7 +113,7 @@ public class UINewsletterEntryDialogSelector extends UIForm {
   public void init(String CategoryName, String subScriptionName) throws Exception{
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     NewsletterCategoryHandler newsletterCategoryHandler = newsletterManagerService.getCategoryHandler();
-    SessionProvider sessionProvider = Utils.getSessionProvider(this);
+    SessionProvider sessionProvider = Utils.getSessionProvider();
     String portalName = Util.getUIPortal().getName();
     List<NewsletterCategoryConfig> newsletterCategoryConfigs = newsletterCategoryHandler.getListCategories(portalName, 
                                                                                                            sessionProvider);
@@ -165,7 +165,7 @@ public class UINewsletterEntryDialogSelector extends UIForm {
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     NewsletterTemplateHandler newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
     List<Node> templateNodes = newsletterTemplateHandler.getTemplates(
-                                                                      Utils.getSessionProvider(this),
+                                                                      Utils.getSessionProvider(),
                                                                       Util.getUIPortal().getName(), 
                                                                       categoryConfig);
     for (Node template : templateNodes) {
@@ -200,7 +200,7 @@ public class UINewsletterEntryDialogSelector extends UIForm {
       UINewsletterEntryContainer newsletterEntryContainer = newsletterEntryDialogSelector.getAncestorOfType(UINewsletterEntryContainer.class);
       UINewsletterEntryForm newsletterEntryForm = newsletterEntryContainer.getChild(UINewsletterEntryForm.class) ;
       newsletterEntryForm.setNodePath(newsletterTemplateHandler.getTemplate(
-                                                                            Utils.getSessionProvider(newsletterEntryDialogSelector),
+                                                                            Utils.getSessionProvider(),
                                                                             Util.getUIPortal().getName(), 
                                                                             newsletterEntryContainer.getCategoryConfig(), 
                                                                             templateName).getPath());
@@ -260,7 +260,7 @@ public class UINewsletterEntryDialogSelector extends UIForm {
       NewsletterManagerService newsletterManagerService = newsletterEntryDialogSelector.getApplicationComponent(NewsletterManagerService.class);
       NewsletterSubscriptionHandler newsletterSubscriptionHandler = newsletterManagerService.getSubscriptionHandler();
       String portalName = Util.getUIPortal().getName();
-      SessionProvider sessionProvider = Utils.getSessionProvider(newsletterEntryDialogSelector);
+      SessionProvider sessionProvider = Utils.getSessionProvider();
       NewsletterCategoryConfig categoryConfig = newsletterManagerService.getCategoryHandler().getCategoryByName(sessionProvider, portalName, 
                                                                                                                 categorySelectBox.getValue());
       List<NewsletterSubscriptionConfig> newsletterSubscriptionConfigs = 

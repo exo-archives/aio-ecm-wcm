@@ -74,7 +74,7 @@ public class UINewsletterViewerPortlet extends UIPortletApplication {
       UINewsletterViewerForm newsletterForm = newsletterViewerPortlet.getChild(UINewsletterViewerForm.class);
       String[] confirms = event.getRequestContext().getRequestParameter(OBJECTID).split("/");
       List<String> listIds = new ArrayList<String>();
-      SessionProvider sessionProvider = Utils.getSessionProvider(newsletterViewerPortlet);
+      SessionProvider sessionProvider = Utils.getSessionProvider();
       boolean correctUser = newsletterForm.publicUserHandler.confirmPublicUser(sessionProvider, confirms[0], confirms[1], NewsLetterUtil.getPortalName());
       if(correctUser){
         List<NewsletterSubscriptionConfig> listSubscriptions = 

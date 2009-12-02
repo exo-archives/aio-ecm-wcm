@@ -151,7 +151,7 @@ public class UISearchResult extends UIContainer {
 			int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIWCMSearchPortlet.ITEMS_PER_PAGE, null));
 			try {
 				WCMPaginatedQueryResult paginatedQueryResult = siteSearchService.searchSiteContents(
-				                                                                                    Utils.getSessionProvider(this),
+				                                                                                    Utils.getSessionProvider(),
 				                                                                                    queryCriteria,
 																																														itemsPerPage, false);
 				setSearchTime(paginatedQueryResult.getQueryTimeInSecond());

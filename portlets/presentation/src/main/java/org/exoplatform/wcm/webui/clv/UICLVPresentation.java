@@ -390,7 +390,8 @@ import org.exoplatform.webui.event.EventListener;
       OrganizationService organizationService = getApplicationComponent(OrganizationService.class);
       UserHandler handler = organizationService.getUserHandler();
       User user = handler.findUserByName(ownerId);
-      return user.getFullName();
+      if (user != null) return user.getFullName();
+      else return ownerId;
     }
     return null;
   }
@@ -605,7 +606,7 @@ import org.exoplatform.webui.event.EventListener;
       String worksapce = preferences.getValue(UICLVPortlet.WORKSPACE, null);      
       RepositoryService repositoryService = contentListPresentation.getApplicationComponent(RepositoryService.class);      
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = Utils.getSessionProvider(contentListPresentation).getSession(worksapce, manageableRepository);
+      Session session = Utils.getSessionProvider().getSession(worksapce, manageableRepository);
   	  Node node = (Node) session.getItem(path);
       UIContentDialogForm uiDocumentDialogForm = contentListPresentation.createUIComponent(UIContentDialogForm.class, null, null);
       uiDocumentDialogForm.init(node, false);

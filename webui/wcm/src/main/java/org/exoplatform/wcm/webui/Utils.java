@@ -27,9 +27,6 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
-import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
-import org.exoplatform.services.ecm.publication.PublicationPlugin;
-import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -58,12 +55,11 @@ import com.ibm.icu.text.Transliterator;
  */
 public class Utils {
 
-  /** The Constant TURN_ON_QUICK_EDIT. */
-  public static final String TURN_ON_QUICK_EDIT = "turnOnQuickEdit";
-
+	/** The Quick edit attribute for HTTPSession */
+	public static final String TURN_ON_QUICK_EDIT = "turnOnQuickEdit";
+	
   /**
    * Checks if is edits the portlet in create page wizard.
-   * 
    * @return true, if is edits the portlet in create page wizard
    */
   public static boolean isEditPortletInCreatePageWizard() {
@@ -76,89 +72,20 @@ public class Utils {
   }
   
   /**
-   * Refresh browser.
+   * Checks if is quick editmode.
    * 
-   * @param context the context
+   * @param container the current container
+   * @param popupWindowId the popup window id
+   * 
+   * @return true, if is quick editmode
    */
-  public static void updatePortal(PortletRequestContext context) {
-    UIPortalApplication portalApplication = Util.getUIPortalApplication();   
-    PortalRequestContext portalRequestContext = (PortalRequestContext)context.getParentAppRequestContext();
-    UIWorkingWorkspace uiWorkingWS = portalApplication.getChildById(UIPortalApplication.UI_WORKING_WS_ID);    
-    portalRequestContext.addUIComponentToUpdateByAjax(uiWorkingWS) ;    
-    portalRequestContext.setFullRender(true);
+  public static boolean isQuickEditMode(UIContainer container, String popupWindowId) {
+    UIPopupContainer popupContainer = getPopupContainer(container);
+    if (popupContainer == null) return false;
+    UIPopupWindow popupWindow = popupContainer.getChildById(popupWindowId);
+    if (popupWindow == null) return false;
+    return true;
   }
-
-  /**
-   * Get node view by publication lifecycle and current mode
-   * 
-   * @param originalNode the original node
-   * 
-   * @return the node is got by publication lifecycle and current mode. Return original node if node doesn't join to any lifecycle.  
-   */
-  @Deprecated
-  public static Node getNodeView(Node originalNode) {
-  	Node realNode = null;
-  	try{
-  		if (originalNode.isNodeType("exo:taxonomyLink")) {
-  			String uuid = originalNode.getProperty("exo:uuid").getString();
-  			realNode = originalNode.getSession().getNodeByUUID(uuid);
-  		} else {
-  			realNode = originalNode;
-  		}
-  	} catch (Exception e) {
-			return null;
-		}
-  	
-  	try {
-    	UIPortalApplication portalApplication = Util.getUIPortalApplication();
-    	PublicationService publicationService = portalApplication.getApplicationComponent(PublicationService.class);
-    	String lifecycleName = publicationService.getNodeLifecycleName(realNode);
-      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
-      HashMap<String,Object> context = new HashMap<String, Object>();    
-      context.put(WCMComposer.FILTER_MODE, getCurrentMode());
-      return publicationPlugin.getNodeView(realNode, context);
-  	} catch (NotInPublicationLifecycleException e) {
-  		return realNode;
-  	} catch (Exception e) {
-  		return null;
-  	}
-  }
-  
-  
-	/**
-	 * Gets the node.
-	 * 
-	 * @return the node
-	 * 
-	 * @throws Exception the exception
-	 */
-	public static Node getNodeView(String repository, String workspace, String nodeIdentifier) {
-		return getNodeView(repository, workspace, nodeIdentifier, null);
-	} 
-
-	/**
-	 * Gets the node.
-	 * 
-	 * @return the node
-	 * 
-	 * @throws Exception the exception
-	 */
-	public static Node getNodeView(String repository, String workspace, String nodeIdentifier, String version) {
-		try {
-			
-			HashMap<String,String> filters = new HashMap<String, String>();
-			filters.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
-			if (version!=null) filters.put(WCMComposer.FILTER_VERSION, version);
-			
-			UIPortalApplication portalApplication = Util.getUIPortalApplication();
-			WCMComposer wcmComposer = portalApplication.getApplicationComponent(WCMComposer.class);
-			Node viewNode = wcmComposer.getContent(repository, workspace, nodeIdentifier, filters, getSessionProvider(null));
-			return viewNode;
-		} catch (Exception e) {
-			return null;
-		}
-	} 
-	
   
   /**
    * Can edit current portal.
@@ -181,73 +108,6 @@ public class Utils {
     return identity.isMemberOf(membershipEntry);
   }
 
-  /**
-   * Gets the current mode.
-   * 
-   * @return the current mode
-   */
-  public static String getCurrentMode() {
-    Object isQuickEditable = Util.getPortalRequestContext().getRequest().getSession().getAttribute(Utils.TURN_ON_QUICK_EDIT);
-    if(isQuickEditable == null) return WCMComposer.MODE_LIVE;
-    boolean turnOnQuickEdit = Boolean.parseBoolean(isQuickEditable.toString()); 
-    return turnOnQuickEdit ? WCMComposer.MODE_EDIT : WCMComposer.MODE_LIVE;
-  }
-
-  /**
-   * Check if the content is draft and in edit mode
-   * 
-   * @return true, if successful
-   */
-  public static boolean isShowDraft(Node content) {
-  	if (content == null) return false;
-  	try {
-  	  if(content.isNodeType("nt:frozenNode")) return false;
-  		WCMPublicationService wcmPublicationService = WCMCoreUtils.getService(WCMPublicationService.class);
-  		String contentState = wcmPublicationService.getContentState(content);
-  		boolean isDraftContent = false;
-  		if (PublicationDefaultStates.DRAFT.equals(contentState)) isDraftContent = true;
-  		boolean isShowDraft = false;
-  		if (WCMComposer.MODE_EDIT.equals(getCurrentMode())) isShowDraft = true;
-  		return isDraftContent && isShowDraft;
-		} catch (Exception e) {
-			return false;
-		}
-  }
-  
-  /**
-   * Check if the portlet is in edit mode
-   * 
-   * @return true, if successful
-   */
-  public static boolean isShowQuickEdit() {
-  	try {
-  		boolean isEditMode = false;
-  		if (WCMComposer.MODE_EDIT.equals(getCurrentMode())) isEditMode = true;
-  		return isEditMode;
-		} catch (Exception e) {
-			return false;
-		}
-  }
-  
-  /**
-   * Check if the content is editable and in edit mode
-   * 
-   * @return true, if successful
-   */
-  public static boolean isShowQuickEdit(Node content) {
-  	if (content == null) return true;
-  	try {
-  		boolean isEditMode = false;
-  		if (WCMComposer.MODE_EDIT.equals(getCurrentMode())) isEditMode = true;
-  		((ExtendedNode) content).checkPermission(PermissionType.SET_PROPERTY);
-  		((ExtendedNode) content).checkPermission(PermissionType.ADD_NODE);
-      ((ExtendedNode) content).checkPermission(PermissionType.REMOVE);
-  		return isEditMode;
-		} catch (Exception e) {
-			return false;
-		}
-  }
-  
   /**
    * Clean string.
    * 
@@ -282,15 +142,164 @@ public class Utils {
       return cleanedStr.toString().toLowerCase();
   }
 
+  
   /**
-   * Creates the popup window.
-   * 
-   * @param container the container
-   * @param component the component
-   * @param popupWindowId the popup window id
-   * @param width the width
-   * @param height the height
-   * 
+   * Refresh whole portal by AJAX.
+   * @param context the portlet request context
+   */
+  public static void updatePortal(PortletRequestContext context) {
+    UIPortalApplication portalApplication = Util.getUIPortalApplication();   
+    PortalRequestContext portalRequestContext = (PortalRequestContext)context.getParentAppRequestContext();
+    UIWorkingWorkspace uiWorkingWS = portalApplication.getChildById(UIPortalApplication.UI_WORKING_WS_ID);    
+    portalRequestContext.addUIComponentToUpdateByAjax(uiWorkingWS) ;    
+    portalRequestContext.setFullRender(true);
+  }
+  
+  
+//  This method just be called in search case
+//  /**
+//   * Get node view by publication lifecycle and current mode
+//   * 
+//   * @param originalNode the original node
+//   * 
+//   * @return the node is got by publication lifecycle and current mode. Return original node if node doesn't join to any lifecycle.  
+//   */
+//  @Deprecated
+//  public static Node getNodeView(Node originalNode) {
+//  	Node realNode = null;
+//  	try{
+//  		if (originalNode.isNodeType("exo:taxonomyLink")) {
+//  			String uuid = originalNode.getProperty("exo:uuid").getString();
+//  			realNode = originalNode.getSession().getNodeByUUID(uuid);
+//  		} else {
+//  			realNode = originalNode;
+//  		}
+//  	} catch (Exception e) {
+//			return null;
+//		}
+//  	
+//  	try {
+//    	UIPortalApplication portalApplication = Util.getUIPortalApplication();
+//    	PublicationService publicationService = portalApplication.getApplicationComponent(PublicationService.class);
+//    	String lifecycleName = publicationService.getNodeLifecycleName(realNode);
+//      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
+//      HashMap<String,Object> context = new HashMap<String, Object>();    
+//      context.put(WCMComposer.FILTER_MODE, getCurrentMode());
+//      return publicationPlugin.getNodeView(realNode, context);
+//  	} catch (NotInPublicationLifecycleException e) {
+//  		return realNode;
+//  	} catch (Exception e) {
+//  		return null;
+//  	}
+//  }
+  
+  /**
+	 * Gets the viewable node by WCMComposer (depends on site mode)
+	 * @param repository the repository's name 
+	 * @param workspace the workspace's name
+	 * @param nodeIdentifier the node's path or node's UUID
+	 * @return the viewable node. Return <code>null</code> if <code>nodeIdentifier</code> is invalid
+	 * @see #getViewableNodeByComposer(String repository, String workspace, String nodeIdentifier, String version) getViewableNodeByComposer()
+	 */
+	public static Node getViewableNodeByComposer(String repository, String workspace, String nodeIdentifier) {
+		return getViewableNodeByComposer(repository, workspace, nodeIdentifier, null);
+	} 
+
+	/**
+	 * Gets the viewable node by WCMComposer (depends on site mode)
+	 * @param repository the repository's name 
+	 * @param workspace the workspace's name
+	 * @param nodeIdentifier the node's path or node's UUID
+	 * @param version the base version (e.g. <code>WCMComposer.BASE_VERSION</code>)
+	 * @return the viewable node. Return <code>null</code> if <code>nodeIdentifier</code> is invalid
+	 * @see #getViewableNodeByComposer(String repository, String workspace, String nodeIdentifier) getViewableNodeByComposer()
+	 * @see WCMComposer
+	 */
+	public static Node getViewableNodeByComposer(String repository, String workspace, String nodeIdentifier, String version) {
+		try {
+			HashMap<String, String> filters = new HashMap<String, String>();
+			filters.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
+			if (version != null) filters.put(WCMComposer.FILTER_VERSION, version);
+			return getService(WCMComposer.class).getContent(repository, workspace, nodeIdentifier, filters, getSessionProvider());
+		} catch (Exception e) {
+			return null;
+		}
+	}
+  
+  /**
+   * Gets the current mode of the site
+   * @return the current mode (e.g. <code>WCMComposer.MODE_EDIT</code>)
+   * @see WCMComposer
+   */
+  public static String getCurrentMode() {
+    Object isQuickEditable = Util.getPortalRequestContext().getRequest().getSession().getAttribute(TURN_ON_QUICK_EDIT);
+    if(isQuickEditable == null) return WCMComposer.MODE_LIVE;
+    boolean turnOnQuickEdit = Boolean.parseBoolean(isQuickEditable.toString()); 
+    return turnOnQuickEdit ? WCMComposer.MODE_EDIT : WCMComposer.MODE_LIVE;
+  }
+  
+  /**
+   * Check if the content is draft and current mode of the site is edit mode
+   * @param content the content node.  
+   * @return true, the content is draft and current mode is edit mode, otherwise return false.
+   */
+  public static boolean isShowDraft(Node content) {
+  	if (content == null) return false;
+  	try {
+  	  if(content.isNodeType("nt:frozenNode")) return false;
+  		WCMPublicationService wcmPublicationService = WCMCoreUtils.getService(WCMPublicationService.class);
+  		String contentState = wcmPublicationService.getContentState(content);
+  		boolean isDraftContent = false;
+  		if (PublicationDefaultStates.DRAFT.equals(contentState)) isDraftContent = true;
+  		boolean isShowDraft = false;
+  		if (WCMComposer.MODE_EDIT.equals(getCurrentMode())) isShowDraft = true;
+  		return isDraftContent && isShowDraft;
+		} catch (Exception e) {
+			return false;
+		}
+  }
+  
+  /**
+   * Check if the current mode of the site is edit mode
+   * @return true, if current mode is edit mode
+   */
+  public static boolean isShowQuickEdit() {
+  	try {
+  		boolean isEditMode = false;
+  		if (WCMComposer.MODE_EDIT.equals(getCurrentMode())) isEditMode = true;
+  		return isEditMode;
+		} catch (Exception e) {
+			return false;
+		}
+  }
+  
+  /**
+   * Check if the content is editable and current mode of the site is edit mode
+   * @param content the content node
+   * @return true if there is no content if the content is editable and current mode is edit mode
+   */
+  public static boolean isShowQuickEdit(Node content) {
+  	if (content == null) return true;
+  	try {
+  		boolean isEditMode = false;
+  		if (WCMComposer.MODE_EDIT.equals(getCurrentMode())) isEditMode = true;
+  		((ExtendedNode) content).checkPermission(PermissionType.SET_PROPERTY);
+  		((ExtendedNode) content).checkPermission(PermissionType.ADD_NODE);
+      ((ExtendedNode) content).checkPermission(PermissionType.REMOVE);
+  		return isEditMode;
+		} catch (Exception e) {
+			return false;
+		}
+  }
+  
+  /**
+   * Creates the popup window. Each portlet have a <code>UIPopupContainer</code>. <br/>
+   * Every <code>UIPopupWindow</code> created by this method is belong to this container.
+   * @param container the current container
+   * @param component the component which will be display as a popup
+   * @param popupWindowId the popup's ID
+   * @param width the width of the popup
+   * @param height the height of the popup
    * @throws Exception the exception
    */
   public static void createPopupWindow(UIContainer container, UIComponent component, String popupWindowId, int width, int height) throws Exception {
@@ -308,9 +317,8 @@ public class Utils {
   
   /**
    * Close popup window.
-   * 
-   * @param container the container
-   * @param popupWindowId the popup window id
+   * @param container the current container
+   * @param popupWindowId the popup's ID
    */
   public static void closePopupWindow(UIContainer container, String popupWindowId) {
     UIPopupContainer popupContainer = getPopupContainer(container);
@@ -319,9 +327,9 @@ public class Utils {
   
   /**
    * Update popup window.
-   * 
    * @param container the container
-   * @param popupWindowId the popup window id
+   * @param component the component which will be replace for the old one in the same popup
+   * @param popupWindowId the popup's ID
    */
   public static void updatePopupWindow(UIContainer container, UIComponent component, String popupWindowId) {
     UIPopupContainer popupContainer = getPopupContainer(container);
@@ -330,26 +338,8 @@ public class Utils {
   }
   
   /**
-   * Checks if is quick editmode.
-   * 
-   * @param container the container
-   * @param popupWindowId the popup window id
-   * 
-   * @return true, if is quick editmode
-   */
-  public static boolean isQuickEditMode(UIContainer container, String popupWindowId) {
-    UIPopupContainer popupContainer = getPopupContainer(container);
-    if (popupContainer == null) return false;
-    UIPopupWindow popupWindow = popupContainer.getChildById(popupWindowId);
-    if (popupWindow == null) return false;
-    return true;
-  }
-  
-  /**
    * Gets the popup container.
-   * 
-   * @param container the container
-   * 
+   * @param container the current container
    * @return the popup container
    */
   public static UIPopupContainer getPopupContainer(UIContainer container) {
@@ -360,11 +350,11 @@ public class Utils {
   
   /**
    * Creates the popup message.
-   * 
-   * @param container the container
-   * @param message the message
-   * @param args the args
-   * @param type the type
+   * @param container the current container
+   * @param message the message key
+   * @param args the arguments to show in the message 
+   * @param type the message's type (e.g. <code>ApplicationMessage.INFO</code>)
+   * @see ApplicationMessage
    */
   public static void createPopupMessage(UIContainer container, String message, Object[] args, int type) {
     UIApplication application = container.getAncestorOfType(UIApplication.class);
@@ -375,10 +365,7 @@ public class Utils {
 
   /**
    * Gets the service.
-   * 
-   * @param component the component
-   * @param clazz the clazz
-   * 
+   * @param clazz the class of the service
    * @return the service
    */
   public static <T> T getService(Class<T> clazz) {
@@ -388,23 +375,19 @@ public class Utils {
   
   /**
    * Gets the session provider.
-   * 
-   * @param component the component
-   * 
    * @return the session provider
+   * @see SessionProviderFactory
    */
-  public static SessionProvider getSessionProvider(UIComponent component) {
+  public static SessionProvider getSessionProvider() {
   	return SessionProviderFactory.createSessionProvider();
   }
   
   /**
-   * Gets the system provider.
-   * 
-   * @param component the component
-   * 
-   * @return the system provider
+   * Gets the system session provider.
+   * @return the system session provider
+   * @see SessionProviderFactory
    */
-  public static SessionProvider getSystemProvider(UIComponent component) {
+  public static SessionProvider getSystemProvider() {
     return SessionProviderFactory.createSystemProvider();
   }
 }

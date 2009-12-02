@@ -92,32 +92,30 @@ import org.exoplatform.webui.form.UIFormStringInput;
       @EventConfig(listeners = DialogFormActionListeners.RemoveDataActionListener.class)
     }
 )
-public class UIContentDialogForm extends UIDialogForm {
+public class UIContentDialogForm extends UIDialogForm  implements UIPopupComponent, UISelectable {
 
 	public static final String CONTENT_DIALOG_FORM_POPUP_WINDOW = "UIContentDialogFormPopupWindow";
 	public static final String FIELD_TAXONOMY = "categories";
 	public static final String TAXONOMY_CONTENT_POPUP_WINDOW = "UIContentPopupWindow";
 	private NodeLocation webcontentNodeLocation;
-	
 	private List<String> listTaxonomy = new ArrayList<String>();
-    private List<String> listTaxonomyName = new ArrayList<String>();
+  private List<String> listTaxonomyName = new ArrayList<String>();
   
-    public List<String> getListTaxonomy() {
-      return listTaxonomy;
-    }
+  public List<String> getListTaxonomy() {
+    return listTaxonomy;
+  }
   
-    public List<String> getlistTaxonomyName() {
-      return listTaxonomyName;
-    }
+  public List<String> getlistTaxonomyName() {
+    return listTaxonomyName;
+  }
   
-    public void setListTaxonomy(List<String> listTaxonomyNew) {
-      listTaxonomy = listTaxonomyNew;
-    }
+  public void setListTaxonomy(List<String> listTaxonomyNew) {
+    listTaxonomy = listTaxonomyNew;
+  }
   
-    public void setListTaxonomyName(List<String> listTaxonomyNameNew) {
-      listTaxonomyName = listTaxonomyNameNew;
-    }
-	
+  public void setListTaxonomyName(List<String> listTaxonomyNameNew) {
+    listTaxonomyName = listTaxonomyNameNew;
+  }
 	private Class<? extends UIContentDialogPreference> preferenceComponent;
 	
 	public NodeLocation getWebcontentNodeLocation() {
@@ -127,7 +125,7 @@ public class UIContentDialogForm extends UIDialogForm {
 	public void setWebcontentNodeLocation(NodeLocation webcontentNodeLocation) {
 		this.webcontentNodeLocation = webcontentNodeLocation;
 	}
-
+	
 	public Class<? extends UIContentDialogPreference> getPreferenceComponent() {
 		return preferenceComponent;
 	}
@@ -164,48 +162,6 @@ public class UIContentDialogForm extends UIDialogForm {
 
   public Node getCurrentNode() {
     return NodeLocation.getNodeByLocation(webcontentNodeLocation);
-  }
-  
-  private boolean checkCategories(UIContentDialogForm contentDialogForm) {
-    String categoriesPath = "";
-    String[] categoriesPathList = null;
-    int index = 0;
-    if (contentDialogForm.isReference) {
-      UIFormMultiValueInputSet uiSet = contentDialogForm.getChild(UIFormMultiValueInputSet.class);
-      if((uiSet != null) && (uiSet.getName() != null) && uiSet.getName().equals(FIELD_TAXONOMY)) {
-        List<UIComponent> listChildren = uiSet.getChildren();         
-        for (UIComponent component : listChildren) {
-          UIFormStringInput uiStringInput = (UIFormStringInput)component;          
-          if(uiStringInput.getValue() != null) {
-            String value = uiStringInput.getValue().trim();            
-            categoriesPath += value + ",";
-          }
-        }
-        if (categoriesPath != null && categoriesPath.length() > 0) {
-          try {
-            if (categoriesPath.endsWith(",")) {
-              categoriesPath = categoriesPath.substring(0, categoriesPath.length()-1).trim();
-              if(categoriesPath.trim().length() == 0) {
-                return true;
-              }
-            }
-            categoriesPathList = categoriesPath.split(",");
-            if ((categoriesPathList == null) || (categoriesPathList.length == 0)) {
-              return true;
-            }
-            for (String categoryPath : categoriesPathList) {
-              index = categoryPath.indexOf("/");
-              if (index < 0) {
-                return true;
-              }
-            }
-          } catch (Exception e) {
-            return true;
-          }
-        }
-      }
-    }
-    return false;
   }
   
   /* (non-Javadoc)
@@ -311,7 +267,7 @@ public class UIContentDialogForm extends UIDialogForm {
           webContentNode.checkout();
         }
       	List<UIComponent> inputs = contentDialogForm.getChildren();
-		if(contentDialogForm.checkCategories(contentDialogForm)) {
+      	if(contentDialogForm.checkCategories(contentDialogForm)) {
       	  Utils.createPopupMessage(contentDialogForm, "UIContentDialogForm.msg.non-categories", null, ApplicationMessage.WARNING);
           return;
       	}
@@ -339,6 +295,48 @@ public class UIContentDialogForm extends UIDialogForm {
     }
   }
   
+  private boolean checkCategories(UIContentDialogForm contentDialogForm) {
+    String categoriesPath = "";
+    String[] categoriesPathList = null;
+    int index = 0;
+    if (contentDialogForm.isReference) {
+      UIFormMultiValueInputSet uiSet = contentDialogForm.getChild(UIFormMultiValueInputSet.class);
+      if((uiSet != null) && (uiSet.getName() != null) && uiSet.getName().equals(FIELD_TAXONOMY)) {
+        List<UIComponent> listChildren = uiSet.getChildren();         
+        for (UIComponent component : listChildren) {
+          UIFormStringInput uiStringInput = (UIFormStringInput)component;          
+          if(uiStringInput.getValue() != null) {
+            String value = uiStringInput.getValue().trim();            
+            categoriesPath += value + ",";
+          }
+        }
+        if (categoriesPath != null && categoriesPath.length() > 0) {
+          try {
+            if (categoriesPath.endsWith(",")) {
+              categoriesPath = categoriesPath.substring(0, categoriesPath.length()-1).trim();
+              if(categoriesPath.trim().length() == 0) {
+                return true;
+              }
+            }
+            categoriesPathList = categoriesPath.split(",");
+            if ((categoriesPathList == null) || (categoriesPathList.length == 0)) {
+              return true;
+            }
+            for (String categoryPath : categoriesPathList) {
+              index = categoryPath.indexOf("/");
+              if (index < 0) {
+                return true;
+              }
+            }
+          } catch (Exception e) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+  
   /**
    * The listener interface for receiving fastPublishAction events.
    * The class that is interested in processing a cancelAction
@@ -363,10 +361,10 @@ public class UIContentDialogForm extends UIDialogForm {
           webContentNode.checkout();
         }
       	List<UIComponent> inputs = contentDialogForm.getChildren();
-		if(contentDialogForm.checkCategories(contentDialogForm)) {
-      	  Utils.createPopupMessage(contentDialogForm, "UIContentDialogForm.msg.non-categories", null, ApplicationMessage.WARNING);
+      	if(contentDialogForm.checkCategories(contentDialogForm)) {
+          Utils.createPopupMessage(contentDialogForm, "UIContentDialogForm.msg.non-categories", null, ApplicationMessage.WARNING);
           return;
-      	}
+        }
       	Map<String, JcrInputProperty> inputProperties = DialogFormUtil.prepareMap(inputs, contentDialogForm.getInputProperties());
         CmsService cmsService = contentDialogForm.getApplicationComponent(CmsService.class);
         cmsService.storeNode(contentDialogForm.contentType, contentDialogForm.getNode().getParent(), inputProperties, contentDialogForm.isAddNew, contentDialogForm.repositoryName);
@@ -427,7 +425,7 @@ public class UIContentDialogForm extends UIDialogForm {
               String rootTreePath = nodeHierarchyCreator.getJcrPath(BasePath.TAXONOMIES_TREE_STORAGE_PATH);
               RepositoryService repositoryService = (RepositoryService)contentDialogForm.getApplicationComponent(RepositoryService.class);
               ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-              Session session = Utils.getSessionProvider(contentDialogForm).getSession(workspaceName, manageableRepository);
+              Session session = Utils.getSessionProvider().getSession(workspaceName, manageableRepository);
               Node rootTree = (Node) session.getItem(rootTreePath);
               NodeIterator childrenIterator = rootTree.getNodes();
               while (childrenIterator.hasNext()) {
@@ -437,7 +435,7 @@ public class UIContentDialogForm extends UIDialogForm {
               }
               uiOneTaxonomySelector.setRootNodeLocation(repository, workspaceName, rootTreePath);
               uiOneTaxonomySelector.setExceptedNodeTypesInPathPanel(new String[] {"exo:symlink"});
-              uiOneTaxonomySelector.init(Utils.getSystemProvider(contentDialogForm));
+              uiOneTaxonomySelector.init(Utils.getSessionProvider());
               String param = "returnField=" + FIELD_TAXONOMY;
               uiOneTaxonomySelector.setSourceComponent(contentDialogForm, new String[]{param});
               Utils.createPopupWindow(contentDialogForm, uiOneTaxonomySelector, TAXONOMY_CONTENT_POPUP_WINDOW, 700, 450);

@@ -7,7 +7,6 @@
  import javax.jcr.Value;
  import javax.servlet.http.HttpServletRequest;
  
- import org.exoplatform.ecm.webui.utils.Utils;
  import org.exoplatform.portal.application.PortalRequestContext;
  import org.exoplatform.portal.webui.portal.UIPortal;
  import org.exoplatform.portal.webui.util.Util;
@@ -15,7 +14,6 @@
  import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
  import org.exoplatform.wcm.webui.search.UISearchForm;
  import org.exoplatform.wcm.webui.search.UISearchPageLayout;
- import org.exoplatform.wcm.webui.Utils;
 %>
 
 <div id="$uicomponent.id" class="UIAdvanceSearchResultDefault">
@@ -67,9 +65,7 @@
     <%
    } else {
     for (ResultNode resultNode : currentPageData) {
-     Node node = resultNode.getNode();
-     Node viewNode = Utils.getNodeView(node);
-     if (viewNode == null) continue; 
+     Node viewNode = resultNode.getNode();
      def itemName = viewNode.getName();
      def itemTitle = uicomponent.getTitle(viewNode);
      if (itemTitle != null && itemTitle.trim().length() != 0) itemName = itemTitle;

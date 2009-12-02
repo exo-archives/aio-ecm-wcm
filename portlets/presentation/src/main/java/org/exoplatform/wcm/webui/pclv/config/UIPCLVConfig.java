@@ -339,7 +339,7 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
     String repository = manageableRepository.getConfiguration().getName();
-    List<Node> templateNodeList = templateManagerService.getTemplatesByCategory(repository, portletName, category, Utils.getSessionProvider(this));
+    List<Node> templateNodeList = templateManagerService.getTemplatesByCategory(repository, portletName, category, Utils.getSessionProvider());
     for (Node templateNode : templateNodeList) {
       String templateName = templateNode.getName();
       String templatePath = templateNode.getPath();

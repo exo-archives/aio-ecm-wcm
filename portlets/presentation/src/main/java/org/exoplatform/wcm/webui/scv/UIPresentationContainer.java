@@ -18,7 +18,6 @@ package org.exoplatform.wcm.webui.scv;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 
 import javax.jcr.Node;
 import javax.portlet.PortletPreferences;
@@ -119,31 +118,10 @@ public class UIPresentationContainer extends UIContainer{
 			String repository = preferences.getValue(UISingleContentViewerPortlet.REPOSITORY, null);    
 			String workspace = preferences.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
 			String nodeIdentifier = preferences.getValue(UISingleContentViewerPortlet.IDENTIFIER, null) ;
-
-			HashMap<String,String> filters = new HashMap<String, String>();
-			filters.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
-
-			WCMComposer wcmComposer = getApplicationComponent(WCMComposer.class);
-			Node viewNode = wcmComposer.getContent(repository, workspace, nodeIdentifier, filters, Utils.getSessionProvider(this));
+			Node viewNode = Utils.getViewableNodeByComposer(repository, workspace, nodeIdentifier);
 			presentation.setNode(viewNode);
-			filters.put(WCMComposer.FILTER_VERSION, WCMComposer.BASE_VERSION);
-			Node orgNode = wcmComposer.getContent(repository, workspace, nodeIdentifier, filters, Utils.getSessionProvider(this));
+			Node orgNode = Utils.getViewableNodeByComposer(repository, workspace, nodeIdentifier, WCMComposer.BASE_VERSION);
 			presentation.setOriginalNode(orgNode);
-			/*
-  		WCMService wcmService = getApplicationComponent(WCMService.class);
-  		Node originalNode = wcmService.getReferencedContent(Utils.getSessionProvider(this), repository, workspace, nodeIdentifier);
-  		Node viewNode = Utils.getNodeView(originalNode);
-  		// Set original node for UIBaseNodePresentation (in case nodeView is a version node)
-  		UIPresentation presentation = getChild(UIPresentation.class);
-  		if (viewNode != null && viewNode.isNodeType("nt:frozenNode")) {
-  			String nodeUUID = viewNode.getProperty("jcr:frozenUuid").getString();
-  			presentation.setOriginalNode(viewNode.getSession().getNodeByUUID(nodeUUID));
-  			presentation.setNode(viewNode);
-  		} else {
-  			presentation.setOriginalNode(viewNode);
-  			presentation.setNode(viewNode);
-  		}
-			 */
 			return viewNode;
 		} catch (Exception e) {
 			return null;

@@ -100,12 +100,12 @@ public class UINewsletterEntryContainer extends UIContainer {
     newsletterEntryForm.setWorkspace(newsletterManagerService.getWorkspaceName());
     if(this.newsletterPath == null){
       NewsletterTemplateHandler newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
-      this.newsletterPath = newsletterTemplateHandler.getTemplate(Utils.getSessionProvider(this), NewsLetterUtil.getPortalName(), categoryConfig, null).getPath();
+      this.newsletterPath = newsletterTemplateHandler.getTemplate(Utils.getSessionProvider(), NewsLetterUtil.getPortalName(), categoryConfig, null).getPath();
       newsletterEntryForm.addNew(true);
     }else{
       UIFormDateTimeInput dateTimeInput = newsletterEntryDialogSelector.getChild(UIFormDateTimeInput.class);
       Calendar calendar = dateTimeInput.getCalendar().getInstance();
-      calendar.setTime(newsletterManagerService.getEntryHandler().getNewsletterEntryByPath(Utils.getSessionProvider(this), this.newsletterPath).getNewsletterSentDate());
+      calendar.setTime(newsletterManagerService.getEntryHandler().getNewsletterEntryByPath(Utils.getSessionProvider(), this.newsletterPath).getNewsletterSentDate());
       dateTimeInput.setCalendar(calendar);
       newsletterEntryForm.addNew(false);
     }

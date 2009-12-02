@@ -139,7 +139,7 @@ public class UISubscriptions extends UIForm {
   @SuppressWarnings("unused")
   private int getNumberOfUser(String subscriptionName){
     return userHandler.getQuantityUserBySubscription(
-                                                     Utils.getSessionProvider(this),
+                                                     Utils.getSessionProvider(),
                                                      portalName,
                                                      this.categoryConfig.getName(),
                                                      subscriptionName);
@@ -155,14 +155,14 @@ public class UISubscriptions extends UIForm {
     List<NewsletterSubscriptionConfig> listSubs = new ArrayList<NewsletterSubscriptionConfig>();
     try{
       if(isAdmin || isModerator){
-        listSubs = subscriptionHandler.getSubscriptionsByCategory(Utils.getSessionProvider(this), 
+        listSubs = subscriptionHandler.getSubscriptionsByCategory(Utils.getSessionProvider(), 
                                                                   NewsLetterUtil.getPortalName(), 
                                                                   this.categoryConfig.getName());
       } else {
         listSubs = subscriptionHandler.getSubscriptionByRedactor(NewsLetterUtil.getPortalName(), 
                                                                  this.categoryConfig.getName(), 
                                                                  NewsLetterUtil.getCurrentUser(), 
-                                                                 Utils.getSessionProvider(this));
+                                                                 Utils.getSessionProvider());
       }
       init(listSubs);
     }catch(Exception e){
@@ -181,7 +181,7 @@ public class UISubscriptions extends UIForm {
   @SuppressWarnings("unused")
   private long getNumberOfWaitingNewsletter(String subscriptionName){
     try{
-      return subscriptionHandler.getNumberOfNewslettersWaiting(Utils.getSessionProvider(this), portalName, this.categoryConfig.getName(), subscriptionName);
+      return subscriptionHandler.getNumberOfNewslettersWaiting(Utils.getSessionProvider(), portalName, this.categoryConfig.getName(), subscriptionName);
     }catch(Exception ex){
       return 0;
     }
@@ -280,7 +280,7 @@ public class UISubscriptions extends UIForm {
       UISubscriptions subsriptions = event.getSource();
       NewsletterManagerService newsletterManagerService = subsriptions.getApplicationComponent(NewsletterManagerService.class);
       NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
-      categoryHandler.delete(Utils.getSessionProvider(subsriptions), NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName());
+      categoryHandler.delete(Utils.getSessionProvider(), NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName());
       UINewsletterManagerPortlet newsletterManagerPortlet = subsriptions.getAncestorOfType(UINewsletterManagerPortlet.class);
       UICategories categories = newsletterManagerPortlet.getChild(UICategories.class);
       categories.setRendered(true);
@@ -343,7 +343,7 @@ public class UISubscriptions extends UIForm {
       }
       UISubcriptionForm subcriptionForm = subsriptions.createUIComponent(UISubcriptionForm.class, null, null);
       NewsletterSubscriptionConfig subscriptionConfig 
-      = subsriptions.subscriptionHandler.getSubscriptionsByName(Utils.getSessionProvider(subsriptions), NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(), subId);
+      = subsriptions.subscriptionHandler.getSubscriptionsByName(Utils.getSessionProvider(), NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(), subId);
       subcriptionForm.setSubscriptionInfor(subscriptionConfig, subsriptions.isAdmin);
       Utils.createPopupWindow(subsriptions, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 500, 350);
     }
@@ -375,7 +375,7 @@ public class UISubscriptions extends UIForm {
         checkbox = (UIFormCheckBoxInput<Boolean>)component;
         if(checkbox.isChecked()){
           isChecked = true;
-          SessionProvider sessionProvider = Utils.getSessionProvider(subsriptions);
+          SessionProvider sessionProvider = Utils.getSessionProvider();
           NewsletterSubscriptionConfig subscriptionConfig = 
             subsriptions.subscriptionHandler.getSubscriptionsByName(sessionProvider, portalName, subsriptions.categoryConfig.getName(), checkbox.getName());
           if (subscriptionConfig != null) {
@@ -427,7 +427,7 @@ public class UISubscriptions extends UIForm {
       UINewsletterManagerPortlet newsletterManagerPortlet = uiSubscription.getAncestorOfType(UINewsletterManagerPortlet.class);
       UINewsletterEntryManager newsletterManager = newsletterManagerPortlet.getChild(UINewsletterEntryManager.class);
       newsletterManager.setRendered(true);
-      SessionProvider sessionProvider = Utils.getSessionProvider(uiSubscription);
+      SessionProvider sessionProvider = Utils.getSessionProvider();
       newsletterManager.setCategoryConfig(
                         uiSubscription.categoryHandler.getCategoryByName(
                                                                          sessionProvider, 
@@ -468,7 +468,7 @@ public class UISubscriptions extends UIForm {
       UINewsletterManagerPortlet newsletterManagerPortlet = uiSubscriptions.getAncestorOfType(UINewsletterManagerPortlet.class);
       UINewsletterEntryManager newsletterManager = newsletterManagerPortlet.getChild(UINewsletterEntryManager.class);
       newsletterManager.setRendered(true);
-      SessionProvider sessionProvider = Utils.getSessionProvider(uiSubscriptions);
+      SessionProvider sessionProvider = Utils.getSessionProvider();
       newsletterManager.setCategoryConfig(
                         uiSubscriptions.categoryHandler.getCategoryByName(
                                                                           sessionProvider, 

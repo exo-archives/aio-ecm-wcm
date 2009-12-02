@@ -83,8 +83,7 @@ public class UIPCVPresentation extends UIBaseNodePresentation {
    */
   @Override
   public Node getNode() throws Exception {
-	  return Utils.getNodeView(contentNodeLocation.getRepository(), contentNodeLocation.getWorkspace(), contentNodeLocation.getPath());
-//    return NodeLocation.getNodeByLocation(contentNodeLocation);
+	  return Utils.getViewableNodeByComposer(contentNodeLocation.getRepository(), contentNodeLocation.getWorkspace(), contentNodeLocation.getPath());
   }
 
   /* (non-Javadoc)
@@ -92,8 +91,7 @@ public class UIPCVPresentation extends UIBaseNodePresentation {
    */
   @Override
   public Node getOriginalNode() throws Exception {
-	  return Utils.getNodeView(originalNodeLocation.getRepository(), originalNodeLocation.getWorkspace(), originalNodeLocation.getPath(), WCMComposer.BASE_VERSION);
-//    return NodeLocation.getNodeByLocation(originalNodeLocation);
+	  return Utils.getViewableNodeByComposer(originalNodeLocation.getRepository(), originalNodeLocation.getWorkspace(), originalNodeLocation.getPath(), WCMComposer.BASE_VERSION);
   }
   
   /**
@@ -207,13 +205,13 @@ public class UIPCVPresentation extends UIBaseNodePresentation {
   	return null;
   }
 
-public UIComponent getRemoveAttach() throws Exception {
-	// TODO Auto-generated method stub
-	return null;
-}
-
-public UIComponent getRemoveComment() throws Exception {
-	// TODO Auto-generated method stub
-	return null;
-}
+  public UIComponent getRemoveAttach() throws Exception {
+  	// TODO Auto-generated method stub
+  	return null;
+  }
+  
+  public UIComponent getRemoveComment() throws Exception {
+  	// TODO Auto-generated method stub
+  	return null;
+  }
 }

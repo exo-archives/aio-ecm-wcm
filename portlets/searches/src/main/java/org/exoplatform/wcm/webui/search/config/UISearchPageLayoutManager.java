@@ -238,7 +238,7 @@ public class UISearchPageLayoutManager extends UIForm  implements UISelectable {
 		List<Node> templateNodeList = templateManagerService.getTemplatesByCategory(repository,
 																																								portletName,
 																																								category,
-																																								Utils.getSessionProvider(this));
+																																								Utils.getSessionProvider());
 		for (Node templateNode : templateNodeList) {
 			String templateName = templateNode.getName();
 			String templatePath = templateNode.getPath();

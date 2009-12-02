@@ -419,7 +419,7 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
                                                                                 repository,
                                                                                 portletName,
                                                                                 category,
-                                                                                Utils.getSessionProvider(this));
+                                                                                Utils.getSessionProvider());
     for (Node templateNode : templateNodeList) {
       String templateName = templateNode.getName();
       String templatePath = templateNode.getPath();
@@ -609,7 +609,7 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
   throws Exception {
   	RepositoryService repositoryService = (RepositoryService)getApplicationComponent(RepositoryService.class);
   	ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-  	Session session = Utils.getSessionProvider(this).getSession(workspaceName, manageableRepository);
+  	Session session = Utils.getSessionProvider().getSession(workspaceName, manageableRepository);
   	WCMPublicationService publicationService = this.getApplicationComponent(WCMPublicationService.class);
   	String pageId = Util.getUIPortal().getSelectedNode().getPageReference();
   	UserPortalConfigService upcService = getApplicationComponent(UserPortalConfigService.class);
@@ -645,7 +645,7 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
   throws Exception {
   	RepositoryService repositoryService = (RepositoryService)getApplicationComponent(RepositoryService.class);
   	ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-  	Session session = Utils.getSessionProvider(this).getSession(workspaceName, manageableRepository);
+  	Session session = Utils.getSessionProvider().getSession(workspaceName, manageableRepository);
   	WCMPublicationService publicationService = this.getApplicationComponent(WCMPublicationService.class);
   	String pageId = Util.getUIPortal().getSelectedNode().getPageReference();
   	UserPortalConfigService upcService = getApplicationComponent(UserPortalConfigService.class);

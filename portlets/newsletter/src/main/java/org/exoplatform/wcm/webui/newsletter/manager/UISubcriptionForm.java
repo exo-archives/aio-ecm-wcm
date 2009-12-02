@@ -204,7 +204,7 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent, UISel
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     categoryHandler = newsletterManagerService.getCategoryHandler();
     try{
-      return categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), Utils.getSessionProvider(this));
+      return categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), Utils.getSessionProvider());
     }catch(Exception e){
       return new ArrayList<NewsletterCategoryConfig>();
     }
@@ -243,7 +243,7 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent, UISel
 
       NewsletterSubscriptionHandler subscriptionHandler = newsletterManagerService.getSubscriptionHandler();
       NewsletterSubscriptionConfig newsletterSubscriptionConfig = null;
-      SessionProvider sessionProvider = Utils.getSessionProvider(uiSubcriptionForm);
+      SessionProvider sessionProvider = Utils.getSessionProvider();
       UIFormInputSetWithAction inputSetWithAction = uiSubcriptionForm.getChildById(FORM_SUBSCRIPTION_REDACTOR);
       UIFormStringInput inputModerator = inputSetWithAction.getChildById(SELECT_REDACTOR);
       

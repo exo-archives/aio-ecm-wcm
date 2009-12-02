@@ -18,9 +18,7 @@ package org.exoplatform.services.wcm.newsletter.handler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -79,7 +77,6 @@ public class NewsletterCategoryHandler {
    * 
    * @throws Exception the exception
    */
-  @SuppressWarnings("unchecked")
   protected NewsletterCategoryConfig getCategoryFromNode(Node categoryNode) throws Exception{
   	NewsletterCategoryConfig categoryConfig = null;
   	categoryConfig = new NewsletterCategoryConfig();

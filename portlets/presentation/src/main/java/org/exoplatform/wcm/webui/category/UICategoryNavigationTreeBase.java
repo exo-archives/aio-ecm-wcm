@@ -37,7 +37,6 @@ import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
-import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;

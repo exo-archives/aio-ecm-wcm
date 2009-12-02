@@ -156,7 +156,7 @@ public class UINameWebContentForm extends UIForm {
       UIApplication uiApplication = uiNameWebContentForm.getAncestorOfType(UIApplication.class);
       String portalName = Util.getUIPortal().getName();
       LivePortalManagerService livePortalManagerService = uiNameWebContentForm.getApplicationComponent(LivePortalManagerService.class);
-      Node portalNode = livePortalManagerService.getLivePortal(Utils.getSessionProvider(uiNameWebContentForm), portalName);
+      Node portalNode = livePortalManagerService.getLivePortal(Utils.getSessionProvider(), portalName);
       WebSchemaConfigService webSchemaConfigService = uiNameWebContentForm.getApplicationComponent(WebSchemaConfigService.class);
       PortalFolderSchemaHandler handler = webSchemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
       Node webContentStorage = handler.getWebContentStorage(portalNode);

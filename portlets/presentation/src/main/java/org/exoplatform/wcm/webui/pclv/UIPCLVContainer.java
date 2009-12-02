@@ -307,51 +307,13 @@ public class UIPCLVContainer extends UIContainer {
 		String orderBy = portletPreferences.getValue(UIPCLVPortlet.ORDER_BY, "");
 		if ("".equals(orderType)) orderType = "DESC";
 		if ("".equals(orderBy)) orderBy = "exo:dateCreated";
-
-                WCMComposer wcmComposer = getApplicationComponent(WCMComposer.class);
-                HashMap<String, String> filters = new HashMap<String, String>();
-                filters.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
-                filters.put(WCMComposer.FILTER_ORDER_BY, orderBy);
-                filters.put(WCMComposer.FILTER_ORDER_TYPE, orderType);
-                filters.put(WCMComposer.FILTER_PRIMARY_TYPE, "exo:taxonomyLink");
-
-                List<Node> nodes = wcmComposer.getContents(
-                                               repository,
-                                               workspace,
-                                               categoryPath,
-                                               filters,
-                                               Utils.getSessionProvider(this));
-
-
+    WCMComposer wcmComposer = getApplicationComponent(WCMComposer.class);
+    HashMap<String, String> filters = new HashMap<String, String>();
+    filters.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
+    filters.put(WCMComposer.FILTER_ORDER_BY, orderBy);
+    filters.put(WCMComposer.FILTER_ORDER_TYPE, orderType);
+    filters.put(WCMComposer.FILTER_PRIMARY_TYPE, "exo:taxonomyLink");
+    List<Node> nodes = wcmComposer.getContents(repository, workspace, categoryPath, filters, Utils.getSessionProvider());
 		return nodes;
-		}
-	
-	/**
-	 * Gets the node view.
-	 * 
-	 * @param node the node
-	 * 
-	 * @return the node view
-	 * 
-	 * @throws Exception the exception
-	 */
-	/*
-	private Node getNodeView(Node node) throws Exception {
-    PublicationService publicationService = getApplicationComponent(PublicationService.class);
-    HashMap<String, Object> context = new HashMap<String, Object>();
-    context.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
-    String lifecyleName = null;
-      try {
-        lifecyleName = publicationService.getNodeLifecycleName(node);
-      } catch (NotInPublicationLifecycleException e) {
-        // You shouldn't throw popup message, because some exception often rise here.
 	}
-    if (lifecyleName == null) return node;
-	
-    PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
-      .get(lifecyleName);
-    Node viewNode = publicationPlugin.getNodeView(node, context);
-    return viewNode;
-  }
-  */
 }

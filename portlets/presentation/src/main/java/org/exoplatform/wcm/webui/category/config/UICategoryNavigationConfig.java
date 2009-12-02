@@ -157,7 +157,7 @@ public class UICategoryNavigationConfig extends UIForm implements UISelectable {
                                                                                         repository,
                                                                                         portletName,
                                                                                         templateCategory,
-                                                                                        Utils.getSessionProvider(this));
+                                                                                        Utils.getSessionProvider());
     for (Node templateNode : templateNodes) {
       String templateName = templateNode.getName();
       String templatePath = templateNode.getPath();
