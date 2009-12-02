@@ -20,7 +20,6 @@
 		<module>component/publication</module>
 		<module>component/search</module>
 		<module>component/newsletter</module>
-		<module>ext/publication</module>
 		<module>webui/wcm</module>
 		<module>portlets/presentation</module>
 		<module>portlets/searches</module>
