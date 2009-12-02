@@ -139,6 +139,7 @@ public class UIPresentationContainer extends UIContainer{
 		String repository = preferences.getValue(UISingleContentViewerPortlet.REPOSITORY, null);    
 		String workspace = preferences.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
 		String path = preferences.getValue(UISingleContentViewerPortlet.IDENTIFIER, null) ;
+		if (!path.startsWith("/")) path = "/" + path;
 
 		String portalURI = Util.getPortalRequestContext().getPortalURI();
 		WCMConfigurationService wcmConfigurationService = getApplicationComponent(WCMConfigurationService.class);
