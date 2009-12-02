@@ -78,6 +78,7 @@ public class UIRemoveModerators extends UIForm {
       UIFormCheckBoxInput<Boolean> checkBoxInput;
       String result = "";
       boolean isChecked = false;
+      // Get all permissions which are not checked to remove
       for(String str : removeModerators.listModerators){
         checkBoxInput = removeModerators.getChildById(str);
         if(!checkBoxInput.isChecked()){
@@ -88,11 +89,16 @@ public class UIRemoveModerators extends UIForm {
         }
       }
       UIApplication uiApp = removeModerators.getAncestorOfType(UIApplication.class);
+      
+      // if untick any permission then view waring  and stop processing 
       if(!isChecked){
         uiApp.addMessage(new ApplicationMessage("UIRemoveModeratorsFormPopupWindow.msg.checkToRemove", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
+      
+      // if current user is not admin of newsletterManager portle and in list permision don't have him selt 
+      // then view waring and stop processing 
       if(!removeModerators.isAdmin){
         boolean havePermission = false;
         List<String> listGrouptMembers = NewsLetterUtil.getAllGroupAndMembershipOfCurrentUser();
@@ -108,13 +114,18 @@ public class UIRemoveModerators extends UIForm {
           return;
         }
       }
+      
       UIPopupContainer popupContainer = (UIPopupContainer)removeModerators.getAncestorOfType(UIPopupContainer.class);
       UIFormInputSetWithAction formInputSetWithAction;
       String inputId;
+      
+      //If now is modifying for Category then update for category form
       if(removeModerators.setForCategoryForm) {
         UICategoryForm componentForm = popupContainer.findFirstComponentOfType(UICategoryForm.class);
         formInputSetWithAction = (UIFormInputSetWithAction)componentForm.getChildById(UICategoryForm.FORM_CATEGORY_MODERATOR);
         inputId = UICategoryForm.INPUT_CATEGORY_MODERATOR;
+        
+      // if now is modifying for subscription then update for subscriptionForm
       } else {
         UISubcriptionForm componentForm = popupContainer.findFirstComponentOfType(UISubcriptionForm.class);
         formInputSetWithAction = (UIFormInputSetWithAction)componentForm.getChildById(UISubcriptionForm.FORM_SUBSCRIPTION_REDACTOR);
