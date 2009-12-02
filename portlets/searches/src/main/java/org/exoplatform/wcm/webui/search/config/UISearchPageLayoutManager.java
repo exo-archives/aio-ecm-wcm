@@ -51,7 +51,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
  */
 @ComponentConfig(
 	lifecycle = UIFormLifecycle.class, 
-	template = "app:/groovy/webui/wcm-search/config/UISearchPageLayoutManager.gtmpl", 
+	template = "app:/groovy/webui/search/config/UISearchPageLayoutManager.gtmpl", 
 	events = {
 		@EventConfig(listeners = UISearchPageLayoutManager.SaveActionListener.class),
 		@EventConfig(listeners = UISearchPageLayoutManager.SelectBasePathActionListener.class),
