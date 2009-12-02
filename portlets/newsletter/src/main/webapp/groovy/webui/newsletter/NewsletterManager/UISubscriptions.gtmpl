@@ -19,28 +19,30 @@ if(uicomponent.categoryConfig != null){
 			<a class="UnSelected"><%=uicomponent.categoryConfig.getTitle()%></a>
 		</div>
 		
-		<div class="LeftActionBar">
-			<div class="RightActionBar">
-				<div class="CenterActionBar">
-					<div class="NewsletterActionBar">			
-						<%
-						if(uicomponent.isAdmin || uicomponent.isModerator){%>
-							<div class="Line FloatLeft">
-								<a href="javaScript:void(0);" onclick="<%=uicomponent.event("AddEntry")%>" class="Newsletter">
-									<%=_ctx.appRes("UICategories.title.NewsLetter")%>
-								</a>
-							</div>
-							<div class="Line FloatLeft">
-								<a href="javaScript:void(0);" onclick="<%=uicomponent.event("AddSubcription")%>" class="NewsSubcript">
-									<%=_ctx.appRes("UICategories.title.NewsSubscription")%>
-								</a>
-							</div>
-						<%
-						}%>
+		<%
+		if(uicomponent.isAdmin || uicomponent.isModerator){%>
+			<div class="LeftActionBar">
+				<div class="RightActionBar">
+					<div class="CenterActionBar">
+						<div class="NewsletterActionBar">			
+								<div class="Line FloatLeft">
+									<a href="javaScript:void(0);" onclick="<%=uicomponent.event("AddEntry")%>" class="Newsletter">
+										<%=_ctx.appRes("UICategories.title.NewsLetter")%>
+									</a>
+								</div>
+								<div class="Line FloatLeft">
+									<a href="javaScript:void(0);" onclick="<%=uicomponent.event("AddSubcription")%>" class="NewsSubcript">
+										<%=_ctx.appRes("UICategories.title.NewsSubscription")%>
+									</a>
+								</div>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		<%
+		}else{%>
+			<div style="margin-top: 20px;"><span></span></div>
+	<%}%>
 		
 		
 		<div class="UICategories">
