@@ -33,6 +33,7 @@ import org.exoplatform.ecm.webui.utils.Utils;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
+import org.exoplatform.ecm.utils.text.Text;
 import org.exoplatform.services.cms.BasePath;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -428,24 +429,6 @@ public class UISelectPathPanel extends UIContainer {
     return nodeHierarchyCreator.getJcrPath(BasePath.TAXONOMIES_TREE_STORAGE_PATH);
   }
   
-  private String escapeIllegalJcrChars(String name) {
-    StringBuffer buffer = new StringBuffer(name.length() * 2);
-    for (int i = 0; i < name.length(); i++) {
-      char ch = name.charAt(i);
-      if (ch == '%' || ch == '/' || ch == ':' || ch == '[' || ch == ']' || ch == '&' || ch == '#' 
-        || ch == '*' || ch == '@' || ch == '\'' || ch == '"' || ch == '|' 
-          || (ch == '.' && name.length() < 3) || (ch == ' ' && (i == 0 || i == name.length() - 1)) 
-          || ch == '\t' || ch == '\r' || ch == '\n') {
-        buffer.append('%');
-        buffer.append(Character.toUpperCase(Character.forDigit(ch / 16, 16)));
-        buffer.append(Character.toUpperCase(Character.forDigit(ch % 16, 16)));
-      } else {
-        buffer.append(ch);
-      }
-    }
-    return buffer.toString();
-  }
-
   /**
    * The listener interface for receiving selectAction events.
    * The class that is interested in processing a selectAction
@@ -463,7 +446,7 @@ public class UISelectPathPanel extends UIContainer {
       UIContainer uiTreeSelector = uiSelectPathPanel.getParent();
       String value = event.getRequestContext().getRequestParameter(OBJECTID);
       String[] values = value.split("/");
-      value = value.replaceAll(values[values.length - 1], uiSelectPathPanel.escapeIllegalJcrChars(values[values.length - 1]));
+      value = value.replaceAll(values[values.length - 1], Text.escapeIllegalJcrChars(values[values.length - 1]));
       if(uiTreeSelector instanceof UIOneNodePathSelector) {
         if(!((UIOneNodePathSelector)uiTreeSelector).isDisable()) {
           value = ((UIOneNodePathSelector)uiTreeSelector).getWorkspaceName() + ":" + value ;
