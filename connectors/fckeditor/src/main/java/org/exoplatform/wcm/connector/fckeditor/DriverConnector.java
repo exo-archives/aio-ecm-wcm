@@ -27,6 +27,7 @@ import java.util.Set;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -89,6 +90,9 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
   
   /** The Constant FILE_TYPE_MEDIAS. */
   public static final String FILE_TYPE_MEDIAS                       = "Medias"; 
+  
+  /** The Constant MEDIA_MIMETYPE. */
+  public static final String[] MEDIA_MIMETYPE = new String[]{"application", "image", "audio", "video"};
   
   /** The log. */
   private static Log log = ExoLogger.getLogger(DriverConnector.class);
@@ -493,61 +497,89 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    * @param command the command
    * @param repositoryName the repository name
    * @param filterBy the filter by
-   * @param session
+   * @param session the session
    * 
    * @return the response
    * 
    * @throws Exception the exception
    */
   private Response buildXMLResponseForChildren(Node node, String command, String repositoryName, String filterBy, Session session) throws Exception {
-    Element rootElement = FCKUtils.createRootElement(command, node, folderHandler.getFolderType(node));
-    NodeList nodeList = rootElement.getElementsByTagName("CurrentFolder");
-    Element currentFolder = (Element) nodeList.item(0);
-    createAtributeUpload(currentFolder, true);
-    Document document = rootElement.getOwnerDocument();
-    Element folders = document.createElement("Folders");
-    createAtributeUpload(folders, true);
-    Element files = document.createElement("Files");
-    createAtributeUpload(files, true);
-    Node sourceNode = null;
-    Node checkNode = null;
-    
-    for (NodeIterator iterator = node.getNodes(); iterator.hasNext();) {
-      Node child = iterator.nextNode();
-      
-      if (child.isNodeType(FCKUtils.EXO_HIDDENABLE))
-        continue;
-      
-      if(child.isNodeType("exo:symlink") && child.hasProperty("exo:uuid")) {
-      	sourceNode = session.getNodeByUUID(child.getProperty("exo:uuid").getString());
-      }
+  	Element rootElement = FCKUtils.createRootElement(command, node, folderHandler.getFolderType(node));
+  	NodeList nodeList = rootElement.getElementsByTagName("CurrentFolder");
+  	Element currentFolder = (Element) nodeList.item(0);
+  	createAtributeUpload(currentFolder, true);
+  	Document document = rootElement.getOwnerDocument();
+  	Element folders = document.createElement("Folders");
+  	createAtributeUpload(folders, true);
+  	Element files = document.createElement("Files");
+  	createAtributeUpload(files, true);
+  	Node sourceNode = null;
+  	Node checkNode = null;
 
-      checkNode = sourceNode != null ? sourceNode : child;
-      
-      if (checkNode.isNodeType(NodetypeConstant.EXO_WEBCONTENT) && FILE_TYPE_WEBCONTENT.equals(filterBy)) {
-      	Element folder = createFolderElement(document, checkNode, checkNode.getPrimaryNodeType().getName(), child.getName());
-      	folders.appendChild(folder);
-      	Element file = FCKFileHandler.createFileElement(document, FILE_TYPE_WEBCONTENT, checkNode, child);
-      	files.appendChild(file);
-      } else if (checkNode.isNodeType(FCKUtils.NT_UNSTRUCTURED) || checkNode.isNodeType(FCKUtils.NT_FOLDER) || checkNode.isNodeType(NodetypeConstant.EXO_TAXONOMY)) {
-        Element folder = createFolderElement(document, checkNode, checkNode.getPrimaryNodeType().getName(), child.getName());
-        folders.appendChild(folder);
-      } else {
-      	String fileType = null;
-      	if (isDMSDocument(checkNode, repositoryName)&& FILE_TYPE_DMSDOC.equals(filterBy)) {
-      		fileType = FILE_TYPE_DMSDOC;
-      	} else if (FILE_TYPE_MEDIAS.equals(filterBy)){
-      		fileType = FILE_TYPE_MEDIAS;
-      	} 
-      	if (fileType != null) {
-      		Element file = FCKFileHandler.createFileElement(document, fileType, checkNode, child);
-      		files.appendChild(file);
-      	}
-      }
-    }
-    rootElement.appendChild(folders);
-    rootElement.appendChild(files);
-    return getResponse(document);
+  	for (NodeIterator iterator = node.getNodes(); iterator.hasNext();) {
+  		Node child = iterator.nextNode();
+  		String fileType = null;
+
+  		if (child.isNodeType(FCKUtils.EXO_HIDDENABLE))
+  			continue;
+
+  		if(child.isNodeType("exo:symlink") && child.hasProperty("exo:uuid")) {
+  			sourceNode = session.getNodeByUUID(child.getProperty("exo:uuid").getString());
+  		}
+
+  		checkNode = sourceNode != null ? sourceNode : child;
+
+  		if (isFolderAndIsNotWebContent(checkNode)) {
+  			Element folder = createFolderElement(
+  					document, checkNode, checkNode.getPrimaryNodeType().getName(), child.getName());
+  			folders.appendChild(folder);
+  		}
+
+  		if (FILE_TYPE_WEBCONTENT.equals(filterBy)) {
+  			if(checkNode.isNodeType(NodetypeConstant.EXO_WEBCONTENT)) {
+  				Element folder = createFolderElement(
+  						document, checkNode, checkNode.getPrimaryNodeType().getName(), child.getName());
+  				folders.appendChild(folder);
+  				fileType = FILE_TYPE_WEBCONTENT;
+  			}
+  			if (checkNode.isNodeType(NodetypeConstant.EXO_ARTICLE)) {
+  				fileType = FILE_TYPE_WEBCONTENT;
+  			}
+  		}
+
+  		if (FILE_TYPE_MEDIAS.equals(filterBy) && isMediaType(checkNode, repositoryName)){
+  			fileType = FILE_TYPE_MEDIAS;
+  		} 
+
+  		if (FILE_TYPE_DMSDOC.equals(filterBy) && isDMSDocument(checkNode, repositoryName)) {
+  			fileType = FILE_TYPE_DMSDOC;
+  		}
+
+  		if (fileType != null) {
+  			Element file = FCKFileHandler.createFileElement(document, fileType, checkNode, child);
+  			files.appendChild(file);
+  		}
+  	}
+  	
+  	rootElement.appendChild(folders);
+  	rootElement.appendChild(files);
+  	return getResponse(document);
+  }
+
+	/**
+	 * Checks if is folder and is not web content.
+	 * 
+	 * @param checkNode the check node
+	 * 
+	 * @return true, if is folder and is not web content
+	 * 
+	 * @throws RepositoryException the repository exception
+	 */
+	private boolean isFolderAndIsNotWebContent(Node checkNode) throws RepositoryException {
+	  return !checkNode.isNodeType(NodetypeConstant.EXO_WEBCONTENT) &&
+	  		(checkNode.isNodeType(FCKUtils.NT_UNSTRUCTURED)
+	  		|| checkNode.isNodeType(FCKUtils.NT_FOLDER)
+	  		|| checkNode.isNodeType(NodetypeConstant.EXO_TAXONOMY));
   }
   
   /**
@@ -566,12 +598,40 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
   	List<String> dmsDocumentList = new ArrayList<String>();
   	dmsDocumentList.addAll(dmsDocumentListTmp);
   	dmsDocumentList.remove(NodetypeConstant.EXO_WEBCONTENT);
+  	dmsDocumentList.remove(NodetypeConstant.EXO_ARTICLE);
   	for (String documentType : dmsDocumentList) {
-	    if (node.getPrimaryNodeType().isNodeType(documentType)) {
+	    if (node.getPrimaryNodeType().isNodeType(documentType) && !isMediaType(node, repositoryName)) {
 	    	return true;
 	    }
     }
   	return false;
+  }
+  
+
+  /**
+   * Checks if is media type.
+   * 
+   * @param node the node
+   * @param repository the repository
+   * 
+   * @return true, if is media type
+   */
+  private boolean isMediaType(Node node, String repository){
+    String mimeType = "";
+
+    try {
+	    mimeType = node.getNode("jcr:content").getProperty("jcr:mimeType").getString();
+    } catch (Exception e) {
+	    return false;
+    }
+    
+    for(String type: MEDIA_MIMETYPE) {
+      if(mimeType.contains(type)){
+        return true;
+      }
+    }
+    
+    return false;
   }
   
 	/* (non-Javadoc)
@@ -629,14 +689,6 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
                                               String contentType,
                                               String contentLength,
                                               int limit) throws Exception {
-//    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
-//    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
-//    Node currentPortal = getCurrentPortalNode(repositoryName,
-//                                              jcrPath,
-//                                              runningPortalName,
-//                                              sharedPortal);
-//    Node webContent = getWebContent(repositoryName, workspaceName, jcrPath);
-//    sessionProvider.close();
     return fileUploadHandler.upload(uploadId,
                                     contentType,
                                     Double.parseDouble(contentLength),
@@ -734,6 +786,12 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
   	return folder;
   }
   
+  /**
+   * Creates the atribute upload.
+   * 
+   * @param element the element
+   * @param isUpload the is upload
+   */
   private void createAtributeUpload(Element element, boolean isUpload) {
     try{
       element.setAttribute("isUpload", String.valueOf(isUpload));
