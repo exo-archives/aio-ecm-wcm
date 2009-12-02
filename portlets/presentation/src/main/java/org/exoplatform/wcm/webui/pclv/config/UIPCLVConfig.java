@@ -308,8 +308,7 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
     for(Node taxonomyNode : taxonomyNodes) {
     	Node portalNode = livePortalManagerService.getLivePortalByChild(taxonomyNode);
     	if (portalNode != null)
-    		taxonomyTrees.add(new SelectItemOption<String>(taxonomyNode.getName(), taxonomyNode.getName()));
-      taxonomyTrees.add(new SelectItemOption<String>(taxonomyNode.getName(), taxonomyNode.getName()));
+			taxonomyTrees.add(new SelectItemOption<String>(taxonomyNode.getName(), taxonomyNode.getName()));
     }
     return taxonomyTrees;
   }
