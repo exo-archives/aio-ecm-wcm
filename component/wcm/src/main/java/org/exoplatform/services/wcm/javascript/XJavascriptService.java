@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
@@ -258,8 +259,10 @@ public class XJavascriptService implements Startable {
       for(Node portal: livePortals) {
         addPortalJavascript(portal, null, true);
       }
+    } catch (PathNotFoundException e) {
+    	log.warn("Exception when merging inside Portal : WCM init is not completed.");
     }catch (Exception e) {
-    	log.error("Exception when start XJavascriptService", e.fillInStackTrace());
+    	log.error("Exception when start XJavascriptService");
     }
     sessionProvider.close();        
   }
