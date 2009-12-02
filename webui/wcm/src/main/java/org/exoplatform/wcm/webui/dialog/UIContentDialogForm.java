@@ -425,7 +425,7 @@ public class UIContentDialogForm extends UIDialogForm  implements UIPopupCompone
               String rootTreePath = nodeHierarchyCreator.getJcrPath(BasePath.TAXONOMIES_TREE_STORAGE_PATH);
               RepositoryService repositoryService = (RepositoryService)contentDialogForm.getApplicationComponent(RepositoryService.class);
               ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-              Session session = Utils.getSessionProvider(contentDialogForm).getSession(workspaceName, manageableRepository);
+              Session session = Utils.getSessionProvider().getSession(workspaceName, manageableRepository);
               Node rootTree = (Node) session.getItem(rootTreePath);
               NodeIterator childrenIterator = rootTree.getNodes();
               while (childrenIterator.hasNext()) {
@@ -435,7 +435,7 @@ public class UIContentDialogForm extends UIDialogForm  implements UIPopupCompone
               }
               uiOneTaxonomySelector.setRootNodeLocation(repository, workspaceName, rootTreePath);
               uiOneTaxonomySelector.setExceptedNodeTypesInPathPanel(new String[] {"exo:symlink"});
-              uiOneTaxonomySelector.init(Utils.getSystemProvider(contentDialogForm));
+              uiOneTaxonomySelector.init(Utils.getSessionProvider());
               String param = "returnField=" + FIELD_TAXONOMY;
               uiOneTaxonomySelector.setSourceComponent(contentDialogForm, new String[]{param});
               Utils.createPopupWindow(contentDialogForm, uiOneTaxonomySelector, TAXONOMY_CONTENT_POPUP_WINDOW, 700, 450);

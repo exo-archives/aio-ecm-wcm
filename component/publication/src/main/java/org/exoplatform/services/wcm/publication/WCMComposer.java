@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
 
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
@@ -87,7 +86,7 @@ public interface WCMComposer {
 	 * 
 	 * @throws Exception the exception
 	 */
-	public Node getContent(String repository, String workspace, String path, HashMap<String, String> filters, SessionProvider sessionProvider) throws Exception ;
+	public Node getContent(String repository, String workspace, String nodeIdentifier, HashMap<String, String> filters, SessionProvider sessionProvider) throws Exception ;
 
 	/**
 	 * returns contents at the specified path based on filters.
@@ -115,7 +114,7 @@ public interface WCMComposer {
 	 * 
 	 * @return true, if successful
 	 */
-	public boolean updateContent(String repository, String workspace, String path, HashMap<String, String> filters) throws Exception;
+	public boolean updateContent(String repository, String workspace, String nodeIdentifier, HashMap<String, String> filters) throws Exception;
 	
 	/**
 	 * Update contents.

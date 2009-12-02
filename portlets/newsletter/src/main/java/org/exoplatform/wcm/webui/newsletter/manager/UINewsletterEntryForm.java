@@ -144,7 +144,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
     String storedPath = getStoredPath().replace(NewsletterConstant.PORTAL_NAME, NewsLetterUtil.getPortalName());
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-    Session session = Utils.getSessionProvider(this).getSession(workspaceName, manageableRepository);
+    Session session = Utils.getSessionProvider().getSession(workspaceName, manageableRepository);
     Node storedNode = (Node)session.getItem(storedPath);
     CmsService cmsService = getApplicationComponent(CmsService.class);
     String newsletterNodePath = cmsService.storeNode("exo:webContent", storedNode, inputProperties, isAddNew(), repositoryName);
@@ -282,7 +282,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
           for (int i = 1; i < listEmailAddress.size(); i ++) {
             receiver += listEmailAddress.get(i) + ",";
           }
-          String content = newsletterManagerService.getEntryHandler().getContent(Utils.getSessionProvider(newsletterEntryForm), newsletterNode);
+          String content = newsletterManagerService.getEntryHandler().getContent(Utils.getSessionProvider(), newsletterNode);
           String baseURI = portletRequest.getScheme() + "://" + portletRequest.getServerName() + ":" + String.format("%s", portletRequest.getServerPort());
           String data = newsletterNode.getNode("default.html").getNode("jcr:content").getProperty("jcr:data").getString();
           String url = "";

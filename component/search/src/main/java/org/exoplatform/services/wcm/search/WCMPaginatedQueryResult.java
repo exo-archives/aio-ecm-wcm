@@ -22,10 +22,9 @@ import javax.jcr.Node;
 import javax.jcr.query.QueryResult;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.services.ecm.publication.PublicationPlugin;
-import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.publication.WCMComposer;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS Author : Hoa Pham hoa.phamvu@exoplatform.com
@@ -109,18 +108,11 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
     Node displayNode = getNodeToCheckState(node);
     if(displayNode == null) return null;
     if (isSearchContent) return displayNode;
-    PublicationService publicationService = (PublicationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(PublicationService.class);
-    String lifecycleName = null;
-    try {
-     lifecycleName = publicationService.getNodeLifecycleName(displayNode);
-    } catch (Exception e) {
-    	return displayNode;
-    }
-    PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
-    HashMap<String, Object> context = new HashMap<String, Object>();
-    
-    context.put(WCMComposer.FILTER_MODE, WCMComposer.MODE_LIVE);
-    return publicationPlugin.getNodeView(displayNode, context);
+    NodeLocation nodeLocation = NodeLocation.make(displayNode);
+    WCMComposer wcmComposer = WCMCoreUtils.getService(WCMComposer.class);
+    HashMap<String, String> filters = new HashMap<String, String>();
+    filters.put(WCMComposer.FILTER_MODE, WCMComposer.MODE_LIVE);
+    return wcmComposer.getContent(nodeLocation.getRepository(), nodeLocation.getWorkspace(), nodeLocation.getPath(), filters, WCMCoreUtils.getSessionProvider());
   }
   
   protected Node getNodeToCheckState(Node node)throws Exception{

@@ -406,7 +406,7 @@ public class UIPCLVForm extends UIForm {
 		String nodeName = null;
 		if(node.getName().equals("jcr:frozenNode")) {
 		  String uuid = node.getProperty("jcr:frozenUuid").getString();
-		  Session session = Utils.getSessionProvider(this).getSession(workspace, manageableRepository);
+		  Session session = Utils.getSessionProvider().getSession(workspace, manageableRepository);
 		  Node realNode = session.getNodeByUUID(uuid);
 		  if(realNode != null){
 		    nodeName = realNode.getName();

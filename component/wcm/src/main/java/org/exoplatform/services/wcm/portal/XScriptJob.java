@@ -14,14 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.wcm.javascript;
+package org.exoplatform.services.wcm.portal;
 
 import org.apache.commons.logging.Log;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.scheduler.BaseJob;
 import org.exoplatform.services.scheduler.JobContext;
+import org.exoplatform.services.wcm.javascript.XJavascriptService;
+import org.exoplatform.services.wcm.skin.XSkinService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -29,21 +30,21 @@ import org.exoplatform.services.scheduler.JobContext;
  * benjamin.paillereau@exoplatform.com
  * Nov 28, 2009
  */
-public class JavascriptJob extends BaseJob {
+public class XScriptJob extends BaseJob {
 
   /** The log. */
-  private static Log log = ExoLogger.getLogger(JavascriptJob.class);
+  private static Log log = ExoLogger.getLogger(XScriptJob.class);
 
   /* (non-Javadoc)
    * @see org.exoplatform.services.scheduler.BaseJob#execute(org.exoplatform.services.scheduler.JobContext)
    */
   public void execute(JobContext arg0) throws Exception {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    XJavascriptService jsService = 
-      (XJavascriptService)container.getComponentInstanceOfType(XJavascriptService.class);
-    if(jsService == null) return;
+    XJavascriptService jsService = WCMCoreUtils.getService(XJavascriptService.class); 
+    XSkinService skinService = WCMCoreUtils.getService(XSkinService.class);
+    if(jsService == null || skinService == null) return;
     try {
       jsService.start();
+      skinService.start();
     } catch (Exception e) {
       log.error("Error when execute Javascript service updater", e);
     }

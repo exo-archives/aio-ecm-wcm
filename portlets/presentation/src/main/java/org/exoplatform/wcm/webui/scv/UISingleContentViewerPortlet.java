@@ -108,7 +108,7 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
       String workspace = preferences.getValue(WORKSPACE, null);
       String nodeIdentifier = preferences.getValue(IDENTIFIER, null) ;
       WCMService wcmService = getApplicationComponent(WCMService.class);
-      return wcmService.getReferencedContent(Utils.getSessionProvider(this), repository, workspace, nodeIdentifier);
+      return wcmService.getReferencedContent(Utils.getSessionProvider(), repository, workspace, nodeIdentifier);
     } catch (Exception e) {
       return null;
     }

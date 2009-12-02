@@ -110,7 +110,7 @@ public class UIManagerUsers extends UITabPane {
     try{
       UIGrid uiGrid = getChildById(UIGRID_MANAGER_USERS);
       ObjectPageList objPageList = 
-                      new ObjectPageList(managerUserHandler.getUsers(Utils.getSessionProvider(this), NewsLetterUtil.getPortalName(), categoryName, subscriptionName), 5);
+                      new ObjectPageList(managerUserHandler.getUsers(Utils.getSessionProvider(), NewsLetterUtil.getPortalName(), categoryName, subscriptionName), 5);
       uiGrid.getUIPageIterator().setPageList(objPageList);
     }catch(Exception ex){
       Utils.createPopupMessage(this, "UIManagerUsers.msg.get-list-users", null, ApplicationMessage.ERROR);
@@ -220,7 +220,7 @@ public class UIManagerUsers extends UITabPane {
     // get list of moderator
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
-    for(NewsletterCategoryConfig categoryConfig : categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), Utils.getSessionProvider(this))){
+    for(NewsletterCategoryConfig categoryConfig : categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), Utils.getSessionProvider())){
       for(String str : categoryConfig.getModerator().split(",")){
         if(!listModerator.contains(str)) {
           listModerator.add(str);
@@ -232,10 +232,10 @@ public class UIManagerUsers extends UITabPane {
     // get list redactor from subscriptions
     listRedactor.addAll(getAllUsersFromGroupMemebers(newsletterManagerService.getSubscriptionHandler().
                                                      getAllRedactor(NewsLetterUtil.getPortalName(), 
-                                                                    Utils.getSessionProvider(this))));
+                                                                    Utils.getSessionProvider())));
     
     // Remove all user who is administrator from moderators and accesspermission
-    for(String uId : managerUserHandler.getAllAdministrator(Utils.getSessionProvider(this), NewsLetterUtil.getPortalName())){
+    for(String uId : managerUserHandler.getAllAdministrator(Utils.getSessionProvider(), NewsLetterUtil.getPortalName())){
       if(!listUserEdit.contains(uId)) listUserEdit.add(uId);
     }
     
@@ -330,7 +330,7 @@ public class UIManagerUsers extends UITabPane {
     public void execute(Event<UIManagerUsers> event) throws Exception {
       UIManagerUsers managerUsers = event.getSource();
       String email = event.getRequestContext().getRequestParameter(OBJECTID);
-      managerUsers.managerUserHandler.changeBanStatus(Utils.getSessionProvider(managerUsers), NewsLetterUtil.getPortalName(), email, false);
+      managerUsers.managerUserHandler.changeBanStatus(Utils.getSessionProvider(), NewsLetterUtil.getPortalName(), email, false);
       event.getRequestContext().addUIComponentToUpdateByAjax(managerUsers) ;
     }
   }
@@ -354,7 +354,7 @@ public class UIManagerUsers extends UITabPane {
   	public void execute(Event<UIManagerUsers> event) throws Exception {
 		  UIManagerUsers managerUsers = event.getSource();
 		  String email = event.getRequestContext().getRequestParameter(OBJECTID);
-		  managerUsers.managerUserHandler.changeBanStatus(Utils.getSessionProvider(managerUsers), NewsLetterUtil.getPortalName(), email, true);
+		  managerUsers.managerUserHandler.changeBanStatus(Utils.getSessionProvider(), NewsLetterUtil.getPortalName(), email, true);
 		  event.getRequestContext().addUIComponentToUpdateByAjax(managerUsers) ;
 	  }
   }
@@ -378,7 +378,7 @@ public class UIManagerUsers extends UITabPane {
     public void execute(Event<UIManagerUsers> event) throws Exception {
       UIManagerUsers managerUsers = event.getSource();
       String email = event.getRequestContext().getRequestParameter(OBJECTID);
-      managerUsers.managerUserHandler.delete(Utils.getSessionProvider(managerUsers), NewsLetterUtil.getPortalName(), email);
+      managerUsers.managerUserHandler.delete(Utils.getSessionProvider(), NewsLetterUtil.getPortalName(), email);
       event.getRequestContext().addUIComponentToUpdateByAjax(managerUsers) ;
     }
   }
@@ -402,7 +402,7 @@ public class UIManagerUsers extends UITabPane {
     public void execute(Event<UIManagerUsers> event) throws Exception {
       UIManagerUsers managerUsers = event.getSource();
       String userId = event.getRequestContext().getRequestParameter(OBJECTID);
-      managerUsers.managerUserHandler.addAdministrator(Utils.getSessionProvider(managerUsers), NewsLetterUtil.getPortalName(), userId);
+      managerUsers.managerUserHandler.addAdministrator(Utils.getSessionProvider(), NewsLetterUtil.getPortalName(), userId);
       managerUsers.updateListUser();
       event.getRequestContext().addUIComponentToUpdateByAjax(managerUsers.getChildById(managerUsers.UIGRID_MANAGER_MODERATOR)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(managerUsers) ;
@@ -428,7 +428,7 @@ public class UIManagerUsers extends UITabPane {
     public void execute(Event<UIManagerUsers> event) throws Exception {
       UIManagerUsers managerUsers = event.getSource();
       String userId = event.getRequestContext().getRequestParameter(OBJECTID);
-      managerUsers.managerUserHandler.deleteUserAddministrator(Utils.getSessionProvider(managerUsers), NewsLetterUtil.getPortalName(), userId);
+      managerUsers.managerUserHandler.deleteUserAddministrator(Utils.getSessionProvider(), NewsLetterUtil.getPortalName(), userId);
       managerUsers.updateListUser();
       event.getRequestContext().addUIComponentToUpdateByAjax(managerUsers.getChildById(managerUsers.UIGRID_MANAGER_MODERATOR)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(managerUsers) ;

@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import javax.jcr.nodetype.NoSuchNodeTypeException;
-
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.search.PaginatedQueryResult;
@@ -156,7 +154,7 @@ public class UIContentSearchForm extends UIForm {
     qCriteria.setFulltextSearch(false);
     qCriteria.setKeyword(keyword);
     SiteSearchService siteSearch = getApplicationComponent(SiteSearchService.class);
-    return siteSearch.searchSiteContents(Utils.getSessionProvider(this), qCriteria, pageSize, true);
+    return siteSearch.searchSiteContents(Utils.getSessionProvider(), qCriteria, pageSize, true);
   }
 
   private PaginatedQueryResult searchWebContentByFulltext(String keyword, 
@@ -165,7 +163,7 @@ public class UIContentSearchForm extends UIForm {
     qCriteria.setFulltextSearchProperty(QueryCriteria.ALL_PROPERTY_SCOPE);
     qCriteria.setKeyword(keyword);
     SiteSearchService siteSearch = getApplicationComponent(SiteSearchService.class);
-    return siteSearch.searchSiteContents(Utils.getSessionProvider(this), qCriteria, pageSize, true);
+    return siteSearch.searchSiteContents(Utils.getSessionProvider(), qCriteria, pageSize, true);
   }
 
   private PaginatedQueryResult searchWebContentByProperty(String property, 
@@ -174,7 +172,7 @@ public class UIContentSearchForm extends UIForm {
     qCriteria.setFulltextSearchProperty(property);
     qCriteria.setKeyword(keyword);
     SiteSearchService siteSearchService = getApplicationComponent(SiteSearchService.class);
-    return siteSearchService.searchSiteContents(Utils.getSessionProvider(this), qCriteria, pageSize, true);
+    return siteSearchService.searchSiteContents(Utils.getSessionProvider(), qCriteria, pageSize, true);
   }
 
   private PaginatedQueryResult searchWebContentByDate(DATE_RANGE_SELECTED dateRangeSelected, 
@@ -189,7 +187,7 @@ public class UIContentSearchForm extends UIForm {
     qCriteria.setFulltextSearch(true);
     qCriteria.setFulltextSearchProperty(null);
     SiteSearchService siteSearch = getApplicationComponent(SiteSearchService.class);
-    return siteSearch.searchSiteContents(Utils.getSessionProvider(this), qCriteria, pageSize, true);
+    return siteSearch.searchSiteContents(Utils.getSessionProvider(), qCriteria, pageSize, true);
   }
 
   private PaginatedQueryResult searchWebContentByDocumentType(String documentType, 
@@ -198,7 +196,7 @@ public class UIContentSearchForm extends UIForm {
     qCriteria.setFulltextSearchProperty(null);
     qCriteria.setContentTypes(documentType.split(","));
     SiteSearchService siteSearch = getApplicationComponent(SiteSearchService.class);
-    return siteSearch.searchSiteContents(Utils.getSessionProvider(this), qCriteria, pageSize, true);
+    return siteSearch.searchSiteContents(Utils.getSessionProvider(), qCriteria, pageSize, true);
   }
 
   private QueryCriteria getInitialQueryCriteria(String siteName) {
@@ -234,7 +232,7 @@ public class UIContentSearchForm extends UIForm {
     qCriteria.setFulltextSearch(false);
     qCriteria.setKeyword(keyword);
     SiteSearchService siteSearch = getApplicationComponent(SiteSearchService.class);
-    return siteSearch.searchSiteContents(Utils.getSessionProvider(this), qCriteria, pageSize, true);
+    return siteSearch.searchSiteContents(Utils.getSessionProvider(), qCriteria, pageSize, true);
   }
 
   private PaginatedQueryResult searchDocumentByFulltext(String keyword, 
@@ -243,7 +241,7 @@ public class UIContentSearchForm extends UIForm {
     qCriteria.setFulltextSearchProperty(QueryCriteria.ALL_PROPERTY_SCOPE);
     qCriteria.setKeyword(keyword);
     SiteSearchService siteSearch = getApplicationComponent(SiteSearchService.class);
-    return siteSearch.searchSiteContents(Utils.getSessionProvider(this), qCriteria, pageSize, true);
+    return siteSearch.searchSiteContents(Utils.getSessionProvider(), qCriteria, pageSize, true);
   }
 
   private PaginatedQueryResult searchDocumentByProperty(String property, 
@@ -252,7 +250,7 @@ public class UIContentSearchForm extends UIForm {
     qCriteria.setFulltextSearchProperty(property);
     qCriteria.setKeyword(keyword);
     SiteSearchService siteSearchService = getApplicationComponent(SiteSearchService.class);
-    return siteSearchService.searchSiteContents(Utils.getSessionProvider(this), qCriteria, pageSize, true);
+    return siteSearchService.searchSiteContents(Utils.getSessionProvider(), qCriteria, pageSize, true);
   }
 
   private PaginatedQueryResult searchDocumentByDate(DATE_RANGE_SELECTED dateRangeSelected, 
@@ -267,7 +265,7 @@ public class UIContentSearchForm extends UIForm {
     qCriteria.setFulltextSearch(true);
     qCriteria.setFulltextSearchProperty(null);
     SiteSearchService siteSearch = getApplicationComponent(SiteSearchService.class);
-    return siteSearch.searchSiteContents(Utils.getSessionProvider(this), qCriteria, pageSize, true);
+    return siteSearch.searchSiteContents(Utils.getSessionProvider(), qCriteria, pageSize, true);
   }
 
   private PaginatedQueryResult searchDocumentByType(String documentType, 
@@ -276,7 +274,7 @@ public class UIContentSearchForm extends UIForm {
     qCriteria.setFulltextSearchProperty(null);
     qCriteria.setContentTypes(documentType.split(","));
     SiteSearchService siteSearch = getApplicationComponent(SiteSearchService.class);
-    return siteSearch.searchSiteContents(Utils.getSessionProvider(this), qCriteria, pageSize, true);
+    return siteSearch.searchSiteContents(Utils.getSessionProvider(), qCriteria, pageSize, true);
   }
 
   static public class SearchWebContentActionListener extends EventListener<UIContentSearchForm> {

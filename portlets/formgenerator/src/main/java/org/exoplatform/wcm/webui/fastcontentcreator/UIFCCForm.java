@@ -205,7 +205,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class) ;
     PortletPreferences preferences = UIFCCUtils.getPortletPreferences() ;
     Session session = 
-      Utils.getSessionProvider(this).getSession(
+      Utils.getSessionProvider().getSession(
         preferences.getValue(UIFCCConstant.PREFERENCE_WORKSPACE, ""), 
         repositoryService.getRepository(preferences.getValue(UIFCCConstant.PREFERENCE_REPOSITORY, ""))) ;
     return (Node) session.getItem(preferences.getValue("path", ""));
@@ -279,7 +279,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
       String preferenceWorkspace = preferences.getValue(UIFCCConstant.PREFERENCE_WORKSPACE, "") ;
       
       RepositoryService repositoryService  = fastContentCreatorForm.getApplicationComponent(RepositoryService.class);
-      SessionProvider sessionProvider = Utils.getSessionProvider(fastContentCreatorForm);
+      SessionProvider sessionProvider = Utils.getSessionProvider();
       Session session = sessionProvider.getSession(preferenceWorkspace, repositoryService.getRepository(preferenceRepository));
       CmsService cmsService = fastContentCreatorForm.getApplicationComponent(CmsService.class) ;
       TaxonomyService taxonomyService = fastContentCreatorForm.getApplicationComponent(TaxonomyService.class);      
@@ -460,7 +460,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
           }
         }
       }
-      SessionProvider sessionProvider = Utils.getSessionProvider(fastContentCreatorForm);
+      SessionProvider sessionProvider = Utils.getSessionProvider();
       if(component instanceof UIOneNodePathSelector) {
         String repositoryName = UIFCCUtils.getPreferenceRepository() ;
         String wsFieldName = (String)fieldPropertiesMap.get("workspaceField") ;
@@ -568,7 +568,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
             uiOneTaxonomySelector.setIsDisable(workspaceName, false);
             String rootTreePath = nodeHierarchyCreator.getJcrPath(BasePath.TAXONOMIES_TREE_STORAGE_PATH);      
             RepositoryService repositoryService  = fastContentCreatorForm.getApplicationComponent(RepositoryService.class);
-            SessionProvider sessionProvider = Utils.getSessionProvider(fastContentCreatorForm);
+            SessionProvider sessionProvider = Utils.getSessionProvider();
             Session session = sessionProvider.getSession(workspaceName, repositoryService.getRepository(fastContentCreatorForm.repositoryName));
             Node rootTree = (Node) session.getItem(rootTreePath);      
             NodeIterator childrenIterator = rootTree.getNodes();
@@ -578,7 +578,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
               break;
             }
             uiOneTaxonomySelector.setRootNodeLocation(fastContentCreatorForm.repositoryName, workspaceName, rootTreePath);
-            uiOneTaxonomySelector.init(Utils.getSessionProvider(fastContentCreatorForm));
+            uiOneTaxonomySelector.init(Utils.getSessionProvider());
             String param = "returnField=" + FIELD_TAXONOMY;        
             uiOneTaxonomySelector.setSourceComponent(fastContentCreatorForm, new String[]{param});
             Utils.createPopupWindow(fastContentCreatorForm, uiOneTaxonomySelector, UIFCCConstant.TAXONOMY_POPUP_WINDOW, 640, 300);

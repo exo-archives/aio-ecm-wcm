@@ -17,6 +17,7 @@
 package org.exoplatform.wcm.webui.clv;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -24,6 +25,7 @@ import javax.portlet.PortletPreferences;
 
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.resolver.ResourceResolver;
+import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -53,10 +55,6 @@ public class UICLVManualMode extends UICLVContainer {
     setViewAbleContent(true);
     String repositoryName = portletPreferences.getValue(UICLVPortlet.REPOSITORY, null);
     String workspaceName = portletPreferences.getValue(UICLVPortlet.WORKSPACE, null);
-//    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-//    ManageableRepository repository = repositoryService.getRepository(repositoryName);
-//    Session session = Utils.getSessionProvider(this).getSession(workspaceName, repository);
-//    Node root = session.getRootNode();
     String[] listContent = UICLVPortlet.getContentsByPreference();
     if (listContent == null || listContent.length == 0) {
       messageKey = "UIMessageBoard.msg.contents-not-found";
@@ -64,12 +62,13 @@ public class UICLVManualMode extends UICLVContainer {
       return;
     }
     int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UICLVPortlet.ITEMS_PER_PAGE, null));
+    HashMap<String,String> filters = new HashMap<String, String>();
+		filters.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
     List<Node> nodes = new ArrayList<Node>();
     if (listContent != null && listContent.length != 0) {
       for (String path : listContent) {
         try {
-//        	Node originalNode = root.getNode(path.substring(1, path.length()));
-        	Node viewNode = Utils.getNodeView(repositoryName, workspaceName, path);
+        	Node viewNode = Utils.getViewableNodeByComposer(repositoryName, workspaceName, path);
         	if (viewNode != null) nodes.add(viewNode);    
         } catch (Exception e) {
           Utils.createPopupMessage(this, "UIMessageBoard.msg.add-node-error", null, ApplicationMessage.ERROR);

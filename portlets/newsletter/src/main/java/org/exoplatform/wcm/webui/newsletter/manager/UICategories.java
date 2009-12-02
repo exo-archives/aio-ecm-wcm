@@ -98,7 +98,7 @@ public class UICategories extends UIContainer {
 	@SuppressWarnings("unused")
   private long getNumberOfWaitingNewsletter(String categoryName, String subscriptionName){
 	  try{
-	    return subscriptionHandler.getNumberOfNewslettersWaiting(Utils.getSessionProvider(this), portalName, categoryName, subscriptionName);
+	    return subscriptionHandler.getNumberOfNewslettersWaiting(Utils.getSessionProvider(), portalName, categoryName, subscriptionName);
 	  }catch(Exception ex){
 	    return 0;
 	  }
@@ -114,7 +114,7 @@ public class UICategories extends UIContainer {
 	 */
 	@SuppressWarnings("unused")
   private int getNumberOfUser(String categoryName, String subscriptionName){
-	  return userHandler.getQuantityUserBySubscription(Utils.getSessionProvider(this), portalName, categoryName, subscriptionName);
+	  return userHandler.getQuantityUserBySubscription(Utils.getSessionProvider(), portalName, categoryName, subscriptionName);
 	}
 	
 	/**
@@ -127,8 +127,8 @@ public class UICategories extends UIContainer {
 	  List<NewsletterCategoryConfig> listCategories = new ArrayList<NewsletterCategoryConfig>();
 		try{
 		  String portalName = NewsLetterUtil.getPortalName();
-			if(isAdmin)listCategories = categoryHandler.getListCategories(portalName, Utils.getSessionProvider(this));
-			else listCategories = categoryHandler.getListCategoriesCanView(portalName, NewsLetterUtil.getCurrentUser(), Utils.getSessionProvider(this));
+			if(isAdmin)listCategories = categoryHandler.getListCategories(portalName, Utils.getSessionProvider());
+			else listCategories = categoryHandler.getListCategoriesCanView(portalName, NewsLetterUtil.getCurrentUser(), Utils.getSessionProvider());
 		}catch(Exception e){
 		  Utils.createPopupMessage(this, "UICategories.msg.get-list-categories", null, ApplicationMessage.ERROR);
 		}
@@ -147,12 +147,12 @@ public class UICategories extends UIContainer {
 	  List<NewsletterSubscriptionConfig> listSubscription = new ArrayList<NewsletterSubscriptionConfig>();
     try{
       if(isAdmin || 
-          NewsLetterUtil.isModeratorOfCategory(categoryHandler.getCategoryByName(Utils.getSessionProvider(this), portalName, categoryName)))
-        listSubscription = subscriptionHandler.getSubscriptionsByCategory(Utils.getSessionProvider(this), 
+          NewsLetterUtil.isModeratorOfCategory(categoryHandler.getCategoryByName(Utils.getSessionProvider(), portalName, categoryName)))
+        listSubscription = subscriptionHandler.getSubscriptionsByCategory(Utils.getSessionProvider(), 
                                                                           NewsLetterUtil.getPortalName(), categoryName);
       else{
         listSubscription = subscriptionHandler.getSubscriptionByRedactor(portalName, categoryName, NewsLetterUtil.getCurrentUser(), 
-                                                                         Utils.getSessionProvider(this));
+                                                                         Utils.getSessionProvider());
       }
     }catch(Exception e){
       Utils.createPopupMessage(this, "UICategories.msg.get-list-subscriptions", null, ApplicationMessage.ERROR);
@@ -230,7 +230,7 @@ public class UICategories extends UIContainer {
 	    UINewsletterManagerPortlet newsletterManagerPortlet = uiCategories.getAncestorOfType(UINewsletterManagerPortlet.class);
 	    UISubscriptions subsriptions = newsletterManagerPortlet.getChild(UISubscriptions.class);
 	    subsriptions.setRendered(true);
-	    subsriptions.setCategory(uiCategories.categoryHandler.getCategoryByName(Utils.getSessionProvider(uiCategories), NewsLetterUtil.getPortalName(), categoryName));
+	    subsriptions.setCategory(uiCategories.categoryHandler.getCategoryByName(Utils.getSessionProvider(), NewsLetterUtil.getPortalName(), categoryName));
 	    newsletterManagerPortlet.getChild(UICategories.class).setRendered(false);
 	    event.getRequestContext().addUIComponentToUpdateByAjax(newsletterManagerPortlet);
 	  }
@@ -310,7 +310,7 @@ public class UICategories extends UIContainer {
       
       String categoryName = categoryAndSubscription.split("/")[0];
       String subscriptionName = categoryAndSubscription.split("/")[1];
-      SessionProvider sessionProvider = Utils.getSessionProvider(uiCategory);
+      SessionProvider sessionProvider = Utils.getSessionProvider();
       newsletterManager.setCategoryConfig(
                         uiCategory.categoryHandler.getCategoryByName(
                                                                      sessionProvider, 

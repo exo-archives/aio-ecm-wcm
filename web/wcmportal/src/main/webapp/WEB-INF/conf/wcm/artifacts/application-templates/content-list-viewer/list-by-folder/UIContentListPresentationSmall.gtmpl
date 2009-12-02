@@ -27,9 +27,7 @@
 				String draftLabel = _ctx.appRes("UICLVPresentation.label.draft");
 				String editActionLabel = _ctx.appRes("UICLVPresentation.action.edit");
 				
-				for (Node node : currentPageData) {
-					def viewNode = Utils.getNodeView(node);
-				  if (viewNode == null)	continue;
+				for (viewNode in currentPageData) {
 					String itemLink = uicomponent.getURL(viewNode);			
 					String itemName = viewNode.getName();
 					String itemSummary = uicomponent.getSummary(viewNode);

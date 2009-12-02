@@ -124,7 +124,7 @@ public class UINewsletterEntryManager extends UIForm {
     try{
       listNewsletterConfig.addAll(newsletterEntryHandler
                                     .getNewsletterEntriesBySubscription(
-                                                                        Utils.getSessionProvider(this),
+                                                                        Utils.getSessionProvider(),
                                                                         NewsLetterUtil.getPortalName(), 
                                                                         categoryConfig.getName(),
                                                                         subscriptionConfig.getName()));
@@ -369,7 +369,7 @@ public class UINewsletterEntryManager extends UIForm {
         return;
       }
       uiNewsletterEntryManager.newsletterEntryHandler.delete(
-                                                             Utils.getSessionProvider(uiNewsletterEntryManager),
+                                                             Utils.getSessionProvider(),
                                                              NewsLetterUtil.getPortalName(), 
                                                              uiNewsletterEntryManager.categoryConfig.getName(), 
                                                              uiNewsletterEntryManager.subscriptionConfig.getName(),
@@ -403,7 +403,7 @@ public class UINewsletterEntryManager extends UIForm {
         return;
       } else {
         NewsletterManagerConfig newsletterName = uiNewsletterEntryManager.newsletterEntryHandler.
-                                                            getNewsletterEntry(Utils.getSessionProvider(uiNewsletterEntryManager), NewsLetterUtil.getPortalName(), 
+                                                            getNewsletterEntry(Utils.getSessionProvider(), NewsLetterUtil.getPortalName(), 
                                                                               uiNewsletterEntryManager.categoryConfig.getName(), 
                                                                               uiNewsletterEntryManager.getSubscriptionConfig().getName(), 
                                                                               subIds.get(0));
@@ -464,12 +464,12 @@ public class UINewsletterEntryManager extends UIForm {
           NewsletterManagerService newsletterManagerService = newsletterEntryManager.getApplicationComponent(NewsletterManagerService.class);
           RepositoryService repositoryService = newsletterEntryManager.getApplicationComponent(RepositoryService.class);
           ManageableRepository manageableRepository = repositoryService.getRepository(newsletterManagerService.getRepositoryName()); 
-          Session session = Utils.getSessionProvider(newsletterEntryManager).getSession(newsletterManagerService.getWorkspaceName(), manageableRepository);
+          Session session = Utils.getSessionProvider().getSession(newsletterManagerService.getWorkspaceName(), manageableRepository);
           String newsletterPath = NewsletterConstant.generateNewsletterPath(Util.getUIPortal().getName(), categoryName, subscriptionName, newsletterName) ;
           Node newsletterNode = (Node) session.getItem(newsletterPath);
           NewsletterTemplateHandler newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
           newsletterTemplateHandler.convertAsTemplate(
-                                                      Utils.getSessionProvider(newsletterEntryManager),
+                                                      Utils.getSessionProvider(),
                                                       newsletterNode.getPath(),
                                                       Util.getUIPortal().getName(),
                                                       categoryName);

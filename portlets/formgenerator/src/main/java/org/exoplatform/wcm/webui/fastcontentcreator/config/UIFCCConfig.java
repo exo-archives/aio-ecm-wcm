@@ -120,7 +120,7 @@ public class UIFCCConfig extends UIForm implements UISelectable {
     String preferencePath = portletPreferences.getValue(UIFCCConstant.PREFERENCE_PATH, "");
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository repository = repositoryService.getRepository(preferenceRepository);
-    Session session = Utils.getSessionProvider(this).getSession(preferenceWorkspace, repository);
+    Session session = Utils.getSessionProvider().getSession(preferenceWorkspace, repository);
     fastContentCreatorActionList.updateGrid((Node)session.getItem(preferencePath), fastContentCreatorActionList.getChild(UIGrid.class).getUIPageIterator().getCurrentPage());
     
     addChild(actionField);
@@ -191,7 +191,7 @@ public class UIFCCConfig extends UIForm implements UISelectable {
     try {
       RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
       ManageableRepository repository = repositoryService.getRepository(repositoryName);
-      Session session = Utils.getSessionProvider(this).getSession(workspaceName, repository);
+      Session session = Utils.getSessionProvider().getSession(workspaceName, repository);
       Node currentNode = null ;
       UIFormSelectBox uiSelectTemplate = getUIFormSelectBox(UIFCCConstant.TEMPLATE_FORM_SELECTBOX) ;
       List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
@@ -331,7 +331,7 @@ public class UIFCCConfig extends UIForm implements UISelectable {
       uiOneNodePathSelector.setIsDisable(workspaceName, true) ;
       uiOneNodePathSelector.setShowRootPathSelect(true) ;
       uiOneNodePathSelector.setRootNodeLocation(repositoryName, workspaceName, "/");
-      uiOneNodePathSelector.init(Utils.getSessionProvider(fastContentCreatorConfig)) ;
+      uiOneNodePathSelector.init(Utils.getSessionProvider()) ;
       uiOneNodePathSelector.setSourceComponent(fastContentCreatorConfig, new String[] {UIFCCConstant.LOCATION_FORM_STRING_INPUT}) ;
       Utils.createPopupWindow(fastContentCreatorConfig, uiOneNodePathSelector, UIFCCConstant.SELECTOR_POPUP_WINDOW, 610, 300);
     }

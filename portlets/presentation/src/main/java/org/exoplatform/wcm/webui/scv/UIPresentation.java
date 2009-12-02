@@ -45,10 +45,6 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
 public class UIPresentation extends UIBaseNodePresentation {
 
-//  private NodeLocation originalNodeLocation;
-//  
-//  private NodeLocation viewNodeLocation;
-
   private NodeLocation originalNodeLocation;
   
   private NodeLocation viewNodeLocation;
@@ -57,10 +53,7 @@ public class UIPresentation extends UIBaseNodePresentation {
    * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getOriginalNode()
    */
   public Node getOriginalNode() throws Exception {
-
-	  return Utils.getNodeView(originalNodeLocation.getRepository(), originalNodeLocation.getWorkspace(), originalNodeLocation.getPath(), WCMComposer.BASE_VERSION);
-
-//    return NodeLocation.getNodeByLocation(originalNodeLocation);
+	  return Utils.getViewableNodeByComposer(originalNodeLocation.getRepository(), originalNodeLocation.getWorkspace(), originalNodeLocation.getPath(), WCMComposer.BASE_VERSION);
   }  
 
   /* (non-Javadoc)
@@ -74,10 +67,7 @@ public class UIPresentation extends UIBaseNodePresentation {
    * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getNode()
    */
   public Node getNode() throws Exception {
-	  
-	  	return Utils.getNodeView(viewNodeLocation.getRepository(), viewNodeLocation.getWorkspace(), viewNodeLocation.getPath());
-	  
-//    return NodeLocation.getNodeByLocation(viewNodeLocation);
+  	return Utils.getViewableNodeByComposer(viewNodeLocation.getRepository(), viewNodeLocation.getWorkspace(), viewNodeLocation.getPath());
   }
   
   /* (non-Javadoc)

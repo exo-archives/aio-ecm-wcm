@@ -38,17 +38,14 @@
 			  %>
 			  	<div class="Contents">
 			  		<%
-							for (node in currentPageData) {
-							    def viewNode = node;
-								//if (viewNode == null)	continue;
-									
+							for (viewNode in currentPageData) {
 								def isShowTitle = uicomponent.isShowField(UICLVPortlet.SHOW_TITLE);
 								def isShowDate = uicomponent.isShowField(UICLVPortlet.SHOW_DATE_CREATED);
 								def isShowLink = uicomponent.isShowField(UICLVPortlet.SHOW_LINK);
 								def isShowReadmore = uicomponent.isShowField(UICLVPortlet.SHOW_READMORE);
 								
 								def itemLink = uicomponent.getURL(viewNode);			
-								def itemWebdavLink = uicomponent.getWebdavURL(node);
+								def itemWebdavLink = uicomponent.getWebdavURL(viewNode);
 								uicomponent.setDateTimeFormat("dd/MM/yyyy");			
 								def itemDateCreated = uicomponent.getCreatedDate(viewNode);
 								def itemOwner = uicomponent.getAuthor(viewNode);			
@@ -64,7 +61,7 @@
 								def itemSummary = uicomponent.getSummary(viewNode);
 								def isShowSummary = uicomponent.isShowField(UICLVPortlet.SHOW_SUMMARY) && itemSummary != null;
 								
-								def itemIcon = uicomponent.getContentIcon(node);
+								def itemIcon = uicomponent.getContentIcon(viewNode);
 								
 								def contentEditLink = uicomponent.event("EditContent", viewNode.getPath());
 						    %>

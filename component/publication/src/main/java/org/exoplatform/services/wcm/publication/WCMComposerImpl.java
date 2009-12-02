@@ -9,8 +9,6 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.PathNotFoundException;
-import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
@@ -18,8 +16,7 @@ import javax.jcr.query.QueryManager;
 import org.apache.commons.logging.Log;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
-import org.exoplatform.services.cms.taxonomy.TaxonomyService;
-import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.cms.link.LinkManager;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
@@ -27,6 +24,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.core.WCMService;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.picocontainer.Startable;
 
@@ -37,31 +35,21 @@ import org.picocontainer.Startable;
  */
 public class WCMComposerImpl implements WCMComposer, Startable {
 
-	/** The template service. */
-	private TemplateService templateService;
-
 	/** The repository service. */
 	private RepositoryService repositoryService;
 
-	/** The publication service. */
-	private PublicationService publicationService;
-
-	/** The taxonomy service. */
-	private TaxonomyService taxonomyService=null;
+	/** The link manager service. */
+	private LinkManager linkManager;
 	
-	/** The cache service. */
+	/** The cache. */
 	private ExoCache cache;
 	
 	private boolean isCached = true;
 	
-	/** The templates filter. */
-	private String templatesFilter = null;
-
-	/** The repository. */
-	private String repository;
-
 	/** The log. */
 	private static Log log = ExoLogger.getLogger(WCMComposerImpl.class);
+	
+	private static final String[] ignorePrimaryTypes = {"nt:folder", "nt:unstructured", "exo:taxonomy"};
 
 	/**
 	 * Instantiates a new WCM composer impl.
@@ -72,91 +60,51 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	 * @throws Exception the exception
 	 */
 	public WCMComposerImpl() throws Exception {
-		this.templateService = WCMCoreUtils.getService(TemplateService.class);
-		this.publicationService = WCMCoreUtils.getService(PublicationService.class);
-		this.repositoryService = WCMCoreUtils.getService(RepositoryService.class);
-		this.repository = "repository";
-		CacheService cacheService = WCMCoreUtils.getService(CacheService.class);
-		cache = cacheService.getCacheInstance("wcm.composer");
+		repositoryService = WCMCoreUtils.getService(RepositoryService.class);
+		linkManager = WCMCoreUtils.getService(LinkManager.class);
+		cache = WCMCoreUtils.getService(CacheService.class).getCacheInstance("wcm.composer");
 //		cache.setLiveTime(60);
 	}
 	
 	private String getHash(String path, String version) throws Exception {
 		String key = path;
-		if (version!=null) key += "::"+version;
+		if (version != null) key += "::" + version;
 		return MessageDigester.getHash(key);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.exoplatform.services.wcm.publication.WCMComposer#getContent(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
 	 */
-	public Node getContent(
-			String repository,
-			String workspace,
-			String path,
-			HashMap<String, String> filters,
-			SessionProvider sessionProvider) throws Exception {
-
+	public Node getContent(String repository, String workspace, String nodeIdentifier, HashMap<String, String> filters, SessionProvider sessionProvider) throws Exception {
 		String mode = filters.get(FILTER_MODE); 
-  		String version = filters.get(FILTER_VERSION);
-
-		if (repository==null && workspace==null) {
-		    String[] params = path.split("/");
-		    repository = params[0];
-		    workspace = params[1];
-		    path = path.substring(repository.length()+workspace.length()+1);
-		}
-
+		String version = filters.get(FILTER_VERSION);
 		if (MODE_LIVE.equals(mode) && isCached) {
-			String hash = getHash(path, version);
+			String hash = getHash(nodeIdentifier, version);
 			Node cachedNode = (Node)cache.get(hash);
-			if (cachedNode!=null) return cachedNode;
+			if (cachedNode != null) return cachedNode;
 		}
-		
-		Node node = null;
-		try {
-			ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-			Session session = sessionProvider.getSession(workspace, manageableRepository);
-			node = (Node)session.getItem(path);
-		} catch (RepositoryException e) {
-			node = getNodeByCategory(repository+"/"+workspace+path);
+		WCMService wcmService = WCMCoreUtils.getService(WCMService.class);
+		Node node = wcmService.getReferencedContent(sessionProvider, repository, workspace, nodeIdentifier);
+		if (version == null || !BASE_VERSION.equals(version)) {
+			node = getViewableContent(node, filters);
 		}
-		
-  		if (node.isNodeType("exo:taxonomyLink")) {
-  			String uuid = node.getProperty("exo:uuid").getString();
-  			node = node.getSession().getNodeByUUID(uuid);
-  		}
-		
-  		if (version == null || !BASE_VERSION.equals(version)) {
-  			node = getViewableContent(node, filters);
-  		}
-
 		if (MODE_LIVE.equals(mode) && isCached) {
-			String hash = getHash(path, version);
+			String hash = getHash(nodeIdentifier, version);
 			cache.remove(hash);
 			cache.put(hash, node);
 		}
-
 		return node;
 	}
 
-	public List<Node> getContents(
-			String repository,
-			String workspace,
-			String path,
-			HashMap<String, String> filters,
-			SessionProvider sessionProvider) throws Exception {
-
+	@SuppressWarnings("unchecked")
+	public List<Node> getContents(String repository, String workspace, String path, HashMap<String, String> filters, SessionProvider sessionProvider) throws Exception {
 		String mode = filters.get(FILTER_MODE);
 		String version = filters.get(FILTER_VERSION);
-
 		if (MODE_LIVE.equals(mode) && isCached) {
 			String hash = getHash(path, version);
 			List<Node> cachedNodes = (List<Node>)cache.get(hash);
-			if (cachedNodes!=null) return cachedNodes;
+			if (cachedNodes != null) return cachedNodes;
 		}
-
-
 		NodeIterator nodeIterator = getViewableContents(repository, workspace, path, filters, sessionProvider);
 		List<Node> nodes = new ArrayList<Node>();
 		Node node = null, viewNode = null;
@@ -167,27 +115,18 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 				nodes.add(viewNode);
 			}
 		}
-
 		if (MODE_LIVE.equals(mode) && isCached) {
 			String hash = getHash(path, version);
 			cache.remove(hash);
 			cache.put(hash, nodes);
 		}
-
-
-		return nodes;
+		return nodes;    
 	}
 
 	/* (non-Javadoc)
 	 * @see org.exoplatform.services.wcm.publication.WCMComposer#getContents(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
 	 */
-	private NodeIterator getViewableContents(
-			String repository,
-			String workspace,
-			String path,
-			HashMap<String, String> filters,
-			SessionProvider sessionProvider) throws Exception {
-		String templatesFilter = getTemlatesSQLFilter();
+	private NodeIterator getViewableContents(String repository, String workspace, String path, HashMap<String, String> filters, SessionProvider sessionProvider) throws Exception {
 		ManageableRepository manageableRepository = repositoryService.getRepository(repository);
 		Session session = sessionProvider.getSession(workspace, manageableRepository);
 		QueryManager manager = session.getWorkspace().getQueryManager();
@@ -195,29 +134,22 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		String mode = filters.get(FILTER_MODE);
 		String recursive = filters.get(FILTER_RECURSIVE);
 		String primaryType = filters.get(FILTER_PRIMARY_TYPE);
-		if (primaryType==null) {
-			primaryType = "nt:base";
-			Node currentFolder = session.getRootNode().getNode(path.substring(1));
-			if (currentFolder.isNodeType("exo:taxonomy")) {
-				primaryType = "exo:taxonomyLink";
-			}
-		}
+		if (primaryType == null) primaryType = "nt:base";
 		StringBuffer statement = new StringBuffer();
-
-		statement.append("select * from "+ primaryType +" where " + "jcr:path like '" + path + "/%'");
-		if (recursive==null) {
-			statement.append(" AND " + "NOT jcr:path like '" + path + "/%/%'");
+		statement.append("SELECT * FROM " + primaryType + " WHERE jcr:path LIKE '" + path + "/%'");
+		if (recursive == null) {
+			statement.append(" AND NOT jcr:path LIKE '" + path + "/%/%'");
 		}
-		statement.append(" AND " + templatesFilter + " AND " + "NOT publication:currentState like '%'");
+		statement.append(getIgnorePrimaryTypeSQL());
+		statement.append(" AND (");
 		if (MODE_LIVE.equals(mode)) {
-			statement.append(" OR publication:currentState = 'published'");
+			statement.append("publication:currentState='" + PublicationDefaultStates.PUBLISHED + "'"); 
 		} else {
-			statement.append(" OR publication:currentState <> 'obsolete' AND publication:currentState <> 'archived'");
+			statement.append("NOT (publication:currentState='" + PublicationDefaultStates.OBSOLETE + "' OR publication:currentState='" + PublicationDefaultStates.ARCHIVED + "')"); 
 		}
-		statement.append(orderFilter);
-
-
-		Query query = manager.createQuery(statement.toString(), Query.SQL);
+		statement.append(" OR publication:currentState LIKE '%')");
+		statement.append(orderFilter);  
+		Query query = manager.createQuery(statement.toString(), Query.SQL);    
 		return query.execute().getNodes();
 	}
 
@@ -231,6 +163,8 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	 * @throws Exception the exception
 	 */
 	private Node getViewableContent(Node node, HashMap<String, String> filters) throws Exception {
+		if (node.isNodeType("exo:taxonomyLink")) node = linkManager.getTarget(node);
+		PublicationService publicationService = WCMCoreUtils.getService(PublicationService.class);
 		HashMap<String, Object> context = new HashMap<String, Object>();
 		String mode = filters.get(FILTER_MODE);
 		context.put(WCMComposer.FILTER_MODE, mode);
@@ -238,38 +172,19 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		try {
 			lifecyleName = publicationService.getNodeLifecycleName(node);
 		} catch (NotInPublicationLifecycleException e) {
-			// You shouldn't throw popup message, because some exception often rise here.
+			// Don't log here, this is normal
 		}
-		if (lifecyleName == null) {
-			return node;
-		}
-
+		if (lifecyleName == null) return node;
 		PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecyleName);
 		Node viewNode = publicationPlugin.getNodeView(node, context);
-
-		
-		
-		String state = this.getContentState(node);
-		List<String> states = getAllowedStates(mode);
-
-		if (states.contains(state)) {
-			return viewNode;
-		} else {
-			return null;
-		}
-
+		return viewNode;
 	}
-
-
 
 	/* (non-Javadoc)
 	 * @see org.exoplatform.services.wcm.publication.WCMComposer#updateContent(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
 	 */
-	public boolean updateContent(String repository, String workspace,
-			String path, HashMap<String, String> filters) throws Exception {
-		
+	public boolean updateContent(String repository, String workspace, String path, HashMap<String, String> filters) throws Exception {
 		if (isCached) {
-			if (log.isInfoEnabled()) log.info("updateContent : "+path);
 			/* remove live cache */
 			String hash = getHash(path, null);
 			cache.remove(hash);
@@ -280,25 +195,22 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 			String part = path.substring(0, path.lastIndexOf("/"));
 			hash = getHash(part, null);
 			cache.remove(hash);
+			if (log.isInfoEnabled()) log.info("updateContent : " + path);
 		}
-
 		return true;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.exoplatform.services.wcm.publication.WCMComposer#updateContents(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
 	 */
-	public boolean updateContents(String repository, String workspace,
-			String path, HashMap<String, String> filters) throws Exception {
-
+	public boolean updateContents(String repository, String workspace, String path, HashMap<String, String> filters) throws Exception {
 		if (isCached) {
-			if (log.isInfoEnabled()) log.info("updateContents : "+path);
 			String hash = getHash(path, null);
 			cache.remove(hash);
 			hash = getHash(path, BASE_VERSION);
 			cache.remove(hash);
+			if (log.isInfoEnabled()) log.info("updateContents : " + path);
 		}
-		
 		return true;
 	}
 
@@ -307,7 +219,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	 * MODE_LIVE : PUBLISHED state only
 	 * MODE_EDIT : PUBLISHED, DRAFT, PENDING, STAGED, APPROVED allowed.
 	 * 
-	 * @param mode the mode
+	 * @param mode the current mode (MODE_LIVE or MODE_EDIT)
 	 * 
 	 * @return the allowed states
 	 */
@@ -328,43 +240,12 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	/* (non-Javadoc)
 	 * @see org.picocontainer.Startable#start()
 	 */
-	public void start() {
-	}
+	public void start() {}
 
 	/* (non-Javadoc)
 	 * @see org.picocontainer.Startable#stop()
 	 */
-	public void stop() {
-	}
-
-	/**
-	 * Gets the temlates sql filter.
-	 * 
-	 * @return the temlates sql filter
-	 */
-	private String getTemlatesSQLFilter() {
-		if (templatesFilter!=null)
-			return templatesFilter;
-		else {
-			try {
-				List<String> listDocumentTypes = templateService.getDocumentTemplates(repository);
-				StringBuffer documentTypeClause = new StringBuffer();
-				for (int i = 0; i < listDocumentTypes.size(); i++) {
-					String documentType = listDocumentTypes.get(i);
-					documentTypeClause.append("jcr:primaryType = '" + documentType + "'");
-					if (i != (listDocumentTypes.size() - 1)) {
-						documentTypeClause.append(" OR ");
-					}
-				}
-				templatesFilter = documentTypeClause.toString();
-				templatesFilter += "OR jcr:primaryType = 'exo:taxonomyLink'";
-				return templatesFilter;
-			} catch (Exception e) {
-				log.error("Error when perform getTemlatesSQLFilter: ", e.fillInStackTrace());
-			}
-		}
-		return "";
-	}
+	public void stop() {}
 
 	/**
 	 * Gets the order sql filter.
@@ -380,56 +261,23 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		if (orderType == null) orderType = "DESC";
 		if (orderBy == null) orderBy = "exo:title";
 		orderQuery += orderBy + " " + orderType;
-
 		return orderQuery;
 	}
-
-	private String getContentState(Node node) throws Exception {
-	    String currentState = null;
-	    try {
-	      if(node.hasProperty("publication:currentState")) {
-	        currentState = node.getProperty("publication:currentState").getString();
-	      }
-	    } catch (Exception e) {
-	      //log.info("Error when perform getContentState: " + e.getMessage());
-	    }
-	    currentState = PublicationDefaultStates.PUBLISHED;
-	    return currentState;
-	}
 	
-	//  acme/categories/acme/World/ben
-	  /**
-	   * Gets the node by category.
-	   * 
-	   * @param parameters the parameters
-	   * 
-	   * @return the node by category
-	   * 
-	   * @throws Exception the exception
-	   */
-	  private Node getNodeByCategory(String path) throws Exception {
-	    if (path == null) return null;
-	    String[] params = path.split("/");
-	    try {
-			if (taxonomyService==null) taxonomyService = WCMCoreUtils.getService(TaxonomyService.class);
-
-	    	Node taxonomyTree = taxonomyService.getTaxonomyTree(this.repository, params[0]);
-	      Node symLink = null;
-	      path = path.substring(path.indexOf("/") + 1);
-	      while(taxonomyTree != null){
-	        try{
-	          symLink = taxonomyTree.getNode(path);
-	          break;
-	        }catch(PathNotFoundException exception){
-	          taxonomyTree = taxonomyTree.getParent();
-	        }
-	      }
-	      return taxonomyTree.getSession().getNodeByUUID(symLink.getProperty("exo:uuid").getString());
-	    } catch (Exception e) {
-	      e.printStackTrace();
-	      return null;
-	    }
-	  }
-
-
+	/**
+	 * Gets the order sql filter.
+	 * 
+	 * @param filters the filters
+	 * 
+	 * @return the order sql filter
+	 */
+	private String getIgnorePrimaryTypeSQL() {
+		String ignoreQuery = " AND NOT (";
+		for (String ignorePrimaryType : ignorePrimaryTypes) {
+			ignoreQuery += "jcr:primaryType = '" + ignorePrimaryType + "' OR ";
+		}
+		if (ignoreQuery.endsWith("OR ")) ignoreQuery = ignoreQuery.substring(0, ignoreQuery.lastIndexOf(" OR "));
+		ignoreQuery += ") ";
+		return ignoreQuery.toString(); 
+	}
 }
