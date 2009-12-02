@@ -141,15 +141,14 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 			statement.append(" AND NOT jcr:path LIKE '" + path + "/%/%'");
 		}
 		statement.append(getIgnorePrimaryTypeSQL());
-		statement.append(" AND (");
 		if (MODE_LIVE.equals(mode)) {
-			statement.append("publication:currentState='" + PublicationDefaultStates.PUBLISHED + "'"); 
+			statement.append(" OR publication:currentState='" + PublicationDefaultStates.PUBLISHED + "'"); 
 		} else {
-			statement.append("NOT (publication:currentState='" + PublicationDefaultStates.OBSOLETE + "' OR publication:currentState='" + PublicationDefaultStates.ARCHIVED + "')"); 
+			statement.append("OR NOT publication:currentState='" + PublicationDefaultStates.OBSOLETE + "' OR NOT publication:currentState='" + PublicationDefaultStates.ARCHIVED + "'"); 
 		}
-		statement.append(" OR publication:currentState LIKE '%')");
+		statement.append(" OR publication:currentState LIKE '%'");
 		statement.append(orderFilter);  
-		Query query = manager.createQuery(statement.toString(), Query.SQL);    
+		Query query = manager.createQuery(statement.toString(), Query.SQL);
 		return query.execute().getNodes();
 	}
 
