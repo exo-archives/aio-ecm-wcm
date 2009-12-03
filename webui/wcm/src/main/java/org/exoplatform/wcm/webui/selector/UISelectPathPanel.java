@@ -28,12 +28,10 @@ import javax.jcr.ValueFormatException;
 import javax.jcr.nodetype.NodeType;
 
 import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.ecm.utils.text.Text;
 import org.exoplatform.ecm.webui.tree.selectone.UIOneNodePathSelector;
 import org.exoplatform.ecm.webui.utils.Utils;
 import org.exoplatform.portal.webui.container.UIContainer;
-import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
-import org.exoplatform.ecm.utils.text.Text;
 import org.exoplatform.services.cms.BasePath;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -46,7 +44,6 @@ import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.wcm.webui.selector.content.UIContentBrowsePanel;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -306,12 +303,6 @@ public class UISelectPathPanel extends UIContainer {
     return listNodeCheck;
   }      
 
-  public void processRender(WebuiRequestContext context) throws Exception {
-  	UIMaskWorkspace maskWorkspace = Util.getUIPortalApplication().getChild(UIMaskWorkspace.class);
-    if (maskWorkspace != null) maskWorkspace.setUpdated(true);
-  	super.processRender(context);
-  }
-  
   /**
    * Checks if is valid state.
    * 

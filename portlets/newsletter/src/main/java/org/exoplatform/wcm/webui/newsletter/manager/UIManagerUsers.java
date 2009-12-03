@@ -305,8 +305,7 @@ public class UIManagerUsers extends UITabPane {
         
         updateListUser();
       }catch(Exception ex){
-        ex.printStackTrace();
-        //Utils.createPopupMessage(this, "UIManagerUsers.msg.set-infor-users", null, ApplicationMessage.ERROR);
+        Utils.createPopupMessage(this, "UIManagerUsers.msg.set-infor-users", null, ApplicationMessage.ERROR);
       }
     }
   }

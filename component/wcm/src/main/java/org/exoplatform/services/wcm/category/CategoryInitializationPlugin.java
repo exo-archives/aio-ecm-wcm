@@ -26,6 +26,7 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ObjectParameter;
 import org.exoplatform.container.xml.ValueParam;
@@ -47,6 +48,7 @@ import org.exoplatform.services.jcr.config.RepositoryEntry;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.log.ExoLogger;
 
 /**
  * Created by The eXo Platform SAS
@@ -56,6 +58,8 @@ import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
  */
 public class CategoryInitializationPlugin extends TaxonomyPlugin {
 
+	protected static final Log log = ExoLogger.getLogger("wcm:CategoryInitializationPlugin");
+	
   /** The tree name. */
   private String treeName = "";
   
@@ -201,7 +205,7 @@ public class CategoryInitializationPlugin extends TaxonomyPlugin {
     try {
       taxonomyService.addTaxonomyTree(taxonomyStorageNodeSystem);
     } catch (TaxonomyAlreadyExistsException e) {
-      e.printStackTrace();
+    	if (log.isInfoEnabled()) log.error("Cannot add taxonomy tree", e);
     }
     session.save();
     session.logout();

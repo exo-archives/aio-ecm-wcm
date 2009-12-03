@@ -30,7 +30,6 @@ import org.exoplatform.ecm.webui.utils.Utils;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.services.cms.BasePath;
 import org.exoplatform.services.cms.drives.DriveData;
 import org.exoplatform.services.cms.drives.ManageDriveService;
@@ -335,9 +334,6 @@ public class UIContentTreeBuilder extends UIContainer {
       event.getRequestContext().addUIComponentToUpdateByAjax(selectPathPanel);
       session.logout();
       sessionProvider.close();
-      
-      UIMaskWorkspace maskWorkspace = Util.getUIPortalApplication().getChild(UIMaskWorkspace.class);
-      if (maskWorkspace != null) maskWorkspace.setUpdated(false);
     }
   }
 }

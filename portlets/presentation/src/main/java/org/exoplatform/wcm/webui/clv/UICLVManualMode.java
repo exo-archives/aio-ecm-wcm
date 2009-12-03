@@ -17,7 +17,6 @@
 package org.exoplatform.wcm.webui.clv;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -25,7 +24,6 @@ import javax.portlet.PortletPreferences;
 
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.resolver.ResourceResolver;
-import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -62,8 +60,6 @@ public class UICLVManualMode extends UICLVContainer {
       return;
     }
     int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UICLVPortlet.ITEMS_PER_PAGE, null));
-    HashMap<String,String> filters = new HashMap<String, String>();
-		filters.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
     List<Node> nodes = new ArrayList<Node>();
     if (listContent != null && listContent.length != 0) {
       for (String path : listContent) {

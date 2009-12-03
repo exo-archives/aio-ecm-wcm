@@ -192,8 +192,7 @@ public class NewsletterCategoryHandler {
       this.updatePermissionForCategoryNode(categoryNode, categoryConfig, true);
       session.save();
     } catch(Exception e) {
-      e.printStackTrace();
-      //log.error("Add category " + categoryConfig.getName() + " failed because of: ", e.fillInStackTrace());
+      log.error("Add category " + categoryConfig.getName() + " failed because of: ", e.fillInStackTrace());
     } finally {
       if (session != null) session.logout();
       sessionProvider.close();
@@ -220,8 +219,7 @@ public class NewsletterCategoryHandler {
       session.save();
       session.logout();
     } catch (Exception e) {
-      e.printStackTrace();
-      //log.info("Edit category " + categoryConfig.getName() + " failed because of ", e.fillInStackTrace());
+      log.info("Edit category " + categoryConfig.getName() + " failed because of ", e.fillInStackTrace());
     }finally{
       sessionProvider.close();
     }
