@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.exoplatform.ecm.wcm</groupId>
   <artifactId>config</artifactId>
-  <name>eXo WCM Config</name>
+  <name>eXo ECM - WCM</name>
   <version>1.1.x</version>
   <packaging>pom</packaging>
 
