@@ -10,7 +10,7 @@
 	      
 	      <property name="redactorMembershipType" value="redactor"/>
 	      
-	      <property name="parameterizedPageURI" value="/parameterizedviewer"/>
+	      <property name="parameterizedPageURI" value="/detail"/>
 	      <property name="printPageURI" value="/printviewer"/>
 	      <property name="printViewerPage" value="printviewer"/>
 	      <property name="createWikiPageURI" value="wikipresentation"/>
@@ -55,6 +55,19 @@
             </object>
           </object-param>                                                                                                   	    
 	   </init-params>
+  </component>
+
+  <component>
+    <key>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService</key>
+    <type>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsServiceImpl</type>
+    <init-params>
+      <values-param>
+        <name>ignored.portals</name>
+        <description>initial portals. the service will not deploy data to the initial portal</description>
+        <value>classic</value>
+        <value>acme</value>
+      </values-param>
+    </init-params>
   </component>
       
   <component>
@@ -129,7 +142,7 @@
 	                	<field  name="workspace"><string>collaboration</string></field>
 	                	<field  name="path"><string>/sites content</string></field>
 	                	<field  name="isDeep"><boolean>true</boolean></field>
-	                	<field  name="nodeTypes"><string>nt:unstructured,nt:folder,nt:file,exo:portalFolder,exo:webContent,exo:webFolder,exo:pictureOnHeadWebcontent,exo:siteSearchBox,exo:siteNavigationWebContent,exo:siteBreadcrumb</string></field>
+	                	<field  name="nodeTypes"><string>nt:unstructured,nt:folder,nt:file,exo:portalFolder</string></field>
 	                  <field  name="eventTypes"><string>addNode</string></field>	                  	                 
 	                  <field  name="actionClassName"><string>org.exoplatform.services.wcm.core.impl.WebSchemaCreationAction</string></field>
 	                </object>
@@ -180,11 +193,19 @@
         </properties-param>
         <properties-param>
           <name>cronjob.info</name>
-          <description>Link validate job</description>
+          <description>Newsletter email job</description>
           <property name="jobName" value="job"/>
           <property name="groupName" value="group"/>
           <property name="job" value="org.exoplatform.services.wcm.newsletter.NewsletterEmailJob"/>
           <property name="expression" value="0 0/60 * * * ?"/>
+        </properties-param>
+        <properties-param>
+          <name>cronjob.info</name>
+          <description>Javascript and Stylesheet updater job</description>
+          <property name="jobName" value="job"/>
+          <property name="groupName" value="group"/>
+          <property name="job" value="org.exoplatform.services.wcm.portal.XScriptJob"/>
+          <property name="expression" value="0 0/1 * * * ?"/>
         </properties-param>
       </init-params>          
     </component-plugin>

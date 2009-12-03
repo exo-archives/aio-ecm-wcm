@@ -31,7 +31,7 @@
 			</propertyDefinition>
 		</propertyDefinitions>
 		<childNodeDefinitions>
-			<childNodeDefinition name="*" defaultPrimaryType="nt:base" autoCreated="false" mandatory="false" onParentVersion="VERSION" protected="false" sameNameSiblings="true">
+			<childNodeDefinition name="*" defaultPrimaryType="nt:base" autoCreated="false" mandatory="false" onParentVersion="VERSION" protected="false" sameNameSiblings="false">
 				<requiredPrimaryTypes>
 					<requiredPrimaryType>nt:base</requiredPrimaryType>
 				</requiredPrimaryTypes>
@@ -72,6 +72,9 @@
 		</supertypes>
 		<propertyDefinitions>
 			<propertyDefinition name="exo:newsletterUserMail" requiredType="String" autoCreated="true" mandatory="true" onParentVersion="COPY" protected="false" multiple="false">
+				<valueConstraints/>
+			</propertyDefinition>
+			<propertyDefinition name="exo:newsletterUserConfirm" requiredType="Boolean" autoCreated="true" mandatory="true" onParentVersion="COPY" protected="false" multiple="false">
 				<valueConstraints/>
 			</propertyDefinition>
 			<propertyDefinition name="exo:newsletterUserBanned" requiredType="Boolean" autoCreated="true" mandatory="true" onParentVersion="COPY" protected="false" multiple="false">

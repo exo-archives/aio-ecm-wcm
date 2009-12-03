@@ -59,6 +59,10 @@
 		<key>javax.servlet.ServletContext</key>
 		<type>org.exoplatform.test.mocks.servlet.MockServletContext</type>
 	</component>
+  
+  <component>
+    <type>org.exoplatform.services.wcm.TestStartupServiceConfiguration</type>
+  </component>
 
 
 

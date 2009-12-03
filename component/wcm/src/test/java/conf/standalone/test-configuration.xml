@@ -59,6 +59,10 @@
 		<key>org.exoplatform.webui.ext.UIExtensionManager</key>
 		<type>org.exoplatform.webui.ext.impl.UIExtensionManagerImpl</type>
 	</component>
+ 
+  <component>
+    <type>org.exoplatform.services.wcm.TestStartupServiceConfiguration</type>
+  </component>
 	
 
 
@@ -79,15 +83,12 @@
 	<component>
 		<key>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService</key>
 		<type>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsServiceImpl</type>
-		<init-params>
-			<values-param>
-				<name>ignored.portals</name>
-				<description>initial portals. the service will not deploy data to the initial portal</description>
-				<value>classic</value>
-				<value>acme</value>
-			</values-param>
-		</init-params>
 	</component>
+ 
+  <component>
+    <key>org.exoplatform.services.wcm.portal.artifacts.RemovePortalArtifactsService</key>
+    <type>org.exoplatform.services.wcm.portal.artifacts.RemovePortalArtifactsServiceImpl</type>
+  </component>
 
 	<component>
 		<key>org.exoplatform.services.wcm.link.LiveLinkManagerService</key>
@@ -218,7 +219,39 @@
 			<description>this listener new live portal content storage</description>
 		</component-plugin>
 	</external-component-plugins>
+ 
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.jcr.impl.ext.action.SessionActionCatalog</target-component>    
+    <component-plugin>
+      <name>addActions</name>
+      <set-method>addPlugin</set-method>
+      <type>org.exoplatform.services.jcr.impl.ext.action.AddActionsPlugin</type>
+      <description>Reload all templates after edit</description>
+      <init-params>
+        <object-param>
+          <name>actions</name>
+          <object type="org.exoplatform.services.jcr.impl.ext.action.AddActionsPlugin$ActionsConfig">
+            <field  name="actions">
+              <collection type="java.util.ArrayList">               
+                <value>
+                  <object type="org.exoplatform.services.jcr.impl.ext.action.ActionConfiguration">
+                    <field  name="workspace"><string>dms-system</string></field>
+                    <field  name="path"><string>/exo:ecm/views/templates/</string></field>
+                    <field  name="isDeep"><boolean>true</boolean></field>
+                    <field  name="nodeTypes"><string>exo:template</string></field>
+                    <field  name="eventTypes"><string>changeProperty</string></field>                                      
+                    <field  name="actionClassName"><string>org.exoplatform.services.wcm.template.TemplateModificationAction</string></field>
+                  </object>
+                </value>
+              </collection>
+            </field>
+          </object>
+        </object-param>
+      </init-params>
+    </component-plugin>   
+  </external-component-plugins>
 	
+ 
 
 	<!-- Imports -->
 	<import>classpath:/conf/standalone/test-portal-configuration.xml</import>
