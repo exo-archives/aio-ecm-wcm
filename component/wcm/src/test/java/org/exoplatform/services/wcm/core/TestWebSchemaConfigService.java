@@ -43,7 +43,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
   private WebSchemaConfigService webSchemaConfigService;
   
   /** The live node. */
-  private Node liveNode;
+  private Node documentNode;
   
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.BaseWCMTestCase#setUp()
@@ -52,7 +52,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
     super.setUp();
     webSchemaConfigService = getService(WebSchemaConfigService.class);
     webSchemaConfigService.getAllWebSchemaHandler().clear();
-    liveNode = (Node) session.getItem("/sites content/live");
+    documentNode = (Node) session.getItem("/sites content/live/classic/documents");
   }
   
   /**
@@ -222,7 +222,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
    */
   public void testCreateCSSFileSchemaHandler() throws Exception {
     webSchemaConfigService.addWebSchemaHandler(new CSSFileHandler());
-    Node cssFolder = liveNode.addNode("css", NodetypeConstant.EXO_CSS_FOLDER);
+    Node cssFolder = documentNode.addNode("css", NodetypeConstant.EXO_CSS_FOLDER);
     Node cssNode = cssFolder.addNode("default.css", NodetypeConstant.NT_FILE);
     cssNode.setProperty(NodetypeConstant.EXO_ACTIVE, true);
     cssNode.setProperty(NodetypeConstant.EXO_PRIORITY, 1);
@@ -252,7 +252,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
    */
   public void testCreateJSFileSchemaHandler() throws Exception {
     webSchemaConfigService.addWebSchemaHandler(new JSFileHandler());
-    Node jsFolder = liveNode.addNode("js", NodetypeConstant.EXO_JS_FOLDER);
+    Node jsFolder = documentNode.addNode("js", NodetypeConstant.EXO_JS_FOLDER);
     Node jsNode = jsFolder.addNode("default.js", NodetypeConstant.NT_FILE);
     jsNode.setProperty(NodetypeConstant.EXO_ACTIVE, true);
     jsNode.setProperty(NodetypeConstant.EXO_PRIORITY, 1);
@@ -282,7 +282,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
    */
   public void testCreateWebcontentSchemaHandler_01() throws Exception {
     webSchemaConfigService.addWebSchemaHandler(new WebContentSchemaHandler());
-    Node webcontentNode = liveNode.addNode("webcontent", NodetypeConstant.EXO_WEBCONTENT);
+    Node webcontentNode = documentNode.addNode("webcontent", NodetypeConstant.EXO_WEBCONTENT);
     SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     webSchemaConfigService.createSchema(sessionProvider, webcontentNode);
     
@@ -312,12 +312,12 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
    */
   public void testCreateHTMLFileSchemaHandler() {
     try {
-      NodeIterator iterator = liveNode.getNodes();
+      NodeIterator iterator = documentNode.getNodes();
       while(iterator.hasNext()) {
         String name = iterator.nextNode().getName();
         System.out.println("Name of node is existed: " + name);
       }
-      Node htmlFolder = liveNode.addNode("html", NodetypeConstant.EXO_WEB_FOLDER);
+      Node htmlFolder = documentNode.addNode("html", NodetypeConstant.EXO_WEB_FOLDER);
       
       Node htmlFile = htmlFolder.addNode("htmlFile", NodetypeConstant.NT_FILE);
       
@@ -372,12 +372,12 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
       + "<a href=" + "#" + ">Test</a>"
       + "</body>" + "</html>";
     try {
-      NodeIterator iterator = liveNode.getNodes();
+      NodeIterator iterator = documentNode.getNodes();
       while(iterator.hasNext()) {
         String name = iterator.nextNode().getName();
         System.out.println("Name of node is existed: " + name);
       }
-      Node htmlFolder = liveNode.addNode("html", NodetypeConstant.EXO_WEB_FOLDER);
+      Node htmlFolder = documentNode.addNode("html", NodetypeConstant.EXO_WEB_FOLDER);
       
       Node htmlFile = htmlFolder.addNode("htmlFile", NodetypeConstant.NT_FILE);
       
@@ -431,11 +431,8 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
    * @see junit.framework.TestCase#tearDown()
    */
   public void tearDown() throws Exception {
-
     super.tearDown();
-    Node liveNode = (Node) session.getItem("/sites content/live");
-
-    NodeIterator nodeIterator = liveNode.getNodes();
+    NodeIterator nodeIterator = documentNode.getNodes();
     while (nodeIterator.hasNext()) {
       nodeIterator.nextNode().remove();
     }
