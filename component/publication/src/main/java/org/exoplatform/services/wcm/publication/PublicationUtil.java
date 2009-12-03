@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFactory;
@@ -266,7 +267,9 @@ public class PublicationUtil {
       try {
         content = session.getNodeByUUID(nodeIdentifier);
       } catch (ItemNotFoundException e) {
-        content = (Node)session.getItem(nodeIdentifier);
+        try {
+	        content = (Node)session.getItem(nodeIdentifier);
+        } catch (RepositoryException re) {}
       } finally {
         if (session != null) session.logout();
         sessionProvider.close();

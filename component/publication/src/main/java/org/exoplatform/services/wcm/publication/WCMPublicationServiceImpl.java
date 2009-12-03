@@ -151,11 +151,13 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
    * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#updateLifecyleOnChangePage(org.exoplatform.portal.config.model.Page)
    */
   public void updateLifecyleOnChangePage(Page page, String remoteUser) {
-    try {
-      for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
-        publicationPlugin.updateLifecyleOnChangePage(page, remoteUser);
-      }
-    } catch(Exception e) {} 
+  	for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
+  		try {
+  			publicationPlugin.updateLifecyleOnChangePage(page, remoteUser);
+  		} catch(Exception e) {
+  			continue;
+  		} 
+  	}
   }
 
   /* (non-Javadoc)
