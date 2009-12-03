@@ -70,8 +70,17 @@
 }	
 
 .UIWCMSearchContainer .UISelectPathPanel .UITreeList {
-	padding: 16px;
+	padding: 16px 0px 16px 16px;
 	margin: 0px;
+}
+
+.UIWCMSearchContainer .UISelectPathPanel .UITreeList .UIGrid {
+	width: 96%;
+	margin: 0px;
+}
+
+.UIWCMSearchContainer .UIContentSelected {
+	height: 200px;
 }
 
 .UIWCMSearchContainer .UIContentSelected .UICLVContentSelectedGrid {
@@ -238,4 +247,5 @@
 
 .UIMaskWorkspace .UISingleContentViewerPortlet .UITabContent {
 	height: auto;
+	overflow: hidden;
 }
