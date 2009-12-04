@@ -28,6 +28,7 @@ import javax.jcr.Session;
 import javax.jcr.Workspace;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ObjectParameter;
@@ -53,6 +54,7 @@ import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.portal.artifacts.CreatePortalPlugin;
 
 /**
@@ -63,6 +65,8 @@ import org.exoplatform.services.wcm.portal.artifacts.CreatePortalPlugin;
  */
 public class CreateTaxonomyPlugin extends CreatePortalPlugin {
 
+	protected static final Log log = ExoLogger.getLogger("wcm:CreateTaxonomyPlugin");
+	
   /** The workspace. */
   private String                  workspace                  = "";
 
@@ -372,7 +376,7 @@ public class CreateTaxonomyPlugin extends CreatePortalPlugin {
     try {
       taxonomyService.addTaxonomyTree(taxonomyStorageNodeSystem);
     } catch (TaxonomyAlreadyExistsException e) {
-      e.printStackTrace();
+    	if (log.isInfoEnabled()) log.error("Cannot add taxonomy tree", e);
     }
     session.save();
     session.logout();

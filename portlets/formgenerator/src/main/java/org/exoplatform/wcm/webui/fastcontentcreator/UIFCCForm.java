@@ -397,7 +397,6 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       } catch(AccessDeniedException e) {
-      	e.printStackTrace();
         Object[] args = { preferencePath } ;
         String key = "UIFCCForm.msg.access-denied" ;
         uiApp.addMessage(new ApplicationMessage(key, args, ApplicationMessage.WARNING)) ;

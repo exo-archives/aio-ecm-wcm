@@ -27,6 +27,9 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
+import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
+import org.exoplatform.services.ecm.publication.PublicationPlugin;
+import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -155,43 +158,42 @@ public class Utils {
     portalRequestContext.setFullRender(true);
   }
   
-  
-//  This method just be called in search case
-//  /**
-//   * Get node view by publication lifecycle and current mode
-//   * 
-//   * @param originalNode the original node
-//   * 
-//   * @return the node is got by publication lifecycle and current mode. Return original node if node doesn't join to any lifecycle.  
-//   */
-//  @Deprecated
-//  public static Node getNodeView(Node originalNode) {
-//  	Node realNode = null;
-//  	try{
-//  		if (originalNode.isNodeType("exo:taxonomyLink")) {
-//  			String uuid = originalNode.getProperty("exo:uuid").getString();
-//  			realNode = originalNode.getSession().getNodeByUUID(uuid);
-//  		} else {
-//  			realNode = originalNode;
-//  		}
-//  	} catch (Exception e) {
-//			return null;
-//		}
-//  	
-//  	try {
-//    	UIPortalApplication portalApplication = Util.getUIPortalApplication();
-//    	PublicationService publicationService = portalApplication.getApplicationComponent(PublicationService.class);
-//    	String lifecycleName = publicationService.getNodeLifecycleName(realNode);
-//      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
-//      HashMap<String,Object> context = new HashMap<String, Object>();    
-//      context.put(WCMComposer.FILTER_MODE, getCurrentMode());
-//      return publicationPlugin.getNodeView(realNode, context);
-//  	} catch (NotInPublicationLifecycleException e) {
-//  		return realNode;
-//  	} catch (Exception e) {
-//  		return null;
-//  	}
-//  }
+  /**
+   * Get node view by publication lifecycle and current mode
+   * @param originalNode the original node
+   * @return the node is got by publication lifecycle and current mode. Return original node if node doesn't join to any lifecycle.
+   * @deprecated  Since 1.2.2, we don't get content directly like this. 
+   * 							Replaced by {@link #getViewableNodeByComposer(String, String, String)} 
+   * 							and by {@link #getViewableNodeByComposer(String, String, String, String)}}
+   */
+  @Deprecated
+  public static Node getNodeView(Node originalNode) {
+  	Node realNode = null;
+  	try{
+  		if (originalNode.isNodeType("exo:taxonomyLink")) {
+  			String uuid = originalNode.getProperty("exo:uuid").getString();
+  			realNode = originalNode.getSession().getNodeByUUID(uuid);
+  		} else {
+  			realNode = originalNode;
+  		}
+  	} catch (Exception e) {
+			return null;
+		}
+  	
+  	try {
+    	UIPortalApplication portalApplication = Util.getUIPortalApplication();
+    	PublicationService publicationService = portalApplication.getApplicationComponent(PublicationService.class);
+    	String lifecycleName = publicationService.getNodeLifecycleName(realNode);
+      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
+      HashMap<String,Object> context = new HashMap<String, Object>();    
+      context.put(WCMComposer.FILTER_MODE, getCurrentMode());
+      return publicationPlugin.getNodeView(realNode, context);
+  	} catch (NotInPublicationLifecycleException e) {
+  		return realNode;
+  	} catch (Exception e) {
+  		return null;
+  	}
+  }
   
   /**
 	 * Gets the viewable node by WCMComposer (depends on site mode)
@@ -377,9 +379,31 @@ public class Utils {
    * Gets the session provider.
    * @return the session provider
    * @see SessionProviderFactory
+   * @deprecated Replaced by {@link #getSessionProvider()}
+   */
+  @Deprecated
+  public static SessionProvider getSessionProvider(UIComponent component) {
+  	return SessionProviderFactory.createSessionProvider();
+  }
+  
+  /**
+   * Gets the session provider.
+   * @return the session provider
+   * @see SessionProviderFactory
    */
   public static SessionProvider getSessionProvider() {
   	return SessionProviderFactory.createSessionProvider();
+  }
+  
+  /**
+   * Gets the system session provider.
+   * @return the system session provider
+   * @see SessionProviderFactory
+   * @deprecated Replaced by {@link #getSystemProvider()}
+   */
+  @Deprecated
+  public static SessionProvider getSystemProvider(UIComponent component) {
+    return SessionProviderFactory.createSystemProvider();
   }
   
   /**

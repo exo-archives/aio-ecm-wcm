@@ -17,6 +17,7 @@ import org.apache.commons.logging.Log;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.cms.link.LinkManager;
+import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
@@ -49,7 +50,8 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	/** The log. */
 	private static Log log = ExoLogger.getLogger(WCMComposerImpl.class);
 	
-	private static final String[] ignorePrimaryTypes = {"nt:folder", "nt:unstructured", "exo:taxonomy"};
+	/** The template filter query */
+	private String templatesFilter;
 
 	/**
 	 * Instantiates a new WCM composer impl.
@@ -140,14 +142,13 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		if (recursive == null) {
 			statement.append(" AND NOT jcr:path LIKE '" + path + "/%/%'");
 		}
-		statement.append(getIgnorePrimaryTypeSQL());
+		statement.append(" AND " + getTemlatesSQLFilter(repository) + " AND " + "NOT publication:currentState like '%'");
 		if (MODE_LIVE.equals(mode)) {
 			statement.append(" OR publication:currentState='" + PublicationDefaultStates.PUBLISHED + "'"); 
 		} else {
-			statement.append("OR NOT publication:currentState='" + PublicationDefaultStates.OBSOLETE + "' OR NOT publication:currentState='" + PublicationDefaultStates.ARCHIVED + "'"); 
+			statement.append(" OR publication:currentState<>'" + PublicationDefaultStates.OBSOLETE + "' AND publication:currentState<>'" + PublicationDefaultStates.ARCHIVED + "'"); 
 		}
-		statement.append(" OR publication:currentState LIKE '%'");
-		statement.append(orderFilter);  
+		statement.append(orderFilter);
 		Query query = manager.createQuery(statement.toString(), Query.SQL);
 		return query.execute().getNodes();
 	}
@@ -264,19 +265,29 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	}
 	
 	/**
-	 * Gets the order sql filter.
-	 * 
-	 * @param filters the filters
-	 * 
-	 * @return the order sql filter
+	 * Gets all document nodetypes and write a query cause
+	 * @param repository the repository's name
+	 * @return a part of the query allow search all document node and taxonomy link also. Return null if there is any exception.
 	 */
-	private String getIgnorePrimaryTypeSQL() {
-		String ignoreQuery = " AND NOT (";
-		for (String ignorePrimaryType : ignorePrimaryTypes) {
-			ignoreQuery += "jcr:primaryType = '" + ignorePrimaryType + "' OR ";
+	private String getTemlatesSQLFilter(String repository) {
+		if (templatesFilter != null) return templatesFilter;
+		else {
+			try {
+				TemplateService templateService = WCMCoreUtils.getService(TemplateService.class);
+				List<String> documentTypes = templateService.getDocumentTemplates(repository);
+				StringBuffer documentTypeClause = new StringBuffer("(");
+				for (int i = 0; i < documentTypes.size(); i++) {
+					String documentType = documentTypes.get(i);
+					documentTypeClause.append("jcr:primaryType = '" + documentType + "'");
+					if (i != (documentTypes.size() - 1)) documentTypeClause.append(" OR ");
+				}
+				templatesFilter = documentTypeClause.toString();
+				templatesFilter += "OR jcr:primaryType = 'exo:taxonomyLink')";
+				return templatesFilter;
+			} catch (Exception e) {
+				log.error("Error when perform getTemlatesSQLFilter: ", e);
+				return null;
+			}
 		}
-		if (ignoreQuery.endsWith("OR ")) ignoreQuery = ignoreQuery.substring(0, ignoreQuery.lastIndexOf(" OR "));
-		ignoreQuery += ") ";
-		return ignoreQuery.toString(); 
 	}
 }

@@ -134,7 +134,6 @@ public class UpdateTreeConnector implements ResourceContainer {
         }
       }
     } catch (Exception e) {
-      e.printStackTrace();
     }
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
