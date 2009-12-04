@@ -137,13 +137,13 @@
 			<preference>
 				<name>repository</name>
 				<value>repository</value>
-				<read-only>true</read-only>
+				<read-only>false</read-only>
 			</preference>
 			<!-- Specify the workspace name will be use in repository	-->
 			<preference>
 				<name>workspace</name>
 				<value>collaboration</value>
-				<read-only>true</read-only>
+				<read-only>false</read-only>
 			</preference>
 			<!-- Specify the destination path which will be use to store saved documents -->
 			<preference>
