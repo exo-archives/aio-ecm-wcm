@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
@@ -17,6 +18,7 @@ import org.apache.commons.logging.Log;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.cms.link.LinkManager;
+import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
@@ -80,13 +82,25 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	public Node getContent(String repository, String workspace, String nodeIdentifier, HashMap<String, String> filters, SessionProvider sessionProvider) throws Exception {
 		String mode = filters.get(FILTER_MODE); 
 		String version = filters.get(FILTER_VERSION);
+		
+		if (repository==null && workspace==null) {
+		  String[] params = nodeIdentifier.split("/");
+		  repository = params[0];
+		  workspace = params[1];
+		  nodeIdentifier = nodeIdentifier.substring(repository.length()+workspace.length()+1);
+		}
 		if (MODE_LIVE.equals(mode) && isCached) {
 			String hash = getHash(nodeIdentifier, version);
 			Node cachedNode = (Node)cache.get(hash);
 			if (cachedNode != null) return cachedNode;
 		}
-		WCMService wcmService = WCMCoreUtils.getService(WCMService.class);
-		Node node = wcmService.getReferencedContent(sessionProvider, repository, workspace, nodeIdentifier);
+		Node node = null;
+		try {
+		  WCMService wcmService = WCMCoreUtils.getService(WCMService.class);
+		  node = wcmService.getReferencedContent(sessionProvider, repository, workspace, nodeIdentifier);
+		} catch (RepositoryException e) {
+		  node = getNodeByCategory(repository, repository + "/" + workspace + nodeIdentifier);
+		}
 		if (version == null || !BASE_VERSION.equals(version)) {
 			node = getViewableContent(node, filters);
 		}
@@ -290,4 +304,23 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 			}
 		}
 	}
+	
+	/**
+   * Gets the node by category.
+   * 
+   * @param parameters the parameters
+   * 
+   * @return the node by category
+   * 
+   * @throws Exception the exception
+   */
+  private Node getNodeByCategory(String repository, String parameters) throws Exception {
+    try {
+      Node taxonomyTree = WCMCoreUtils.getService(TaxonomyService.class).getTaxonomyTree(repository, parameters.split("/")[0]);
+      Node symlink = taxonomyTree.getNode(parameters.substring(parameters.indexOf("/") + 1));
+      return WCMCoreUtils.getService(LinkManager.class).getTarget(symlink);
+    } catch (Exception e) {
+      return null;
+    }
+  }
 }
