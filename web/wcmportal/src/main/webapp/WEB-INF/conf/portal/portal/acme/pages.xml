@@ -243,7 +243,7 @@
 		<application>
 			<instance-id>portal#acme:/formgenerator/FastContentCreatorBasicPortlet/acme-contactus</instance-id>
 			<title>Contact Us</title>
-			<show-info-bar>true</show-info-bar>
+			<show-info-bar>false</show-info-bar>
 			<show-application-state>false</show-application-state>
 			<show-application-mode>true</show-application-mode>
 		</application>
