@@ -32,6 +32,7 @@ import org.exoplatform.services.jcr.core.nodetype.ExtendedNodeTypeManager;
 import org.exoplatform.services.jcr.core.nodetype.NodeDefinitionValue;
 import org.exoplatform.services.jcr.core.nodetype.NodeTypeValue;
 import org.exoplatform.services.jcr.core.nodetype.PropertyDefinitionValue;
+import org.exoplatform.services.listener.ListenerService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -475,15 +476,20 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       String nodetypeName = formGeneratorTabPane.getNodetypeName(templateName);
       
       String preferenceRepository = UIFormGeneratorUtils.getPreferenceRepository();
+      ListenerService listenerService = Utils.getService(ListenerService.class);
+      
+      listenerService.broadcast(UIFormGeneratorConstant.PRE_CREATE_NODETYPE_EVENT, null, nodetypeName);
       
       formGeneratorTabPane.addNodetype(event.getRequestContext(), preferenceRepository, nodetypeName, forms);
       String newGTMPLTemplate = formGeneratorTabPane.generateDialogTemplate(templateName, forms);
       String newViewTemplate = formGeneratorTabPane.generateViewTemplate(templateName, forms);
-      
+
       TemplateService templateService = Utils.getService(TemplateService.class);
       templateService.addTemplate(true, nodetypeName, templateName, true, templateName, new String[] {"*"}, newGTMPLTemplate, preferenceRepository) ;
       templateService.addTemplate(false, nodetypeName, templateName, true, templateName, new String[] {"*"}, newViewTemplate, preferenceRepository) ;
-      
+
+      listenerService.broadcast(UIFormGeneratorConstant.POST_CREATE_NODETYPE_EVENT, null, nodetypeName);      
+
       Utils.createPopupMessage(formGeneratorTabPane, "UIFormGeneratorTabPane.msg.AddNewsSuccessful", new Object[]{templateName}, ApplicationMessage.INFO);
       
       nameFormStringInput.setValue("");
