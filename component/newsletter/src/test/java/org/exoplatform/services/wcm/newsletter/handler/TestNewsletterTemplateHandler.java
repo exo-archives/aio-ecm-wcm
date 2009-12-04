@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.Session;
 
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
 import org.exoplatform.services.wcm.core.NodetypeConstant;
@@ -12,6 +14,8 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
+
+import com.sun.org.apache.xalan.internal.xsltc.NodeIterator;
 
 /**
  * The Class TestNewsletterTemplateHandler.
@@ -85,16 +89,14 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 			newsletterSubscriptionHandler.add(sessionProvider, "classic", newsletterSubscriptionConfig);
 			
 			subscriptionNode = categoriesNode.getNode("CategoryName/SubscriptionName");
-			nodesTemp = subscriptionNode.addNode("testTemplate", NodetypeConstant.EXO_WEBCONTENT);
-			nodesTemp.addMixin(NodetypeConstant.EXO_NEWSLETTER_ENTRY);
+			nodesTemp 	= createWebcontentNode(subscriptionNode, "testTemplate", null, null, null);
 			session.save();
 			for(int i = 0 ; i < 5; i++) {
 				try{
 					nodesTemp = subscriptionNode.getNode("testTemplate "+i);
 				}catch(Exception ex){
-					nodesTemp = subscriptionNode.addNode("testTemplate "+i, NodetypeConstant.EXO_WEBCONTENT);
+					nodesTemp = createWebcontentNode(subscriptionNode, "testTemplate"+i, null, null, null);
 				}
-				nodesTemp.addMixin(NodetypeConstant.EXO_NEWSLETTER_ENTRY);
 				session.save();
 				listNode.add(nodesTemp);
 				newsletterTemplateHandler.convertAsTemplate(sessionProvider, nodesTemp.getPath(), "classic", newsletterCategoryConfig.getName());
@@ -144,6 +146,11 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 	public void tearDow() {
 	  try {
       super.tearDown();
+      javax.jcr.NodeIterator nodeIterator = newsletterApplicationNode.getNodes();
+      while(nodeIterator.hasNext()) {
+    	  nodeIterator.nextNode().remove();
+      }
+      session.save();
     } catch (Exception e) {
       sessionProvider.close();
     } finally {
