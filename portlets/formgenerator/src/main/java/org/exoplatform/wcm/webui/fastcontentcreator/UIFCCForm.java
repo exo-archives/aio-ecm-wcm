@@ -382,10 +382,10 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
         if (preferenceIsRedirect && preferenceRedirectPath != null) {
           event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + preferenceRedirectPath + "');");
         } else {
-          Object[] args = { preferencePath } ;
           String saveMessage = preferences.getValue(UIFCCConstant.PREFERENCE_SAVE_MESSAGE, "") ;
           if (saveMessage == null) saveMessage = "saved-successfully"; 
-          uiApp.addMessage(new ApplicationMessage("UIFCCForm.msg." + saveMessage, args)) ;
+          Object[] args = { saveMessage } ;
+          uiApp.addMessage(new ApplicationMessage("UIFCCForm.msg.saved-successfully", args)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         }
         event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorForm.getParent()) ;

@@ -2,18 +2,18 @@
 <bundle>
  <UIFCCForm>
   <msg>
-   <name-not-allowed>Ce nom n'est pas autorisée.</name-not-allowed>
-   <in-versioning>Besoin de courant à la caisse avant d'ajouter un nouveau noeud noeud</in-versioning>
-   <cannot-save>Certaines contraintes ont été violés au cours de cette action.</cannot-save>
-   <saved-successfully>Ce nœud a été enregistré à '{0}' emplacement avec succès</saved-successfully>
+   <name-not-allowed>Ce nom n'est pas autorisé.</name-not-allowed>
+   <in-versioning>Le répertoire est bloqué</in-versioning>
+   <cannot-save>Impossible de sauver</cannot-save>
+   <saved-successfully>{0}</saved-successfully>
    <not-support>Impossible de charger le modèle de '{0}'.</not-support>
-   <not-add-folder>nt:file peut seulement ajouter dans ce dossier</not-add-folder>
+   <not-add-folder>Seuls les fichiers sont autorisés dans ce dossier</not-add-folder>
    <access-denied>Accès refusé! Vous n'avez pas la permission d'ajouter à '{0}'</access-denied>
-   <path-not-found>Path '{0}' a été supprimé ou est invalide chemin.</path-not-found>
-   <node-locked>PathNode '{0}' est verrouillé. Unlock ce noeud avant de créer des documents.</node-locked>
-   <node-isExist>Ce nœud existe déjà dans '{0}' et le même nom de frère n'est pas autorisé</node-isExist>
-   <get-dialog-path>erreur lorsque obtenir le chemin de dialogue.</get-dialog-path>
-   <new-jcr-template>erreur lorsque vous effectuez la création de nouveaux newJCRTemplateResourceResolver </new-jcr-template>>
+   <path-not-found>Le chemin '{0}' a été supprimé</path-not-found>
+   <node-locked>Le chemin '{0}' est verrouillé. Déverrouiller ce chemin avant de créer des documents.</node-locked>
+   <node-isExist>Ce nœud existe déjà dans '{0}'</node-isExist>
+   <get-dialog-path>Impossible de trouver le chemin demandé</get-dialog-path>
+   <new-jcr-template>Impossible de trouver un gabarit d'affichage</new-jcr-template>>
   </msg>
   <action>
    <Save>Sauver</Save>
@@ -23,29 +23,29 @@
 
  <UIFCCConfig>
   <label>
-   <select-repository>Sélectionnez référentiel</select-repository>
-   <UIFCCSaveLocationField>Enregistrer le lieu</UIFCCSaveLocationField>
-   <UIFCCRepositoryFormSelectBox>Sélectionnez référentiel</UIFCCRepositoryFormSelectBox>
-   <UIFCCWorkspaceFormSelectBox>Sélectionnez travail</UIFCCWorkspaceFormSelectBox>
-   <UIFCCTemplateField>Les options du modèle</UIFCCTemplateField>
-   <UIFCCLocationFormInputAction>Lieu à mettre</UIFCCLocationFormInputAction>
+   <select-repository>Sélectionner référentiel</select-repository>
+   <UIFCCSaveLocationField>Où enregistrer ?</UIFCCSaveLocationField>
+   <UIFCCRepositoryFormSelectBox>Sélectionner référentiel</UIFCCRepositoryFormSelectBox>
+   <UIFCCWorkspaceFormSelectBox>Sélectionner espace de travail</UIFCCWorkspaceFormSelectBox>
+   <UIFCCTemplateField>Options</UIFCCTemplateField>
+   <UIFCCLocationFormInputAction>Répertoire de stockage</UIFCCLocationFormInputAction>
    <UIFCCLocationFormStringInput></UIFCCLocationFormStringInput>
    <UIFCCTemplateFormSelectBox>Sélectionner un modèle</UIFCCTemplateFormSelectBox>
    <UIFCCSaveFormStringInput>Personnaliser le bouton Enregistrer</UIFCCSaveFormStringInput>
-   <UIFCCMessageFormTextareaInput>Custom mettre message</UIFCCMessageFormTextareaInput>
-   <UIFCCRedirectFormCheckboxInput>Redirect</UIFCCRedirectFormCheckboxInput>
-   <UIFCCRedirectPathFormStringInput>Redirect chemin</UIFCCRedirectPathFormStringInput>
+   <UIFCCMessageFormTextareaInput>Message de remerciement</UIFCCMessageFormTextareaInput>
+   <UIFCCRedirectFormCheckboxInput>Redirection</UIFCCRedirectFormCheckboxInput>
+   <UIFCCRedirectPathFormStringInput>URL de redirection</UIFCCRedirectPathFormStringInput>
    <UIFCCActionField>Actions</UIFCCActionField>
    <UIFCCActionList></UIFCCActionList>
   </label>
   <msg>
-   <save-successfully>Enregistré dans les préférences de portlet avec succès</save-successfully>
+   <save-successfully>Enregistré avec succès</save-successfully>
    <item-not-found>Ce chemin n'est pas valide!</item-not-found>
-   <fileType-empty>Vous devez choisir le type de fichier avant d'enregistrer cette configuration.</fileType-empty>
-   <ws-empty>Vous devez choisir l'une de travail.</ws-empty>
-   <get-template>erreur lorsque vous template.</get-template>
-   <set-template-option>erreur lorsque mis template option.</set-template-option>
-   <do-select>erreur lorsque ne sélectionnez.</do-select>
+   <fileType-empty>Vous devez choisir le type de fichier avant d'enregistrer</fileType-empty>
+   <ws-empty>Vous devez choisir l'espace de travail.</ws-empty>
+   <get-template>Modèle non disponible</get-template>
+   <set-template-option>Erreur sur le modèle</set-template-option>
+   <do-select>Erreur de sélection</do-select>
   </msg>
   <action>
    <Save>Sauver</Save>
@@ -54,7 +54,7 @@
  
  <UIFCCLocationFormInputAction>
   <title>
-   <SelectPath>Sélectionnez chemin</SelectPath>
+   <SelectPath>Choisissez un chemin</SelectPath>
   </title>
  </UIFCCLocationFormInputAction>
 
@@ -70,11 +70,11 @@
   </action>
   <msg>
    <empty>Aucune action</empty>
-   <remove-popup-first>Vous devez fermer popup modifier avant de supprimer ce noeud.</remove-popup-first>
-   <confirm-delete-action>Ne yo voulez vraiment supprimer cette action?</confirm-delete-action>
-   <template-empty>Modèle de '{0}' est nul ou vide</template-empty>
+   <remove-popup-first>Vous devez fermer la fenêtre avant de supprimer ce noeud.</remove-popup-first>
+   <confirm-delete-action>Voulez-vous vraiment supprimer cette action?</confirm-delete-action>
+   <template-empty>Modèle de '{0}' n'existe pas</template-empty>
    <template-null>Modèle est nul ou vous n'avez pas la permission d'accéder à ce modèle.</template-null>
-   <access-denied>Accès refusé! Vous n'avez pas la permission de le faire assez de cette action.</access-denied>
+   <access-denied>Accès refusé! Vous n'avez pas la permission de faire cette action.</access-denied>
   </msg>
  </UIFCCActionList>
 
@@ -86,7 +86,7 @@
  
  <UIWorkspaceList>
   <label>
-   <workspaceName>Workspace</workspaceName>
+   <workspaceName>Espace de travail</workspaceName>
    <rootNodePath>Chemin d'accès racine</rootNodePath>
    <rootNodeInfo></rootNodeInfo>
   </label>
@@ -94,7 +94,7 @@
  
  <rootNodeInfo>
   <title>
-   <AddRootNode>Ajoutez root node</AddRootNode>
+   <AddRootNode>Ajoutez Racine</AddRootNode>
   </title>
  </rootNodeInfo>
 

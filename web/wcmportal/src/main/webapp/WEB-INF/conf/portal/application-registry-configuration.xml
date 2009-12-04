@@ -55,7 +55,7 @@
 		                <object type="org.exoplatform.application.registry.Application">                     
 		                  <field  name="categoryName"><string>WCM Presentation</string></field>
 		                  <field name="applicationName"><string>SingleContentViewer</string></field>
-						          <field name="displayName"><string>Single Content Viewer Portlet</string></field>
+						          <field name="displayName"><string>Content Detail</string></field>
 		                  <field name="applicationType"><string>portlet</string></field>
 		                  <field name="applicationGroup"><string>presentation</string></field>
 		                  <field name="accessPermissions">
@@ -69,7 +69,7 @@
 		                <object type="org.exoplatform.application.registry.Application">                     
 		                  <field  name="categoryName"><string>WCM Presentation</string></field>
 		                  <field name="applicationName"><string>ContentListViewerPortlet</string></field>
-						          <field name="displayName"><string>Content List Viewer Portlet</string></field>
+						          <field name="displayName"><string>Content List</string></field>
 		                  <field name="applicationType"><string>portlet</string></field>
 		                  <field name="applicationGroup"><string>presentation</string></field>
 		                  <field name="accessPermissions">
@@ -83,7 +83,7 @@
 		                <object type="org.exoplatform.application.registry.Application">                     
 		                  <field  name="categoryName"><string>WCM Presentation</string></field>
 		                  <field name="applicationName"><string>ParameterizedContentViewerPortlet</string></field>
-						          <field name="displayName"><string>Parameterized Content Viewer Portlet</string></field>
+						          <field name="displayName"><string>Content by URL</string></field>
 		                  <field name="applicationType"><string>portlet</string></field>
 		                  <field name="applicationGroup"><string>presentation</string></field>
 		                  <field name="accessPermissions">
@@ -97,7 +97,7 @@
 		                <object type="org.exoplatform.application.registry.Application">                     
 		                  <field  name="categoryName"><string>WCM Presentation</string></field>
 		                  <field name="applicationName"><string>CategoryNavigationPortlet</string></field>
-						          <field name="displayName"><string>Category Navigation Portlet</string></field>
+						          <field name="displayName"><string>Category Navigation</string></field>
 		                  <field name="applicationType"><string>portlet</string></field>
 		                  <field name="applicationGroup"><string>presentation</string></field>
 		                  <field name="accessPermissions">
@@ -111,7 +111,7 @@
 		                <object type="org.exoplatform.application.registry.Application">                     
 		                  <field  name="categoryName"><string>WCM Presentation</string></field>
 		                  <field name="applicationName"><string>ParameterizedContentListViewerPortlet</string></field>
-						          <field name="displayName"><string>Parameterized Content List Viewer Portlet</string></field>
+						          <field name="displayName"><string>Category Contents</string></field>
 		                  <field name="applicationType"><string>portlet</string></field>
 		                  <field name="applicationGroup"><string>presentation</string></field>
 		                  <field name="accessPermissions">
@@ -125,7 +125,7 @@
 		                <object type="org.exoplatform.application.registry.Application">                     
 		                  <field  name="categoryName"><string>WCM Newsletter</string></field>
 		                  <field name="applicationName"><string>NewsletterViewerPortlet</string></field>
-						          <field name="displayName"><string>Newsletter Viewer Portlet</string></field>
+						          <field name="displayName"><string>Newsletter</string></field>
 		                  <field name="applicationType"><string>portlet</string></field>
 		                  <field name="applicationGroup"><string>newsletter</string></field>
 		                  <field name="accessPermissions">
@@ -139,7 +139,7 @@
 		                <object type="org.exoplatform.application.registry.Application">                     
 		                  <field  name="categoryName"><string>WCM Newsletter</string></field>
 		                  <field name="applicationName"><string>NewsletterManagerPortlet</string></field>
-						          <field name="displayName"><string>Newsletter Manager Portlet</string></field>
+						          <field name="displayName"><string>Newsletter Manager</string></field>
 		                  <field name="applicationType"><string>portlet</string></field>
 		                  <field name="applicationGroup"><string>newsletter</string></field>
 		                  <field name="accessPermissions">
@@ -151,9 +151,9 @@
 	                </value>
 									<value>                 
 		                <object type="org.exoplatform.application.registry.Application">                     
-		                  <field  name="categoryName"><string>WCM Form Genenerator</string></field>
+		                  <field  name="categoryName"><string>WCM Form Generator</string></field>
 		                  <field name="applicationName"><string>FormGeneratorPortlet</string></field>
-						          <field name="displayName"><string>Form Generator Portlet</string></field>
+						          <field name="displayName"><string>Form Generator</string></field>
 		                  <field name="applicationType"><string>portlet</string></field>
 		                  <field name="applicationGroup"><string>formgenerator</string></field>
 		                  <field name="accessPermissions">
@@ -163,11 +163,25 @@
 						          </field>                                 
 		                </object>
 	                </value>
-									<value>                 
+									<!-- value>                 
 		                <object type="org.exoplatform.application.registry.Application">                     
 		                  <field  name="categoryName"><string>WCM Form Generator</string></field>
 		                  <field name="applicationName"><string>FastContentCreatorPortlet</string></field>
-						          <field name="displayName"><string>Fast Content Creator Portlet</string></field>
+						          <field name="displayName"><string>Content Creator</string></field>
+		                  <field name="applicationType"><string>portlet</string></field>
+		                  <field name="applicationGroup"><string>formgenerator</string></field>
+		                  <field name="accessPermissions">
+								        <collection type="java.util.ArrayList" item-type="java.lang.String">													
+													<value><string>*:/platform/users</string></value>													
+								        </collection>
+						          </field>                                 
+		                </object>
+	                </value-->
+									<value>                 
+		                <object type="org.exoplatform.application.registry.Application">                     
+		                  <field  name="categoryName"><string>WCM Form Generator</string></field>
+		                  <field name="applicationName"><string>FastContentCreatorBasicPortlet</string></field>
+						          <field name="displayName"><string>Content Creator</string></field>
 		                  <field name="applicationType"><string>portlet</string></field>
 		                  <field name="applicationGroup"><string>formgenerator</string></field>
 		                  <field name="accessPermissions">
