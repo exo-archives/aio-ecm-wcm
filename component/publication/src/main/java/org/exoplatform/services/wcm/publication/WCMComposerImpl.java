@@ -15,6 +15,7 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 
 import org.apache.commons.logging.Log;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.cms.link.LinkManager;
@@ -82,19 +83,17 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 //		cache.setLiveTime(60);
 	}
 	
-	private String getHash(String path, String version) throws Exception {
-		String key = path;
-		if (version != null) key += "::" + version;
-		return MessageDigester.getHash(key);
-	}
-
 	/* (non-Javadoc)
 	 * @see org.exoplatform.services.wcm.publication.WCMComposer#getContent(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
 	 */
 	public Node getContent(String repository, String workspace, String nodeIdentifier, HashMap<String, String> filters, SessionProvider sessionProvider) throws Exception {
 		String mode = filters.get(FILTER_MODE); 
-		String version = filters.get(FILTER_VERSION);
-		
+  		String version = filters.get(FILTER_VERSION);
+  		String remoteUser = null;
+  		try {
+  			remoteUser = Util.getPortalRequestContext().getRemoteUser();
+  		} catch (Exception e) {}
+
 		if (repository==null && workspace==null) {
 		  String[] params = nodeIdentifier.split("/");
 		  repository = params[0];
@@ -102,7 +101,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		  nodeIdentifier = nodeIdentifier.substring(repository.length()+workspace.length()+1);
 		}
 		if (MODE_LIVE.equals(mode) && isCached) {
-			String hash = getHash(nodeIdentifier, version);
+			String hash = getHash(nodeIdentifier, version, remoteUser);
 			Node cachedNode = (Node)cache.get(hash);
 			if (cachedNode != null) return cachedNode;
 		}
@@ -116,7 +115,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 			node = getViewableContent(node, filters);
 		}
 		if (MODE_LIVE.equals(mode) && isCached) {
-			String hash = getHash(nodeIdentifier, version);
+			String hash = getHash(nodeIdentifier, version, remoteUser);
 			cache.remove(hash);
 			cache.put(hash, node);
 		}
@@ -127,8 +126,13 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	public List<Node> getContents(String repository, String workspace, String path, HashMap<String, String> filters, SessionProvider sessionProvider) throws Exception {
 		String mode = filters.get(FILTER_MODE);
 		String version = filters.get(FILTER_VERSION);
+  		String remoteUser = null;
+  		try {
+  			remoteUser = Util.getPortalRequestContext().getRemoteUser();
+  		} catch (Exception e) {}
+
 		if (MODE_LIVE.equals(mode) && isCached) {
-			String hash = getHash(path, version);
+			String hash = getHash(path, version, remoteUser);
 			List<Node> cachedNodes = (List<Node>)cache.get(hash);
 			if (cachedNodes != null) return cachedNodes;
 		}
@@ -143,7 +147,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 			}
 		}
 		if (MODE_LIVE.equals(mode) && isCached) {
-			String hash = getHash(path, version);
+			String hash = getHash(path, version, remoteUser);
 			cache.remove(hash);
 			cache.put(hash, nodes);
 		}
@@ -169,15 +173,16 @@ public class WCMComposerImpl implements WCMComposer, Startable {
       }
 		}
 		StringBuffer statement = new StringBuffer();
-		statement.append("SELECT * FROM " + primaryType + " WHERE jcr:path LIKE '" + path + "/%'");
-		if (recursive == null) {
-			statement.append(" AND NOT jcr:path LIKE '" + path + "/%/%'");
+
+		statement.append("SELECT * FROM " + primaryType + " WHERE (jcr:path LIKE '" + path + "/%'");
+		if (recursive==null) {
+			statement.append(" AND NOT jcr:path LIKE '" + path + "/%/%')");
 		}
-		statement.append(" AND " + getTemlatesSQLFilter(repository) + " AND " + "NOT publication:currentState like '%'");
+		statement.append(" AND (" + getTemlatesSQLFilter(repository) + ") AND (" + "(NOT publication:currentState like '%')");
 		if (MODE_LIVE.equals(mode)) {
-			statement.append(" OR publication:currentState='" + PublicationDefaultStates.PUBLISHED + "'"); 
+			statement.append(" OR publication:currentState='" + PublicationDefaultStates.PUBLISHED + "')");
 		} else {
-			statement.append(" OR publication:currentState<>'" + PublicationDefaultStates.OBSOLETE + "' AND publication:currentState<>'" + PublicationDefaultStates.ARCHIVED + "'"); 
+			statement.append(" OR (publication:currentState<>'" + PublicationDefaultStates.OBSOLETE + "' AND publication:currentState<>'" + PublicationDefaultStates.ARCHIVED + "'))");
 		}
 		statement.append(orderFilter);
 		Query query = manager.createQuery(statement.toString(), Query.SQL);
@@ -215,6 +220,13 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	 */
 	public boolean updateContent(String repository, String workspace, String path, HashMap<String, String> filters) throws Exception {
 		if (isCached) {
+			if (log.isInfoEnabled()) log.info("updateContent : "+path);
+			String part = path.substring(0, path.lastIndexOf("/"));
+	  		String remoteUser = null;
+	  		try {
+	  			remoteUser = Util.getPortalRequestContext().getRemoteUser();
+	  		} catch (Exception e) {}
+			
 			/* remove live cache */
 			String hash = getHash(path, null);
 			cache.remove(hash);
@@ -222,10 +234,19 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 			hash = getHash(path, BASE_VERSION);
 			cache.remove(hash);
 			/* remove parent cache */
-			String part = path.substring(0, path.lastIndexOf("/"));
 			hash = getHash(part, null);
 			cache.remove(hash);
-			if (log.isInfoEnabled()) log.info("updateContent : " + path);
+			if (remoteUser!=null) {
+				/* remove live cache for current user */
+				hash = getHash(path, null, remoteUser);
+				cache.remove(hash);
+				/* remove base content cache for current user */
+				hash = getHash(path, BASE_VERSION, remoteUser);
+				cache.remove(hash);
+				/* remove parent cache for current user */
+				hash = getHash(part, null, remoteUser);
+				cache.remove(hash);
+			}
 		}
 		return true;
 	}
@@ -235,11 +256,22 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	 */
 	public boolean updateContents(String repository, String workspace, String path, HashMap<String, String> filters) throws Exception {
 		if (isCached) {
+	  		String remoteUser = null;
+	  		try {
+	  			remoteUser = Util.getPortalRequestContext().getRemoteUser();
+	  		} catch (Exception e) {}
+
+	  		if (log.isInfoEnabled()) log.info("updateContents : "+path);
 			String hash = getHash(path, null);
 			cache.remove(hash);
 			hash = getHash(path, BASE_VERSION);
 			cache.remove(hash);
-			if (log.isInfoEnabled()) log.info("updateContents : " + path);
+			if (remoteUser!=null) {
+				hash = getHash(path, null, remoteUser);
+				cache.remove(hash);
+				hash = getHash(path, BASE_VERSION, remoteUser);
+				cache.remove(hash);
+			}
 		}
 		return true;
 	}
@@ -338,4 +370,18 @@ public class WCMComposerImpl implements WCMComposer, Startable {
       return null;
     }
   }
+
+	  private String getHash(String path, String version, String remoteUser) throws Exception {
+		  String key = path;
+		  if (version!=null) key += "::"+version;
+		  if (remoteUser!=null) key += ";;"+remoteUser;
+		  return MessageDigester.getHash(key);
+	  }
+	  
+	  private String getHash(String path, String version) throws Exception {
+		  return getHash(path, version, null);
+	  }
+
+
+
 }
