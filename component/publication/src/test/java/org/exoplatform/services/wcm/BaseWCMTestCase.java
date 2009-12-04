@@ -120,7 +120,8 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
     
     Node jsFolder = webcontent.addNode("js", "exo:jsFolder");
     Node jsNode = jsFolder.addNode("default.js", "nt:file");
-    jsNode.addMixin("exo:jsFile");
+    if (jsNode.canAddMixin("exo:jsFile"))
+    	jsNode.addMixin("exo:jsFile");
     jsNode.setProperty("exo:active", true);
     jsNode.setProperty("exo:priority", 1);
     jsNode.setProperty("exo:sharedJS", true);
@@ -134,7 +135,8 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
     
     Node cssFolder = webcontent.addNode("css", "exo:cssFolder");
     Node cssNode = cssFolder.addNode("default.css", "nt:file");
-    cssNode.addMixin("exo:cssFile");
+    if (cssNode.canAddMixin("exo:cssFile"))
+    	cssNode.addMixin("exo:cssFile");
     cssNode.setProperty("exo:active", true);
     cssNode.setProperty("exo:priority", 1);
     cssNode.setProperty("exo:sharedCSS", true);
