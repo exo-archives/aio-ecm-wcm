@@ -241,11 +241,11 @@
 		<access-permissions>Everyone</access-permissions>
 		<edit-permission>*:/platform/web-contributors</edit-permission>
 		<application>
-			<instance-id>portal#acme:/formgenerator/FastContentCreatorPortlet/acme-contactus</instance-id>
+			<instance-id>portal#acme:/formgenerator/FastContentCreatorBasicPortlet/acme-contactus</instance-id>
 			<title>Contact Us</title>
-			<show-info-bar>false</show-info-bar>
+			<show-info-bar>true</show-info-bar>
 			<show-application-state>false</show-application-state>
-			<show-application-mode>false</show-application-mode>
+			<show-application-mode>true</show-application-mode>
 		</application>
 	</page>
 
