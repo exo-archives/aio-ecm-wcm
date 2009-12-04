@@ -44,6 +44,14 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	/** The link manager service. */
 	private LinkManager linkManager;
 	
+	private PublicationService  publicationService;
+	
+	private TaxonomyService  taxonomyService;
+	
+	private TemplateService templateService;
+	
+	private WCMService wcmService;
+	
 	/** The cache. */
 	private ExoCache cache;
 	
@@ -66,6 +74,10 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	public WCMComposerImpl() throws Exception {
 		repositoryService = WCMCoreUtils.getService(RepositoryService.class);
 		linkManager = WCMCoreUtils.getService(LinkManager.class);
+		publicationService = WCMCoreUtils.getService(PublicationService.class);
+		taxonomyService = WCMCoreUtils.getService(TaxonomyService.class);
+		templateService = WCMCoreUtils.getService(TemplateService.class);
+		wcmService = WCMCoreUtils.getService(WCMService.class);
 		cache = WCMCoreUtils.getService(CacheService.class).getCacheInstance("wcm.composer");
 //		cache.setLiveTime(60);
 	}
@@ -96,7 +108,6 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		}
 		Node node = null;
 		try {
-		  WCMService wcmService = WCMCoreUtils.getService(WCMService.class);
 		  node = wcmService.getReferencedContent(sessionProvider, repository, workspace, nodeIdentifier);
 		} catch (RepositoryException e) {
 		  node = getNodeByCategory(repository, repository + "/" + workspace + nodeIdentifier);
@@ -150,7 +161,13 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		String mode = filters.get(FILTER_MODE);
 		String recursive = filters.get(FILTER_RECURSIVE);
 		String primaryType = filters.get(FILTER_PRIMARY_TYPE);
-		if (primaryType == null) primaryType = "nt:base";
+		if (primaryType == null) {
+		  primaryType = "nt:base";
+		  Node currentFolder = session.getRootNode().getNode(path.substring(1));
+		  if (currentFolder.isNodeType("exo:taxonomy")) {
+        primaryType = "exo:taxonomyLink";
+      }
+		}
 		StringBuffer statement = new StringBuffer();
 		statement.append("SELECT * FROM " + primaryType + " WHERE jcr:path LIKE '" + path + "/%'");
 		if (recursive == null) {
@@ -178,7 +195,6 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	 */
 	private Node getViewableContent(Node node, HashMap<String, String> filters) throws Exception {
 		if (node.isNodeType("exo:taxonomyLink")) node = linkManager.getTarget(node);
-		PublicationService publicationService = WCMCoreUtils.getService(PublicationService.class);
 		HashMap<String, Object> context = new HashMap<String, Object>();
 		String mode = filters.get(FILTER_MODE);
 		context.put(WCMComposer.FILTER_MODE, mode);
@@ -287,7 +303,6 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		if (templatesFilter != null) return templatesFilter;
 		else {
 			try {
-				TemplateService templateService = WCMCoreUtils.getService(TemplateService.class);
 				List<String> documentTypes = templateService.getDocumentTemplates(repository);
 				StringBuffer documentTypeClause = new StringBuffer("(");
 				for (int i = 0; i < documentTypes.size(); i++) {
@@ -316,9 +331,9 @@ public class WCMComposerImpl implements WCMComposer, Startable {
    */
   private Node getNodeByCategory(String repository, String parameters) throws Exception {
     try {
-      Node taxonomyTree = WCMCoreUtils.getService(TaxonomyService.class).getTaxonomyTree(repository, parameters.split("/")[0]);
+      Node taxonomyTree = taxonomyService.getTaxonomyTree(repository, parameters.split("/")[0]);
       Node symlink = taxonomyTree.getNode(parameters.substring(parameters.indexOf("/") + 1));
-      return WCMCoreUtils.getService(LinkManager.class).getTarget(symlink);
+      return linkManager.getTarget(symlink);
     } catch (Exception e) {
       return null;
     }
