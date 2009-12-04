@@ -60,7 +60,7 @@ public class WCMSkinResourceResolver implements ResourceResolver{
     final String cssData = skinService.getMergedCSS(cssPath);
     if(cssData == null) 
       return null;     
-    return new Resource(path) {
+    return new Resource(cssPath) {
       public Reader read() {
         return new StringReader(cssData);
       }
