@@ -108,7 +108,7 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     Node testNode = createWebcontentNode(collaborationSession.getRootNode(), "testDefaultContent", null, null, null); 
     collaborationSession.save();
     
-	WebpagePublicationPlugin publicationPlugin = new StageAndVersionPublicationPlugin();
+    WebpagePublicationPlugin publicationPlugin = new StageAndVersionPublicationPlugin();
     publicationPlugin.setName(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
     wcmPublicationService.addPublicationPlugin(publicationPlugin);
 
@@ -334,7 +334,7 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
    * @throws Exception the exception
    */
   public void testUpdateLifecycleOnChangeNavigation() throws Exception{
-    Node testNode = ((Node)collaborationSession.getItem("/sites content/live")).addNode("testSCV", "exo:webContent"); 
+    Node testNode = createWebcontentNode(collaborationSession.getRootNode(), "testSCV", null, null, null);
     collaborationSession.save();
 
     PageNavigation pageNavigation = createPageNavigation();
@@ -416,7 +416,7 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
    */
   public void testUpdateLifecyleOnCreatePage() throws Exception{
   	// Create new content
-    Node testNode = ((Node)collaborationSession.getItem("/sites content/live")).addNode("testSCV", "exo:webContent"); 
+    Node testNode = createWebcontentNode(collaborationSession.getRootNode(), "testSCV", null, null, null);
     collaborationSession.save();
     
     prepareNodeStatus(testNode);
@@ -456,7 +456,8 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
    */
   public void testUpdateLifecyleOnChangePage() throws Exception{
   	// Create new content
-    Node testNode = ((Node)collaborationSession.getItem("/sites content/live")).addNode("testSCV", "exo:webContent"); 
+    Node parentNode = (Node)collaborationSession.getItem("/sites content/live/classic/web contents");
+  	Node testNode = createWebcontentNode(parentNode, "testSCV", null, null, null);
     collaborationSession.save();
     
     createPageNavigation();
@@ -504,7 +505,7 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
    * @throws Exception the exception
    */
   public void testUpdateLifecycleOnRemovePage() throws Exception{
-    Node testNode = ((Node)collaborationSession.getItem("/sites content/live")).addNode("testSCV", "exo:webContent"); 
+    Node testNode = createWebcontentNode(collaborationSession.getRootNode(), "testSCV", null, null, null);
     collaborationSession.save();
 
     PageNavigation pageNavigation = createPageNavigation();
@@ -576,7 +577,7 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
    * @throws Exception the exception
    */
   public void testIsEnrolledInWCMLifecycle() throws Exception{
-    Node testNode = ((Node)collaborationSession.getItem("/sites content/live")).addNode("testSCV", "exo:webContent"); 
+  	Node testNode = createWebcontentNode(collaborationSession.getRootNode(), "testSCV", null, null, null);
     collaborationSession.save();
     
 	  WebpagePublicationPlugin publicationPlugin = new StageAndVersionPublicationPlugin();
