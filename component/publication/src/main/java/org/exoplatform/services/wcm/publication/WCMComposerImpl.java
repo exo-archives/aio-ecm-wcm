@@ -76,7 +76,6 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		repositoryService = WCMCoreUtils.getService(RepositoryService.class);
 		linkManager = WCMCoreUtils.getService(LinkManager.class);
 		publicationService = WCMCoreUtils.getService(PublicationService.class);
-		taxonomyService = WCMCoreUtils.getService(TaxonomyService.class);
 		templateService = WCMCoreUtils.getService(TemplateService.class);
 		wcmService = WCMCoreUtils.getService(WCMService.class);
 		cache = WCMCoreUtils.getService(CacheService.class).getCacheInstance("wcm.composer");
@@ -353,23 +352,24 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	}
 	
 	/**
-   * Gets the node by category.
-   * 
-   * @param parameters the parameters
-   * 
-   * @return the node by category
-   * 
-   * @throws Exception the exception
-   */
-  private Node getNodeByCategory(String repository, String parameters) throws Exception {
-    try {
-      Node taxonomyTree = taxonomyService.getTaxonomyTree(repository, parameters.split("/")[0]);
-      Node symlink = taxonomyTree.getNode(parameters.substring(parameters.indexOf("/") + 1));
-      return linkManager.getTarget(symlink);
-    } catch (Exception e) {
-      return null;
-    }
-  }
+	 * Gets the node by category.
+	 * 
+	 * @param parameters the parameters
+	 * 
+	 * @return the node by category
+	 * 
+	 * @throws Exception the exception
+	 */
+	private Node getNodeByCategory(String repository, String parameters) throws Exception {
+		try {
+			if (taxonomyService==null) taxonomyService = WCMCoreUtils.getService(TaxonomyService.class);
+			Node taxonomyTree = taxonomyService.getTaxonomyTree(repository, parameters.split("/")[0]);
+			Node symlink = taxonomyTree.getNode(parameters.substring(parameters.indexOf("/") + 1));
+			return linkManager.getTarget(symlink);
+		} catch (Exception e) {
+			return null;
+		}
+	}
 
 	  private String getHash(String path, String version, String remoteUser) throws Exception {
 		  String key = path;
