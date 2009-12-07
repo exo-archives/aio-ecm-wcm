@@ -108,7 +108,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		try {
 		  node = wcmService.getReferencedContent(sessionProvider, repository, workspace, nodeIdentifier);
 		} catch (RepositoryException e) {
-		  node = getNodeByCategory(repository, repository + "/" + workspace + nodeIdentifier);
+		  node = getNodeByCategory(repository + "/" + workspace + nodeIdentifier);
 		}
 		if (version == null || !BASE_VERSION.equals(version)) {
 			node = getViewableContent(node, filters);
@@ -360,8 +360,9 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	 * 
 	 * @throws Exception the exception
 	 */
-	private Node getNodeByCategory(String repository, String parameters) throws Exception {
+	private Node getNodeByCategory(String parameters) throws Exception {
 		try {
+		  String repository = repositoryService.getCurrentRepository().getConfiguration().getName();
 			if (taxonomyService==null) taxonomyService = WCMCoreUtils.getService(TaxonomyService.class);
 			Node taxonomyTree = taxonomyService.getTaxonomyTree(repository, parameters.split("/")[0]);
 			Node symlink = taxonomyTree.getNode(parameters.substring(parameters.indexOf("/") + 1));
