@@ -421,7 +421,8 @@ UIFormGeneratorPortlet.prototype.getProperties = function(comp) {
 			strObject +=  '"value":"'+inputNode.value+'","width":'+width+',"mandatory":'+mandatory+',"height":'+height+',';
 			break;
 		case "label" :
-			strObject +=  '"value":"null","width":0,"mandatory":'+mandatory+',"height":0,';
+			var labelNode = DOMUtil.findFirstDescendantByClass(topContent, 'td', 'FieldComponent');
+			strObject +=  '"value":"' + labelNode.innerHTML + '","width":0,"mandatory":'+mandatory+',"height":0,';
 			break;
 		case "textarea" :
 			var textareaNode = DOMUtil.findFirstDescendantByClass(topContent, 'textarea', "Textarea");

@@ -264,11 +264,11 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       if (validate.endsWith("=")) validate = "";
       String propertyName = getPropertyName(inputName);
       if (UIFormGeneratorConstant.LABEL.equals(inputType)) {
-        dialogTemplate.append("\n      <tr>\n");
-        dialogTemplate.append("        <td class=\"FieldLabel\" colspan=\"2\">"+value+"</td>\n");
+        dialogTemplate.append("      <tr>\n");
+        dialogTemplate.append("        <td></td>\n");
+        dialogTemplate.append("        <td>" + value + "</td>\n");
         dialogTemplate.append("        </td>\n");
         dialogTemplate.append("      </tr>\n");
-        
       } else {
         dialogTemplate.append("      <tr>\n");
         
