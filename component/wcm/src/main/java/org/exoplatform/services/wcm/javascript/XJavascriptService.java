@@ -212,9 +212,15 @@ public class XJavascriptService implements Startable {
   	// Get all js by query
   	Node jsFolder = schemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class).getJSFolder(portalNode);
   	String statement = StringUtils.replaceOnce(SHARED_JS_QUERY, "{path}", jsFolder.getPath());
-  	QueryManager queryManager = portalNode.getSession().getWorkspace().getQueryManager();
-  	Query query = queryManager.createQuery(statement, Query.SQL);
-  	QueryResult queryResult = query.execute();
+  	RepositoryService repositoryService = WCMCoreUtils.getService(RepositoryService.class);
+  	SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+  	NodeLocation portalNodeLocation = NodeLocation.make(portalNode);
+  	ManageableRepository repository = repositoryService.getRepository(portalNodeLocation.getRepository());
+  	Session session = sessionProvider.getSession(portalNodeLocation.getWorkspace(), repository);
+  	QueryManager queryManager = session.getWorkspace().getQueryManager();
+  	QueryResult queryResult = null;
+	  Query query = queryManager.createQuery(statement, Query.SQL);
+	  queryResult = query.execute();
   	NodeIterator iterator = queryResult.getNodes();
   	
   	if (isStartup) {

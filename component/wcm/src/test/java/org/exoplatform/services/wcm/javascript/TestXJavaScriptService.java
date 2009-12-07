@@ -24,7 +24,10 @@ import javax.jcr.NodeIterator;
 
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
+import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
+import org.exoplatform.web.application.javascript.JavascriptConfigService;
 
 /**
  * The Class TestXJavaScriptService.
@@ -43,6 +46,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	private static final String WEB_CONTENT_NODE_NAME = "webContent";
 	
 	private Node documentNode;
+	private Node sharedJsNode;
 	
 	SessionProvider sessionProvider;
 	
@@ -55,6 +59,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 		sessionProvider = WCMCoreUtils.getSessionProvider();
 		javascriptService = getService(XJavascriptService.class);
 		documentNode = (Node) session.getItem("/sites content/live/classic/documents");
+		sharedJsNode = (Node) session.getItem("/sites content/live/classic/js");
 	}
 	
 	/**
@@ -97,7 +102,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 			Node webContent = documentNode.addNode(WEB_CONTENT_NODE_NAME, "exo:webContent");
 			
 			webContent.setProperty("exo:title", WEB_CONTENT_NODE_NAME);
-			webContent.addNode("js", "exo:jsFolder");
+			webContent.addNode("jsFolder", "exo:jsFolder");
 			webContent.addNode("css", "exo:cssFolder");
 			webContent.addNode("medias");
 			session.save();
@@ -119,13 +124,8 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 		try {
 			Node webContent = documentNode.addNode(WEB_CONTENT_NODE_NAME, "exo:webContent");
 			webContent.setProperty("exo:title", WEB_CONTENT_NODE_NAME);
-			Node jsFolder = webContent.addNode("js", "exo:jsFolder");
+			Node jsFolder = webContent.addNode("jsFolder", "exo:jsFolder");
 	    Node jsNode = jsFolder.addNode("default.js", "nt:file");
-	    
-	    jsNode.addMixin("exo:cssFile");
-	    jsNode.setProperty("exo:active", true);
-	    jsNode.setProperty("exo:priority", 1);
-	    jsNode.setProperty("exo:sharedCSS", true);
 	    
 	    Node jsContent = jsNode.addNode("jcr:content", "nt:resource");
 	    jsContent.setProperty("jcr:encoding", "UTF-8");
@@ -135,7 +135,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	    session.save();
 
 			String jsData = javascriptService.getActiveJavaScript(webContent);
-			assertEquals("", jsData);
+			assertEquals("This is the default.js file.", jsData);
 		} catch(Exception e) {
 			fail();
 		}
@@ -176,7 +176,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 			session.save();
 			
 			String jsData = javascriptService.getActiveJavaScript(webContent);
-			assertEquals("", jsData);
+			assertEquals("This is the default.js file.", jsData);
 		} catch(Exception e) {
 			fail();
 		}
@@ -318,220 +318,293 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 		}
 	}
 
-//	/**
-//	 * Test update portal js on modify_01.
-//	 * When node input is null.
-//	 */
-//	public void testUpdatePortalJSOnModify_01() {
-//		try {
-//			javascriptService.updatePortalJSOnModify(sessionProvider, null);
-//			fail();
-//		} catch(Exception e) {
-//			assertNotNull(e.getStackTrace());
-//		}
-//	}
-//	
-//	/**
-//	 * Test update portal js on modify_02.
-//	 * When SessionProvider input is null.
-//	 */
-//	public void testUpdatePortalJSOnModify_02() {
-//		try {
-//			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
-//			Node jsNode = webContent.getNode("js").getNode("default.js");
-//			javascriptService.updatePortalJSOnModify(sessionProvider, jsNode);
-//			fail();
-//		} catch(Exception e) {
-//			assertNotNull(e.getStackTrace());
-//		}
-//	}
-//	
-//	/**
-//	 * Test update portal js on modify_03.
-//	 * When Node input does not jsFile.
-//	 */
-//	public void testUpdatePortalJSOnModify_03() {
-//		try {
-//			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "1", null, null, null);
-//			createWebcontentNode(root, WEB_CONTENT_NODE_NAME + "2", null, null, null);
-//			Node jsFolder = webContent.getNode("js");
-//			javascriptService.updatePortalJSOnModify(sessionProvider, jsFolder);
-//			fail();
-//		} catch(Exception e) {
-//			assertNotNull(e.getStackTrace());
-//		}
-//	}
-//	
-//	/**
-//	 * Test update portal js on modify_04.
-//	 * When node input have jcr:data is "".
-//	 */
-//	public void testUpdatePortalJSOnModify_04() {
-//		try {
-//			JavascriptConfigService configService = null;
-//			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "1", null, null, "");
-//			createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
-//			Node jsNode = webContent.getNode("js").getNode("default.js");
-//			javascriptService.updatePortalJSOnModify(sessionProvider, jsNode);
-//			session.save();
-//			
-//			configService = getService(JavascriptConfigService.class);
-//			String jsData = new String(configService.getMergedJavascript());
-//			assertEquals("\nThis is the default.js file.", jsData);
-//		} catch(Exception e) {
-//			fail();
-//		}
-//	}
-//	
-//	/**
-//	 * Test update portal js on modify_05.
-//	 * When node input have jcr:data is "When perform testUpdatePortalJSOnModify...".
-//	 */
-//	public void testUpdatePortalJSOnModify_05() {
-//		try {
-//			JavascriptConfigService configService = null;
-//			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "1", null, null, "When perform testUpdatePortalJSOnModify...");
-//			createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
-//			
-//			Node jsNode = webContent.getNode("js").getNode("default.js");
-//			javascriptService.updatePortalJSOnModify(sessionProvider, jsNode);
-//			session.save();
-//			configService = getService(JavascriptConfigService.class);
-//			String jsData = new String(configService.getMergedJavascript());
-//			assertEquals("\nThis is the default.js file.When perform testUpdatePortalJSOnModify...", jsData);
-//		} catch(Exception e) {
-//			fail();
-//		}
-//	}
-//	
-//	/**
-//	 * Test update portal js on modify_06.
-//	 * When node input have jcr:data is "alert('testUpdatePortalJSOnModify...');".
-//	 */
-//	public void testUpdatePortalJSOnModify_06() {
-//		try {
-//			JavascriptConfigService configService = null;
-//			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "1", null, null, "alert('testUpdatePortalJSOnModify...');");
-//			createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "1", null, null, null);
-//			Node jsNode = webContent.getNode("js").getNode("default.js");
-//			javascriptService.updatePortalJSOnModify(sessionProvider, jsNode);
-//			session.save();
-//			
-//			configService = getService(JavascriptConfigService.class);
-//			String jsData = new String(configService.getMergedJavascript());
-//			assertEquals("\nThis is the default.js file.alert('testUpdatePortalJSOnModify...');", jsData);
-//		} catch(Exception e) {
-//			fail();
-//		}
-//	}
-//	
-//	/**
-//	 * Test update portal js on remove_01.
-//	 * When node input is null.
-//	 */
-//	public void testUpdatePortalJSOnRemove_01() {
-//		try {
-//			javascriptService.updatePortalJSOnRemove(sessionProvider, null);
-//			fail();
-//		} catch(Exception e) {
-//			assertNotNull(e.getStackTrace());
-//		}
-//	}
-//	
-//	/**
-//	 * Test update portal js on remove_02.
-//	 * When Session Provider input is null.
-//	 */
-//	public void testUpdatePortalJSOnRemove_02() {
-//		try {
-//			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
-//			Node jsNode = webContent.getNode("js").getNode("default.js");
-//			javascriptService.updatePortalJSOnRemove(sessionProvider, jsNode);
-//			fail();
-//		} catch(Exception e) {
-//			assertNotNull(e.getStackTrace());
-//		}
-//	}
-//	
-//	/**
-//	 * Test update portal js on remove_03.
-//	 * When Node input does not jsFile.
-//	 */
-//	public void testUpdatePortalJSOnRemove_03() {
-//		try {
-//			JavascriptConfigService configService = null;
-//			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "1", null, null, null);
-//			createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
-//			Node jsFolder = webContent.getNode("js");
-//			javascriptService.updatePortalJSOnRemove(sessionProvider, jsFolder);
-//			session.save();
-//			String jsData = "";
-//			configService = getService(JavascriptConfigService.class);
-//			jsData = new String(configService.getMergedJavascript());
-//			assertEquals("\nThis is the default.js file.", jsData);
-//		} catch(Exception e) {
-//			fail();
-//		}
-//	}
-//	
-//	/**
-//	 * Test update portal js on remove_04.
-//	 * When node input have jcr:data is "".
-//	 */
-//	public void testUpdatePortalJSOnRemove_04() {
-//		try {
-//			JavascriptConfigService configService = null;
-//			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "1", null, null, "");
-//			createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
-//			Node jsNode = webContent.getNode("js").getNode("default.js");
-//			javascriptService.updatePortalJSOnModify(sessionProvider, jsNode);
-//			session.save();
-//			String jsData = "";
-//			configService = getService(JavascriptConfigService.class);
-//			jsData = new String(configService.getMergedJavascript());
-//			assertEquals("\nThis is the default.js file.", jsData);
-//			javascriptService.updatePortalJSOnRemove(sessionProvider, jsNode);
-//			session.save();
-//			jsData = new String(configService.getMergedJavascript());
-//			assertEquals("\nThis is the default.js file.", jsData);
-//		} catch(Exception e) {
-//			fail();
-//		}
-//	}
-//	
-//	/**
-//	 * Test update portal js on remove_05.
-//	 * When node input have jcr:data is "alert('testUpdatePortalJSOnModify...');".
-//	 */
-//	public void testUpdatePortalJSOnRemove_05() {
-//		try {
-//			JavascriptConfigService configService = null;
-//			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "1", null, null, "alert('testUpdatePortalJSOnModify...');");
-//			createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
-//			Node jsNode = webContent.getNode("js").getNode("default.js");
-//			javascriptService.updatePortalJSOnModify(sessionProvider, jsNode);
-//			session.save();
-//			String jsData = "";
-//			configService = getService(JavascriptConfigService.class);
-//			jsData = new String(configService.getMergedJavascript());
-//			assertEquals("\nThis is the default.js file.alert('testUpdatePortalJSOnModify...');", jsData);
-//			javascriptService.updatePortalJSOnRemove(sessionProvider, jsNode);
-//			session.save();
-//			jsData = new String(configService.getMergedJavascript());
-//			assertEquals("\nThis is the default.js file.", jsData);
-//		} catch(Exception e) {
-//			fail();
-//		}
-//	}
+	/**
+	 * Test update portal js on modify_01.
+	 * When node input is null.
+	 */
+	public void testUpdatePortalJSOnModify_01() {
+		try {
+		  JavascriptConfigService configService = null;
+		  Node portalNode = findPortalNode(sessionProvider, documentNode);
+			javascriptService.updatePortalJSOnModify(portalNode, null);
+      session.save();
+      configService = getService(JavascriptConfigService.class);
+      String jsData = new String(configService.getMergedJavascript());
+      assertEquals("", jsData);
+		} catch(Exception e) {
+		  fail();
+		}
+	}
+	
+	/**
+	 * Test update portal js on modify_02.
+	 * When Node input does not jsFile.
+	 */
+	public void testUpdatePortalJSOnModify_02() {
+		try {
+		  Node portalNode = findPortalNode(sessionProvider, documentNode);
+			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
+			createSharedJsNode(sharedJsNode);
+			Node jsFolder = webContent.getNode("js");
+			javascriptService.updatePortalJSOnModify(portalNode, jsFolder);
+			fail();
+		} catch(Exception e) {
+			assertNotNull(e.getStackTrace());
+		}
+	}
+	
+	/**
+	 * Test update portal js on modify_03.
+	 * When node input have jcr:data is "".
+	 */
+	public void testUpdatePortalJSOnModify_03() {
+		try {
+			JavascriptConfigService configService = null;
+			Node portalNode = findPortalNode(sessionProvider, documentNode);
+			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, "");
+			createSharedJsNode(sharedJsNode);
+			Node jsNode = webContent.getNode("js").getNode("default.js");
+			javascriptService.updatePortalJSOnModify(portalNode, jsNode);
+			session.save();
+			
+			configService = getService(JavascriptConfigService.class);
+			String jsData = new String(configService.getMergedJavascript());
+			assertEquals("", jsData);
+		} catch(Exception e) {
+			fail();
+		}
+	}
+	
+	/**
+	 * Test update portal js on modify_04.
+	 * When node input have jcr:data is "When perform testUpdatePortalJSOnModify...".
+	 */
+	public void testUpdatePortalJSOnModify_04() {
+		try {
+			JavascriptConfigService configService = null;
+			Node portalNode = findPortalNode(sessionProvider, documentNode);
+			createSharedJsNode(sharedJsNode);
+			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, "When perform testUpdatePortalJSOnModify...");
+			Node jsNode = webContent.getNode("js").getNode("default.js");
+			javascriptService.updatePortalJSOnModify(portalNode, jsNode);
+			session.save();
+			configService = getService(JavascriptConfigService.class);
+			String jsData = new String(configService.getMergedJavascript());
+			assertEquals("\nWhen perform testUpdatePortalJSOnModify...", jsData);
+		} catch(Exception e) {
+			fail();
+		}
+	}
+	
+	/**
+	 * Test update portal js on modify_05.
+	 * When node input have jcr:data is "alert('testUpdatePortalJSOnModify...');".
+	 */
+	public void testUpdatePortalJSOnModify_05() {
+		try {
+			JavascriptConfigService configService = null;
+			Node portalNode = findPortalNode(sessionProvider, documentNode);
+      createSharedJsNode(sharedJsNode);
+      Node js = sharedJsNode.getNode("sharedJsFile.js");
+      js.setProperty("exo:priority", 2);
+      Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, "alert('testUpdatePortalJSOnModify...');");
+      Node jsNode = webContent.getNode("js").getNode("default.js");
+      javascriptService.updatePortalJSOnModify(portalNode, jsNode);
+			session.save();
+			
+			configService = getService(JavascriptConfigService.class);
+			String jsData = new String(configService.getMergedJavascript());
+			assertEquals("\nalert('testUpdatePortalJSOnModify...');", jsData);
+		} catch(Exception e) {
+			fail();
+		}
+	}
+	
+	public void testUpdatePortalJSOnModify_06() {
+    try {
+      JavascriptConfigService configService = null;
+      WCMConfigurationService configurationService = WCMCoreUtils.getService(WCMConfigurationService.class);;
+      LivePortalManagerService livePortalManagerService = getService(LivePortalManagerService.class);
+      String sharedPortalName = configurationService.getSharedPortalName(REPO_NAME);
+      Node portal = livePortalManagerService.getLivePortal(sessionProvider, sharedPortalName);
+      Node sharedNode = (Node) session.getItem("/sites content/live/" + sharedPortalName + "/js");
+      Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, "alert('testUpdatePortalJSOnModify...');");
+      Node jsNode = webContent.getNode("js").getNode("default.js");
+      createSharedJsNode(sharedNode);
+      Node js = sharedNode.getNode("sharedJsFile.js");
+      js.setProperty("exo:priority", 1);
+      javascriptService.updatePortalJSOnModify(portal, jsNode);
+      session.save();
+      String jsData = "";
+      configService = getService(JavascriptConfigService.class);
+      jsData = new String(configService.getMergedJavascript());
+      assertEquals("\nThis is the default.js file.alert('testUpdatePortalJSOnModify...');", jsData);
+      
+      session.save();
+    } catch(Exception e) {
+      fail();
+    }
+  }
+	
+	/**
+	 * Test update portal js on remove_01.
+	 * When node input is null.
+	 */
+	public void testUpdatePortalJSOnRemove_01() {
+		try {
+		  Node portalNode = findPortalNode(sessionProvider, documentNode);
+		  createSharedJsNode(sharedJsNode);
+			javascriptService.updatePortalJSOnRemove(portalNode, null);
+			fail();
+		} catch(Exception e) {
+			assertNotNull(e.getStackTrace());
+		}
+	}
+	
+	/**
+	 * Test update portal js on remove_03.
+	 * When Node input does not jsFile.
+	 */
+	public void testUpdatePortalJSOnRemove_03() {
+		try {
+			Node portalNode = findPortalNode(sessionProvider, documentNode);
+			createSharedJsNode(sharedJsNode);
+			javascriptService.updatePortalJSOnRemove(portalNode, sharedJsNode);
+			fail();
+		} catch(Exception e) {
+			assertNotNull(e.fillInStackTrace());
+		}
+	}
+	
+	/**
+	 * Test update portal js on remove_04.
+	 * When node input have jcr:data is "".
+	 */
+	public void testUpdatePortalJSOnRemove_04() {
+		try {
+			JavascriptConfigService configService = null;
+			Node portalNode = findPortalNode(sessionProvider, documentNode);
+			createSharedJsNode(sharedJsNode);
+			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, "");
+			Node jsNode = webContent.getNode("js").getNode("default.js");
+			configService = getService(JavascriptConfigService.class);
+			String jsData = "";
+			javascriptService.updatePortalJSOnRemove(portalNode, jsNode);
+			session.save();
+			jsData = new String(configService.getMergedJavascript());
+			assertEquals("\nThis is the default.js file.", jsData);
+		} catch(Exception e) {
+			fail();
+		}
+	}
+	
+	/**
+	 * Test update portal js on remove_05.
+	 * When node input have jcr:data is "alert('testUpdatePortalJSOnModify...');".
+	 */
+	public void testUpdatePortalJSOnRemove_05() {
+		try {
+			JavascriptConfigService configService = null;
+			Node portalNode = findPortalNode(sessionProvider, documentNode);
+			
+			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, "alert('testUpdatePortalJSOnModify...');");
+			Node jsNode = webContent.getNode("js").getNode("default.js");
+			createSharedJsNode(sharedJsNode);
+			Node js = sharedJsNode.getNode("sharedJsFile.js");
+			js.setProperty("exo:priority", 1);
+			session.save();
+			String jsData = "";
+			configService = getService(JavascriptConfigService.class);
+			javascriptService.updatePortalJSOnRemove(portalNode, jsNode);
+			session.save();
+			jsData = new String(configService.getMergedJavascript());
+			assertEquals("\nThis is the default.js file.This is the default.js file.", jsData);
+		} catch(Exception e) {
+			fail();
+		}
+	}
+
+	/**
+   * Test update portal js on remove_06.
+   * When portal node is shared portal.
+   */
+  public void testUpdatePortalJSOnRemove_06() {
+    try {
+      JavascriptConfigService configService = null;
+      WCMConfigurationService configurationService = WCMCoreUtils.getService(WCMConfigurationService.class);;
+      LivePortalManagerService livePortalManagerService = getService(LivePortalManagerService.class);
+      String sharedPortalName = configurationService.getSharedPortalName(REPO_NAME);
+      Node portal = livePortalManagerService.getLivePortal(sessionProvider, sharedPortalName);
+      Node sharedNode = (Node) session.getItem("/sites content/live/" + sharedPortalName + "/js");
+      Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, "alert('testUpdatePortalJSOnModify...');");
+      Node jsNode = webContent.getNode("js").getNode("default.js");
+      createSharedJsNode(sharedNode);
+      String jsData = "";
+      configService = getService(JavascriptConfigService.class);
+      javascriptService.updatePortalJSOnRemove(portal, jsNode);
+      session.save();
+      jsData = new String(configService.getMergedJavascript());
+      assertEquals("\nThis is the default.js file.alert('testUpdatePortalJSOnModify...');", jsData);
+      session.save();
+    } catch(Exception e) {
+      fail();
+    }
+  }
+	
+  private Node findPortalNode(SessionProvider sessionProvider, Node child) throws Exception{    
+    LivePortalManagerService livePortalManagerService = getService(LivePortalManagerService.class);                
+    String portalName = null;
+    for(String portalPath: livePortalManagerService.getLivePortalsPath()) {
+      if(child.getPath().startsWith(portalPath)) {
+        portalName = livePortalManagerService.getPortalNameByPath(portalPath);
+        break;
+      }      
+    }
+    if(portalName == null) return null;    
+    return livePortalManagerService.getLivePortal(sessionProvider, portalName);
+  }
+  
+  private void createSharedJsNode(Node parentNode) throws Exception {
+    Node jsNode;
+    jsNode = parentNode.addNode("sharedJsFile.js", "nt:file");
+    if (!jsNode.isNodeType("exo:jsFile")) {
+      jsNode.addMixin("exo:jsFile");
+    }
+    jsNode.setProperty("exo:active", true);
+    jsNode.setProperty("exo:priority", 2);
+    jsNode.setProperty("exo:sharedJS", true);
+
+    Node jsContent;
+    try {
+      jsContent = jsNode.getNode("jcr:content");
+    } catch (Exception ex) {
+      jsContent = jsNode.addNode("jcr:content", "nt:resource");
+    }
+    jsContent.setProperty("jcr:encoding", "UTF-8");
+    jsContent.setProperty("jcr:mimeType", "text/javascript");
+    jsContent.setProperty("jcr:lastModified", new Date().getTime());
+    String jsData = "This is the default.js file.";
+    jsContent.setProperty("jcr:data", jsData);
+    session.save();
+  }
 	
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#tearDown()
 	 */
 	public void tearDown() throws Exception {
 		super.tearDown();
+		Node sharedPortalNode = (Node) session.getItem("/sites content/live/shared/js");
 		NodeIterator nodeIterator = documentNode.getNodes();
+		NodeIterator sharedNode = sharedJsNode.getNodes();
+		NodeIterator sharedIterator = sharedPortalNode.getNodes();
 		while(nodeIterator.hasNext()) {
-			nodeIterator.nextNode().remove();
+		    nodeIterator.nextNode().remove();
+		}
+		while(sharedNode.hasNext()) {
+		  sharedNode.nextNode().remove();
+		}
+		while(sharedIterator.hasNext()) {
+		  sharedIterator.nextNode().remove();
 		}
 		session.save();
 		sessionProvider.close();

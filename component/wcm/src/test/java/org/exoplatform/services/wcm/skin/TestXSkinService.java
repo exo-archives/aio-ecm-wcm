@@ -23,8 +23,11 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 
 import org.exoplatform.portal.webui.skin.SkinService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
+import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * The Class TestXJavaScriptService.
@@ -42,12 +45,21 @@ public class TestXSkinService extends BaseWCMTestCase {
 	/** The Constant WEB_CONTENT_NODE_NAME. */
 	private static final String WEB_CONTENT_NODE_NAME = "webContent";
 	
+	private Node documentNode;
+	
+	private Node sharedCssNode;
+	
+	SessionProvider sessionProvider;
+	
 	/* (non-Javadoc)
 	 * @see org.exoplatform.services.wcm.BaseWCMTestCase#setUp()
 	 */
 	public void setUp() throws Exception {
 		super.setUp();
+		sessionProvider = WCMCoreUtils.getSessionProvider();
 		skinService = getService(XSkinService.class);
+		documentNode = (Node) session.getItem("/sites content/live/classic/documents");
+		sharedCssNode = (Node) session.getItem("/sites content/live/classic/css");
 	}
 	
 	/**
@@ -71,8 +83,7 @@ public class TestXSkinService extends BaseWCMTestCase {
 	 */
 	public void testGetActiveStylesheet_02() {
 		try {
-			Node root = session.getRootNode();
-			Node nodeInput = root.addNode(WEB_CONTENT_NODE_NAME);
+			Node nodeInput = documentNode.addNode(WEB_CONTENT_NODE_NAME);
 			session.save();
 			
 			String cssData = skinService.getActiveStylesheet(nodeInput);
@@ -89,8 +100,7 @@ public class TestXSkinService extends BaseWCMTestCase {
 	 */
 	public void testGetActiveStylesheet_03() {
 		try {
-			Node root = session.getRootNode();
-			Node webContent = root.addNode(WEB_CONTENT_NODE_NAME, "exo:webContent");
+			Node webContent = documentNode.addNode(WEB_CONTENT_NODE_NAME, "exo:webContent");
 			webContent.setProperty("exo:title", WEB_CONTENT_NODE_NAME);
 			webContent.addNode("js", "exo:jsFolder");
 			webContent.addNode("css", "exo:cssFolder");
@@ -107,46 +117,14 @@ public class TestXSkinService extends BaseWCMTestCase {
 	/**
 	 * Test get active Stylesheet_04.
 	 * 
-	 * When node input is exo:webcontent and have some child node but have mixin type does not exo:cssFile.
-	 */
-	public void testGetActiveStylesheet_04() {
-		try {
-			Node root = session.getRootNode();
-			Node webContent = root.addNode(WEB_CONTENT_NODE_NAME, "exo:webContent");
-			
-			webContent.setProperty("exo:title", WEB_CONTENT_NODE_NAME);
-			Node jsFolder = webContent.addNode("css", "exo:cssFolder");
-	    Node jsNode = jsFolder.addNode("default.css", "nt:file");
-	    jsNode.addMixin("exo:jsFile");
-	    jsNode.setProperty("exo:active", true);
-	    jsNode.setProperty("exo:priority", 1);
-	    jsNode.setProperty("exo:sharedJS", true);
-	    Node jsContent = jsNode.addNode("jcr:content", "nt:resource");
-	    jsContent.setProperty("jcr:encoding", "UTF-8");
-	    jsContent.setProperty("jcr:mimeType", "text/css");
-	    jsContent.setProperty("jcr:lastModified", new Date().getTime());
-	    jsContent.setProperty("jcr:data", "This is the default.css file.");
-	    
-	    session.save();
-			String jsData = skinService.getActiveStylesheet(webContent);
-			assertEquals("", jsData);
-		} catch(Exception e) {
-			fail();
-		}
-	}
-
-	/**
-	 * Test get active Stylesheet_05.
-	 * 
 	 * Child node have properties normal and value of exo:active is:
 	 * - "exo:active": false
 	 */
-	public void testGetActiveStylesheet_05() {
+	public void testGetActiveStylesheet_04() {
 		try {
-			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
-			Node jsNode = webContent.getNode("css").getNode("default.css");
-			jsNode.setProperty("exo:active", false);
+			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
+			Node cssNode = webContent.getNode("css").getNode("default.css");
+			cssNode.setProperty("exo:active", false);
 			session.save();
 			String cssData = skinService.getActiveStylesheet(webContent);
 			assertEquals("", cssData);
@@ -156,36 +134,14 @@ public class TestXSkinService extends BaseWCMTestCase {
 	}
 	
 	/**
-	 * Test get active Stylesheet_06.
-	 * 
-	 * Child node have properties normal and value of jcr:mimeType is:
-	 * - "jcr:mimeType": text/html
-	 */
-	public void testGetActiveStylesheet_06() {
-		try {
-			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
-			Node jsNode = webContent.getNode("css").getNode("default.css");
-			Node jsContent = jsNode.getNode("jcr:content");
-			jsContent.setProperty("jcr:mimeType", "text/html");
-			session.save();
-			String cssData = skinService.getActiveStylesheet(webContent);
-			assertEquals("", cssData);
-		} catch(Exception e) {
-			fail();
-		}
-	}
-	
-	/**
-	 * Test get active Stylesheet_07.
+	 * Test get active Stylesheet_05.
 	 * 
 	 * Child node have properties normal and value of jcr:mimeType is:
 	 * - "jcr:mimeType": text/css
 	 */
-	public void testGetActiveStylesheet_07() {
+	public void testGetActiveStylesheet_05() {
 		try {
-			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
+			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("css").getNode("default.css");
 			Node jsContent = jsNode.getNode("jcr:content");
 			jsContent.setProperty("jcr:mimeType", "text/css");
@@ -198,18 +154,13 @@ public class TestXSkinService extends BaseWCMTestCase {
 	}
 	
 	/**
-	 * Test get active Stylesheet_08.
+	 * Test get active Stylesheet_06.
 	 * 
 	 * Child node have properties normal and value of jcr:data is ""
 	 */
-	public void testGetActiveStylesheet_08() {
+	public void testGetActiveStylesheet_06() {
 		try {
-			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
-			Node jsNode = webContent.getNode("css").getNode("default.css");
-			Node jsContent = jsNode.getNode("jcr:content");
-			jsContent.setProperty("jcr:data", "");
-			session.save();
+			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, "", null);
 			String cssData = skinService.getActiveStylesheet(webContent);
 			assertEquals("", cssData);
 		} catch(Exception e) {
@@ -218,14 +169,13 @@ public class TestXSkinService extends BaseWCMTestCase {
 	}
 	
 	/**
-	 * Test get active Stylesheet_09.
+	 * Test get active Stylesheet_07.
 	 * 
 	 * In case normal
 	 */
-	public void testGetActiveStylesheet_09() {
+	public void testGetActiveStylesheet_07() {
 		try {
-			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
+			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
 			String cssData = skinService.getActiveStylesheet(webContent);
 			assertEquals("This is the default.css file.", cssData);
 		} catch (Exception e) {
@@ -239,10 +189,9 @@ public class TestXSkinService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalSkinOnModify_01() {
 		try {
-			Node root = session.getRootNode();
-			Node classicNode = root.getNode("sites content").getNode("live").getNode("classic");
-			Node portal = getPortalNode(classicNode);
-			skinService.updatePortalSkinOnModify(null, portal);
+			Node portal = findPortalNode(sessionProvider, documentNode);
+			createSharedCssNode(sharedCssNode);
+			skinService.updatePortalSkinOnModify(portal, null);
 			fail();
 		} catch(Exception e) {
 			assertNotNull(e.getStackTrace());
@@ -255,10 +204,9 @@ public class TestXSkinService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalSkinOnModify_02() {
 		try {
-			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
+			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("css").getNode("default.css");
-			skinService.updatePortalSkinOnModify(jsNode, null);
+			skinService.updatePortalSkinOnModify(null, jsNode);
 			fail();
 		} catch(Exception e) {
 			assertNotNull(e.getStackTrace());
@@ -271,13 +219,11 @@ public class TestXSkinService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalSkinOnModify_03() {
 		try {
-			Node root = session.getRootNode();
-			Node classicNode = root.getNode("sites content").getNode("live").getNode("classic");
-			Node portal = getPortalNode(classicNode);
-			Node webContent = createWebcontentNode(classicNode, WEB_CONTENT_NODE_NAME + "1", null, null, null);
-			createWebcontentNode(classicNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
+			Node portal = this.findPortalNode(sessionProvider, documentNode);
+			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
+			createSharedCssNode(sharedCssNode);
 			Node jsFolder = webContent.getNode("css");
-			skinService.updatePortalSkinOnModify(jsFolder, portal);
+			skinService.updatePortalSkinOnModify(portal, jsFolder);
 			fail();
 		} catch(Exception e) {
 			assertNotNull(e.getStackTrace());
@@ -290,22 +236,14 @@ public class TestXSkinService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalSkinOnModify_04() {
 		try {
-			Node root = session.getRootNode();
-			Node classicNode = root.getNode("sites content").getNode("live").getNode("classic");
-			Node portal = getPortalNode(classicNode);
+			Node portal = findPortalNode(sessionProvider, documentNode);
 			SkinService configService = null;
-			Node cssFolder;
-	    try{
-	      cssFolder = classicNode.getNode("css");
-	    }catch(Exception ex){
-	      cssFolder = classicNode.addNode("css", "exo:cssFolder");
-	    }
-	    Node cssNode = createNode(cssFolder,"default1.css", "");
-			createNode(cssFolder,"default2.css", "This is the default.css file.");
-			session.save();
+			Node webcontent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
+			Node cssNode = webcontent.getNode("css").getNode("default.css");
+			createSharedCssNode(sharedCssNode);
 			configService = getService(SkinService.class);
 			configService.addSkin("", "Default", "", "");
-			skinService.updatePortalSkinOnModify(cssNode, portal);
+			skinService.updatePortalSkinOnModify(portal, cssNode);
 			session.save();
 			String cssData = configService.getMergedCSS("/portlet_app_1/css/jcr/classic/Default/Stylesheet.css");
 			assertEquals("This is the default.css file.", cssData);
@@ -320,25 +258,17 @@ public class TestXSkinService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalSkinOnModify_05() {
 		try {
-			Node root = session.getRootNode();
-			Node classicNode = root.getNode("sites content").getNode("live").getNode("classic");
-			Node portal = getPortalNode(classicNode);
+			Node portal = findPortalNode(sessionProvider, documentNode);
 			SkinService configService = null;
-			Node cssFolder;
-	    try{
-	      cssFolder = classicNode.getNode("css");
-	    }catch(Exception ex){
-	      cssFolder = classicNode.addNode("css", "exo:cssFolder");
-	    }
-	    Node cssNode = createNode(cssFolder,"default1.css", "Test XSkin Service");
-			createNode(cssFolder,"default2.css", "This is the default.css file.");
-			session.save();
+			Node webcontent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
+      Node cssNode = webcontent.getNode("css").getNode("default.css");
+      createSharedCssNode(sharedCssNode);
 			configService = getService(SkinService.class);
 			configService.addSkin("", "Default", "", "");
-			skinService.updatePortalSkinOnModify(cssNode, portal);
+			skinService.updatePortalSkinOnModify(portal, cssNode);
 			session.save();
 			String cssData = configService.getMergedCSS("/portlet_app_1/css/jcr/classic/Default/Stylesheet.css");
-			assertEquals("This is the default.css file.Test XSkin Service", cssData);
+			assertEquals("This is the default.css file.", cssData);
 		} catch(Exception e) {
 			fail();
 		}
@@ -350,10 +280,9 @@ public class TestXSkinService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalSkinOnRemove_01() {
 		try {
-			Node root = session.getRootNode();
-			Node classicNode = root.getNode("sites content").getNode("live").getNode("classic");
-			Node portal = getPortalNode(classicNode);
-			skinService.updatePortalSkinOnRemove(null, portal);
+			Node portal = findPortalNode(sessionProvider, documentNode);
+			createSharedCssNode(sharedCssNode);
+			skinService.updatePortalSkinOnRemove(portal, null);
 			fail();
 		} catch(Exception e) {
 			assertNotNull(e.getStackTrace());
@@ -366,10 +295,9 @@ public class TestXSkinService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalSkinOnRemove_02() {
 		try {
-			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
-			Node jsNode = webContent.getNode("css").getNode("default.css");
-			skinService.updatePortalSkinOnRemove(jsNode, null);
+			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
+			Node cssNode = webContent.getNode("css").getNode("default.css");
+			skinService.updatePortalSkinOnRemove(null, cssNode);
 			fail();
 		} catch(Exception e) {
 			assertNotNull(e.getStackTrace());
@@ -382,19 +310,14 @@ public class TestXSkinService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalSkinOnRemove_03() {
 		try {
-			Node root = session.getRootNode();
-			Node classicNode = root.getNode("sites content").getNode("live").getNode("classic");
-			Node portal = getPortalNode(classicNode);
-			Node webContent = createWebcontentNode(classicNode, WEB_CONTENT_NODE_NAME + "1", null, null, null);
-			createWebcontentNode(classicNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
-			Node jsFolder = webContent.getNode("css");
-			skinService.updatePortalSkinOnRemove(jsFolder, portal);
-			SkinService configService = getService(SkinService.class);
-      configService.addSkin("", "Default", "", "");
-			String cssData = configService.getMergedCSS("/portlet_app_1/css/jcr/classic/Default/Stylesheet.css");
-      assertEquals("", cssData);
-		} catch(Exception e) {
+			Node portal = findPortalNode(sessionProvider, documentNode);
+			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
+			createSharedCssNode(sharedCssNode);
+			Node cssFolder = webContent.getNode("css");
+			skinService.updatePortalSkinOnRemove(portal, cssFolder);
 			fail();
+		} catch(Exception e) {
+			assertNotNull(e.fillInStackTrace());
 		}
 	}
 	
@@ -404,25 +327,17 @@ public class TestXSkinService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalSkinOnRemove_04() {
 		try {
-			Node root = session.getRootNode();
-			Node classicNode = root.getNode("sites content").getNode("live").getNode("classic");
-			Node portal = getPortalNode(classicNode);
+			Node portal = findPortalNode(sessionProvider, documentNode);
 			SkinService configService = null;
-			Node cssFolder;
-	    try{
-	      cssFolder = classicNode.getNode("css");
-	    }catch(Exception ex){
-	      cssFolder = classicNode.addNode("css", "exo:cssFolder");
-	    }
-	    Node cssNode = createNode(cssFolder,"default1.css", "");
-			createNode(cssFolder,"default2.css", "This is the default.css file.");
-			session.save();
+			Node webcontent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, "", null);
+      Node cssNode = webcontent.getNode("css").getNode("default.css");
+      createSharedCssNode(sharedCssNode);
 			configService = getService(SkinService.class);
 			configService.addSkin("", "Default", "", "");
-			skinService.updatePortalSkinOnRemove(cssNode, portal);
+			skinService.updatePortalSkinOnRemove(portal, cssNode);
 			session.save();
 			String cssData = configService.getMergedCSS("/portlet_app_1/css/jcr/classic/Default/Stylesheet.css");
-			assertEquals("This is the default.css file.", cssData);
+			assertEquals("", cssData);
 		} catch(Exception e) {
 			fail();
 		}
@@ -434,99 +349,130 @@ public class TestXSkinService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalSkinOnRemove_05() {
 		try {
-			Node root = session.getRootNode();
-			Node classicNode = root.getNode("sites content").getNode("live").getNode("classic");
-			Node portal = getPortalNode(classicNode);
+			Node portal = findPortalNode(sessionProvider, documentNode);
 			SkinService configService = null;
-			Node cssFolder;
-	    try{
-	      cssFolder = classicNode.getNode("css");
-	    }catch(Exception ex){
-	      cssFolder = classicNode.addNode("css", "exo:cssFolder");
-	    }
-	    Node cssNode = createNode(cssFolder,"default1.css", "Test XSkin Service");
-			createNode(cssFolder,"default2.css", "This is the default.css file.");
-			session.save();
+			Node webcontent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, "Test XSkin Service", null);
+      Node cssNode = webcontent.getNode("css").getNode("default.css");
+      createSharedCssNode(sharedCssNode);
 			configService = getService(SkinService.class);
-			configService.addSkin("", "Default", "", "");
-			skinService.updatePortalSkinOnModify(cssNode, portal);
-			session.save();
-			String cssDataOnModify = configService.getMergedCSS("/portlet_app_1/css/jcr/classic/Default/Stylesheet.css");
-			assertEquals("This is the default.css file.Test XSkin Service", cssDataOnModify);
-			skinService.updatePortalSkinOnRemove(cssNode, portal);
+			configService.addSkin(portal.getName(), "Default", "", "");
+			skinService.updatePortalSkinOnRemove(portal, cssNode);
 			session.save();
 
 			String cssData = configService.getMergedCSS("/portlet_app_1/css/jcr/classic/Default/Stylesheet.css");
-			assertEquals("This is the default.css file.", cssData);
+			assertEquals("Test XSkin Service", cssData);
 		} catch(Exception e) {
 			fail();
 		}
 	}
+	
+	/**
+   * Test update portal Skin on remove_06.
+   * When node input have jcr:data is "Test XSkin Service" and shared node have priority = 1.
+   */
+  public void testUpdatePortalSkinOnRemove_06() {
+    try {
+      Node portal = findPortalNode(sessionProvider, documentNode);
+      SkinService configService = null;
+      Node webcontent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, "Test XSkin Service", null);
+      Node cssNode = webcontent.getNode("css").getNode("default.css");
+      createSharedCssNode(sharedCssNode);
+      Node sharedNode = sharedCssNode.getNode("sharedJsFile.css");
+      sharedNode.setProperty("exo:priority", 1);
+      session.save();
+      configService = getService(SkinService.class);
+      configService.addSkin(portal.getName(), "Default", "", "");
+      skinService.updatePortalSkinOnRemove(portal, cssNode);
+      session.save();
+
+      String cssData = configService.getMergedCSS("/portlet_app_1/css/jcr/classic/Default/Stylesheet.css");
+      assertEquals("This is the default.css file.", cssData);
+    } catch(Exception e) {
+      fail();
+    }
+  }
+	
+	/**
+   * Test update portal Skin on remove_07.
+   * When portal node is shared portal.
+   */
+  public void testUpdatePortalSkinOnRemove_07() {
+    try {
+      WCMConfigurationService configurationService = WCMCoreUtils.getService(WCMConfigurationService.class);;
+      LivePortalManagerService livePortalManagerService = getService(LivePortalManagerService.class);
+      String sharedPortalName = configurationService.getSharedPortalName(REPO_NAME);
+      Node portal = livePortalManagerService.getLivePortal(sessionProvider, sharedPortalName);
+      SkinService configService = getService(SkinService.class);
+      configService.addSkin("", "Default", "", "");
+      Node webcontent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, "Test XSkin Service", null);
+      Node cssNode = webcontent.getNode("css").getNode("default.css");
+      Node sharedNode = (Node) session.getItem("/sites content/live/" + sharedPortalName + "/css");
+      createSharedCssNode(sharedNode);
+      skinService.updatePortalSkinOnRemove(portal, cssNode);
+      session.save();
+
+      String cssData = configService.getMergedCSS("/portlet_app_1/css/jcr/" + sharedPortalName + "/Default/Stylesheet.css");
+      assertEquals("Test XSkin Service", cssData);
+    } catch(Exception e) {
+      fail();
+    }
+  }
 	
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#tearDown()
 	 */
 	public void tearDown() throws Exception {
 		super.tearDown();
-		Node rootNode = session.getRootNode();
-		if(rootNode.hasNode(WEB_CONTENT_NODE_NAME))
-			rootNode.getNode(WEB_CONTENT_NODE_NAME).remove();
-		Node sharedNode = rootNode.getNode("sites content").getNode("live").getNode("classic").getNode("css");
-		NodeIterator nodeIterator = sharedNode.getNodes();
+		Node sharedPortalNode = (Node) session.getItem("/sites content/live/shared/css");
+		NodeIterator nodeIterator = documentNode.getNodes();
+		NodeIterator cssNodeIterator = sharedCssNode.getNodes();
+		NodeIterator sharedIterator = sharedPortalNode.getNodes();
 		while(nodeIterator.hasNext()) {
 			nodeIterator.nextNode().remove();
 		}
+		while(cssNodeIterator.hasNext()) {
+		  cssNodeIterator.nextNode().remove();
+    }
+		while(sharedIterator.hasNext()) {
+		  sharedIterator.nextNode().remove();
+    }
 		session.save();
 	}
 	
-	/**
-	 * Gets the portal node.
-	 * 
-	 * @param parent the parent
-	 * 
-	 * @return the portal node
-	 * 
-	 * @throws Exception the exception
-	 */
-	private Node getPortalNode(Node parent) throws Exception{    
-		LivePortalManagerService livePortalManagerService = getService(LivePortalManagerService.class);                
-    return livePortalManagerService.getLivePortalByChild(parent);
-	}
-	
-	/**
-	 * Creates the node.
-	 * 
-	 * @param parentNode the parent node
-	 * @param nodeName the node name
-	 * @param test the test
-	 * 
-	 * @return the node
-	 * 
-	 * @throws Exception the exception
-	 */
-	private Node createNode(Node parentNode,String nodeName, String test) throws Exception {
-		Node cssNode;
-    try{
-      cssNode = parentNode.getNode(nodeName);
-    }catch(Exception ex){
-      cssNode = parentNode.addNode(nodeName, "nt:file");
+	private Node findPortalNode(SessionProvider sessionProvider, Node child) throws Exception{    
+    LivePortalManagerService livePortalManagerService = getService(LivePortalManagerService.class);                
+    String portalName = null;
+    for(String portalPath: livePortalManagerService.getLivePortalsPath()) {
+      if(child.getPath().startsWith(portalPath)) {
+        portalName = livePortalManagerService.getPortalNameByPath(portalPath);
+        break;
+      }      
     }
-    if(!cssNode.isNodeType("exo:cssFile"))cssNode.addMixin("exo:cssFile");
+    if(portalName == null) return null;    
+    return livePortalManagerService.getLivePortal(sessionProvider, portalName);
+  }
+	
+	private void createSharedCssNode(Node parentNode) throws Exception {
+    Node cssNode;
+    cssNode = parentNode.addNode("sharedJsFile.css", "nt:file");
+    if (!cssNode.isNodeType("exo:cssFile")) {
+      cssNode.addMixin("exo:cssFile");
+    }
     cssNode.setProperty("exo:active", true);
-    cssNode.setProperty("exo:priority", 1);
+    cssNode.setProperty("exo:priority", 2);
     cssNode.setProperty("exo:sharedCSS", true);
-    
+
     Node cssContent;
-    try{
+    try {
       cssContent = cssNode.getNode("jcr:content");
-    }catch(Exception ex){
+    } catch (Exception ex) {
       cssContent = cssNode.addNode("jcr:content", "nt:resource");
     }
     cssContent.setProperty("jcr:encoding", "UTF-8");
     cssContent.setProperty("jcr:mimeType", "text/css");
     cssContent.setProperty("jcr:lastModified", new Date().getTime());
-    cssContent.setProperty("jcr:data", test);
+    String cssData = "This is the default.css file.";
+    cssContent.setProperty("jcr:data", cssData);
     session.save();
-		return cssNode;
-	}
+  }
 }
