@@ -225,7 +225,12 @@ public class XSkinService implements Startable {
   	// Get all css by query
   	Node cssFolder = schemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class).getCSSFolder(portalNode);
   	String statement = StringUtils.replaceOnce(SHARED_CSS_QUERY, "{path}", cssFolder.getPath());
-  	QueryManager queryManager = portalNode.getSession().getWorkspace().getQueryManager();
+  	RepositoryService repositoryService = WCMCoreUtils.getService(RepositoryService.class);
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    NodeLocation portalNodeLocation = NodeLocation.make(portalNode);
+    ManageableRepository repository = repositoryService.getRepository(portalNodeLocation.getRepository());
+    Session session = sessionProvider.getSession(portalNodeLocation.getWorkspace(), repository);
+  	QueryManager queryManager = session.getWorkspace().getQueryManager();
   	Query query = queryManager.createQuery(statement, Query.SQL);
   	QueryResult queryResult = query.execute();
   	NodeIterator iterator = queryResult.getNodes();
