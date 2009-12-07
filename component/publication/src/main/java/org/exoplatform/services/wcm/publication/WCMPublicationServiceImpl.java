@@ -129,66 +129,78 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
    * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#updateLifecycleOnChangeNavigation(org.exoplatform.portal.config.model.PageNavigation)
    */
   public void updateLifecycleOnChangeNavigation(PageNavigation navigation, String remoteUser) {
-    try {
-      for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
-        publicationPlugin.updateLifecycleOnChangeNavigation(navigation, remoteUser);
-      }
-    } catch(Exception e) {} 
+  	for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
+  		try {
+  			publicationPlugin.updateLifecycleOnChangeNavigation(navigation, remoteUser);
+  		} catch(Exception e) {
+  			continue;
+  		} 
+  	}
   }
 
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#updateLifecycleOnRemovePage(org.exoplatform.portal.config.model.Page)
    */
   public void updateLifecycleOnRemovePage(Page page, String remoteUser) {
-    try {
-      for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
-        publicationPlugin.updateLifecycleOnRemovePage(page, remoteUser);
-      }
-    } catch(Exception e) {} 
+  	for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
+  		try {
+  			publicationPlugin.updateLifecycleOnRemovePage(page, remoteUser);
+  		} catch(Exception e) {
+  			continue;
+  		} 
+  	}
   }
 
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#updateLifecyleOnChangePage(org.exoplatform.portal.config.model.Page)
    */
   public void updateLifecyleOnChangePage(Page page, String remoteUser) {
-    try {
-      for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
-        publicationPlugin.updateLifecyleOnChangePage(page, remoteUser);
-      }
-    } catch(Exception e) {} 
+  	for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
+  		try {
+  			publicationPlugin.updateLifecyleOnChangePage(page, remoteUser);
+  		} catch(Exception e) {
+  			continue;
+  		} 
+  	}
   }
 
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#updateLifecyleOnCreateNavigation(org.exoplatform.portal.config.model.PageNavigation)
    */
   public void updateLifecyleOnCreateNavigation(PageNavigation navigation) {
-    try {
-      for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
-        publicationPlugin.updateLifecyleOnCreateNavigation(navigation);
-      }
-    } catch(Exception e) {} 
+  	for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
+  		try {
+  			publicationPlugin.updateLifecyleOnCreateNavigation(navigation);
+  		} catch(Exception e) {
+  			continue;
+  		} 
+  	}
   }
 
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#updateLifecyleOnCreatePage(org.exoplatform.portal.config.model.Page)
    */
   public void updateLifecyleOnCreatePage(Page page, String remoteUser) {
-    try {
-      for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
-        publicationPlugin.updateLifecyleOnCreatePage(page, remoteUser);
-      }
-    } catch(Exception e){}
+  	for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
+  		try {
+  			publicationPlugin.updateLifecyleOnCreatePage(page, remoteUser);
+  		} catch(Exception e){
+  			continue;
+  		}
+  	}
   }
 
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#updateLifecyleOnRemoveNavigation(org.exoplatform.portal.config.model.PageNavigation)
    */
   public void updateLifecyleOnRemoveNavigation(PageNavigation navigation) {
-    try {
-      for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
-        publicationPlugin.updateLifecyleOnRemoveNavigation(navigation);
-      }
-    } catch (Exception e) {}
+  	for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
+  		try {
+  			publicationPlugin.updateLifecyleOnRemoveNavigation(navigation);
+  		} catch (Exception e) {
+  			continue;
+  		}
+  	}
   }
   
   /* (non-Javadoc)
