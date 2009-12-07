@@ -21,7 +21,7 @@
 
 	<component>
 		<key>org.exoplatform.services.jcr.RepositoryService</key>
-		<type>org.exoplatform.services.jcr.impl.RepositoryServiceImpl</type>
+		<type>org.exoplatform.services.wcm.TestRepositoryServiceImpl</type>
 	</component>
 
 	<component>

@@ -23,7 +23,6 @@ import java.io.InputStream;
 import java.util.Date;
 
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
 
 import org.exoplatform.services.wcm.BaseWCMTestCase;
 
@@ -41,8 +40,7 @@ public class TestRESTImagesRendererService extends BaseWCMTestCase {
   /** The Constant WEB_CONTENT_NODE_NAME. */
   private static final String WEB_CONTENT_NODE_NAME = "webContent";
   
-  /** The Constant IMAGE_NODE_NAME. */
-  private static final String IMAGE_NODE_NAME = "webContent";
+  private Node documentNode;
   
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.BaseWCMTestCase#setUp()
@@ -50,6 +48,7 @@ public class TestRESTImagesRendererService extends BaseWCMTestCase {
   public void setUp() throws Exception {
     super.setUp();
     restImagesRendererService = getService(RESTImagesRendererService.class);
+    documentNode = (Node) session.getItem("/sites content/live/classic/documents");
   }
   
   /**
@@ -74,8 +73,7 @@ public class TestRESTImagesRendererService extends BaseWCMTestCase {
   public void testGenerateURI_02() {
     try {
       File file = new File("src/test/resources/test.html");
-      Node root = session.getRootNode();
-      Node imageNode = this.createdNodeImages(root, IMAGE_NODE_NAME, getFileImages(file));
+      Node imageNode = this.createdNodeImages(documentNode, file.getName(), getFileImages(file));
       restImagesRendererService.generateURI(imageNode.getParent());
       fail();
     } catch (Exception e) {
@@ -95,9 +93,7 @@ public class TestRESTImagesRendererService extends BaseWCMTestCase {
   public void testGenerateURI_03() {
     try {
       File file = new File("src/test/resources/test.html");
-      
-      Node root = session.getRootNode();
-      Node imageNode = this.createdNodeImages(root,file.getName(), getFileImages(file));
+      Node imageNode = this.createdNodeImages(documentNode,file.getName(), getFileImages(file));
       imageNode.getNode("jcr:content");
       String uri = restImagesRendererService.generateURI(imageNode);
       
@@ -117,8 +113,7 @@ public class TestRESTImagesRendererService extends BaseWCMTestCase {
   public void testGenerateURI_04() {
     try {
       File file = new File("src/test/resources/08_resize.jpg");
-      Node root = session.getRootNode();
-      Node imageNode = this.createdNodeImages(root,file.getName(), getFileImages(file));
+      Node imageNode = this.createdNodeImages(documentNode,file.getName(), getFileImages(file));
       imageNode.getNode("jcr:content");
       String uri = restImagesRendererService.generateURI(imageNode);
       
@@ -138,8 +133,7 @@ public class TestRESTImagesRendererService extends BaseWCMTestCase {
   public void testGenerateURI_05() {
     try {
       File file = new File("src/test/resources/08_resize.jpg");
-      Node root = session.getRootNode();
-      Node imageNode = this.createdNodeImages(root,file.getName(), getFileImages(file));
+      Node imageNode = this.createdNodeImages(documentNode, file.getName(), getFileImages(file));
       imageNode.getNode("jcr:content");
       String uri = restImagesRendererService.generateURI(imageNode, null);
       
@@ -159,8 +153,7 @@ public class TestRESTImagesRendererService extends BaseWCMTestCase {
   public void testGenerateURI_06() {
     try {
       File file = new File("src/test/resources/08_resize.jpg");
-      Node root = session.getRootNode();
-      Node imageNode = this.createdNodeImages(root,file.getName(), getFileImages(file));
+      Node imageNode = this.createdNodeImages(documentNode, file.getName(), getFileImages(file));
       imageNode.getNode("jcr:content");
       String uri = restImagesRendererService.generateURI(imageNode, "");
       
@@ -180,8 +173,7 @@ public class TestRESTImagesRendererService extends BaseWCMTestCase {
   public void testGenerateURI_07() {
     try {
       File file = new File("src/test/resources/08_resize.jpg");
-      Node root = session.getRootNode();
-      Node imageNode = this.createdNodeImages(root,file.getName(), getFileImages(file));
+      Node imageNode = this.createdNodeImages(documentNode, file.getName(), getFileImages(file));
       imageNode.getNode("jcr:content");
       String uri = restImagesRendererService.generateURI(imageNode, "test property name");
       String expected = "/portal/rest/private/images/repository/collaboration/webContent/medias/images/"
@@ -202,11 +194,8 @@ public class TestRESTImagesRendererService extends BaseWCMTestCase {
    * @throws Exception the exception
    */
   private InputStream getFileImages(File file) throws Exception {
-    
     InputStream fileInput = new FileInputStream(file);
-
     if (fileInput == null) throw new FileNotFoundException("File not found!!!");
-    
     return fileInput;
   }
   
@@ -243,16 +232,8 @@ public class TestRESTImagesRendererService extends BaseWCMTestCase {
    * @see junit.framework.TestCase#tearDown()
    */
   public void tearDown() throws Exception {
-    
     super.tearDown();
-    Node rootNode = session.getRootNode();
-    if(rootNode.hasNode(WEB_CONTENT_NODE_NAME))
-      rootNode.getNode(WEB_CONTENT_NODE_NAME).remove();
-    Node sharedNode = rootNode.getNode("sites content").getNode("live").getNode("classic");
-    NodeIterator nodeIterator = sharedNode.getNodes();
-    while(nodeIterator.hasNext()) {
-      nodeIterator.nextNode().remove();
-    }
+    documentNode.getNode(WEB_CONTENT_NODE_NAME).remove();
     session.save();
   }
 }

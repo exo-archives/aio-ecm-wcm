@@ -7,7 +7,6 @@ import javax.jcr.Node;
 
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
-import org.exoplatform.services.wcm.core.NodetypeUtils;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
@@ -67,7 +66,6 @@ public class TestNewsletterManageUserHandler extends BaseWCMTestCase {
 	 */
 	public void setUp() throws Exception {
 		super.setUp();
-		NodetypeUtils.displayAllNode("collaboration", "repository");
 		Node newsletterApplicationNode = (Node) session.getItem("/sites content/live/classic/ApplicationData/NewsletterApplication");
 		categoriesNode = newsletterApplicationNode.addNode("Categories");
 		userHomeNode   = newsletterApplicationNode.addNode("Users");

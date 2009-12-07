@@ -59,6 +59,10 @@
 		<key>org.exoplatform.webui.ext.UIExtensionManager</key>
 		<type>org.exoplatform.webui.ext.impl.UIExtensionManagerImpl</type>
 	</component>
+  
+  <component>
+    <type>org.exoplatform.services.wcm.TestStartupServiceConfiguration</type>
+  </component>
 
 
 

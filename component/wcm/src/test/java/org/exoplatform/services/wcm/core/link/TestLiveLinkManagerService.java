@@ -133,6 +133,12 @@ public class TestLiveLinkManagerService extends BaseWCMTestCase {
     assertEquals("status=unchecked@url=http://www.mozilla.com", values[0].getString());
   }
   
+  public void testCheckIsBrokenLink() throws Exception {
+  	liveLinkManagerService.updateLinks("classic");
+    List<LinkBean> linkBeans = liveLinkManagerService.getBrokenLinks("classic");
+    assertTrue(linkBeans.get(0).isBroken()); 
+  }
+  
   /* (non-Javadoc)
    * @see junit.framework.TestCase#tearDown()
    */

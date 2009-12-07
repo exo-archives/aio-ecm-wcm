@@ -19,7 +19,6 @@ package org.exoplatform.services.wcm.navigation;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
@@ -54,8 +53,6 @@ public class TestNavigationService extends BaseWCMTestCase {
     pageNavigations.add(pageNavigation);
     String jsonResult = navigationService.getNavigationsAsJSON(pageNavigations);
     
-    @SuppressWarnings("unused")
-    UserPortalConfigService userPortalConfigService = getService(UserPortalConfigService.class);
     String jsonExpert = "[" +
     		                  "{" +
     		                    "\"ownerType\":\"" + pageNavigation.getOwnerType() + "\"," +

@@ -74,7 +74,7 @@ public class TestWCMConfigurationService extends BaseWCMTestCase {
    */
   public void testGetRuntimeContextParam() {
     assertEquals("redactor", configurationService.getRuntimeContextParam(WCMConfigurationService.REDACTOR_MEMBERSHIP_TYPE));
-    assertEquals("/parameterizedviewer", configurationService.getRuntimeContextParam(WCMConfigurationService.PARAMETERIZED_PAGE_URI));
+    assertEquals("/detail", configurationService.getRuntimeContextParam(WCMConfigurationService.PARAMETERIZED_PAGE_URI));
     assertEquals("/printviewer", configurationService.getRuntimeContextParam(WCMConfigurationService.PRINT_PAGE_URI));
     assertEquals("printviewer", configurationService.getRuntimeContextParam(WCMConfigurationService.PRINT_VIEWER_PAGE));
     assertEquals("wikipresentation", configurationService.getRuntimeContextParam(WCMConfigurationService.CREATE_WIKI_PAGE_URI));
@@ -90,7 +90,7 @@ public class TestWCMConfigurationService extends BaseWCMTestCase {
   public void testGetRuntimeContextParams() {
     Collection<String> runtimeContextParams = configurationService.getRuntimeContextParams();
     assertTrue(runtimeContextParams.contains("redactor"));
-    assertTrue(runtimeContextParams.contains("/parameterizedviewer"));
+    assertTrue(runtimeContextParams.contains("/detail"));
     assertTrue(runtimeContextParams.contains("/printviewer"));
     assertTrue(runtimeContextParams.contains("printviewer"));
     assertTrue(runtimeContextParams.contains("wikipresentation"));

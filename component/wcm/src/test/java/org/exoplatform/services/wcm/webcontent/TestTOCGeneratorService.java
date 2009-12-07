@@ -120,8 +120,8 @@ public class TestTOCGeneratorService extends BaseWCMTestCase {
   }
 
   private Node createWebContentNodeToTest(String nodeName, Map<String, String> fMap) throws Exception {
-    Node rootNode = session.getRootNode();
-    Node webContentNode = rootNode.addNode(nodeName, "exo:webContent");
+    Node documentNode = (Node)session.getItem("/sites content/live/classic/documents");
+    Node webContentNode = documentNode.addNode(nodeName, "exo:webContent");
     webContentNode.setProperty("exo:title", nodeName);
     Set<String> keySet = fMap.keySet();
     for (String key : keySet) {
@@ -155,9 +155,8 @@ public class TestTOCGeneratorService extends BaseWCMTestCase {
   public void tearDown() throws Exception {
 
     super.tearDown();
-    Node rootNode = session.getRootNode();
-
-    NodeIterator nodeIterator = rootNode.getNodes();
+    Node documentNode = (Node)session.getItem("/sites content/live/classic/documents");
+    NodeIterator nodeIterator = documentNode.getNodes();
     while (nodeIterator.hasNext()) {
       nodeIterator.nextNode().remove();
     }

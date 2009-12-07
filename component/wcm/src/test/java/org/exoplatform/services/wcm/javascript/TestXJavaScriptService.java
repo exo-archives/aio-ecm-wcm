@@ -42,6 +42,8 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	/** The Constant WEB_CONTENT_NODE_NAME. */
 	private static final String WEB_CONTENT_NODE_NAME = "webContent";
 	
+	private Node documentNode;
+	
 	SessionProvider sessionProvider;
 	
 	/* (non-Javadoc)
@@ -52,6 +54,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 		super.setUp();
 		sessionProvider = WCMCoreUtils.getSessionProvider();
 		javascriptService = getService(XJavascriptService.class);
+		documentNode = (Node) session.getItem("/sites content/live/classic/documents");
 	}
 	
 	/**
@@ -75,8 +78,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testGetActiveJavaScript_02() {
 		try {
-			Node root = session.getRootNode();
-			Node nodeInput = root.addNode(WEB_CONTENT_NODE_NAME);
+			Node nodeInput = documentNode.addNode(WEB_CONTENT_NODE_NAME);
 			session.save();
 			String jsData = javascriptService.getActiveJavaScript(nodeInput);
 			assertEquals("", jsData);
@@ -92,8 +94,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testGetActiveJavaScript_03() {
 		try {
-			Node root = session.getRootNode();
-			Node webContent = root.addNode(WEB_CONTENT_NODE_NAME, "exo:webContent");
+			Node webContent = documentNode.addNode(WEB_CONTENT_NODE_NAME, "exo:webContent");
 			
 			webContent.setProperty("exo:title", WEB_CONTENT_NODE_NAME);
 			webContent.addNode("js", "exo:jsFolder");
@@ -116,8 +117,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testGetActiveJavaScript_04() {
 		try {
-			Node root = session.getRootNode();
-			Node webContent = root.addNode(WEB_CONTENT_NODE_NAME, "exo:webContent");
+			Node webContent = documentNode.addNode(WEB_CONTENT_NODE_NAME, "exo:webContent");
 			webContent.setProperty("exo:title", WEB_CONTENT_NODE_NAME);
 			Node jsFolder = webContent.addNode("js", "exo:jsFolder");
 	    Node jsNode = jsFolder.addNode("default.js", "nt:file");
@@ -149,8 +149,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testGetActiveJavaScript_05() {
 		try {
-			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
+			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			jsNode.setProperty("exo:active", false);
 			session.save();
@@ -170,8 +169,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testGetActiveJavaScript_06() {
 		try {
-			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
+			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			Node jsContent = jsNode.getNode("jcr:content");
 			jsContent.setProperty("jcr:mimeType", "text/html");
@@ -192,8 +190,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testGetActiveJavaScript_07() {
 		try {
-			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
+			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			Node jsContent = jsNode.getNode("jcr:content");
 			jsContent.setProperty("jcr:mimeType", "text/javascript");
@@ -214,8 +211,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testGetActiveJavaScript_08() {
 		try {
-			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
+			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			Node jsContent = jsNode.getNode("jcr:content");
 			jsContent.setProperty("jcr:mimeType", "application/x-javascript");
@@ -236,8 +232,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testGetActiveJavaScript_09() {
 		try {
-			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
+			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			Node jsContent = jsNode.getNode("jcr:content");
 			jsContent.setProperty("jcr:mimeType", "text/ecmascript");
@@ -257,8 +252,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testGetActiveJavaScript_10() {
 		try {
-			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
+			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			Node jsContent = jsNode.getNode("jcr:content");
 			jsContent.setProperty("jcr:data", "");
@@ -279,8 +273,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testGetActiveJavaScript_11() {
 		try {
-			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
+			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			Node jsContent = jsNode.getNode("jcr:content");
 			jsContent.setProperty("jcr:data", "This is the default.js file.");
@@ -301,8 +294,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testGetActiveJavaScript_12() {
 		try {
-			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, "alert('Test method getActiveJavaScript()');");
+			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, "alert('Test method getActiveJavaScript()');");
 			session.save();
 			String jsData = javascriptService.getActiveJavaScript(webContent);
 			assertEquals("alert('Test method getActiveJavaScript()');", jsData);
@@ -318,8 +310,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testGetActiveJavaScript_13() {
 		try {
-			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
+			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
 			String jsData = javascriptService.getActiveJavaScript(webContent);
 			assertEquals("This is the default.js file.", jsData);
 		} catch (Exception e) {
@@ -346,8 +337,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 //	 */
 //	public void testUpdatePortalJSOnModify_02() {
 //		try {
-//			Node root = session.getRootNode();
-//			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
+//			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
 //			Node jsNode = webContent.getNode("js").getNode("default.js");
 //			javascriptService.updatePortalJSOnModify(sessionProvider, jsNode);
 //			fail();
@@ -362,8 +352,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 //	 */
 //	public void testUpdatePortalJSOnModify_03() {
 //		try {
-//			Node root = session.getRootNode();
-//			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME + "1", null, null, null);
+//			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "1", null, null, null);
 //			createWebcontentNode(root, WEB_CONTENT_NODE_NAME + "2", null, null, null);
 //			Node jsFolder = webContent.getNode("js");
 //			javascriptService.updatePortalJSOnModify(sessionProvider, jsFolder);
@@ -379,11 +368,9 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 //	 */
 //	public void testUpdatePortalJSOnModify_04() {
 //		try {
-//			Node root = session.getRootNode();
 //			JavascriptConfigService configService = null;
-//			Node liveNode = root.getNode("sites content").getNode("live");
-//			Node webContent = createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "1", null, null, "");
-//			createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
+//			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "1", null, null, "");
+//			createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
 //			Node jsNode = webContent.getNode("js").getNode("default.js");
 //			javascriptService.updatePortalJSOnModify(sessionProvider, jsNode);
 //			session.save();
@@ -402,11 +389,9 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 //	 */
 //	public void testUpdatePortalJSOnModify_05() {
 //		try {
-//			Node root = session.getRootNode();
 //			JavascriptConfigService configService = null;
-//			Node liveNode = root.getNode("sites content").getNode("live");
-//			Node webContent = createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "1", null, null, "When perform testUpdatePortalJSOnModify...");
-//			createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
+//			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "1", null, null, "When perform testUpdatePortalJSOnModify...");
+//			createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
 //			
 //			Node jsNode = webContent.getNode("js").getNode("default.js");
 //			javascriptService.updatePortalJSOnModify(sessionProvider, jsNode);
@@ -425,11 +410,9 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 //	 */
 //	public void testUpdatePortalJSOnModify_06() {
 //		try {
-//			Node root = session.getRootNode();
 //			JavascriptConfigService configService = null;
-//			Node liveNode = root.getNode("sites content").getNode("live");
-//			Node webContent = createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "1", null, null, "alert('testUpdatePortalJSOnModify...');");
-//			createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "1", null, null, null);
+//			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "1", null, null, "alert('testUpdatePortalJSOnModify...');");
+//			createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "1", null, null, null);
 //			Node jsNode = webContent.getNode("js").getNode("default.js");
 //			javascriptService.updatePortalJSOnModify(sessionProvider, jsNode);
 //			session.save();
@@ -461,8 +444,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 //	 */
 //	public void testUpdatePortalJSOnRemove_02() {
 //		try {
-//			Node root = session.getRootNode();
-//			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
+//			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
 //			Node jsNode = webContent.getNode("js").getNode("default.js");
 //			javascriptService.updatePortalJSOnRemove(sessionProvider, jsNode);
 //			fail();
@@ -478,10 +460,8 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 //	public void testUpdatePortalJSOnRemove_03() {
 //		try {
 //			JavascriptConfigService configService = null;
-//			Node root = session.getRootNode();
-//			Node liveNode = root.getNode("sites content").getNode("live");
-//			Node webContent = createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "1", null, null, null);
-//			createWebcontentNode(root, WEB_CONTENT_NODE_NAME + "2", null, null, null);
+//			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "1", null, null, null);
+//			createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
 //			Node jsFolder = webContent.getNode("js");
 //			javascriptService.updatePortalJSOnRemove(sessionProvider, jsFolder);
 //			session.save();
@@ -501,10 +481,8 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 //	public void testUpdatePortalJSOnRemove_04() {
 //		try {
 //			JavascriptConfigService configService = null;
-//			Node root = session.getRootNode();
-//			Node liveNode = root.getNode("sites content").getNode("live");
-//			Node webContent = createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "1", null, null, "");
-//			createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
+//			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "1", null, null, "");
+//			createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
 //			Node jsNode = webContent.getNode("js").getNode("default.js");
 //			javascriptService.updatePortalJSOnModify(sessionProvider, jsNode);
 //			session.save();
@@ -528,10 +506,8 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 //	public void testUpdatePortalJSOnRemove_05() {
 //		try {
 //			JavascriptConfigService configService = null;
-//			Node root = session.getRootNode();
-//			Node liveNode = root.getNode("sites content").getNode("live");
-//			Node webContent = createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "1", null, null, "alert('testUpdatePortalJSOnModify...');");
-//			createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
+//			Node webContent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "1", null, null, "alert('testUpdatePortalJSOnModify...');");
+//			createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
 //			Node jsNode = webContent.getNode("js").getNode("default.js");
 //			javascriptService.updatePortalJSOnModify(sessionProvider, jsNode);
 //			session.save();
@@ -553,11 +529,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void tearDown() throws Exception {
 		super.tearDown();
-		Node rootNode = session.getRootNode();
-		if(rootNode.hasNode(WEB_CONTENT_NODE_NAME))
-			rootNode.getNode(WEB_CONTENT_NODE_NAME).remove();
-		Node sharedNode = rootNode.getNode("sites content").getNode("live");
-		NodeIterator nodeIterator = sharedNode.getNodes();
+		NodeIterator nodeIterator = documentNode.getNodes();
 		while(nodeIterator.hasNext()) {
 			nodeIterator.nextNode().remove();
 		}
