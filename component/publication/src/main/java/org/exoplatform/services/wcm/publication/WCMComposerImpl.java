@@ -226,6 +226,26 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	  			remoteUser = Util.getPortalRequestContext().getRemoteUser();
 	  		} catch (Exception e) {}
 			
+	  		String oid = null;
+	  		SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+			try {
+				/** TODO : 
+				 * Replace repository parameter by a Repository instance as we get wrong toString from Repository in
+				 * WCMPublicationService
+				 */
+				repository = repositoryService.getCurrentRepository().getConfiguration().getName();
+				/**
+				 * END quick fix
+				 */
+				Node node = wcmService.getReferencedContent(sessionProvider, repository, workspace, path);
+				if (node!=null) oid = node.getUUID();
+			} catch (RepositoryException e) {
+				if (log.isInfoEnabled()) log.info("Can't find UUID for path : "+workspace+":"+path);
+			} finally {
+				sessionProvider.close();
+			}
+
+	  		
 			/* remove live cache */
 			String hash = getHash(path, null);
 			cache.remove(hash);
@@ -235,6 +255,11 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 			/* remove parent cache */
 			hash = getHash(part, null);
 			cache.remove(hash);
+			if (oid!=null) {
+				/* remove live cache */
+				hash = getHash(oid, null);
+				cache.remove(hash);
+			}
 			if (remoteUser!=null) {
 				/* remove live cache for current user */
 				hash = getHash(path, null, remoteUser);
@@ -245,6 +270,11 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 				/* remove parent cache for current user */
 				hash = getHash(part, null, remoteUser);
 				cache.remove(hash);
+				if (oid!=null) {
+					/* remove live cache */
+					hash = getHash(oid, null, remoteUser);
+					cache.remove(hash);
+				}
 			}
 		}
 		return true;
