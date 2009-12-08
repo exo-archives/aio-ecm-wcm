@@ -17,6 +17,7 @@
 package org.exoplatform.services.wcm.newsletter.handler;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
@@ -104,7 +105,10 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 	 */
 	public void testDeleteCategory() throws Exception {
 		newsletterCategoryHandler.add(sessionProvider, "classic", newsletterCategoryConfig);
+		newsletterCategoryHandler.getCategoryByName(sessionProvider, "classic", newsletterCategoryConfig.getName());
+		System.out.println("\n\n\n\n LIST ====================>"+categoriesNode.getNodes().getSize()+"\n\n\n\n");
 		newsletterCategoryHandler.delete(sessionProvider, "classic", newsletterCategoryConfig.getName());
+		System.out.println("\n\n\n\n LIST ====================>"+categoriesNode.getNodes().getSize()+"\n\n\n\n");
 		assertEquals(0, categoriesNode.getNodes().getSize());
 	}
 	
@@ -141,13 +145,10 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 	 */
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		try {
-		  session.getRootNode().getNode("sites content/live/classic/ApplicationData/NewsletterApplication/Categories/newsletter01").remove();
-		  session.save();
-    } catch (Exception e) {
-      sessionProvider.close();
-    } finally {
-      sessionProvider.close();
-    }
+		NodeIterator nodeIterator = categoriesNode.getNodes();
+		while(nodeIterator.hasNext()) {
+			nodeIterator.nextNode().remove();
+		}
+		session.save();
 	}
 }

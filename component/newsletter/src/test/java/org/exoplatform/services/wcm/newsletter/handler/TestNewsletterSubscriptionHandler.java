@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
@@ -33,7 +34,9 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 	
 	/** The user home node. */
 	@SuppressWarnings("unused")
-  private Node userHomeNode;
+	private Node userHomeNode;
+	
+	private Node newsletterApplicationNode; 
 	
 	/** The newsletter manager service. */
 	NewsletterManagerService newsletterManagerService;
@@ -43,7 +46,11 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 	 */
 	public void setUp() throws Exception {
 		super.setUp();
-		Node newsletterApplicationNode = (Node) session.getItem("/sites content/live/classic/ApplicationData/NewsletterApplication");
+		newsletterApplicationNode = (Node) session.getItem("/sites content/live/classic/ApplicationData/NewsletterApplication");
+		NodeIterator nodesList = newsletterApplicationNode.getNodes();
+		while(nodesList.hasNext()) {
+			System.out.println("\n\n\n\n TEST =================>"+nodesList.nextNode().getName());
+		}
 		categoriesNode = newsletterApplicationNode.getNode("Categories");
 		userHomeNode = newsletterApplicationNode.getNode("Users");
 		session.save();
@@ -198,7 +205,6 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 			nodeTemp.setProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_AWAITING);
 		}
 		session.save();
-		
 		long numNewsletterWaiting = newsletterSubscriptionHandler.getNumberOfNewslettersWaiting(sessionProvider, "classic", "CategoryName", "SubscriptionName");
 		assertEquals(5, numNewsletterWaiting);
 	}
@@ -206,14 +212,19 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#tearDown()
 	 */
-	protected void tearDown() {
-		try {
+	protected void tearDown() throws Exception {
       super.tearDown();
+      /*
+	  NodeIterator Cat_nodes = newsletterApplicationNode.getNodes("Categories");
+	  while(Cat_nodes.hasNext()) {
+		Cat_nodes.nextNode().remove();
+	  }
+	  
+	  NodeIterator User_nodes = newsletterApplicationNode.getNodes("Users");
+	  while(User_nodes.hasNext()) {
+		  User_nodes.nextNode().remove();
+	  }
+	  */
       session.save();
-    } catch (Exception e) {
-      sessionProvider.close();
-    } finally {
-      sessionProvider.close();
-    }
 	}
 }

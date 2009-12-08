@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
@@ -181,9 +182,13 @@ public class TestNewsletterEntryHandler extends BaseWCMTestCase {
 	/**
 	 * TearDow.
 	 */
-	public void tearDow() {
+	public void tearDown() {
     try {
       super.tearDown();
+      NodeIterator nodeIterator = newsletterApplicationNode.getNodes();
+      while(nodeIterator.hasNext()) {
+    	  nodeIterator.nextNode().remove();
+      }
     } catch (Exception e) {
       sessionProvider.close();
     } finally {
