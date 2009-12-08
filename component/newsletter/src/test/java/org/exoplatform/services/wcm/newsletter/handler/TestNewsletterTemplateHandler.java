@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 
 import org.exoplatform.services.jcr.RepositoryService;
@@ -14,8 +15,6 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
-
-import com.sun.org.apache.xalan.internal.xsltc.NodeIterator;
 
 /**
  * The Class TestNewsletterTemplateHandler.
@@ -55,56 +54,18 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 	/** The nodes temp. */
 	private Node nodesTemp;
 	
-	/** The list node. */
-	private List<Node> listNode = new ArrayList<Node>();
-	
-	/** The is added. */
-	private static boolean isAdded = false;
-	
 	/* (non-Javadoc)
 	 * @see org.exoplatform.services.wcm.BaseWCMTestCase#setUp()
 	 */
 	public void setUp() throws Exception {
 		super.setUp();
-		sessionProvider = WCMCoreUtils.getSessionProvider();
 		newsletterManagerService = getService(NewsletterManagerService.class);
 		newsletterCategoryHandler = newsletterManagerService.getCategoryHandler();
 		newsletterSubscriptionHandler = newsletterManagerService.getSubscriptionHandler();
 		newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
 		newsletterApplicationNode = (Node) session.getItem("/sites content/live/classic/ApplicationData/NewsletterApplication");
 		categoriesNode = newsletterApplicationNode.getNode("Categories");
-		if(!isAdded){
-			newsletterCategoryConfig = new NewsletterCategoryConfig();
-			newsletterCategoryConfig.setName("CategoryName");
-			newsletterCategoryConfig.setTitle("CategoryTitle");
-			newsletterCategoryConfig.setDescription("CategoryDescription");
-			newsletterCategoryConfig.setModerator("root");
-			newsletterCategoryHandler.add(sessionProvider, "classic", newsletterCategoryConfig);
-			
-			newsletterSubscriptionConfig = new NewsletterSubscriptionConfig();
-			newsletterSubscriptionConfig.setCategoryName("CategoryName");
-			newsletterSubscriptionConfig.setName("SubscriptionName");
-			newsletterSubscriptionConfig.setTitle("SubscriptionTitle");
-			newsletterSubscriptionConfig.setDescription("SubScriptionDescription");
-			newsletterSubscriptionHandler.add(sessionProvider, "classic", newsletterSubscriptionConfig);
-			
-			subscriptionNode = categoriesNode.getNode("CategoryName/SubscriptionName");
-			nodesTemp 	= createWebcontentNode(subscriptionNode, "testTemplate", null, null, null);
-			session.save();
-			for(int i = 0 ; i < 5; i++) {
-				try{
-					nodesTemp = subscriptionNode.getNode("testTemplate "+i);
-				}catch(Exception ex){
-					nodesTemp = createWebcontentNode(subscriptionNode, "testTemplate"+i, null, null, null);
-				}
-				session.save();
-				listNode.add(nodesTemp);
-				newsletterTemplateHandler.convertAsTemplate(sessionProvider, nodesTemp.getPath(), "classic", newsletterCategoryConfig.getName());
-			}
-		} else {
-			newsletterCategoryConfig = newsletterCategoryHandler.getCategoryByName(sessionProvider, "classic", "CategoryName");
-		}
-		isAdded = true;
+		
 	}
 	
 	/**
@@ -113,8 +74,62 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 	 * @throws Exception the exception
 	 */
 	public void testGetTemplate() throws Exception {
-		nodesTemp = newsletterTemplateHandler.getTemplate(sessionProvider, "classic", newsletterCategoryConfig, nodesTemp.getName());
-		assertNotNull(nodesTemp);
+		sessionProvider = WCMCoreUtils.getSessionProvider();
+		newsletterCategoryConfig = new NewsletterCategoryConfig();
+		newsletterCategoryConfig.setName("CategoryName");
+		newsletterCategoryConfig.setTitle("CategoryTitle");
+		newsletterCategoryConfig.setDescription("CategoryDescription");
+		newsletterCategoryConfig.setModerator("root");
+		newsletterCategoryHandler.add(sessionProvider, "classic", newsletterCategoryConfig);
+		
+		newsletterSubscriptionConfig = new NewsletterSubscriptionConfig();
+		newsletterSubscriptionConfig.setCategoryName("CategoryName");
+		newsletterSubscriptionConfig.setName("SubscriptionName");
+		newsletterSubscriptionConfig.setTitle("SubscriptionTitle");
+		newsletterSubscriptionConfig.setDescription("SubScriptionDescription");
+		newsletterSubscriptionHandler.add(sessionProvider, "classic", newsletterSubscriptionConfig);
+		
+		subscriptionNode = categoriesNode.getNode("CategoryName/SubscriptionName");
+		nodesTemp 	= createWebcontentNode(subscriptionNode, "testTemplate", null, null, null);
+		newsletterTemplateHandler.convertAsTemplate(sessionProvider, nodesTemp.getPath(), "classic", newsletterCategoryConfig.getName());
+		session.save();
+		Node nodeTmpl = newsletterTemplateHandler.getTemplate(sessionProvider, "classic", newsletterCategoryConfig, "testTemplate");
+		assertNotNull(nodeTmpl);
+	}
+	
+	/**
+	 * Test convert as template.
+	 * 
+	 * @throws Exception the exception
+	 */
+	public void testConvertAsTemplate() throws Exception {
+		sessionProvider = WCMCoreUtils.getSessionProvider();
+		NewsletterCategoryConfig newsletterCategoryConfig1 = new NewsletterCategoryConfig();
+		newsletterCategoryConfig1.setName("CategoryName1");
+		newsletterCategoryConfig1.setTitle("CategoryTitle1");
+		newsletterCategoryConfig1.setDescription("CategoryDescription1");
+		newsletterCategoryConfig1.setModerator("root");
+		newsletterCategoryHandler.add(sessionProvider, "classic", newsletterCategoryConfig1);
+		
+		NewsletterSubscriptionConfig newsletterSubscriptionConfig1 = new NewsletterSubscriptionConfig();
+		newsletterSubscriptionConfig1.setCategoryName("CategoryName1");
+		newsletterSubscriptionConfig1.setName("SubscriptionName1");
+		newsletterSubscriptionConfig1.setTitle("SubscriptionTitle1");
+		newsletterSubscriptionConfig1.setDescription("SubScriptionDescription1");
+		newsletterSubscriptionHandler.add(sessionProvider, "classic", newsletterSubscriptionConfig1);
+		
+		subscriptionNode = categoriesNode.getNode("CategoryName1/SubscriptionName1");
+		for(int i = 0 ; i < 5; i++) {
+			try{
+				nodesTemp = subscriptionNode.getNode("testTemplate "+i);
+			}catch(Exception ex){
+				nodesTemp = createWebcontentNode(subscriptionNode, "testTemplate"+i, null, null, null);
+			}
+			newsletterTemplateHandler.convertAsTemplate(sessionProvider, nodesTemp.getPath(), "classic", newsletterCategoryConfig1.getName());
+		}
+		session.save();
+		List<Node> listTemplates = newsletterTemplateHandler.getTemplates(sessionProvider, "classic", newsletterCategoryConfig1);
+		assertEquals(5, listTemplates.size());
 	}
 	
 	/**
@@ -124,37 +139,50 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 	 */
 	@SuppressWarnings("unchecked")
   public void testGetTemplates() throws Exception {
-		List listTemplates = newsletterTemplateHandler.getTemplates(sessionProvider, "classic", newsletterCategoryConfig);
+		sessionProvider = WCMCoreUtils.getSessionProvider();
+		NewsletterCategoryConfig newsletterCategoryConfig2 = new NewsletterCategoryConfig();
+		newsletterCategoryConfig2.setName("CategoryName2");
+		newsletterCategoryConfig2.setTitle("CategoryTitle2");
+		newsletterCategoryConfig2.setDescription("CategoryDescription2");
+		newsletterCategoryConfig2.setModerator("root");
+		newsletterCategoryHandler.add(sessionProvider, "classic", newsletterCategoryConfig2);
+		
+		NewsletterSubscriptionConfig newsletterSubscriptionConfig2 = new NewsletterSubscriptionConfig();
+		newsletterSubscriptionConfig2.setCategoryName("CategoryName2");
+		newsletterSubscriptionConfig2.setName("SubscriptionName2");
+		newsletterSubscriptionConfig2.setTitle("SubscriptionTitle2");
+		newsletterSubscriptionConfig2.setDescription("SubScriptionDescription2");
+		newsletterSubscriptionHandler.add(sessionProvider, "classic", newsletterSubscriptionConfig2);
+		
+		subscriptionNode = categoriesNode.getNode("CategoryName2/SubscriptionName2");
+		for(int i = 0 ; i < 5; i++) {
+			try{
+				nodesTemp = subscriptionNode.getNode("testTemplate "+i);
+			}catch(Exception ex){
+				nodesTemp = createWebcontentNode(subscriptionNode, "testTemplate"+i, null, null, null);
+			}
+			newsletterTemplateHandler.convertAsTemplate(sessionProvider, nodesTemp.getPath(), "classic", newsletterCategoryConfig2.getName());
+		}
+		session.save();
+		
+		List listTemplates = newsletterTemplateHandler.getTemplates(sessionProvider, "classic", newsletterCategoryConfig2);
 		assertEquals(5, listTemplates.size());
 	}
 	
 	/**
-	 * Test convert as template.
-	 * 
-	 * @throws Exception the exception
+	 * Tear down
 	 */
-	public void testConvertAsTemplate() throws Exception {
-		List<Node> listTemplates = newsletterTemplateHandler.getTemplates(sessionProvider, "classic", newsletterCategoryConfig);
-		for(Node node : listTemplates) {
-			newsletterTemplateHandler.convertAsTemplate(sessionProvider, node.getPath(), "classic", "CategoryName");
+	public void tearDown() throws Exception {
+		super.tearDown();
+		NodeIterator Cat_nodes = newsletterApplicationNode.getNodes("categories");
+		while(Cat_nodes.hasNext()) {
+			Cat_nodes.nextNode().remove();
 		}
-	}
-	
-	/**
-	 * Tear dow.
-	 */
-	public void tearDow() {
-	  try {
-      super.tearDown();
-      javax.jcr.NodeIterator nodeIterator = newsletterApplicationNode.getNodes();
-      while(nodeIterator.hasNext()) {
-    	  nodeIterator.nextNode().remove();
-      }
-      session.save();
-    } catch (Exception e) {
-      sessionProvider.close();
-    } finally {
-      sessionProvider.close();
-    }
+		
+//		NodeIterator nodesTmpls = newsletterApplicationNode.getNodes("DefaultTemplates");
+//		while(nodesTmpls.hasNext()) {
+//			nodesTmpls.nextNode().remove();
+//		}
+		session.save();
 	}
 }
