@@ -106,6 +106,7 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
 	 */
 	public void testEnrollNodeInDefaultLifecycle() throws Exception{
 		Node testNode = createWebcontentNode(collaborationSession.getRootNode(), "testDefaultContent", null, null, null); 
+		Node testNode2 = createWebcontentNode(collaborationSession.getRootNode(), "testDefaultContent", null, null, null); 
 		collaborationSession.save();
 
 		WebpagePublicationPlugin publicationPlugin = new StageAndVersionPublicationPlugin();
@@ -119,8 +120,13 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
 		wcmPublicationService.enrollNodeInLifecycle(testNode, "classic", "root");
 		assertNotNull(testNode.getProperty("publication:history"));
 		assertEquals("enrolled", testNode.getProperty("publication:currentState").getString());
+		
+		wcmPublicationService.enrollNodeInLifecycle(testNode2, "test", "root");
+		assertNotNull(testNode2.getProperty("publication:history"));
+		assertEquals("enrolled", testNode2.getProperty("publication:currentState").getString());
 
 		testNode.remove();
+		testNode2.remove();
 		collaborationSession.save();
 	}
 
@@ -183,6 +189,12 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
 		Node testNode = createWebcontentNode(collaborationSession.getRootNode(), "testSCV", null, null, null); 
 		collaborationSession.save();
 
+		try {
+			wcmPublicationService.publishContentSCV(testNode, null, "root");
+		} catch (Exception e) {
+			assertTrue(e instanceof NotInPublicationLifecycleException);
+		}
+		
 		createPageNavigation();
 		Page page = createPage();
 
@@ -213,6 +225,12 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
 	public void testPublishContentCLV_01() throws Exception{
 		Node testNode = createWebcontentNode(collaborationSession.getRootNode(), "test", null, null, null); 
 		collaborationSession.save();
+		
+		try {
+			wcmPublicationService.publishContentCLV(testNode, null, null, null, "root");
+		} catch (Exception e) {
+			assertTrue(e instanceof NotInPublicationLifecycleException);
+		}
 
 		Page page = createPage();
 		createPageNavigation();
@@ -320,6 +338,16 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
 	public void testSuspendPublishedContentFromPage() throws Exception {
 		suspendSCV();
 		suspendCLV();
+		
+		Node suspendNode = createWebcontentNode(collaborationSession.getRootNode(), "suspendNode", null, null, null);
+		collaborationSession.save();
+		try {
+			wcmPublicationService.suspendPublishedContentFromPage(suspendNode, null, "root");
+		} catch (Exception e) {
+			assertTrue(e instanceof NotInPublicationLifecycleException);
+		}
+		suspendNode.remove();
+		collaborationSession.save();
 	}
 
 	/**
@@ -594,6 +622,11 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
 		collaborationSession.save();
 	}
 	
+	/**
+	 * Test get content state.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void testGetContentState() throws Exception {
 		Node testNode = createWebcontentNode(collaborationSession.getRootNode(), "testSCV", null, null, null);
 		collaborationSession.save();
@@ -607,6 +640,11 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
 		collaborationSession.save();
 	}
 	
+	/**
+	 * Test update lifecyle on change content.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void testUpdateLifecyleOnChangeContent() throws Exception{
 		Node testNode = createWebcontentNode(collaborationSession.getRootNode(), "testSCV", null, null, null);
 		Node testNode1 = createWebcontentNode(collaborationSession.getRootNode(), "testSCV1", null, null, null);
