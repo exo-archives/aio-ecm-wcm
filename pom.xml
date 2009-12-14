@@ -32,7 +32,7 @@
     <org.exoplatform.ecm.dms.version>2.5.2.1</org.exoplatform.ecm.dms.version>
 
     <!-- tests default config -->
-    <maven.test.skip>true</maven.test.skip>
+    <!--maven.test.skip>true</maven.test.skip-->
     <maven.test.failure.ignore>true</maven.test.failure.ignore>  
   </properties>
 	
