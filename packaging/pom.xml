@@ -26,7 +26,7 @@
     <dependency><groupId>org.exoplatform.portletcontainer</groupId><artifactId>exo.pc.component.plugins.wsrp2</artifactId><version>${org.exoplatform.pc.version}</version><type>jar</type></dependency><!-- 2.0.7-->
     <dependency><groupId>org.exoplatform.portletcontainer</groupId><artifactId>exo.pc.applications.wsrp</artifactId><version>${org.exoplatform.pc.version}</version><type>exopc-war</type></dependency><!-- 2.0.7-->
 
-    <dependency><groupId>org.exoplatform.tool</groupId><artifactId>exo.tool.webunit</artifactId><version>trunk</version><type>jar</type></dependency><!-- trunk -->
+    <dependency><groupId>org.exoplatform.tool</groupId><artifactId>exo.tool.webunit</artifactId><version>1.0.0</version><type>jar</type></dependency><!-- trunk -->
 
     <dependency><groupId>org.exoplatform.ws</groupId><artifactId>exo.ws.frameworks.servlet</artifactId><version>${org.exoplatform.ws.version}</version><type>jar</type></dependency><!-- 1.3.4-->
 
