@@ -202,7 +202,7 @@
 <portlet-preferences>
 		<owner-type>portal</owner-type>
 		<owner-id>@owner@</owner-id>
-		<window-id>portal#@owner@:/searches/WCMAdvanceSearchPortlet/@owner@-searchResult</window-id>
+		<window-id>portal#@owner@:/searches/WCMAdvanceSearchPortlet/@owner@-searchLayout</window-id>
 		<preference>
 		    	<name>repository</name>
 		    	<value>repository</value>

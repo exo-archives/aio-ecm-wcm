@@ -43,4 +43,10 @@
     <servlet-name>PortletWrapper</servlet-name>
     <url-pattern>/PortletWrapper</url-pattern>
   </servlet-mapping>
+  
+  <session-config>
+    <session-timeout>2</session-timeout>
+  </session-config>
+
+  
 </web-app>

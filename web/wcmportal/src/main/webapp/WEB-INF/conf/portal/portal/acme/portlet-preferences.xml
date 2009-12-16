@@ -636,10 +636,14 @@
 	<portlet-preferences>
 		<owner-type>portal</owner-type>
 		<owner-id>acme</owner-id>
-		<window-id>portal#acme:/formgenerator/FastContentCreatorPortlet/acme-contactus</window-id>
+		<window-id>portal#acme:/formgenerator/FastContentCreatorBasicPortlet/acme-contactus</window-id>
 		<preference>
 			<name>redirectPath</name>
 			<value>/portal/public/acme/contactus/confirmation</value>
+		</preference>
+		<preference>
+			<name>mode</name>
+			<value>basic</value>
 		</preference>
 		<preference>
 			<name>workspace</name>
@@ -668,6 +672,11 @@
 		<preference>
 			<name>type</name>
 			<value>exo:contact_us</value>
+			<read-only>false</read-only>
+		</preference>
+		<preference>
+			<name>action</name>
+			<value>exo:sendMailAction</value>
 			<read-only>false</read-only>
 		</preference>
 	</portlet-preferences>	

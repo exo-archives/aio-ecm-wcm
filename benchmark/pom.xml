@@ -7,12 +7,8 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>exo.ecm.wcm.benchmark</artifactId>
-	<packaging>jar</packaging>
 	<name>eXo WCM Benchmark</name>
-	<url>http://www.exoplatform.org</url>
-	<description>eXo WCM Service</description>
-
-	<dependencies>
+		<dependencies>
 		<dependency>
 			<groupId>org.exoplatform.kernel</groupId>
 			<artifactId>exo.kernel.container</artifactId>
@@ -115,12 +111,7 @@
 	</dependencies>
 
 	<build>
-		<sourceDirectory>src/main/java</sourceDirectory>
-		<outputDirectory>target/classes</outputDirectory>
-		<testSourceDirectory>src/test/java</testSourceDirectory>
-		<testOutputDirectory>target/test-classes</testOutputDirectory>
-
-		<resources>
+				<resources>
 			<resource>
 				<directory>src/main/java</directory>
 				<includes>
@@ -162,11 +153,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<testFailureIgnore>${exo.test.failure.ignore}</testFailureIgnore>
-					<forkMode>${exo.test.forkmode}</forkMode>
-					<includes>
-						<include>**/NavigationServiceTest.java</include>						
-					</includes>
 					<excludes>
 						<exclude>**/*$*</exclude><!--nested classes prb, http://jira.codehaus.org/browse/SUREFIRE-288-->
 						<exclude>**/BaseTestCase</exclude>

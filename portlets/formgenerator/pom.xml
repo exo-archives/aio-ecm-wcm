@@ -44,7 +44,7 @@
 		<dependency>
 			<groupId>org.exoplatform.ecm</groupId>
 			<artifactId>exo.ecm.wcm.component.wcm</artifactId>
-			<version>${project.version}</version>
+			<version>1.3-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 			
@@ -79,21 +79,21 @@
 		<dependency>
 			<groupId>org.exoplatform.ecm</groupId>
 			<artifactId>exo.ecm.wcm.component.search</artifactId>
-			<version>${project.version}</version>
+			<version>1.3-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 			
 		<dependency>
 			<groupId>org.exoplatform.ecm</groupId>
 			<artifactId>exo.ecm.wcm.webui.wcm</artifactId>
-			<version>${project.version}</version>
+			<version>1.3-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.exoplatform.ecm</groupId>
 			<artifactId>exo.ecm.wcm.component.newsletter</artifactId>
-			<version>${project.version}</version>
+			<version>1.3-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

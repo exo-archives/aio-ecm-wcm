@@ -24,6 +24,12 @@ package org.exoplatform.wcm.webui.fastcontentcreator;
  */
 public class UIFCCConstant {
 
+  /** The Constant PREFERENCE_MODE. */
+  public static final String PREFERENCE_MODE            = "mode";
+  
+  /** The Constant PREFERENCE_ACTION. */
+  public static final String PREFERENCE_ACTION            = "action";
+  
   /** The Constant PREFERENCE_REPOSITORY. */
   public static final String PREFERENCE_REPOSITORY            = "repository";
   

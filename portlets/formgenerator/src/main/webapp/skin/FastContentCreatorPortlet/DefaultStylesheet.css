@@ -1,3 +1,18 @@
+.UIPopupMessages .UIHorizontalTabs {
+	display: none;	
+}
+.UIPopupMessages .PopupMessageBox {
+	height: 100%;
+}
+
+.UITabPane .UITabContentContainer .UITabContent {
+	height: 500px;
+}
+	
+.UIPopupMessages .InfoMessage .MessageContainer {
+	border-bottom: 0px;
+}
+
 .UIFCCPortlet {
 	background: white;
 	padding: 10px ;

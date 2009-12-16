@@ -267,15 +267,8 @@ public class UIContentSearchResult extends UIGrid {
     public void execute(Event<UIContentSearchResult> event) throws Exception {
       UIContentSearchResult contentSearchResult = event.getSource();
       String webcontentPath = event.getRequestContext().getRequestParameter(OBJECTID);
-      RepositoryService repositoryService = contentSearchResult.getApplicationComponent(RepositoryService.class);
-      String repoName = repositoryService.getCurrentRepository().getConfiguration().getName();
-      WCMConfigurationService configurationService = contentSearchResult.getApplicationComponent(WCMConfigurationService.class);
-      NodeLocation portalLocation = configurationService.getLivePortalsLocation(repoName);
-      ManageableRepository manageableRepository = repositoryService.getRepository(portalLocation.getRepository());
-      Session session = Utils.getSessionProvider().getSession(portalLocation.getWorkspace(), manageableRepository);
-      Node originalNode = (Node)session.getItem(webcontentPath);
-      NodeLocation originalLocation = NodeLocation.make(originalNode);
-      Node viewNode = Utils.getViewableNodeByComposer(originalLocation.getRepository(), originalLocation.getWorkspace(), originalLocation.getPath());
+      Node originalNode = Utils.getViewableNodeByComposer(null, null, webcontentPath);
+      Node viewNode = originalNode;
       UIContentSelector contentSelector = contentSearchResult.getAncestorOfType(UIContentSelector.class);
       UIContentViewer contentResultViewer = contentSelector.getChild(UIContentViewer.class);
       if (contentResultViewer == null) contentResultViewer = contentSelector.addChild(UIContentViewer.class, null, null);

@@ -2,18 +2,40 @@
 	
 	<parent>
 		<groupId>org.exoplatform</groupId>
-		<artifactId>parent</artifactId>
-		<version>1.1.1</version>
+		<artifactId>exo.parent</artifactId>
+		<version>6</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.exoplatform.ecm</groupId>
 	<artifactId>wcm</artifactId>
-        <name>eXo ECM - WCM</name>
-        <description>eXo Enterprise Content Management - Web Content Management</description>
-	<version>1.3-SNAPSHOT</version>
+        <name>eXo ECM WCM</name>
+        <version>1.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+	<scm>
+		<connection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/branches/1.2.x</connection>
+		<developerConnection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/branches/1.2.x</developerConnection>
+		<url>http://fisheye.exoplatform.org/browse/projects/ecm/wcm/branches/1.2.x</url>
+	</scm>
+
+	<properties>
+    <exo.product.name>exo-wcm</exo.product.name>
+    <exo.product.specification>1.2</exo.product.specification>
+
+    <org.exoplatform.kernel.version>2.0.8</org.exoplatform.kernel.version>
+    <org.exoplatform.core.version>2.1.6</org.exoplatform.core.version>
+    <org.exoplatform.ws.version>1.3.4</org.exoplatform.ws.version>
+    <org.exoplatform.jcr.version>1.10.5.1</org.exoplatform.jcr.version>
+    <org.exoplatform.pc.version>2.0.7</org.exoplatform.pc.version>
+    <org.exoplatform.portal.version>2.5.6.2</org.exoplatform.portal.version>
+    <org.exoplatform.ecm.dms.version>2.5.2.1</org.exoplatform.ecm.dms.version>
+
+    <!-- tests default config -->
+    <maven.test.skip>true</maven.test.skip>
+    <maven.test.failure.ignore>true</maven.test.failure.ignore>  
+  </properties>
+	
 	<modules>
 		<module>benchmark</module>
 		<module>component/wcm</module>
@@ -55,24 +77,8 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-				</configuration>
-			</plugin>
-			
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<skip>${exo.test.skip}</skip>
-					<useFile>false</useFile>
-					<forkMode>pertest</forkMode><!--once , pertest -->
-					<testFailureIgnore>false</testFailureIgnore>
-					<includes>
-						<include implementation="java.lang.String">**/${test.classes}*.java</include>
-					</includes>
 					<systemProperties>
 						<property>
 							<name>maven.exoplatform.dir</name>
@@ -132,35 +138,4 @@
 		</plugins>
 	</build>
 	
-	<profiles>
-		<profile>
-			<id>default</id>
-			<activation>
-				<property><name>default</name></property>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<properties>
-				<org.exoplatform.kernel.version>2.0.8</org.exoplatform.kernel.version>
-				<org.exoplatform.core.version>2.1.6</org.exoplatform.core.version>
-				<org.exoplatform.ws.version>1.3.4</org.exoplatform.ws.version>
-				<org.exoplatform.jcr.version>1.10.5</org.exoplatform.jcr.version>
-				<org.exoplatform.pc.version>2.0.7</org.exoplatform.pc.version>
-				<org.exoplatform.portal.version>2.5.6.2</org.exoplatform.portal.version>
-				<org.exoplatform.ecm.dms.version>2.5.2.1</org.exoplatform.ecm.dms.version>
-				<exo.test.classes>Test</exo.test.classes>
-				<exo.test.skip>true</exo.test.skip>
-			</properties>
-		</profile>	
-	</profiles>
-	
-	<properties>
-			<exo.product.name>exo-wcm</exo.product.name>
-			<exo.product.specification>1.3</exo.product.specification>
-	</properties>
-	
-	<scm>
-		<connection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/trunk</connection>
-		<developerConnection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/trunk</developerConnection>
-		<url>http://fisheye.exoplatform.org/browse/projects/ecm/wcm/trunk</url>
-	</scm>
 </project>

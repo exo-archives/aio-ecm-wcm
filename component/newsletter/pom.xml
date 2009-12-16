@@ -93,14 +93,14 @@
 		<dependency>
 			<groupId>org.exoplatform.ecm</groupId>
 			<artifactId>exo.ecm.wcm.component.wcm</artifactId>
-			<version>${project.version}</version>
+			<version>1.3-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.exoplatform.ecm</groupId>
 			<artifactId>exo.ecm.wcm.component.publication</artifactId>
-			<version>${project.version}</version>
+			<version>1.3-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
@@ -156,7 +156,7 @@
 						<testFailureIgnore>${exo.test.failure.ignore}</testFailureIgnore>
 						<forkMode>${exo.test.forkmode}</forkMode>
 						<includes>
-							<include>**/TestNewsletterCategoryHandler.java</include>						
+							<include>**/TestNewsletterSubscriptionHandler.java</include>						
 						</includes>
 						<excludes>
 							<exclude>**/*$*</exclude><!--nested classes prb, http://jira.codehaus.org/browse/SUREFIRE-288-->

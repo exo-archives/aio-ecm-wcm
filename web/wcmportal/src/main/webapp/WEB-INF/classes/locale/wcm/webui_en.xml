@@ -29,6 +29,22 @@
   </label>
  </Views>
  
+ <WCMContentView>
+  <header>
+   <status>Status</status>
+   <author>Author</author>
+   <date>Created date</date>
+   <title>Document title</title>
+  </header>
+ </WCMContentView>
+ 
+ <UIActionBar>
+  <obtion>
+   <Publication>Publication</Publication>
+   <System>System</System>
+  </obtion>
+ </UIActionBar>
+ 
  <UIPageSelectorPanel>
   <header>
    <path>Path</path>
@@ -224,7 +240,7 @@
    	<exception>
    		Have any exception raising while perform add categories for this document.
    	</exception>
-   	<non-categories>Categories are wrong. Please select good categories.</non-categories>
+	<non-categories>Categories are wrong. Please select good categories.</non-categories>
    </msg>
   </UIContentDialogForm>
   

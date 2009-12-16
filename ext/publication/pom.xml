@@ -2,17 +2,14 @@
 	<parent>
 		<groupId>org.exoplatform.ecm</groupId>
 		<artifactId>wcm</artifactId>
-		<version>1.3-SNAPSHOT</version>
+		<version>1.2.2-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>exo.ecm.wcm.ext.publication</artifactId>
 	<packaging>jar</packaging>
 	<name>eXo WCM Publication Extension</name>
-	<url>http://www.exoplatform.org</url>
-	<description>eXo WCM Publication Extension</description>
-
-	<dependencies>
+		<dependencies>
 		<dependency>
 			<groupId>org.exoplatform.kernel</groupId>
 			<artifactId>exo.kernel.container</artifactId>
@@ -100,20 +97,18 @@
 		<dependency>
 			<groupId>org.exoplatform.ecm</groupId>
 			<artifactId>exo.ecm.wcm.component.wcm</artifactId>
-			<version>${project.version}</version>
+			<version>1.3-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.exoplatform.ecm</groupId>
 			<artifactId>exo.ecm.wcm.component.publication</artifactId>
-			<version>${project.version}</version>
+			<version>1.3-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-	<build>
-		<sourceDirectory>src/main/java</sourceDirectory>
-		<outputDirectory>target/classes</outputDirectory>
+			<build>
 		<resources>
 			<resource>
 				<directory>src/main/java</directory>
@@ -178,11 +173,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<testFailureIgnore>${exo.test.failure.ignore}</testFailureIgnore>
-					<forkMode>${exo.test.forkmode}</forkMode>
-					<includes>
-						<include>**/TestWCMPublicationService.java</include>
-					</includes>
 					<excludes>
 						<exclude>**/*$*</exclude><!--nested classes prb, http://jira.codehaus.org/browse/SUREFIRE-288-->
 						<exclude>**/BaseWCMTestCase</exclude>

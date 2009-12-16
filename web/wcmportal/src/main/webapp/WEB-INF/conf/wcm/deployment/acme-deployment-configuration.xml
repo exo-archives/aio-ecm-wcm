@@ -297,6 +297,14 @@
               <field  name="targetPath"><string>repository:collaboration:/sites content/live/acme/categories/acme</string></field>
             </object>
           </object-param>
+        <object-param>        
+            <name>link11</name>
+            <description>Deployment Descriptor</description>
+            <object type="org.exoplatform.services.wcm.deployment.plugins.LinkDeploymentDescriptor">
+              <field  name="sourcePath"><string>repository:collaboration:/sites content/live/acme/web contents/site artifacts/News/News1</string></field>
+              <field  name="targetPath"><string>repository:collaboration:/sites content/live/acme/categories/acme/World</string></field>
+            </object>
+          </object-param>
         </init-params>
       </component-plugin>
     </external-component-plugins>

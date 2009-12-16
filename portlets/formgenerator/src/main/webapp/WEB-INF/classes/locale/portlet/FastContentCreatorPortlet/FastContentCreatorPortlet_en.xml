@@ -5,7 +5,7 @@
    <name-not-allowed>This name is not allowed.</name-not-allowed>
    <in-versioning>Need to checkout current node before add new node</in-versioning>
    <cannot-save>Some constraints were violated during that action.</cannot-save>
-   <saved-successfully>This node has been saved at '{0}' location successfully</saved-successfully>
+   <saved-successfully>{0}</saved-successfully>
    <not-support>Cannot load template of '{0}'.</not-support>
    <not-add-folder>Only nt:file can add in this folder</not-add-folder>
    <access-denied>Access denied! You haven't got add permission at '{0}'</access-denied>

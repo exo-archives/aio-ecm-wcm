@@ -29,6 +29,22 @@
   </label>
  </Views>
  
+ <WCMContentView>
+  <header>
+   <status>L'état</status>
+   <author>L'auteur</author>
+   <date>La date de création</date>
+   <title>Le titre du document</title>
+  </header>
+ </WCMContentView>
+ 
+ <UIActionBar>
+  <obtion>
+   <Publication>Publication</Publication>
+   <System>Système</System>
+  </obtion>
+ </UIActionBar>
+ 
  <UIPageSelectorPanel>
   <header>
    <path>Chemin</path>
@@ -224,7 +240,7 @@
    	<exception>
    		Pour toute exception élever tout accomplir ajouter des catégories pour ce document.
    	</exception>
-   	<non-categories>Les catégories sont faux. S'il vous plaît sélectionner des catégories bien.</non-categories>
+	<non-categories>Les catégories sont faux. S'il vous plaît sélectionner des catégories bien.</non-categories>
    </msg>
   </UIContentDialogForm>
   

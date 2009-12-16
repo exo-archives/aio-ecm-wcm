@@ -192,7 +192,7 @@
           <property name="jobName" value="job"/>
           <property name="groupName" value="group"/>
           <property name="job" value="org.exoplatform.services.wcm.portal.XScriptJob"/>
-          <property name="expression" value="0 0/1 * * * ?"/>
+          <property name="expression" value="0 0/10 * * * ?"/>
         </properties-param>
       </init-params>          
     </component-plugin>

@@ -32,8 +32,10 @@ import org.exoplatform.services.listener.ListenerService;
  */
 public class CreatePortalArtifactsServiceImpl implements CreatePortalArtifactsService {
 
+  public static final String CREATE_PORTAL_EVENT = "PortalArtifactsInitializerServiceImpl.portal.onCreate";
   private HashMap<String,CreatePortalPlugin> artifactPlugins = new HashMap<String,CreatePortalPlugin>();
   private ArrayList<String> initialPortals = new ArrayList<String>();
+  private ListenerService listenerService;
 
   @SuppressWarnings("unchecked")
   public CreatePortalArtifactsServiceImpl(InitParams initParams, ListenerService listenerService) {     
@@ -41,18 +43,22 @@ public class CreatePortalArtifactsServiceImpl implements CreatePortalArtifactsSe
     if(valuesParam != null) {
       initialPortals = valuesParam.getValues();
     }
+    this.listenerService = listenerService;
   }
   public void addPlugin(CreatePortalPlugin artifactsPlugin) throws Exception {
     artifactPlugins.put(artifactsPlugin.getName(),artifactsPlugin);
   }
 
-  public void deployArtifactsToPortal(SessionProvider sessionProvider, String portalName) throws Exception {
+  public void deployArtifactsToPortal(SessionProvider sessionProvider, String portalName)
+  throws Exception {
     //Do not initalize portal artifact for predefined portal
     if(initialPortals.contains(portalName)) return ;
 
     for(CreatePortalPlugin plugin: artifactPlugins.values()) {
       plugin.deployToPortal(sessionProvider, portalName);
     }
+    
+    listenerService.broadcast(CREATE_PORTAL_EVENT, portalName, sessionProvider);
   }
 
 }
