@@ -23,8 +23,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.jcr.AccessDeniedException;
+import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -34,7 +37,12 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.cms.link.LinkManager;
+import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
 import org.exoplatform.wcm.webui.pcv.config.UIPCVConfig;
@@ -259,6 +267,86 @@ public class UIPCVContainer extends UIContainer {
     }    
     return nodeView;
   }
+  
+  /**
+   * Gets the nodeby path.
+   * 
+   * @param parameters the parameters
+   * 
+   * @return the nodeby path
+   * 
+   * @throws Exception the exception
+   */
+  private Node getNodebyPath(String parameters) throws Exception {
+    if (parameters == null) return null;
+    ManageableRepository manageableRepository = null;
+    String[] params = parameters.split("/");
+    String repository = params[0];
+    String workspace = params[1];
+    try {
+      RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+      manageableRepository = repositoryService.getRepository(repository);
+    } catch(Exception e) {
+      return null;
+    }
+    String nodeIdentifier = null;
+    Node currentNode = null;
+    Session session = Utils.getSessionProvider().getSession(workspace, manageableRepository);
+    if (params.length > 2) {
+      StringBuffer identifier = new StringBuffer();
+      for (int i = 2; i < params.length; i++) {
+        identifier.append("/").append(params[i]);
+      }
+      nodeIdentifier = identifier.toString();
+      boolean isUUID = false;
+      // try to get node by path
+      try {
+        currentNode = (Node) session.getItem(nodeIdentifier);
+      } catch (Exception e) {
+        isUUID = true;
+      }
+      if (isUUID) {
+        // try to get node by uuid
+        try {
+          String uuid = params[params.length - 1];
+          currentNode = session.getNodeByUUID(uuid);
+        } catch (ItemNotFoundException exc) {
+          return null;
+        } catch (AccessDeniedException ex) {
+        	return null;
+        }
+      }
+    } else if (params.length == 2) {
+      currentNode = session.getRootNode();
+    }
+    
+    return currentNode;  
+  }
+  
+  /**
+   * Gets the node by category.
+   * 
+   * @param parameters the parameters
+   * 
+   * @return the node by category
+   * 
+   * @throws Exception the exception
+   */
+  private Node getNodeByCategory(String parameters) throws Exception {
+  	try {
+  		Node taxonomyTree = WCMCoreUtils.getService(TaxonomyService.class).getTaxonomyTree(repository, parameters.split("/")[0]);
+  		Node symlink = null;
+  		while(symlink == null && parameters.indexOf("/") > 0){
+    		parameters = parameters.substring(parameters.indexOf("/") + 1);
+    		if(taxonomyTree.hasNode(parameters))symlink = taxonomyTree.getNode(parameters);
+  		}
+  		return WCMCoreUtils.getService(LinkManager.class).getTarget(symlink);
+		} catch (Exception e) {
+		  e.printStackTrace();
+			return null;
+		}
+  }
+
   
   /**
    * Gets the request parameters.
