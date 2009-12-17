@@ -600,7 +600,9 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
   	dmsDocumentList.remove(NodetypeConstant.EXO_WEBCONTENT);
   	dmsDocumentList.remove(NodetypeConstant.EXO_ARTICLE);
   	for (String documentType : dmsDocumentList) {
-	    if (node.getPrimaryNodeType().isNodeType(documentType) && !isMediaType(node, repositoryName)) {
+	    if (node.getPrimaryNodeType().isNodeType(documentType)
+	    		&& !isMediaType(node, repositoryName)
+	    		&& !node.isNodeType(NodetypeConstant.EXO_WEBCONTENT)) {
 	    	return true;
 	    }
     }
