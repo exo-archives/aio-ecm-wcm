@@ -41,6 +41,7 @@ import org.exoplatform.services.mail.MailService;
 import org.exoplatform.services.mail.Message;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -86,9 +87,7 @@ public class NewsletterPublicUserHandler {
     for(Value value : values){
       try {
         listString.add(value.getString());
-      } catch (Exception e) {
-        log.error("Error when convert values to array: ", e.fillInStackTrace());
-      }
+      } catch (Exception e) { }
     }
     return listString;
   }
@@ -209,7 +208,7 @@ public class NewsletterPublicUserHandler {
       message.setSubject(emailContent[0]) ;
       message.setBody(mailContent) ;
       try{
-        MailService mService = (MailService)PortalContainer.getComponent(MailService.class) ;
+        MailService mService = WCMCoreUtils.getService(MailService.class) ;
         mService.sendMessage(message) ;   
       } catch(Exception e) {
         MailService mService = (MailService)StandaloneContainer.getInstance().getComponentInstanceOfType(MailService.class) ;

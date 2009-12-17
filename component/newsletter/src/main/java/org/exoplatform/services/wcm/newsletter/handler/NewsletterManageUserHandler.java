@@ -280,8 +280,9 @@ public class NewsletterManageUserHandler {
   /**
    * Delete.
    * 
-   * @param portalName the portal name
-   * @param userMail the user mail
+   * @param portalName      the portal name
+   * @param userMail        the user mail
+   * @param SessionProvider the sessionprovider
    */
   public void delete(SessionProvider sessionProvider, String portalName, String userMail) {
     log.info("Trying to delete user " + userMail);

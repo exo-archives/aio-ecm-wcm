@@ -110,6 +110,7 @@ public class NewsletterSubscriptionHandler {
         if(!listModerators.contains(permission))categoryExtend.setPermission(permission, permissions);
       }
       
+      permissions = new String[]{PermissionType.READ, PermissionType.SET_PROPERTY};
       // Set permission is addNode, remove and setProperty for administrators
       if(isAddNew){
         for(String per : listAddministrators){
@@ -117,18 +118,22 @@ public class NewsletterSubscriptionHandler {
           extendedSubscriptionNode.setPermission(per, permissions);
           newRedactors.add(per);
         }
+        extendedSubscriptionNode.setPermission("any", permissions);
       }
       
       // set only read permission for normal users who are not administrator ,moderator or redactor.
-      for(String oldPer : NewsletterConstant.getAllPermissionOfNode(subscriptionNode)){
-        if(!newRedactors.contains(oldPer)){
-          extendedSubscriptionNode.removePermission(oldPer, PermissionType.ADD_NODE);
-          extendedSubscriptionNode.removePermission(oldPer, PermissionType.REMOVE);
-          extendedSubscriptionNode.removePermission(oldPer, PermissionType.SET_PROPERTY);
-          extendedSubscriptionNode.removePermission(oldPer, PermissionType.CHANGE_PERMISSION);
-          extendedSubscriptionNode.setPermission(oldPer, new String[]{PermissionType.READ});
+      List<String> allPermissions = NewsletterConstant.getAllPermissionOfNode(subscriptionNode);
+      if(allPermissions != null && allPermissions.size() > 0){
+        for(String oldPer : allPermissions){
+          if(!newRedactors.contains(oldPer)){
+            extendedSubscriptionNode.removePermission(oldPer, PermissionType.ADD_NODE);
+            extendedSubscriptionNode.removePermission(oldPer, PermissionType.REMOVE);
+            extendedSubscriptionNode.removePermission(oldPer, PermissionType.CHANGE_PERMISSION);
+            extendedSubscriptionNode.setPermission(oldPer, permissions);
+          }
         }
       }
+      
     }
   }
   

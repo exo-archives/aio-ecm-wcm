@@ -24,6 +24,7 @@ import org.exoplatform.services.wcm.BaseWCMTestCase;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
+import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
@@ -51,6 +52,7 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 		super.setUp();
 		sessionProvider = WCMCoreUtils.getSessionProvider();
 		categoriesNode = session.getRootNode().getNode("sites content/live/classic/ApplicationData/NewsletterApplication/Categories");
+		categoriesNode.setProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR, new String[]{this.userRoot});
 		session.save();	
 		
 		NewsletterManagerService  newsletterManagerService = getService(NewsletterManagerService.class);
@@ -69,13 +71,21 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 	 * @throws Exception the exception
 	 */
 	public void testAddCategory() throws Exception {
-		newsletterCategoryHandler.add(sessionProvider, "classic", newsletterCategoryConfig);
+		newsletterCategoryHandler.add(sessionProvider, classicPortal, newsletterCategoryConfig);
 
 		Node node = categoriesNode.getNode(newsletterCategoryConfig.getName());
 		assertNotNull(node);
 		assertEquals(node.getName(), newsletterCategoryConfig.getName());
 		assertEquals(node.getProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION).getString(), newsletterCategoryConfig.getDescription());
-		assertEquals(node.getProperty(NewsletterConstant.CATEGORY_PROPERTY_TITLE).getString(), newsletterCategoryConfig.getTitle());	
+		assertEquals(node.getProperty(NewsletterConstant.CATEGORY_PROPERTY_TITLE).getString(), newsletterCategoryConfig.getTitle());
+		
+		newsletterCategoryConfig.setName("TestWrong");
+		newsletterCategoryHandler.add(sessionProvider, "classicPortal", newsletterCategoryConfig);
+    node = null;
+    try{
+      node = categoriesNode.getNode(newsletterCategoryConfig.getName());
+    }catch(Exception ex){}
+    assertNull(node);
 	}
 	
 	/**
@@ -84,18 +94,25 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 	 * @throws Exception the exception
 	 */
 	public void testEditCategory()  throws Exception {
-		newsletterCategoryHandler.add(sessionProvider, "classic", newsletterCategoryConfig);
+		newsletterCategoryHandler.add(sessionProvider, classicPortal, newsletterCategoryConfig);
 
 		newsletterCategoryConfig.setTitle("Sport News");
 		newsletterCategoryConfig.setDescription("Soccer,tennis,...");
 		newsletterCategoryConfig.setModerator("john");
-		newsletterCategoryHandler.edit(sessionProvider, "classic", newsletterCategoryConfig);
+		newsletterCategoryHandler.edit(sessionProvider, classicPortal, newsletterCategoryConfig);
 		
 		// get node and edit
 		Node node = categoriesNode.getNode(newsletterCategoryConfig.getName());
 		assertNotNull(node);
 		assertEquals(node.getProperty(NewsletterConstant.CATEGORY_PROPERTY_TITLE).getString(), newsletterCategoryConfig.getTitle());
 		assertEquals(node.getProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION).getString(), newsletterCategoryConfig.getDescription());
+		
+		// Edit category with wrong portal's name
+		newsletterCategoryHandler.edit(sessionProvider, classicPortal + "Wrong", newsletterCategoryConfig);
+		node = categoriesNode.getNode(newsletterCategoryConfig.getName());
+		newsletterCategoryConfig.setDescription("I have just modified");
+    assertNotSame(node.getProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION).getString(), newsletterCategoryConfig.getDescription());
+    
 	}
 
 	/**
@@ -104,12 +121,13 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 	 * @throws Exception the exception
 	 */
 	public void testDeleteCategory() throws Exception {
-		newsletterCategoryHandler.add(sessionProvider, "classic", newsletterCategoryConfig);
-		newsletterCategoryHandler.getCategoryByName(sessionProvider, "classic", newsletterCategoryConfig.getName());
-		System.out.println("\n\n\n\n LIST ====================>"+categoriesNode.getNodes().getSize()+"\n\n\n\n");
-		newsletterCategoryHandler.delete(sessionProvider, "classic", newsletterCategoryConfig.getName());
-		System.out.println("\n\n\n\n LIST ====================>"+categoriesNode.getNodes().getSize()+"\n\n\n\n");
+		newsletterCategoryHandler.add(sessionProvider, classicPortal, newsletterCategoryConfig);
+		assertEquals(1, categoriesNode.getNodes().getSize());
+		newsletterCategoryHandler.delete(sessionProvider, classicPortal, newsletterCategoryConfig.getName()+"Wrong");
+		assertEquals(1, categoriesNode.getNodes().getSize());
+		newsletterCategoryHandler.delete(sessionProvider, classicPortal, newsletterCategoryConfig.getName());
 		assertEquals(0, categoriesNode.getNodes().getSize());
+		
 	}
 	
 	/**
@@ -118,9 +136,12 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 	 * @throws Exception the exception
 	 */
 	public void testGetCategoryByName() throws Exception {
-		newsletterCategoryHandler.add(sessionProvider, "classic", newsletterCategoryConfig);
-		NewsletterCategoryConfig cat = newsletterCategoryHandler.getCategoryByName(sessionProvider, "classic", newsletterCategoryConfig.getName()); 
+		newsletterCategoryHandler.add(sessionProvider, classicPortal, newsletterCategoryConfig);
+		NewsletterCategoryConfig cat = newsletterCategoryHandler.getCategoryByName(sessionProvider, classicPortal, newsletterCategoryConfig.getName()); 
 		assertEquals("newsletter01", cat.getName());
+		
+		cat = newsletterCategoryHandler.getCategoryByName(sessionProvider, classicPortal, newsletterCategoryConfig.getName() + "wrong"); 
+		assertEquals(null, cat);
 	}
 	
 	/**
@@ -134,10 +155,42 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 			newsletterCategoryConfig.setName("cat_" + i);
 			newsletterCategoryConfig.setTitle("title_" + i);
 			newsletterCategoryConfig.setDescription("description_" + i);
-			newsletterCategoryConfig.setModerator("root");
-			newsletterCategoryHandler.add(sessionProvider, "classic", newsletterCategoryConfig);
+			newsletterCategoryConfig.setModerator(this.userRoot);
+			newsletterCategoryHandler.add(sessionProvider, this.classicPortal, newsletterCategoryConfig);
 		}
-		assertEquals(5, newsletterCategoryHandler.getListCategories("classic", sessionProvider).size());
+		assertEquals(5, newsletterCategoryHandler.getListCategories(this.classicPortal, sessionProvider).size());
+		assertEquals(0, newsletterCategoryHandler.getListCategories(this.classicPortal + "Wrong", sessionProvider).size());
+	}
+	
+	public void testGetListCategoryCanView() throws Exception {
+	  NewsletterCategoryConfig newsletterCategoryConfig;
+	  NewsletterSubscriptionConfig subscriptionConfig;
+	  NewsletterManagerService  newsletterManagerService = getService(NewsletterManagerService.class);
+	  NewsletterSubscriptionHandler newsletterSubscriptionHandler = newsletterManagerService.getSubscriptionHandler();
+	  for(int i =0; i < 5; i ++) {
+      newsletterCategoryConfig = new NewsletterCategoryConfig();
+      newsletterCategoryConfig.setName("cat_" + i);
+      newsletterCategoryConfig.setTitle("title_" + i);
+      newsletterCategoryConfig.setDescription("description_" + i);
+      newsletterCategoryConfig.setModerator(this.userRoot);
+      newsletterCategoryHandler.add(sessionProvider, classicPortal, newsletterCategoryConfig);
+      for(int j = 0; j < 2; j ++){
+        subscriptionConfig = new NewsletterSubscriptionConfig();
+        subscriptionConfig.setName(newsletterCategoryConfig.getName() + "subscription" + j);
+        subscriptionConfig.setCategoryName(newsletterCategoryConfig.getName());
+        subscriptionConfig.setDescription("Description");
+        subscriptionConfig.setRedactor("demo");
+        subscriptionConfig.setTitle("Title");
+        newsletterSubscriptionHandler.add(sessionProvider, classicPortal, subscriptionConfig);
+      }
+    }
+	  assertEquals(5, newsletterCategoryHandler.getListCategoriesCanView(this.classicPortal, 
+	                                                                     this.userRoot, 
+	                                                                     sessionProvider).size());
+	  
+	  assertEquals(5, newsletterCategoryHandler.getListCategoriesCanView(this.classicPortal, 
+	                                                                     "demo", 
+	                                                                     sessionProvider).size());
 	}
 	
 	/* (non-Javadoc)

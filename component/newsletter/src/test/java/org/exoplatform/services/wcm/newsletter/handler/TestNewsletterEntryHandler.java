@@ -66,6 +66,7 @@ public class TestNewsletterEntryHandler extends BaseWCMTestCase {
 	 */
 	public void setUp() throws Exception {
 		super.setUp();
+		System.out.println("\n\n\n\n-----------------------> TestNewsletterEntryHandler");
 		newsletterApplicationNode = (Node) session.getItem("/sites content/live/classic/ApplicationData/NewsletterApplication");
 		categoriesNode = newsletterApplicationNode.getNode("Categories");
 		

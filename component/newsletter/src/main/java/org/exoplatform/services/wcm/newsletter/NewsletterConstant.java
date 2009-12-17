@@ -31,6 +31,7 @@ import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -252,16 +253,18 @@ public class NewsletterConstant {
     String value = "";
     String id = "";
     Membership membership = null;
-    OrganizationService organizationService_ = (OrganizationService) PortalContainer.getComponent(OrganizationService.class);
-    for(Object object : organizationService_.getMembershipHandler().findMembershipsByUser(userId).toArray()){
-      id = object.toString();
-      id = id.replace("Membership[", "").replace("]", "");
-      membership = organizationService_.getMembershipHandler().findMembership(id);
-      value = membership.getGroupId();
-      userGroupMembership.add(value);
-      value = membership.getMembershipType() + ":" + value;
-      userGroupMembership.add(value);
-    }
+    OrganizationService organizationService_ = WCMCoreUtils.getService(OrganizationService.class);
+    try{
+      for(Object object : organizationService_.getMembershipHandler().findMembershipsByUser(userId).toArray()){
+        id = object.toString();
+        id = id.replace("Membership[", "").replace("]", "");
+        membership = organizationService_.getMembershipHandler().findMembership(id);
+        value = membership.getGroupId();
+        userGroupMembership.add(value);
+        value = membership.getMembershipType() + ":" + value;
+        userGroupMembership.add(value);
+      }
+    }catch(Exception ex){ }
     return userGroupMembership;
   }
   

@@ -5,7 +5,9 @@ import java.util.List;
 
 import javax.jcr.Node;
 
+import org.apache.commons.logging.Log;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
@@ -53,6 +55,10 @@ public class TestNewsletterPublicUserHandler extends BaseWCMTestCase {
 	/** The user email. */
 	private String userEmail = "test@local.com";
 	
+	private String userEmail2 = "test2@local.com";
+	
+	private static Log log = ExoLogger.getLogger(TestNewsletterPublicUserHandler.class);
+	
 	/* (non-Javadoc)
 	 * @see org.exoplatform.services.wcm.BaseWCMTestCase#setUp()
 	 */
@@ -96,9 +102,37 @@ public class TestNewsletterPublicUserHandler extends BaseWCMTestCase {
 	 * @throws Exception the exception
 	 */
 	public void testSubscribe() throws Exception {
-		newsletterPublicUserHandler.subscribe(sessionProvider, "classic", userEmail, listSubs, "http://test.com", new String[]{"test", "adjasd", "asdasd"});
+		try{
+		  newsletterPublicUserHandler.subscribe(sessionProvider, "classic", userEmail, listSubs, "http://test.com", new String[]{"test", "adjasd", "asdasd"});
+		}catch(Exception ex){
+		  log.warn("Can't send mail ");
+		}
 		List<NewsletterSubscriptionConfig> listSubscriptions = newsletterSubscriptionHandler.getSubscriptionIdsByPublicUser(sessionProvider, "classic", userEmail);
 		assertEquals(5, listSubscriptions.size());
+		
+		// Subscribe with wrong protal's name
+		try{
+		  newsletterPublicUserHandler.subscribe(sessionProvider, "classicWrong", userEmail, listSubs, "http://test.com", new String[]{"test", "adjasd", "asdasd"});
+		}catch(Exception ex){
+		  log.warn("Portal's name is wrong");
+		}
+		listSubscriptions = newsletterSubscriptionHandler.getSubscriptionIdsByPublicUser(sessionProvider, "classic", userEmail);
+    assertEquals(5, listSubscriptions.size());
+	}
+	
+	public void testSubscribeEmails() throws Exception {
+	  try{
+      newsletterPublicUserHandler.subscribe(sessionProvider, "classic", userEmail, 
+                                            listSubs, "http://test.com", 
+                                            new String[]{"test", "adjasd", "asdasd"});
+      newsletterPublicUserHandler.subscribe(sessionProvider, "classic", userEmail2, 
+                                            listSubs, "http://test2.com", 
+                                            new String[]{"test", "adjasd", "asdasd"});
+    }catch(Exception ex){
+      log.warn("Can't send mail ");
+    }
+    List<NewsletterSubscriptionConfig> listSubscriptions = newsletterSubscriptionHandler.getSubscriptionIdsByPublicUser(sessionProvider, "classic", userEmail);
+    assertEquals(5, listSubscriptions.size());
 	}
 	
 	/**
@@ -107,18 +141,22 @@ public class TestNewsletterPublicUserHandler extends BaseWCMTestCase {
 	 * @throws Exception the exception
 	 */
 	public void testUpdateSubscriptions() throws Exception {
-		newsletterPublicUserHandler.subscribe(sessionProvider, "classic", userEmail, listSubs, "http://test.com", 
+	  try{
+	    newsletterPublicUserHandler.subscribe(sessionProvider, classicPortal, userEmail, listSubs, "http://test.com", 
 													new String[]{"as","dsd", "asdasd"});
+	  }catch(Exception ex){
+      log.warn("Can't send mail");
+    }
 		List<NewsletterSubscriptionConfig> listSubscriptions = newsletterSubscriptionHandler.
-																	getSubscriptionIdsByPublicUser(sessionProvider, "classic", userEmail);
+																	getSubscriptionIdsByPublicUser(sessionProvider, classicPortal, userEmail);
 		assertEquals(5, listSubscriptions.size());
 		
 		List<String> listCategoryAndSubs = new ArrayList<String>();
 		for(int j = 0; j < 3; j++) {
 			listCategoryAndSubs.add(listSubs.get(j));
 		}
-		newsletterPublicUserHandler.updateSubscriptions(sessionProvider, "classic", userEmail, listCategoryAndSubs);
-		listSubscriptions = newsletterSubscriptionHandler.getSubscriptionIdsByPublicUser(sessionProvider, "classic", userEmail);
+		newsletterPublicUserHandler.updateSubscriptions(sessionProvider, this.classicPortal, userEmail, listCategoryAndSubs);
+		listSubscriptions = newsletterSubscriptionHandler.getSubscriptionIdsByPublicUser(sessionProvider, classicPortal, userEmail);
 		assertEquals(3, listSubscriptions.size());	
 	}
 	
@@ -128,8 +166,12 @@ public class TestNewsletterPublicUserHandler extends BaseWCMTestCase {
 	 * @throws Exception the exception
 	 */
 	public void testClearEmailInSubscription() throws Exception {
-		newsletterPublicUserHandler.subscribe(sessionProvider, "classic", userEmail, listSubs, "http://test.com", new String[]{"test", "sdasd", "asdasd"});
-		newsletterPublicUserHandler.clearEmailInSubscription(sessionProvider, userEmail);
+	  try{
+	    newsletterPublicUserHandler.subscribe(sessionProvider, "classic", userEmail, listSubs, "http://test.com", new String[]{"test", "sdasd", "asdasd"});
+	  }catch(Exception ex){
+      log.warn("Can't send mail");
+    }
+	  newsletterPublicUserHandler.clearEmailInSubscription(sessionProvider, userEmail);
 		List<NewsletterSubscriptionConfig> listSubscriptions =  newsletterSubscriptionHandler.getSubscriptionIdsByPublicUser(sessionProvider, "classic", userEmail);
 		assertEquals(0, listSubscriptions.size());
 	}
@@ -140,12 +182,18 @@ public class TestNewsletterPublicUserHandler extends BaseWCMTestCase {
 	 * @throws Exception the exception
 	 */
 	public void testConfirmPublicUser() throws Exception {
-		newsletterPublicUserHandler.subscribe(sessionProvider, "classic", userEmail, listSubs, "http://test.com", new String[]{"test", "asdas", "ssss"});
+		try{
+		  newsletterPublicUserHandler.subscribe(sessionProvider, "classic", userEmail, listSubs, "http://test.com", new String[]{"test", "asdas", "ssss"});
+		}catch(Exception ex){
+      log.warn("Can't send mail");
+    }
 		String userPath = NewsletterConstant.generateUserPath("classic");
     Node userFolderNode = (Node)session.getItem(userPath);
     Node node =  userFolderNode.getNode(userEmail);
 		boolean isPublicUser = newsletterPublicUserHandler.confirmPublicUser(sessionProvider, userEmail, node.getProperty(NewsletterConstant.USER_PROPERTY_VALIDATION_CODE).getString(), "classic");
 		assertEquals(true, isPublicUser);
+		isPublicUser = newsletterPublicUserHandler.confirmPublicUser(sessionProvider, userEmail2, node.getProperty(NewsletterConstant.USER_PROPERTY_VALIDATION_CODE).getString(), "classic");
+		assertEquals(false, isPublicUser);
 	}
 	
 	/**
@@ -154,7 +202,12 @@ public class TestNewsletterPublicUserHandler extends BaseWCMTestCase {
 	 * @throws Exception the exception
 	 */
 	public void testForgetEmail() throws Exception {
-		newsletterPublicUserHandler.subscribe(sessionProvider, "classic", userEmail, listSubs, "http://test.com", new String[]{"test","fgfg", "wesad"});
+		try{
+		  newsletterPublicUserHandler.subscribe(sessionProvider, "classic", userEmail, listSubs, "http://test.com", new String[]{"test","fgfg", "wesad"});
+		  newsletterPublicUserHandler.subscribe(sessionProvider, "classic", userEmail2, listSubs, "http://test.com", new String[]{"test","fgfg", "wesad"});
+		}catch(Exception ex){
+      log.warn("Can't send mail ");
+    }
 		newsletterPublicUserHandler.forgetEmail(sessionProvider, "classic", userEmail);
 		List<NewsletterSubscriptionConfig> listSubcriptions = newsletterSubscriptionHandler.getSubscriptionIdsByPublicUser(sessionProvider, "classic", userEmail);
 		assertEquals(0, listSubcriptions.size());

@@ -52,6 +52,10 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
 
 	/** The COLLABORATIO n_ ws. */
 	protected final String          COLLABORATION_WS = "collaboration".intern();
+	
+	protected final String classicPortal = "classic";
+	
+	protected final String userRoot = "root";
 
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#setUp()
