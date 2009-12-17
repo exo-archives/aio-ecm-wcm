@@ -39,6 +39,15 @@
 	cursor: pointer;
 }
 
+.UIFCCPortlet .Add16x16Icon {
+	background: url('DefaultSkin/AddIcon.png') no-repeat;
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+	margin-bottom:2px;
+	margin-left:10px;
+}
+
 .UIFCCPortlet .Edit16x16Icon {
 	background: url('DefaultSkin/EditAction.gif') no-repeat;
 	width: 16px;
