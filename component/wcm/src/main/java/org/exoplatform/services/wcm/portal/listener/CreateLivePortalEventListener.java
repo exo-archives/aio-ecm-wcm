@@ -34,7 +34,6 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService;
-import org.exoplatform.services.wcm.skin.XSkinService;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
@@ -85,10 +84,6 @@ public class CreateLivePortalEventListener extends Listener<DataStorageImpl, Por
       log.error("Error when create drive for portal: " + portalConfig.getName(),
                 e.fillInStackTrace());
     }
-    // Update skin for new portal
-    XSkinService xSkinService = (XSkinService) container.getComponentInstanceOfType(XSkinService.class);
-    xSkinService.start();
-    
     sessionProvider.close();
   }
 

@@ -30,6 +30,8 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.javascript.XJavascriptService;
+import org.exoplatform.services.wcm.skin.XSkinService;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.picocontainer.Startable;
 
@@ -104,6 +106,11 @@ public class WCMContentInitializerService implements Startable{
         contentInitializerServiceLogContent.setProperty("jcr:data", logData.toString());
         contentInitializerServiceLogContent.setProperty("jcr:lastModified", date.getTime());
         session.save();
+        
+        XJavascriptService jsService = WCMCoreUtils.getService(XJavascriptService.class); 
+        XSkinService xSkinService = WCMCoreUtils.getService(XSkinService.class);
+        xSkinService.start();
+        jsService.start();
       }
     } catch (Exception e) {
       log.error("Error when start WCMContentInitializerService: ", e.fillInStackTrace());
