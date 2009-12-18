@@ -60,6 +60,12 @@
    </label>
   </UIContentDialogConfig>
   
+  <UISCVConfig>
+    <msg>
+      <saved-successfully>Cấu hình của portlet đã được cập nhật</saved-successfully>
+    </msg>
+  </UISCVConfig>
+  
   <UIContentDialogFormPopupWindow>
    <title>
     <UIWelcomeScreen>Chào mừng đến với Single content viewer</UIWelcomeScreen>

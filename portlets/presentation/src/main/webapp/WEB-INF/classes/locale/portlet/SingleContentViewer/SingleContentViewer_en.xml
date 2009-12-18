@@ -60,6 +60,12 @@
    </label>
   </UIContentDialogConfig>
   
+  <UISCVConfig>
+    <msg>
+      <saved-successfully>The portlet's preference is updated</saved-successfully>
+    </msg>
+  </UISCVConfig>
+  
   <UIContentDialogFormPopupWindow>
    <title>
     <UIWelcomeScreen>Welcome to Single content viewer</UIWelcomeScreen>
