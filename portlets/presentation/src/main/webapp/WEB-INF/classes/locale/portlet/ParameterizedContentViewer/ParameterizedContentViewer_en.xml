@@ -34,4 +34,14 @@
    <Cancel>Cancel</Cancel>
   </action>
  </UIPCVConfig>
+ 
+ <UIPCVContainer>
+  <label>
+   <draft>Draft</draft>
+   <edit>Edit</edit>
+  </label>
+  <msg>
+   <content-not-found>No content found</content-not-found>
+  </msg>
+ </UIPCVContainer>
 </bundle>

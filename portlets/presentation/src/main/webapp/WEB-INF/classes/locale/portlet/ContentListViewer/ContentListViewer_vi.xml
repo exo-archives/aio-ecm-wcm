@@ -90,13 +90,23 @@
    <readmore>Đọc thêm</readmore>
   </label>
   <action>
-   <refresh>Làm mới trang</refresh>
+   <refresh>Làm mới</refresh>
+   <edit>Chỉnh sửa</edit>
   </action>
+  <label>
+    <draft>Bản nháp</draft>
+  </label>
  </UICLVPresentation>
  
  <CorrectContentSelectorPopupWindow>
   <title>
-   <UIContentSelectorMulti>Multiple content selector panel</UIContentSelectorMulti>
+   <UIContentSelectorMulti>Bảng lựa chọn nhiều nội dung</UIContentSelectorMulti>
   </title>
  </CorrectContentSelectorPopupWindow>
+ 
+ <UIContentDialogFormPopupWindow>
+  <title>
+    <UIContentDialogForm>Web content form</UIContentDialogForm>
+  </title>
+ </UIContentDialogFormPopupWindow>
 </bundle>

@@ -34,4 +34,14 @@
    <Cancel>Hủy</Cancel>
   </action>
  </UIPCVConfig>
+ 
+ <UIPCVContainer>
+  <label>
+   <draft>Bản nháp</draft>
+   <edit>Chỉnh sửa</edit>
+  </label>
+  <msg>
+   <content-not-found>Không tìm thấy nội dung nào</content-not-found>
+  </msg>
+ </UIPCVContainer>
 </bundle>

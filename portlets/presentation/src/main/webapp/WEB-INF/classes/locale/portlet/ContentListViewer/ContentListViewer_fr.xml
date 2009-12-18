@@ -91,7 +91,11 @@
   </label>
   <action>
    <refresh>Refresh</refresh>
+   <edit>Modifier</edit>
   </action>
+  <label>
+    <draft>Brouillon</draft>
+  </label>
  </UICLVPresentation>
  
  <CorrectContentSelectorPopupWindow>
@@ -99,4 +103,10 @@
    <UIContentSelectorMulti>Multiples panneau sélecteur de contenu</UIContentSelectorMulti>
   </title>
  </CorrectContentSelectorPopupWindow>
+ 
+ <UIContentDialogFormPopupWindow>
+  <title>
+    <UIContentDialogForm>Web content form</UIContentDialogForm>
+  </title>
+ </UIContentDialogFormPopupWindow>
 </bundle>

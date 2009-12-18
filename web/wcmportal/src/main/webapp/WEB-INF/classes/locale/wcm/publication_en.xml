@@ -62,9 +62,9 @@
   </label>
  </UIPublishedPages>
  <UIPublicationPanel>
-  <action>
+  <button>
    <Close>Close</Close>
-  </action>
+  </button>
   <revisions>
    <version>Revisions</version>
    <date>Date</date>
@@ -83,7 +83,7 @@
    <enrolled>Enrolled</enrolled>
    <draft>Draft</draft>
    <awaiting>Awaiting</awaiting>
-   <live>Live</live>
+   <published>Published</published>
    <obsolete>Obsolete</obsolete>
   </status>
   <scheduled>

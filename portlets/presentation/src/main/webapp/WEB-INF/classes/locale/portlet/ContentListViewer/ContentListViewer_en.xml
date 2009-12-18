@@ -91,7 +91,11 @@
   </label>
   <action>
    <refresh>Refresh</refresh>
+   <edit>Edit</edit>
   </action>
+  <label>
+    <draft>Draft</draft>
+  </label>
  </UICLVPresentation>
  
  <CorrectContentSelectorPopupWindow>
@@ -99,4 +103,10 @@
    <UIContentSelectorMulti>Multiple content selector panel</UIContentSelectorMulti>
   </title>
  </CorrectContentSelectorPopupWindow>
+ 
+ <UIContentDialogFormPopupWindow>
+  <title>
+    <UIContentDialogForm>Web content form</UIContentDialogForm>
+  </title>
+ </UIContentDialogFormPopupWindow>
 </bundle>

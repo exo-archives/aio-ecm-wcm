@@ -317,4 +317,32 @@
     <Invalid-number>Giá trị 0 không được chấp nhận ở trường '{0}'</Invalid-number>
    </msg>
   </ZeroValidator>
+  
+  <UIDropDownPageTemp>
+  <item>
+   <WCMPageConfigs>Kiểu WCM</WCMPageConfigs>
+   <ColumnPageConfigs>Kiểu cột</ColumnPageConfigs>
+   <RowPageConfigs>Kiểu dòng</RowPageConfigs>
+   <TabsPageConfigs>Kiểu tab</TabsPageConfigs>
+   <MixPageConfigs>Kiểu hỗn hợp</MixPageConfigs>
+  </item>
+ </UIDropDownPageTemp>
+  
+ <UIWizardPageSelectLayoutForm>
+  <label>
+   <SingleContentViewer>Single content viewer</SingleContentViewer>
+   <ContentListViewer>Content list viewer</ContentListViewer>
+   <Search>Trang tìm kiếm</Search>
+   <Sitemap>Trang sơ đồ</Sitemap>
+   <TwoColumnsLayout>Trang có hai cột</TwoColumnsLayout>
+   <ThreeColumnsLayout>Trang có ba cột</ThreeColumnsLayout>
+   <TwoRowsLayout>Two rows layout</TwoRowsLayout>
+   <ThreeRowsLayout>Three rows layout</ThreeRowsLayout>
+   <TwoTabsLayout>Two tabs layout</TwoTabsLayout>
+   <ThreeTabsLayout>Three tabs layout</ThreeTabsLayout>
+   <TwoColumnsOneRowLayout>Two columns One row layout</TwoColumnsOneRowLayout>
+   <OneRowTwoColumnsLayout>One row Two columns layout</OneRowTwoColumnsLayout>
+   <ThreeRowsTwoColumnsLayout>Three rows Two columns layout </ThreeRowsTwoColumnsLayout>
+  </label>
+ </UIWizardPageSelectLayoutForm>
 </bundle>

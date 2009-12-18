@@ -316,4 +316,32 @@
     <Invalid-number>Zéro n'est pas acceptée dans le domaine '{0}'</Invalid-number>
    </msg>
   </ZeroValidator>
+  
+  <UIDropDownPageTemp>
+  <item>
+   <WCMPageConfigs>WCM page configs</WCMPageConfigs>
+   <ColumnPageConfigs>Column page configs</ColumnPageConfigs>
+   <RowPageConfigs>Row page configs</RowPageConfigs>
+   <TabsPageConfigs>Tabs page configs</TabsPageConfigs>
+   <MixPageConfigs>Mix page config</MixPageConfigs>
+  </item>
+ </UIDropDownPageTemp>
+  
+ <UIWizardPageSelectLayoutForm>
+  <label>
+   <SingleContentViewer>Single content viewer</SingleContentViewer>
+   <ContentListViewer>Content list viewer</ContentListViewer>
+   <Search>Search</Search>
+   <Sitemap>Sitemap</Sitemap>
+   <TwoColumnsLayout>Two columns layout</TwoColumnsLayout>
+   <ThreeColumnsLayout>Three columns layout</ThreeColumnsLayout>
+   <TwoRowsLayout>Two rows layout</TwoRowsLayout>
+   <ThreeRowsLayout>Three rows layout</ThreeRowsLayout>
+   <TwoTabsLayout>Two tabs layout</TwoTabsLayout>
+   <ThreeTabsLayout>Three tabs layout</ThreeTabsLayout>
+   <TwoColumnsOneRowLayout>Two columns One row layout</TwoColumnsOneRowLayout>
+   <OneRowTwoColumnsLayout>One row Two columns layout</OneRowTwoColumnsLayout>
+   <ThreeRowsTwoColumnsLayout>Three rows Two columns layout </ThreeRowsTwoColumnsLayout>
+  </label>
+ </UIWizardPageSelectLayoutForm>
 </bundle>
