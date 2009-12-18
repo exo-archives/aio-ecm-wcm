@@ -8,7 +8,7 @@
    <modelVersion>4.0.0</modelVersion>
    <artifactId>wcm.packaging.module</artifactId>
    <packaging>pom</packaging>
-   <name>eXo DMS eXoBuild module</name>
+   <name>eXo WCM eXoBuild module</name>
 
    <properties>
       <exobuild.name>wcm</exobuild.name>
