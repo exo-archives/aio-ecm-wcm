@@ -529,20 +529,14 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
 
   		checkNode = sourceNode != null ? sourceNode : child;
 
-  		if (isFolderAndIsNotWebContent(checkNode)) {
+  		if (isFolder(checkNode)) {
   			Element folder = createFolderElement(
   					document, checkNode, checkNode.getPrimaryNodeType().getName(), child.getName());
   			folders.appendChild(folder);
   		}
 
   		if (FILE_TYPE_WEBCONTENT.equals(filterBy)) {
-  			if(checkNode.isNodeType(NodetypeConstant.EXO_WEBCONTENT)) {
-  				Element folder = createFolderElement(
-  						document, checkNode, checkNode.getPrimaryNodeType().getName(), child.getName());
-  				folders.appendChild(folder);
-  				fileType = FILE_TYPE_WEBCONTENT;
-  			}
-  			if (checkNode.isNodeType(NodetypeConstant.EXO_ARTICLE)) {
+  			if(checkNode.isNodeType(NodetypeConstant.EXO_WEBCONTENT) || checkNode.isNodeType(NodetypeConstant.EXO_ARTICLE)) {
   				fileType = FILE_TYPE_WEBCONTENT;
   			}
   		}
@@ -575,11 +569,11 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
 	 * 
 	 * @throws RepositoryException the repository exception
 	 */
-	private boolean isFolderAndIsNotWebContent(Node checkNode) throws RepositoryException {
-	  return !checkNode.isNodeType(NodetypeConstant.EXO_WEBCONTENT) &&
-	  		(checkNode.isNodeType(FCKUtils.NT_UNSTRUCTURED)
+	private boolean isFolder(Node checkNode) throws RepositoryException {
+	  return 
+	  		checkNode.isNodeType(FCKUtils.NT_UNSTRUCTURED)
 	  		|| checkNode.isNodeType(FCKUtils.NT_FOLDER)
-	  		|| checkNode.isNodeType(NodetypeConstant.EXO_TAXONOMY));
+	  		|| checkNode.isNodeType(NodetypeConstant.EXO_TAXONOMY);
   }
   
   /**
