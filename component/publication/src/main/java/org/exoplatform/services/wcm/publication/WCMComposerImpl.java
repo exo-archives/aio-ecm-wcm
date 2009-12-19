@@ -15,6 +15,8 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 
 import org.apache.commons.logging.Log;
+import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
@@ -72,7 +74,13 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	 * 
 	 * @throws Exception the exception
 	 */
-	public WCMComposerImpl() throws Exception {
+	public WCMComposerImpl(InitParams params) throws Exception {
+		if (params!=null) {
+		    ValueParam useCache = params.getValueParam("useCache");
+		    if (useCache != null)
+		      this.isCached = Boolean.parseBoolean(useCache.getValue());
+		}
+		
 		repositoryService = WCMCoreUtils.getService(RepositoryService.class);
 		linkManager = WCMCoreUtils.getService(LinkManager.class);
 		publicationService = WCMCoreUtils.getService(PublicationService.class);
@@ -177,6 +185,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		if (recursive==null) {
 			statement.append(" AND NOT jcr:path LIKE '" + path + "/%/%')");
 		}
+//		statement.append(" AND (" + getTemlatesSQLFilter(repository) + ")");
 		statement.append(" AND (" + getTemlatesSQLFilter(repository) + ") AND (" + "(NOT publication:currentState like '%')");
 		if (MODE_LIVE.equals(mode)) {
 			statement.append(" OR publication:currentState='" + PublicationDefaultStates.PUBLISHED + "')");
