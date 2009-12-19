@@ -169,7 +169,6 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		Session session = sessionProvider.getSession(workspace, manageableRepository);
 		QueryManager manager = session.getWorkspace().getQueryManager();
 		String orderFilter = getOrderSQLFilter(filters);
-		String mode = filters.get(FILTER_MODE);
 		String recursive = filters.get(FILTER_RECURSIVE);
 		String primaryType = filters.get(FILTER_PRIMARY_TYPE);
 		if (primaryType == null) {
@@ -185,13 +184,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		if (recursive==null) {
 			statement.append(" AND NOT jcr:path LIKE '" + path + "/%/%')");
 		}
-//		statement.append(" AND (" + getTemlatesSQLFilter(repository) + ")");
-		statement.append(" AND (" + getTemlatesSQLFilter(repository) + ") AND (" + "(NOT publication:currentState like '%')");
-		if (MODE_LIVE.equals(mode)) {
-			statement.append(" OR publication:currentState='" + PublicationDefaultStates.PUBLISHED + "')");
-		} else {
-			statement.append(" OR (publication:currentState<>'" + PublicationDefaultStates.OBSOLETE + "' AND publication:currentState<>'" + PublicationDefaultStates.ARCHIVED + "'))");
-		}
+		statement.append(" AND (" + getTemlatesSQLFilter(repository) + ")");
 		statement.append(orderFilter);
 		Query query = manager.createQuery(statement.toString(), Query.SQL);
 		return query.execute().getNodes();
