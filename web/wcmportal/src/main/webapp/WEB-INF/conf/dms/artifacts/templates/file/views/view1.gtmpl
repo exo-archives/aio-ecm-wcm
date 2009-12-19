@@ -107,7 +107,13 @@
   public String getDownloadLink(Node node) throws Exception {
     def input = node.getNode("jcr:content").getProperty("jcr:data").getStream() ;
     def dresource = new InputStreamDownloadResource(input, "image") ;
-    dresource.setDownloadName(node.getName()) ;
+    def name = node.getName();
+    if (node.isNodeType("nt:frozenNode")) {
+      String uuid = node.getProperty("jcr:frozenUuid").getString();
+      Node originalNode = node.getSession().getNodeByUUID(uuid);
+      name = originalNode.getName();
+    }
+    dresource.setDownloadName(name) ;
     def dservice = uicomponent.getApplicationComponent(DownloadService.class) ;
     return dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;
   }
