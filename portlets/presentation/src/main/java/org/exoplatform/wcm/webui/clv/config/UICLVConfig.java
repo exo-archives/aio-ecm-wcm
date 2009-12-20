@@ -66,6 +66,7 @@ import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
 
 /*
@@ -302,6 +303,7 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
     paginatorTemplateSelector.setValue(paginatorTemplate);
     String itemsPerPageVal = portletPreferences.getValue(UICLVPortlet.ITEMS_PER_PAGE, null);
     itemsPerPageStringInput.setValue(itemsPerPageVal);
+    itemsPerPageStringInput.addValidator(MandatoryValidator.class);
     itemsPerPageStringInput.addValidator(ZeroNumberValidator.class);
     itemsPerPageStringInput.addValidator(PositiveNumberFormatValidator.class);
     itemsPerPageStringInput.setMaxLength(3);    
