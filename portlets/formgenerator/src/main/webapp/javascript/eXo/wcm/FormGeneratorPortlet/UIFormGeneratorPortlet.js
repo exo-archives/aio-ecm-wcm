@@ -1,5 +1,4 @@
 function UIFormGeneratorPortlet() {
-	
 }
 
 UIFormGeneratorPortlet.prototype.init = function() {
@@ -43,25 +42,26 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 			advancedOption  +=	"<tr>";
 			advancedOption  +=		"<td class='FieldLabel'>Advance Options</td>";
 			advancedOption  +=		"<td class='FileComponent'>";
-			advancedOption  += 			"Toolbar: <select class='SelectBox'><option>SuperBasicWCM</option><option>BasicWCM</option><option>CompleteWCM</option></select><option>Basic</option>";
+			advancedOption  += 			"Toolbar: <select class='SelectBox'><option>SuperBasicWCM</option><option>BasicWCM</option><option>CompleteWCM</option><option>Basic</option></select>";
 			advancedOption  +=		"</td>";
 			advancedOption  +=	"</tr>";
 
 			break;			
 		case "select"		: 
 			fieldComponent  +=		"<td class='FieldLabel' value='Select'>Select field</td>";
-			fieldComponent  +=		"<td class='FieldComponent'><select class='SelectBox'><option></option></select></td>";
+			fieldComponent  +=		"<td class='FieldComponent'><select class='SelectBox'><option index='1' value='option1'>Option 1</option></select></td>";
 			
 			multivalue		= true;
 			
 			break;			
 		case "checkbox"	: 
 			fieldComponent  +=		"<td class='FieldLabel' value='Checkbox'>Checkbox field</td>";
-			fieldComponent  +=		"<td class='FieldComponent'><input type='checkbox' class='CheckBox' value='checkbox1'/><input type='checkbox' class='CheckBox' value='checkbox2'/><input type='checkbox' class='CheckBox' value='checkbox3'/></td>";
+			fieldComponent  +=		"<td class='FieldComponent'><div class='CheckboxButton'><input type='checkbox' class='CheckBox' value='checkbox1'/><span style='padding : 0 5px 0 19px; display:block; line-height:12px'>Checkbox 1</span><div style='clear:left'></div></div></td>";
 			break;						
 		case "radio"		: 
 			fieldComponent  +=		"<td class='FieldLabel' value='Radio'>Radio field</td>";
-			fieldComponent  +=		"<td class='FieldComponent'><input type='radio' class='Radio' value='radio1'/><input type='radio' class='Radio' value='radio2'/><input type='radio' class='Radio' value='radio3'/></td>";
+			fieldComponent  +=		"<td class='FieldComponent'><div class='RadioButton'><input type='radio' class='Radio' value='radio1'/><span style='padding : 0 5px 0 19px; display:block; line-height:12px'>Radio 1</span><div style='clear:left'></div></div></td>";
+			multivalue		= true;
 			break;			
 		case "datetime"	: 
 			fieldComponent  +=		"<td class='FieldLabel' value='DateTime'>Datetime field</td>";
@@ -133,7 +133,7 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 	formGenerator  +=							"</tr>";
 	formGenerator  +=							"<tr>";
 	formGenerator  +=								"<td class='FieldLabel'>Default Value</td>";
-	formGenerator  +=								"<td class='FieldComponent'><input type='text' class='InputText' onkeyup='eXo.ecm.UIFormGeneratorPortlet.updateValue(event);'/></td>";
+	formGenerator  +=								"<td class='FieldComponent'><input type='text' class='InputText' onkeyup='eXo.ecm.UIFormGeneratorPortlet.updateValue(event);' index='1'/></td>";
 	formGenerator  +=								"<td class='FieldIcon'>";
 	if (multivalue) {
 		formGenerator  +=								"<a class='AddIcon' onclick='eXo.ecm.UIFormGeneratorPortlet.addOption(this);'><span></span></a>";
@@ -334,6 +334,34 @@ UIFormGeneratorPortlet.prototype.updateValue = function(evt) {
 			break;
 		case "upload" : 
 			break;
+		case "Radio"  :
+			var fieldComponent = DOMUtil.findFirstDescendantByClass(componentNode, "td", "FieldComponent");
+			var radioNodes = DOMUtil.findDescendantsByClass(fieldComponent, 'div', 'RadioButton');
+			var fieldNode = DOMUtil.findAncestorByClass(srcEle, 'FieldComponent');
+			var inputList = DOMUtil.getChildrenByTagName(fieldNode, 'input');
+			for(var i = 0 ; i < inputList.length; i++) {
+				if(inputList[i] == srcEle) {
+					var radioInputNode = DOMUtil.findFirstDescendantByClass(radioNodes[i], 'input', 'Radio');
+					radioInputNode.value = srcEle.value;
+					var radioTextNode = DOMUtil.findDescendantsByTagName(radioNodes[i], 'span')[0];
+					radioTextNode.innerHTML = srcEle.value;
+				} 
+			}
+			break;	
+		case "Checkbox" :
+			var fieldComponent = DOMUtil.findFirstDescendantByClass(componentNode, "td", "FieldComponent");
+			var checkboxNodes = DOMUtil.findDescendantsByClass(fieldComponent, 'div', 'CheckboxButton');
+			var fieldNode = DOMUtil.findAncestorByClass(srcEle, 'FieldComponent');
+			var inputList = DOMUtil.getChildrenByTagName(fieldNode, 'input');
+			for(var i = 0 ; i < inputList.length; i++) {
+				if(inputList[i] == srcEle) {
+					var chkInputNode = DOMUtil.findFirstDescendantByClass(checkboxNodes[i], 'input', 'CheckBox');
+					chkInputNode.value = srcEle.value;
+					var chkTextNode = DOMUtil.findDescendantsByTagName(checkboxNodes[i], 'span')[0];
+					chkTextNode.innerHTML = srcEle.value;
+				}
+			}
+			break;	
 	}
 };
 
@@ -350,16 +378,45 @@ UIFormGeneratorPortlet.prototype.addOption = function(obj) {
 	var parentNode = DOMUtil.findAncestorByClass(obj, 'BoxContentBoxStyle');
 	var containerNode = DOMUtil.findFirstDescendantByClass(parentNode, 'div', 'TopContentBoxStyle');
 	var componentNode = DOMUtil.findFirstDescendantByClass(containerNode, 'td', 'FieldComponent');
-	var inputNode = componentNode.childNodes[0];
-	var optionNode = document.createElement('option');
-	inputNode.appendChild(optionNode);
 	var rowNode = DOMUtil.findAncestorByTagName(obj, 'tr');
 	var brotherNode = DOMUtil.findFirstDescendantByClass(rowNode, 'td', 'FieldComponent');
-	var optionInputNode = document.createElement('input');
-	optionInputNode.className = 'InputText';
-	optionInputNode.type = 'text';
-	optionInputNode.onkeyup = this.updateValue;	
-	brotherNode.appendChild(optionInputNode);
+	var brotherChildNodes = DOMUtil.findDescendantsByClass(brotherNode, 'input', 'InputText');
+	var index = 0;
+	for(var i = 1; i <= brotherChildNodes.length; i++) {
+		if(i == brotherChildNodes.length) {
+			index = i;
+			index++;
+		}	
+	}
+	switch(parentNode.getAttribute("typeComponent")) {
+		case "select" :
+			var selectNode = DOMUtil.findFirstDescendantByClass(componentNode, 'select', 'SelectBox');
+			var optionNode = document.createElement('option');
+			optionNode.setAttribute("index", index);
+			optionNode.value = "Option"+index;
+			optionNode.innerHTML = "Option"+index;
+			selectNode.appendChild(optionNode);
+			break;
+		case "radio"	:
+			var radioNode  = document.createElement("div");
+			radioNode.innerHTML = '<input type="radio" class="Radio" value="radio'+index+'" /><span style="padding : 0 5px 0 19px; display:block; line-height:12px">Radio '+index+'</span><div style="clear:left"></div>';
+			radioNode.className = "RadioButton";
+			componentNode.appendChild(radioNode);
+			break;
+		case "checkbox" :
+			var checkboxNode  = document.createElement("div");
+			checkboxNode.innerHTML = '<input type="checkbox" class="CheckBox" value="checkbox'+index+'" /><span style="padding : 0 5px 0 19px; display:block; line-height:12px">Checkbox '+index+'</span><div style="clear:left"></div>';
+			checkboxNode.className = "CheckboxButton";
+			componentNode.appendChild(checkboxNode);	
+			break;
+	}
+	
+	var inputNode = document.createElement('input');
+	inputNode.className = 'InputText';
+	inputNode.setAttribute("input", index);
+	inputNode.type = 'text';
+	inputNode.onkeyup = this.updateValue;	
+	brotherNode.appendChild(inputNode);
 };
 
 UIFormGeneratorPortlet.prototype.removeOption = function(obj) {
@@ -367,19 +424,45 @@ UIFormGeneratorPortlet.prototype.removeOption = function(obj) {
 	var parentNode = DOMUtil.findAncestorByTagName(obj, 'tr');
 	var componentNode = DOMUtil.findFirstDescendantByClass(parentNode, 'td', 'FieldComponent');
 	var inputNodes = DOMUtil.getChildrenByTagName(componentNode, 'input');
-	
+	if(inputNodes.length <= 1)	return;
 	var root = DOMUtil.findAncestorByClass(obj, 'BoxContentBoxStyle');
 	var topContainerNode = DOMUtil.findFirstDescendantByClass(root, 'div', 'TopContentBoxStyle');
 	var topFieldComponent = DOMUtil.findFirstDescendantByClass(topContainerNode, 'td', 'FieldComponent');
-	var selectNode = DOMUtil.findFirstDescendantByClass(topFieldComponent, 'select', 'SelectBox');
-	var options =	 DOMUtil.getChildrenByTagName(selectNode, 'options');
-	for(var i = 0 ; i < inputNodes.length; i++) {
-		var index = inputNodes.length -1;
-		if(i == index) {
-			componentNode.removeChild(inputNodes[i]);			
-			selectNode.remove(i);
-		}
+	
+	switch(root.getAttribute("typeComponent")) {
+		case "select" :
+			var selectNode = DOMUtil.findFirstDescendantByClass(topFieldComponent, 'select', 'SelectBox');
+			var options =	 DOMUtil.getChildrenByTagName(selectNode, 'options');
+			for(var i = 0 ; i < inputNodes.length; i++) {
+				var index = inputNodes.length -1;
+				if(i == index) {
+					componentNode.removeChild(inputNodes[i]);			
+					selectNode.remove(i);
+				}
+			}
+			break;
+		case "radio"	:
+			var radioNodes = DOMUtil.findDescendantsByClass(topFieldComponent, 'div', 'RadioButton');
+			for(var i = 0 ; i < inputNodes.length; i++) {
+				var index = inputNodes.length -1;
+				if(i == index) {
+					componentNode.removeChild(inputNodes[i]);			
+					topFieldComponent.removeChild(radioNodes[i]);
+				}
+			}
+			break;
+		case "checkbox" :
+			var checkboxNodes = DOMUtil.findDescendantsByClass(topFieldComponent, 'div', 'CheckboxButton');
+			for(var i = 0 ; i < inputNodes.length; i++) {
+				var index = inputNodes.length -1;
+				if(i == index) {
+					componentNode.removeChild(inputNodes[i]);			
+					topFieldComponent.removeChild(checkboxNodes[i]);
+				}
+			}
+			break;	
 	}
+	
 };
 
 UIFormGeneratorPortlet.prototype.getStringJsonObject = function() {
@@ -456,6 +539,10 @@ UIFormGeneratorPortlet.prototype.getProperties = function(comp) {
 		case "upload" :
 			strObject +=  '"value":"null","width":0,"mandatory":'+mandatory+',"height":0,';	
 			break;
+		case "radio" :
+			break;
+		case "checkbox" :
+			break;		
 	}
 
 	strObject += '"guideline":"'+fieldLabel.getAttribute('desc')+'"';

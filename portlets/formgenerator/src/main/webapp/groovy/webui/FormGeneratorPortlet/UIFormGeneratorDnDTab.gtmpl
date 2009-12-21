@@ -1,6 +1,5 @@
 <%
 	import org.exoplatform.web.application.JavascriptManager;
-	
 	def rcontext = _ctx.getRequestContext() ;
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
 	jsmanager.addOnLoadJavascript('eXo.ecm.UIFormGeneratorPortlet.init()');
@@ -55,7 +54,7 @@
 							</div>
 						</div>
 					</div>
-					<!-- <div class="LeftMenu" elementType="radio">
+					<div class="LeftMenu" elementType="radio">
 						<div class="RightMenu">
 							<div class="CenterMenu">
 								<a class="IconMenu IconRadio"><span></span></a>
@@ -63,7 +62,7 @@
 								<div class="ClearLeft"><span></span></div>
 							</div>
 						</div>
-					</div> -->
+					</div>
 					<div class="LeftMenu" elementType="upload">
 						<div class="RightMenu">
 							<div class="CenterMenu">
@@ -73,7 +72,7 @@
 							</div>
 						</div>
 					</div>
-					<!-- <div class="LeftMenu" elementType="checkbox">
+					<div class="LeftMenu" elementType="checkbox">
 						<div class="RightMenu">
 							<div class="CenterMenu">
 								<a class="IconMenu IconCheckBox"><span></span></a>
@@ -81,7 +80,7 @@
 								<div class="ClearLeft"><span></span></div>
 							</div>
 						</div>
-					</div> -->
+					</div>
 				</div>
 			</div>
 		</div>

@@ -260,7 +260,7 @@ public class XJavascriptService implements Startable {
     try {
       LivePortalManagerService livePortalManagerService = WCMCoreUtils.getService(LivePortalManagerService.class);
       Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
-      addSharedPortalJavascript(sharedPortal, null, true);
+//      addSharedPortalJavascript(sharedPortal, null, true);
       List<Node> livePortals = livePortalManagerService.getLivePortals(sessionProvider);
       for(Node portal: livePortals) {
         addPortalJavascript(portal, null, true);
