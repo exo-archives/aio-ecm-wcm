@@ -287,24 +287,27 @@ public class UINewsletterEntryForm extends UIDialogForm {
           String data = newsletterNode.getNode("default.html").getNode("jcr:content").getProperty("jcr:data").getString();
           String url = "";
           int index= 0;
+          String link;
           do{
             if(data.indexOf("<a", index) >= 0) {
               index = data.indexOf("href=", index) + "href=".length() + 1;
               int indexEndLink = data.indexOf(">", index);
-              String link = data.substring(index, indexEndLink);
+              link = data.substring(index, indexEndLink);
               if(link.startsWith("/")) {
                 url = baseURI + link;
                 url = url.replaceAll(" ", "%20");
                 content = content.replaceAll(link, url);
+              }else{
+                content = content.replaceAll(link, link.replaceAll(" ", "%20"));
               }
             } else if(data.indexOf("<img", index) >= 0) {
               index = data.indexOf("src=", index) + "src=".length() + 1;
               int indexEndImg = data.indexOf("/>", index);
-              String imgSrc = data.substring(index, indexEndImg);
-              if(imgSrc.startsWith("/")) {
-                url = baseURI + imgSrc;
+              link = data.substring(index, indexEndImg);
+              if(link.startsWith("/")) {
+                url = baseURI + link;
                 url = url.replaceAll(" ", "%20");
-                content = content.replaceAll(imgSrc, url);
+                content = content.replaceAll(link, url);
               }
             } else {
               break;

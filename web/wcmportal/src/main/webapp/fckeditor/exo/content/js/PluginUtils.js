@@ -383,9 +383,9 @@ PluginUtils.prototype.insertContent = function(objContent) {
 	if(nodeType.indexOf("image") >=0) {
 		strHTML += "<img src='"+url+"' name='"+name+"' alt='"+name+"'/>";
 	} else {
-		//strHTML += "<a href='"+url+"' style='text-decoration:none;'>"+name+"</a>";
-		strHTML += "<font onclick=\"javaScript:window.location='" + window.location.protocol + "//" + window.location.host + 
-								url +	"'\" style='text-decoration:none;color:" + FCKConfig.InsertedLinkColor + ";cursor:pointer'>"+name+"</font>";
+		strHTML += "<a href='" + window.location.protocol + "//" + window.location.host + url+"' style='text-decoration:none;'>"+name+"</a>";
+		//strHTML += "<font onclick=\"javaScript:window.location='" + window.location.protocol + "//" + window.location.host + 
+		//						url +	"'\" style='text-decoration:none;color:" + FCKConfig.InsertedLinkColor + ";cursor:pointer'>"+name+"</font>";
 	}
 	FCK.InsertHtml(strHTML);
 	FCK.OnAfterSetHTML = window.close();
