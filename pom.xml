@@ -35,6 +35,9 @@
     <org.exoplatform.exopackage.version>1.2.0-SNAPSHOT</org.exoplatform.exopackage.version>
     <org.exoplatform.mvnexobuild.version>1.2.0-SNAPSHOT</org.exoplatform.mvnexobuild.version>
 
+    <org.exoplatform.ecm.jbpm.version>3.0.1-SNAPSHOT</org.exoplatform.ecm.jbpm.version>
+    <bonita.version>4.0</bonita.version>        
+
     <!-- tests default config -->
     <!--maven.test.skip>true</maven.test.skip-->
     <maven.test.failure.ignore>true</maven.test.failure.ignore>  
