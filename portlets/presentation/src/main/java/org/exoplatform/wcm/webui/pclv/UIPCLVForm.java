@@ -399,10 +399,9 @@ public class UIPCLVForm extends UIForm {
 		TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
 
 		Node treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
-		if (preferenceTreeName.equals(categoryPath)) {
-			categoryPath = "";
-		}
-		Node categoryNode = treeNode.getNode(categoryPath);
+		Node categoryNode = null;
+		if (preferenceTreeName.equals(categoryPath) || "".equals(categoryPath)) categoryNode = treeNode;
+		else categoryNode = treeNode.getNode(categoryPath);
 		String nodeName = null;
 		if(node.getName().equals("jcr:frozenNode")) {
 		  String uuid = node.getProperty("jcr:frozenUuid").getString();

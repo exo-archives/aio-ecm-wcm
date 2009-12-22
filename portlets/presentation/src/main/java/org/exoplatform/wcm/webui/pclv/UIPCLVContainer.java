@@ -146,20 +146,10 @@ public class UIPCLVContainer extends UIContainer {
 		  treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
 		} catch(Exception ex){}
 		
-		if (preferenceTreeName.equals(categoryPath))
-			categoryPath = "";
 		Node categoryNode = null;
-		List<Node> nodes = null;
-		if(treeNode != null) {
-			try {
-				categoryNode = treeNode.getNode(categoryPath);
-				nodes = this.getListSymlinkNode(portletPreferences, categoryNode.getPath());
-			} catch (Exception e) {
-				nodes = this.getListSymlinkNode(portletPreferences, null);
-			}
-    } else {
-      nodes = this.getListSymlinkNode(portletPreferences, null);
-    }
+		if (preferenceTreeName.equals(categoryPath) || "".equals(categoryPath)) categoryNode = treeNode;
+		else categoryNode = treeNode.getNode(categoryPath);
+		List<Node> nodes = this.getListSymlinkNode(portletPreferences, categoryNode.getPath());
 		if(nodes == null) {
 		  nodes = new ArrayList<Node>();
 		}
