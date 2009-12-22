@@ -62,6 +62,22 @@
                             </object>                      
                           </value>                      
                         </collection>
+                      </field>
+                      <field  name="referencedSkin">
+                        <collection type="java.util.ArrayList">
+                          <value>
+                            <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
+                              <field name="templateFile"><string>/file/skins/Stylesheet-lt.css</string></field>
+                              <field name="roles"><string>*</string></field>                
+                            </object>                                                   
+                          </value>
+                          <value>
+                            <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
+                              <field name="templateFile"><string>/file/skins/Stylesheet-rt.css</string></field>
+                              <field name="roles"><string>*</string></field>                
+                            </object>                                                   
+                          </value>  
+                        </collection>
                       </field>                                    
                     </object>
                   </value>                  
@@ -89,7 +105,23 @@
                             </object>                                                   
                           </value>  
                         </collection>
-                      </field>                                    
+                      </field>
+                      <field  name="referencedSkin">
+                        <collection type="java.util.ArrayList">
+                          <value>
+                            <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
+                              <field name="templateFile"><string>/article/skins/Stylesheet-lt.css</string></field>
+                              <field name="roles"><string>*</string></field>                
+                            </object>                                                   
+                          </value>
+                          <value>
+                            <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
+                              <field name="templateFile"><string>/article/skins/Stylesheet-rt.css</string></field>
+                              <field name="roles"><string>*</string></field>                
+                            </object>                                                   
+                          </value>  
+                        </collection>
+                      </field>
                     </object>
                   </value>                  
                   <value>
@@ -143,7 +175,23 @@
                             </object>                           
                           </value>                                               
                         </collection>
-                      </field>                                    
+                      </field>
+                      <field  name="referencedSkin">
+                        <collection type="java.util.ArrayList">
+                          <value>
+                            <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
+                              <field name="templateFile"><string>/podcast/skins/Stylesheet-lt.css</string></field>
+                              <field name="roles"><string>*</string></field>                
+                            </object>                                                   
+                          </value>
+                          <value>
+                            <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
+                              <field name="templateFile"><string>/podcast/skins/Stylesheet-rt.css</string></field>
+                              <field name="roles"><string>*</string></field>                
+                            </object>                                                   
+                          </value>  
+                        </collection>
+                      </field>
                     </object>
                   </value>             
                   <value>
@@ -389,7 +437,23 @@
                             </object>                           
                           </value>                                               
                         </collection>
-                      </field>                                    
+                      </field>
+                      <field  name="referencedSkin">
+                        <collection type="java.util.ArrayList">
+                          <value>
+                            <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
+                              <field name="templateFile"><string>/sample/skins/Stylesheet-lt.css</string></field>
+                              <field name="roles"><string>*</string></field>                
+                            </object>                                                   
+                          </value>
+                          <value>
+                            <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
+                              <field name="templateFile"><string>/sample/skins/Stylesheet-rt.css</string></field>
+                              <field name="roles"><string>*</string></field>                
+                            </object>                                                   
+                          </value>  
+                        </collection>
+                      </field>
                     </object>
                   </value>  
                  <value>
@@ -413,6 +477,22 @@
                             <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
                               <field name="templateFile"><string>/filePlan/dialogs/dialog1.gtmpl</string></field>
                               <field name="roles"><string>*:/platform/administrators</string></field>                
+                            </object>                                                   
+                          </value>  
+                        </collection>
+                      </field>
+                      <field  name="referencedSkin">
+                        <collection type="java.util.ArrayList">
+                          <value>
+                            <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
+                              <field name="templateFile"><string>/filePlan/skins/Stylesheet-lt.css</string></field>
+                              <field name="roles"><string>*</string></field>                
+                            </object>                                                   
+                          </value>
+                          <value>
+                            <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
+                              <field name="templateFile"><string>/filePlan/skins/Stylesheet-rt.css</string></field>
+                              <field name="roles"><string>*</string></field>                
                             </object>                                                   
                           </value>  
                         </collection>
@@ -444,6 +524,22 @@
                           </value>
                         </collection>
                       </field>
+                      <field  name="referencedSkin">
+                        <collection type="java.util.ArrayList">
+                          <value>
+                            <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
+                              <field name="templateFile"><string>/kofax/skins/Stylesheet-lt.css</string></field>
+                              <field name="roles"><string>*</string></field>                
+                            </object>                                                   
+                          </value>
+                          <value>
+                            <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
+                              <field name="templateFile"><string>/kofax/skins/Stylesheet-rt.css</string></field>
+                              <field name="roles"><string>*</string></field>                
+                            </object>                                                   
+                          </value>  
+                        </collection>
+                      </field>
                     </object>
                   </value>
                   <value>
@@ -460,7 +556,23 @@
                             </object>                           
                           </value>                                            
                         </collection>
-                      </field>                                 
+                      </field>
+                      <field  name="referencedSkin">
+                        <collection type="java.util.ArrayList">
+                          <value>
+                            <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
+                              <field name="templateFile"><string>/vote/skins/Stylesheet-lt.css</string></field>
+                              <field name="roles"><string>*</string></field>                
+                            </object>                                                   
+                          </value>
+                          <value>
+                            <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
+                              <field name="templateFile"><string>/vote/skins/Stylesheet-rt.css</string></field>
+                              <field name="roles"><string>*</string></field>                
+                            </object>                                                   
+                          </value>  
+                        </collection>
+                      </field>
                     </object>
                   </value>
                   <value>
