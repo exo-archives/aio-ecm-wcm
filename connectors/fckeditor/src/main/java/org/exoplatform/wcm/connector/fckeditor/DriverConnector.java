@@ -169,6 +169,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
   public Response getFoldersAndFiles(
   		@QueryParam("driverName") String driverName,
   		@QueryParam("currentFolder") String currentFolder,
+      @QueryParam("currentPortal") String currentPortal,
   		@QueryParam("repositoryName") String repositoryName,
   		@QueryParam("workspaceName") String workspaceName,
   		@QueryParam("filterBy") String filterBy,
@@ -189,7 +190,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
       itemPath = StringUtils.replaceOnce(itemPath, "${userId}", userId);
       Node node = (Node)session.getItem(itemPath);
       
-      return buildXMLResponseForChildren(node, null, repositoryName, filterBy, session);
+      return buildXMLResponseForChildren(node, null, repositoryName, filterBy, session, currentPortal);
 
     } catch (Exception e) {
       log.error("Error when perform getFoldersAndFiles: ", e.fillInStackTrace());
@@ -498,12 +499,13 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    * @param repositoryName the repository name
    * @param filterBy the filter by
    * @param session the session
-   * 
+   * @param currentPortal TODO
    * @return the response
    * 
    * @throws Exception the exception
    */
-  private Response buildXMLResponseForChildren(Node node, String command, String repositoryName, String filterBy, Session session) throws Exception {
+  private Response buildXMLResponseForChildren(
+  		Node node, String command, String repositoryName, String filterBy, Session session, String currentPortal) throws Exception {
   	Element rootElement = FCKUtils.createRootElement(command, node, folderHandler.getFolderType(node));
   	NodeList nodeList = rootElement.getElementsByTagName("CurrentFolder");
   	Element currentFolder = (Element) nodeList.item(0);
@@ -550,7 +552,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
   		}
 
   		if (fileType != null) {
-  			Element file = FCKFileHandler.createFileElement(document, fileType, checkNode, child);
+  			Element file = FCKFileHandler.createFileElement(document, fileType, checkNode, child, currentPortal);
   			files.appendChild(file);
   		}
   	}
