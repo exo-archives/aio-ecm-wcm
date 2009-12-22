@@ -46,6 +46,7 @@
    <get-template>Có lỗi khi lấy mẫu</get-template>
    <set-template-option>Có lỗi khi chọn mẫu</set-template-option>
    <do-select>Có lỗi khi chọn</do-select>
+   <redirectpath-empty>Đường dẫn bị rỗng</redirectpath-empty>
   </msg>
   <action>
    <Save>Lưu</Save>

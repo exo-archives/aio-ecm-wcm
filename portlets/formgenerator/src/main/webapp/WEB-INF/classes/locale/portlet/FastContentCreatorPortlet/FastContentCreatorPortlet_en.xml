@@ -46,6 +46,7 @@
    <get-template>Error when get template.</get-template>
    <set-template-option>Error when set template option.</set-template-option>
    <do-select>Error when do select.</do-select>
+   <redirectpath-empty>Redirect path is empty</redirectpath-empty>
   </msg>
   <action>
    <Save>Save</Save>

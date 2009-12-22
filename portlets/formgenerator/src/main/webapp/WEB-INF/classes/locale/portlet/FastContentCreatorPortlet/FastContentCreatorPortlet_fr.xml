@@ -46,6 +46,7 @@
    <get-template>Modèle non disponible</get-template>
    <set-template-option>Erreur sur le modèle</set-template-option>
    <do-select>Erreur de sélection</do-select>
+   <redirectpath-empty>Chemin de redirection est vide</redirectpath-empty>
   </msg>
   <action>
    <Save>Sauver</Save>
