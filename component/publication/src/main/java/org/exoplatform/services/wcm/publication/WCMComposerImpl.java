@@ -106,6 +106,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		  repository = params[0];
 		  workspace = params[1];
 		  nodeIdentifier = nodeIdentifier.substring(repository.length()+workspace.length()+1);
+		  if (nodeIdentifier.lastIndexOf("/") == 0) nodeIdentifier = nodeIdentifier.substring(1); 
 		}
 		if (MODE_LIVE.equals(mode) && isCached) {
 			String hash = getHash(nodeIdentifier, version, remoteUser);
