@@ -45,12 +45,11 @@ public class UISearchBoxContainer extends UIContainer {
 	 * @throws Exception the exception
 	 */
 	public UISearchBoxContainer() throws Exception {
-		PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+		/*PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
 		PortletPreferences portletPreferences = context.getRequest().getPreferences();
-		String searchBoxTemplatePath = portletPreferences.getValue(	UIWCMSearchPortlet.SEARCH_BOX_TEMPLATE_PATH,
-																																null);
+		String searchBoxTemplatePath = portletPreferences.getValue(	UIWCMSearchPortlet.SEARCH_BOX_TEMPLATE_PATH, null);
 		UISearchBox uiSearchBox = addChild(UISearchBox.class, null, SEARCH_BOX);
-		uiSearchBox.setTemplatePath(searchBoxTemplatePath);
+		uiSearchBox.setTemplatePath(searchBoxTemplatePath);*/
 	}
 
 	/**
