@@ -345,4 +345,12 @@
    <ThreeRowsTwoColumnsLayout>Three rows Two columns layout </ThreeRowsTwoColumnsLayout>
   </label>
  </UIWizardPageSelectLayoutForm>
+ 
+ <Signin>
+   <welcome>Welcome</welcome>
+   <login>Login</login>
+   <logout>Logout</logout>
+   <language>Change language</language>
+   <register>Register</register>
+ </Signin>
 </bundle>
