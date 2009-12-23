@@ -25,7 +25,6 @@ import java.util.Map;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.access.AccessControlEntry;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;

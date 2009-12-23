@@ -794,8 +794,8 @@ public class TestSearchService extends BaseWCMTestCase {
     WCMPaginatedQueryResult paginatedQueryResult = new WCMPaginatedQueryResult(20);
     paginatedQueryResult.setQueryCriteria(this.queryCriteria);
     paginatedQueryResult = getSearchResult();
-    String querry = paginatedQueryResult.getQueryCriteria().getFulltextSearchProperty();
-    String spellSuggestion = paginatedQueryResult.getSpellSuggestion();
+//    String querry = paginatedQueryResult.getQueryCriteria().getFulltextSearchProperty();
+//    String spellSuggestion = paginatedQueryResult.getSpellSuggestion();
     float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
     log.info("\n\tTest case 21: search contents are not page/documents with shared portal and not live mode \n\tTime search: " + timeSearch + " s\n");
     assertEquals(0, paginatedQueryResult.getTotalNodes());

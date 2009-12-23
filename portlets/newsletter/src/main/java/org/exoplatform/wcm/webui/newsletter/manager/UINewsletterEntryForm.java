@@ -32,6 +32,7 @@ import javax.portlet.PortletRequest;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
+import org.exoplatform.ecm.webui.form.DialogFormActionListeners;
 import org.exoplatform.ecm.webui.form.UIDialogForm;
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
 import org.exoplatform.portal.webui.util.Util;
@@ -72,7 +73,8 @@ import org.exoplatform.webui.form.UIFormSelectBox;
     events = {
       @EventConfig (listeners = UINewsletterEntryForm.SaveActionListener.class),
       @EventConfig (listeners = UINewsletterEntryForm.SendActionListener.class),
-      @EventConfig (listeners = UINewsletterEntryForm.CancelActionListener.class, phase = Phase.DECODE)
+      @EventConfig (listeners = UINewsletterEntryForm.CancelActionListener.class, phase = Phase.DECODE),
+      @EventConfig (listeners = DialogFormActionListeners.RemoveDataActionListener.class)
     }
 )
 public class UINewsletterEntryForm extends UIDialogForm {
@@ -83,6 +85,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
    * @throws Exception the exception
    */
   public UINewsletterEntryForm() throws Exception {
+  	setActions(new String [] {"Save", "Send", "Cancel"});
   }
 
   /* (non-Javadoc)

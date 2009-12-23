@@ -31,7 +31,6 @@ import javax.jcr.query.QueryResult;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.StandaloneContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
