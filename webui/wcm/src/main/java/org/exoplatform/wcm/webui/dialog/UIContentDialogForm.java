@@ -46,6 +46,7 @@ import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.cms.JcrInputProperty;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.impl.DMSRepositoryConfiguration;
+import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
@@ -158,6 +159,35 @@ public class UIContentDialogForm extends UIDialogForm  implements UIPopupCompone
     this.isAddNew = isAddNew;
     setStoredPath(webcontent.getParent().getPath());
     resetProperties();
+    
+    initFieldInput();
+  }
+  
+  private void initFieldInput() throws Exception {
+    TemplateService tservice = this.getApplicationComponent(TemplateService.class);
+    List<String> documentNodeType = tservice.getDocumentTemplates(this.repositoryName);
+    if(!documentNodeType.contains(this.contentType)){
+      return;
+    }
+    if (!isAddNew) {
+      TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
+      Node currentNode = getCurrentNode();    
+      List<Node> listCategories = taxonomyService.getAllCategories(currentNode);
+      for (Node itemNode : listCategories) {
+        String categoryPath = itemNode.getPath().replaceAll(getPathTaxonomy() + "/", "");
+        if (!listTaxonomy.contains(categoryPath)) {
+          listTaxonomy.add(categoryPath);
+          listTaxonomyName.add(categoryPath);
+        }
+      }
+    }
+    if(listTaxonomyName == null || listTaxonomyName.size() == 0) return;
+    UIFormMultiValueInputSet uiFormMultiValue = createUIComponent(UIFormMultiValueInputSet.class, null, null);
+    uiFormMultiValue.setId(FIELD_TAXONOMY);
+    uiFormMultiValue.setName(FIELD_TAXONOMY);
+    uiFormMultiValue.setType(UIFormStringInput.class);
+    uiFormMultiValue.setValue(listTaxonomyName);
+    addUIFormInput(uiFormMultiValue);
   }
 
   public Node getCurrentNode() {
