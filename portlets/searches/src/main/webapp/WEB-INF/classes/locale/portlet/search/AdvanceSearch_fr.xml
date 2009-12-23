@@ -32,4 +32,18 @@
    <new-suggestion>Suggestions: </new-suggestion>
   </msg>
  </UIDefaultSearchResult>
+ <UISearchPageLayoutManager>
+ 	<label> 	
+ 		<itemsPerPageSelector>Articles par page</itemsPerPageSelector>
+ 		<searchFormSelector>Formulaire de recherche de modèle</searchFormSelector>
+ 		<searchResultSelector>Résultat de la recherche de modèle</searchResultSelector>
+ 		<searchPaginatorSelector>Paginator modèle de recherche</searchPaginatorSelector>
+ 		<searchPageLayoutSelector>Mise en page modèle de recherche</searchPageLayoutSelector> 		
+ 		<searchResultBasePathInputSetAction>Base de chemin</searchResultBasePathInputSetAction>
+ 	</label> 	
+ 	<action>
+ 		<Save>Sauver</Save>
+ 		<Cancel>Annuler</Cancel>
+ 	</action>
+ </UISearchPageLayoutManager>
 </bundle>

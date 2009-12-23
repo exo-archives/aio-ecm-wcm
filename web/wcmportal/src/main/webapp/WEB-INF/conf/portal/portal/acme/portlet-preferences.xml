@@ -910,18 +910,8 @@
 		    	<read-only>false</read-only>
 		    </preference>
 			<preference>
-				<name>searchMode</name>
-				<value>searchPageMode</value>
-				<read-only>false</read-only>
-			</preference>		    
-			<preference>
 				<name>searchFormTemplatePath</name>
 				<value>/exo:ecm/views/templates/WCM Advance Search/search-form/UIDefaultSearchForm.gtmpl</value>
-				<read-only>false</read-only>
-			</preference>
-			<preference>
-				<name>searchBoxTemplatePath</name>
-				<value>/exo:ecm/views/templates/WCM Advance Search/search-box/UIDefaultSearchBox.gtmpl</value>
 				<read-only>false</read-only>
 			</preference>
 			<preference>

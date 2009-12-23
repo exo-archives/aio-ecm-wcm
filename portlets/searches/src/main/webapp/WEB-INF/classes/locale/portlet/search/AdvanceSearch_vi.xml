@@ -32,4 +32,18 @@
    <new-suggestion>Suggestions: </new-suggestion>
   </msg>
  </UIDefaultSearchResult>
+ <UISearchPageLayoutManager>
+ 	<label> 	
+ 		<itemsPerPageSelector>Số bản ghi trên trang</itemsPerPageSelector>
+ 		<searchFormSelector>Tìm biểu mẫu tìm kiếm mẫu</searchFormSelector>
+ 		<searchResultSelector>Tìm mẫu kết quả</searchResultSelector>
+ 		<searchPaginatorSelector>Tìm Paginator mẫu</searchPaginatorSelector>
+ 		<searchPageLayoutSelector>Tìm mẫu bố trí trang</searchPageLayoutSelector> 		
+ 		<searchResultBasePathInputSetAction>Đường dẫn gốc</searchResultBasePathInputSetAction>
+ 	</label> 	
+ 	<action>
+ 		<Save>Lưu</Save>
+ 		<Cancel>Hủy</Cancel>
+ 	</action>
+ </UISearchPageLayoutManager>
 </bundle>
