@@ -55,16 +55,15 @@ public class ResourceBundleConnector implements ResourceContainer {
 			String resourceBundleNames[] = resourceBundleService.getSharedResourceBundleNames();
 			Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 			Element bundles = document.createElement("bundles");
+			bundles.setAttribute("locale", locale);
 			String keys[] = multiKey.split(",");
 			for (String resourceBundleName : resourceBundleNames) {
 				for (String key : keys) {
 					try {
 						ResourceBundle resourceBundle = resourceBundleService.getResourceBundle(resourceBundleName, new Locale(locale));
 						String value = resourceBundle.getString(key);
-						Element element = document.createElement("bundle");
-						element.setAttribute("key", key); 
+						Element element = document.createElement(key);
   					element.setAttribute("value", value);
-  					element.setAttribute("locale", locale);
   					bundles.appendChild(element);
 					} catch (MissingResourceException e) {}
 				}
