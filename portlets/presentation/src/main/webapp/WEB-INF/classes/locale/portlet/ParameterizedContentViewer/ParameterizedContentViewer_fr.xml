@@ -42,6 +42,7 @@
   </label>
   <msg>
    <content-not-found>Aucun contenu trouvé</content-not-found>
+   <not-support>Vous n'avez pas la permission d'accéder à</not-support>
   </msg>
  </UIPCVContainer>
 </bundle>

@@ -38,10 +38,12 @@ import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
 import org.exoplatform.wcm.webui.pcv.config.UIPCVConfig;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -335,8 +337,14 @@ public class UIPCVContainer extends UIContainer {
       UIPCVPresentation uiContentViewer = uiContentViewerContainer.getChild(UIPCVPresentation.class);
       Node orginialNode = uiContentViewer.getOriginalNode();
       UIContentDialogForm uiDocumentDialogForm = uiContentViewerContainer.createUIComponent(UIContentDialogForm.class, null, null);
-      uiDocumentDialogForm.init(orginialNode, false);
-      Utils.createPopupWindow(uiContentViewerContainer, uiDocumentDialogForm, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW, 800, 600);
+      try{
+        uiDocumentDialogForm.init(orginialNode, false);
+        Utils.createPopupWindow(uiContentViewerContainer, uiDocumentDialogForm, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW, 800, 600);
+      }catch(Exception ex){
+        UIApplication uiApp = uiContentViewerContainer.getAncestorOfType(UIApplication.class);
+        Object[] arg = {orginialNode.getPrimaryNodeType().getName()};
+        uiApp.addMessage(new ApplicationMessage("UIPCVContainer.msg.not-support", arg, ApplicationMessage.ERROR));
+      }
     }
   }
 

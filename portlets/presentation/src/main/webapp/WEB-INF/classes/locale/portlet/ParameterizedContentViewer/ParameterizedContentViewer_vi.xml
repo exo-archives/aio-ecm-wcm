@@ -42,6 +42,7 @@
   </label>
   <msg>
    <content-not-found>Không tìm thấy nội dung nào</content-not-found>
+   <not-support>Bạn không có quyền truy cập</not-support>
   </msg>
  </UIPCVContainer>
 </bundle>

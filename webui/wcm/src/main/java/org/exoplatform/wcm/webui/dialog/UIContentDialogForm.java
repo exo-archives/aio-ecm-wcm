@@ -39,7 +39,10 @@ import org.exoplatform.ecm.webui.form.UIDialogForm;
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.ecm.webui.tree.selectone.UIOneTaxonomySelector;
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
+import org.exoplatform.portal.webui.portal.UIPortal;
+import org.exoplatform.portal.webui.portal.UIPortalBrowser;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.BasePath;
 import org.exoplatform.services.cms.CmsService;
@@ -101,6 +104,7 @@ public class UIContentDialogForm extends UIDialogForm  implements UIPopupCompone
 	private NodeLocation webcontentNodeLocation;
 	private List<String> listTaxonomy = new ArrayList<String>();
   private List<String> listTaxonomyName = new ArrayList<String>();
+  private String template;
   
   public List<String> getListTaxonomy() {
     return listTaxonomy;
@@ -159,7 +163,9 @@ public class UIContentDialogForm extends UIDialogForm  implements UIPopupCompone
     this.isAddNew = isAddNew;
     setStoredPath(webcontent.getParent().getPath());
     resetProperties();
-    
+    TemplateService templateService = getApplicationComponent(TemplateService.class) ;
+    String userName = Util.getPortalRequestContext().getRemoteUser();
+    this.template = templateService.getTemplatePathByUser(true, contentType, userName, repositoryName);
     initFieldInput();
   }
   
@@ -198,16 +204,7 @@ public class UIContentDialogForm extends UIDialogForm  implements UIPopupCompone
    * @see org.exoplatform.ecm.webui.form.UIDialogForm#getTemplate()
    */
   public String getTemplate() {
-    TemplateService templateService = getApplicationComponent(TemplateService.class) ;
-    String userName = Util.getPortalRequestContext().getRemoteUser();
-    try{
-      return templateService.getTemplatePathByUser(true, contentType, userName, repositoryName);
-    } catch(Exception e) {
-      UIApplication uiApp = getAncestorOfType(UIApplication.class);
-      Object[] arg = {contentType};
-      uiApp.addMessage(new ApplicationMessage("UIDocumentForm.msg.not-support", arg, ApplicationMessage.ERROR));
-      return null;
-    }
+    return template;
   }
 
   /* (non-Javadoc)
