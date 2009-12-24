@@ -248,3 +248,27 @@ if (typeof FCKCommentsProcessor === 'undefined')
 FCK["eXoPlugin"] = eXoPlugin;
 
 eXoPlugin.init();
+
+var WCMDialogCommand = function( name, title, url, width, height, getStateFunction, getStateParam, customValue ) {
+	this.Name	= name ;
+	this.Title	= title ;
+	this.Url	= url ;
+	this.Width	= width ;
+	this.Height	= height ;
+	this.CustomValue = customValue ;
+
+	this.GetStateFunction	= getStateFunction ;
+	this.GetStateParam		= getStateParam ;
+
+	this.Resizable = false ;
+}
+
+WCMDialogCommand.prototype.Execute = function() {
+	var newWindow = window.open( this.Url, this.Title, this.CustomValue + ",width=" + this.Width + ",height=" + this.Height);
+	newWindow.focus();
+}
+
+WCMDialogCommand.prototype.GetState = function() {
+	if ( this.GetStateFunction ) return this.GetStateFunction( this.GetStateParam ) ;
+	else return FCK.EditMode == FCK_EDITMODE_WYSIWYG ? FCK_TRISTATE_OFF : FCK_TRISTATE_DISABLED ;
+}
