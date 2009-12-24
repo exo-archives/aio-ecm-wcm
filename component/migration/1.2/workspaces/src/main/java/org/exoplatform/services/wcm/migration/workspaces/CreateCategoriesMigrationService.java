@@ -38,9 +38,11 @@ public class CreateCategoriesMigrationService implements Startable {
   private static final Log log  = ExoLogger.getLogger("wcm:CreateCategoriesMigrationService"); 
   
   private RepositoryService repositoryService;
+  
   public CreateCategoriesMigrationService(RepositoryService repositoryService) {
     this.repositoryService = repositoryService;
   }
+  
   public void start() {
     log.info("==========================================================");
     log.info("Start CreateCategoriesMigrationService...");
@@ -57,6 +59,11 @@ public class CreateCategoriesMigrationService implements Startable {
 
   public void stop() {}
 
+  /**
+   * Create Categories node, User node for Newsletter and categories node.
+   * @param parentNode
+   * @throws Exception
+   */
   private void createNode() throws Exception {
     Session session = repositoryService.getCurrentRepository().getSystemSession("collaboration");
     Node parentNode = (Node) session.getItem(PARENT_PATH);
