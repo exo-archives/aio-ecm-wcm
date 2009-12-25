@@ -496,3 +496,20 @@ function showPopupSubMenu(obj) {
 		subMenuItemContainer.style.top =  eXo.core.Browser.findPosYInContainer(objParent,subMenuItemContainer.offsetParent) + 'px';
 	}
 }
+
+function requestAjax(urlRequestXML) {
+	var xmlHttpRequest = false;
+	if (window.XMLHttpRequest) {
+		xmlHttpRequest = new window.XMLHttpRequest();
+		xmlHttpRequest.open("GET",urlRequestXML,false);
+		xmlHttpRequest.send("");
+		return xmlHttpRequest.responseXML;
+	}	else if (ActiveXObject("Microsoft.XMLDOM")) { // for IE
+		xmlHttpRequest = new ActiveXObject("Microsoft.XMLDOM");
+		xmlHttpRequest.async=false;
+		xmlHttpRequest.load(urlRequestXML);
+		return xmlHttpRequest;
+	}
+	alert("There was a problem retrieving the XML data!");
+	return null;
+}
