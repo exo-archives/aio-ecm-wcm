@@ -306,12 +306,6 @@ public class UISelectPathPanel extends UIContainer {
     return listNodeCheck;
   }      
 
-  public void processRender(WebuiRequestContext context) throws Exception {
-  	UIMaskWorkspace maskWorkspace = Util.getUIPortalApplication().getChild(UIMaskWorkspace.class);
-    if (maskWorkspace != null) maskWorkspace.setUpdated(true);
-  	super.processRender(context);
-  }
-  
   /**
    * Checks if is valid state.
    * 

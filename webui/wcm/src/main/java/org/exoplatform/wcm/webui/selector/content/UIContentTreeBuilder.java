@@ -335,9 +335,6 @@ public class UIContentTreeBuilder extends UIContainer {
       event.getRequestContext().addUIComponentToUpdateByAjax(selectPathPanel);
       session.logout();
       sessionProvider.close();
-      
-      UIMaskWorkspace maskWorkspace = Util.getUIPortalApplication().getChild(UIMaskWorkspace.class);
-      if (maskWorkspace != null) maskWorkspace.setUpdated(false);
     }
   }
 }
