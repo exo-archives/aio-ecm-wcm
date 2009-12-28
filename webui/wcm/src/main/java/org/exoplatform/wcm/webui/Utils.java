@@ -325,6 +325,8 @@ public class Utils {
   public static void closePopupWindow(UIContainer container, String popupWindowId) {
     UIPopupContainer popupContainer = getPopupContainer(container);
     popupContainer.removeChildById(popupWindowId);
+    WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
+    requestContext.addUIComponentToUpdateByAjax(popupContainer);
   }
   
   /**

@@ -39,6 +39,7 @@ public class UIPopupWindow extends org.exoplatform.webui.core.UIPopupWindow {
 			UIPopupWindow popupWindow = event.getSource();
 			UIPopupContainer popupContainer = popupWindow.getAncestorOfType(UIPopupContainer.class);
 			popupContainer.removeChildById(popupWindow.getId());
+			event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer);
 		}
 	}
 	

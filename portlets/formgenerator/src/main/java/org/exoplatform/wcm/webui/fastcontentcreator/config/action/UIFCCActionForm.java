@@ -289,7 +289,6 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
         Node storedHomeNode = fccActionForm.getParentNode(currentNode).getNode("exo:actions");
         cmsService.storeNode(fccActionForm.nodeTypeName_, storedHomeNode, sortedInputs, false, repository) ;
         storedHomeNode.getSession().save();
-        Utils.closePopupWindow(fccActionForm, UIFCCConstant.ACTION_POPUP_WINDOW);
       } else {
         
         // Add lock token if node is locked
@@ -299,8 +298,6 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
             currentNode.getSession().addLockToken(lockToken);
           }
         }
-        // Close popup
-        Utils.closePopupWindow(fccActionForm, UIFCCConstant.ACTION_POPUP_WINDOW);
         
         try{
           JcrInputProperty rootProp = sortedInputs.get("/node");
@@ -364,7 +361,7 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
           return;
         }      
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorActionList) ;
+      Utils.closePopupWindow(fccActionForm, UIFCCConstant.ACTION_POPUP_WINDOW);
     }
   }
   
