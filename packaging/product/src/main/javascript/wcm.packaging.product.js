@@ -8,7 +8,7 @@ function getProduct(version) {
   product.portalwar = "portal.war" ;
   product.codeRepo = "ecm/wcm" ;
   product.useContentvalidation = true;
-  product.version = "trunk" ;
+  product.version = "${project.version}" ;
   product.contentvalidationVersion = "${org.exoplatform.ecm.dms.version}";
   product.workflowVersion = "${org.exoplatform.ecm.workflow.version}" ;
   product.serverPluginVersion = "${org.exoplatform.portal.version}" ;

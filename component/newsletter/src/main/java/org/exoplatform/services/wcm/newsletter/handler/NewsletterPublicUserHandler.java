@@ -86,7 +86,9 @@ public class NewsletterPublicUserHandler {
     for(Value value : values){
       try {
         listString.add(value.getString());
-      } catch (Exception e) { }
+      } catch (Exception e) {
+        log.error("Error when convert values to array: ", e.fillInStackTrace());
+      }
     }
     return listString;
   }

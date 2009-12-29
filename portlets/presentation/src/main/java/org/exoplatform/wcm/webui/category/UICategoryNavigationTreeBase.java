@@ -178,7 +178,9 @@ public class UICategoryNavigationTreeBase extends UITree {
     String preferenceRepository = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_REPOSITORY, "");
     String preferenceTreeName = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, "");
     Node treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
-    Node categoryNode = treeNode.getNode(categoryPath);
+    Node categoryNode = null;
+    if ("".equals(categoryPath)) categoryNode = treeNode;
+    else categoryNode = treeNode.getNode(categoryPath);
     NodeIterator nodeIterator = categoryNode.getNodes();
     List<Node> subcategories = new ArrayList<Node>();
     while (nodeIterator.hasNext()) {

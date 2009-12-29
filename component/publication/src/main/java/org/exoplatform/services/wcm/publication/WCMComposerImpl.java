@@ -15,6 +15,8 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 
 import org.apache.commons.logging.Log;
+import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
@@ -72,7 +74,13 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	 * 
 	 * @throws Exception the exception
 	 */
-	public WCMComposerImpl() throws Exception {
+	public WCMComposerImpl(InitParams params) throws Exception {
+		if (params!=null) {
+		    ValueParam useCache = params.getValueParam("useCache");
+		    if (useCache != null)
+		      this.isCached = Boolean.parseBoolean(useCache.getValue());
+		}
+		
 		repositoryService = WCMCoreUtils.getService(RepositoryService.class);
 		linkManager = WCMCoreUtils.getService(LinkManager.class);
 		publicationService = WCMCoreUtils.getService(PublicationService.class);
@@ -98,6 +106,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		  repository = params[0];
 		  workspace = params[1];
 		  nodeIdentifier = nodeIdentifier.substring(repository.length()+workspace.length()+1);
+		  if (nodeIdentifier.lastIndexOf("/") == 0) nodeIdentifier = nodeIdentifier.substring(1); 
 		}
 		if (MODE_LIVE.equals(mode) && isCached) {
 			String hash = getHash(nodeIdentifier, version, remoteUser);
@@ -161,7 +170,6 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		Session session = sessionProvider.getSession(workspace, manageableRepository);
 		QueryManager manager = session.getWorkspace().getQueryManager();
 		String orderFilter = getOrderSQLFilter(filters);
-		String mode = filters.get(FILTER_MODE);
 		String recursive = filters.get(FILTER_RECURSIVE);
 		String primaryType = filters.get(FILTER_PRIMARY_TYPE);
 		if (primaryType == null) {
@@ -177,12 +185,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		if (recursive==null) {
 			statement.append(" AND NOT jcr:path LIKE '" + path + "/%/%')");
 		}
-		statement.append(" AND (" + getTemlatesSQLFilter(repository) + ") AND (" + "(NOT publication:currentState like '%')");
-		if (MODE_LIVE.equals(mode)) {
-			statement.append(" OR publication:currentState='" + PublicationDefaultStates.PUBLISHED + "')");
-		} else {
-			statement.append(" OR (publication:currentState<>'" + PublicationDefaultStates.OBSOLETE + "' AND publication:currentState<>'" + PublicationDefaultStates.ARCHIVED + "'))");
-		}
+		statement.append(" AND (" + getTemlatesSQLFilter(repository) + ")");
 		statement.append(orderFilter);
 		Query query = manager.createQuery(statement.toString(), Query.SQL);
 		return query.execute().getNodes();
