@@ -128,20 +128,20 @@ public class NewsletterCategoryHandler {
         extendedCategoryNode.setPermission(permission, PermissionType.ALL);
       }
       
-      String[] permissions = new String[]{PermissionType.ADD_NODE, PermissionType.REMOVE, PermissionType.SET_PROPERTY};
+      String[] permissions = new String[]{PermissionType.READ, PermissionType.ADD_NODE, PermissionType.REMOVE, PermissionType.SET_PROPERTY};
       
       //Update permissions for subscriptions of this category node
       NewsletterConstant.addPermissionsFromCateToSubs(categoryNode, newModerators.toArray(new String[]{}), permissions);
       
-      // Set permission is addNode, remove and setProperty for administrators
+      // Set permission is read, addNode, remove and setProperty for administrators
       if(isAddNew){
         Node categoriesNode = categoryNode.getParent();
         if(categoriesNode.hasProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR)) {
           Value[] values = categoriesNode.getProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR).getValues();
-          for(String per : convertValuesToArray(values)){
-            if(newModerators.contains(per)) continue;
-            extendedCategoryNode.setPermission(per, permissions);
-            newModerators.add(per);
+          for(String admin : convertValuesToArray(values)){
+            if(newModerators.contains(admin)) continue;
+            extendedCategoryNode.setPermission(admin, permissions);
+            newModerators.add(admin);
           }
         }
       }
