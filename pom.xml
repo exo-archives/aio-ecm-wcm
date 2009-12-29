@@ -3,33 +3,41 @@
 	<parent>
 		<groupId>org.exoplatform</groupId>
 		<artifactId>exo.parent</artifactId>
-		<version>6</version>
+		<version>7</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.exoplatform.ecm</groupId>
 	<artifactId>wcm</artifactId>
         <name>eXo ECM WCM</name>
-        <version>1.3-SNAPSHOT</version>
+        <version>2.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<scm>
-		<connection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/branches/1.2.x</connection>
-		<developerConnection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/branches/1.2.x</developerConnection>
-		<url>http://fisheye.exoplatform.org/browse/projects/ecm/wcm/branches/1.2.x</url>
+		<connection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/branches/2.0.x</connection>
+		<developerConnection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/branches/2.0.x</developerConnection>
+		<url>http://fisheye.exoplatform.org/browse/projects/ecm/wcm/branches/2.0.x</url>
 	</scm>
 
 	<properties>
     <exo.product.name>exo-wcm</exo.product.name>
-    <exo.product.specification>1.2</exo.product.specification>
+    <exo.product.specification>2.0</exo.product.specification>
 
-    <org.exoplatform.kernel.version>2.0.8</org.exoplatform.kernel.version>
-    <org.exoplatform.core.version>2.1.6</org.exoplatform.core.version>
-    <org.exoplatform.ws.version>1.3.4</org.exoplatform.ws.version>
-    <org.exoplatform.jcr.version>1.10.5.1</org.exoplatform.jcr.version>
-    <org.exoplatform.pc.version>2.0.7</org.exoplatform.pc.version>
-    <org.exoplatform.portal.version>2.5.6.2</org.exoplatform.portal.version>
-    <org.exoplatform.ecm.dms.version>2.5.2.1</org.exoplatform.ecm.dms.version>
+    <org.exoplatform.kernel.version>2.0.9</org.exoplatform.kernel.version>
+    <org.exoplatform.core.version>2.1.7</org.exoplatform.core.version>
+    <org.exoplatform.ws.version>1.3.5</org.exoplatform.ws.version>
+    <org.exoplatform.jcr.version>1.10.6</org.exoplatform.jcr.version>
+    <org.exoplatform.portletcontainer.version>2.0.8</org.exoplatform.portletcontainer.version>
+    <org.exoplatform.portal.version>2.5.7</org.exoplatform.portal.version>
+    <org.exoplatform.webos.version>1.5.4</org.exoplatform.webos.version>
+    <org.exoplatform.ecm.workflow.version>1.0.5</org.exoplatform.ecm.workflow.version>
+    <org.exoplatform.ecm.dms.version>2.5.3</org.exoplatform.ecm.dms.version>
+
+<org.exoplatform.exopackage.version>1.2.0</org.exoplatform.exopackage.version>
+    <org.exoplatform.mvnexobuild.version>1.2.0</org.exoplatform.mvnexobuild.version>
+
+    <org.exoplatform.ecm.jbpm.version>3.0.2</org.exoplatform.ecm.jbpm.version>
+    <bonita.version>4.0</bonita.version>        
 
     <!-- tests default config -->
     <maven.test.skip>true</maven.test.skip>

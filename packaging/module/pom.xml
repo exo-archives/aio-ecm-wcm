@@ -2,16 +2,16 @@
   <parent>
 		<groupId>org.exoplatform.ecm.wcm</groupId>
     <artifactId>exo.ecm.wcm.packaging</artifactId>
-		<version>1.2.2-SNAPSHOT</version>
+		<version>2.0-SNAPSHOT</version>
   </parent>
 
    <modelVersion>4.0.0</modelVersion>
-   <artifactId>dms.packaging.module</artifactId>
+   <artifactId>wcm.packaging.module</artifactId>
    <packaging>pom</packaging>
-   <name>eXo DMS eXoBuild module</name>
+   <name>eXo WCM eXoBuild module</name>
 
    <properties>
-      <exobuild.name>dms</exobuild.name>
+      <exobuild.name>wcm</exobuild.name>
       <exobuild.type>module</exobuild.type>
    </properties>
    
