@@ -8,6 +8,9 @@
     <type>org.exoplatform.wcm.connector.collaboration.RssConnector</type>    
   </component>      
   <component>    
+    <type>org.exoplatform.wcm.connector.collaboration.ResourceBundleConnector</type>    
+  </component>
+  <component>    
     <type>org.exoplatform.wcm.connector.fckeditor.LinkConnector</type>    
   </component>       
   <component>    

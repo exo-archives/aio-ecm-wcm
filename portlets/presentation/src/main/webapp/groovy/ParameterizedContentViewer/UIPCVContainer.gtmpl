@@ -12,22 +12,7 @@
 	def wcmConfigurationService = uicomponent.getApplicationComponent(WCMConfigurationService.class);
 	def parameterizedPageURI = wcmConfigurationService.getRuntimeContextParam("parameterizedPageURI");
 	def printPreviewPageURI = wcmConfigurationService.getRuntimeContextParam("printPageURI");
-	if (isPrint) {
-		%>
-		 <script type="text/javascript">
-    var allElements = document.getElementsByTagName('*');
-    for (i in allElements) {
-     if (allElements[i].style) allElements[i].style.overflow = 'visible';
-     allElements[i].overflow = 'visible';
-    }
-		 </script>
-   <style type="text/css">
-    @media print{
-     a{ display:none; }
-    }
-   </style>
-		<%
-	}
+	
 %>
 <div id="$uicomponent.id" class="$uicomponent.id">
 	<div class="PCV">
@@ -81,3 +66,23 @@
 		<%} %>
 	</div>
 </div>
+<%
+if (isPrint) {
+	%>
+	 <script type="text/javascript">
+  var allElements = document.getElementsByTagName('*');
+  for (i in allElements) {
+   if (allElements[i].nodeName == 'HTML') continue;
+   if (allElements[i].style) allElements[i].style.overflow = 'visible';
+   allElements[i].overflow = 'visible';
+  }
+	 </script>
+ <style type="text/css">
+  @media print{
+   a{ display:none; }
+   overflow{ display:none;}
+  }
+ </style>
+	<%
+}
+%>

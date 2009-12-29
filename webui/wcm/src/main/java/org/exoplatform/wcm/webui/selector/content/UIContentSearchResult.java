@@ -21,6 +21,7 @@ import org.exoplatform.services.wcm.core.NodeIdentifier;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.NotInWCMPublicationException;
+import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.search.PaginatedQueryResult;
 import org.exoplatform.wcm.webui.Utils;
@@ -267,8 +268,11 @@ public class UIContentSearchResult extends UIGrid {
     public void execute(Event<UIContentSearchResult> event) throws Exception {
       UIContentSearchResult contentSearchResult = event.getSource();
       String webcontentPath = event.getRequestContext().getRequestParameter(OBJECTID);
-      Node originalNode = Utils.getViewableNodeByComposer(null, null, webcontentPath);
-      Node viewNode = originalNode;
+      PortletPreferences prefs = ((PortletRequestContext)event.getRequestContext()).getRequest().getPreferences();
+      String workspace = prefs.getValue("workspace", null);
+      String repository = prefs.getValue("repository", null);
+      Node originalNode = Utils.getViewableNodeByComposer(repository, workspace, webcontentPath, WCMComposer.BASE_VERSION);
+      Node viewNode = Utils.getViewableNodeByComposer(repository, workspace, webcontentPath);
       UIContentSelector contentSelector = contentSearchResult.getAncestorOfType(UIContentSelector.class);
       UIContentViewer contentResultViewer = contentSelector.getChild(UIContentViewer.class);
       if (contentResultViewer == null) contentResultViewer = contentSelector.addChild(UIContentViewer.class, null, null);

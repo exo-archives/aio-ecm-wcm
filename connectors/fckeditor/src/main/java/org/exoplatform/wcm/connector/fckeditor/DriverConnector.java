@@ -169,6 +169,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
   public Response getFoldersAndFiles(
   		@QueryParam("driverName") String driverName,
   		@QueryParam("currentFolder") String currentFolder,
+      @QueryParam("currentPortal") String currentPortal,
   		@QueryParam("repositoryName") String repositoryName,
   		@QueryParam("workspaceName") String workspaceName,
   		@QueryParam("filterBy") String filterBy,
@@ -189,7 +190,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
       itemPath = StringUtils.replaceOnce(itemPath, "${userId}", userId);
       Node node = (Node)session.getItem(itemPath);
       
-      return buildXMLResponseForChildren(node, null, repositoryName, filterBy, session);
+      return buildXMLResponseForChildren(node, null, repositoryName, filterBy, session, currentPortal);
 
     } catch (Exception e) {
       log.error("Error when perform getFoldersAndFiles: ", e.fillInStackTrace());
@@ -498,12 +499,13 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    * @param repositoryName the repository name
    * @param filterBy the filter by
    * @param session the session
-   * 
+   * @param currentPortal TODO
    * @return the response
    * 
    * @throws Exception the exception
    */
-  private Response buildXMLResponseForChildren(Node node, String command, String repositoryName, String filterBy, Session session) throws Exception {
+  private Response buildXMLResponseForChildren(
+  		Node node, String command, String repositoryName, String filterBy, Session session, String currentPortal) throws Exception {
   	Element rootElement = FCKUtils.createRootElement(command, node, folderHandler.getFolderType(node));
   	NodeList nodeList = rootElement.getElementsByTagName("CurrentFolder");
   	Element currentFolder = (Element) nodeList.item(0);
@@ -529,20 +531,14 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
 
   		checkNode = sourceNode != null ? sourceNode : child;
 
-  		if (isFolderAndIsNotWebContent(checkNode)) {
+  		if (isFolder(checkNode)) {
   			Element folder = createFolderElement(
   					document, checkNode, checkNode.getPrimaryNodeType().getName(), child.getName());
   			folders.appendChild(folder);
   		}
 
   		if (FILE_TYPE_WEBCONTENT.equals(filterBy)) {
-  			if(checkNode.isNodeType(NodetypeConstant.EXO_WEBCONTENT)) {
-  				Element folder = createFolderElement(
-  						document, checkNode, checkNode.getPrimaryNodeType().getName(), child.getName());
-  				folders.appendChild(folder);
-  				fileType = FILE_TYPE_WEBCONTENT;
-  			}
-  			if (checkNode.isNodeType(NodetypeConstant.EXO_ARTICLE)) {
+  			if(checkNode.isNodeType(NodetypeConstant.EXO_WEBCONTENT) || checkNode.isNodeType(NodetypeConstant.EXO_ARTICLE)) {
   				fileType = FILE_TYPE_WEBCONTENT;
   			}
   		}
@@ -556,7 +552,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
   		}
 
   		if (fileType != null) {
-  			Element file = FCKFileHandler.createFileElement(document, fileType, checkNode, child);
+  			Element file = FCKFileHandler.createFileElement(document, fileType, checkNode, child, currentPortal);
   			files.appendChild(file);
   		}
   	}
@@ -575,11 +571,11 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
 	 * 
 	 * @throws RepositoryException the repository exception
 	 */
-	private boolean isFolderAndIsNotWebContent(Node checkNode) throws RepositoryException {
-	  return !checkNode.isNodeType(NodetypeConstant.EXO_WEBCONTENT) &&
-	  		(checkNode.isNodeType(FCKUtils.NT_UNSTRUCTURED)
+	private boolean isFolder(Node checkNode) throws RepositoryException {
+	  return 
+	  		checkNode.isNodeType(FCKUtils.NT_UNSTRUCTURED)
 	  		|| checkNode.isNodeType(FCKUtils.NT_FOLDER)
-	  		|| checkNode.isNodeType(NodetypeConstant.EXO_TAXONOMY));
+	  		|| checkNode.isNodeType(NodetypeConstant.EXO_TAXONOMY);
   }
   
   /**
@@ -600,7 +596,9 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
   	dmsDocumentList.remove(NodetypeConstant.EXO_WEBCONTENT);
   	dmsDocumentList.remove(NodetypeConstant.EXO_ARTICLE);
   	for (String documentType : dmsDocumentList) {
-	    if (node.getPrimaryNodeType().isNodeType(documentType) && !isMediaType(node, repositoryName)) {
+	    if (node.getPrimaryNodeType().isNodeType(documentType)
+	    		&& !isMediaType(node, repositoryName)
+	    		&& !node.isNodeType(NodetypeConstant.EXO_WEBCONTENT)) {
 	    	return true;
 	    }
     }

@@ -34,6 +34,7 @@ import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.category.UICategoryNavigationConstant;
 import org.exoplatform.wcm.webui.pclv.UIPCLVPortlet;
 import org.exoplatform.wcm.webui.selector.page.UIPageSelector;
+import org.exoplatform.wcm.webui.validator.ZeroNumberValidator;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -49,6 +50,8 @@ import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
 
 /**
  * Created by The eXo Platform SAS
@@ -206,6 +209,9 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
     UIFormStringInput itemsPerPageStringInput = new UIFormStringInput(ITEMS_PER_PAGE_INPUT, ITEMS_PER_PAGE_INPUT, null);
     String itemsPerPageVal = portletPreferences.getValue(UIPCLVPortlet.ITEMS_PER_PAGE, null);
     itemsPerPageStringInput.setValue(itemsPerPageVal);
+    itemsPerPageStringInput.addValidator(MandatoryValidator.class);
+    itemsPerPageStringInput.addValidator(ZeroNumberValidator.class);
+    itemsPerPageStringInput.addValidator(PositiveNumberFormatValidator.class);
     itemsPerPageStringInput.setMaxLength(3);
     
     UIFormSelectBox formViewTemplateSelector = new UIFormSelectBox(FORM_VIEW_TEMPLATES_SELECTOR, FORM_VIEW_TEMPLATES_SELECTOR, formViewerTemplateList);

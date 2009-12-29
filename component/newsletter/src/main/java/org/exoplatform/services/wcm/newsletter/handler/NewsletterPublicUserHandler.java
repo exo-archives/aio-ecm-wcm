@@ -31,7 +31,6 @@ import javax.jcr.query.QueryResult;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.StandaloneContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -41,6 +40,7 @@ import org.exoplatform.services.mail.MailService;
 import org.exoplatform.services.mail.Message;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -209,7 +209,7 @@ public class NewsletterPublicUserHandler {
       message.setSubject(emailContent[0]) ;
       message.setBody(mailContent) ;
       try{
-        MailService mService = (MailService)PortalContainer.getComponent(MailService.class) ;
+        MailService mService = WCMCoreUtils.getService(MailService.class) ;
         mService.sendMessage(message) ;   
       } catch(Exception e) {
         MailService mService = (MailService)StandaloneContainer.getInstance().getComponentInstanceOfType(MailService.class) ;

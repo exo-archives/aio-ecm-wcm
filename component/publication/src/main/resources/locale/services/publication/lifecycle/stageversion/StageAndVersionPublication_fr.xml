@@ -4,7 +4,7 @@
   <StageAndVersionPublicationPlugin>
    <changeState>
     <enrolled>Le contenu est inscrit</enrolled>
-    <draft>Le contenu est draft</draft>
+    <draft>Le contenu est brouillon</draft>
     <published>Le contenu est publié</published>
 	 		<obsolete>Le contenu est obsolète</obsolete>
    </changeState>

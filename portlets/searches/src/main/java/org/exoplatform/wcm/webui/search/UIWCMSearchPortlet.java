@@ -12,10 +12,8 @@
 package org.exoplatform.wcm.webui.search;
 
 import javax.portlet.PortletMode;
-import javax.portlet.PortletPreferences;
 
 import org.exoplatform.wcm.webui.search.config.UIPortletConfig;
-import org.exoplatform.wcm.webui.search.config.UISearchPageLayoutManager;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -42,26 +40,17 @@ public class UIWCMSearchPortlet extends UIPortletApplication {
 	/** The Constant SEARCH_RESULT_TEMPLATE_PATH. */
 	public static final String	SEARCH_RESULT_TEMPLATE_PATH				= "searchResultTemplatePath".intern();
 
-	/** The Constant SEARCH_BOX_TEMPLATE_PATH. */
-	public static final String	SEARCH_BOX_TEMPLATE_PATH					= "searchBoxTemplatePath".intern();
-
 	/** The Constant SEARCH_PAGINATOR_TEMPLATE_PATH. */
 	public static final String	SEARCH_PAGINATOR_TEMPLATE_PATH		= "searchPaginatorTemplatePath".intern();
 
 	/** The Constant SEARCH_PAGE_LAYOUT_TEMPLATE_PATH. */
 	public static final String	SEARCH_PAGE_LAYOUT_TEMPLATE_PATH	= "searchPageLayoutTemplatePath".intern();
 
-	/** The Constant SEARCH_MODE. */
-	public static final String	SEARCH_MODE												= "searchMode";
-
 	/** The Constant REPOSITORY. */
 	public static final String	REPOSITORY												= "repository";
 
 	/** The Constant WORKSPACE. */
 	public static final String	WORKSPACE													= "workspace";
-
-	/** The Constant SEARCH_BOX_CONTAINER. */
-	public static final String	SEARCH_BOX_CONTAINER							= "uiSearchBoxContainer".intern();
 
 	/** The Constant ITEMS_PER_PAGE. */
 	public final static String	ITEMS_PER_PAGE										= "itemsPerPage";
@@ -107,14 +96,7 @@ public class UIWCMSearchPortlet extends UIPortletApplication {
 		getChildren().clear();
 		addChild(UIPopupContainer.class, null, "UISearchedContentEdittingPopup");
 		if (PortletMode.VIEW.equals(mode)) {
-			PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-			PortletPreferences portletPreferences = context.getRequest().getPreferences();
-			String searchMode = portletPreferences.getValue(UIWCMSearchPortlet.SEARCH_MODE, null);
-			if (UISearchPageLayoutManager.SEARCH_BOX_MODE_OPTION.equals(searchMode)) {
-				addChild(UISearchBoxContainer.class, null, SEARCH_BOX_CONTAINER);
-			} else if (UISearchPageLayoutManager.SEARCH_PAGE_MODE_OPTION.equals(searchMode)) {
 				addChild(UISearchPageLayout.class, null, UIPortletApplication.VIEW_MODE);
-			}
 		} else if (PortletMode.EDIT.equals(mode)) {
 			addChild(UIPortletConfig.class, null, UIPortletApplication.EDIT_MODE);
 		}

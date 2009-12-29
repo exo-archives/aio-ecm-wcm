@@ -245,23 +245,7 @@
               <field  name="category"><string>search-paginator</string></field>
             </object>
           </object-param>	          
-          <object-param>        
-            <name>default.searchBox</name>
-            <description>Default search box template</description>
-            <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
-              <field  name="templateName"><string>UIDefaultSearchBox.gtmpl</string></field>  
-              <field  name="category"><string>search-box</string></field>
-            </object>
-          </object-param>	          
-          <object-param>        
-            <name>acme.searchBox</name>
-            <description>ACME search box template</description>
-            <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
-              <field  name="templateName"><string>UIACMESearchBox.gtmpl</string></field>  
-              <field  name="category"><string>search-box</string></field>
-            </object>
-          </object-param>
-        </init-params>  
+          </init-params>  
       </component-plugin> 
    </external-component-plugins> 
 	

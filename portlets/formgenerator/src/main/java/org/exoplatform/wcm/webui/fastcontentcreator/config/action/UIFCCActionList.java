@@ -63,7 +63,7 @@ public class UIFCCActionList extends UIContainer {
   private static final String[] HEADERS = {"name", "description", "instanceOf"};
   
   /** The Constant ACTIONS. */
-  private static final String[] ACTIONS = {"Edit", "Delete"};
+  private static final String[] ACTIONS = {"Add", "Edit", "Delete"};
   
   /**
    * Instantiates a new uIFCC action list.

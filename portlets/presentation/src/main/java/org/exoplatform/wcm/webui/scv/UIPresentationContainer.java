@@ -73,13 +73,18 @@ public class UIPresentationContainer extends UIContainer{
 	 */
 	public String getTitle(Node node) throws Exception {
 		String title = null;
+		if (node.hasProperty("exo:title")) {
+			title = node.getProperty("exo:title").getValue().getString();
+		}
 		if (node.hasNode("jcr:content")) {
 			Node content = node.getNode("jcr:content");
 			if (content.hasProperty("dc:title")) {
+				try {
 				title = content.getProperty("dc:title").getValues()[0].getString();
+				} catch (Exception e) {
+					title = null;
+				}
 			}
-		} else if (node.hasProperty("exo:title")) {
-			title = node.getProperty("exo:title").getValue().getString();
 		}
 		if (title==null) title = node.getName();
 

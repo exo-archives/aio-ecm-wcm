@@ -219,17 +219,17 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 			UIFormInputSetWithAction inputSetWithAction = uiCategoryForm.getChildById(FORM_CATEGORY_MODERATOR);
       UIFormStringInput inputModerator = inputSetWithAction.getChildById(INPUT_CATEGORY_MODERATOR);
       
-      String inputMderatorValue = inputModerator.getValue();
-      if (("".equals(inputMderatorValue)) || (inputMderatorValue == null)) {
+      String inputModeratorValue = inputModerator.getValue();
+      if (("".equals(inputModeratorValue)) || (inputModeratorValue == null)) {
         UIApplication uiApp = uiCategoryForm.getAncestorOfType(UIApplication.class);
         uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.inputModeratorEmpty", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
-      categoryConfig.setModerator(inputMderatorValue); 
+      categoryConfig.setModerator(inputModeratorValue); 
       
       // Update access permission into newsletter manager page for moderators
-      NewsLetterUtil.updateAccessPermission(inputMderatorValue.split(","), uiCategoryForm);
+      NewsLetterUtil.updateAccessPermission(inputModeratorValue.split(","), uiCategoryForm);
 			
 			UIApplication uiApp = uiCategoryForm.getAncestorOfType(UIApplication.class);
 			NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();

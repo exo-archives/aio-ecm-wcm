@@ -248,11 +248,13 @@
 .UIFormGenerator .UIFormEditBox .CheckBox {
   width: auto;
   margin: 0px;
+  float:left;
 }
 
 .UIFormGenerator .UIFormEditBox .Radio {
   width: auto;
   margin: 0px;
+  float:left;
 }
 
 .UIFormGenerator .UIFormEditBox .SelectBox {

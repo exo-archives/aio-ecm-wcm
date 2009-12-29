@@ -389,7 +389,7 @@ var eXp = {
 	}
 
 	function requestInit() {
-		var connector = eXoPlugin.hostName + eXp.connector + eXp.command.init;
+		var connector = eXoPlugin.hostName + eXp.connector+ eXp.command.init+"&currentPortal="+eXoPlugin.portalName;
 		eXp.sendRequest(connector);
 	}
 
@@ -427,7 +427,7 @@ var eXp = {
 		eXp.store.currentFolder = currentFolder;
 		eXp.store.currentNode = currentNode;
 		driverName = eXp.store.driverName;
-		var strReplace 	= "getFoldersAndFiles?driverName="+driverName+"&currentFolder="+currentFolder+"&";	
+		var strReplace 	= "getFoldersAndFiles?driverName="+driverName+"&currentFolder="+currentFolder+"&currentPortal="+eXoPlugin.portalName+"&" ;	
 		strConnector 		= strConnector.replace("getDrivers?",strReplace);
 		var filter = '';
 		var dropdownlist = document.getElementById("Pinter");
