@@ -20,6 +20,7 @@ import javax.jcr.Node;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
@@ -30,12 +31,14 @@ import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
 import org.exoplatform.wcm.webui.selector.UISelectPathPanel;
 import org.exoplatform.wcm.webui.selector.content.UIContentBrowsePanel;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
+import org.exoplatform.wcm.webui.Utils;
 
 /**
  * Created by The eXo Platform SAS.
@@ -79,39 +82,43 @@ public class UIContentBrowsePanelOne extends UIContentBrowsePanel{
   		String uuid = node.getProperty("exo:uuid").getString();
   		realNode = node.getSession().getNodeByUUID(uuid);
   	}
-    NodeIdentifier nodeIdentifier = NodeIdentifier.make(realNode);
-    PortletRequestContext pContext = (PortletRequestContext) requestContext;
-    PortletPreferences prefs = pContext.getRequest().getPreferences();
-    prefs.setValue("repository", nodeIdentifier.getRepository());
-    prefs.setValue("workspace", nodeIdentifier.getWorkspace());
-    prefs.setValue("nodeIdentifier", nodeIdentifier.getUUID());
-    prefs.store();
-    
-    String remoteUser = Util.getPortalRequestContext().getRemoteUser();
-    String portalOwner = Util.getPortalRequestContext().getPortalOwner();
-
-    WCMPublicationService wcmPublicationService = this.getApplicationComponent(WCMPublicationService.class);
-
-    try {
-      wcmPublicationService.isEnrolledInWCMLifecycle(realNode);
-    } catch (NotInWCMPublicationException e){
-      wcmPublicationService.unsubcribeLifecycle(realNode);
-      wcmPublicationService.enrollNodeInLifecycle(realNode, portalOwner, remoteUser);          
-    }
-    
-    wcmPublicationService.updateLifecyleOnChangeContent(realNode, portalOwner, remoteUser, null);
-    if (!Utils.isEditPortletInCreatePageWizard()) {
-      String pageId = Util.getUIPortal().getSelectedNode().getPageReference();
-      UserPortalConfigService upcService = getApplicationComponent(UserPortalConfigService.class);
-      wcmPublicationService.updateLifecyleOnChangePage(upcService.getPage(pageId), remoteUser);
-    }
-
-    // Update Page And Close PopUp
-    UIPortal uiPortal = Util.getUIPortal();
-    UIPageBody uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
-    uiPageBody.setUIComponent(null);
-    uiPageBody.setMaximizedUIComponent(null);
-    Utils.updatePortal((PortletRequestContext)requestContext);
-    Utils.closePopupWindow(this, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW);
+  	if(!realNode.isCheckedOut()){
+  	  Utils.createPopupMessage(this, "UIContentBrowsePanelOne.msg.node-checkout", null, ApplicationMessage.WARNING);
+  	  return;
+  	}  	
+	  NodeIdentifier nodeIdentifier = NodeIdentifier.make(realNode);
+	  PortletRequestContext pContext = (PortletRequestContext) requestContext;
+	  PortletPreferences prefs = pContext.getRequest().getPreferences();
+	  prefs.setValue("repository", nodeIdentifier.getRepository());
+	  prefs.setValue("workspace", nodeIdentifier.getWorkspace());
+	  prefs.setValue("nodeIdentifier", nodeIdentifier.getUUID());
+	  prefs.store();
+	  
+	  String remoteUser = Util.getPortalRequestContext().getRemoteUser();
+	  String portalOwner = Util.getPortalRequestContext().getPortalOwner();
+	  
+	  WCMPublicationService wcmPublicationService = this.getApplicationComponent(WCMPublicationService.class);
+	  
+	  try {
+	    wcmPublicationService.isEnrolledInWCMLifecycle(realNode);
+	  } catch (NotInWCMPublicationException e){
+	    wcmPublicationService.unsubcribeLifecycle(realNode);
+	    wcmPublicationService.enrollNodeInLifecycle(realNode, portalOwner, remoteUser);          
+	  }
+	  
+	  wcmPublicationService.updateLifecyleOnChangeContent(realNode, portalOwner, remoteUser, null);
+	  if (!Utils.isEditPortletInCreatePageWizard()) {
+	    String pageId = Util.getUIPortal().getSelectedNode().getPageReference();
+	    UserPortalConfigService upcService = getApplicationComponent(UserPortalConfigService.class);
+	    wcmPublicationService.updateLifecyleOnChangePage(upcService.getPage(pageId), remoteUser);
+	  }
+	  
+	  // Update Page And Close PopUp
+	  UIPortal uiPortal = Util.getUIPortal();
+	  UIPageBody uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
+	  uiPageBody.setUIComponent(null);
+	  uiPageBody.setMaximizedUIComponent(null);
+	  Utils.updatePortal((PortletRequestContext)requestContext);
+	  Utils.closePopupWindow(this, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW);
   }
 }

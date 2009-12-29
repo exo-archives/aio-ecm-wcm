@@ -82,6 +82,9 @@
    <DMSDocument>Tài liệu</DMSDocument>
    <Media>Media</Media>
   </selectBoxValues>
+  <msg>
+  	<node-checkout>Node đã được Check-out. Vui lòng Check-in Node trước khi làm chức năng này</node-checkout>
+  </msg>
  </UIContentBrowsePanelOne>
  
  <UIContentBrowsePanelMulti>

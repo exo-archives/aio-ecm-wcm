@@ -82,6 +82,9 @@
    <DMSDocument>Document</DMSDocument>
    <Media>Média</Media>
   </selectBoxValues>
+  <msg>
+  	<node-checkout>Le noeud est extrait. S'il vous plaît vérifier dans le nœud avant de faire cette fonction</node-checkout>
+  </msg>
  </UIContentBrowsePanelOne>
  
  <UIContentBrowsePanelMulti>

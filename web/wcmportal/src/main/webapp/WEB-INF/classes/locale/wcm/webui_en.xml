@@ -82,6 +82,9 @@
    <DMSDocument>Document</DMSDocument>
    <Media>Media</Media>
   </selectBoxValues>
+  <msg>
+  	<node-checkout>Node is checked out. Please check in node before do this function</node-checkout>
+  </msg>
  </UIContentBrowsePanelOne>
  
  <UIContentBrowsePanelMulti>
