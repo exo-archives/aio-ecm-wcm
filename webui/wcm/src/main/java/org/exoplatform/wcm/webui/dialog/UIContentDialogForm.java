@@ -34,15 +34,11 @@ import javax.jcr.lock.LockException;
 import javax.jcr.version.VersionException;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
-import org.exoplatform.ecm.webui.form.DialogFormActionListeners;
 import org.exoplatform.ecm.webui.form.UIDialogForm;
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.ecm.webui.tree.selectone.UIOneTaxonomySelector;
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
-import org.exoplatform.portal.webui.portal.UIPortal;
-import org.exoplatform.portal.webui.portal.UIPortalBrowser;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.BasePath;
 import org.exoplatform.services.cms.CmsService;
@@ -77,11 +73,12 @@ import org.exoplatform.webui.form.UIFormInputBase;
 import org.exoplatform.webui.form.UIFormMultiValueInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
 
+
 /**
  * Created by The eXo Platform SAS
  * Author : Phan Le Thanh Chuong
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Oct 29, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Oct 29, 2009
  */
 @ComponentConfig (
     lifecycle = UIFormLifecycle.class,
@@ -93,63 +90,121 @@ import org.exoplatform.webui.form.UIFormStringInput;
       @EventConfig(listeners = UIContentDialogForm.FastPublishActionListener.class),
       @EventConfig(listeners = UIContentDialogForm.PreferencesActionListener.class),
       @EventConfig(listeners = UIContentDialogForm.CloseActionListener.class),
-      @EventConfig(listeners = DialogFormActionListeners.RemoveDataActionListener.class)
+      @EventConfig(listeners = UIContentDialogForm.RemoveDataActionListener.class)
     }
 )
 public class UIContentDialogForm extends UIDialogForm  implements UIPopupComponent, UISelectable {
 
+	/** The Constant CONTENT_DIALOG_FORM_POPUP_WINDOW. */
 	public static final String CONTENT_DIALOG_FORM_POPUP_WINDOW = "UIContentDialogFormPopupWindow";
+	
+	/** The Constant FIELD_TAXONOMY. */
 	public static final String FIELD_TAXONOMY = "categories";
+	
+	/** The Constant TAXONOMY_CONTENT_POPUP_WINDOW. */
 	public static final String TAXONOMY_CONTENT_POPUP_WINDOW = "UIContentPopupWindow";
+	
+	/** The webcontent node location. */
 	private NodeLocation webcontentNodeLocation;
+	
+	/** The list taxonomy. */
 	private List<String> listTaxonomy = new ArrayList<String>();
+  
+  /** The list taxonomy name. */
   private List<String> listTaxonomyName = new ArrayList<String>();
+  
+  /** The template. */
   private String template;
   
+  /**
+   * Gets the list taxonomy.
+   * 
+   * @return the list taxonomy
+   */
   public List<String> getListTaxonomy() {
     return listTaxonomy;
   }
   
+  /**
+   * Gets the list taxonomy name.
+   * 
+   * @return the list taxonomy name
+   */
   public List<String> getlistTaxonomyName() {
     return listTaxonomyName;
   }
   
+  /**
+   * Sets the list taxonomy.
+   * 
+   * @param listTaxonomyNew the new list taxonomy
+   */
   public void setListTaxonomy(List<String> listTaxonomyNew) {
     listTaxonomy = listTaxonomyNew;
   }
   
+  /**
+   * Sets the list taxonomy name.
+   * 
+   * @param listTaxonomyNameNew the new list taxonomy name
+   */
   public void setListTaxonomyName(List<String> listTaxonomyNameNew) {
     listTaxonomyName = listTaxonomyNameNew;
   }
+	
+	/** The preference component. */
 	private Class<? extends UIContentDialogPreference> preferenceComponent;
 	
+	/**
+	 * Gets the webcontent node location.
+	 * 
+	 * @return the webcontent node location
+	 */
 	public NodeLocation getWebcontentNodeLocation() {
 		return webcontentNodeLocation;
 	}
 
+	/**
+	 * Sets the webcontent node location.
+	 * 
+	 * @param webcontentNodeLocation the new webcontent node location
+	 */
 	public void setWebcontentNodeLocation(NodeLocation webcontentNodeLocation) {
 		this.webcontentNodeLocation = webcontentNodeLocation;
 	}
 	
+	/**
+	 * Gets the preference component.
+	 * 
+	 * @return the preference component
+	 */
 	public Class<? extends UIContentDialogPreference> getPreferenceComponent() {
 		return preferenceComponent;
 	}
 	
+	/**
+	 * Sets the preference component.
+	 * 
+	 * @param preferenceComponent the new preference component
+	 */
 	public void setPreferenceComponent(Class<? extends UIContentDialogPreference> preferenceComponent) {
 		this.preferenceComponent = preferenceComponent;
 	}
 	
 	/**
-   * Instantiates a new uI content dialog form.
-   * 
-   * @throws Exception the exception
-   */
+	 * Instantiates a new uI content dialog form.
+	 * 
+	 * @throws Exception the exception
+	 */
   public UIContentDialogForm() throws Exception {
     setActions(new String [] {"SaveDraft", "FastPublish", "Preferences", "Close"});
   }
 
   /**
    * Inits the.
+   * 
+   * @param webcontent the webcontent
+   * @param isAddNew the is add new
    * 
    * @throws Exception the exception
    */
@@ -169,6 +224,11 @@ public class UIContentDialogForm extends UIDialogForm  implements UIPopupCompone
     initFieldInput();
   }
   
+  /**
+   * Inits the field input.
+   * 
+   * @throws Exception the exception
+   */
   private void initFieldInput() throws Exception {
     TemplateService tservice = this.getApplicationComponent(TemplateService.class);
     List<String> documentNodeType = tservice.getDocumentTemplates(this.repositoryName);
@@ -196,6 +256,11 @@ public class UIContentDialogForm extends UIDialogForm  implements UIPopupCompone
     addUIFormInput(uiFormMultiValue);
   }
 
+  /**
+   * Gets the current node.
+   * 
+   * @return the current node
+   */
   public Node getCurrentNode() {
     return NodeLocation.getNodeByLocation(webcontentNodeLocation);
   }
@@ -322,6 +387,13 @@ public class UIContentDialogForm extends UIDialogForm  implements UIPopupCompone
     }
   }
   
+  /**
+   * Check categories.
+   * 
+   * @param contentDialogForm the content dialog form
+   * 
+   * @return true, if successful
+   */
   private boolean checkCategories(UIContentDialogForm contentDialogForm) {
     String categoriesPath = "";
     String[] categoriesPathList = null;
@@ -426,6 +498,17 @@ public class UIContentDialogForm extends UIDialogForm  implements UIPopupCompone
 	  }
   }
   
+  /**
+   * The listener interface for receiving addAction events.
+   * The class that is interested in processing a addAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addAddActionListener<code> method. When
+   * the addAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see AddActionEvent
+   */
   static public class AddActionListener extends EventListener<UIContentDialogForm> {
 
     /* (non-Javadoc)
@@ -485,12 +568,21 @@ public class UIContentDialogForm extends UIDialogForm  implements UIPopupCompone
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIPopupComponent#activate()
+   */
   public void activate() throws Exception {
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIPopupComponent#deActivate()
+   */
   public void deActivate() throws Exception {
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.selector.UISelectable#doSelect(java.lang.String, java.lang.Object)
+   */
   @SuppressWarnings("unchecked")
   public void doSelect(String selectField, Object value) throws Exception {
     isUpdateSelect = true;    
@@ -510,7 +602,22 @@ public class UIContentDialogForm extends UIDialogForm  implements UIPopupCompone
     }
   }
   
+  /**
+   * The listener interface for receiving removeReferenceAction events.
+   * The class that is interested in processing a removeReferenceAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addRemoveReferenceActionListener<code> method. When
+   * the removeReferenceAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see RemoveReferenceActionEvent
+   */
   static public class RemoveReferenceActionListener extends EventListener<UIContentDialogForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIContentDialogForm> event) throws Exception {
       UIContentDialogForm contentDialogForm = event.getSource();
       contentDialogForm.isRemovePreference = true;
@@ -518,5 +625,50 @@ public class UIContentDialogForm extends UIDialogForm  implements UIPopupCompone
       contentDialogForm.getUIStringInput(fieldName).setValue(null);
       event.getRequestContext().addUIComponentToUpdateByAjax(contentDialogForm);
     }
+  }
+
+  /**
+   * The listener interface for receiving removeDataAction events.
+   * The class that is interested in processing a removeDataAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addRemoveDataActionListener<code> method. When
+   * the removeDataAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see RemoveDataActionEvent
+   */
+  static public class RemoveDataActionListener extends EventListener<UIContentDialogForm> {
+  	
+	  /* (non-Javadoc)
+	   * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+	   */
+	  public void execute(Event<UIContentDialogForm> event) throws Exception {
+  		UIContentDialogForm uiForm = event.getSource();
+  		uiForm.isRemovePreference = true;
+  		String referenceNodePath = event.getRequestContext().getRequestParameter(UIDialogForm.OBJECTID);
+  		if (referenceNodePath.startsWith("/")) {
+  			Node referenceNode = (Node)uiForm.getSession().getItem(uiForm.getNodePath() + referenceNodePath);
+  			if(referenceNode.hasProperty("jcr:data")) {
+  				referenceNode.setProperty("jcr:data", "");
+  				uiForm.setDataRemoved(true);
+  			}
+  		} else {
+  			Node currentNode = (Node) uiForm.getSession().getItem(uiForm.getNodePath());
+  			
+      	if (currentNode.isLocked()) {
+	        Object[] args = { currentNode.getPath() };
+	        Utils.createPopupMessage(uiForm, "UIPermissionManagerGrid.msg.node-locked", args,
+	            ApplicationMessage.WARNING);
+	        return;
+        }
+      	
+				if (currentNode.hasProperty(referenceNodePath)) {
+  				currentNode.setProperty(referenceNodePath, "");
+  				uiForm.setDataRemoved(true);
+  			}
+  		}
+  		event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent());
+  	}
   }
 }
