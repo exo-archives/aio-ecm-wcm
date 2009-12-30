@@ -481,12 +481,13 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       listenerService.broadcast(UIFormGeneratorConstant.PRE_CREATE_NODETYPE_EVENT, null, nodetypeName);
       
       formGeneratorTabPane.addNodetype(event.getRequestContext(), preferenceRepository, nodetypeName, forms);
-      String newGTMPLTemplate = formGeneratorTabPane.generateDialogTemplate(templateName, forms);
+      String newDialogTemplate = formGeneratorTabPane.generateDialogTemplate(templateName, forms);
       String newViewTemplate = formGeneratorTabPane.generateViewTemplate(templateName, forms);
       
       TemplateService templateService = Utils.getService(TemplateService.class);
-      templateService.addTemplate(true, nodetypeName, templateName, true, templateName, new String[] {"*"}, newGTMPLTemplate, preferenceRepository) ;
-      templateService.addTemplate(false, nodetypeName, templateName, true, templateName, new String[] {"*"}, newViewTemplate, preferenceRepository) ;
+      templateService.addTemplate(TemplateService.DIALOGS, nodetypeName, templateName, true, templateName, new String[] {"*"}, newDialogTemplate, preferenceRepository) ;
+      templateService.addTemplate(TemplateService.VIEWS, nodetypeName, templateName, true, templateName, new String[] {"*"}, newViewTemplate, preferenceRepository) ;
+      templateService.addTemplate(TemplateService.SKINS, nodetypeName, templateName, true, templateName, new String[] {"*"}, "", preferenceRepository) ;
       
       listenerService.broadcast(UIFormGeneratorConstant.POST_CREATE_NODETYPE_EVENT, null, nodetypeName);      
 
