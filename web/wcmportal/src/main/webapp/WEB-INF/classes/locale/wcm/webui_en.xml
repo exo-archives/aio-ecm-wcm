@@ -275,6 +275,7 @@
     <confirm-delete-permission>Are you sure to delete ?</confirm-delete-permission>
     <no-permission-remove>Don't have permission.</no-permission-remove>
     <access-denied>Access denied.</access-denied>
+    <node-locked>The path element (0) or one of its parents is locked.</node-locked>
     <userOrGroup-required>Require select user or group.</userOrGroup-required>
     <checkbox-require>You should set right.</checkbox-require>
     <node-locked>The item with path {0} or upper level is locked.</node-locked>
@@ -320,6 +321,10 @@
     <Invalid-number>Zero is not accepted in field '{0}'</Invalid-number>
    </msg>
   </ZeroValidator>
+
+ <ACMESite>
+  <label>ACME Template</label>
+ </ACMESite>
 
  <UIDropDownPageTemp>
   <item>

@@ -319,6 +319,10 @@
     <Invalid-number>Zéro n'est pas acceptée dans le domaine '{0}'</Invalid-number>
    </msg>
   </ZeroValidator>
+
+ <ACMESite>
+  <label>ACME Template</label>
+ </ACMESite>
   
   <UIDropDownPageTemp>
   <item>
