@@ -82,6 +82,9 @@
    <DMSDocument>Document</DMSDocument>
    <Media>Média</Media>
   </selectBoxValues>
+  <msg>
+  	<node-checkout>Le noeud est extrait. S'il vous plaît vérifier dans le nœud avant de faire cette fonction</node-checkout>
+  </msg>
  </UIContentBrowsePanelOne>
  
  <UIContentBrowsePanelMulti>
@@ -316,4 +319,44 @@
     <Invalid-number>Zéro n'est pas acceptée dans le domaine '{0}'</Invalid-number>
    </msg>
   </ZeroValidator>
+
+ <ACMESite>
+  <label>ACME Template</label>
+ </ACMESite>
+  
+  <UIDropDownPageTemp>
+  <item>
+   <WCMPageConfigs>WCM page configs</WCMPageConfigs>
+   <ColumnPageConfigs>Column page configs</ColumnPageConfigs>
+   <RowPageConfigs>Row page configs</RowPageConfigs>
+   <TabsPageConfigs>Tabs page configs</TabsPageConfigs>
+   <MixPageConfigs>Mix page config</MixPageConfigs>
+  </item>
+ </UIDropDownPageTemp>
+  
+ <UIWizardPageSelectLayoutForm>
+  <label>
+   <SingleContentViewer>Single content viewer</SingleContentViewer>
+   <ContentListViewer>Content list viewer</ContentListViewer>
+   <Search>Search</Search>
+   <Sitemap>Sitemap</Sitemap>
+   <TwoColumnsLayout>Two columns layout</TwoColumnsLayout>
+   <ThreeColumnsLayout>Three columns layout</ThreeColumnsLayout>
+   <TwoRowsLayout>Two rows layout</TwoRowsLayout>
+   <ThreeRowsLayout>Three rows layout</ThreeRowsLayout>
+   <TwoTabsLayout>Two tabs layout</TwoTabsLayout>
+   <ThreeTabsLayout>Three tabs layout</ThreeTabsLayout>
+   <TwoColumnsOneRowLayout>Two columns One row layout</TwoColumnsOneRowLayout>
+   <OneRowTwoColumnsLayout>One row Two columns layout</OneRowTwoColumnsLayout>
+   <ThreeRowsTwoColumnsLayout>Three rows Two columns layout </ThreeRowsTwoColumnsLayout>
+  </label>
+ </UIWizardPageSelectLayoutForm>
+ 
+ <Signin>
+   <welcome>Bienvenue</welcome>
+   <login>Connexion</login>
+   <logout>Déconnexion</logout>
+   <language>Changer de langue</language>
+   <register>Enregistrer</register>
+ </Signin>
 </bundle>
