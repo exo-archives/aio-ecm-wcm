@@ -103,7 +103,7 @@ public class NewsletterSubscriptionHandler {
         Value[] values = categoriesNode.getProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR).getValues();
         listAddministrators = convertValuesToArray(values);
       }
-      listAddministrators.add(PublicationUtil.getServices(UserACL.class).getSuperUser());// add supper user into list administrator
+      //listAddministrators.add(PublicationUtil.getServices(UserACL.class).getSuperUser());// add supper user into list administrator
       listAddministrators.addAll(listModerators);
       
       // Set permission is all for Redactors

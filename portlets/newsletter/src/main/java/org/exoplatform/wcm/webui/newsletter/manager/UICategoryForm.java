@@ -29,6 +29,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
 import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.newsletter.NoneHTMLValidator;
 import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
 import org.exoplatform.wcm.webui.selector.UIUserMemberSelector;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -105,8 +106,9 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 		
 		inputCateName.addValidator(MandatoryValidator.class).addValidator(NameValidator.class)
 									.addValidator(SpecialCharacterValidator.class);;
-		inputCateTitle.addValidator(MandatoryValidator.class);
+		inputCateTitle.addValidator(MandatoryValidator.class).addValidator(NoneHTMLValidator.class);
 		inputModerator.addValidator(MandatoryValidator.class);
+		inputCateDescription.addValidator(NoneHTMLValidator.class);
 		
 		addChild(inputCateName);
 		addChild(inputCateTitle);

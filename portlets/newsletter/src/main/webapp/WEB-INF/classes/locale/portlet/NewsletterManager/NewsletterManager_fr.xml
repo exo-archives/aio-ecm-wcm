@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
+	<NoneHTMLValidator>
+		<msg>
+			<invalid>S'il vous plaît, n'utilisez pas de balise HTML dans "{0}" sur le terrain</invalid>
+		</msg>
+	</NoneHTMLValidator>
 	<NewsletterPortlet>
     <action>
     	<Preferences>Préférences</Preferences>

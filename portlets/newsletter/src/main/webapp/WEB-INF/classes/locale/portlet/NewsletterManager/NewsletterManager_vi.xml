@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
+	<NoneHTMLValidator>
+		<msg>
+			<invalid>Please, don't use html tags in "{0}" field</invalid>
+		</msg>
+	</NoneHTMLValidator>
 	<NewsletterPortlet>
     <action>
     	<Preferences>Preferences</Preferences>
