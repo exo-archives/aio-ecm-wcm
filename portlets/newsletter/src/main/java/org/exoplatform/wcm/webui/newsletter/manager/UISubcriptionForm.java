@@ -30,6 +30,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
 import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.newsletter.NoneHTMLValidator;
 import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
 import org.exoplatform.wcm.webui.selector.UIUserMemberSelector;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -115,7 +116,7 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent, UISel
     .addValidator(SpecialCharacterValidator.class);
 
     UIFormStringInput inputSubcriptionTitle = new UIFormStringInput(INPUT_SUBCRIPTION_TITLE, null);
-    inputSubcriptionTitle.addValidator(MandatoryValidator.class);
+    inputSubcriptionTitle.addValidator(MandatoryValidator.class).addValidator(NoneHTMLValidator.class);
 
     UIFormStringInput inputModerator = new UIFormStringInput(SELECT_REDACTOR, SELECT_REDACTOR, null);
     inputModerator.setEditable(false);
@@ -124,11 +125,13 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent, UISel
     formSubscriptionDeractor.addChild(inputModerator);
     formSubscriptionDeractor.setActionInfo(SELECT_REDACTOR, new String[] {"SelectUser", "SelectMember", "DeleteModerator"});
     formSubscriptionDeractor.showActionInfo(true);
+    UIFormTextAreaInput descriptionInput = new UIFormTextAreaInput(INPUT_SUBCRIPTION_DESCRIPTION, null, null);
+    descriptionInput.addValidator(NoneHTMLValidator.class);
 
     addChild(new UIFormSelectBox(SELECT_CATEGORIES_NAME, SELECT_CATEGORIES_NAME, listCategoriesName));
     addChild(inputSubcriptionName);
     addChild(inputSubcriptionTitle);
-    addChild(new UIFormTextAreaInput(INPUT_SUBCRIPTION_DESCRIPTION, null, null));
+    addChild(descriptionInput);
     addChild(formSubscriptionDeractor);
   }
 
