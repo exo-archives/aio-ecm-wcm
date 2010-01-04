@@ -140,7 +140,8 @@ public class UISearchResult extends UIContainer {
 			QueryCriteria queryCriteria = new QueryCriteria();
 			queryCriteria.setSiteName(currentPortal);
 			queryCriteria.setKeyword(keyword.toLowerCase());
-			queryCriteria.setSearchWebpage(true);
+			//queryCriteria.setSearchWebpage(true);
+			queryCriteria.setSearchWebpage(false);
 			queryCriteria.setSearchDocument(true);
 			queryCriteria.setSearchWebContent(true);
 			if (Boolean.parseBoolean(Utils.getCurrentMode())) {
