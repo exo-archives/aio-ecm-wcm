@@ -116,6 +116,14 @@ public class ResultNode implements Node{
   public String getExcerpt() {
     return excerpt;
   }
+  
+  public String getEditor(){
+    try{
+    if(node.hasProperty("exo:owner"))
+      return node.getProperty("exo:owner").getString();
+    }catch(Exception ex){}
+    return null;
+  }
 
   /**
    * Sets the excerpt.

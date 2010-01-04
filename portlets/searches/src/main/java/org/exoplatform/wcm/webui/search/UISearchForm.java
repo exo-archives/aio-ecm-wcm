@@ -95,7 +95,7 @@ public class UISearchForm extends UIForm {
 																														PORTALS_SELECTOR,
 																														getPortalList());
 		UIFormCheckBoxInput uiPageCheckBox = new UIFormCheckBoxInput(PAGE_CHECKING, PAGE_CHECKING, null);
-		uiPageCheckBox.setChecked(true);
+		uiPageCheckBox.setChecked(false);
 		UIFormCheckBoxInput uiDocumentCheckBox = new UIFormCheckBoxInput(	DOCUMENT_CHECKING,
 																																			DOCUMENT_CHECKING,
 																																			null);
