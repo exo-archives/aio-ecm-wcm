@@ -37,6 +37,7 @@
 					<field name="title"><string>Results</string></field>
 					<field name="description"><string>Monthly newsletter about our results and forecasts</string></field>
 					<field name="categoryName"><string>general</string></field>
+					<field name="redactor"><string>root</string></field>
 				</object>
 			</object-param>
 			<object-param>
@@ -47,6 +48,7 @@
 					<field name="title"><string>Check-List</string></field>
 					<field name="description"><string>Weekly newsletter with general topics</string></field>
 					<field name="categoryName"><string>general</string></field>
+					<field name="redactor"><string>root</string></field>
 				</object>
 			</object-param>
 			<object-param>
@@ -57,6 +59,7 @@
 					<field name="title"><string>The market</string></field>
 					<field name="description"><string>What's on the market today ?</string></field>
 					<field name="categoryName"><string>marketing</string></field>
+					<field name="redactor"><string>root</string></field>
 				</object>
 			</object-param>
 			<object-param>

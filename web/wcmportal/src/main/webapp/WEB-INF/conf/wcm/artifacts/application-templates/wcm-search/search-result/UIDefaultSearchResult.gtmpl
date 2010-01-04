@@ -74,14 +74,16 @@
      if (!listNavigationNodeUris.isEmpty()) {
       itemUrl = uicomponent.getPublishedNodeURI(listNavigationNodeUris.get(0));
      }
-     def itemExcerpt = resultNode.getExcerpt();
+     def itemExcerpt = resultNode.getEditor();
      def itemScore = resultNode.getScore();
      %>
       <div class="SearchItem">
        <div class="ItemTitle">
         <a href="$itemUrl">$itemName</a>
        </div>
-       <div class="ItemExcerpt"><%=itemExcerpt%></div>
+       <%if(itemExcerpt != null && itemExcerpt.trim().length > 0){%>
+       		<div class="ItemExcerpt" style="font-weight:bold;"><%=_ctx.appRes("UIDefaultSearchResult.label.editor")%>: <%=itemExcerpt%></div>
+       <%}%>
        <div class="ItemInfo">
         <span class="ItemUrl"><%=itemUrl%></span> - <span class="ItemScore"><%= itemScore %></span>
         <%
@@ -103,7 +105,9 @@
                 <div class="ItemTitle">
                  <a href="$itemUrl">$itemName</a>
                 </div>
-                <div class="ItemExcerpt"><%=itemExcerpt%></div>
+                <%if(itemExcerpt != null && itemExcerpt.trim().length > 0){%>
+                		<div class="ItemExcerpt"  style="font-weight:bold;"><%=_ctx.appRes("UIDefaultSearchResult.label.editor")%>: <%=itemExcerpt%></div>
+                <%}%>
                 <div class="ItemInfo">
                  <span class="ItemUrl"><%=itemUrl%></span> - <span class="ItemScore"><%=itemScore%></span>
                 </div>

@@ -86,11 +86,8 @@ public class NewsletterSubscriptionHandler {
       if(extendedSubscriptionNode.canAddMixin("exo:privilegeable"))
         extendedSubscriptionNode.addMixin("exo:privilegeable");
       List<String> newRedactors = new ArrayList<String>();
-      try{
+      if(subscriptionConfig.getRedactor() != null && subscriptionConfig.getRedactor().trim().length() > 0)
         newRedactors.addAll(Arrays.asList(subscriptionConfig.getRedactor().split(",")));
-      }catch(NullPointerException ex){
-        log.warn("Error: "+ex.getMessage());        
-      }
       
       // get all administrator of newsletter and moderator of category which contain this subscription
       Node categoryNode = subscriptionNode.getParent();
