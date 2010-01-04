@@ -87,7 +87,7 @@ public class NewsletterSubscriptionHandler {
         extendedSubscriptionNode.addMixin("exo:privilegeable");
       List<String> newRedactors = new ArrayList<String>();
       if(subscriptionConfig.getRedactor() != null && subscriptionConfig.getRedactor().trim().length() > 0)
-        newRedactors.addAll(Arrays.asList(subscriptionConfig.getRedactor().split(","))); 
+        newRedactors.addAll(Arrays.asList(subscriptionConfig.getRedactor().split(",")));
       
       // get all administrator of newsletter and moderator of category which contain this subscription
       Node categoryNode = subscriptionNode.getParent();
@@ -115,7 +115,7 @@ public class NewsletterSubscriptionHandler {
         if(newRedactors.contains(admin)) continue;
         extendedSubscriptionNode.setPermission(admin, permissions);
         newRedactors.add(admin);
-        }
+      }
       
       permissions = new String[]{PermissionType.READ, PermissionType.SET_PROPERTY}; // permission for normal users
       // set permission for any user when add new
@@ -127,14 +127,14 @@ public class NewsletterSubscriptionHandler {
       List<String> allPermissions = NewsletterConstant.getAllPermissionOfNode(subscriptionNode);
       if(allPermissions != null && allPermissions.size() > 0){
         for(String oldPer : allPermissions){
-        if(!newRedactors.contains(oldPer)){
-          extendedSubscriptionNode.removePermission(oldPer, PermissionType.ADD_NODE);
-          extendedSubscriptionNode.removePermission(oldPer, PermissionType.REMOVE);
-          extendedSubscriptionNode.removePermission(oldPer, PermissionType.CHANGE_PERMISSION);
+          if(!newRedactors.contains(oldPer)){
+            extendedSubscriptionNode.removePermission(oldPer, PermissionType.ADD_NODE);
+            extendedSubscriptionNode.removePermission(oldPer, PermissionType.REMOVE);
+            extendedSubscriptionNode.removePermission(oldPer, PermissionType.CHANGE_PERMISSION);
             extendedSubscriptionNode.setPermission(oldPer, permissions);
+          }
         }
       }
-    }
       
     }
   }
