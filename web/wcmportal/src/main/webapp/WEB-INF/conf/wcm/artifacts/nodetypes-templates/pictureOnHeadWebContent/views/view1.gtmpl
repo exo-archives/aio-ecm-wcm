@@ -15,7 +15,7 @@
       rim = currentNode.getProperty(property).getString();
       if (!(rim.indexOf("%") > 0)) rim = rim + "px";
     } catch(PathNotFoundException pnf) {
-      rim = "100%";
+      rim = "100px";
     }
     return rim;
   }
