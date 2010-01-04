@@ -22,6 +22,7 @@
    <forCaption>for</forCaption>
    <timeUnitCaption>seconds</timeUnitCaption>
    <similar>Pages where the same content appears</similar>
+   <editor>Editor</editor>
   </label>
   <action>
    <edit>Edit</edit>

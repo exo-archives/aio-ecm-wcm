@@ -22,6 +22,7 @@
    <forCaption>pour</forCaption>
    <timeUnitCaption>seconde</timeUnitCaption>
    <similar>Pages où apparaît le même contenu</similar>
+   <editor>Sous la direction de</editor>
   </label>
   <action>
    <edit>Modifier</edit>
