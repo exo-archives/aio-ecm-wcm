@@ -97,12 +97,12 @@ public class NewsletterCategoryHandler {
   
   private List<String> convertValuesToArray(Value[] values){
     List<String> listString = new ArrayList<String>();
-    for(Value value : values){
-      try {
+    try {
+      for(Value value : values){
         listString.add(value.getString());
-      }catch (Exception e) {
-        log.error("Error when convert values to array: ", e.fillInStackTrace());
       }
+    }catch (Exception e) {
+      log.error("Error when convert values to array: ", e.fillInStackTrace());
     }
     return listString;
   }
@@ -281,22 +281,19 @@ public class NewsletterCategoryHandler {
    */
   public List<NewsletterCategoryConfig> getListCategories(String portalName, SessionProvider sessionProvider) throws Exception{
     List<NewsletterCategoryConfig> listCategories = new ArrayList<NewsletterCategoryConfig>();
-  	try{
+    NodeIterator nodeIterator = null;
+    try{
     	ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = sessionProvider.getSession(workspace, manageableRepository);
       String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
       Node categoriesNode = (Node)session.getItem(categoryPath);
-      NodeIterator nodeIterator = categoriesNode.getNodes();
+      nodeIterator = categoriesNode.getNodes();
       while(nodeIterator.hasNext()){
-        try{
-          listCategories.add(getCategoryFromNode(nodeIterator.nextNode()));
-        }catch(Exception ex){
-          log.error("Get category " + nodeIterator.nextNode().getName() + " failed because of ", ex.fillInStackTrace());
-        }
+        listCategories.add(getCategoryFromNode(nodeIterator.nextNode()));
       }
-  	}catch(Exception e){
-  	  log.error("Get list categories  failed because of ", e.fillInStackTrace());
-	  }
+    }catch(Exception ex){
+      log.error("Get category " + nodeIterator.nextNode().getName() + " failed because of ", ex.fillInStackTrace());
+    }
     return listCategories;
   }
   
