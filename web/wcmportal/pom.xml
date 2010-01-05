@@ -2,7 +2,7 @@
 	<parent>
 		<groupId>org.exoplatform.ecm</groupId>
 		<artifactId>wcm</artifactId>
-		<version>2.0-SNAPSHOT</version>
+		<version>1.2.3-SNAPSHOT</version>
 	</parent> 
 
 	<modelVersion>4.0.0</modelVersion>
@@ -49,7 +49,7 @@
 						groovy/webui/form/ext/UIFormInputSetWithAction.gtmpl,
 						groovy/webui/form/UIFormUploadInput.gtmpl,
 						fckeditor/editor/dialog/fck_table.html,
-						fckeditor/editor/dialog/fck_image.html,
+						fckeditor/editor/dialog/fck_image.html
 					</dependentWarExcludes> 
 				</configuration>
 			</plugin>
