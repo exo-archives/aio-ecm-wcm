@@ -463,6 +463,12 @@ var eXp = {
 	window.onload = function() {
 		requestInit();
 		languageInit(); 
+		eXoWCM.PluginUtils.fixHeightTrees();
+	};
+	
+	
+	window.onresize = function(){
+			eXoWCM.PluginUtils.fixHeightTrees();
 	};
 
 </script>

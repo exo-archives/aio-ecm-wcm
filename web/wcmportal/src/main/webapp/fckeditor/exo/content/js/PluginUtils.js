@@ -452,5 +452,18 @@ PluginUtils.prototype.changeFilter = function() {
 	eXoWCM.PluginUtils.listFiles();
 	if(eXp.store.currentNode)	 getDir(eXp.store.currentNode, eXp.store.eventNode);
 }
+
+PluginUtils.prototype.fixHeightTrees = function() {
+	var leftWS = document.getElementById('LeftWorkspace');
+	var windowHeight = eXo.core.Browser.getBrowserHeight();
+	var root = eXo.core.DOMUtil.findAncestorByClass(leftWS, "UIHomePageDT");
+	var titleBar = eXo.core.DOMUtil.findFirstDescendantByClass(root, "div", "TitleBar");
+	var uiWorkingWorkspace = eXo.core.DOMUtil.findFirstDescendantByClass(root, "div", "UIWorkingWorkspace");
+	var actionBar = eXo.core.DOMUtil.findFirstDescendantByClass(uiWorkingWorkspace, "div", "ActionBar");
+	var breadcumbsPortlet = eXo.core.DOMUtil.findFirstDescendantByClass(uiWorkingWorkspace, "div", "BreadcumbsPortlet");
+	leftWS.style.height = windowHeight - (titleBar.offsetHeight + actionBar.offsetHeight + breadcumbsPortlet.offsetHeight + 55) + "px";
+	document.title = "leftWS :"+leftWS.offsetHeight;
+};
+
 if(!window.eXoWCM) eXoWCM = new Object();
 eXoWCM.PluginUtils = new PluginUtils();
