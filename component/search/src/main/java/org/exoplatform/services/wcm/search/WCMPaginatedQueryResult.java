@@ -139,9 +139,7 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
           return null;
       }
       if(queryCriteria.isSearchWebpage()) {
-        // Check node'type: if node type is publication:publication then node is one of result. 
-        // But publication:publication is supper type of publication:simplePublication 
-        if (!displayNode.isNodeType("publication:publication"))
+        if (!displayNode.isNodeType("publication:webpagesPublication"))
           return null;
       }
     } else if(queryCriteria.isSearchWebpage()) {
