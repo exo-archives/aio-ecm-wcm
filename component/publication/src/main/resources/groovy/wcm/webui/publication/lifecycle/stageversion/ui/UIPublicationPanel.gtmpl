@@ -152,7 +152,7 @@
               <div class="ButtonLeft">
                 <div class="ButtonRight">
                   <div class="ButtonMiddle">
-                    <%=_ctx.appRes("UIPublicationPanel.button.close")%>
+                    <%=_ctx.appRes("UIPublicationPanel.button.Close")%>
                   </div>
                 </div>
               </div>
