@@ -379,18 +379,31 @@ PluginUtils.prototype.insertContent = function(objContent) {
 	var nodeType = objContent.getAttribute('nodeType');
 	var url 	= objContent.getAttribute('url');
 	var name 	= objContent.innerHTML;
-	var strHTML = '';
-	if(nodeType.indexOf("image") >=0) {
-		strHTML += "<img src='"+url+"' name='"+name+"' alt='"+name+"'/>";
+	var strHTML = '';	
+	if(window.opener.document.getElementById(getParameterValueByName("browserType"))){		
+		strHTML += url;		
+		window.opener.document.getElementById(getParameterValueByName("browserType")).value=strHTML;
 	} else {
-		strHTML += "<a href='" + window.location.protocol + "//" + window.location.host + url+"' style='text-decoration:none;'>"+name+"</a>";
-		//strHTML += "<font onclick=\"javaScript:window.location='" + window.location.protocol + "//" + window.location.host + 
-		//						url +	"'\" style='text-decoration:none;color:" + FCKConfig.InsertedLinkColor + ";cursor:pointer'>"+name+"</font>";
-	}
-	FCK.InsertHtml(strHTML);
+		if(nodeType.indexOf("image") >=0) {
+			strHTML += "<img src='"+url+"' name='"+name+"' alt='"+name+"'/>";
+		} else {
+			strHTML += "<a href='" + url+"' style='text-decoration:none;'>"+name+"</a>";		
+		}
+		FCK.InsertHtml(strHTML);
+	}			
 	FCK.OnAfterSetHTML = window.close();
 };
-
+function getParameterValueByName( parameterName )
+{
+  parameterName = parameterName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+  var regexS = "[\\?&]"+parameterName+"=([^&#]*)";
+  var regex = new RegExp( regexS );
+  var results = regex.exec( window.location.href );
+  if( results == null )
+    return "";
+  else
+    return results[1];
+}
 PluginUtils.prototype.showSettings = function(obj) {
 	if(!obj) return;
 	if(obj.Timeout) clearTimeout(obj.Timeout);
@@ -452,18 +465,5 @@ PluginUtils.prototype.changeFilter = function() {
 	eXoWCM.PluginUtils.listFiles();
 	if(eXp.store.currentNode)	 getDir(eXp.store.currentNode, eXp.store.eventNode);
 }
-
-PluginUtils.prototype.fixHeightTrees = function() {
-	var leftWS = document.getElementById('LeftWorkspace');
-	var windowHeight = eXo.core.Browser.getBrowserHeight();
-	var root = eXo.core.DOMUtil.findAncestorByClass(leftWS, "UIHomePageDT");
-	var titleBar = eXo.core.DOMUtil.findFirstDescendantByClass(root, "div", "TitleBar");
-	var uiWorkingWorkspace = eXo.core.DOMUtil.findFirstDescendantByClass(root, "div", "UIWorkingWorkspace");
-	var actionBar = eXo.core.DOMUtil.findFirstDescendantByClass(uiWorkingWorkspace, "div", "ActionBar");
-	var breadcumbsPortlet = eXo.core.DOMUtil.findFirstDescendantByClass(uiWorkingWorkspace, "div", "BreadcumbsPortlet");
-	leftWS.style.height = windowHeight - (titleBar.offsetHeight + actionBar.offsetHeight + breadcumbsPortlet.offsetHeight + 55) + "px";
-	document.title = "leftWS :"+leftWS.offsetHeight;
-};
-
 if(!window.eXoWCM) eXoWCM = new Object();
 eXoWCM.PluginUtils = new PluginUtils();
