@@ -102,7 +102,7 @@ public class UIPublicationPanel extends UIForm {
     currentRevisionLocation = NodeLocation.make(node);
     this.viewedRevisions = getLatestRevisions(3,node);    
     this.revisionsDataMap = getRevisionData(node);
-    //In somecases as copy a a node, we will lost all version of the node
+    //In some cases as copy a a node, we will lost all version of the node
     //So we will clean all publication data
     cleanPublicationData(node);
   }

@@ -57,12 +57,29 @@ window.eXoPlugin = {
 		this.eXoFileManager = {
 			Connector: "/portal/rest/fckconnector/jcr/",
 			ResourceType : "File"
-		};
-		
-		FCKConfig.LinkBrowserURL = FCKConfig.eXoPath + 'explorer/explorer.html?Type=Link&Connector=/portal/rest/wcmLink/';		
-		this.ExoPortalLinkBrowserURL = FCKConfig.eXoPath + 'explorer/explorer.html?Type=PortalLink&Connector=/portal/rest/portalLinks/&disableUploading=true&disableCreatingFolder=true' ;
-		
-		//detect user language
+		};				
+		this.ExoPortalLinkBrowserURL = FCKConfig.eXoPath + 'explorer/explorer.html?Type=PortalLink&Connector=/portal/rest/portalLinks/&disableUploading=true&disableCreatingFolder=true' ;		
+//-Set link for Insert/Edit Link button
+		FCKConfig.LinkBrowser = true ;
+		FCKConfig.LinkBrowserURL = FCKConfig.eXoPath + 'explorer/explorer.html?Type=PortalLink&Connector=/portal/rest/portalLinks/&disableUploading=true&disableCreatingFolder=true' ;
+		FCKConfig.LinkBrowserWindowWidth	= FCKConfig.ScreenWidth * 0.7 ;		// 70%
+		FCKConfig.LinkBrowserWindowHeight	= FCKConfig.ScreenHeight * 0.7 ;	// 70%		
+//Set Link for browser URL
+		FCKConfig.ImageBrowser = true ;
+		FCKConfig.ImageBrowserURL = FCKConfig.eXoPath + 'content/content.html?Type=File&Connector=/portal/rest/wcmDriver/getDrivers?repositoryName=repository&workspaceName=collaboration&browserType=txtUrl';
+		FCKConfig.ImageBrowserWindowWidth  = FCKConfig.ScreenWidth * 0.7 ;	// 70% ;
+		FCKConfig.ImageBrowserWindowHeight = FCKConfig.ScreenHeight * 0.7 ;	// 70% ;
+//Set Link for browser image when right click on an image and select Image Properties
+		FCKConfig.ImageBrowserLink = true ;
+		FCKConfig.ImageBrowserLink = FCKConfig.eXoPath + 'content/content.html?Type=File&Connector=/portal/rest/wcmDriver/getDrivers?repositoryName=repository&workspaceName=collaboration&browserType=txtLnkUrl';
+		FCKConfig.ImageBrowserLinkWindowWidth  = FCKConfig.ScreenWidth * 0.7 ;	// 70% ;
+		FCKConfig.ImageBrowserLinkWindowHeight = FCKConfig.ScreenHeight * 0.7 ;	// 70% ;
+//Set link for Insert/edit Flash button links
+		FCKConfig.FlashBrowser = true ;
+		FCKConfig.FlashBrowserURL = FCKConfig.eXoPath + 'content/content.html?Type=File&Connector=/portal/rest/wcmDriver/getDrivers?repositoryName=repository&workspaceName=collaboration&browserType=txtUrl';		
+		FCKConfig.FlashBrowserWindowWidth  = FCKConfig.ScreenWidth * 0.7 ;	//70% ;
+		FCKConfig.FlashBrowserWindowHeight = FCKConfig.ScreenHeight * 0.7 ;	//70% ;		
+//detect user language
 		this.userLanguage = FCK.Language.GetActiveLanguage() || "en";
 	},
 	switchToolBar: function(r) {
