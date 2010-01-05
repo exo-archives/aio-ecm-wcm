@@ -117,7 +117,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		try {
 		  node = wcmService.getReferencedContent(sessionProvider, repository, workspace, nodeIdentifier);
 		} catch (RepositoryException e) {
-		  node = getNodeByCategory(repository + "/" + workspace + nodeIdentifier);
+		  node = getNodeByCategory(repository + "/" + workspace + "/" + nodeIdentifier);
 		}
 		if (version == null || !BASE_VERSION.equals(version)) {
 			node = getViewableContent(node, filters);
