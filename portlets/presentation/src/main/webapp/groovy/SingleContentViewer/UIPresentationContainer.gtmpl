@@ -2,15 +2,16 @@
 	import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 	import org.exoplatform.wcm.webui.Utils;
 	import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
+	import org.exoplatform.portal.webui.util.Util; 
 %>
 <div class="$uicomponent.id">
-	<%
+	<%	
 		def rcontext = _ctx.getRequestContext() ;
+		def isPortalAppEditting = Util.getUIPortalApplication().isEditting();
 		def portletId = rcontext.getWindowId();
+		portletId = isPortalAppEditting ? "EditMode-" + portletId : portletId;
 		def quickEditingBlockId = portletId + "-QuickEditingBlock";
 		rcontext.getJavascriptManager().addJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '");');
-		
-		//def scvPortlet = uicomponent.getAncestorOfType(UISingleContentViewerPortlet.class); 
 		def node = uicomponent.getNodeView();
 		if (node != null) {
 			def preferences = rcontext.getRequest().getPreferences();
