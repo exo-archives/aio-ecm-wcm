@@ -43,7 +43,7 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 			advancedOption  +=	"<tr>";
 			advancedOption  +=		"<td class='FieldLabel'>Advance Options</td>";
 			advancedOption  +=		"<td class='FileComponent'>";
-			advancedOption  += 			"Toolbar: <select class='SelectBox'><option>SuperBasicWCM</option><option>BasicWCM</option><option>CompleteWCM</option></select><option>Basic</option>";
+			advancedOption  += 			"Toolbar: <select class='SelectBox'><option>CompleteWCM</option><option>SuperBasicWCM</option><option>BasicWCM</option></select><option>Basic</option>";
 			advancedOption  +=		"</td>";
 			advancedOption  +=	"</tr>";
 
@@ -167,7 +167,7 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 	if(!FCKeditorAPI.GetInstance('RichTextEditorContent')) {
 		var oFCKEditor = new FCKeditor('RichTextEditorContent');
 		oFCKEditor.BasePath = '/portal/fckeditor/';
-		oFCKEditor.ToolbarSet = 'SuperBasicWCM';
+		oFCKEditor.ToolbarSet = 'CompleteWCM';
 		oFCKEditor.ReplaceTextarea();
 	}
 };
