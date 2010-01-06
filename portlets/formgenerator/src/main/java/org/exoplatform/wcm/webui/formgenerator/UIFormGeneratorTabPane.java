@@ -257,6 +257,10 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
         validate += "datetime,";
       } else if (UIFormGeneratorConstant.SELECT.equals(inputType)) {
         inputField = "SelectBoxField";
+      } else if (UIFormGeneratorConstant.CHECKBOX.equals(inputType)) {
+      	inputField = "CheckBoxField";
+      } else if (UIFormGeneratorConstant.RADIO.equals(inputType)) {
+      	inputField = "RadioBoxField";
       } else {
         inputField = "TextField";
       }
