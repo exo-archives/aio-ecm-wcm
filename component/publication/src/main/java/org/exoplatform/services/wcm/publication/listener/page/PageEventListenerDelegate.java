@@ -202,7 +202,8 @@ public class PageEventListenerDelegate {
    */
   private void saveAddedApplication(
   		Page page, String applicationId, Node content, String lifecycleName,
-  		String remoteUser, WebpagePublicationPlugin plugin) throws Exception {    
+  		String remoteUser, WebpagePublicationPlugin plugin) throws Exception {
+  	if (!content.isCheckedOut()) content.checkout();
     PublicationService publicationService = PublicationUtil.getServices(PublicationService.class);                 
     String nodeLifecycleName = null;
     try {
@@ -250,6 +251,7 @@ public class PageEventListenerDelegate {
    * @throws Exception the exception
    */
   private void saveRemovedApplication(Page page, String applicationId, Node content, String remoteUser, WebpagePublicationPlugin plugin) throws Exception {
+  	if (!content.isCheckedOut()) content.checkout();
     Session session = content.getSession();
     ValueFactory valueFactory = session.getValueFactory();
 
