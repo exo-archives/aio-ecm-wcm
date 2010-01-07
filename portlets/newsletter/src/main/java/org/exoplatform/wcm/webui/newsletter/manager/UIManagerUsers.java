@@ -31,6 +31,7 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
+import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterUserInfor;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
@@ -220,7 +221,8 @@ public class UIManagerUsers extends UITabPane {
     // get list of moderator
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
-    for(NewsletterCategoryConfig categoryConfig : categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), Utils.getSessionProvider())){
+    String portalName = NewsLetterUtil.getPortalName();
+    for(NewsletterCategoryConfig categoryConfig : categoryHandler.getListCategories(portalName, Utils.getSessionProvider())){
       for(String str : categoryConfig.getModerator().split(",")){
         if(!listModerator.contains(str)) {
           listModerator.add(str);
@@ -230,9 +232,7 @@ public class UIManagerUsers extends UITabPane {
     listModerator = getAllUsersFromGroupMemebers(listModerator);
     
     // get list redactor from subscriptions
-    listRedactor.addAll(getAllUsersFromGroupMemebers(newsletterManagerService.getSubscriptionHandler().
-                                                     getAllRedactor(NewsLetterUtil.getPortalName(), 
-                                                                    Utils.getSessionProvider())));
+    listRedactor.addAll(getAllUsersFromGroupMemebers(NewsletterConstant.getAllRedactor(NewsLetterUtil.getPortalName())));
     
     // Remove all user who is administrator from moderators and accesspermission
     for(String uId : managerUserHandler.getAllAdministrator(Utils.getSessionProvider(), NewsLetterUtil.getPortalName())){

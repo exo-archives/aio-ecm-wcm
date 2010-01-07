@@ -26,6 +26,7 @@ import org.exoplatform.ecm.webui.selector.UIGroupMemberSelector;
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
+import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
 import org.exoplatform.wcm.webui.Utils;
@@ -87,7 +88,17 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 	
 	private boolean isAdmin = false;
 	
-	/**
+	private boolean isRemove;
+
+	public boolean isRemove() {
+    return isRemove;
+  }
+
+  public void setRemove(boolean isRemove) {
+    this.isRemove = isRemove;
+  }
+
+  /**
 	 * Instantiates a new uI category form.
 	 * 
 	 * @throws Exception the exception
@@ -231,10 +242,10 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
       categoryConfig.setModerator(inputModeratorValue); 
       
       // Update access permission into newsletter manager page for moderators
-      NewsLetterUtil.updateAccessPermission(inputModeratorValue.split(","), uiCategoryForm);
-			
+      NewsletterConstant.updateAccessPermission(inputModeratorValue.split(","), uiCategoryForm);
 			UIApplication uiApp = uiCategoryForm.getAncestorOfType(UIApplication.class);
 			NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
+			categoryHandler.setRemove(uiCategoryForm.isRemove());
 			String portalName = NewsLetterUtil.getPortalName(); 
 			try{
 				SessionProvider sessionProvider = Utils.getSessionProvider();
@@ -274,6 +285,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 		 */
 		public void execute(Event<UICategoryForm> event) throws Exception {
 			UICategoryForm uiCategoryForm = event.getSource();
+			uiCategoryForm.setRemove(false);
 			Utils.closePopupWindow(uiCategoryForm, UINewsletterConstant.CATEGORY_FORM_POPUP_WINDOW);
 		}
 	}
@@ -296,6 +308,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
   	 */
   	public void execute(Event<UICategoryForm> event) throws Exception {
 	    UICategoryForm categoryForm = event.getSource();
+	    categoryForm.setRemove(false);
       UIUserMemberSelector userMemberSelector = categoryForm.createUIComponent(UIUserMemberSelector.class, null, null);
       userMemberSelector.setMulti(false);
       userMemberSelector.setShowSearch(true);
@@ -324,6 +337,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
   	 */
   	public void execute(Event<UICategoryForm> event) throws Exception {
 	    UICategoryForm categoryForm = event.getSource();
+	    categoryForm.setRemove(false);
       UIGroupMemberSelector groupMemberSelector = categoryForm.createUIComponent(UIGroupMemberSelector.class, null, null);
       groupMemberSelector.setShowAnyPermission(false);
       groupMemberSelector.setSourceComponent(categoryForm, new String[] {INPUT_CATEGORY_MODERATOR});
@@ -351,6 +365,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 	    removeModerators.init(((UIFormStringInput)((UIFormInputSetWithAction)categoryForm.
 	                          getChildById(FORM_CATEGORY_MODERATOR)).getChildById(INPUT_CATEGORY_MODERATOR)).getValue(),
 	                          categoryForm.isAdmin);
+	    categoryForm.setRemove(true);
 	    Utils.createPopupWindow(categoryForm, removeModerators, UINewsletterConstant.REMOVE_MODERATORS_FORM_POPUP_WINDOW, 480, 300);
 	    categoryForm.setPopupId(UINewsletterConstant.REMOVE_MODERATORS_FORM_POPUP_WINDOW);
 	  }

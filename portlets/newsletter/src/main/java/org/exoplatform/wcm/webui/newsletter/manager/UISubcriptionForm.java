@@ -25,6 +25,7 @@ import org.exoplatform.ecm.webui.selector.UIGroupMemberSelector;
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
+import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
@@ -94,6 +95,16 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent, UISel
   private String popupId;
   
   private boolean isAdmin = false;
+  
+  private boolean isRemove;
+  
+  public boolean isRemove() {
+    return isRemove;
+  }
+
+  public void setRemove(boolean isRemove) {
+    this.isRemove = isRemove;
+  }
 
   /**
    * Instantiates a new uI subcription form.
@@ -152,7 +163,6 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent, UISel
     stringInput.setValue(result);
     Utils.closePopupWindow(this, popupId);
   }
-
 
   /**
    * Gets the popup id.
@@ -245,6 +255,7 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent, UISel
       UIApplication uiApp = uiSubcriptionForm.getAncestorOfType(UIApplication.class);
 
       NewsletterSubscriptionHandler subscriptionHandler = newsletterManagerService.getSubscriptionHandler();
+      subscriptionHandler.setRemove(uiSubcriptionForm.isRemove());
       NewsletterSubscriptionConfig newsletterSubscriptionConfig = null;
       SessionProvider sessionProvider = Utils.getSessionProvider();
       UIFormInputSetWithAction inputSetWithAction = uiSubcriptionForm.getChildById(FORM_SUBSCRIPTION_REDACTOR);
@@ -258,7 +269,7 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent, UISel
       }
       
       // Update Redactors into access permissions of newsletter manager page
-      NewsLetterUtil.updateAccessPermission(inputRedactorValue.split(","), uiSubcriptionForm);
+      NewsletterConstant.updateAccessPermission(inputRedactorValue.split(","), uiSubcriptionForm);
       
       if(uiSubcriptionForm.subscriptionConfig == null) {
         newsletterSubscriptionConfig = subscriptionHandler
@@ -314,6 +325,7 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent, UISel
         uiSubcriptionForm.getComponentConfig().setValidators(null);
         uiSubcriptionForm.getChildren().clear();
       }
+      uiSubcriptionForm.setRemove(false);
       Utils.closePopupWindow(uiSubcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW);
     }
   }
@@ -324,14 +336,15 @@ public static class SelectUserActionListener extends EventListener<UISubcription
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
     public void execute(Event<UISubcriptionForm> event) throws Exception {
-      UISubcriptionForm categoryForm = event.getSource();
-      UIUserMemberSelector userMemberSelector = categoryForm.createUIComponent(UIUserMemberSelector.class, null, null);
+      UISubcriptionForm uiSubcriptionForm = event.getSource();
+      uiSubcriptionForm.setRemove(false);
+      UIUserMemberSelector userMemberSelector = uiSubcriptionForm.createUIComponent(UIUserMemberSelector.class, null, null);
       userMemberSelector.setMulti(false);
       userMemberSelector.setShowSearch(true);
-      userMemberSelector.setSourceComponent(categoryForm, new String[] {SELECT_REDACTOR});
+      userMemberSelector.setSourceComponent(uiSubcriptionForm, new String[] {SELECT_REDACTOR});
       userMemberSelector.init();
-      Utils.createPopupWindow(categoryForm, userMemberSelector, UINewsletterConstant.USER_SELECTOR_POPUP_WINDOW, 750, 315);
-      categoryForm.setPopupId(UINewsletterConstant.USER_SELECTOR_POPUP_WINDOW);
+      Utils.createPopupWindow(uiSubcriptionForm, userMemberSelector, UINewsletterConstant.USER_SELECTOR_POPUP_WINDOW, 750, 315);
+      uiSubcriptionForm.setPopupId(UINewsletterConstant.USER_SELECTOR_POPUP_WINDOW);
     }
   }
 
@@ -352,12 +365,13 @@ public static class SelectUserActionListener extends EventListener<UISubcription
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
     public void execute(Event<UISubcriptionForm> event) throws Exception {
-      UISubcriptionForm categoryForm = event.getSource();
-      UIGroupMemberSelector groupMemberSelector = categoryForm.createUIComponent(UIGroupMemberSelector.class, null, null);
+      UISubcriptionForm uiSubcriptionForm = event.getSource();
+      uiSubcriptionForm.setRemove(false);
+      UIGroupMemberSelector groupMemberSelector = uiSubcriptionForm.createUIComponent(UIGroupMemberSelector.class, null, null);
       groupMemberSelector.setShowAnyPermission(false);
-      groupMemberSelector.setSourceComponent(categoryForm, new String[] {SELECT_REDACTOR});
-      Utils.createPopupWindow(categoryForm, groupMemberSelector, UINewsletterConstant.GROUP_SELECTOR_POPUP_WINDOW, 540, 300);
-      categoryForm.setPopupId(UINewsletterConstant.GROUP_SELECTOR_POPUP_WINDOW);
+      groupMemberSelector.setSourceComponent(uiSubcriptionForm, new String[] {SELECT_REDACTOR});
+      Utils.createPopupWindow(uiSubcriptionForm, groupMemberSelector, UINewsletterConstant.GROUP_SELECTOR_POPUP_WINDOW, 540, 300);
+      uiSubcriptionForm.setPopupId(UINewsletterConstant.GROUP_SELECTOR_POPUP_WINDOW);
     }
   }
   
@@ -368,6 +382,7 @@ public static class SelectUserActionListener extends EventListener<UISubcription
      */
     public void execute(Event<UISubcriptionForm> event) throws Exception {
       UISubcriptionForm subscriptionForm = event.getSource();
+      subscriptionForm.setRemove(true);
       UIFormInputSetWithAction formCategoryModerator = subscriptionForm.getChildById(FORM_SUBSCRIPTION_REDACTOR);
       UIFormStringInput stringInput = formCategoryModerator.getChildById(SELECT_REDACTOR);
       if(stringInput.getValue() == null || stringInput.getValue().trim().length() < 1) {
