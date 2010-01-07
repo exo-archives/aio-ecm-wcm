@@ -17,6 +17,8 @@
 package org.exoplatform.services.wcm.newsletter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -24,13 +26,29 @@ import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.Session;
+import javax.jcr.Value;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
+import javax.jcr.query.QueryResult;
 
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.access.AccessControlEntry;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
+import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
+import org.exoplatform.services.organization.MembershipHandler;
+import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserHandler;
+import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
+import org.exoplatform.webui.core.UIComponent;
 
 /**
  * Created by The eXo Platform SAS
@@ -135,8 +153,26 @@ public class NewsletterConstant {
   /** The USER base path. */
   public static String       USER_BASE_PATH                      = "/sites content/live/" + PORTAL_NAME + "/ApplicationData/NewsletterApplication/Users";
   
+  private static UIComponent component;
   
+  private static Session session;
   
+  public static Session getSession() {
+    return session;
+  }
+
+  public static void setSession(Session session) {
+    NewsletterConstant.session = session;
+  }
+
+  public static UIComponent getComponent() {
+    return component;
+  }
+
+  public static void setComponent(UIComponent component) {
+    NewsletterConstant.component = component;
+  }
+
   /**
    * Generate default template path.
    * 
@@ -254,16 +290,18 @@ public class NewsletterConstant {
     Membership membership = null;
     OrganizationService organizationService_ = WCMCoreUtils.getService(OrganizationService.class);
     try{
-    for(Object object : organizationService_.getMembershipHandler().findMembershipsByUser(userId).toArray()){
-      id = object.toString();
-      id = id.replace("Membership[", "").replace("]", "");
-      membership = organizationService_.getMembershipHandler().findMembership(id);
-      value = membership.getGroupId();
-      userGroupMembership.add(value);
-      value = membership.getMembershipType() + ":" + value;
-      userGroupMembership.add(value);
+      for(Object object : organizationService_.getMembershipHandler().findMembershipsByUser(userId).toArray()){
+        id = object.toString();
+        id = id.replace("Membership[", "").replace("]", "");
+        membership = organizationService_.getMembershipHandler().findMembership(id);
+        value = membership.getGroupId();
+        userGroupMembership.add(value);
+        value = membership.getMembershipType() + ":" + value;
+        userGroupMembership.add(value);
+      }
+    }catch(Exception ex){
+      return null;
     }
-    }catch(Exception ex){ }
     return userGroupMembership;
   }
   
@@ -307,5 +345,213 @@ public class NewsletterConstant {
         }
       }
     }
+  }
+  
+  /**
+   * Update access  permissions 
+   * @param accessPermissions   list of user will be set access permission
+   * @param component           UIComponent
+   * @throws Exception          The exception
+   */
+  public static void updateAccessPermission(String[] accessPermissions, UIComponent component) throws Exception{
+    NewsletterConstant.setComponent(component);
+    UserPortalConfigService userService = (UserPortalConfigService)component.getApplicationComponent(UserPortalConfigService.class);
+    Page page = userService.getPage(Util.getUIPortal().getSelectedNode().getPageReference());
+    List<String> listAccess = new ArrayList<String>();
+    WCMConfigurationService wcmConfigurationService = component.getApplicationComponent(WCMConfigurationService.class);
+    String editSitePermission = Util.getUIPortal().getEditPermission();
+    String redactorMembershipType = wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.REDACTOR_MEMBERSHIP_TYPE);
+    String groupName = null;
+    if (editSitePermission.indexOf(":") != -1) {
+      groupName = editSitePermission.substring(editSitePermission.indexOf(":") + 1);
+    }
+    OrganizationService organizationService = component.getApplicationComponent(OrganizationService.class) ;
+    MembershipHandler memberShipHandler = organizationService.getMembershipHandler();
+    Group group = organizationService.getGroupHandler().findGroupById(groupName);
+    MembershipType membershipType = organizationService.getMembershipTypeHandler().findMembershipType(redactorMembershipType);
+    UserHandler userHandler = organizationService.getUserHandler();
+    listAccess.addAll(Arrays.asList(page.getAccessPermissions()));
+    List<String> userViewAdminToolBar = getUserPermission(new String[]{editSitePermission});
+    for(String acc : accessPermissions){
+      if(listAccess.contains(acc)) continue;
+      // update view admintoolbar permission
+      for(String uid : getUserPermission(new String[]{acc})){
+          if(userViewAdminToolBar.contains(uid)) continue;
+          userViewAdminToolBar.add(uid);
+          memberShipHandler.linkMembership(userHandler.findUserByName(uid),
+                                         group, membershipType, true);
+      }
+      // update access portlet permission
+      listAccess.add(acc);
+    }
+    page.setAccessPermissions(listAccess.toArray(new String[]{}));
+    userService.update(page);
+  }
+  
+  /**
+   * Remove access  permissions 
+   * @param accessPermissions   list of user will be set access permission
+   * @throws Exception          The exception
+   */
+  public static void removeAccessPermission(String[] removePermissions) {
+    if(removePermissions == null) {
+      return;
+    }
+    UserPortalConfigService userService = (UserPortalConfigService)component.getApplicationComponent(UserPortalConfigService.class);
+    Page page;
+    try {
+      page = userService.getPage(Util.getUIPortal().getSelectedNode().getPageReference());
+      List<String> listAccess = new ArrayList<String>();
+      OrganizationService organizationService = component.getApplicationComponent(OrganizationService.class) ;
+      MembershipHandler memberShipHandler = organizationService.getMembershipHandler();
+      listAccess.addAll(Arrays.asList(page.getAccessPermissions()));
+      for(String acc : removePermissions){
+        if(listAccess.contains(acc)) {
+          listAccess.remove(acc);
+          memberShipHandler.removeMembershipByUser(acc, true);
+        }
+      }
+      page.setAccessPermissions(listAccess.toArray(new String[]{}));
+      userService.update(page);
+    } catch (Exception e) {
+      return;
+    }
+  }
+  
+  /**
+   * Get moderator in user,group,membership become list user
+   * 
+   * @param userGroupMembership is string user input to interface
+   * @return list users
+   * @throws Exception
+   */
+  @SuppressWarnings("unchecked")
+  public static List<String> getUserPermission(String[] userGroupMembership) throws Exception {
+    List<String> users = new ArrayList<String> () ;
+    if(userGroupMembership == null || userGroupMembership.length <= 0 || 
+        (userGroupMembership.length == 1 && userGroupMembership[0].equals(" "))) return users ; 
+    OrganizationService organizationService = (OrganizationService) PortalContainer.getComponent(OrganizationService.class);
+    for(String str : userGroupMembership) {
+      str = str.trim();
+      if(str.indexOf("/") >= 0) {
+        if(str.indexOf(":") >= 0) { //membership
+          String[] array = str.split(":") ;
+          List<User> userList = organizationService.getUserHandler().findUsersByGroup(array[1]).getAll() ;
+          if(array[0].length() > 1){
+            for(User user: userList) {
+              if(!users.contains(user.getUserName())){
+                Collection<Membership> memberships = organizationService.getMembershipHandler().findMembershipsByUser(user.getUserName()) ;
+                for(Membership member : memberships){
+                  if(member.getMembershipType().equals(array[0])) {
+                    users.add(user.getUserName()) ;
+                    break ;
+                  }
+                }           
+              }
+            }
+          }else {
+            if(array[0].charAt(0)== 42) {
+              for(User user: userList) {
+                if(!users.contains(user.getUserName())){
+                  users.add(user.getUserName()) ;
+                }
+              }
+            }
+          }
+        }else { //group
+          List<User> userList = organizationService.getUserHandler().findUsersByGroup(str).getAll() ;
+          for(User user: userList) {
+            if(!users.contains(user.getUserName())){
+              users.add(user.getUserName()) ;
+            }
+          }
+        }
+      }else {//user
+        if(!users.contains(str)){
+          users.add(str) ;
+        }
+      }
+    }
+    return users ;
+  }
+  
+  public static NodeIterator getAllCategories(Session session) throws Exception {
+    QueryManager queryManager = session.getWorkspace().getQueryManager();
+    String sqlQuery = "Select * from " + NewsletterConstant.CATEGORY_NODETYPE;
+    Query query = queryManager.createQuery(sqlQuery, Query.SQL);
+    QueryResult queryResult = query.execute();
+    return queryResult.getNodes();
+  }
+  
+  /**
+   * Get all redactors in all subscriptions of newsletter
+   * @param portalName        name of portal
+   * @param sessionProvider   The SessionProvider
+   * @return                  List of redactor
+   * @throws Exception        The exception
+   */
+  public static List<String> getAllRedactor(String portalName)throws Exception{
+    Session session = NewsletterConstant.getSession();
+    List<String> list = new ArrayList<String>();
+    String path = NewsletterConstant.generateCategoryPath(portalName);
+    QueryManager queryManager = session.getWorkspace().getQueryManager();
+    String sqlQuery = "select * from " + NewsletterConstant.SUBSCRIPTION_NODETYPE + 
+                      " where jcr:path LIKE '" + path + "[%]/%'";
+    Query query = queryManager.createQuery(sqlQuery, Query.SQL);
+    QueryResult queryResult = query.execute();
+    Node subNode;
+    for(NodeIterator nodeIterator = queryResult.getNodes(); nodeIterator.hasNext();){
+      subNode = nodeIterator.nextNode();
+      for(String str : NewsletterConstant.getAllPermissionOfNode(subNode)){
+        if(list.contains(str)) continue;
+        list.add(str);
+      }
+    }
+    return list;
+  }
+  
+  public static List<String> removePermission(Node subscriptionNode,
+                                        Node categoryNode,
+                                        List<String> candidateRemove,
+                                        boolean isAddNew,
+                                        String portalName,
+                                        Session session) {
+    NewsletterConstant.setSession(session);
+    if(candidateRemove == null) candidateRemove = new ArrayList<String>();
+    try {
+     NodeIterator categoriesIterator = NewsletterConstant.getAllCategories(session);
+     List<String> allRedactor = NewsletterConstant.getAllRedactor(portalName);
+     List<String> allpermissions = null;
+     while(categoriesIterator.hasNext()) {
+       allpermissions = NewsletterConstant.getAllPermissionOfNode(categoriesIterator.nextNode());
+       for(String permission : allpermissions) {
+         if(candidateRemove.isEmpty()) break;
+         if(candidateRemove.contains(permission)) {
+           candidateRemove.remove(permission);
+         } 
+       }
+     }
+     for(String redactor : allRedactor) {
+       if(candidateRemove.isEmpty()) break;
+       if(candidateRemove.contains(redactor)) {
+         candidateRemove.remove(redactor);
+       }
+     }
+    } catch (Exception e) {
+      return new ArrayList<String>();
+    }
+    return candidateRemove;
+  }
+  
+  public static List<String> convertValuesToArray(Value[] values){
+    List<String> listString = new ArrayList<String>();
+    for(Value value : values){
+      try {
+        listString.add(value.getString());
+      }catch (Exception e) {
+        return null;
+      }
+    }
+    return listString;
   }
 }
