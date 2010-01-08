@@ -17,7 +17,12 @@
 	      		<th><%=_ctx.appRes("UIFCCActionList.header.name")%></th>
 			    <th><%=_ctx.appRes("UIFCCActionList.header.description")%></th>
 	 		    <th><%=_ctx.appRes("UIFCCActionList.header.instanceOf")%></th>
-	 		    <th><%=_ctx.appRes("UIFCCActionList.header.action")%></th>
+	 		    <th>
+	 		    	<%=_ctx.appRes("UIFCCActionList.header.action")%>
+	<% if (!"basic".equals(uicomponent.getMode())) { %>
+ 		    		<img class="Add16x16Icon" src="/eXoResources/skin/sharedImages/Blank.gif" title="<%=_ctx.appRes("UIFCCActionList.action.Add")%>" onclick="<%=uicomponent.event("Add")%>"/>
+  	<% } %>
+	 		    </th>
 	    	</tr>
 	  	</thead>
 	  	<tbody>
@@ -85,6 +90,7 @@
 			uicomponent.renderChild(UIPageIterator.class);
 		} 
 	%>
+	<% if (!"basic".equals(uicomponent.getMode())) { %>
   	<div class="UIAction"> 
     	<table class="ActionContainer">
     		<tr>
@@ -102,4 +108,5 @@
     		</tr>
     	</table>
   	</div>
+  	<% } %>
 </div>

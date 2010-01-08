@@ -216,6 +216,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     dialogTemplate.append(" }\n");
     dialogTemplate.append(" String timestampName = getTimestampName();\n");
     dialogTemplate.append(" %>\n");
+    dialogTemplate.append("<!--DIALOG_BEGIN-->\n");
     
     dialogTemplate.append("<div class=\"UIForm FormLayout\">\n");
     dialogTemplate.append("  <% uiform.begin() %>\n");
@@ -356,6 +357,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     dialogTemplate.append("    </div>\n");
     dialogTemplate.append("  <% uiform.end() %>\n");
     dialogTemplate.append("</div>\n");
+    dialogTemplate.append("<!--DIALOG_END-->\n");
     return dialogTemplate.toString();
   }
   
@@ -373,6 +375,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     viewTemplate.append(" import org.exoplatform.download.InputStreamDownloadResource;\n");
     viewTemplate.append(" import java.io.InputStream;\n");
     viewTemplate.append("\n def currentNode = uicomponent.getNode() ; %>\n");
+    viewTemplate.append("<!--VIEW_BEGIN-->\n");
     viewTemplate.append(" <div>\n");
     viewTemplate.append("   <table style=\"width:95%;margin:5px;border:1px solid;\">\n");
     viewTemplate.append("     <tr>\n");
@@ -408,6 +411,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     }
     viewTemplate.append("   </table>\n");
     viewTemplate.append(" </div>\n");
+    viewTemplate.append("<!--VIEW_END-->\n");
     return viewTemplate.toString();
   }
   
@@ -481,13 +485,14 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       listenerService.broadcast(UIFormGeneratorConstant.PRE_CREATE_NODETYPE_EVENT, null, nodetypeName);
       
       formGeneratorTabPane.addNodetype(event.getRequestContext(), preferenceRepository, nodetypeName, forms);
-      String newGTMPLTemplate = formGeneratorTabPane.generateDialogTemplate(templateName, forms);
+      String newDialogTemplate = formGeneratorTabPane.generateDialogTemplate(templateName, forms);
       String newViewTemplate = formGeneratorTabPane.generateViewTemplate(templateName, forms);
-
+      
       TemplateService templateService = Utils.getService(TemplateService.class);
-      templateService.addTemplate(true, nodetypeName, templateName, true, templateName, new String[] {"*"}, newGTMPLTemplate, preferenceRepository) ;
-      templateService.addTemplate(false, nodetypeName, templateName, true, templateName, new String[] {"*"}, newViewTemplate, preferenceRepository) ;
-
+      templateService.addTemplate(TemplateService.DIALOGS, nodetypeName, templateName, true, templateName, new String[] {"*"}, newDialogTemplate, preferenceRepository) ;
+      templateService.addTemplate(TemplateService.VIEWS, nodetypeName, templateName, true, templateName, new String[] {"*"}, newViewTemplate, preferenceRepository) ;
+      templateService.addTemplate(TemplateService.SKINS, nodetypeName, templateName, true, templateName, new String[] {"*"}, "", preferenceRepository) ;
+      
       listenerService.broadcast(UIFormGeneratorConstant.POST_CREATE_NODETYPE_EVENT, null, nodetypeName);      
 
       Utils.createPopupMessage(formGeneratorTabPane, "UIFormGeneratorTabPane.msg.AddNewsSuccessful", new Object[]{templateName}, ApplicationMessage.INFO);
