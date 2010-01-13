@@ -362,15 +362,37 @@ PluginUtils.prototype.actionBreadcrumbs = function(nodeId) {
 	var node =  eXo.core.DOMUtil.findAncestorByClass(element, "Node");
 	eXoWCM.PluginUtils.actionColExp(node);
 	eXoWCM.PluginUtils.renderBreadcrumbs(element);
-	var rightWS = document.getElementById('RightWorkspace');
-	var tblRWS  = eXo.core.DOMUtil.findDescendantsByTagName(rightWS, "table")[0];
-	var rowsRWS = eXo.core.DOMUtil.findDescendantsByTagName(tblRWS, "tr");
-	if(rowsRWS && rowsRWS.length > 0) {
-		for(var i = 0; i < rowsRWS.length; i++) {
-			if(i > 0) tblRWS.deleteRow(rowsRWS[i].rowIndex);
-		}
-	} 
-	eXoWCM.PluginUtils.listFiles();
+
+	var strConnector = eXp.connector;
+	var currentFolder;
+	var currentNode = element;
+	var driverName;
+	var uploadItem = document.getElementById("UploadItem");	
+	if(uploadItem) uploadItem.style.display = "block";
+	if(currentNode.getAttribute("driverPath")) {
+		driverName =	currentNode.getAttribute('name');
+		eXp.store.driverName = driverName;
+		currentFolder = '/';	
+	} else {
+		currentFolder = element.getAttribute("currentfolder");
+	}
+	
+	eXp.store.currentFolder = currentFolder;
+	eXp.store.currentNode = currentNode;
+	driverName = eXp.store.driverName;
+	var strReplace 	= "getFoldersAndFiles?driverName="+driverName+"&currentFolder="+currentFolder+"&currentPortal="+eXoPlugin.portalName+"&" ;	
+	strConnector 		= strConnector.replace("getDrivers?",strReplace);
+	var filter = '';
+	var dropdownlist = document.getElementById("Pinter");
+	if(dropdownlist) filter = dropdownlist.options[dropdownlist.selectedIndex].value;
+	else filter = 'Web Contents';
+	var connector = eXoPlugin.hostName + strConnector+ "&workspaceName=collaboration&userId=" + eXoPlugin.userId + "&filterBy="+filter;
+	if(eXp.strConnection == connector) return;	
+	eXp.strConnection = connector;
+	var xmlDoc = eXoWCM.PluginUtils.request(connector);
+	if(!xmlDoc) return;
+	var fileList = xmlDoc.getElementsByTagName("File");
+	eXoWCM.PluginUtils.listFiles(fileList);
 };
 
 PluginUtils.prototype.insertContent = function(objContent) {
@@ -465,5 +487,17 @@ PluginUtils.prototype.changeFilter = function() {
 	eXoWCM.PluginUtils.listFiles();
 	if(eXp.store.currentNode)	 getDir(eXp.store.currentNode, eXp.store.eventNode);
 }
+
+PluginUtils.prototype.fixHeightTrees = function() {
+	var leftWS = document.getElementById('LeftWorkspace');
+	var windowHeight = eXo.core.Browser.getBrowserHeight();
+	var root = eXo.core.DOMUtil.findAncestorByClass(leftWS, "UIHomePageDT");
+	var titleBar = eXo.core.DOMUtil.findFirstDescendantByClass(root, "div", "TitleBar");
+	var uiWorkingWorkspace = eXo.core.DOMUtil.findFirstDescendantByClass(root, "div", "UIWorkingWorkspace");
+	var actionBar = eXo.core.DOMUtil.findFirstDescendantByClass(uiWorkingWorkspace, "div", "ActionBar");
+	var breadcumbsPortlet = eXo.core.DOMUtil.findFirstDescendantByClass(uiWorkingWorkspace, "div", "BreadcumbsPortlet");
+	leftWS.style.height = windowHeight - (titleBar.offsetHeight + actionBar.offsetHeight + breadcumbsPortlet.offsetHeight + 55) + "px";
+};
+
 if(!window.eXoWCM) eXoWCM = new Object();
 eXoWCM.PluginUtils = new PluginUtils();
