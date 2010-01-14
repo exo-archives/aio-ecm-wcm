@@ -267,9 +267,9 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
     UserACL userACL = PublicationUtil.getServices(UserACL.class);
     for(Object object:pageList.getAll()) {
       PortalConfig portalConfig = (PortalConfig)object;
-      if(userACL.hasPermission(portalConfig, userId)) {
-        listPortalName.add(portalConfig.getName());
-      }
+//      if(userACL.hasPermission(portalConfig, userId)) {
+//        listPortalName.add(portalConfig.getName());
+//      }
     }
     return listPortalName;
   }
@@ -279,8 +279,9 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
    */
   public void publishContentToPage(Node content, Page page) throws Exception {
     UserPortalConfigService userPortalConfigService = PublicationUtil.getServices(UserPortalConfigService.class);
-    Application portlet = new Application();
-    portlet.setApplicationType(org.exoplatform.web.application.Application.EXO_PORTLET_TYPE);
+//    Application portlet = new Application();
+    Application portlet = null;
+//    portlet.setApplicationType(org.exoplatform.web.application.Application.EXO_PORTLET_TYPE);
     portlet.setShowInfoBar(false);
 
     // Create portlet
@@ -293,13 +294,13 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
             .append(configurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET))
             .append("/")
             .append(IdGenerator.generate());
-    portlet.setInstanceId(windowId.toString());
+//    portlet.setInstanceId(windowId.toString());
 
     // Add preferences to portlet
     PortletPreferences portletPreferences = new PortletPreferences();
     portletPreferences.setWindowId(windowId.toString());
-    portletPreferences.setOwnerType(PortalConfig.PORTAL_TYPE);
-    portletPreferences.setOwnerId(org.exoplatform.portal.webui.util.Util.getUIPortal().getOwner());
+//    portletPreferences.setOwnerType(PortalConfig.PORTAL_TYPE);
+//    portletPreferences.setOwnerId(org.exoplatform.portal.webui.util.Util.getUIPortal().getOwner());
     ArrayList<Preference> listPreference = new ArrayList<Preference>();
 
     Preference preferenceR = new Preference();
@@ -336,9 +337,9 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
     dataStorage.save(portletPreferences);
 
     // Add portlet to page
-    ArrayList<Object> listPortlet = page.getChildren();
-    listPortlet.add(portlet);
-    page.setChildren(listPortlet);
+//    ArrayList<Object> listPortlet = page.getChildren();
+//    listPortlet.add(portlet);
+//    page.setChildren(listPortlet);
     userPortalConfigService.update(page);
   }
 

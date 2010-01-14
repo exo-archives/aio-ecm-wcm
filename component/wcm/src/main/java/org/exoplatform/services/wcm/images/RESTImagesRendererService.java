@@ -23,8 +23,12 @@ import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.Session;
 import javax.jcr.version.VersionHistory;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Response;
 
-import org.apache.commons.logging.Log;
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.access.SystemIdentity;
@@ -32,17 +36,8 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.rest.HTTPMethod;
-import org.exoplatform.services.rest.InputTransformer;
-import org.exoplatform.services.rest.OutputTransformer;
-import org.exoplatform.services.rest.QueryParam;
-import org.exoplatform.services.rest.QueryTemplate;
-import org.exoplatform.services.rest.Response;
-import org.exoplatform.services.rest.URIParam;
-import org.exoplatform.services.rest.URITemplate;
-import org.exoplatform.services.rest.container.ResourceContainer;
-import org.exoplatform.services.rest.transformer.PassthroughInputTransformer;
-import org.exoplatform.services.rest.transformer.PassthroughOutputTransformer;
+import org.exoplatform.services.log.Log;
+import org.exoplatform.services.rest.resource.ResourceContainer;
 
 /**
  * Created by The eXo Platform SAS
@@ -50,7 +45,7 @@ import org.exoplatform.services.rest.transformer.PassthroughOutputTransformer;
  * hoa.phamvu@exoplatform.com
  * Mar 31, 2009
  */
-@URITemplate("/images/{repositoryName}/{workspaceName}/{nodeIdentifier}/")
+@Path("/images/{repositoryName}/{workspaceName}/{nodeIdentifier}/")
 public class RESTImagesRendererService implements ResourceContainer{
 
   /** The session provider service. */
@@ -85,12 +80,13 @@ public class RESTImagesRendererService implements ResourceContainer{
    * 
    * @return the response
    */
-  @HTTPMethod("GET")
-  @QueryTemplate("type=file")
-  @InputTransformer(PassthroughInputTransformer.class)
-  @OutputTransformer(PassthroughOutputTransformer.class)
-  public Response serveImage(@URIParam("repositoryName") String repository, @URIParam("workspaceName") String workspace,
-      @URIParam("nodeIdentifier") String nodeIdentifier) { 
+  @GET
+  @PathParam("type=file")
+//  @InputTransformer(PassthroughInputTransformer.class)
+//  @OutputTransformer(PassthroughOutputTransformer.class)
+  public Response serveImage(@PathParam("repositoryName") String repository, 
+		  					 @PathParam("workspaceName") String workspace,
+		  					 @PathParam("nodeIdentifier") String nodeIdentifier) { 
     Node node = null;
     SessionProvider sessionProvider = sessionProviderService.getSessionProvider(null);
     Session session = null;
@@ -101,7 +97,7 @@ public class RESTImagesRendererService implements ResourceContainer{
       else
         node = session.getNodeByUUID(nodeIdentifier);
       if(node == null) {
-        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).build();
+        return Response.status(HTTPStatus.NOT_FOUND).build();
       }
       Node dataNode = null; 
       InputStream jcrData = null;
@@ -112,17 +108,17 @@ public class RESTImagesRendererService implements ResourceContainer{
         String versionableUUID = versionHistory.getVersionableUUID();
         dataNode = session.getNodeByUUID(versionableUUID);
       }else {
-        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).build();
+        return Response.status(HTTPStatus.NOT_FOUND).build();
       }     
       jcrData = dataNode.getNode("jcr:content").getProperty("jcr:data").getStream();
-      return Response.Builder.ok().entity(jcrData, "image").build();
+      return Response.ok(jcrData, "image").build();
     } catch (PathNotFoundException e) {
-      return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).build();
+      return Response.status(HTTPStatus.NOT_FOUND).build();
     }catch (ItemNotFoundException e) {
-      return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).build();
+      return Response.status(HTTPStatus.NOT_FOUND).build();
     }catch (Exception e) {
       log.error("Error when serveImage: ", e.fillInStackTrace());
-      return Response.Builder.serverError().build(); 
+      return Response.serverError().build(); 
     } finally {
       if (session != null) session.logout();
       sessionProvider.close();
@@ -139,11 +135,13 @@ public class RESTImagesRendererService implements ResourceContainer{
    * 
    * @return the response
    */
-  @HTTPMethod("GET")  
-  @InputTransformer(PassthroughInputTransformer.class)
-  @OutputTransformer(PassthroughOutputTransformer.class)
-  public Response serveImage(@URIParam("repositoryName") String repository, @URIParam("workspaceName") String workspace,
-      @URIParam("nodeIdentifier") String nodeIdentifier, @QueryParam("propertyName") String propertyName) {
+  @GET  
+//  @InputTransformer(PassthroughInputTransformer.class)
+//  @OutputTransformer(PassthroughOutputTransformer.class)
+  public Response serveImage(@PathParam("repositoryName") String repository, 
+		  					 @PathParam("workspaceName") String workspace,
+		  					 @PathParam("nodeIdentifier") String nodeIdentifier, 
+		  					 @QueryParam("propertyName") String propertyName) {
     Node node = null;
     SessionProvider sessionProvider = sessionProviderService.getSessionProvider(null);
     Session session = null;
@@ -154,17 +152,17 @@ public class RESTImagesRendererService implements ResourceContainer{
       else
         node = session.getNodeByUUID(nodeIdentifier);
       if(node == null) {
-        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).build();
+        return Response.status(HTTPStatus.NOT_FOUND).build();
       }            
       InputStream jcrData = node.getProperty(propertyName).getStream();
-      return Response.Builder.ok().entity(jcrData, "image").build();
+      return Response.ok(jcrData, "image").build();
     } catch (PathNotFoundException e) {
-      return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).build();
+      return Response.status(HTTPStatus.NOT_FOUND).build();
     }catch (ItemNotFoundException e) {
-      return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).build();
+      return Response.status(HTTPStatus.NOT_FOUND).build();
     }catch (Exception e) {
       log.error("Error when serve image: ", e.fillInStackTrace());
-      return Response.Builder.serverError().build(); 
+      return Response.serverError().build(); 
     } finally {
       if (session != null) session.logout();
       sessionProvider.close();

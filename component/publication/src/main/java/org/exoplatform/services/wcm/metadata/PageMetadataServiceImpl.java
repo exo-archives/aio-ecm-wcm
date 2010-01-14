@@ -27,13 +27,13 @@ import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.NodeTypeManager;
 import javax.jcr.nodetype.PropertyDefinition;
 
-import org.apache.commons.logging.Log;
 import org.exoplatform.commons.utils.ISO8601;
-import org.exoplatform.services.cms.folksonomy.FolksonomyService;
+import org.exoplatform.services.cms.folksonomy.NewFolksonomyService;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 
 /**
@@ -54,7 +54,7 @@ public class PageMetadataServiceImpl implements PageMetadataService {
   private TaxonomyService taxonomyService;
   
   /** The folksonomy service. */
-  private FolksonomyService folksonomyService;
+  private NewFolksonomyService folksonomyService;
   
   /**
    * Instantiates a new page metadata service impl.
@@ -67,7 +67,7 @@ public class PageMetadataServiceImpl implements PageMetadataService {
    */
   public PageMetadataServiceImpl(LivePortalManagerService livePortalManagerService, 
                                  TaxonomyService taxonomyService, 
-                                 FolksonomyService folksonomyService) throws Exception {        
+                                 NewFolksonomyService folksonomyService) throws Exception {        
     this.livePortalManagerService = livePortalManagerService;    
     this.taxonomyService = taxonomyService;
     this.folksonomyService = folksonomyService;
@@ -187,8 +187,9 @@ public class PageMetadataServiceImpl implements PageMetadataService {
    * @throws Exception the exception
    */
   private String computeContentKeywords(Node node, String title) throws Exception {
-    StringBuilder builder = new StringBuilder();    
-    String repository = ((ManageableRepository)node.getSession().getRepository()).getConfiguration().getName();    
+    StringBuilder builder = new StringBuilder();
+    NodeLocation nodeLocation = NodeLocation.make(node);
+    String repository = nodeLocation.getRepository();    
     try {
       List<Node> iterator = taxonomyService.getCategories(node,repository);
       for(Node category: iterator) {
@@ -198,7 +199,7 @@ public class PageMetadataServiceImpl implements PageMetadataService {
       return builder.toString();
     }
     
-    for(Node tag: folksonomyService.getLinkedTagsOfDocument(node,repository)) {
+    for(Node tag: folksonomyService.getLinkedTagsOfDocument(node,repository, nodeLocation.getWorkspace())) {
       builder.append(tag.getName()).append(",");
     }
     builder.append(title.replaceAll(" ",","));

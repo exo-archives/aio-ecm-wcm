@@ -202,12 +202,12 @@ public class UIWikiContentForm extends UIForm {
     .append(wcmCfgService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET))
     .append("/")
     .append(random);
-    scvPortlet.setWindowId(windowId.toString());
+//    scvPortlet.setWindowId(windowId.toString());
     // Add portlet Preference into portlet
     PortletPreferences prefs = new PortletPreferences();
     prefs.setWindowId(windowId.toString());
-    prefs.setOwnerType(PortalConfig.PORTAL_TYPE);
-    prefs.setOwnerId(uiPortal.getOwner());
+//    prefs.setOwnerType(PortalConfig.PORTAL_TYPE);
+//    prefs.setOwnerId(uiPortal.getOwner());
     ArrayList<Preference> preferenceList = new ArrayList<Preference>();
 
     Preference prefR = new Preference();
@@ -256,9 +256,9 @@ public class UIWikiContentForm extends UIForm {
   private void addSCVPortletIntoPage(UIPortlet scvPortlet, UIPage uiPage, 
       Page page,
       UserPortalConfigService userPortalCfgService) throws Exception {
-    ArrayList<Object> listPortlet = page.getChildren();
-    listPortlet.add(PortalDataMapper.toPortletModel(scvPortlet));
-    page.setChildren(listPortlet);
+//    ArrayList<Object> listPortlet = page.getChildren();
+//    listPortlet.add(PortalDataMapper.toPortletModel(scvPortlet));
+//    page.setChildren(listPortlet);
     userPortalCfgService.update(page);
     uiPage.setChildren(null);
     PortalDataMapper.toUIPage(uiPage, page);

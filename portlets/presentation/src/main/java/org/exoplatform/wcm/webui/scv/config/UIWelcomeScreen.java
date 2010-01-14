@@ -19,19 +19,17 @@ package org.exoplatform.wcm.webui.scv.config;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.exoplatform.portal.application.PortletPreferences;
-import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Container;
+import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
 import org.exoplatform.wcm.webui.selector.content.one.UIContentSelectorOne;
@@ -140,38 +138,38 @@ public class UIWelcomeScreen extends UIForm {
       Page currentPage = userPortalConfigService.getPage(currentPageNode.getPageReference());
       ArrayList<Object> applications = new ArrayList<Object>();
       applications.addAll(currentPage.getChildren());
-      ArrayList<Object> applicationsTmp = currentPage.getChildren(); 
+      ArrayList<ModelObject> applicationsTmp = currentPage.getChildren(); 
       Collections.reverse(applicationsTmp);
       DataStorage dataStorage = welcomeScreen.getApplicationComponent(DataStorage.class);
       for (Object applicationObject : applicationsTmp) {
         if (applicationObject instanceof Container) continue;
         Application application = Application.class.cast(applicationObject);
-        String applicationId = application.getInstanceId();
-        PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(applicationId));
-        if (portletPreferences == null) continue;
+//        String applicationId = application.getInstanceId();
+//        PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(applicationId));
+//        if (portletPreferences == null) continue;
         
         boolean isQuickCreate = false;
         String nodeIdentifier = null;
         
-        for (Object preferenceObject : portletPreferences.getPreferences()) {
-        	Preference preference = Preference.class.cast(preferenceObject);
-
-        	if ("isQuickCreate".equals(preference.getName())) {
-        		isQuickCreate = Boolean.valueOf(preference.getValues().get(0).toString());
-        		if (!isQuickCreate) break;
-        	}
-
-        	if ("nodeIdentifier".equals(preference.getName())) {
-        		nodeIdentifier = preference.getValues().get(0).toString();
-        		if (nodeIdentifier == null || "".equals(nodeIdentifier)) break;
-        	}
-        }
+//        for (Object preferenceObject : portletPreferences.getPreferences()) {
+//        	Preference preference = Preference.class.cast(preferenceObject);
+//
+//        	if ("isQuickCreate".equals(preference.getName())) {
+//        		isQuickCreate = Boolean.valueOf(preference.getValues().get(0).toString());
+//        		if (!isQuickCreate) break;
+//        	}
+//
+//        	if ("nodeIdentifier".equals(preference.getName())) {
+//        		nodeIdentifier = preference.getValues().get(0).toString();
+//        		if (nodeIdentifier == null || "".equals(nodeIdentifier)) break;
+//        	}
+//        }
 
         if (isQuickCreate && (nodeIdentifier == null || "".equals(nodeIdentifier))) {
         	applications.remove(applicationObject);
         }
       }
-      currentPage.setChildren(applications);
+//      currentPage.setChildren(applications);
       userPortalConfigService.update(currentPage);
       UIPage uiPage = portal.findFirstComponentOfType(UIPage.class);
       if (uiPage != null) {

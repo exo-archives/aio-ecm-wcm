@@ -16,7 +16,7 @@
  */
 package org.exoplatform.services.wcm.portal.listener;
 
-import org.exoplatform.portal.config.jcr.DataStorageImpl;
+import org.exoplatform.portal.config.DataStorageImpl;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;

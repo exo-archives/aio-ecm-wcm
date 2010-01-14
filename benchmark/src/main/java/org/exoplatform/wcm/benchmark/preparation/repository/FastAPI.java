@@ -18,7 +18,6 @@ package org.exoplatform.wcm.benchmark.preparation.repository;
 
 import java.util.Calendar;
 import javax.jcr.PropertyType;
-import org.apache.commons.logging.Log;
 import org.exoplatform.services.jcr.access.AccessControlList;
 import org.exoplatform.services.jcr.dataflow.ItemState;
 import org.exoplatform.services.jcr.dataflow.PlainChangesLog;
@@ -39,6 +38,7 @@ import org.exoplatform.services.jcr.impl.util.io.WorkspaceFileCleanerHolder;
 import org.exoplatform.services.jcr.storage.WorkspaceStorageConnection;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 
 /**
  * Fast access to the JCR.

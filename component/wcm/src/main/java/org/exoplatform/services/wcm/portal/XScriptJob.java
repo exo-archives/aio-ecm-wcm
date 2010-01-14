@@ -16,8 +16,8 @@
  */
 package org.exoplatform.services.wcm.portal;
 
-import org.apache.commons.logging.Log;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.scheduler.BaseJob;
 import org.exoplatform.services.scheduler.JobContext;
 import org.exoplatform.services.wcm.javascript.XJavascriptService;

@@ -22,7 +22,7 @@ import java.util.Date;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 
-import org.exoplatform.portal.webui.skin.SkinService;
+import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;

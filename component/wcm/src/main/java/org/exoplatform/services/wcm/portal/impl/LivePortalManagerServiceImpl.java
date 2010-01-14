@@ -28,13 +28,13 @@ import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
 
-import org.apache.commons.logging.Log;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
@@ -212,25 +212,25 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService, S
 
   public void start() {
     log.info("Start LivePortalManagementService....");
-    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
-    Session session = null;
-    try {
-      ManageableRepository repository = repositoryService.getCurrentRepository();
-      NodeLocation nodeLocation = wcmConfigService.getLivePortalsLocation(repository.getConfiguration().getName());
-      session = sessionProvider.getSession(nodeLocation.getWorkspace(),repository);
-      String statement = "select * from exo:portalFolder where jcr:path like '" + nodeLocation.getPath() + "/%'";
-      Query query = session.getWorkspace().getQueryManager().createQuery(statement,Query.SQL);
-      QueryResult result = query.execute();
-      for(NodeIterator iterator = result.getNodes(); iterator.hasNext();) {
-        Node portalNode = iterator.nextNode();
-        livePortalPaths.putIfAbsent(portalNode.getName(),portalNode.getPath());
-      }
-    } catch (Exception e) {
-      log.error("Error when starting LivePortalManagerService: ", e.fillInStackTrace());
-    } finally {
-      if (session != null) session.logout();
-      sessionProvider.close();
-    }
+//    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+//    Session session = null;
+//    try {
+//      ManageableRepository repository = repositoryService.getCurrentRepository();
+//      NodeLocation nodeLocation = wcmConfigService.getLivePortalsLocation(repository.getConfiguration().getName());
+//      session = sessionProvider.getSession(nodeLocation.getWorkspace(),repository);
+//      String statement = "select * from exo:portalFolder where jcr:path like '" + nodeLocation.getPath() + "/%'";
+//      Query query = session.getWorkspace().getQueryManager().createQuery(statement,Query.SQL);
+//      QueryResult result = query.execute();
+//      for(NodeIterator iterator = result.getNodes(); iterator.hasNext();) {
+//        Node portalNode = iterator.nextNode();
+//        livePortalPaths.putIfAbsent(portalNode.getName(),portalNode.getPath());
+//      }
+//    } catch (Exception e) {
+//      log.error("Error when starting LivePortalManagerService: ", e.fillInStackTrace());
+//    } finally {
+//      if (session != null) session.logout();
+//      sessionProvider.close();
+//    }
   }
 
   public void stop() {    

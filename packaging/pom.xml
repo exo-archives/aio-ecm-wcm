@@ -13,9 +13,8 @@
 	
 	<modules>
     <module>module</module>
-  <module>product</module>
-  
-<module>pkg</module>
+    <module>product</module>
+    <module>pkg</module>
   </modules>
     
 </project>

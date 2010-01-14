@@ -19,10 +19,9 @@ package org.exoplatform.services.wcm.portal.listener;
 import javax.jcr.Node;
 import javax.jcr.Session;
 
-import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.config.jcr.DataStorageImpl;
+import org.exoplatform.portal.config.DataStorageImpl;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.cms.drives.DriveData;
 import org.exoplatform.services.cms.drives.ManageDriveService;
@@ -31,6 +30,7 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService;
@@ -106,7 +106,7 @@ public class CreateLivePortalEventListener extends Listener<DataStorageImpl, Por
     boolean viewNonDocument = mainDriveData.getViewNonDocument();
     boolean viewSideBar = mainDriveData.getViewSideBar();
     boolean showHiddenNode = mainDriveData.getShowHiddenNode();
-    String allowCreateFolder = mainDriveData.getAllowCreateFolder();
+    String allowCreateFolder = mainDriveData.getAllowCreateFolders();
     driveService.addDrive(portal.getName(), workspace, permission, homePath, views, icon,
         viewReferences, viewNonDocument, viewSideBar, showHiddenNode, repository,
         allowCreateFolder);

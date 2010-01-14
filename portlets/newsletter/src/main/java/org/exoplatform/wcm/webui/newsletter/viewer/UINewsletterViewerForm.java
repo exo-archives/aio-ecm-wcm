@@ -235,7 +235,7 @@ public class UINewsletterViewerForm extends UIForm {
    * @param url the new link
    */
   @SuppressWarnings("unused")
-  private void setLink(String url){
+  private void setLink(String url) throws Exception {
     this.linkToSendMail = NewsLetterUtil.generateLink(url);
   }
 

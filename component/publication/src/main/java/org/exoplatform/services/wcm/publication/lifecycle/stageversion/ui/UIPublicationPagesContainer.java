@@ -78,9 +78,9 @@ public class UIPublicationPagesContainer extends UIContainer {
     UserACL userACL = PublicationUtil.getServices(UserACL.class);
     for(Object object:pageList.getAll()) {
       PortalConfig portalConfig = (PortalConfig)object;
-      if(userACL.hasPermission(portalConfig, userId)) {
-        listPortalName.add(portalConfig.getName());
-      }
+//      if(userACL.hasPermission(portalConfig, userId)) {
+//        listPortalName.add(portalConfig.getName());
+//      }
     }
     return listPortalName;
   }

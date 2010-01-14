@@ -1,1 +1,0 @@
-JavascriptService.addJavascript("eXo.wcm.UIFormGeneratorPortlet", "/javascript/eXo/wcm/FormGeneratorPortlet/UIFormGeneratorPortlet.js", ServletContext);

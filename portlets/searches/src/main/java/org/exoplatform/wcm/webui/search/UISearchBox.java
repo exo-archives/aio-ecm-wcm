@@ -16,14 +16,12 @@ import java.net.URLEncoder;
 import javax.portlet.PortletPreferences;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.logging.Log;
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
-import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -48,9 +46,6 @@ public class UISearchBox extends UIForm {
 
 	/** The template path. */
 	private String							templatePath;
-
-	/** The log. */
-	private static Log					log								= ExoLogger.getLogger(UISearchBox.class);
 
 	/** The Constant KEYWORD_INPUT. */
 	public static final String	KEYWORD_INPUT			= "keywordInput".intern();
@@ -112,9 +107,6 @@ public class UISearchBox extends UIForm {
 			String workspace = dmsConfiguration.getConfig(repository).getSystemWorkspace();
 			return new JCRResourceResolver(repository, workspace, "exo:templateFile");
 		} catch (Exception e) {
-			if (log.isDebugEnabled()) {
-				log.debug(e);
-			}
 			return null;
 		}
 	}

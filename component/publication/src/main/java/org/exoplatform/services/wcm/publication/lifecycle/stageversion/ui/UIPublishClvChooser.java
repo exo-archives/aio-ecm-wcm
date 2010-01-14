@@ -28,7 +28,6 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.PublicationUtil;
@@ -122,7 +121,8 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
     for (String clvPortletId : clvPortletsId) {
     	boolean isManualViewerMode = false;
       Application application = PublicationUtil.findAppInstancesById(page, clvPortletId);
-      PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));      
+//      PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));      
+      PortletPreferences portletPreferences = null;
       if (portletPreferences != null) {
         for (Object object : portletPreferences.getPreferences()) {
           Preference preference = (Preference) object;
@@ -162,7 +162,8 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
       WCMPublicationService presentationService = clvChooser.getApplicationComponent(WCMPublicationService.class);
 //      clvPortletId = PortalConfig.PORTAL_TYPE + "#" + org.exoplatform.portal.webui.util.Util.getUIPortal().getOwner() + ":" + clvPortletId;
       DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
-      PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
+//      PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
+      PortletPreferences portletPreferences = null;
       Node node = clvChooser.getNode();
       if (portletPreferences != null) {
         for (Object object : portletPreferences.getPreferences()) {

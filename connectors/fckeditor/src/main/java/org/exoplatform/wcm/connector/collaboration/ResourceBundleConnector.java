@@ -20,17 +20,15 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.services.resources.ResourceBundleService;
-import org.exoplatform.services.rest.HTTPMethod;
-import org.exoplatform.services.rest.OutputTransformer;
-import org.exoplatform.services.rest.QueryParam;
-import org.exoplatform.services.rest.Response;
-import org.exoplatform.services.rest.URITemplate;
-import org.exoplatform.services.rest.container.ResourceContainer;
-import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
+import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -41,12 +39,12 @@ import org.w3c.dom.Element;
  *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
  * Dec 21, 2009  
  */
-@URITemplate("/bundle/")
+@Path("/bundle/")
 public class ResourceBundleConnector implements ResourceContainer {
 
-	@HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/getBundle/")
-  @OutputTransformer(XMLOutputTransformer.class)
+  @GET
+  @Path("/getBundle/")
+//  @OutputTransformer(XMLOutputTransformer.class)
   public Response getBundle (
     @QueryParam("key") String multiKey,
     @QueryParam("locale") String locale) {
@@ -69,9 +67,9 @@ public class ResourceBundleConnector implements ResourceContainer {
 				}
 			}
 			document.appendChild(bundles);
-		  return Response.Builder.ok(document, "text/xml").build();
+		  return Response.ok(document, new MediaType("text", "xml")).build();
 		} catch (Exception e) {
-			return Response.Builder.serverError().build();
+			return Response.serverError().build();
 		}
 	}
 	

@@ -55,8 +55,7 @@
 	    <component-plugin>
 	      <name>new.portal.config.user.listener</name>
 	      <set-method>initListener</set-method>
-	      <!-- This listener is temporary until next version of Portal -->
-	      <type>org.exoplatform.services.wcm.portal.NewPortalConfigListener</type>
+	      <type>org.exoplatform.portal.config.NewPortalConfigListener</type>
 	      <description>this listener init the portal configuration</description>
 	      <init-params>
 	        <value-param>

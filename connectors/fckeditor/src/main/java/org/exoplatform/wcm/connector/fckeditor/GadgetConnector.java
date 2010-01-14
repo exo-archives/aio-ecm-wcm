@@ -25,29 +25,28 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
 import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
-import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PropertiesParam;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.rest.CacheControl;
-import org.exoplatform.services.rest.HTTPMethod;
-import org.exoplatform.services.rest.OutputTransformer;
-import org.exoplatform.services.rest.QueryParam;
-import org.exoplatform.services.rest.Response;
-import org.exoplatform.services.rest.URITemplate;
-import org.exoplatform.services.rest.container.ResourceContainer;
-import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
+import org.exoplatform.services.log.Log;
+import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -58,7 +57,7 @@ import org.w3c.dom.Element;
  * chuong_phan@exoplatform.com
  * Jan 21, 2009
  */
-@URITemplate("/wcmGadget/")
+@Path("/wcmGadget/")
 public class GadgetConnector implements ResourceContainer {
   
   /** The Constant FCK_RESOURCE_BUNDLE_FILE. */
@@ -113,9 +112,9 @@ public class GadgetConnector implements ResourceContainer {
    * 
    * @throws Exception the exception
    */
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/getFoldersAndFiles/")
-  @OutputTransformer(XMLOutputTransformer.class)
+  @GET
+  @Path("/getFoldersAndFiles/")
+//  @OutputTransformer(XMLOutputTransformer.class)
   public Response getFoldersAndFiles(@QueryParam("currentFolder") String currentFolder, @QueryParam("currentFolder") String language) throws Exception {
     try {
       Response response = buildXMLResponse(currentFolder, language);
@@ -124,7 +123,7 @@ public class GadgetConnector implements ResourceContainer {
     } catch (Exception e) {
       log.error("Error when perform getFoldersAndFiles: ", e.fillInStackTrace());
     }    
-    return Response.Builder.ok().build();
+    return Response.ok().build();
   }
   
   /**
@@ -143,7 +142,7 @@ public class GadgetConnector implements ResourceContainer {
     Document document = rootElement.getOwnerDocument();
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
-    return Response.Builder.ok(document).mediaType("text/xml").cacheControl(cacheControl).build();
+    return Response.ok(document, new MediaType("text", "xml")).cacheControl(cacheControl).build();
   }
   
   /**
@@ -234,7 +233,7 @@ public class GadgetConnector implements ResourceContainer {
    */
   private Element createFileElement(Document document, ApplicationCategory applicationCategory) throws Exception {
     Element files = document.createElement("Files");
-    List<Application> listApplication = applicationRegistryService.getApplications(applicationCategory, org.exoplatform.web.application.Application.EXO_GAGGET_TYPE);
+    List<Application> listApplication = applicationRegistryService.getApplications(applicationCategory, ApplicationType.GADGET);
     for (Application application : listApplication) {
       Gadget gadget = gadgetRegistryService.getGadget(application.getApplicationName());
       Element file = document.createElement("File");
@@ -279,7 +278,7 @@ public class GadgetConnector implements ResourceContainer {
     List<ApplicationCategory> applicationCategories = applicationRegistryService.getApplicationCategories();
     List<ApplicationCategory> gadgetCategories = new ArrayList<ApplicationCategory>();
     for (ApplicationCategory applicationCategory : applicationCategories) {
-      if (!applicationRegistryService.getApplications(applicationCategory, org.exoplatform.web.application.Application.EXO_GAGGET_TYPE).isEmpty()) {
+      if (!applicationRegistryService.getApplications(applicationCategory, ApplicationType.GADGET).isEmpty()) {
         gadgetCategories.add(applicationCategory);
       }
     }

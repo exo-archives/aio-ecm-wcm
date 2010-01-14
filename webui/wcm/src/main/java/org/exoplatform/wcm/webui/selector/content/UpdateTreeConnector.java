@@ -26,11 +26,15 @@ import java.util.Set;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.commons.logging.Log;
-import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cms.BasePath;
@@ -42,17 +46,11 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.rest.CacheControl;
-import org.exoplatform.services.rest.HTTPMethod;
-import org.exoplatform.services.rest.OutputTransformer;
-import org.exoplatform.services.rest.QueryParam;
-import org.exoplatform.services.rest.Response;
-import org.exoplatform.services.rest.URITemplate;
-import org.exoplatform.services.rest.container.ResourceContainer;
-import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
+import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.wcm.core.NodetypeConstant;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -63,7 +61,7 @@ import org.w3c.dom.Element;
  * maivanha1610@gmail.com
  * Sep 7, 2009
  */
-@URITemplate("/wcmTreeContent/")
+@Path("/wcmTreeContent/")
 public class UpdateTreeConnector implements ResourceContainer {
   
   /** The Constant FILE_TYPE_WEBCONTENT. */
@@ -78,9 +76,9 @@ public class UpdateTreeConnector implements ResourceContainer {
   /** The log. */
   private static Log log = ExoLogger.getLogger(UpdateTreeConnector.class);
 
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/getChildNodes/")
-  @OutputTransformer(XMLOutputTransformer.class)
+  @GET
+  @Path("/getChildNodes/")
+//  @OutputTransformer(XMLOutputTransformer.class)
   public Response getChildNodes(@QueryParam("nodePath") String nodePath,
                               @QueryParam("workspaceName") String workspaceName,
                               @QueryParam("repositoryName") String repositoryName) throws Exception {
@@ -119,13 +117,13 @@ public class UpdateTreeConnector implements ResourceContainer {
           childNode = document.createElement("childNode");
           parentNode.appendChild(childNode);
           workSpaceEle = document.createElement("workspaceName");
-          workSpaceEle.setTextContent(workspaceName);
+//          workSpaceEle.setTextContent(workspaceName);
           repositoryEle = document.createElement("repositoryName");
-          repositoryEle.setTextContent(repositoryName);
+//          repositoryEle.setTextContent(repositoryName);
           nameEle = document.createElement("name");
-          nameEle.setTextContent(buffer.toString());
+//          nameEle.setTextContent(buffer.toString());
           nodePathEle = document.createElement("nodePath");
-          nodePathEle.setTextContent(node.getPath());
+//          nodePathEle.setTextContent(node.getPath());
           
           childNode.appendChild(workSpaceEle);
           childNode.appendChild(repositoryEle);
@@ -137,7 +135,7 @@ public class UpdateTreeConnector implements ResourceContainer {
     }
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
-    return Response.Builder.ok(document).mediaType("text/xml").cacheControl(cacheControl).build();
+    return Response.ok(document, new MediaType("text", "xml")).cacheControl(cacheControl).build();
   }
   
   /**

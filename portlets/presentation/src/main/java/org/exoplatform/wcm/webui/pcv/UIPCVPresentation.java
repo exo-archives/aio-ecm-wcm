@@ -214,4 +214,9 @@ public class UIPCVPresentation extends UIBaseNodePresentation {
   	// TODO Auto-generated method stub
   	return null;
   }
+
+public UIComponent getUIComponent(String mimeType) throws Exception {
+	// TODO Auto-generated method stub
+	return null;
+}
 }

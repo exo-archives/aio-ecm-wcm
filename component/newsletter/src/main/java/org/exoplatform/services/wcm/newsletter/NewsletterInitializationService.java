@@ -22,13 +22,13 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.Session;
 
-import org.apache.commons.logging.Log;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
@@ -89,56 +89,56 @@ public class NewsletterInitializationService implements Startable {
    */
   public void start() {
     log.info("Starting NewsletterInitializationService ... ");
-    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
-    Session session = null;
-    try {
-      Node dummyNode = livePortalManagerService.getLivePortal(sessionProvider, portalNames.get(0));
-      session = dummyNode.getSession();
-      Node serviceFolder = session.getRootNode().getNode("exo:services");
-      Node newsletterInitializationService = null;
-      if (serviceFolder.hasNode("NewsletterInitializationService")) {
-        newsletterInitializationService = serviceFolder.getNode("NewsletterInitializationService");
-      } else {
-        newsletterInitializationService = serviceFolder.addNode("NewsletterInitializationService", "nt:unstructured");
-      }
-      if (!newsletterInitializationService.hasNode("NewsletterInitializationServiceLog")) {
-        String[] arrayPers = {PermissionType.READ, PermissionType.SET_PROPERTY, PermissionType.ADD_NODE, PermissionType.REMOVE} ;
-        for (String portalName : portalNames) {
-          NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
-          for (NewsletterCategoryConfig categoryConfig : categoryConfigs) {
-            categoryHandler.add(sessionProvider, portalName, categoryConfig);
-          }
-          
-          NewsletterSubscriptionHandler subscriptionHandler = newsletterManagerService.getSubscriptionHandler();
-          for (NewsletterSubscriptionConfig subscriptionConfig : subscriptionConfigs) {
-            subscriptionHandler.add(sessionProvider, portalName, subscriptionConfig);
-          }
-
-          NewsletterManageUserHandler manageUserHandler = newsletterManagerService.getManageUserHandler();
-          for (NewsletterUserConfig userConfig : userConfigs) {
-            manageUserHandler.add(sessionProvider, portalName, userConfig.getMail());
-          }
-          ExtendedNode userFolderNode = (ExtendedNode)((Node)session.getItem(NewsletterConstant.generateUserPath(portalName)));
-          if(userFolderNode.canAddMixin("exo:privilegeable")) 
-            userFolderNode.addMixin("exo:privilegeable");
-          
-          userFolderNode.setPermission("any", arrayPers);
-          
-          Node newsletterInitializationServiceLog = newsletterInitializationService.addNode("NewsletterInitializationServiceLog", "nt:file");
-          Node newsletterInitializationServiceLogContent = newsletterInitializationServiceLog.addNode("jcr:content", "nt:resource");
-          newsletterInitializationServiceLogContent.setProperty("jcr:encoding", "UTF-8");
-          newsletterInitializationServiceLogContent.setProperty("jcr:mimeType", "text/plain");
-          newsletterInitializationServiceLogContent.setProperty("jcr:data", "Newsletter was created successfully");
-          newsletterInitializationServiceLogContent.setProperty("jcr:lastModified", new Date().getTime());
-          session.save();
-        }
-      }
-    } catch (Throwable e) {
-      log.info("Starting NewsletterInitializationService fail because of ", e.fillInStackTrace());
-    } finally {
-      if (session != null) session.logout();
-      sessionProvider.close();
-    }
+//    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+//    Session session = null;
+//    try {
+//      Node dummyNode = livePortalManagerService.getLivePortal(sessionProvider, portalNames.get(0));
+//      session = dummyNode.getSession();
+//      Node serviceFolder = session.getRootNode().getNode("exo:services");
+//      Node newsletterInitializationService = null;
+//      if (serviceFolder.hasNode("NewsletterInitializationService")) {
+//        newsletterInitializationService = serviceFolder.getNode("NewsletterInitializationService");
+//      } else {
+//        newsletterInitializationService = serviceFolder.addNode("NewsletterInitializationService", "nt:unstructured");
+//      }
+//      if (!newsletterInitializationService.hasNode("NewsletterInitializationServiceLog")) {
+//        String[] arrayPers = {PermissionType.READ, PermissionType.SET_PROPERTY, PermissionType.ADD_NODE, PermissionType.REMOVE} ;
+//        for (String portalName : portalNames) {
+//          NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
+//          for (NewsletterCategoryConfig categoryConfig : categoryConfigs) {
+//            categoryHandler.add(sessionProvider, portalName, categoryConfig);
+//          }
+//          
+//          NewsletterSubscriptionHandler subscriptionHandler = newsletterManagerService.getSubscriptionHandler();
+//          for (NewsletterSubscriptionConfig subscriptionConfig : subscriptionConfigs) {
+//            subscriptionHandler.add(sessionProvider, portalName, subscriptionConfig);
+//          }
+//
+//          NewsletterManageUserHandler manageUserHandler = newsletterManagerService.getManageUserHandler();
+//          for (NewsletterUserConfig userConfig : userConfigs) {
+//            manageUserHandler.add(sessionProvider, portalName, userConfig.getMail());
+//          }
+//          ExtendedNode userFolderNode = (ExtendedNode)((Node)session.getItem(NewsletterConstant.generateUserPath(portalName)));
+//          if(userFolderNode.canAddMixin("exo:privilegeable")) 
+//            userFolderNode.addMixin("exo:privilegeable");
+//          
+//          userFolderNode.setPermission("any", arrayPers);
+//          
+//          Node newsletterInitializationServiceLog = newsletterInitializationService.addNode("NewsletterInitializationServiceLog", "nt:file");
+//          Node newsletterInitializationServiceLogContent = newsletterInitializationServiceLog.addNode("jcr:content", "nt:resource");
+//          newsletterInitializationServiceLogContent.setProperty("jcr:encoding", "UTF-8");
+//          newsletterInitializationServiceLogContent.setProperty("jcr:mimeType", "text/plain");
+//          newsletterInitializationServiceLogContent.setProperty("jcr:data", "Newsletter was created successfully");
+//          newsletterInitializationServiceLogContent.setProperty("jcr:lastModified", new Date().getTime());
+//          session.save();
+//        }
+//      }
+//    } catch (Throwable e) {
+//      log.info("Starting NewsletterInitializationService fail because of ", e.fillInStackTrace());
+//    } finally {
+//      if (session != null) session.logout();
+//      sessionProvider.close();
+//    }
   }
 
   /* (non-Javadoc)

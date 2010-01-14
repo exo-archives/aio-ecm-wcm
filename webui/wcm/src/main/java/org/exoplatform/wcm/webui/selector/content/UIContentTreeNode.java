@@ -19,8 +19,6 @@ package org.exoplatform.wcm.webui.selector.content;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
-import org.apache.commons.logging.Log;
-import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.NodeLocation;
 
 /**
@@ -45,9 +43,6 @@ public class UIContentTreeNode {
   /** The work space name. */
   private String workSpaceName;
   
-  /** The log. */
-  private static Log log = ExoLogger.getLogger(UIContentTreeNode.class);
-
   /**
    * Instantiates a new tree node.
    * 
@@ -64,7 +59,7 @@ public class UIContentTreeNode {
     try {
       this.treePath = path + "/" + getName();
     } catch (RepositoryException e) {
-      log.error("Error when perform generate tree node: ", e.fillInStackTrace());
+      e.printStackTrace();
     }
   }
   

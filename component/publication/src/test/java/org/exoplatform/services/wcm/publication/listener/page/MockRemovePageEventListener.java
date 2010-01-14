@@ -16,7 +16,6 @@
  */
 package org.exoplatform.services.wcm.publication.listener.page;
 
-import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.UserPortalConfigService;
@@ -24,6 +23,7 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.listener.navigation.MockRemoveNavigationEventListener;
 

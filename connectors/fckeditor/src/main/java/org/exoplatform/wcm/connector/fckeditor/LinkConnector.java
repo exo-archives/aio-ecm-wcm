@@ -18,20 +18,18 @@ package org.exoplatform.wcm.connector.fckeditor;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Response;
 
-import org.apache.commons.logging.Log;
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.rest.HTTPMethod;
-import org.exoplatform.services.rest.OutputTransformer;
-import org.exoplatform.services.rest.QueryParam;
-import org.exoplatform.services.rest.Response;
-import org.exoplatform.services.rest.URITemplate;
-import org.exoplatform.services.rest.container.ResourceContainer;
-import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
+import org.exoplatform.services.log.Log;
+import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.wcm.connector.BaseConnector;
@@ -42,7 +40,7 @@ import org.w3c.dom.Element;
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Jun 24, 2008
  */
-@URITemplate("/wcmLink/")
+@Path("/wcmLink/")
 public class LinkConnector extends BaseConnector implements ResourceContainer {
 
   /** The link file handler. */
@@ -76,9 +74,9 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
    * 
    * @throws Exception the exception
    */
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/getFoldersAndFiles/")
-  @OutputTransformer(XMLOutputTransformer.class)
+  @GET
+  @Path("/getFoldersAndFiles/")
+//  @OutputTransformer(XMLOutputTransformer.class)
   public Response getFoldersAndFiles(@QueryParam("repositoryName") String repositoryName,
                                      @QueryParam("workspaceName") String workspaceName,
                                      @QueryParam("jcrPath") String jcrPath,
@@ -94,7 +92,7 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
     } catch (Exception e) {
       log.error("Error when perform getFoldersAndFiles: ", e.fillInStackTrace());
     }    
-    return Response.Builder.ok().build();
+    return Response.ok().build();
   }
 
   /*

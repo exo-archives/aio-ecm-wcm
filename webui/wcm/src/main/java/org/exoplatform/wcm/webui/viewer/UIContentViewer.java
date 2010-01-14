@@ -120,5 +120,10 @@ public class UIContentViewer extends UIBaseNodePresentation {
 	public UIComponent getRemoveComment() {
 		return null;
 	}
+
+	public UIComponent getUIComponent(String mimeType) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

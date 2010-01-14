@@ -29,11 +29,18 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
@@ -49,20 +56,11 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.rest.CacheControl;
-import org.exoplatform.services.rest.HTTPMethod;
-import org.exoplatform.services.rest.HeaderParam;
-import org.exoplatform.services.rest.InputTransformer;
-import org.exoplatform.services.rest.OutputTransformer;
-import org.exoplatform.services.rest.QueryParam;
-import org.exoplatform.services.rest.Response;
-import org.exoplatform.services.rest.URITemplate;
-import org.exoplatform.services.rest.container.ResourceContainer;
-import org.exoplatform.services.rest.transformer.PassthroughInputTransformer;
-import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
+import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.wcm.core.NodetypeConstant;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
@@ -79,7 +77,7 @@ import org.w3c.dom.NodeList;
  * thang.do@exoplatform.com
  * Sep 7, 2009
  */
-@URITemplate("/wcmDriver/")
+@Path("/wcmDriver/")
 public class DriverConnector extends BaseConnector implements ResourceContainer {
   
   /** The Constant FILE_TYPE_WEBCONTENT. */
@@ -122,9 +120,9 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    * 
    * @throws Exception the exception
    */
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/getDrivers/")
-  @OutputTransformer(XMLOutputTransformer.class)
+  @GET
+  @Path("/getDrivers/")
+//  @OutputTransformer(XMLOutputTransformer.class)
   public Response getDrivers(
   		@QueryParam("repositoryName") String repositoryName,
   		@QueryParam("workspaceName") String workspaceName,
@@ -146,7 +144,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
-    return Response.Builder.ok(document).mediaType("text/xml").cacheControl(cacheControl).build();
+    return Response.ok(document, new MediaType("text", "xml")).cacheControl(cacheControl).build();
   }
 
   /**
@@ -163,9 +161,9 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    * 
    * @throws Exception the exception
    */
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/getFoldersAndFiles/")
-  @OutputTransformer(XMLOutputTransformer.class)
+  @GET
+  @Path("/getFoldersAndFiles/")
+//  @OutputTransformer(XMLOutputTransformer.class)
   public Response getFoldersAndFiles(
   		@QueryParam("driverName") String driverName,
   		@QueryParam("currentFolder") String currentFolder,
@@ -195,7 +193,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     } catch (Exception e) {
       log.error("Error when perform getFoldersAndFiles: ", e.fillInStackTrace());
     }    
-    return Response.Builder.ok().build();
+    return Response.ok().build();
   }
 	
 
@@ -218,10 +216,10 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    * 
    * @throws Exception the exception
    */
-  @HTTPMethod(HTTPMethods.POST)
-  @URITemplate("/uploadFile/upload/")
-  @InputTransformer(PassthroughInputTransformer.class)
-  @OutputTransformer(XMLOutputTransformer.class)
+  @POST
+  @Path("/uploadFile/upload/")
+//  @InputTransformer(PassthroughInputTransformer.class)
+//  @OutputTransformer(XMLOutputTransformer.class)
   public Response uploadFile(InputStream inputStream,
   		@QueryParam("repositoryName") String repositoryName,
   		@QueryParam("workspaceName") String workspaceName,
@@ -257,9 +255,9 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    * 
    * @throws Exception the exception
    */
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/uploadFile/control/")
-  @OutputTransformer(XMLOutputTransformer.class)
+  @GET
+  @Path("/uploadFile/control/")
+//  @OutputTransformer(XMLOutputTransformer.class)
   public Response processUpload(
   		@QueryParam("repositoryName") String repositoryName,
       @QueryParam("workspaceName") String workspaceName,
@@ -279,7 +277,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     } catch (Exception e) {
       log.error("Error when perform processUpload: ", e.fillInStackTrace());
     }
-    return Response.Builder.ok().build();
+    return Response.ok().build();
   }
   
   /**

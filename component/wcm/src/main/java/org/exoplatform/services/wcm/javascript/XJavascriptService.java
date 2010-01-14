@@ -28,11 +28,11 @@ import javax.jcr.query.QueryResult;
 import javax.servlet.ServletContext;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.NodetypeConstant;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
@@ -256,21 +256,21 @@ public class XJavascriptService implements Startable {
    * @see org.picocontainer.Startable#start()
    */
   public void start() {    
-    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();    
-    try {
-      LivePortalManagerService livePortalManagerService = WCMCoreUtils.getService(LivePortalManagerService.class);
-      Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
-      addSharedPortalJavascript(sharedPortal, null, true);
-      List<Node> livePortals = livePortalManagerService.getLivePortals(sessionProvider);
-      for(Node portal: livePortals) {
-        addPortalJavascript(portal, null, true);
-      }
-    } catch (PathNotFoundException e) {
-    	log.warn("Exception when merging inside Portal : WCM init is not completed.");
-    }catch (Exception e) {
-    	log.error("Exception when start XJavascriptService");
-    }
-    sessionProvider.close();        
+//    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();    
+//    try {
+//      LivePortalManagerService livePortalManagerService = WCMCoreUtils.getService(LivePortalManagerService.class);
+//      Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
+//      addSharedPortalJavascript(sharedPortal, null, true);
+//      List<Node> livePortals = livePortalManagerService.getLivePortals(sessionProvider);
+//      for(Node portal: livePortals) {
+//        addPortalJavascript(portal, null, true);
+//      }
+//    } catch (PathNotFoundException e) {
+//    	log.warn("Exception when merging inside Portal : WCM init is not completed.");
+//    }catch (Exception e) {
+//    	log.error("Exception when start XJavascriptService");
+//    }
+//    sessionProvider.close();        
   }
 
   /* (non-Javadoc)

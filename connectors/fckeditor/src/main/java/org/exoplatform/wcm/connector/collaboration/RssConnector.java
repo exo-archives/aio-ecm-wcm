@@ -28,21 +28,19 @@ import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.rest.HTTPMethod;
-import org.exoplatform.services.rest.OutputTransformer;
-import org.exoplatform.services.rest.QueryParam;
-import org.exoplatform.services.rest.Response;
-import org.exoplatform.services.rest.URITemplate;
-import org.exoplatform.services.rest.container.ResourceContainer;
-import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
+import org.exoplatform.services.log.Log;
+import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.wcm.connector.BaseConnector;
@@ -63,7 +61,7 @@ import com.sun.syndication.io.SyndFeedOutput;
  * 29-08-2009
  */
 
-@URITemplate("/rss/")
+@Path("/rss/")
 public class RssConnector extends BaseConnector implements ResourceContainer {
 
   /** The WORKSPACE. */
@@ -129,9 +127,9 @@ public class RssConnector extends BaseConnector implements ResourceContainer {
    * 
    * @throws Exception the exception
    */
-  @HTTPMethod("GET")
-  @URITemplate("/generate/")
-  @OutputTransformer(XMLOutputTransformer.class)
+  @GET
+  @Path("/generate/")
+//  @OutputTransformer(XMLOutputTransformer.class)
   public Response generate ( 
       @QueryParam("repository") String repositoryName, 
       @QueryParam("workspace") String workspaceName,
@@ -155,7 +153,7 @@ public class RssConnector extends BaseConnector implements ResourceContainer {
     contextRss.put(LINK, server + "/portal/public/"+siteName);
     String feedXML = generateRSS(contextRss);
     Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(feedXML.getBytes()));
-    Response response = Response.Builder.ok(document).build();
+    Response response = Response.ok(document).build();
     return response;
   }
   

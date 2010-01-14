@@ -198,7 +198,7 @@ public class UICategoryNavigationTreeBase extends UITree {
    * 
    * @return the string
    */
-  public String resolveCategoryPathByUri(WebuiRequestContext context) {
+  public String resolveCategoryPathByUri(WebuiRequestContext context) throws Exception {
     PortletRequestContext porletRequestContext = (PortletRequestContext) context;
     HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
     PortalRequestContext portalRequestContext = Util.getPortalRequestContext();

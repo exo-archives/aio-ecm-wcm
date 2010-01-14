@@ -22,11 +22,9 @@ import java.util.List;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
-import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.wcm.webui.Utils;
@@ -189,14 +187,14 @@ public class UICLVPortlet extends UIPortletApplication {
   		.append(context.getWindowId());
   		List<String> contents = new ArrayList<String>();
   		DataStorage dataStorage = WCMCoreUtils.getService(DataStorage.class);
-  		List<?> preferences = dataStorage.getPortletPreferences(new ExoWindowID(persistenceId.toString())).getPreferences();
-  		for (Object object : preferences) {
-  			Preference preference = (Preference) object;
-  			if (UICLVPortlet.CONTENT_LIST.equals(preference.getName())) {
-  				contents = preference.getValues();
-  				break;
-  			}
-  		}
+//  		List<?> preferences = dataStorage.getPortletPreferences(new ExoWindowID(persistenceId.toString())).getPreferences();
+//  		for (Object object : preferences) {
+//  			Preference preference = (Preference) object;
+//  			if (UICLVPortlet.CONTENT_LIST.equals(preference.getName())) {
+//  				contents = preference.getValues();
+//  				break;
+//  			}
+//  		}
   		return contents.toArray(new String[contents.size()]);
 		} catch (Exception e) {
 			return null;

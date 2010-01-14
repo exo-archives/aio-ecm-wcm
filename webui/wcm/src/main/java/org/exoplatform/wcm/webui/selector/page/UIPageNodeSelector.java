@@ -23,7 +23,6 @@ import java.util.List;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.webui.navigation.UIPageNavigationActionListener.CreateNavigationActionListener;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -51,7 +50,7 @@ import org.exoplatform.webui.event.Event.Phase;
   @ComponentConfig(
       template = "classpath:groovy/wcm/webui/selector/page/UIPageNodeSelector.gtmpl" ,
       events = {
-        @EventConfig(listeners = CreateNavigationActionListener.class),
+//        @EventConfig(listeners = CreateNavigationActionListener.class),
         @EventConfig(listeners = UIPageNodeSelector.SelectNavigationActionListener.class, phase=Phase.DECODE) 
       }
   ),

@@ -29,7 +29,6 @@ import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 
-import org.apache.commons.logging.Log;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
@@ -37,7 +36,6 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
@@ -99,9 +97,6 @@ import org.exoplatform.webui.event.EventListener;
 
   /** The date formatter. */
   private DateFormat               dateFormatter = null;
-  
-  /** The log. */
-  private static Log log = ExoLogger.getLogger(UICLVPresentation.class);
   
   /**
    * Instantiates a new uI content list presentation.
@@ -496,7 +491,7 @@ import org.exoplatform.webui.event.EventListener;
     } catch(PathNotFoundException ex) {
       // We don't do anything here because so many documents doesn't have illustration image
     } catch (Exception e) {
-      log.error("Error when get illustration image: ", e.fillInStackTrace());
+      e.printStackTrace();
     }
     return uri;
   }

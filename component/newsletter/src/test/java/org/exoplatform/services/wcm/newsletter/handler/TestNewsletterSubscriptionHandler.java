@@ -234,7 +234,7 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 	}
 	
 	public void testGetAllRedactors() throws Exception{
-	  assertEquals(this.userRoot,newsletterSubscriptionHandler.getAllRedactor(this.classicPortal, sessionProvider).get(0));
+	  assertEquals(this.userRoot,NewsletterConstant.getAllRedactor(this.classicPortal).get(0));
 	}
 	
 	public void testGetSubscriptionsByRedactor()throws Exception{

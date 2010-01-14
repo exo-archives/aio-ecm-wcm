@@ -6,7 +6,6 @@ function getModule(params) {
   var kernel = params.kernel;
   var core = params.core;
   var ws = params.ws;
-  var eXoPortletContainer = params.eXoPortletContainer;
   var jcr = params.eXoJcr;
   var portal = params.portal;
   var dms = params.dms;  
@@ -47,12 +46,16 @@ function getModule(params) {
   module.web = {};
   module.web.eXoWCMResources = 
     new Project("org.exoplatform.ecm", "exo.ecm.wcm.web.eXoWCMResources", "war", module.version).
-    addDependency(portal.web.eXoResources) .
-    addDependency(portal.web.eXoMacSkin) .
-    addDependency(portal.web.eXoVistaSkin);
-        
-  module.web.wcmportal = 
-    new Project("org.exoplatform.ecm", "exo.ecm.wcm.web.portal", "exo-portal", module.version);
+    addDependency(portal.web.eXoResources);
+    //addDependency(portal.web.eXoMacSkin) .
+    //addDependency(portal.web.eXoVistaSkin);
+  
+  module.extension = {};
+  module.extension.war = new Project("org.exoplatform.ecm", "exo.ecm.wcm.extension.war", "war", module.version).
+		addDependency(new Project("org.exoplatform.ecm", "exo.ecm.wcm.extension.config", "jar", module.version));
+  module.extension.war.deployName = "aaa-wcm-extension";	      
+  //module.web.wcmportal = 
+  //  new Project("org.exoplatform.ecm", "exo.ecm.wcm.web.portal", "exo-portal", module.version);
     
   return module;
 }

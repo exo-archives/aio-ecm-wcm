@@ -149,4 +149,9 @@ public class UIPresentation extends UIBaseNodePresentation {
   public UIComponent getRemoveComment() throws Exception {
   	return null;
   }
+
+public UIComponent getUIComponent(String mimeType) throws Exception {
+	// TODO Auto-generated method stub
+	return null;
+}
 }

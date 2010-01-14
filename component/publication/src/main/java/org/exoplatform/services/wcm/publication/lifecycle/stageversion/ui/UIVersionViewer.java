@@ -18,7 +18,6 @@ package org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui;
 
 import javax.jcr.Node;
 
-import org.apache.commons.logging.Log;
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
 import org.exoplatform.portal.webui.util.Util;
@@ -26,6 +25,7 @@ import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -151,6 +151,11 @@ public UIComponent getRemoveAttach() throws Exception {
 }
 
 public UIComponent getRemoveComment() throws Exception {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+public UIComponent getUIComponent(String mimeType) throws Exception {
 	// TODO Auto-generated method stub
 	return null;
 }

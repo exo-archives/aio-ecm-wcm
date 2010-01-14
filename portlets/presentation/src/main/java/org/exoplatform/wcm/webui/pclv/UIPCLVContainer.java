@@ -102,7 +102,7 @@ public class UIPCLVContainer extends UIContainer {
    * 
    * @return the header
    */
-  private String getHeader(){
+  private String getHeader() throws Exception {
     PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) portletRequestContext.getRequest();
     String requestURI = requestWrapper.getRequestURI();

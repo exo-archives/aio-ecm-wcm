@@ -20,8 +20,8 @@ import java.util.Collection;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.webui.skin.SkinConfig;
-import org.exoplatform.portal.webui.skin.SkinService;
+import org.exoplatform.portal.resource.SkinConfig;
+import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.services.ecm.fckconfig.FCKConfigPlugin;
 import org.exoplatform.services.ecm.fckconfig.FCKEditorContext;
 import org.exoplatform.webui.form.wysiwyg.FCKEditorConfig;

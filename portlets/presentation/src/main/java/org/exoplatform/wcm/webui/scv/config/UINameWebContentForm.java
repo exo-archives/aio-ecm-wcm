@@ -28,11 +28,11 @@ import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.webui.comparator.ItemOptionNameComparator;
 import org.exoplatform.ecm.webui.form.validator.ECMNameValidator;
-import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Container;
+import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.webui.page.UIPage;
@@ -41,7 +41,6 @@ import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
@@ -226,38 +225,39 @@ public class UINameWebContentForm extends UIForm {
       Page currentPage = userPortalConfigService.getPage(currentPageNode.getPageReference());
       ArrayList<Object> applications = new ArrayList<Object>();
       applications.addAll(currentPage.getChildren());
-      ArrayList<Object> applicationsTmp = currentPage.getChildren(); 
+      ArrayList<ModelObject> applicationsTmp = currentPage.getChildren(); 
       Collections.reverse(applicationsTmp);
       DataStorage dataStorage = nameWebcontentForm.getApplicationComponent(DataStorage.class);
       for (Object applicationObject : applicationsTmp) {
         if (applicationObject instanceof Container) continue;
         Application application = Application.class.cast(applicationObject);
-        String applicationId = application.getInstanceId();
-        org.exoplatform.portal.application.PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(applicationId));
-        if (portletPreferences == null) continue;
+//        String applicationId = application.getInstanceId();
+        String applicationId = application.getId();
+//        org.exoplatform.portal.application.PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(applicationId));
+//        if (portletPreferences == null) continue;
         
         boolean isQuickCreate = false;
         String nodeIdentifier = null;
         
-        for (Object preferenceObject : portletPreferences.getPreferences()) {
-        	Preference preference = Preference.class.cast(preferenceObject);
-
-        	if ("isQuickCreate".equals(preference.getName())) {
-        		isQuickCreate = Boolean.valueOf(preference.getValues().get(0).toString());
-        		if (!isQuickCreate) break;
-        	}
-
-        	if ("nodeIdentifier".equals(preference.getName())) {
-        		nodeIdentifier = preference.getValues().get(0).toString();
-        		if (nodeIdentifier == null || nodeIdentifier == "") break;
-        	}
-        }
+//        for (Object preferenceObject : portletPreferences.getPreferences()) {
+//        	Preference preference = Preference.class.cast(preferenceObject);
+//
+//        	if ("isQuickCreate".equals(preference.getName())) {
+//        		isQuickCreate = Boolean.valueOf(preference.getValues().get(0).toString());
+//        		if (!isQuickCreate) break;
+//        	}
+//
+//        	if ("nodeIdentifier".equals(preference.getName())) {
+//        		nodeIdentifier = preference.getValues().get(0).toString();
+//        		if (nodeIdentifier == null || nodeIdentifier == "") break;
+//        	}
+//        }
         
         if (isQuickCreate && (nodeIdentifier == null || nodeIdentifier == "")) {
         	applications.remove(applicationObject);
         }
       }
-      currentPage.setChildren(applications);
+//      currentPage.setChildren(applications);
       userPortalConfigService.update(currentPage);
       UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
       if (uiPage != null) {

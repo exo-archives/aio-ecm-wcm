@@ -51,7 +51,6 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.ecm.publication.IncorrectStateUpdateLifecycleException;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.util.IdGenerator;
-import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.PublicationUtil;
@@ -371,8 +370,9 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
    */
   public void publishContentToSCV(Node content, Page page, String portalOwnerName) throws Exception {
     // Create portlet
-    Application portlet = new Application();
-    portlet.setApplicationType(org.exoplatform.web.application.Application.EXO_PORTLET_TYPE);
+//    Application portlet = new Application();
+    Application portlet = null;
+//    portlet.setApplicationType(org.exoplatform.web.application.Application.EXO_PORTLET_TYPE);
     portlet.setShowInfoBar(false);
     
     //// generate new portlet's id
@@ -385,7 +385,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
             .append(configurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET))
             .append("/")
             .append(IdGenerator.generate());
-    portlet.setInstanceId(windowId.toString());
+//    portlet.setInstanceId(windowId.toString());
 
     //// Add preferences to portlet
     ArrayList<Preference> preferences = new ArrayList<Preference>();
@@ -401,9 +401,9 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     savePortletPreferences(windowId.toString(), preferences, portalOwnerName);
     
     // Add portlet to page
-    ArrayList<Object> listPortlet = page.getChildren();
-    listPortlet.add(portlet);
-    page.setChildren(listPortlet);
+//    ArrayList<Object> listPortlet = page.getChildren();
+//    listPortlet.add(portlet);
+//    page.setChildren(listPortlet);
     UserPortalConfigService userPortalConfigService = PublicationUtil.getServices(UserPortalConfigService.class);
     userPortalConfigService.update(page);
   }
@@ -417,7 +417,8 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     ArrayList<Preference> preferences = new ArrayList<Preference>();
     
     DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
-    PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
+//    PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
+    PortletPreferences portletPreferences = null;
     
     if (portletPreferences == null) {
       preferences.add(addPreference("repository", ((ManageableRepository) content.getSession().getRepository()).getConfiguration().getName()));
@@ -586,8 +587,8 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
   private void savePortletPreferences(String portletId, ArrayList<Preference> listPreference, String portalOwnerName) throws Exception {
     PortletPreferences portletPreferences = new PortletPreferences();
     portletPreferences.setWindowId(portletId);
-    portletPreferences.setOwnerType(PortalConfig.PORTAL_TYPE);
-    portletPreferences.setOwnerId(portalOwnerName);
+//    portletPreferences.setOwnerType(PortalConfig.PORTAL_TYPE);
+//    portletPreferences.setOwnerId(portalOwnerName);
     portletPreferences.setPreferences(listPreference);
     DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
     dataStorage.save(portletPreferences);
@@ -604,7 +605,8 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     List<String> clvPortletsId = PublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.CLV_PORTLET));
     if (content != null && !clvPortletsId.isEmpty()) {
       for (String clvPortletId : clvPortletsId) {
-        PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
+//        PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
+        PortletPreferences portletPreferences = null;
         if (portletPreferences != null) {
           ArrayList<Preference> preferences = new ArrayList<Preference>();
           for (Object preferenceTmp : portletPreferences.getPreferences()) {
@@ -700,9 +702,9 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     UserACL userACL = PublicationUtil.getServices(UserACL.class);
     for(Object object:pageList.getAll()) {
       PortalConfig portalConfig = (PortalConfig)object;
-      if(userACL.hasPermission(portalConfig, userId)) {
-        listPortalName.add(portalConfig.getName());
-      }
+//      if(userACL.hasPermission(portalConfig, userId)) {
+//        listPortalName.add(portalConfig.getName());
+//      }
     }
     return listPortalName;
   }

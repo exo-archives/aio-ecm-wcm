@@ -20,13 +20,13 @@ import javax.jcr.Node;
 import javax.jcr.Property;
 
 import org.apache.commons.chain.Context;
-import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.command.action.Action;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 /**
  * Created by The eXo Platform SAS

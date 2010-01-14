@@ -33,7 +33,6 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.PublicationUtil;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
@@ -281,7 +280,8 @@ public class UIPublicationAction extends UIForm {
     List<String> applicationIDs = new ArrayList<String>();
     for (String clvPortletId : clvPortletsId) {
     	boolean isManualViewerMode = false;
-      PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
+//      PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
+      PortletPreferences portletPreferences = null;
       if (portletPreferences != null) {
         for (Object object : portletPreferences.getPreferences()) {
           Preference preference = (Preference) object;

@@ -18,14 +18,14 @@ package org.exoplatform.services.wcm.portal.listener;
 
 import javax.jcr.Node;
 
-import org.apache.commons.logging.Log;
-import org.exoplatform.portal.config.jcr.DataStorageImpl;
+import org.exoplatform.portal.config.DataStorageImpl;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.cms.drives.ManageDriveService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.portal.artifacts.RemovePortalArtifactsService;

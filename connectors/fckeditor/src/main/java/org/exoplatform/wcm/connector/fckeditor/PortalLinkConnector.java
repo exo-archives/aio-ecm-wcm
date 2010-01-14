@@ -22,12 +22,16 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletContext;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.logging.Log;
-import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.ExoContainer;
@@ -42,14 +46,8 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.rest.CacheControl;
-import org.exoplatform.services.rest.HTTPMethod;
-import org.exoplatform.services.rest.OutputTransformer;
-import org.exoplatform.services.rest.QueryParam;
-import org.exoplatform.services.rest.Response;
-import org.exoplatform.services.rest.URITemplate;
-import org.exoplatform.services.rest.container.ResourceContainer;
-import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
+import org.exoplatform.services.log.Log;
+import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.security.ConversationState;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -58,7 +56,7 @@ import org.w3c.dom.Element;
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Jul 11, 2008
  */
-@URITemplate("/portalLinks/")
+@Path("/portalLinks/")
 public class PortalLinkConnector implements ResourceContainer {
 
   /** The PUBLI c_ access. */
@@ -112,9 +110,9 @@ public class PortalLinkConnector implements ResourceContainer {
    * 
    * @throws Exception the exception
    */
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/getFoldersAndFiles/")
-  @OutputTransformer(XMLOutputTransformer.class)
+  @GET
+  @Path("/getFoldersAndFiles/")
+//  @OutputTransformer(XMLOutputTransformer.class)
   public Response getPageURI(@QueryParam("currentFolder") String currentFolder,
                              @QueryParam("command") String command,
                              @QueryParam("type") String type) throws Exception {
@@ -124,7 +122,7 @@ public class PortalLinkConnector implements ResourceContainer {
     } catch (Exception e) {
       log.error("Error when perform getPageURI: ", e.fillInStackTrace());
     }    
-    return Response.Builder.ok().build();
+    return Response.ok().build();
   }
 
   /**
@@ -162,7 +160,7 @@ public class PortalLinkConnector implements ResourceContainer {
     }
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
-    return Response.Builder.ok(document).mediaType("text/xml").cacheControl(cacheControl).build();
+    return Response.ok(document, new MediaType("text", "xml")).cacheControl(cacheControl).build();
   }
 
   /**
@@ -189,7 +187,8 @@ public class PortalLinkConnector implements ResourceContainer {
     rootElement.appendChild(foldersElement);
     for (Object object : pageList.getAll()) {
       PortalConfig config = (PortalConfig) object;
-      if (!portalUserACL.hasPermission(config, userId)) {
+//      if (!portalUserACL.hasPermission(config, userId)) {
+      if (!portalUserACL.hasPermission(config)) {
         continue;
       }
       Element folderElement = rootElement.getOwnerDocument().createElement("Folder");

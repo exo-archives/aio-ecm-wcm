@@ -41,7 +41,6 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
@@ -125,19 +124,19 @@ public class PublicationUtil {
    * @param results the results
    */
   private static void findAppInstancesByContainerAndName(Container container, String applicationName, List<String> results) {
-    ArrayList<Object> chidren = container.getChildren();
-    if(chidren == null) return ;
-    for(Object object: chidren) {
-      if(object instanceof Application) {
-        Application application = Application.class.cast(object);
-        if(application.getInstanceId().contains(applicationName)) {
-          results.add(application.getInstanceId());
-        }
-      } else if(object instanceof Container) {
-        Container child = Container.class.cast(object);
-        findAppInstancesByContainerAndName(child, applicationName, results);
-      }
-    }
+//    ArrayList<Object> chidren = container.getChildren();
+//    if(chidren == null) return ;
+//    for(Object object: chidren) {
+//      if(object instanceof Application) {
+//        Application application = Application.class.cast(object);
+//        if(application.getInstanceId().contains(applicationName)) {
+//          results.add(application.getInstanceId());
+//        }
+//      } else if(object instanceof Container) {
+//        Container child = Container.class.cast(object);
+//        findAppInstancesByContainerAndName(child, applicationName, results);
+//      }
+//    }
   }   
   
   /** The application. */
@@ -152,19 +151,19 @@ public class PublicationUtil {
    * @return the application
    */
   public static Application findAppInstancesById(Container container, String applicationId) {
-    ArrayList<Object> chidren = container.getChildren();
-    if(chidren == null) return null;
-    for(Object object: chidren) {
-      if(object instanceof Application) {
-        Application app = Application.class.cast(object);
-        if(app.getInstanceId().equals(applicationId)) {
-          application = app;
-        }
-      } else if(object instanceof Container) {
-        Container child = Container.class.cast(object);
-        findAppInstancesById(child, applicationId);
-      }
-    }
+//    ArrayList<Object> chidren = container.getChildren();
+//    if(chidren == null) return null;
+//    for(Object object: chidren) {
+//      if(object instanceof Application) {
+//        Application app = Application.class.cast(object);
+//        if(app.getInstanceId().equals(applicationId)) {
+//          application = app;
+//        }
+//      } else if(object instanceof Container) {
+//        Container child = Container.class.cast(object);
+//        findAppInstancesById(child, applicationId);
+//      }
+//    }
     return application;
   }
 
@@ -177,21 +176,22 @@ public class PublicationUtil {
   private static void removedAppInstancesInContainerByNames(
   		Container container, List<String> removingApplicationIds) {
   	ArrayList<Object> childrenTmp = new ArrayList<Object>();    
-    ArrayList<Object> chidren = container.getChildren();    
+//    ArrayList<Object> chidren = container.getChildren();    
+    ArrayList<Object> chidren = null;
     if(chidren == null) return ;
     for(Object object: chidren) {
       if(object instanceof Application) {
         Application application = Application.class.cast(object);
-        if(!removingApplicationIds.contains(application.getInstanceId())) {
-        	childrenTmp.add(object);
-        }        
+//        if(!removingApplicationIds.contains(application.getInstanceId())) {
+//        	childrenTmp.add(object);
+//        }        
       } else if(object instanceof Container) {
         Container child = Container.class.cast(object);
         removedAppInstancesInContainerByNames(child,removingApplicationIds);
         childrenTmp.add(child);
       }
     }
-    container.setChildren(childrenTmp);
+//    container.setChildren(childrenTmp);
   }
   
   /**
@@ -245,7 +245,8 @@ public class PublicationUtil {
   public static Node getNodeByApplicationId(String applicationId) throws Exception {
     DataStorage dataStorage = getServices(DataStorage.class);
     RepositoryService repositoryService = getServices(RepositoryService.class);
-    PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(applicationId));
+//    PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(applicationId));
+    PortletPreferences portletPreferences = null;
     if (portletPreferences == null) return null;
     String repositoryName = null;
     String workspaceName = null;

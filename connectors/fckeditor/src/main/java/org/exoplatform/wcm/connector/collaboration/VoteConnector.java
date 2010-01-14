@@ -17,19 +17,15 @@
 package org.exoplatform.wcm.connector.collaboration;
 
 import javax.jcr.Node;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
-import org.exoplatform.services.rest.HTTPMethod;
-import org.exoplatform.services.rest.InputTransformer;
-import org.exoplatform.services.rest.OutputTransformer;
-import org.exoplatform.services.rest.QueryParam;
-import org.exoplatform.services.rest.Response;
-import org.exoplatform.services.rest.URITemplate;
-import org.exoplatform.services.rest.container.ResourceContainer;
-import org.exoplatform.services.rest.transformer.PassthroughInputTransformer;
-import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
+import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.connector.BaseConnector;
@@ -42,7 +38,7 @@ import org.w3c.dom.Element;
  * benjamin.paillereau@exoplatform.com
  * July 10, 2009
  */
-@URITemplate("/contents/vote/")
+@Path("/contents/vote/")
 public class VoteConnector extends BaseConnector implements ResourceContainer {
 
   /**
@@ -65,9 +61,9 @@ public class VoteConnector extends BaseConnector implements ResourceContainer {
    * 
    * @throws Exception the exception
    */
-  @HTTPMethod("GET")
-  @URITemplate("/postVote/")
-  @InputTransformer(PassthroughInputTransformer.class)
+  @GET
+  @Path("/postVote/")
+//  @InputTransformer(PassthroughInputTransformer.class)
   public Response postVote( 
 		  @QueryParam("repositoryName") String repositoryName, 
 		  @QueryParam("workspaceName") String workspaceName, 
@@ -82,9 +78,9 @@ public class VoteConnector extends BaseConnector implements ResourceContainer {
     		votingService.vote(content, Double.parseDouble(vote), userName, lang);
     	}
     } catch (Exception e) {
-    	Response.Builder.serverError().build();
+    	Response.serverError().build();
     }    
-    return Response.Builder.ok().build();
+    return Response.ok().build();
   }
 
   /**
@@ -98,9 +94,9 @@ public class VoteConnector extends BaseConnector implements ResourceContainer {
    * 
    * @throws Exception the exception
    */
-  @HTTPMethod("GET")
-  @URITemplate("/getVote/")
-  @OutputTransformer(XMLOutputTransformer.class)
+  @GET
+  @Path("/getVote/")
+//  @OutputTransformer(XMLOutputTransformer.class)
   public Response getVote( 
 		  @QueryParam("repositoryName") String repositoryName, 
 		  @QueryParam("workspaceName") String workspaceName, 
@@ -117,19 +113,19 @@ public class VoteConnector extends BaseConnector implements ResourceContainer {
 					DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 			  Element element = document.createElement("vote");
 			  Element rate = document.createElement("rate");
-			  rate.setTextContent(votingRate);
+//			  rate.setTextContent(votingRate);
 			  Element total = document.createElement("total");
-			  total.setTextContent(votingTotal);
+//			  total.setTextContent(votingTotal);
 			  element.appendChild(rate);
 			  element.appendChild(total);
 			  document.appendChild(element);
 
-			  return Response.Builder.ok(document, "text/xml").build();
+			  return Response.ok(document, "text/xml").build();
 		  }
 	  } catch (Exception e) {
-		  Response.Builder.serverError().build();
+		  Response.serverError().build();
 	  }    
-	  return Response.Builder.ok().build();
+	  return Response.ok().build();
   }
   
   /*

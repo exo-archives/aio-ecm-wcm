@@ -267,7 +267,7 @@ public class UIPCVContainer extends UIContainer {
    * 
    * @return the request parameters
    */
-  private String getRequestParameters() {
+  private String getRequestParameters() throws Exception {
     PortletRequestContext porletRequestContext = WebuiRequestContext.getCurrentInstance();
     HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
     PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
