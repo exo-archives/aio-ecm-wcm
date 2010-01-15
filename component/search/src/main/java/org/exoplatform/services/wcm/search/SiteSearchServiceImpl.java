@@ -115,7 +115,12 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     Session session = sessionProvider.getSession(location.getWorkspace(),currentRepository);
     QueryManager queryManager = session.getWorkspace().getQueryManager();
     long startTime = System.currentTimeMillis();
-    QueryResult queryResult = searchSiteContent(queryCriteria, queryManager);  
+    QueryResult queryResult = null;
+    try{
+      queryResult = searchSiteContent(queryCriteria, queryManager);  
+    }catch(Exception ex){
+      ex.printStackTrace();
+    }
     String suggestion = getSpellSuggestion(queryCriteria.getKeyword(),currentRepository);
     long queryTime = System.currentTimeMillis() - startTime;
     WCMPaginatedQueryResult paginatedQueryResult = null;
@@ -184,7 +189,10 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     mapMetadataProperties(queryCriteria,queryBuilder);
     orderBy(queryCriteria, queryBuilder);
     String queryStatement = queryBuilder.createQueryStatement();
-    
+    queryStatement = queryStatement.replace("jcr:path LIKE '/sites content/live/%'",
+                           "CONTAINS(.,'NewSite~') AND " +
+                           "jcr:path LIKE '/sites content/live/NewSite/%'");
+    System.out.println("\n\n\n\n--------------->queryStatement:" + queryStatement);
     Query query = queryManager.createQuery(queryStatement, Query.SQL);
     return query.execute();
   }

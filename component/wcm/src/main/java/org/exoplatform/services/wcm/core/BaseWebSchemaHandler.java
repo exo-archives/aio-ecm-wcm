@@ -16,6 +16,8 @@
  */
 package org.exoplatform.services.wcm.core;
 
+import java.util.Calendar;
+
 import javax.jcr.Node;
 
 import org.exoplatform.commons.utils.MimeTypeResolver;
@@ -118,6 +120,37 @@ public abstract class BaseWebSchemaHandler extends BaseComponentPlugin implement
       mimeType = resolver.getMimeType(file.getName());
     }
     return mimeType;
+  }
+  
+  protected void createDefautWebData(Node webContent) throws Exception{
+    //create empty css file:
+    Node defaultCSS = addNodeAsNTFile(webContent.getNode("css"), "default.css", "text/css", "");
+    addMixin(defaultCSS, "exo:cssFile");
+    addMixin(defaultCSS,"exo:owneable");
+
+    Node defaultJS = addNodeAsNTFile(webContent.getNode("js"), "default.js", "application/x-javascript", "");
+    addMixin(defaultJS, "exo:jsFile");
+    addMixin(defaultJS,"exo:owneable");
+
+    if(!webContent.hasNode("default.html")){
+      Node defaultHTML = addNodeAsNTFile(webContent, "default.html", "text/html", "");
+      addMixin(defaultHTML, "exo:htmlFile");
+      addMixin(defaultHTML,"exo:owneable");
+    }
+
+    Node illustration = addNodeAsNTFile(webContent.getNode("medias/images"), "illustration", "", "");
+    addMixin(illustration, "exo:owneable");
+  }
+
+  private Node addNodeAsNTFile(Node home, String fileName,String mimeType,String data) throws Exception{
+    Node file = home.addNode(fileName,"nt:file");
+    Node jcrContent = file.addNode("jcr:content","nt:resource");    
+    jcrContent.addMixin("dc:elementSet");
+    jcrContent.setProperty("jcr:encoding", "UTF-8");
+    jcrContent.setProperty("jcr:lastModified", Calendar.getInstance());
+    jcrContent.setProperty("jcr:mimeType", mimeType);
+    jcrContent.setProperty("jcr:data", data);    
+    return file;
   }
 
 }

@@ -78,23 +78,10 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
   public void createDefaultSchema(Node webContent) throws Exception{
     addMixin(webContent,"exo:owneable");
     createSchema(webContent);
-    //create empty css file:
-    Node defaultCSS = addNodeAsNTFile(webContent.getNode("css"), "default.css", "text/css", "");
-    addMixin(defaultCSS, "exo:cssFile");
-    addMixin(defaultCSS,"exo:owneable");
+    createDefautWebData(webContent);
+  }
 
-    Node defaultJS = addNodeAsNTFile(webContent.getNode("js"), "default.js", "application/x-javascript", "");
-    addMixin(defaultJS, "exo:jsFile");
-    addMixin(defaultJS,"exo:owneable");
-
-    Node defaultHTML = addNodeAsNTFile(webContent, "default.html", "text/html", "");
-    addMixin(defaultHTML, "exo:htmlFile");
-    addMixin(defaultHTML,"exo:owneable");
-
-    Node illustration = addNodeAsNTFile(webContent.getNode("medias/images"), "illustration", "", "");
-    addMixin(illustration, "exo:owneable");
-  }     
-  protected void createSchema(final Node webContent) throws Exception {    
+  protected void createSchema(final Node webContent) throws Exception { 
     if (!webContent.hasNode("js")) {
       Node js = webContent.addNode("js","exo:jsFolder"); 
       addMixin(js,"exo:owneable");
@@ -124,17 +111,6 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
     //because exo:webcontent is exo:rss-enable so need set exo:title of the webcontent
     //by default, value of exo:title is webcontent name
     webContent.setProperty("exo:title", webContent.getName());
-  }
-
-  private Node addNodeAsNTFile(Node home, String fileName,String mimeType,String data) throws Exception{
-    Node file = home.addNode(fileName,"nt:file");
-    Node jcrContent = file.addNode("jcr:content","nt:resource");    
-    jcrContent.addMixin("dc:elementSet");
-    jcrContent.setProperty("jcr:encoding", "UTF-8");
-    jcrContent.setProperty("jcr:lastModified", Calendar.getInstance());
-    jcrContent.setProperty("jcr:mimeType", mimeType);
-    jcrContent.setProperty("jcr:data", data);    
-    return file;
   }
 
   public boolean isWebcontentChildNode(Node file) throws Exception{    
