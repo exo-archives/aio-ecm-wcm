@@ -15,35 +15,190 @@
   	<container id="ACMEBanner" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
   		<container id="ACMELogo" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
   			<application>
-			    <instance-id>portal#acme:/presentation/SingleContentViewer/acme-logo</instance-id>
-			    <title>Banner</title>
+  				<portlet>
+		      	<application-ref>presentation</application-ref>
+		        <portlet-ref>SingleContentViewer</portlet-ref>
+		        <preference>
+					<name>repository</name>
+					<value>repository</value>
+					<read-only>false</read-only>
+				</preference>
+				<preference>
+					<name>workspace</name>
+					<value>collaboration</value>
+					<read-only>false</read-only>
+				</preference>
+				<preference>
+					<name>nodeIdentifier</name>
+					<value>/sites content/live/acme/web contents/site artifacts/Logo</value>
+					<read-only>false</read-only>
+				</preference>
+				<preference>
+					<name>ShowQuickEdit</name>
+					<value>true</value>
+					<read-only>false</read-only>
+				</preference>
+				<preference>
+					<name>ShowPrintAction</name>
+					<value>false</value>
+					<read-only>false</read-only>
+				</preference>
+		      </portlet>
+		      <title>Banner</title>
+		      <show-info-bar>false</show-info-bar>
+		      <show-application-state>false</show-application-state>
+			  <show-application-mode>false</show-application-mode>
 			  </application>
   		</container>
   		<container id="ACMESearch" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  		<application>
-			    <instance-id>portal#acme:/presentation/SingleContentViewer/acme-searchbox</instance-id>
-			    <title>Access</title>
+	  			<portlet>
+		      	<application-ref>presentation</application-ref>
+		        <portlet-ref>SingleContentViewer</portlet-ref>
+		        <preference>
+					<name>repository</name>
+					<value>repository</value>
+					<read-only>false</read-only>
+				</preference>
+				<preference>
+					<name>workspace</name>
+					<value>collaboration</value>
+					<read-only>false</read-only>
+				</preference>
+				<preference>
+					<name>nodeIdentifier</name>
+					<value>/sites content/live/acme/web contents/site artifacts/Searchbox</value>
+					<read-only>false</read-only>
+				</preference>
+				<preference>
+					<name>ShowQuickEdit</name>
+					<value>true</value>
+					<read-only>false</read-only>
+				</preference>
+				<preference>
+					<name>ShowPrintAction</name>
+					<value>false</value>
+					<read-only>false</read-only>
+				</preference>
+		      </portlet>
+		      <title>Searchbox</title>
+		      <show-info-bar>false</show-info-bar>
+		      <show-application-state>false</show-application-state>
+			  <show-application-mode>false</show-application-mode>
 			  </application>
   		</container>
   		<container id="ACMESignin" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  		<application>
-			    <instance-id>portal#acme:/presentation/SingleContentViewer/acme-signin</instance-id>
-			    <title>Search box</title>
+	  			<portlet>
+		      	<application-ref>presentation</application-ref>
+		        <portlet-ref>SingleContentViewer</portlet-ref>
+		        <preference>
+					<name>repository</name>
+					<value>repository</value>
+					<read-only>false</read-only>
+				</preference>
+				<preference>
+					<name>workspace</name>
+					<value>collaboration</value>
+					<read-only>false</read-only>
+				</preference>
+				<preference>
+					<name>nodeIdentifier</name>
+					<value>/sites content/live/acme/web contents/site artifacts/Signin</value>
+					<read-only>false</read-only>
+				</preference>
+				<preference>
+					<name>ShowQuickEdit</name>
+					<value>true</value>
+					<read-only>false</read-only>
+				</preference>
+				<preference>
+					<name>ShowPrintAction</name>
+					<value>false</value>
+					<read-only>false</read-only>
+				</preference>
+		      </portlet>
+		      <title>Signin</title>
+		      <show-info-bar>false</show-info-bar>
+		      <show-application-state>false</show-application-state>
+			  <show-application-mode>false</show-application-mode>
 			  </application>
   		</container>
   	</container>
   		
-  	<application>
-		 	<instance-id>portal#acme:/presentation/SingleContentViewer/acme-navigation</instance-id>
-  	  <title>Navigation</title>
-		</application>
+  		<portlet-application>
+  			  <portlet>
+		      	<application-ref>presentation</application-ref>
+		        <portlet-ref>SingleContentViewer</portlet-ref>
+		        <preference>
+					<name>repository</name>
+					<value>repository</value>
+					<read-only>false</read-only>
+				</preference>
+				<preference>
+					<name>workspace</name>
+					<value>collaboration</value>
+					<read-only>false</read-only>
+				</preference>
+				<preference>
+					<name>nodeIdentifier</name>
+					<value>/sites content/live/acme/web contents/site artifacts/Navigation</value>
+					<read-only>false</read-only>
+				</preference>
+				<preference>
+					<name>ShowQuickEdit</name>
+					<value>true</value>
+					<read-only>false</read-only>
+				</preference>
+				<preference>
+					<name>ShowPrintAction</name>
+					<value>false</value>
+					<read-only>false</read-only>
+				</preference>
+		      </portlet>
+		      <title>Navigation</title>
+		      <show-info-bar>false</show-info-bar>
+		      <show-application-state>false</show-application-state>
+			  <show-application-mode>false</show-application-mode>
+		</portlet-application>
   	
 	  <page-body> </page-body>
 	  
-	  <application>
-	    <instance-id>portal#acme:/presentation/SingleContentViewer/acme-footer</instance-id>
-	    <title>Footer</title>
-	  </application>
+	  <portlet-application>
+	  	 <portlet>
+		      	<application-ref>presentation</application-ref>
+		        <portlet-ref>SingleContentViewer</portlet-ref>
+		        <preference>
+					<name>repository</name>
+					<value>repository</value>
+					<read-only>false</read-only>
+				</preference>
+				<preference>
+					<name>workspace</name>
+					<value>collaboration</value>
+					<read-only>false</read-only>
+				</preference>
+				<preference>
+					<name>nodeIdentifier</name>
+					<value>/sites content/live/acme/web contents/site artifacts/Footer</value>
+					<read-only>false</read-only>
+				</preference>
+				<preference>
+					<name>ShowQuickEdit</name>
+					<value>true</value>
+					<read-only>false</read-only>
+				</preference>
+				<preference>
+					<name>ShowPrintAction</name>
+					<value>false</value>
+					<read-only>false</read-only>
+				</preference>
+		      </portlet>
+		      <title>Footer</title>
+		      <show-info-bar>false</show-info-bar>
+		      <show-application-state>false</show-application-state>
+			  <show-application-mode>false</show-application-mode>
+	  </portlet-application>
   </portal-layout>
   
 </portal-config>
