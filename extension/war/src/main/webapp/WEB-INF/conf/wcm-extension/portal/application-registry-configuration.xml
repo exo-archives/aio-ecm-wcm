@@ -1,179 +1,314 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
 <configuration
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
-   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">    
+   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
 
   <external-component-plugins>
-    <target-component>org.exoplatform.application.registry.ApplicationRegistryService</target-component>     
-	    <component-plugin>
-	      <name>wcm.portlets.registry</name>
-	      <set-method>initListener</set-method>
-	      <type>org.exoplatform.application.registry.ApplicationCategoriesPlugins</type>
-	      <description>this listener init the portlets are registered in PortletRegister</description>
-	      <init-params>			
-			    <object-param>
-	          <name>WCM presentation</name>
-	          <description>WCM presentation</description>
-	          <object type="org.exoplatform.application.registry.ApplicationCategory">
-	            <field name="name"><string>WCM presentation</string></field>
-	            <field name="displayName"><string>WCM presentation</string></field> 
-	            <field name="accessPermissions">
-				        <collection type="java.util.ArrayList" item-type="java.lang.String">													
-									<value><string>*:/platform/users</string></value>													
-				        </collection>
-						  </field> 
-	            <field name="applications">
-		            <collection type="java.util.ArrayList">
-	                <value>                 
-		                <object type="org.exoplatform.application.registry.Application">                     
-		                  <field name="categoryName"><string>WCM presentation</string></field>
-		                  <field name="applicationName"><string>SingleContentViewer</string></field>
-						          <field name="displayName"><string>Single content viewer</string></field>
-		                  <field name="type"><string>portlet</string></field>
-		                  <field name="contentId"><string>WCM presentation/SingleContentViewer</string></field>
-		                  <field name="accessPermissions">
-								        <collection type="java.util.ArrayList" item-type="java.lang.String">													
-													<value><string>*:/platform/users</string></value>													
-								        </collection>
-						          </field>                                 
-		                </object>
-	                </value>
-	                <value>                 
-		                <object type="org.exoplatform.application.registry.Application">                     
-		                  <field name="categoryName"><string>WCM presentation</string></field>
-		                  <field name="applicationName"><string>ContentListViewerPortlet</string></field>
-						          <field name="displayName"><string>Content list viewer portlet</string></field>
-		                  <field name="type"><string>portlet</string></field>
-		                  <field name="contentId"><string>WCM presentation/ContentListViewerPortlet</string></field>
-		                  <field name="accessPermissions">
-								        <collection type="java.util.ArrayList" item-type="java.lang.String">													
-													<value><string>*:/platform/users</string></value>													
-								        </collection>
-						          </field>                                 
-		                </object>
-	                </value>
-	                <value>                 
-		                <object type="org.exoplatform.application.registry.Application">                     
-		                  <field name="categoryName"><string>WCM presentation</string></field>
-		                  <field name="applicationName"><string>ParameterizedContentViewerPortlet</string></field>
-						          <field name="displayName"><string>Parameterized content viewer portlet</string></field>
-		                  <field name="type"><string>portlet</string></field>
-		                  <field name="contentId"><string>WCM presentation/ParameterizedContentViewerPortlet</string></field>
-		                  <field name="accessPermissions">
-								        <collection type="java.util.ArrayList" item-type="java.lang.String">													
-													<value><string>*:/platform/users</string></value>													
-								        </collection>
-						          </field>                                 
-		                </object>
-	                </value>
-									<value>                 
-		                <object type="org.exoplatform.application.registry.Application">                     
-		                  <field name="categoryName"><string>WCM presentation</string></field>
-		                  <field name="applicationName"><string>CategoryNavigationPortlet</string></field>
-						          <field name="displayName"><string>Category navigation portlet</string></field>
-		                  <field name="type"><string>portlet</string></field>
-		                  <field name="contentId"><string>WCM presentation/CategoryNavigationPortlet</string></field>
-		                  <field name="accessPermissions">
-								        <collection type="java.util.ArrayList" item-type="java.lang.String">													
-													<value><string>*:/platform/users</string></value>													
-								        </collection>
-						          </field>                                 
-		                </object>
-	                </value>
-									<value>                 
-		                <object type="org.exoplatform.application.registry.Application">                     
-		                  <field name="categoryName"><string>WCM presentation</string></field>
-		                  <field name="applicationName"><string>ParameterizedContentListViewerPortlet</string></field>
-						          <field name="displayName"><string>Parameterized content list viewer portlet</string></field>
-		                  <field name="type"><string>portlet</string></field>
-		                  <field name="contentId"><string>WCM presentation/ParameterizedContentListViewerPortlet</string></field>
-		                  <field name="accessPermissions">
-								        <collection type="java.util.ArrayList" item-type="java.lang.String">													
-													<value><string>*:/platform/users</string></value>													
-								        </collection>
-						          </field>                                 
-		                </object>
-	                </value>
-	              </collection>                               
-              </field> 
-            </object>        
-          </object-param>
-          
-          <object-param>
-            <name>WCM Newsletter</name>
-            <description>WCM Newsletter</description>
-            <object type="org.exoplatform.application.registry.ApplicationCategory">
-              <field name="name"><string>WCM Newsletter</string></field>
-              <field name="displayName"><string>WCM Newsletter</string></field> 
-              <field name="accessPermissions">
-                <collection type="java.util.ArrayList" item-type="java.lang.String">                          
-                  <value><string>*:/platform/users</string></value>                         
-                </collection>
-              </field> 
-              <field name="applications">
-                <collection type="java.util.ArrayList">
-									<value>                 
-		                <object type="org.exoplatform.application.registry.Application">                     
-		                  <field name="categoryName"><string>WCM Newsletter</string></field>
-		                  <field name="applicationName"><string>NewsletterViewerPortlet</string></field>
-						          <field name="displayName"><string>Newsletter</string></field>
-		                  <field name="type"><string>portlet</string></field>
-		                  <field name="contentId"><string>WCM Newsletter/NewsletterViewerPortlet</string></field>
-		                  <field name="accessPermissions">
-								        <collection type="java.util.ArrayList" item-type="java.lang.String">													
-													<value><string>*:/platform/users</string></value>													
-								        </collection>
-						          </field>                                 
-		                </object>
-	                </value>
-									<value>                 
-		                <object type="org.exoplatform.application.registry.Application">                     
-		                  <field name="categoryName"><string>WCM Newsletter</string></field>
-		                  <field name="applicationName"><string>NewsletterManagerPortlet</string></field>
-						          <field name="displayName"><string>Newsletter Manager</string></field>
-		                  <field name="type"><string>portlet</string></field>
-		                  <field name="contentId"><string>WCM Newsletter/NewsletterManagerPortlet</string></field>
-		                  <field name="accessPermissions">
-								        <collection type="java.util.ArrayList" item-type="java.lang.String">													
-													<value><string>*:/platform/users</string></value>													
-								        </collection>
-						          </field>                                 
-		                </object>
-	                </value>
-	              </collection>                               
-              </field> 
-            </object>        
-          </object-param>
-          
-          <object-param>
-            <name>WCM Form Generator</name>
-            <description>WCM Form Generator</description>
-            <object type="org.exoplatform.application.registry.ApplicationCategory">
-              <field name="name"><string>WCM Form Generator</string></field>
-              <field name="displayName"><string>WCM Form Generator</string></field> 
-              <field name="accessPermissions">
-                <collection type="java.util.ArrayList" item-type="java.lang.String">                          
-                  <value><string>*:/platform/users</string></value>                         
-                </collection>
-              </field> 
-              <field name="applications">
-                <collection type="java.util.ArrayList">
-									<value>                 
-		                <object type="org.exoplatform.application.registry.Application">                     
-		                  <field name="categoryName"><string>WCM Form Generator</string></field>
-		                  <field name="applicationName"><string>FormGeneratorPortlet</string></field>
-						          <field name="displayName"><string>Form generator portlet</string></field>
-		                  <field name="type"><string>portlet</string></field>
-		                  <field name="contentId"><string>WCM Form Generator/FormGeneratorPortlet</string></field>
-		                  <field name="accessPermissions">
-								        <collection type="java.util.ArrayList" item-type="java.lang.String">													
-													<value><string>*:/platform/users</string></value>													
-								        </collection>
-						          </field>                                 
-		                </object>
-	                </value>
-									<!-- value>                 
+    <target-component>org.exoplatform.application.registry.ApplicationRegistryService</target-component>
+    <component-plugin>
+      <name>wcm.portlets.registry</name>
+      <set-method>initListener</set-method>
+      <type>org.exoplatform.application.registry.ApplicationCategoriesPlugins</type>
+      <description>this listener init the portlets are registered in PortletRegister</description>
+      <init-params>
+        <object-param>
+          <name>WCM presentation</name>
+          <description>WCM presentation</description>
+          <object type="org.exoplatform.application.registry.ApplicationCategory">
+            <field name="name">
+              <string>WCM presentation</string>
+            </field>
+            <field name="displayName">
+              <string>WCM presentation</string>
+            </field>
+            <field name="accessPermissions">
+              <collection type="java.util.ArrayList" item-type="java.lang.String">
+                <value>
+                  <string>*:/platform/users</string>
+                </value>
+              </collection>
+            </field>
+            <field name="applications">
+              <collection type="java.util.ArrayList">
+                <value>
+                  <object type="org.exoplatform.application.registry.Application">
+                    <field name="categoryName">
+                      <string>WCM presentation</string>
+                    </field>
+                    <field name="applicationName">
+                      <string>SingleContentViewer</string>
+                    </field>
+                    <field name="displayName">
+                      <string>Single content viewer</string>
+                    </field>
+                    <field name="type">
+                      <string>portlet</string>
+                    </field>
+                    <field name="contentId">
+                      <string>WCM presentation/SingleContentViewer</string>
+                    </field>
+                    <field name="accessPermissions">
+                      <collection type="java.util.ArrayList" item-type="java.lang.String">
+                        <value>
+                          <string>*:/platform/users</string>
+                        </value>
+                      </collection>
+                    </field>
+                  </object>
+                </value>
+                <value>
+                  <object type="org.exoplatform.application.registry.Application">
+                    <field name="categoryName">
+                      <string>WCM presentation</string>
+                    </field>
+                    <field name="applicationName">
+                      <string>ContentListViewerPortlet</string>
+                    </field>
+                    <field name="displayName">
+                      <string>Content list viewer portlet</string>
+                    </field>
+                    <field name="type">
+                      <string>portlet</string>
+                    </field>
+                    <field name="contentId">
+                      <string>WCM presentation/ContentListViewerPortlet</string>
+                    </field>
+                    <field name="accessPermissions">
+                      <collection type="java.util.ArrayList" item-type="java.lang.String">
+                        <value>
+                          <string>*:/platform/users</string>
+                        </value>
+                      </collection>
+                    </field>
+                  </object>
+                </value>
+                <value>
+                  <object type="org.exoplatform.application.registry.Application">
+                    <field name="categoryName">
+                      <string>WCM presentation</string>
+                    </field>
+                    <field name="applicationName">
+                      <string>ParameterizedContentViewerPortlet</string>
+                    </field>
+                    <field name="displayName">
+                      <string>Parameterized content viewer portlet</string>
+                    </field>
+                    <field name="type">
+                      <string>portlet</string>
+                    </field>
+                    <field name="contentId">
+                      <string>WCM presentation/ParameterizedContentViewerPortlet</string>
+                    </field>
+                    <field name="accessPermissions">
+                      <collection type="java.util.ArrayList" item-type="java.lang.String">
+                        <value>
+                          <string>*:/platform/users</string>
+                        </value>
+                      </collection>
+                    </field>
+                  </object>
+                </value>
+                <value>
+                  <object type="org.exoplatform.application.registry.Application">
+                    <field name="categoryName">
+                      <string>WCM presentation</string>
+                    </field>
+                    <field name="applicationName">
+                      <string>CategoryNavigationPortlet</string>
+                    </field>
+                    <field name="displayName">
+                      <string>Category navigation portlet</string>
+                    </field>
+                    <field name="type">
+                      <string>portlet</string>
+                    </field>
+                    <field name="contentId">
+                      <string>WCM presentation/CategoryNavigationPortlet</string>
+                    </field>
+                    <field name="accessPermissions">
+                      <collection type="java.util.ArrayList" item-type="java.lang.String">
+                        <value>
+                          <string>*:/platform/users</string>
+                        </value>
+                      </collection>
+                    </field>
+                  </object>
+                </value>
+                <value>
+                  <object type="org.exoplatform.application.registry.Application">
+                    <field name="categoryName">
+                      <string>WCM presentation</string>
+                    </field>
+                    <field name="applicationName">
+                      <string>ParameterizedContentListViewerPortlet</string>
+                    </field>
+                    <field name="displayName">
+                      <string>Parameterized content list viewer portlet</string>
+                    </field>
+                    <field name="type">
+                      <string>portlet</string>
+                    </field>
+                    <field name="contentId">
+                      <string>WCM presentation/ParameterizedContentListViewerPortlet</string>
+                    </field>
+                    <field name="accessPermissions">
+                      <collection type="java.util.ArrayList" item-type="java.lang.String">
+                        <value>
+                          <string>*:/platform/users</string>
+                        </value>
+                      </collection>
+                    </field>
+                  </object>
+                </value>
+              </collection>
+            </field>
+          </object>
+        </object-param>
+
+        <object-param>
+          <name>WCM Newsletter</name>
+          <description>WCM Newsletter</description>
+          <object type="org.exoplatform.application.registry.ApplicationCategory">
+            <field name="name">
+              <string>WCM Newsletter</string>
+            </field>
+            <field name="displayName">
+              <string>WCM Newsletter</string>
+            </field>
+            <field name="accessPermissions">
+              <collection type="java.util.ArrayList" item-type="java.lang.String">
+                <value>
+                  <string>*:/platform/users</string>
+                </value>
+              </collection>
+            </field>
+            <field name="applications">
+              <collection type="java.util.ArrayList">
+                <value>
+                  <object type="org.exoplatform.application.registry.Application">
+                    <field name="categoryName">
+                      <string>WCM Newsletter</string>
+                    </field>
+                    <field name="applicationName">
+                      <string>NewsletterViewerPortlet</string>
+                    </field>
+                    <field name="displayName">
+                      <string>Newsletter</string>
+                    </field>
+                    <field name="type">
+                      <string>portlet</string>
+                    </field>
+                    <field name="contentId">
+                      <string>WCM Newsletter/NewsletterViewerPortlet</string>
+                    </field>
+                    <field name="accessPermissions">
+                      <collection type="java.util.ArrayList" item-type="java.lang.String">
+                        <value>
+                          <string>*:/platform/users</string>
+                        </value>
+                      </collection>
+                    </field>
+                  </object>
+                </value>
+                <value>
+                  <object type="org.exoplatform.application.registry.Application">
+                    <field name="categoryName">
+                      <string>WCM Newsletter</string>
+                    </field>
+                    <field name="applicationName">
+                      <string>NewsletterManagerPortlet</string>
+                    </field>
+                    <field name="displayName">
+                      <string>Newsletter Manager</string>
+                    </field>
+                    <field name="type">
+                      <string>portlet</string>
+                    </field>
+                    <field name="contentId">
+                      <string>WCM Newsletter/NewsletterManagerPortlet</string>
+                    </field>
+                    <field name="accessPermissions">
+                      <collection type="java.util.ArrayList" item-type="java.lang.String">
+                        <value>
+                          <string>*:/platform/users</string>
+                        </value>
+                      </collection>
+                    </field>
+                  </object>
+                </value>
+              </collection>
+            </field>
+          </object>
+        </object-param>
+
+        <object-param>
+          <name>WCM Form Generator</name>
+          <description>WCM Form Generator</description>
+          <object type="org.exoplatform.application.registry.ApplicationCategory">
+            <field name="name">
+              <string>WCM Form Generator</string>
+            </field>
+            <field name="displayName">
+              <string>WCM Form Generator</string>
+            </field>
+            <field name="accessPermissions">
+              <collection type="java.util.ArrayList" item-type="java.lang.String">
+                <value>
+                  <string>*:/platform/users</string>
+                </value>
+              </collection>
+            </field>
+            <field name="applications">
+              <collection type="java.util.ArrayList">
+                <value>
+                  <object type="org.exoplatform.application.registry.Application">
+                    <field name="categoryName">
+                      <string>WCM Form Generator</string>
+                    </field>
+                    <field name="applicationName">
+                      <string>FormGeneratorPortlet</string>
+                    </field>
+                    <field name="displayName">
+                      <string>Form generator portlet</string>
+                    </field>
+                    <field name="type">
+                      <string>portlet</string>
+                    </field>
+                    <field name="contentId">
+                      <string>WCM Form Generator/FormGeneratorPortlet</string>
+                    </field>
+                    <field name="accessPermissions">
+                      <collection type="java.util.ArrayList" item-type="java.lang.String">
+                        <value>
+                          <string>*:/platform/users</string>
+                        </value>
+                      </collection>
+                    </field>
+                  </object>
+                </value>
+                <!-- value>                 
 		                <object type="org.exoplatform.application.registry.Application">                     
 		                  <field name="categoryName"><string>WCM Form Generator</string></field>
 		                  <field name="applicationName"><string>FastContentCreatorPortlet</string></field>
@@ -187,26 +322,38 @@
 						          </field>                                 
 		                </object>
 	                </value-->
-									<value>                 
-		                <object type="org.exoplatform.application.registry.Application">                     
-		                  <field name="categoryName"><string>WCM Form Generator</string></field>
-		                  <field name="applicationName"><string>FastContentCreatorBasicPortlet</string></field>
-						          <field name="displayName"><string>Fast content creator basic portlet</string></field>
-		                  <field name="type"><string>portlet</string></field>
-		                  <field name="contentId"><string>WCM Form Generator/FastContentCreatorBasicPortlet</string></field>
-		                  <field name="accessPermissions">
-								        <collection type="java.util.ArrayList" item-type="java.lang.String">													
-													<value><string>*:/platform/users</string></value>													
-								        </collection>
-						          </field>                                 
-		                </object>
-	                </value>
-		            </collection>                               
-	            </field> 
-	          </object>        
-	        </object-param>
-	        
-	      </init-params>
-	    </component-plugin>
- </external-component-plugins>       
+                <value>
+                  <object type="org.exoplatform.application.registry.Application">
+                    <field name="categoryName">
+                      <string>WCM Form Generator</string>
+                    </field>
+                    <field name="applicationName">
+                      <string>FastContentCreatorBasicPortlet</string>
+                    </field>
+                    <field name="displayName">
+                      <string>Fast content creator basic portlet</string>
+                    </field>
+                    <field name="type">
+                      <string>portlet</string>
+                    </field>
+                    <field name="contentId">
+                      <string>WCM Form Generator/FastContentCreatorBasicPortlet</string>
+                    </field>
+                    <field name="accessPermissions">
+                      <collection type="java.util.ArrayList" item-type="java.lang.String">
+                        <value>
+                          <string>*:/platform/users</string>
+                        </value>
+                      </collection>
+                    </field>
+                  </object>
+                </value>
+              </collection>
+            </field>
+          </object>
+        </object-param>
+
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
 </configuration>

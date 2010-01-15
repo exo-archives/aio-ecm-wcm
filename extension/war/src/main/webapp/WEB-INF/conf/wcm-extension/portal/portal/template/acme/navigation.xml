@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<node-navigation>
+  <owner-type>portal</owner-type>
+  <owner-id>@owner@</owner-id>
+  <priority>1</priority>
+  <page-nodes>
+    <node>
+      <uri>overview</uri>
+      <name>overview</name>
+      <label>Overview</label>
+      <page-reference>portal::@owner@::overview</page-reference>
+    </node>
+
+    <node>
+      <uri>products</uri>
+      <name>products</name>
+      <label>#{portal.@owner@.products}</label>
+      <visible>false</visible>
+      <page-reference>portal::@owner@::pcv</page-reference>
+      <node>
+        <uri>products/presentation</uri>
+        <name>presentation</name>
+        <label>#{portal.@owner@.presentation}</label>
+        <page-reference>portal::@owner@::pcv</page-reference>
+        <node>
+          <uri>products/presentation/pcv</uri>
+          <name>pcv</name>
+          <label>#{portal.@owner@.pcv}</label>
+          <page-reference>portal::@owner@::pcv</page-reference>
+        </node>
+      </node>
+    </node>
+
+    <node>
+      <uri>printviewer</uri>
+      <name>printviewer</name>
+      <label>#{portal.@owner@.printviewer}</label>
+      <visible>false</visible>
+      <page-reference>portal::@owner@::printviewer</page-reference>
+    </node>
+
+    <node>
+      <uri>searchResult</uri>
+      <name>searchResult</name>
+      <label>#{portal.@owner@.searchResult}</label>
+      <visible>false</visible>
+      <page-reference>portal::@owner@::searchResult</page-reference>
+    </node>
+
+    <node>
+      <uri>newAccount</uri>
+      <name>newAccount</name>
+      <label>#{portal.@owner@.newAccount}</label>
+      <visible>false</visible>
+      <page-reference>portal::@owner@::newAccount</page-reference>
+    </node>
+
+  </page-nodes>
+</node-navigation>

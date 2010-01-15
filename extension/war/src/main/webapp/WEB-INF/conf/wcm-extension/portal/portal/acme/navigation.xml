@@ -1,132 +1,153 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
 <node-navigation>
-	<owner-type>portal</owner-type>
-	<owner-id>acme</owner-id>
-	<priority>1</priority>
-	<page-nodes>
-		<node>
-			<uri>overview</uri>
-			<name>overview</name>
-			<label>#{portal.acme.overview}</label>
-			<page-reference>portal::acme::overview</page-reference>	    
-		</node>	         	  	  	  	 	     	  	    
-		<node>
-			<uri>news</uri>
-			<name>news</name>
-			<label>#{portal.acme.news}</label>
-			<page-reference>portal::acme::news</page-reference>
-		</node>    
-		<!-- node>
-			<uri>events</uri>
-			<name>events</name>
-			<label>#{portal.acme.events}</label>
-			<page-reference>portal::acme::events</page-reference>	    
-		</node>	         	  	  	  	 	     	  	   
-	  	<node>
-			<uri>publications</uri>
-			<name>publications</name>
-			<label>#{portal.acme.publications}</label>
-			<page-reference>portal::acme::publications</page-reference>	    
-		</node-->
-		<node>
-			<uri>newsletters</uri>
-			<name>newsletters</name>
-			<label>#{portal.acme.newsletters}</label>
-			<page-reference>portal::acme::newsletters</page-reference>
-		</node>
-		
-		<node>
-			<uri>contactus</uri>
-			<name>contactus</name>
-			<label>#{portal.acme.contactus}</label>
-			<page-reference>portal::acme::contactus</page-reference>
-			<node>
-				<uri>contactus/confirmation</uri>
-				<name>confirmation</name>
-				<label>#{portal.acme.confirmation}</label>
-				<visible>false</visible>
-				<page-reference>portal::acme::confirmation</page-reference>
-			</node>
-		</node>
-
-		<node>
-			<uri>detail</uri>
-			<name>detail</name>
-			<label>#{portal.acme.pcv}</label>
-			<visible>false</visible>
-			<page-reference>portal::acme::pcv</page-reference>
-		</node>
-		
-		<node>
-			<uri>products</uri>
-			<name>products</name>
-			<label>#{portal.acme.products}</label>
-			<visible>false</visible>
-			<page-reference>portal::acme::scv</page-reference>
-			
-			<node>
-				<uri>products/presentation</uri>
-				<name>presentation</name>
-				<label>#{portal.acme.presentation}</label>
-				<page-reference>portal::acme::scv</page-reference>
-				<node>
-					<uri>products/presentation/scv</uri>
-					<name>scv</name>
-					<label>#{portal.acme.scv}</label>
-					<page-reference>portal::acme::scv</page-reference>
-				</node>
-				<node>
-					<uri>products/presentation/clv</uri>
-					<name>clv</name>
-					<label>#{portal.acme.clv}</label>
-					<page-reference>portal::acme::clv</page-reference>
-				</node>
-				<node>
-					<uri>products/presentation/pcv</uri>
-					<name>pcv</name>
-					<label>#{portal.acme.pcv}</label>
-					<visible>false</visible>
-					<page-reference>portal::acme::pcv</page-reference>
-				</node>
-				<node>
-					<uri>products/presentation/category</uri>
-					<name>category</name>
-					<label>#{portal.acme.category}</label>
-					<page-reference>portal::acme::category</page-reference>
-				</node>
-				<node>
-					<uri>products/presentation/pclv</uri>
-					<name>pclv</name>
-					<label>#{portal.acme.pclv}</label>
-					<visible>false</visible>
-					<page-reference>portal::acme::pclv</page-reference>
-				</node>
-			</node>
-		</node>
-		
-		<node>
-			<uri>printviewer</uri>
-			<name>printviewer</name>
-			<label>#{portal.acme.printviewer}</label>
-			<visible>false</visible>
-			<page-reference>portal::acme::printviewer</page-reference>
-		</node>
-
-		<node>
-			<uri>searchResult</uri>
-			<name>searchResult</name>
-			<label>#{portal.acme.searchResult}</label>
-			<visible>false</visible>			
-			<page-reference>portal::acme::searchResult</page-reference>	    
-		</node>
-		
-		<node>
-	    <uri>newAccount</uri>
-	    <name>newAccount</name>
-	    <label>#{portal.acme.newAccount}</label>
-	    <visible>false</visible>
-	    <page-reference>portal::acme::newAccount</page-reference>
+  <owner-type>portal</owner-type>
+  <owner-id>acme</owner-id>
+  <priority>1</priority>
+  <page-nodes>
+    <node>
+      <uri>overview</uri>
+      <name>overview</name>
+      <label>#{portal.acme.overview}</label>
+      <page-reference>portal::acme::overview</page-reference>
     </node>
-		
-	</page-nodes>
+    <node>
+      <uri>news</uri>
+      <name>news</name>
+      <label>#{portal.acme.news}</label>
+      <page-reference>portal::acme::news</page-reference>
+    </node>
+    <!-- node>
+      <uri>events</uri>
+      <name>events</name>
+      <label>#{portal.acme.events}</label>
+      <page-reference>portal::acme::events</page-reference>      
+    </node>                                          
+      <node>
+      <uri>publications</uri>
+      <name>publications</name>
+      <label>#{portal.acme.publications}</label>
+      <page-reference>portal::acme::publications</page-reference>      
+    </node-->
+    <node>
+      <uri>newsletters</uri>
+      <name>newsletters</name>
+      <label>#{portal.acme.newsletters}</label>
+      <page-reference>portal::acme::newsletters</page-reference>
+    </node>
+
+    <node>
+      <uri>contactus</uri>
+      <name>contactus</name>
+      <label>#{portal.acme.contactus}</label>
+      <page-reference>portal::acme::contactus</page-reference>
+      <node>
+        <uri>contactus/confirmation</uri>
+        <name>confirmation</name>
+        <label>#{portal.acme.confirmation}</label>
+        <visible>false</visible>
+        <page-reference>portal::acme::confirmation</page-reference>
+      </node>
+    </node>
+
+    <node>
+      <uri>detail</uri>
+      <name>detail</name>
+      <label>#{portal.acme.pcv}</label>
+      <visible>false</visible>
+      <page-reference>portal::acme::pcv</page-reference>
+    </node>
+
+    <node>
+      <uri>products</uri>
+      <name>products</name>
+      <label>#{portal.acme.products}</label>
+      <visible>false</visible>
+      <page-reference>portal::acme::scv</page-reference>
+
+      <node>
+        <uri>products/presentation</uri>
+        <name>presentation</name>
+        <label>#{portal.acme.presentation}</label>
+        <page-reference>portal::acme::scv</page-reference>
+        <node>
+          <uri>products/presentation/scv</uri>
+          <name>scv</name>
+          <label>#{portal.acme.scv}</label>
+          <page-reference>portal::acme::scv</page-reference>
+        </node>
+        <node>
+          <uri>products/presentation/clv</uri>
+          <name>clv</name>
+          <label>#{portal.acme.clv}</label>
+          <page-reference>portal::acme::clv</page-reference>
+        </node>
+        <node>
+          <uri>products/presentation/pcv</uri>
+          <name>pcv</name>
+          <label>#{portal.acme.pcv}</label>
+          <visible>false</visible>
+          <page-reference>portal::acme::pcv</page-reference>
+        </node>
+        <node>
+          <uri>products/presentation/category</uri>
+          <name>category</name>
+          <label>#{portal.acme.category}</label>
+          <page-reference>portal::acme::category</page-reference>
+        </node>
+        <node>
+          <uri>products/presentation/pclv</uri>
+          <name>pclv</name>
+          <label>#{portal.acme.pclv}</label>
+          <visible>false</visible>
+          <page-reference>portal::acme::pclv</page-reference>
+        </node>
+      </node>
+    </node>
+
+    <node>
+      <uri>printviewer</uri>
+      <name>printviewer</name>
+      <label>#{portal.acme.printviewer}</label>
+      <visible>false</visible>
+      <page-reference>portal::acme::printviewer</page-reference>
+    </node>
+
+    <node>
+      <uri>searchResult</uri>
+      <name>searchResult</name>
+      <label>#{portal.acme.searchResult}</label>
+      <visible>false</visible>
+      <page-reference>portal::acme::searchResult</page-reference>
+    </node>
+
+    <node>
+      <uri>newAccount</uri>
+      <name>newAccount</name>
+      <label>#{portal.acme.newAccount}</label>
+      <visible>false</visible>
+      <page-reference>portal::acme::newAccount</page-reference>
+    </node>
+
+  </page-nodes>
 </node-navigation>
