@@ -14,6 +14,7 @@
 	  				<portlet>
 	  					<application-ref>presentation</application-ref>
         				<portlet-ref>SingleContentViewer</portlet-ref>
+        				<preferences>
         				<preference>
 							<name>repository</name>
 							<value>repository</value>
@@ -39,6 +40,7 @@
 							<value>false</value>
 							<read-only>false</read-only>
 						</preference>
+						</preferences>
 	  				</portlet>
 				    <title>Homepage</title>
 				  </portlet-application>
@@ -46,6 +48,7 @@
 	  				<portlet>
 	  					<application-ref>presentation</application-ref>
         				<portlet-ref>ContentListViewerPortlet</portlet-ref>
+        				<preferences>
         				<preference>
 					    	<name>repository</name>
 					    	<value>repository</value>
@@ -141,6 +144,7 @@
 								<value>detail</value>	    	
 								<read-only>false</read-only>
 							</preference>
+							</preferences>
 	  				</portlet>
 			    	<title>Events</title>
 			    	<access-permissions>Everyone</access-permissions>
@@ -152,6 +156,7 @@
 	  				<portlet>
 	  					<application-ref>presentation</application-ref>
         				<portlet-ref>ContentListViewerPortlet</portlet-ref>
+        				<preferences>
         				<preference>
 					    	<name>repository</name>
 					    	<value>repository</value>
@@ -247,6 +252,7 @@
 								<value>detail</value>	    	
 								<read-only>false</read-only>
 							</preference>
+							</preferences>
 	  				</portlet>
 				    <title>News</title>
 				    <access-permissions>Everyone</access-permissions>
@@ -260,6 +266,7 @@
 	  				<portlet>
 	  					<application-ref>presentation</application-ref>
         				<portlet-ref>ContentListViewerPortlet</portlet-ref>
+        				<preferences>
         				<preference>
 					    	<name>repository</name>
 					    	<value>repository</value>
@@ -355,6 +362,7 @@
 								<value>detail</value>	    	
 								<read-only>false</read-only>
 							</preference>
+							</preferences>
 	  				</portlet>
 				    <title>Documents</title>
 				    <access-permissions>Everyone</access-permissions>
@@ -366,6 +374,7 @@
 	  				<portlet>
 	  					<application-ref>presentation</application-ref>
         				<portlet-ref>ContentListViewerPortlet</portlet-ref>
+        				<preferences>
         				<preference>
 					    	<name>repository</name>
 					    	<value>repository</value>
@@ -461,6 +470,7 @@
 								<value>detail</value>	    	
 								<read-only>false</read-only>
 							</preference>
+							</preferences>
 	  				</portlet>
 			    	<title>Latest news</title>
 			    	<access-permissions>Everyone</access-permissions>
@@ -486,6 +496,7 @@
 	  			<portlet>
 	  					<application-ref>presentation</application-ref>
         				<portlet-ref>CategoryNavigationPortlet</portlet-ref>
+        				<preferences>
         				<preference>
 							<name>portletName</name>
 							<value>Category Navigation Portlet</value>
@@ -521,6 +532,7 @@
 							<value>news</value>
 							<read-only>false</read-only>
 						</preference>
+						</preferences>
 	  				</portlet>
 			    <title>Categories</title>
 			    <access-permissions>Everyone</access-permissions>
@@ -534,6 +546,7 @@
 	  			<portlet>
 	  					<application-ref>presentation</application-ref>
         				<portlet-ref>ParameterizedContentListViewerPortlet</portlet-ref>
+        				<preferences>
         				<preference>
 							<name>repository</name>
 							<value>repository</value>
@@ -639,6 +652,7 @@
 							<value>acme</value>
 							<read-only>false</read-only>
 						</preference>
+						</preferences>
 	  				</portlet>
 			    <title>Parameterized</title>
 			    <access-permissions>Everyone</access-permissions>
@@ -662,6 +676,7 @@
 	  	<portlet>
 	  		<application-ref>presentation</application-ref>
         	<portlet-ref>SingleContentViewer</portlet-ref>
+        	<preferences>
         	<preference>
 		    	<name>repository</name>
 		    	<value>repository</value>
@@ -757,6 +772,7 @@
 					<value>detail</value>	    	
 					<read-only>false</read-only>
 				</preference>
+				</preferences>
 	  	</portlet>
 	    <title>Events</title>
 	    <access-permissions>Everyone</access-permissions>
@@ -778,6 +794,7 @@
 	  	<portlet>
 	  		<application-ref>presentation</application-ref>
         	<portlet-ref>SingleContentViewer</portlet-ref>
+        	<preferences></preferences>
 	  	</portlet>
 	    <title>Publications</title>
 	    <access-permissions>Everyone</access-permissions>
@@ -799,6 +816,7 @@
       <portlet>
   		<application-ref>searches</application-ref>
        	<portlet-ref>WCMAdvanceSearchPortlet</portlet-ref>
+       	<preferences>
        	<preference>
 		    	<name>repository</name>
 		    	<value>repository</value>
@@ -844,6 +862,7 @@
 		    	<value>detail</value>	    	
 		    	<read-only>false</read-only>
 		    </preference>
+		    </preferences>
 	  </portlet>
       <title>SearchResult</title>
       <show-info-bar>false</show-info-bar>      
@@ -864,6 +883,7 @@
 			<portlet>
 				<application-ref>presentation</application-ref>
        			<portlet-ref>ParameterizedContentViewerPortlet</portlet-ref>
+       			<preferences>
        			<preference>
 					<name>repository</name>
 					<value>repository</value>
@@ -889,6 +909,7 @@
 					<value>true</value>
 					<read-only>false</read-only>
 				</preference>
+				</preferences>
 			</portlet>
 			<title>Parameterized content viewer portlet</title>
 			<show-info-bar>false</show-info-bar>
@@ -910,6 +931,7 @@
 			<portlet>
 				<application-ref>presentation</application-ref>
        			<portlet-ref>ParameterizedContentViewerPortlet</portlet-ref>
+       			<preferences></preferences>
 			</portlet>
 			<title>Print viewer</title>
 			<show-info-bar>false</show-info-bar>
@@ -930,6 +952,7 @@
 			<portlet>
 				<application-ref>presentation</application-ref>
        			<portlet-ref>ParameterizedContentListViewerPortlet</portlet-ref>
+       			<preferences></preferences>
 			</portlet>
 			<title>Parameterized Content List Viewer Portlet</title>
 			<show-info-bar>false</show-info-bar>
@@ -950,6 +973,7 @@
 			<portlet>
 				<application-ref>presentation</application-ref>
        			<portlet-ref>CategoryNavigationPortlet</portlet-ref>
+       			<preferences>
        			<preference>
 					<name>portletName</name>
 					<value>Category Navigation Portlet</value>
@@ -985,6 +1009,7 @@
 					<value>news</value>
 					<read-only>false</read-only>
 				</preference>
+				</preferences>
 			</portlet>
 			<title>Category navigation portlet</title>
 			<show-info-bar>false</show-info-bar>
@@ -1005,6 +1030,7 @@
 			<portlet>
 				<application-ref>presentation</application-ref>
         		<portlet-ref>ContentListViewerPortlet</portlet-ref>
+        		<preferences></preferences>
 			</portlet>
 			<title>Content List Viewer Portlet</title>
 			<show-info-bar>false</show-info-bar>
@@ -1025,6 +1051,7 @@
 			<portlet>
 				<application-ref>presentation</application-ref>
         		<portlet-ref>SingleContentViewer</portlet-ref>
+        		<preferences></preferences>
 			</portlet>
 			<title>Single Content Viewer Portlet</title>
 			<show-info-bar>false</show-info-bar>
@@ -1045,6 +1072,7 @@
 			<portlet>
 				<application-ref>presentation</application-ref>
         		<portlet-ref>SingleContentViewer</portlet-ref>
+        		<preferences>
         		<preference>
 					<name>repository</name>
 					<value>repository</value>
@@ -1070,6 +1098,7 @@
 					<value>false</value>
 					<read-only>false</read-only>
 				</preference>
+				</preferences>
 			</portlet>
 			<title>Newsletter Header</title>
 			<show-info-bar>false</show-info-bar>
@@ -1080,6 +1109,7 @@
 			<portlet>
 				<application-ref>newsletter</application-ref>
         		<portlet-ref>NewsletterViewerPortlet</portlet-ref>
+        		<preferences></preferences>
 			</portlet>
 			<title>Newsletter Viewer</title>
 			<show-info-bar>false</show-info-bar>
@@ -1100,6 +1130,7 @@
 			<portlet>
 				<application-ref>formgenerator</application-ref>
         		<portlet-ref>FastContentCreatorBasicPortlet</portlet-ref>
+        		<preferences>
         		<preference>
 					<name>redirectPath</name>
 					<value>/portal/public/acme/contactus/confirmation</value>
@@ -1142,6 +1173,7 @@
 					<value>exo:sendMailAction</value>
 					<read-only>false</read-only>
 				</preference>
+				</preferences>
 			</portlet>
 			<title>Contact Us</title>
 			<show-info-bar>false</show-info-bar>
@@ -1162,6 +1194,7 @@
 	  	<portlet>
 	  		<application-ref>presentation</application-ref>
         	<portlet-ref>SingleContentViewer</portlet-ref>
+        	<preferences>
         	<preference>
 				<name>repository</name>
 				<value>repository</value>
@@ -1187,6 +1220,7 @@
 				<value>false</value>
 				<read-only>false</read-only>
 			</preference>
+			</preferences>
 	  	</portlet>
 	    <title>Contact Form Confirmation</title>
 	  </portlet-application>
@@ -1204,6 +1238,7 @@
       <portlet>
       	<application-ref>exoadmin</application-ref>
         <portlet-ref>AccountPortlet</portlet-ref>
+        <preferences></preferences>
       </portlet>
       <title>New Account</title>
       <show-info-bar>false</show-info-bar>

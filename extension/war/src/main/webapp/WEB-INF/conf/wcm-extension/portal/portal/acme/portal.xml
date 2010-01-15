@@ -13,6 +13,7 @@
   				<portlet>
 		      	<application-ref>presentation</application-ref>
 		        <portlet-ref>SingleContentViewer</portlet-ref>
+		        <preferences>
 		        <preference>
 					<name>repository</name>
 					<value>repository</value>
@@ -38,6 +39,7 @@
 					<value>false</value>
 					<read-only>false</read-only>
 				</preference>
+				</preferences>
 		      </portlet>
 		      <title>Banner</title>
 		      <show-info-bar>false</show-info-bar>
@@ -50,6 +52,7 @@
 	  			<portlet>
 		      	<application-ref>presentation</application-ref>
 		        <portlet-ref>SingleContentViewer</portlet-ref>
+		        <preferences>
 		        <preference>
 					<name>repository</name>
 					<value>repository</value>
@@ -75,6 +78,7 @@
 					<value>false</value>
 					<read-only>false</read-only>
 				</preference>
+				</preferences>
 		      </portlet>
 		      <title>Searchbox</title>
 		      <show-info-bar>false</show-info-bar>
@@ -87,6 +91,7 @@
 	  			<portlet>
 		      	<application-ref>presentation</application-ref>
 		        <portlet-ref>SingleContentViewer</portlet-ref>
+		        <preferences>
 		        <preference>
 					<name>repository</name>
 					<value>repository</value>
@@ -112,6 +117,7 @@
 					<value>false</value>
 					<read-only>false</read-only>
 				</preference>
+				</preferences>
 		      </portlet>
 		      <title>Signin</title>
 		      <show-info-bar>false</show-info-bar>
@@ -125,6 +131,7 @@
   			  <portlet>
 		      	<application-ref>presentation</application-ref>
 		        <portlet-ref>SingleContentViewer</portlet-ref>
+		        <preferences>
 		        <preference>
 					<name>repository</name>
 					<value>repository</value>
@@ -150,6 +157,7 @@
 					<value>false</value>
 					<read-only>false</read-only>
 				</preference>
+				</preferences>
 		      </portlet>
 		      <title>Navigation</title>
 		      <show-info-bar>false</show-info-bar>
@@ -163,6 +171,7 @@
 	  	 <portlet>
 		      	<application-ref>presentation</application-ref>
 		        <portlet-ref>SingleContentViewer</portlet-ref>
+		        <preferences>
 		        <preference>
 					<name>repository</name>
 					<value>repository</value>
@@ -188,6 +197,7 @@
 					<value>false</value>
 					<read-only>false</read-only>
 				</preference>
+				</preferences>
 		      </portlet>
 		      <title>Footer</title>
 		      <show-info-bar>false</show-info-bar>
