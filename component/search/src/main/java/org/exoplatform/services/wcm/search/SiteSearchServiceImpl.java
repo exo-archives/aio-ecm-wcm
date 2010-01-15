@@ -189,10 +189,6 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     mapMetadataProperties(queryCriteria,queryBuilder);
     orderBy(queryCriteria, queryBuilder);
     String queryStatement = queryBuilder.createQueryStatement();
-    queryStatement = queryStatement.replace("jcr:path LIKE '/sites content/live/%'",
-                           "CONTAINS(.,'NewSite~') AND " +
-                           "jcr:path LIKE '/sites content/live/NewSite/%'");
-    System.out.println("\n\n\n\n--------------->queryStatement:" + queryStatement);
     Query query = queryManager.createQuery(queryStatement, Query.SQL);
     return query.execute();
   }
