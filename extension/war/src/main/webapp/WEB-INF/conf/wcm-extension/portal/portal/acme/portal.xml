@@ -7,14 +7,9 @@
   <creator>root</creator>
     
  	<portal-layout> 		
- 	  <application>
-	    <instance-id>portal#acme:/presentation/SiteAdministrationPortlet/acme-admintoolbar</instance-id>
-	    <show-info-bar>false</show-info-bar>
-  	</application>	  
-  	
   	<container id="ACMEBanner" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
   		<container id="ACMELogo" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-  			<application>
+  			<portlet-application>
   				<portlet>
 		      	<application-ref>presentation</application-ref>
 		        <portlet-ref>SingleContentViewer</portlet-ref>
@@ -48,10 +43,10 @@
 		      <show-info-bar>false</show-info-bar>
 		      <show-application-state>false</show-application-state>
 			  <show-application-mode>false</show-application-mode>
-			  </application>
+			  </portlet-application>
   		</container>
   		<container id="ACMESearch" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  		<application>
+	  		<portlet-application>
 	  			<portlet>
 		      	<application-ref>presentation</application-ref>
 		        <portlet-ref>SingleContentViewer</portlet-ref>
@@ -85,10 +80,10 @@
 		      <show-info-bar>false</show-info-bar>
 		      <show-application-state>false</show-application-state>
 			  <show-application-mode>false</show-application-mode>
-			  </application>
+			  </portlet-application>
   		</container>
   		<container id="ACMESignin" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  		<application>
+	  		<portlet-application>
 	  			<portlet>
 		      	<application-ref>presentation</application-ref>
 		        <portlet-ref>SingleContentViewer</portlet-ref>
@@ -122,7 +117,7 @@
 		      <show-info-bar>false</show-info-bar>
 		      <show-application-state>false</show-application-state>
 			  <show-application-mode>false</show-application-mode>
-			  </application>
+			  </portlet-application>
   		</container>
   	</container>
   		

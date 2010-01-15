@@ -10,7 +10,7 @@
 	  <edit-permission>editor:/platform/web-contributors</edit-permission>
 	  <container id="ACMEBody" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
 			<container id="ACMELeft" template="system:/groovy/portal/webui/container/UIContainer.gtmpl" width="640px">
-	  			<application>
+	  			<portlet-application>
 	  				<portlet>
 	  					<application-ref>presentation</application-ref>
         				<portlet-ref>SingleContentViewer</portlet-ref>
@@ -41,8 +41,8 @@
 						</preference>
 	  				</portlet>
 				    <title>Homepage</title>
-				  </application>
-	  			<application>
+				  </portlet-application>
+	  			<portlet-application>
 	  				<portlet>
 	  					<application-ref>presentation</application-ref>
         				<portlet-ref>ContentListViewerPortlet</portlet-ref>
@@ -147,8 +147,8 @@
 			        <show-info-bar>false</show-info-bar>
 			        <show-application-state>false</show-application-state>
 			        <show-application-mode>false</show-application-mode>
-			  	</application>
-	  			<application>
+			  	</portlet-application>
+	  			<portlet-application>
 	  				<portlet>
 	  					<application-ref>presentation</application-ref>
         				<portlet-ref>ContentListViewerPortlet</portlet-ref>
@@ -253,10 +253,10 @@
 			        <show-info-bar>false</show-info-bar>
 			        <show-application-state>false</show-application-state>
 			        <show-application-mode>false</show-application-mode>
-				  </application>
+				  </portlet-application>
 	  		</container>
 	 	 	<container id="ACMERight" template="system:/groovy/portal/webui/container/UIContainer.gtmpl" width="230px">
-	  			<application>
+	  			<portlet-application>
 	  				<portlet>
 	  					<application-ref>presentation</application-ref>
         				<portlet-ref>ContentListViewerPortlet</portlet-ref>
@@ -361,8 +361,8 @@
 			        <show-info-bar>false</show-info-bar>
 			        <show-application-state>false</show-application-state>
 			        <show-application-mode>false</show-application-mode>
-				  </application>
-	  			<application>
+				  </portlet-application>
+	  			<portlet-application>
 	  				<portlet>
 	  					<application-ref>presentation</application-ref>
         				<portlet-ref>ContentListViewerPortlet</portlet-ref>
@@ -467,7 +467,7 @@
 			        <show-info-bar>false</show-info-bar>
 			        <show-application-state>false</show-application-state>
 			        <show-application-mode>false</show-application-mode>
-			  	</application>
+			  	</portlet-application>
 		  	</container>
 	  </container>
   </page>
@@ -482,7 +482,7 @@
 	  <edit-permission>editor:/platform/web-contributors</edit-permission>
 	  <container id="ACMEBody" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
 	  	<container id="ACMECategories" template="system:/groovy/portal/webui/container/UIContainer.gtmpl" width="200px">
-	  		<application>
+	  		<portlet-application>
 	  			<portlet>
 	  					<application-ref>presentation</application-ref>
         				<portlet-ref>CategoryNavigationPortlet</portlet-ref>
@@ -527,10 +527,10 @@
 		        <show-info-bar>false</show-info-bar>
 		        <show-application-state>false</show-application-state>
 		        <show-application-mode>false</show-application-mode>
-			  </application>
+			  </portlet-application>
 	  	</container>
 	  	<container id="ACMEParameterized" template="system:/groovy/portal/webui/container/UIContainer.gtmpl" width="680px">
-	  		<application>
+	  		<portlet-application>
 	  			<portlet>
 	  					<application-ref>presentation</application-ref>
         				<portlet-ref>ParameterizedContentListViewerPortlet</portlet-ref>
@@ -645,7 +645,7 @@
 		        <show-info-bar>false</show-info-bar>
 		        <show-application-state>false</show-application-state>
 		        <show-application-mode>false</show-application-mode>
-			  </application>
+			  </portlet-application>
 	  	</container>
 	  </container>
   </page>
