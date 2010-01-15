@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+ <UISiteAdminToolbar>
+  <action>
+   <AddPage>Tạo mới trang</AddPage>
+   <EditPage>Chỉnh sửa bố cục trang</EditPage>
+   <BrowsePage>Quản lý trang</BrowsePage>
+   <EditPortal>Chỉnh sửa portal</EditPortal>
+   <CreatePortal>Tạo mới portal</CreatePortal>
+   <ChangePortal>Thay đổi portal</ChangePortal>
+   <BrowsePortal>Quản lý portals</BrowsePortal>
+   <SkinSettings>Thiết lập giao diện</SkinSettings>>
+   <LanguageSettings>Thiết lập ngôn ngữ</LanguageSettings>
+   <AccountSettings>Thiết lập tài khoản</AccountSettings>
+   <TurnOnQuickEdit>O</TurnOnQuickEdit>
+   <TurnOffQuickEdit>l</TurnOffQuickEdit>
+   <AddContent>Tạo mới nội dung</AddContent>   
+   <Logout>Đăng xuất</Logout>
+   <EditPageAndNavigation>Chỉnh sửa navigation</EditPageAndNavigation>  
+   <Sites>Portals</Sites>   
+   <Groups>Nhóm</Groups>   
+   <Editor>Chỉnh sửa</Editor>
+   <Administrator>Quản trị</Administrator>
+  </action>
+  <label>
+   <LiveModeTitle>Chế độ hiển thị</LiveModeTitle>
+   <EditModeTitle>Chế độ chỉnh sửa</EditModeTitle>
+  </label>
+  <msg>
+   <not-permission>Bạn không có quyền thực hiện hành động này.</not-permission>
+  </msg>
+ </UISiteAdminToolbar>
+</bundle>

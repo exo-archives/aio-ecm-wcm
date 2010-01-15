@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<configuration>
+
+	<component>
+	  <key>org.exoplatform.services.wcm.publication.WCMPublicationService</key>
+	  <type>org.exoplatform.services.wcm.publication.WCMPublicationServiceImpl</type>
+	</component>	
+	
+	<component>
+	  <key>org.exoplatform.services.wcm.publication.WCMComposer</key>
+	  <type>org.exoplatform.services.wcm.publication.WCMComposerImpl</type>
+	  </component>	
+	
+	<component>
+	  <key>org.exoplatform.services.wcm.metadata.PageMetadataService</key>
+	  <type>org.exoplatform.services.wcm.metadata.PageMetadataServiceImpl</type>    
+	</component>
+	
+	<external-component-plugins>
+  	<target-component>org.exoplatform.services.jcr.RepositoryService</target-component>		
+	  <component-plugin>
+	    <name>add.nodeType</name>
+	    <set-method>addPlugin</set-method>
+	    <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
+	    <priority>99</priority>
+	    <init-params>
+	      <values-param>
+	        <name>autoCreatedInNewRepository</name>
+	        <description>Node types configuration file</description>
+	        <value>jar:/conf/wcm-publication-nodetypes.xml</value>
+	      </values-param>
+	    </init-params>
+	  </component-plugin>
+	</external-component-plugins>	
+	
+</configuration>

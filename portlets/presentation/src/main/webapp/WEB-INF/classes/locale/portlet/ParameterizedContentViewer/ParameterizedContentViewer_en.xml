@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+ <UIPCVContainer>
+  <title>
+   <Back>Back</Back>
+   <print>Print this page</print>
+   <QuickEdit>Quick edit</QuickEdit>
+  </title>
+  <label>
+   <print>Print</print>
+  </label>
+  <action>
+   <Print>Print</Print>
+   <Close>Close</Close>
+  </action>
+ </UIPCVContainer>
+ 
+ <UIPCVConfigPopupWindow>
+  <title>
+   <UIPCVConfig>Parameterized content viewer configuration</UIPCVConfig>
+  </title>
+ </UIPCVConfigPopupWindow>
+ 
+ <UIPCVConfig>
+  <label>
+   <Title>Parameterized content viewer configuration</Title>
+   <DisplaySettingBlock>Display setting</DisplaySettingBlock>
+   <ShowTitle>Show title</ShowTitle>
+   <ShowDateCreated>Show date created</ShowDateCreated>
+   <ShowBar>Show option bar</ShowBar>
+  </label>
+  <action>
+   <Save>Save</Save>
+   <Cancel>Cancel</Cancel>
+  </action>
+ </UIPCVConfig>
+</bundle>

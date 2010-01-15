@@ -1,0 +1,33 @@
+<div class="$uicomponent.id" id="$uicomponent.id">
+	<%
+		import org.exoplatform.wcm.webui.clv.UICLVPresentation;
+		import	org.exoplatform.wcm.webui.Utils;
+		import org.exoplatform.portal.webui.util.Util; 
+	
+		def rcontext = _ctx.getRequestContext() ;
+		def isPortalAppEditting = Util.getUIPortalApplication().isEditting();
+		def portletId = rcontext.getWindowId();
+		portletId = isPortalAppEditting ? "EditMode-" + portletId : portletId;
+		def quickEditingBlockId = portletId + "-QuickEditingBlock";
+		rcontext.getJavascriptManager().addJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '");');
+		if (Utils.isShowQuickEdit()) {					
+	%>
+			<div style="position: relative; height: 0px;" id="<%=quickEditingBlockId%>">
+				<div style="position: absolute; right: 0px; top: 0px; z-index: 1">
+					<a href="<%=uicomponent.event("QuickEdit")%>" title="<%= _ctx.appRes("UICLVContainer.title.QuickEdit");%>"><div class="QuickEdit"><span></span></div></a>					 
+				</div>
+			</div>
+	<% } %>		
+
+	<% 			
+	if (uicomponent.isViewAbleContent()) {			
+		uicomponent.renderChild(UICLVPresentation.class);
+	} else {
+	%>
+	<div class="CLV">
+		<div style="height: 100px; text-align: center; font-size: 13px; background: white;border: 1px solid gray; padding: 10px;margin: 5px;">
+			<span><%= _ctx.appRes(uicomponent.getMessageKey()) %></span>
+		</div>
+	</div>
+	<% } %>
+</div>

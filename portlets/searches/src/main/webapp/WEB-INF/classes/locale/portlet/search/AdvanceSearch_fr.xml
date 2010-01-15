@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+ <UIDefaultSearchForm>
+  <label>
+   <keyword>Mot-clé</keyword>
+   <portal>Portail</portal>
+   <Page>Page</Page>
+   <Document>Document</Document>
+  </label>
+  <action>
+   <Search>Recherche</Search>
+  </action>
+ </UIDefaultSearchForm>
+ 
+ <UIDefaultSearchResult>
+  <label>
+   <Page>Page</Page>
+   <Document>Document</Document>
+   <DocumentAndPage>Document et page</DocumentAndPage>
+   <resutlsCaption>Résultats</resutlsCaption>
+   <ofAboutCaption>d'environ</ofAboutCaption>
+   <forCaption>pour</forCaption>
+   <timeUnitCaption>seconde</timeUnitCaption>
+   <similar>Pages où apparaît le même contenu</similar>
+   <editor>Sous la direction de</editor>
+  </label>
+  <action>
+   <edit>Modifier</edit>
+  </action>
+  <msg>
+   <your-search>Votre recherche</your-search>
+   <did-not-match>ne correspond à aucun</did-not-match>
+   <new-suggestion>Suggestions: </new-suggestion>
+  </msg>
+ </UIDefaultSearchResult>
+</bundle>
