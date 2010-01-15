@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<configuration>		 
+	  <external-component-plugins>
+		<target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
+	    <component-plugin>
+	      <name>BackCronJob</name>
+	      <set-method>addCronJob</set-method>
+	      <type>org.exoplatform.services.wcm.extensions.scheduler.BackCronJob</type>
+	      <description>add a job to export content</description>
+	      <init-params>
+	      	
+	        <properties-param>
+	          <name>cronjob.info</name>
+	          <description>cron job info</description>
+              <property name="jobName" value="exportContentJob"/>
+          	  <property name="groupName" value="group"/>
+              <property name="job" value="org.exoplatform.services.wcm.extensions.scheduler.impl.ExportContentJob"/>
+              <property name="expression" value="0/59 * * * * ?"/>
+	        </properties-param>
+	        <properties-param>
+	        	<name>exportContentJob.generalParams</name>
+	        	<description>General parameters for job</description>
+	        	<property name="fromState" value="draft"/>
+	          	<property name="toState" value="published"/>
+	          	<property name="localTempDir" value="D:\exo-bin\exo-eXoWCM-1.2.2-tomcat\export"/>
+	          	<property name="targetServerUrl" value="http://localhost:8080/portal"/>
+	          	<property name="targetKey" value="$TIMESTAMP:pmlnjkl"/>
+	          	<property name="predefinedPath" value="repository:collaboration:/sites content/live/acme"/>
+	        </properties-param>
+	      </init-params>
+	    </component-plugin>
+	  </external-component-plugins> 
+</configuration>

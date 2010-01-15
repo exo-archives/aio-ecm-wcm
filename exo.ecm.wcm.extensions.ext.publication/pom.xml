@@ -1,0 +1,59 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<groupId>org.exoplatform.ecm</groupId>
+		<artifactId>wcm.extensions</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>exo.ecm.wcm.extensions.ext.publication</artifactId>
+	<packaging>jar</packaging>
+	<version>1.0-SNAPSHOT</version>
+	<name>extended plugin publication</name>
+	
+	<properties>
+		<compile.source>1.5</compile.source>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.exoplatform.portal</groupId>
+			<artifactId>exo.portal.webui.portal</artifactId>
+			<version>${org.exoplatform.portal.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.exoplatform.ecm.dms.core</groupId>
+			<artifactId>exo.ecm.dms.core.component.publication</artifactId>
+			<version>${org.exoplatform.ecm.dms.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.exoplatform.ecm.dms.core</groupId>
+			<artifactId>exo.ecm.dms.core.webui.dms</artifactId>
+			<version>${org.exoplatform.ecm.dms.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.exoplatform.ecm</groupId>
+			<artifactId>exo.ecm.wcm.component.publication</artifactId>
+			<version>1.2.2-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+	<build>
+	<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${compile.source}</source>
+					<target>${compile.source}</target>
+					<encoding>UTF-8</encoding>
+					<optimize>true</optimize>
+				</configuration>
+			</plugin>
+	</plugins>
+		<finalName>exo.ecm.wcm.extensions.ext.publication</finalName>
+	</build>
+</project>

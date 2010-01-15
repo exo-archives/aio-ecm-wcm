@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<configuration>
+	  <external-component-plugins>
+		<target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
+	    <component-plugin>
+	      <name>FrontCronJob</name>
+	      <set-method>addCronJob</set-method>
+	      <type>org.exoplatform.services.wcm.extensions.scheduler.FrontCronJob</type>
+	      <description>add a job to export content</description>
+	      <init-params>
+	      	
+	        <properties-param>
+	          <name>cronjob.info</name>
+	          <description>cron job info</description>
+              <property name="jobName" value="importContentJob"/>
+          	  <property name="groupName" value="group"/>
+              <property name="job" value="org.exoplatform.services.wcm.extensions.scheduler.impl.ImportContentsJob"/>
+              <property name="expression" value="59/120 * * * * ?"/>
+	        </properties-param>
+	        <properties-param>
+	        	<name>importContentJob.generalParams</name>
+	        	<description>General parameters for job</description>
+	          	<property name="stagingStorage" value="D:\exo-bin\eXoWCM-1.2.2-tomcat_\eXoWCM-1.2.2-tomcat\export"/>
+	        	<property name="temporaryStorge" value="D:\exo-bin\eXoWCM-1.2.2-tomcat_\eXoWCM-1.2.2-tomcat\temp\export"/>
+	        </properties-param>
+	      </init-params>
+	    </component-plugin>
+	  </external-component-plugins> 
+</configuration>

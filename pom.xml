@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<groupId>org.exoplatform.ecm</groupId>
+	<artifactId>wcm.extensions</artifactId>
+	<packaging>pom</packaging>
+	<name>eXo WCM Extensions</name>
+	<version>1.0-SNAPSHOT</version>
+
+
+	<modules>
+	<module>exo.ecm.wcm.extensions.ext.publication</module>
+	<module>exo.ecm.wcm.extensions.config.multiserver.frontcronjob</module>
+	<module>exo.ecm.wcm.extensions.config.multiserver.backcronjob</module>
+	<module>exo.ecm.wcm.extensions.config.multiserver.webservice.rest</module>
+	</modules>
+	<build>
+	<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+					<encoding>UTF-8</encoding>
+					<optimize>true</optimize>
+				</configuration>
+			</plugin>
+	</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>default</id>
+			<activation>
+				<property><name>default</name></property>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<org.exoplatform.portal.version>2.5.6.2</org.exoplatform.portal.version>
+				<org.exoplatform.ecm.dms.version>2.5.2.1</org.exoplatform.ecm.dms.version>
+				<exo.test.classes>Test</exo.test.classes>
+				<exo.test.skip>true</exo.test.skip>
+			</properties>
+		</profile>	
+	</profiles>
+	
+</project>
