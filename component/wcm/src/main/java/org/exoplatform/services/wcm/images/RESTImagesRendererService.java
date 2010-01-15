@@ -45,7 +45,7 @@ import org.exoplatform.services.rest.resource.ResourceContainer;
  * hoa.phamvu@exoplatform.com
  * Mar 31, 2009
  */
-@Path("/images/{repositoryName}/{workspaceName}/{nodeIdentifier}/")
+@Path("/images/")
 public class RESTImagesRendererService implements ResourceContainer{
 
   /** The session provider service. */
@@ -81,7 +81,8 @@ public class RESTImagesRendererService implements ResourceContainer{
    * @return the response
    */
   @GET
-  @PathParam("type=file")
+  //@PathParam("type=file")
+  @Path("/{repositoryName}/{workspaceName}/{nodeIdentifier}/?type=file")
 //  @InputTransformer(PassthroughInputTransformer.class)
 //  @OutputTransformer(PassthroughOutputTransformer.class)
   public Response serveImage(@PathParam("repositoryName") String repository, 
@@ -136,6 +137,7 @@ public class RESTImagesRendererService implements ResourceContainer{
    * @return the response
    */
   @GET  
+  @Path("/{repositoryName}/{workspaceName}/{nodeIdentifier}/")
 //  @InputTransformer(PassthroughInputTransformer.class)
 //  @OutputTransformer(PassthroughOutputTransformer.class)
   public Response serveImage(@PathParam("repositoryName") String repository, 
