@@ -54,7 +54,6 @@
     <module>portlets/formgenerator</module>
     <module>connectors/fckeditor</module>
     <module>web/eXoWCMResources</module>
-    <module>web/wcmportal</module>
     <module>extension</module>
     <module>packaging</module>
   </modules>
