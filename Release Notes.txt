@@ -2,7 +2,7 @@
 	eXo WCM 1.2.2
 ==============================================
 
-- Introductio
+- Introduction
 		eXo WCM (Web Content Management) - Keep your Websites under Control
 		With the web 2.0 and all the new technologies available to webmasters, creating and maintaining web sites is becoming 
 	more and more complex. Moreover, the Internet has evolved quickly over the years and websites now rely on many different people 
