@@ -149,6 +149,7 @@ public class HTMLFileSchemaHandler extends BaseWebSchemaHandler {
     String htmlFilePath = webContent.getPath() + "/default.html";    
     session.move(tempPath, htmlFilePath);
     tempFolder.remove();    
+    createDefautWebData(webContent);
     session.save();
   }
 
