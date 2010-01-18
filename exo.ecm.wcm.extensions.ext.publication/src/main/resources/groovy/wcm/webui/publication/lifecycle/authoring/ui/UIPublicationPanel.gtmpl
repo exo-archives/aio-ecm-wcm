@@ -1,0 +1,275 @@
+<%
+	import java.util.List;
+	import javax.jcr.Node;
+	import javax.jcr.version.Version;
+	import org.exoplatform.services.wcm.extensions.publication.lifecycle.authoring.ui.UIPublicationPanel;
+	import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
+	import org.exoplatform.container.ExoContainer;
+	import org.exoplatform.container.ExoContainerContext;
+	import org.exoplatform.services.security.Identity;
+	import org.exoplatform.services.security.IdentityRegistry;
+	import org.exoplatform.services.wcm.extensions.publication.impl.PublicationManagerImpl;
+	import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig.Lifecycle;
+	import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig.State;
+
+	Node currentRevision = uicomponent.getCurrentRevision();
+	def context = _ctx.getRequestContext() ;
+	String remoteUser=context.getRemoteUser()
+	Node cNode = uicomponent.getCurrentNode();
+	boolean lastState=false;
+	String lifecycleName = cNode.getProperty("publication:lifecycle").getString();
+	ExoContainer container = ExoContainerContext.getCurrentContainer();
+	PublicationManagerImpl publicationManagerImpl = (PublicationManagerImpl) container.getComponentInstanceOfType(PublicationManagerImpl.class);
+	Lifecycle lifecycle = publicationManagerImpl.getLifecycle(lifecycleName);
+	List<State> states = lifecycle.getStates();
+	public boolean isCurrentRevision(String inputStatus, Node revision) throws Exception {    
+	String state = uicomponent.getRevisionState(revision);
+	return inputStatus.equals(state) ? true : false;
+	}  
+%>
+<% uicomponent.begin(); %>
+<div class="UIPublicationPanel" id="$uicomponent.id">
+  <fieldset class="StatusTable">
+    <% String versionName = currentRevision.getName();  %>
+    <legend class="Legend"> <%=_ctx.appRes("UIPublicationPanel.status.version")%> $versionName </legend>
+    <div class="StatusAction">
+      <div class="StatusTitle"><%=_ctx.appRes("UIPublicationPanel.status.title")%>: </div>
+      <div class="StatusLink">
+        <%
+ for (State state : states) {
+	if(states.indexOf(state)==states.size()-1) lastState=true;
+		 String membership = state.getMembership();
+		    String[] membershipTab = membership.split(":");
+		    IdentityRegistry identityRegistry = (IdentityRegistry) container.getComponentInstanceOfType(IdentityRegistry.class);
+		    Identity identity = identityRegistry.getIdentity(remoteUser);
+		if (PublicationDefaultStates.DRAFT.equals(state.getState())) {
+		
+		   
+			if (isCurrentRevision("draft",currentRevision)){%>
+			<a class="CurrentStatus">
+			<%} else  if(identity.isMemberOf(membershipTab[1], membershipTab[0])){
+			%>	
+			<a class="ActiveStatus" href="<%= uicomponent.event("Draft")%>">
+			<%
+		    }			
+			else{%>
+			<a class="DisableStatus">
+			<%}%>
+			<%=_ctx.appRes("UIPublicationPanel.status.draft")%></a>
+			<%if(!lastState){%>
+			
+			<span class="StatusArrow"></span>
+			<%}else{%>
+			<div style="clear: left;"><span></span></div>  
+			<%}
+			
+		} else if (PublicationDefaultStates.PENDING.equals(state.getState())) {
+		    if (isCurrentRevision("pending",currentRevision)){%>
+			<a class="CurrentStatus">
+			<%} else  if(identity.isMemberOf(membershipTab[1], membershipTab[0])){
+			%>	
+			<a class="ActiveStatus" href="<%= uicomponent.event("Pending")%>">
+			<%
+		    }			
+			else{%>
+			<a class="DisableStatus">
+			<%}%>
+			draft</a>
+			<%if(!lastState){%>
+			
+			<span class="StatusArrow"></span>
+			<%}else{%>
+			<div style="clear: left;"><span></span></div>  
+			<%}
+			
+		} else if (PublicationDefaultStates.APPROVED.equals(state.getState())) {
+		     if (isCurrentRevision("approved",currentRevision)){%>
+			<a class="CurrentStatus">
+			<%} else  if(identity.isMemberOf(membershipTab[1], membershipTab[0])){
+			%>	
+			<a class="ActiveStatus" href="<%= uicomponent.event("Approved")%>">
+			<%
+		    }			
+			else{%>
+			<a class="DisableStatus">
+			<%}%>
+			approved</a>
+			<%if(!lastState){%>
+			
+			<span class="StatusArrow"></span>
+			<%}else{%>
+			<div style="clear: left;"><span></span></div>  
+			<%}
+			
+		} else if (PublicationDefaultStates.ARCHIVED.equals(state.getState())) {
+		    if (isCurrentRevision("archived",currentRevision)){%>
+			<a class="CurrentStatus">
+			<%} else  if(identity.isMemberOf(membershipTab[1], membershipTab[0])){
+			%>	
+			<a class="ActiveStatus" href="<%= uicomponent.event("Archived")%>">
+			<%
+		    }			
+			else{%>
+			<a class="DisableStatus">
+			<%}%>
+			archived</a>
+			<%if(!lastState){%>
+			
+			<span class="StatusArrow"></span>
+			<%}else{%>
+			<div style="clear: left;"><span></span></div>  
+			<%}
+		} else if (PublicationDefaultStates.PUBLISHED.equals(state.getState())) {
+		    if (isCurrentRevision("published",currentRevision)){%>
+			<a class="CurrentStatus">
+			<%} else  if(identity.isMemberOf(membershipTab[1], membershipTab[0])){
+			%>	
+			<a class="ActiveStatus" href="<%= uicomponent.event("Published")%>">
+			<%
+		    }			
+			else{%>
+			<a class="DisableStatus">
+			<%}%>
+			published</a>
+			<%if(!lastState){%>
+			
+			<span class="StatusArrow"></span>
+			<%}else{%>
+			<div style="clear: left;"><span></span></div>  
+			<%}
+		} else if (PublicationDefaultStates.STAGED.equals(state.getState())) {
+		    if (isCurrentRevision("staged",currentRevision)){%>
+			<a class="CurrentStatus">
+			<%} else  if(identity.isMemberOf(membershipTab[1], membershipTab[0])){
+			%>	
+			<a class="ActiveStatus" href="<%= uicomponent.event("Staged")%>">
+			<%
+		    }			
+			else{%>
+			<a class="DisableStatus">
+			<%}%>
+			staged</a>
+			<%if(!lastState){%>
+			
+			<span class="StatusArrow"></span>
+			<%}else{%>
+			<div style="clear: left;"><span></span></div>  
+			<%}
+		}else if (PublicationDefaultStates.UNPUBLISHED.equals(state.getState())) {
+		    if (isCurrentRevision("unpublished",currentRevision)){%>
+			<a class="CurrentStatus">
+			<%} else  if(identity.isMemberOf(membershipTab[1], membershipTab[0])){
+			%>	
+			<a class="ActiveStatus" href="<%= uicomponent.event("Unpublished")%>">
+			<%
+		    }			
+			else{%>
+			<a class="DisableStatus">
+			<%}%>
+			unpublished</a>
+			<%if(!lastState){%>
+			
+			<span class="StatusArrow"></span>
+			<%}else{%>
+			<div style="clear: left;"><span></span></div>  
+			<%}
+			}
+		
+	    }%>
+      </div>
+    </div>
+  </fieldset>
+  <table class="RevisionsTable" border="1">
+    <tr>
+      <td class="Version"><%=_ctx.appRes("UIPublicationPanel.revisions.version")%></td>
+      <td class="Date"><%=_ctx.appRes("UIPublicationPanel.revisions.date")%></td>
+      <td class="Author"><%=_ctx.appRes("UIPublicationPanel.revisions.author")%></td>
+      <td class="Status"><%=_ctx.appRes("UIPublicationPanel.revisions.status")%></td>
+      <td class="Action"><%=_ctx.appRes("UIPublicationPanel.revisions.action")%></td>
+    </tr>
+    <%
+      List<Node> revisions = uicomponent.getRevisions();
+      if (revisions.isEmpty()) {
+        %>
+          <tr>
+            <td colspan="5" class="None"><%=_ctx.appRes("UIPublicationPanel.revisions.none")%></td>
+          </tr>
+        <%
+      }
+         
+      for (Node revision : revisions) {
+      	def state = uicomponent.getRevisionState(revision);
+      	%>
+          <tr>
+            <td class="Name">
+              <%
+                if (versionName.equals(revision.getName())) {
+                  %>
+                    <a><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%= revision.getName() %></a>
+                  <%
+                } else {
+                  %>
+                    <a class="ActiveLink" href="<%= uicomponent.event("ChangeVersion", revision.getUUID()) %>"><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%= revision.getName() %></a>
+                  <%
+                }
+              %>
+            </td>
+            <td><%= uicomponent.getRevisionCreatedDate(revision)%></td>
+            <td><%= uicomponent.getRevisionAuthor(revision) %></td>
+            <td>
+              <%
+                if (revisions.indexOf(revision) == 0) {
+                  out.print(_ctx.appRes("UIPublicationPanel.status." + uicomponent.getRevisionState(revision)));
+                  out.print("[" + _ctx.appRes("UIPublicationPanel.revisions.currentVersion") + "]");
+                } else {
+                  out.print(_ctx.appRes("UIPublicationPanel.status." + uicomponent.getRevisionState(revision)));
+                }
+              %>
+            </td>
+            <td>
+              <div title="<%=_ctx.appRes("UIPublicationPanel.title.preview")%>" class="Preview" onclick="<%= uicomponent.event("PreviewVersion", revision.getUUID()) %>"><span></span></div>
+              <%
+                if (revisions.indexOf(revision) != 0) {
+                  if (PublicationDefaultStates.DRAFT.equals(uicomponent.getRevisionState(revisions.get(0)))) {
+                    %><div title="<%=_ctx.appRes("UIPublicationPanel.title.restore")%>" class="Restore" onclick="if (confirm('<%=_ctx.appRes("UIPublicationPanel.revisions.confirm")%>')) <%= uicomponent.event("RestoreVersion", revision.getUUID()) %>"><span></span></div><%
+                  } else {
+                    %><div title="<%=_ctx.appRes("UIPublicationPanel.title.restore")%>" class="Restore" onclick="<%= uicomponent.event("RestoreVersion", revision.getUUID()) %>"><span></span></div><%
+                  }
+                }
+              %>
+              <div style="clear: left"><span></span></div>
+            </td>
+          </tr>
+        <%
+      }
+    %>  
+  </table>
+  <%
+    List<Node> allRevisions = uicomponent.getAllRevisions(cNode);
+    if (allRevisions.size() > 3) {
+      %>
+        <tr>
+          <div class="SeeAllVersion" onclick="<%= uicomponent.event("SeeAllVersion") %>"><%=_ctx.appRes("UIPublicationPanel.revisions.seeall")%></div>
+        </tr>
+      <%
+    }
+  %>
+  <div class="UIAction"> 
+    <table align="center" class="ActionContainer">
+      <tr>
+        <td align="center">
+            <a href="<%= uicomponent.event("Close") %>" class="ActionButton LightBlueStyle">
+              <div class="ButtonLeft">
+                <div class="ButtonRight">
+                  <div class="ButtonMiddle">
+                    <%=_ctx.appRes("UIPublicationPanel.button.close")%>
+                  </div>
+                </div>
+              </div>
+            </a>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<% uicomponent.end(); %>
