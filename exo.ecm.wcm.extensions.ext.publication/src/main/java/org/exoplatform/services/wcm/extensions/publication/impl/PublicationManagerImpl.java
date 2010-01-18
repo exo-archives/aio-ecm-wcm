@@ -49,8 +49,14 @@ public class PublicationManagerImpl implements PublicationManager, Startable {
     }
 
     public Lifecycle getLifecycle(String name) {
+	if (name != null && statesLifecyclePlugin != null && statesLifecyclePlugin.getLifecyclesConfig() != null) {
+	    for (Lifecycle lifecycle : statesLifecyclePlugin.getLifecyclesConfig().getLifecycles()) {
+		if (name.equals(lifecycle.getName())) {
+		    return lifecycle;
+		}
+	    }
+	}
 
-	// TODO
 	return null;
     }
 
@@ -61,7 +67,7 @@ public class PublicationManagerImpl implements PublicationManager, Startable {
     }
 
     public List<Lifecycle> getLifecyclesFromUser(String remoteUser, String state) {
-	// TODO 
+	// TODO
 	return null;
     }
 }
