@@ -108,6 +108,9 @@ public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin
 		PublicationDefaultStates.PUBLISHED, PublicationDefaultStates.OBSOLETE };
     }
 
+    public String getLifecycleName(){
+	return AuthoringPublicationConstant.LIFECYCLE_NAME;
+    }
     public String getLifecycleType() {
 	return AuthoringPublicationConstant.PUBLICATION_LIFECYCLE_TYPE;
     }
@@ -277,6 +280,21 @@ public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin
 	    return map;
 	}
 	return map;
+    }
+    
+    /**
+     * In this publication process, we put the content in Draft state when editing
+     * it.
+     */
+    public void updateLifecyleOnChangeContent(Node node, String remoteUser, String newState) throws Exception {
+
+      String state = node.getProperty(StageAndVersionPublicationConstant.CURRENT_STATE).getString();
+
+      if (state.equals(newState))
+        return;
+
+      HashMap<String, String> context = new HashMap<String, String>();
+      changeState(node, newState, context);
     }
 
 }

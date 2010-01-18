@@ -16,17 +16,32 @@
  */
 package org.exoplatform.services.wcm.extensions.publication;
 
+import java.util.HashMap;
 import java.util.TreeSet;
 
 import javax.jcr.Node;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.security.Identity;
+import org.exoplatform.services.security.IdentityRegistry;
 import org.exoplatform.services.wcm.extensions.publication.context.impl.ContextConfig.Context;
 import org.exoplatform.services.wcm.extensions.publication.impl.PublicationManagerImpl;
+import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig.Lifecycle;
 import org.exoplatform.services.wcm.extensions.utils.ContextComparator;
+import org.exoplatform.services.wcm.publication.WCMComposer;
+import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 public class WCMPublicationServiceImpl extends org.exoplatform.services.wcm.publication.WCMPublicationServiceImpl {
+
+    /** The publication service. */
+    private PublicationService publicationService;
+
+    /** The content composer. */
+    private WCMComposer wcmComposer;
 
     /**
      * Instantiates a new WCM publication service. This service delegate to
@@ -37,6 +52,8 @@ public class WCMPublicationServiceImpl extends org.exoplatform.services.wcm.publ
      */
     public WCMPublicationServiceImpl() {
 	super();
+	this.publicationService = WCMCoreUtils.getService(PublicationService.class);
+	this.wcmComposer = WCMCoreUtils.getService(WCMComposer.class);
     }
 
     /**
@@ -44,31 +61,71 @@ public class WCMPublicationServiceImpl extends org.exoplatform.services.wcm.publ
      * as a default lifecycle for all sites and "Simple Publishing" for the root
      * user.
      */
-    public void enrollNodeInLifecycle(Node node, String siteName, String remoteUser) throws Exception {
-	ExoContainer container = ExoContainerContext.getCurrentContainer();
-	PublicationManagerImpl publicationManagerImpl = (PublicationManagerImpl) container.getComponentInstanceOfType(PublicationManager.class);
-	ContextComparator comparator = new ContextComparator();
-	TreeSet<Context> treeSetContext = new TreeSet<Context>(comparator);
-	treeSetContext.addAll(publicationManagerImpl.getContexts());
-	for (Context context : treeSetContext) {
-	    boolean pathVerified = true;
-	    boolean nodetypeVerified = true;
-	    boolean siteVerified = true;
-	    String path = context.getPath();
-	    String nodetype = context.getNodetype();
-	    String site = context.getSite();
-	    String membership = context.getMembership();
-	    if (path != null)
-		pathVerified = node.getPath().contains(path);
-	    if (nodetype != null)
-		nodetypeVerified = nodetype.equals(node.getPrimaryNodeType().getName());
-	    if (site != null)
-		siteVerified = site.equals(siteName);
-	    if (pathVerified && nodetypeVerified && siteVerified) {
-		// @TODO
+    public void enrollNodeInLifecycle(Node node, String siteName, String remoteUser) {
+	try {
+	    ExoContainer container = ExoContainerContext.getCurrentContainer();
+	    PublicationManagerImpl publicationManagerImpl = (PublicationManagerImpl) container
+		    .getComponentInstanceOfType(PublicationManagerImpl.class);
+	    ContextComparator comparator = new ContextComparator();
+	    TreeSet<Context> treeSetContext = new TreeSet<Context>(comparator);
+	    treeSetContext.addAll(publicationManagerImpl.getContexts());
+	    for (Context context : treeSetContext) {
+		boolean pathVerified = true;
+		boolean nodetypeVerified = true;
+		boolean siteVerified = true;
+		boolean membershipVerified = true;
+		String path = context.getPath();
+		String nodetype = context.getNodetype();
+		String site = context.getSite();
+		String membership = context.getMembership();
+		if (path != null) {
+		    String workspace = node.getSession().getWorkspace().getName();
+		    ManageableRepository manaRepository = (ManageableRepository) node.getSession().getRepository();
+		    String repository = manaRepository.getConfiguration().getName();
+		    String[] pathTab = path.split(":");
+		    pathVerified = node.getPath().contains(pathTab[2]) && (repository.equals(pathTab[0])) && (workspace.equals(pathTab[1]));
+		}
+		if (nodetype != null)
+		    nodetypeVerified = nodetype.equals(node.getPrimaryNodeType().getName());
+		if (site != null)
+		    siteVerified = site.equals(siteName);
+		if (membership != null) {
+		    String[] membershipTab = membership.split(":");
+		    IdentityRegistry identityRegistry = (IdentityRegistry) container.getComponentInstanceOfType(IdentityRegistry.class);
+		    Identity identity = identityRegistry.getIdentity(remoteUser);
+		    membershipVerified = identity.isMemberOf(membershipTab[1], membershipTab[0]);
+		}
+		if (pathVerified && nodetypeVerified && siteVerified && membershipVerified) {
+		    Lifecycle lifecycle = publicationManagerImpl.getLifecycle(context.getLifecycle());
+		    String lifecycleName = this.getWebpagePublicationPlugins().get(lifecycle.getPublicationPlugin()).getLifecycleName();
+		    if (node.canAddMixin("publication:authoring")) {
+			node.addMixin("publication:authoring");
+			node.setProperty("publication:lastUser", remoteUser);
+			node.setProperty("publication:lifecycle", lifecycle.getName());
+		    }
+		    enrollNodeInLifecycle(node, lifecycleName);
+		    break;
+		}
 	    }
-	    // @TODO
+	} catch (Exception ex) {
+	    ex.printStackTrace();
 	}
+    }
 
+    /**
+     * This default implementation checks if the state is valid then delegates
+     * the update to the node WebpagePublicationPlugin.
+     */
+    public void updateLifecyleOnChangeContent(Node node, String siteName, String remoteUser, String newState) throws Exception {
+	if (!publicationService.isNodeEnrolledInLifecycle(node)) {
+	    enrollNodeInLifecycle(node, siteName, remoteUser);
+	}
+	String lifecycleName = publicationService.getNodeLifecycleName(node);
+	WebpagePublicationPlugin publicationPlugin = this.getWebpagePublicationPlugins().get(lifecycleName);
+
+	publicationPlugin.updateLifecyleOnChangeContent(node, remoteUser, newState);
+
+	wcmComposer.updateContent(node.getSession().getRepository().toString(), node.getSession().getWorkspace().getName(), node.getPath(),
+		new HashMap<String, String>());
     }
 }
