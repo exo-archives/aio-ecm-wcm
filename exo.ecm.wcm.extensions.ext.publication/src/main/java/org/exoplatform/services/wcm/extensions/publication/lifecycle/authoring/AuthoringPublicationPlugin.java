@@ -29,10 +29,10 @@ import org.exoplatform.services.wcm.publication.listener.page.PageEventListenerD
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.form.UIForm;
 
-/** 
+/**
  * 
  * @author nedved
- *
+ * 
  */
 
 public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin {
@@ -60,17 +60,18 @@ public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin
      * org.exoplatform.services.ecm.publication.PublicationPlugin#changeState
      * (javax.jcr.Node, java.lang.String, java.util.HashMap)
      */
+
     public void changeState(Node node, String newState, HashMap<String, String> context) throws IncorrectStateUpdateLifecycleException, Exception {
+	String versionName = context.get(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME);
+	String logItemName = versionName;
+	String userId = node.getSession().getUserID();
+	if (node.getName().equals(versionName) || versionName == null) {
+	    logItemName = node.getName();
+	}
+	Map<String, VersionData> revisionsMap = getRevisionData(node);
+	VersionLog versionLog = null;
 
 	if (PublicationDefaultStates.PENDING.equals(newState)) {
-	    String versionName = context.get(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME);
-	    String logItemName = versionName;
-	    String userId = node.getSession().getUserID();
-	    if (node.getName().equals(versionName) || versionName == null) {
-		logItemName = node.getName();
-	    }
-	    Map<String, VersionData> revisionsMap = getRevisionData(node);
-	    VersionLog versionLog = null;
 
 	    node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE, newState);
 	    versionLog = new VersionLog(logItemName, newState, node.getSession().getUserID(), GregorianCalendar.getInstance(),
@@ -86,6 +87,67 @@ public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin
 	    revisionsMap.put(node.getUUID(), versionData);
 	    addRevisionData(node, revisionsMap.values());
 
+	} else if (PublicationDefaultStates.APPROVED.equals(newState)) {
+
+	    node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE, newState);
+	    versionLog = new VersionLog(logItemName, newState, node.getSession().getUserID(), GregorianCalendar.getInstance(),
+		    AuthoringPublicationConstant.CHANGE_TO_APPROVED);
+	    addLog(node, versionLog);
+	    VersionData versionData = revisionsMap.get(node.getUUID());
+	    if (versionData != null) {
+		versionData.setAuthor(userId);
+		versionData.setState(newState);
+	    } else {
+		versionData = new VersionData(node.getUUID(), newState, userId);
+	    }
+	    revisionsMap.put(node.getUUID(), versionData);
+	    addRevisionData(node, revisionsMap.values());
+
+	} else if (PublicationDefaultStates.STAGED.equals(newState)) {
+
+	    node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE, newState);
+	    versionLog = new VersionLog(logItemName, newState, node.getSession().getUserID(), GregorianCalendar.getInstance(),
+		    AuthoringPublicationConstant.CHANGE_TO_STAGED);
+	    addLog(node, versionLog);
+	    VersionData versionData = revisionsMap.get(node.getUUID());
+	    if (versionData != null) {
+		versionData.setAuthor(userId);
+		versionData.setState(newState);
+	    } else {
+		versionData = new VersionData(node.getUUID(), newState, userId);
+	    }
+	    revisionsMap.put(node.getUUID(), versionData);
+	    addRevisionData(node, revisionsMap.values());
+
+	} else if (PublicationDefaultStates.UNPUBLISHED.equals(newState)) {
+
+	    node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE, newState);
+	    versionLog = new VersionLog(logItemName, newState, node.getSession().getUserID(), GregorianCalendar.getInstance(),
+		    AuthoringPublicationConstant.CHANGE_TO_UNPUBLISHED);
+	    addLog(node, versionLog);
+	    VersionData versionData = revisionsMap.get(node.getUUID());
+	    if (versionData != null) {
+		versionData.setAuthor(userId);
+		versionData.setState(newState);
+	    } else {
+		versionData = new VersionData(node.getUUID(), newState, userId);
+	    }
+	    revisionsMap.put(node.getUUID(), versionData);
+	    addRevisionData(node, revisionsMap.values());
+	} else if (PublicationDefaultStates.ARCHIVED.equals(newState)) {
+	    node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE, newState);
+	    versionLog = new VersionLog(logItemName, newState, node.getSession().getUserID(), GregorianCalendar.getInstance(),
+		    AuthoringPublicationConstant.CHANGE_TO_ARCHIVED);
+	    addLog(node, versionLog);
+	    VersionData versionData = revisionsMap.get(node.getUUID());
+	    if (versionData != null) {
+		versionData.setAuthor(userId);
+		versionData.setState(newState);
+	    } else {
+		versionData = new VersionData(node.getUUID(), newState, userId);
+	    }
+	    revisionsMap.put(node.getUUID(), versionData);
+	    addRevisionData(node, revisionsMap.values());
 	} else {
 	    super.changeState(node, newState, context);
 	}
@@ -108,9 +170,10 @@ public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin
 		PublicationDefaultStates.PUBLISHED, PublicationDefaultStates.OBSOLETE };
     }
 
-    public String getLifecycleName(){
+    public String getLifecycleName() {
 	return AuthoringPublicationConstant.LIFECYCLE_NAME;
     }
+
     public String getLifecycleType() {
 	return AuthoringPublicationConstant.PUBLICATION_LIFECYCLE_TYPE;
     }
@@ -281,20 +344,20 @@ public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin
 	}
 	return map;
     }
-    
+
     /**
-     * In this publication process, we put the content in Draft state when editing
-     * it.
+     * In this publication process, we put the content in Draft state when
+     * editing it.
      */
     public void updateLifecyleOnChangeContent(Node node, String remoteUser, String newState) throws Exception {
 
-      String state = node.getProperty(StageAndVersionPublicationConstant.CURRENT_STATE).getString();
+	String state = node.getProperty(StageAndVersionPublicationConstant.CURRENT_STATE).getString();
 
-      if (state.equals(newState))
-        return;
+	if (state.equals(newState))
+	    return;
 
-      HashMap<String, String> context = new HashMap<String, String>();
-      changeState(node, newState, context);
+	HashMap<String, String> context = new HashMap<String, String>();
+	changeState(node, newState, context);
     }
 
 }

@@ -17,71 +17,78 @@
 package org.exoplatform.services.wcm.extensions.publication.lifecycle.authoring;
 
 /**
- * Created by The eXo Platform SAS
- * Author : Hoa Pham
- * hoa.phamvu@exoplatform.com
+ * Created by The eXo Platform SAS Author : Hoa Pham hoa.phamvu@exoplatform.com
  * Mar 4, 2009
  */
 public interface AuthoringPublicationConstant {
-  
-  /** The Constant PUBLICATION_LIFECYCLE_TYPE. */
-  public static final String PUBLICATION_LIFECYCLE_TYPE = "publication:authoringPublication".intern();
-  
-  /** The Constant LIFECYCLE_NAME. */
-  public static final String LIFECYCLE_NAME = "Authoring publication".intern();   
-  
-  /** The Constant LOCALIZATION. */
-  public static final String LOCALIZATION = "artifacts.lifecycle.stageversion.StageAndVersionPublication".intern();
-  
-  /** The Constant ENROLLED_TO_LIFECYCLE. */
-  public static final String ENROLLED_TO_LIFECYCLE = "Publication.log.description.enrolled".intern();
-  
-  /** The Constant CHANGE_TO_DRAFT. */
-  public static final String CHANGE_TO_DRAFT = "Publication.log.description.change-to-draft-state".intern();
-  
-  /** The Constant CHANGE_TO_AWAITNG. */
-  public static final String CHANGE_TO_AWAITNG = "Publication.log.description.change-to-awaiting-state".intern();
-  
-  /** The Constant CHANGE_TO_LIVE. */
-  public static final String CHANGE_TO_LIVE = "Publication.log.description.change-to-live-state".intern();
-  
-  /** The Constant CHANGE_TO_OBSOLETE. */
-  public static final String CHANGE_TO_OBSOLETE = "Publication.log.description.change-to-obsolete-state".intern();
-  
-  /** The Constant PUBLICATION_LIFECYCLE_NAME. */
-  public static final String PUBLICATION_LIFECYCLE_NAME = "publication:lifecycleName".intern();
-  
-  /** The Constant CURRENT_STATE. */
-  public static final String CURRENT_STATE = "publication:currentState".intern();
-  
-  /** The Constant MIX_VERSIONABLE. */
-  public static final String MIX_VERSIONABLE = "mix:versionable".intern();
-  
-  /** The Constant HISTORY. */
-  public static final String HISTORY = "publication:history".intern();
-  
-  /** The Constant LIVE_REVISION_PROP. */
-  public static final String LIVE_REVISION_PROP = "publication:liveRevision".intern();
-  
-  /** The Constant LIVE_DATE_PROP. */
-  public static final String LIVE_DATE_PROP = "publication:liveDate".intern();  
-  
-  /** The Constant REVISION_DATA_PROP. */
-  public static final String REVISION_DATA_PROP = "publication:revisionData".intern();
-  
-  /** The Constant RUNTIME_MODE. */
-  public static final String RUNTIME_MODE = "wcm.runtime.mode".intern();
-  
-  /** The Constant CURRENT_REVISION_NAME. */
-  public static final String CURRENT_REVISION_NAME = "Publication.context.currentVersion".intern();
-  
-  /**
-   * The Enum SITE_MODE.
-   */
-  public static enum SITE_MODE {
-    /** The LIVE. */
-    LIVE,
-    /** The EDITING. */
-    EDITING
-  };
+
+    /** The Constant PUBLICATION_LIFECYCLE_TYPE. */
+    public static final String PUBLICATION_LIFECYCLE_TYPE = "publication:authoringPublication".intern();
+
+    /** The Constant LIFECYCLE_NAME. */
+    public static final String LIFECYCLE_NAME = "Authoring publication".intern();
+
+    /** The Constant LOCALIZATION. */
+    public static final String LOCALIZATION = "artifacts.lifecycle.stageversion.StageAndVersionPublication".intern();
+
+    /** The Constant ENROLLED_TO_LIFECYCLE. */
+    public static final String ENROLLED_TO_LIFECYCLE = "Publication.log.description.enrolled".intern();
+
+    /** The Constant CHANGE_TO_DRAFT. */
+    public static final String CHANGE_TO_DRAFT = "Publication.log.description.change-to-draft-state".intern();
+
+    /** The Constant CHANGE_TO_LIVE. */
+    public static final String CHANGE_TO_LIVE = "Publication.log.description.change-to-live-state".intern();
+
+    /** The Constant CHANGE_TO_PENDING. */
+    public static final String CHANGE_TO_PENDING = "Publication.log.description.change-to-pending-state".intern();
+
+    /** The Constant CHANGE_TO_APPROVED. */
+    public static final String CHANGE_TO_APPROVED = "Publication.log.description.change-to-approved-state".intern();
+
+    /** The Constant CHANGE_TO_STAGED. */
+    public static final String CHANGE_TO_STAGED = "Publication.log.description.change-to-staged-state".intern();
+
+    /** The Constant CHANGE_TO_UNPUBLISHED. */
+    public static final String CHANGE_TO_UNPUBLISHED = "Publication.log.description.change-to-unpublished-state".intern();
+
+    /** The Constant CHANGE_TO_ARCHIVED. */
+    public static final String CHANGE_TO_ARCHIVED = "Publication.log.description.change-to-archived-state".intern();
+
+    /** The Constant PUBLICATION_LIFECYCLE_NAME. */
+    public static final String PUBLICATION_LIFECYCLE_NAME = "publication:lifecycleName".intern();
+
+    /** The Constant CURRENT_STATE. */
+    public static final String CURRENT_STATE = "publication:currentState".intern();
+
+    /** The Constant MIX_VERSIONABLE. */
+    public static final String MIX_VERSIONABLE = "mix:versionable".intern();
+
+    /** The Constant HISTORY. */
+    public static final String HISTORY = "publication:history".intern();
+
+    /** The Constant LIVE_REVISION_PROP. */
+    public static final String LIVE_REVISION_PROP = "publication:liveRevision".intern();
+
+    /** The Constant LIVE_DATE_PROP. */
+    public static final String LIVE_DATE_PROP = "publication:liveDate".intern();
+
+    /** The Constant REVISION_DATA_PROP. */
+    public static final String REVISION_DATA_PROP = "publication:revisionData".intern();
+
+    /** The Constant RUNTIME_MODE. */
+    public static final String RUNTIME_MODE = "wcm.runtime.mode".intern();
+
+    /** The Constant CURRENT_REVISION_NAME. */
+    public static final String CURRENT_REVISION_NAME = "Publication.context.currentVersion".intern();
+
+    /**
+     * The Enum SITE_MODE.
+     */
+    public static enum SITE_MODE {
+	/** The LIVE. */
+	LIVE,
+	/** The EDITING. */
+	EDITING
+    };
 }
