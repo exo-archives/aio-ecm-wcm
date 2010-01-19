@@ -28,7 +28,7 @@
   <creator>root</creator>
 
   <portal-layout>
-    <container id="ACMEBanner" template="system:/templates/groovy/webui/component/UITableColumnContainer.gtmpl">
+    <container id="ACMEBanner" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
       <container id="ACMELogo" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
         <portlet-application>
           <portlet>

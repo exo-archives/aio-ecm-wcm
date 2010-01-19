@@ -33,7 +33,7 @@
       <show-info-bar>false</show-info-bar>
     </application>
 
-    <container id="ACMEBanner" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
+    <container id="ACMEBanner" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
       <container id="ACMELogo" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
         <application>
           <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-logo</instance-id>
