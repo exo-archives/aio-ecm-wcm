@@ -14,7 +14,7 @@
 
 	Node currentRevision = uicomponent.getCurrentRevision();
 	def context = _ctx.getRequestContext() ;
-	String remoteUser=context.getRemoteUser()
+	String remoteUser=context.getRemoteUser();
 	Node cNode = uicomponent.getCurrentNode();
 	boolean lastState=false;
 	String lifecycleName = cNode.getProperty("publication:lifecycle").getString();
@@ -39,15 +39,24 @@
  for (State state : states) {
 	if(states.indexOf(state)==states.size()-1) lastState=true;
 		 String membership = state.getMembership();
-		    String[] membershipTab = membership.split(":");
-		    IdentityRegistry identityRegistry = (IdentityRegistry) container.getComponentInstanceOfType(IdentityRegistry.class);
-		    Identity identity = identityRegistry.getIdentity(remoteUser);
+		 boolean isAutomatic = false;
+		 IdentityRegistry identityRegistry=null;
+		 Identity identity=null;
+		 String[] membershipTab=null;
+		 if(!"automatic".equals(membership)){
+		    membershipTab = membership.split(":");
+		    identityRegistry = (IdentityRegistry) container.getComponentInstanceOfType(IdentityRegistry.class);
+		    identity = identityRegistry.getIdentity(remoteUser);
+		    }
+		    else{
+		    isAutomatic=true;
+		    }
 		if (PublicationDefaultStates.DRAFT.equals(state.getState())) {
 		
 		   
 			if (isCurrentRevision("draft",currentRevision)){%>
 			<a class="CurrentStatus">
-			<%} else  if(identity.isMemberOf(membershipTab[1], membershipTab[0])){
+			<%} else  if(!isAutomatic&&identity.isMemberOf(membershipTab[1], membershipTab[0])){
 			%>	
 			<a class="ActiveStatus" href="<%= uicomponent.event("Draft")%>">
 			<%
@@ -66,7 +75,7 @@
 		} else if (PublicationDefaultStates.PENDING.equals(state.getState())) {
 		    if (isCurrentRevision("pending",currentRevision)){%>
 			<a class="CurrentStatus">
-			<%} else  if(identity.isMemberOf(membershipTab[1], membershipTab[0])){
+			<%} else  if(!isAutomatic&&identity.isMemberOf(membershipTab[1], membershipTab[0])){
 			%>	
 			<a class="ActiveStatus" href="<%= uicomponent.event("Pending")%>">
 			<%
@@ -85,7 +94,7 @@
 		} else if (PublicationDefaultStates.APPROVED.equals(state.getState())) {
 		     if (isCurrentRevision("approved",currentRevision)){%>
 			<a class="CurrentStatus">
-			<%} else  if(identity.isMemberOf(membershipTab[1], membershipTab[0])){
+			<%} else  if(!isAutomatic&&identity.isMemberOf(membershipTab[1], membershipTab[0])){
 			%>	
 			<a class="ActiveStatus" href="<%= uicomponent.event("Approved")%>">
 			<%
@@ -104,7 +113,7 @@
 		} else if (PublicationDefaultStates.ARCHIVED.equals(state.getState())) {
 		    if (isCurrentRevision("archived",currentRevision)){%>
 			<a class="CurrentStatus">
-			<%} else  if(identity.isMemberOf(membershipTab[1], membershipTab[0])){
+			<%} else  if(!isAutomatic&&identity.isMemberOf(membershipTab[1], membershipTab[0])){
 			%>	
 			<a class="ActiveStatus" href="<%= uicomponent.event("Archived")%>">
 			<%
@@ -119,12 +128,16 @@
 			<%}else{%>
 			<div style="clear: left;"><span></span></div>  
 			<%}
-		} else if (PublicationDefaultStates.PUBLISHED.equals(state.getState())) {
-		    if (isCurrentRevision("published",currentRevision)){%>
+		} 
+		else if (PublicationDefaultStates.PUBLISHED.equals(state.getState())) {
+				System.out.println("rrrrrrrrrrr"+currentRevision);
+		    if (isCurrentRevision("published",currentRevision)){
+			
+			%>
 			<a class="CurrentStatus">
-			<%} else  if(identity.isMemberOf(membershipTab[1], membershipTab[0])){
+			<%} else  if(!isAutomatic&&identity.isMemberOf(membershipTab[1], membershipTab[0])){
 			%>	
-			<a class="ActiveStatus" href="<%= uicomponent.event("Published")%>">
+			<a class="ActiveStatus" href="<%= uicomponent.event("Live")%>">
 			<%
 		    }			
 			else{%>
@@ -140,7 +153,7 @@
 		} else if (PublicationDefaultStates.STAGED.equals(state.getState())) {
 		    if (isCurrentRevision("staged",currentRevision)){%>
 			<a class="CurrentStatus">
-			<%} else  if(identity.isMemberOf(membershipTab[1], membershipTab[0])){
+			<%} else  if(!isAutomatic&&identity.isMemberOf(membershipTab[1], membershipTab[0])){
 			%>	
 			<a class="ActiveStatus" href="<%= uicomponent.event("Staged")%>">
 			<%
@@ -158,7 +171,7 @@
 		}else if (PublicationDefaultStates.UNPUBLISHED.equals(state.getState())) {
 		    if (isCurrentRevision("unpublished",currentRevision)){%>
 			<a class="CurrentStatus">
-			<%} else  if(identity.isMemberOf(membershipTab[1], membershipTab[0])){
+			<%} else  if(!isAutomatic&&identity.isMemberOf(membershipTab[1], membershipTab[0])){
 			%>	
 			<a class="ActiveStatus" href="<%= uicomponent.event("Unpublished")%>">
 			<%

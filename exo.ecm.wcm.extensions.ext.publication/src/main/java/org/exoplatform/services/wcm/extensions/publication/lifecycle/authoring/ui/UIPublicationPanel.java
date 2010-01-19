@@ -94,6 +94,7 @@ public class UIPublicationPanel extends org.exoplatform.services.wcm.publication
 	    }
 	    try {
 		publicationPlugin.changeState(currentNode, PublicationDefaultStates.ARCHIVED, context);
+		currentNode.setProperty("publication:lastUser", event.getRequestContext().getRemoteUser());
 		publicationPanel.updatePanel();
 	    } catch (Exception e) {
 		UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
@@ -136,6 +137,7 @@ public class UIPublicationPanel extends org.exoplatform.services.wcm.publication
 	    }
 	    try {
 		publicationPlugin.changeState(currentNode, PublicationDefaultStates.UNPUBLISHED, context);
+		currentNode.setProperty("publication:lastUser", event.getRequestContext().getRemoteUser());
 		publicationPanel.updatePanel();
 	    } catch (Exception e) {
 		UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
@@ -178,6 +180,7 @@ public class UIPublicationPanel extends org.exoplatform.services.wcm.publication
 	    }
 	    try {
 		publicationPlugin.changeState(currentNode, PublicationDefaultStates.STAGED, context);
+		currentNode.setProperty("publication:lastUser", event.getRequestContext().getRemoteUser());
 		publicationPanel.updatePanel();
 	    } catch (Exception e) {
 		UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
@@ -220,6 +223,7 @@ public class UIPublicationPanel extends org.exoplatform.services.wcm.publication
 	    }
 	    try {
 		publicationPlugin.changeState(currentNode, PublicationDefaultStates.APPROVED, context);
+		currentNode.setProperty("publication:lastUser", event.getRequestContext().getRemoteUser());
 		publicationPanel.updatePanel();
 	    } catch (Exception e) {
 		UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
@@ -262,6 +266,7 @@ public class UIPublicationPanel extends org.exoplatform.services.wcm.publication
 	    }
 	    try {
 		publicationPlugin.changeState(currentNode, PublicationDefaultStates.PENDING, context);
+		currentNode.setProperty("publication:lastUser", event.getRequestContext().getRemoteUser());
 		publicationPanel.updatePanel();
 	    } catch (Exception e) {
 		UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
@@ -304,6 +309,7 @@ public class UIPublicationPanel extends org.exoplatform.services.wcm.publication
 	    }
 	    try {
 		publicationPlugin.changeState(currentNode, PublicationDefaultStates.DRAFT, context);
+		currentNode.setProperty("publication:lastUser", event.getRequestContext().getRemoteUser());
 		publicationPanel.updatePanel();
 	    } catch (Exception e) {
 		UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
@@ -345,6 +351,7 @@ public class UIPublicationPanel extends org.exoplatform.services.wcm.publication
 	    }
 	    try {
 		publicationPlugin.changeState(currentNode, PublicationDefaultStates.PUBLISHED, context);
+		currentNode.setProperty("publication:lastUser", event.getRequestContext().getRemoteUser());
 		publicationPanel.updatePanel();
 	    } catch (Exception e) {
 		UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
