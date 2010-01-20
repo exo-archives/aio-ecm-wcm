@@ -446,17 +446,6 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
       Class clazz = Class.forName(classPath, true, cl) ;
       UIComponent component = fastContentCreatorPortlet.createUIComponent(clazz, null, null);
       NodeHierarchyCreator nodeHierarchyCreator = fastContentCreatorForm.getApplicationComponent(NodeHierarchyCreator.class);  
-      String value = fastContentCreatorForm.getUIStringInput(fieldName).getValue();
-      String[] arrayTaxonomy = new String[1];
-      if (value != null && !value.equals("")) {
-        arrayTaxonomy = value.split(",");
-        if (arrayTaxonomy.length > 0) {
-          if (arrayTaxonomy[0].startsWith("[")) arrayTaxonomy[0] = arrayTaxonomy[0].substring(1, arrayTaxonomy[0].length());
-          if (arrayTaxonomy[arrayTaxonomy.length - 1].endsWith("]")) {
-            arrayTaxonomy[arrayTaxonomy.length - 1] = arrayTaxonomy[arrayTaxonomy.length - 1].substring(0, arrayTaxonomy[arrayTaxonomy.length - 1].length() - 1);  
-          }
-        }
-      }
       SessionProvider sessionProvider = Utils.getSessionProvider();
       String selectorParams = (String)fieldPropertiesMap.get("selectorParams") ;
       if(component instanceof UIOneNodePathSelector) {
