@@ -407,7 +407,7 @@ UIFormGeneratorPortlet.prototype.addOption = function(obj) {
 	inputNode.onkeyup = this.updateValue; 
 	for(var j =0; j< brotherChildNodes.length; j++){
 		if(brotherChildNodes[j].getAttribute("index")==currentIndex){
-			UIFormGeneratorPortlet.prototype.insertAfter(brotherChildNodes[j],inputNode);
+			eXo.ecm.UIFormGeneratorPortlet.insertAfter(brotherChildNodes[j],inputNode);
 		}				
 	}	
 		
@@ -419,13 +419,13 @@ UIFormGeneratorPortlet.prototype.addOption = function(obj) {
 	rNode.className="DivIcon";
 	rNode.setAttribute("index",index);
 	rNode.innerHTML=strRNode;
-	UIFormGeneratorPortlet.prototype.insertAfter(upperIconNode,rNode);	
+	eXo.ecm.UIFormGeneratorPortlet.insertAfter(upperIconNode,rNode);	
 		
 	var arrayDivIcons = DOMUtil.findFirstDescendantByClass(rowNode, 'td', 'FieldIcon').childNodes;
 	var arrayInputTexts =DOMUtil.findDescendantsByClass(brotherNode, 'input', 'InputText');	
 	
-	UIFormGeneratorPortlet.prototype.updateNodeIndex(arrayDivIcons,index);
-	UIFormGeneratorPortlet.prototype.updateNodeIndex(arrayInputTexts,index);
+	eXo.ecm.UIFormGeneratorPortlet.updateNodeIndex(arrayDivIcons,index);
+	eXo.ecm.UIFormGeneratorPortlet.updateNodeIndex(arrayInputTexts,index);
 	
 	switch(ancestorNode.getAttribute("typeComponent")) {		
 		case "select" :			
@@ -435,10 +435,10 @@ UIFormGeneratorPortlet.prototype.addOption = function(obj) {
 			optionNode.innerHTML = "Option"+index;		
 			for(var j =0; j< selectNode.length; j++){
 				if(selectNode[j].getAttribute("index")== currentIndex){
-					UIFormGeneratorPortlet.prototype.insertAfter(selectNode[j],optionNode);							
+					eXo.ecm.UIFormGeneratorPortlet.insertAfter(selectNode[j],optionNode);							
 				}				
 			}			
-			UIFormGeneratorPortlet.prototype.updateNodeIndex(selectNode,index);		
+			eXo.ecm.UIFormGeneratorPortlet.updateNodeIndex(selectNode,index);		
 			for(var i=0; i< arrayInputTexts.length; i++){
 				if(arrayInputTexts[i].value=="" || arrayInputTexts[i].value.length <1) {
 					selectNode[i].value="Option"+selectNode[i].getAttribute("index");				
@@ -453,7 +453,7 @@ UIFormGeneratorPortlet.prototype.addOption = function(obj) {
 			radioNode.className = "RadioButton";					
 			for(var j =0; j< radioContainer.length; j++){			
 				if(radioContainer[j].getAttribute("index")== currentIndex){
-					UIFormGeneratorPortlet.prototype.insertAfter(radioContainer[j],radioNode);							
+					eXo.ecm.UIFormGeneratorPortlet.insertAfter(radioContainer[j],radioNode);							
 				}				
 			}
 			var rContainer = DOMUtil.findDescendantsByClass(containerNode, 'div', 'RadioButton');		
@@ -503,7 +503,7 @@ UIFormGeneratorPortlet.prototype.removeOption = function(obj) {
 					selectNode[j].parentNode.removeChild(selectNode[j]);					
 				}				
 			}			
-			UIFormGeneratorPortlet.prototype.updateNodeIndex(selectNode,0);	
+			eXo.ecm.UIFormGeneratorPortlet.updateNodeIndex(selectNode,0);	
 			var arrInputTexts = DOMUtil.findDescendantsByClass(brotherNode, 'input', 'InputText');				
 			for(var i=0; i< arrInputTexts.length; i++){
 				if(arrInputTexts[i].value=="" || arrInputTexts[i].value.length <1) {
