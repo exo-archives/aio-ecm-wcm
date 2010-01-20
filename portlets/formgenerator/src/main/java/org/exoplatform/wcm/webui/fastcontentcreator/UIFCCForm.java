@@ -458,6 +458,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
         }
       }
       SessionProvider sessionProvider = Utils.getSessionProvider();
+      String selectorParams = (String)fieldPropertiesMap.get("selectorParams") ;
       if(component instanceof UIOneNodePathSelector) {
         String repositoryName = UIFCCUtils.getPreferenceRepository() ;
         String wsFieldName = (String)fieldPropertiesMap.get("workspaceField") ;
@@ -466,7 +467,6 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
           wsName = (String)fastContentCreatorForm.<UIFormInputBase>getUIInput(wsFieldName).getValue() ;
           ((UIOneNodePathSelector)component).setIsDisable(wsName, true) ;      
         }
-        String selectorParams = (String)fieldPropertiesMap.get("selectorParams") ;
         if(selectorParams != null) {
           String[] arrParams = selectorParams.split(",") ;
           if(arrParams.length == 4) {
@@ -504,7 +504,8 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
       }
       Utils.createPopupWindow(fastContentCreatorForm, component, UIFCCConstant.TAXONOMY_POPUP_WINDOW, 640, 300);
       String param = "returnField=" + fieldName ;
-      ((ComponentSelector)component).setSourceComponent(fastContentCreatorForm, new String[]{param}) ;
+      String[] params = selectorParams == null ? new String[]{param} : new String[]{param, "selectorParams=" + selectorParams};
+      ((ComponentSelector)component).setSourceComponent(fastContentCreatorForm, params) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorPortlet) ;
     }
   }      
