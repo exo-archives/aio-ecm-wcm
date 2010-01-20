@@ -324,6 +324,12 @@
   margin-left: 5px;
 }
 
+.UIFormGenerator .UIFormEditBox .FieldIcon .DivIcon {
+  width : 40px;
+  padding :2px; 
+  height: 16px;
+}
+
 .UIFormGenerator .UIAction {
   padding: 15px 0px;
 }

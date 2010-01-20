@@ -42,7 +42,7 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 			advancedOption  +=	"<tr>";
 			advancedOption  +=		"<td class='FieldLabel'>Advance Options</td>";
 			advancedOption  +=		"<td class='FileComponent'>";
-			advancedOption  += 			"Toolbar: <select class='SelectBox'><option>CompleteWCM</option><option>SuperBasicWCM</option><option>BasicWCM</option><option>Basic</option></select>";
+			advancedOption  += 			"Toolbar: <select class='SelectBox'><option>SuperBasicWCM</option><option>BasicWCM</option><option>CompleteWCM</option><option>Basic</option></select>";
 			advancedOption  +=		"</td>";
 			advancedOption  +=	"</tr>";
 
@@ -60,7 +60,7 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 			break;						
 		case "radio"		: 
 			fieldComponent  +=		"<td class='FieldLabel' value='Radio'>Radio field</td>";
-			fieldComponent  +=		"<td class='FieldComponent'><div class='RadioButton'><input type='radio' class='Radio' value='radio1'/><span style='padding : 0 5px 0 19px; display:block; line-height:12px'>Radio 1</span><div style='clear:left'></div></div></td>";
+			fieldComponent  +=		"<td class='FieldComponent'><div class='RadioButton' index='1'><input type='radio' class='Radio' value='radio1'/><span style='padding : 0 5px 0 19px; display:block; line-height:12px'>Radio 1</span><div style='clear:left'></div></div></td>";
 			multivalue		= true;
 			break;			
 		case "datetime"	: 
@@ -126,19 +126,21 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 	formGenerator  +=							"</tr>";
 	formGenerator  +=							"<tr>";
 	formGenerator  +=								"<td class='FieldLabel'>Height</td>";	
-	formGenerator  +=								"<td class='FieldComponent'>";
+	formGenerator  +=								"<td class='FieldComponent' style='padding:0px;'>";
 	formGenerator  +=									"<input type='number' value='' class='InputText' style='width: 50%; float:left;' onkeyup='eXo.ecm.UIFormGeneratorPortlet.updateHeight(this);' />";
 	formGenerator  +=								"</td>";
 	formGenerator  +=								"<td class='FieldIcon'><span></span></td>";
-	formGenerator  +=							"</tr>";
+	formGenerator  +=							"</tr>";		
 	formGenerator  +=							"<tr>";
 	formGenerator  +=								"<td class='FieldLabel'>Default Value</td>";
 	formGenerator  +=								"<td class='FieldComponent'><input type='text' class='InputText' onkeyup='eXo.ecm.UIFormGeneratorPortlet.updateValue(event);' index='1'/></td>";
 	formGenerator  +=								"<td class='FieldIcon'>";
 	if (multivalue) {
-		formGenerator  +=								"<a class='AddIcon' onclick='eXo.ecm.UIFormGeneratorPortlet.addOption(this);'><span></span></a>";
-		formGenerator  +=								"<a class='RemoveIcon' onclick='eXo.ecm.UIFormGeneratorPortlet.removeOption(this);'><span></span></a>";
-		formGenerator  +=								"<div class='ClearRight'><span></span></div>";
+		formGenerator  += 								"<div class='DivIcon' index='1'>";
+		formGenerator  +=									"<a class='AddIcon' onclick='eXo.ecm.UIFormGeneratorPortlet.addOption(this);'><span></span></a>";
+		formGenerator  +=									"<a class='RemoveIcon' onclick='eXo.ecm.UIFormGeneratorPortlet.removeOption(this);'><span></span></a>";
+		formGenerator  +=									"<div style='clear:left;'><span></span></div>";
+		formGenerator  +=								"</div>";
 	} else {
 		formGenerator  += 								"<span></span>";
 	}
@@ -167,7 +169,7 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 	if(!FCKeditorAPI.GetInstance('RichTextEditorContent')) {
 		var oFCKEditor = new FCKeditor('RichTextEditorContent');
 		oFCKEditor.BasePath = '/portal/fckeditor/';
-		oFCKEditor.ToolbarSet = 'CompleteWCM';
+		oFCKEditor.ToolbarSet = 'SuperBasicWCM';
 		oFCKEditor.ReplaceTextarea();
 	}
 };
@@ -372,36 +374,97 @@ UIFormGeneratorPortlet.prototype.updateGuide = function(objGuide) {
 	var fieldLabel = DOMUtil.findFirstDescendantByClass(componentNode, 'td', 'FieldLabel');
 	fieldLabel.setAttribute("desc", objGuide.value);
 };
+// This function inserts newNode after referenceNode
+// when the second parameter of insertBefore is null then the newNode is appended to the end of the parentNode
+UIFormGeneratorPortlet.prototype.insertAfter = function( referenceNode, newNode ){
+    referenceNode.parentNode.insertBefore( newNode, referenceNode.nextSibling );
+}
+//After being removed all the elements need to update their indexes. This function does that!
+UIFormGeneratorPortlet.prototype.updateNodeIndex = function( elementNode, index ){//alert("called");
+	for(var i=parseInt(index); i< elementNode.length; i++){					
+		elementNode[i].setAttribute("index",parseInt(i)+1);				
+	}		
+}
 
-UIFormGeneratorPortlet.prototype.addOption = function(obj) {
+UIFormGeneratorPortlet.prototype.addOption = function(obj) {		
 	var DOMUtil = eXo.core.DOMUtil;
-	var parentNode = DOMUtil.findAncestorByClass(obj, 'BoxContentBoxStyle');
-	var containerNode = DOMUtil.findFirstDescendantByClass(parentNode, 'div', 'TopContentBoxStyle');
-	var componentNode = DOMUtil.findFirstDescendantByClass(containerNode, 'td', 'FieldComponent');
+	var ancestorNode = DOMUtil.findAncestorByClass(obj, 'BoxContentBoxStyle');
+	var containerNode = DOMUtil.findFirstDescendantByClass(ancestorNode, 'div', 'TopContentBoxStyle');
+	var componentNode = DOMUtil.findFirstDescendantByClass(containerNode, 'td', 'FieldComponent');	
+	var selectNode = DOMUtil.findFirstDescendantByClass(componentNode, 'select', 'SelectBox');
 	var rowNode = DOMUtil.findAncestorByTagName(obj, 'tr');
-	var brotherNode = DOMUtil.findFirstDescendantByClass(rowNode, 'td', 'FieldComponent');
+	var brotherNode = DOMUtil.findFirstDescendantByClass(rowNode, 'td', 'FieldComponent');	
 	var brotherChildNodes = DOMUtil.findDescendantsByClass(brotherNode, 'input', 'InputText');
-	var index = 0;
-	for(var i = 1; i <= brotherChildNodes.length; i++) {
-		if(i == brotherChildNodes.length) {
-			index = i;
-			index++;
-		}	
-	}
-	switch(parentNode.getAttribute("typeComponent")) {
-		case "select" :
-			var selectNode = DOMUtil.findFirstDescendantByClass(componentNode, 'select', 'SelectBox');
+	var radioContainer = DOMUtil.findDescendantsByClass(containerNode, 'div', 'RadioButton');						
+	var upperIconNode = DOMUtil.findAncestorByClass(obj, 'DivIcon');		
+	var currentIndex = upperIconNode.getAttribute("index");
+	var index = parseInt(currentIndex)+1;	
+	
+	var inputNode = document.createElement('input');
+	inputNode.className = 'InputText';
+	inputNode.setAttribute("index", index);
+	inputNode.type = 'text';
+	inputNode.onkeyup = this.updateValue; 
+	for(var j =0; j< brotherChildNodes.length; j++){
+		if(brotherChildNodes[j].getAttribute("index")==currentIndex){
+			UIFormGeneratorPortlet.prototype.insertAfter(brotherChildNodes[j],inputNode);
+		}				
+	}	
+		
+	var strRNode ="";
+	strRNode  +="<a class='AddIcon' onclick='eXo.ecm.UIFormGeneratorPortlet.addOption(this);'><span></span></a>";
+	strRNode  +="<a class='RemoveIcon' onclick='eXo.ecm.UIFormGeneratorPortlet.removeOption(this);'><span></span></a>";
+	strRNode  +="<div style='clear:left;'><span></span></div>";
+	var rNode = document.createElement('div');
+	rNode.className="DivIcon";
+	rNode.setAttribute("index",index);
+	rNode.innerHTML=strRNode;
+	UIFormGeneratorPortlet.prototype.insertAfter(upperIconNode,rNode);	
+		
+	var arrayDivIcons = DOMUtil.findFirstDescendantByClass(rowNode, 'td', 'FieldIcon').childNodes;
+	var arrayInputTexts =DOMUtil.findDescendantsByClass(brotherNode, 'input', 'InputText');	
+	
+	UIFormGeneratorPortlet.prototype.updateNodeIndex(arrayDivIcons,index);
+	UIFormGeneratorPortlet.prototype.updateNodeIndex(arrayInputTexts,index);
+	
+	switch(ancestorNode.getAttribute("typeComponent")) {		
+		case "select" :			
 			var optionNode = document.createElement('option');
 			optionNode.setAttribute("index", index);
 			optionNode.value = "Option"+index;
-			optionNode.innerHTML = "Option"+index;
-			selectNode.appendChild(optionNode);
+			optionNode.innerHTML = "Option"+index;		
+			for(var j =0; j< selectNode.length; j++){
+				if(selectNode[j].getAttribute("index")== currentIndex){
+					UIFormGeneratorPortlet.prototype.insertAfter(selectNode[j],optionNode);							
+				}				
+			}			
+			UIFormGeneratorPortlet.prototype.updateNodeIndex(selectNode,index);		
+			for(var i=0; i< arrayInputTexts.length; i++){
+				if(arrayInputTexts[i].value=="" || arrayInputTexts[i].value.length <1) {
+					selectNode[i].value="Option"+selectNode[i].getAttribute("index");				
+					selectNode[i].text="Option"+selectNode[i].getAttribute("index");
+				}
+			}						
 			break;
-		case "radio"	:
+		case "radio" :				
 			var radioNode  = document.createElement("div");
+			radioNode.setAttribute("index",index);
 			radioNode.innerHTML = '<input type="radio" class="Radio" value="radio'+index+'" /><span style="padding : 0 5px 0 19px; display:block; line-height:12px">Radio '+index+'</span><div style="clear:left"></div>';
-			radioNode.className = "RadioButton";
-			componentNode.appendChild(radioNode);
+			radioNode.className = "RadioButton";					
+			for(var j =0; j< radioContainer.length; j++){			
+				if(radioContainer[j].getAttribute("index")== currentIndex){
+					UIFormGeneratorPortlet.prototype.insertAfter(radioContainer[j],radioNode);							
+				}				
+			}
+			var rContainer = DOMUtil.findDescendantsByClass(containerNode, 'div', 'RadioButton');		
+			var arrInputTexts =DOMUtil.findDescendantsByClass(brotherNode, 'input', 'InputText');				
+			eXo.ecm.UIFormGeneratorPortlet.updateNodeIndex(rContainer,index);								
+			for(var i=0; i< rContainer.length; i++){						
+				if(arrInputTexts[i].value=="" || arrInputTexts[i].value.length <1) {											
+					rContainer[i].firstChild.value="radio"+rContainer[i].getAttribute("index");				
+					rContainer[i].firstChild.nextSibling.innerHTML="Radio "+rContainer[i].getAttribute("index");
+				}
+			}						
 			break;
 		case "checkbox" :
 			var checkboxNode  = document.createElement("div");
@@ -409,60 +472,74 @@ UIFormGeneratorPortlet.prototype.addOption = function(obj) {
 			checkboxNode.className = "CheckboxButton";
 			componentNode.appendChild(checkboxNode);	
 			break;
-	}
-	
-	var inputNode = document.createElement('input');
-	inputNode.className = 'InputText';
-	inputNode.setAttribute("input", index);
-	inputNode.type = 'text';
-	inputNode.onkeyup = this.updateValue;	
-	brotherNode.appendChild(inputNode);
+	}			
 };
 
-UIFormGeneratorPortlet.prototype.removeOption = function(obj) {
+UIFormGeneratorPortlet.prototype.removeOption = function(obj) {	
+
 	var DOMUtil = eXo.core.DOMUtil;
-	var parentNode = DOMUtil.findAncestorByTagName(obj, 'tr');
-	var componentNode = DOMUtil.findFirstDescendantByClass(parentNode, 'td', 'FieldComponent');
-	var inputNodes = DOMUtil.getChildrenByTagName(componentNode, 'input');
-	if(inputNodes.length <= 1)	return;
-	var root = DOMUtil.findAncestorByClass(obj, 'BoxContentBoxStyle');
-	var topContainerNode = DOMUtil.findFirstDescendantByClass(root, 'div', 'TopContentBoxStyle');
-	var topFieldComponent = DOMUtil.findFirstDescendantByClass(topContainerNode, 'td', 'FieldComponent');
+	var ancestorNode = DOMUtil.findAncestorByClass(obj, 'BoxContentBoxStyle');
+	var containerNode = DOMUtil.findFirstDescendantByClass(ancestorNode, 'div', 'TopContentBoxStyle');
+	var componentNode = DOMUtil.findFirstDescendantByClass(containerNode, 'td', 'FieldComponent');	
+	var selectNode = DOMUtil.findFirstDescendantByClass(componentNode, 'select', 'SelectBox');
+	var rowNode = DOMUtil.findAncestorByTagName(obj, 'tr');
+	var brotherNode = DOMUtil.findFirstDescendantByClass(rowNode, 'td', 'FieldComponent');	
+	var brotherChildNodes = DOMUtil.findDescendantsByClass(brotherNode, 'input', 'InputText');
+	var radioContainer = DOMUtil.findDescendantsByClass(containerNode, 'div', 'RadioButton');						
+	var upperIconNode = DOMUtil.findAncestorByClass(obj, 'DivIcon');		
+	var currentIndex = upperIconNode.getAttribute("index");
+	var index = parseInt(currentIndex)+1;	
 	
-	switch(root.getAttribute("typeComponent")) {
-		case "select" :
-			var selectNode = DOMUtil.findFirstDescendantByClass(topFieldComponent, 'select', 'SelectBox');
-			var options =	 DOMUtil.getChildrenByTagName(selectNode, 'options');
-			for(var i = 0 ; i < inputNodes.length; i++) {
-				var index = inputNodes.length -1;
-				if(i == index) {
-					componentNode.removeChild(inputNodes[i]);			
-					selectNode.remove(i);
-				}
-			}
-			break;
-		case "radio"	:
-			var radioNodes = DOMUtil.findDescendantsByClass(topFieldComponent, 'div', 'RadioButton');
-			for(var i = 0 ; i < inputNodes.length; i++) {
-				var index = inputNodes.length -1;
-				if(i == index) {
-					componentNode.removeChild(inputNodes[i]);			
-					topFieldComponent.removeChild(radioNodes[i]);
-				}
-			}
-			break;
-		case "checkbox" :
-			var checkboxNodes = DOMUtil.findDescendantsByClass(topFieldComponent, 'div', 'CheckboxButton');
-			for(var i = 0 ; i < inputNodes.length; i++) {
-				var index = inputNodes.length -1;
-				if(i == index) {
-					componentNode.removeChild(inputNodes[i]);			
-					topFieldComponent.removeChild(checkboxNodes[i]);
-				}
-			}
-			break;	
-	}
+	for(var j =0; j< brotherChildNodes.length; j++){
+		if(brotherChildNodes[j].getAttribute("index")==currentIndex){
+			brotherChildNodes[j].parentNode.removeChild(brotherChildNodes[j]);
+		}				
+	}	
 	
+	switch(ancestorNode.getAttribute("typeComponent")) {		
+		case "select" :						
+			for(var j =0; j< selectNode.length; j++){
+				if(selectNode[j].getAttribute("index")== currentIndex){
+					selectNode[j].parentNode.removeChild(selectNode[j]);					
+				}				
+			}			
+			UIFormGeneratorPortlet.prototype.updateNodeIndex(selectNode,0);	
+			var arrInputTexts = DOMUtil.findDescendantsByClass(brotherNode, 'input', 'InputText');				
+			for(var i=0; i< arrInputTexts.length; i++){
+				if(arrInputTexts[i].value=="" || arrInputTexts[i].value.length <1) {
+					selectNode[i].value="Option"+selectNode[i].getAttribute("index");				
+					selectNode[i].text="Option"+selectNode[i].getAttribute("index");
+				}
+			}						
+			break;
+		case "radio" :							
+			for(var j =0; j< radioContainer.length; j++){			
+				if(radioContainer[j].getAttribute("index")== currentIndex){
+					radioContainer[j].parentNode.removeChild(radioContainer[j]);										
+				}				
+			}			
+			var rContainer = DOMUtil.findDescendantsByClass(containerNode, 'div', 'RadioButton');		
+			var arrInputTexts =DOMUtil.findDescendantsByClass(brotherNode, 'input', 'InputText');				
+			eXo.ecm.UIFormGeneratorPortlet.updateNodeIndex(rContainer,0);								
+			for(var i=0; i< rContainer.length; i++){						
+				if(arrInputTexts[i].value=="" || arrInputTexts[i].value.length <1) {											
+					rContainer[i].firstChild.value="Option"+rContainer[i].getAttribute("index");				
+					rContainer[i].firstChild.nextSibling.innerHTML="Option"+rContainer[i].getAttribute("index");
+				}
+			}						
+			break;		
+	}	
+
+	var arrayDivIcons = DOMUtil.findFirstDescendantByClass(rowNode, 'td', 'FieldIcon').childNodes;
+	var arrayInputTexts = DOMUtil.findDescendantsByClass(brotherNode, 'input', 'InputText');	
+	
+	for(var j =0; j< arrayDivIcons.length; j++){
+		if(arrayDivIcons[j].getAttribute("index")== currentIndex){
+			arrayDivIcons[j].parentNode.removeChild(arrayDivIcons[j]);						
+		}				
+	}				
+	eXo.ecm.UIFormGeneratorPortlet.updateNodeIndex(arrayDivIcons,0);
+	eXo.ecm.UIFormGeneratorPortlet.updateNodeIndex(arrayInputTexts,0);
 };
 
 UIFormGeneratorPortlet.prototype.getStringJsonObject = function() {
@@ -540,27 +617,8 @@ UIFormGeneratorPortlet.prototype.getProperties = function(comp) {
 			strObject +=  '"value":"null","width":0,"mandatory":'+mandatory+',"height":0,';	
 			break;
 		case "radio" :
-			var radioNodes = DOMUtil.findDescendantsByClass(topContent, 'div', "RadioButton");
-			var dummyRadioNode = DOMUtil.findFirstDescendantByClass(radioNodes[0], 'input', 'Radio');
-			var width	= dummyRadioNode.offsetWidth;
-			var height  = dummyRadioNode.offsetHeight;
-			var mandatory = fieldLabel.getAttribute('mandatory');
-			strObject +=  '"value":"'+dummyRadioNode.value+'","width":'+width+',"mandatory":'+mandatory+',"height":'+height+',"advanced":"';
-			for(var i = 0; i < radioNodes.length; i++) {
-				var radioNode = DOMUtil.findFirstDescendantByClass(radioNodes[i], 'input', 'Radio');
-				strObject += radioNode.value;
-				if(i != (radioNodes.length-1)) {
-					strObject += ",";				
-				}
-			}
-			strObject += '",';
 			break;
 		case "checkbox" :
-			var checkboxNode = DOMUtil.findFirstDescendantByClass(topContent, 'input', "CheckBox");
-			var width	= checkboxNode.offsetWidth;
-			var mandatory = fieldLabel.getAttribute('mandatory');
-			var height  = checkboxNode.offsetHeight;
-			strObject +=  '"value":"'+checkboxNode.value+'","width":'+width+',"mandatory":'+mandatory+',"height":'+height+',';	
 			break;		
 	}
 
