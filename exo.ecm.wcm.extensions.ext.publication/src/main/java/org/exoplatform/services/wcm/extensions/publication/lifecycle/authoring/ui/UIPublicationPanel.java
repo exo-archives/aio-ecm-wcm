@@ -17,11 +17,13 @@
 package org.exoplatform.services.wcm.extensions.publication.lifecycle.authoring.ui;
 
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 import javax.jcr.Node;
 
-import org.exoplatform.ecm.webui.utils.JCRExceptionManager;
+import org.exoplatform.ecm.webui.utils.JCRExceptionManager; 
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.authoring.AuthoringPublicationConstant;
@@ -69,7 +71,11 @@ public class UIPublicationPanel extends org.exoplatform.services.wcm.publication
      */
     public UIPublicationPanel() throws Exception {
 	addChild(new UIFormDateTimeInput(START_PUBLICATION, START_PUBLICATION, null).addValidator(MandatoryValidator.class));
-	addChild(new UIFormDateTimeInput(END_PUBLICATION, END_PUBLICATION, null).addValidator(MandatoryValidator.class));
+	
+	// initialize default end date to tomorrow to avoid immediate unpublishing
+	Calendar defaultEndPublication = new GregorianCalendar();
+	defaultEndPublication.add(Calendar.HOUR, 24);
+	addChild(new UIFormDateTimeInput(END_PUBLICATION, END_PUBLICATION, defaultEndPublication.getTime()).addValidator(MandatoryValidator.class));
 	setActions(new String[] { "Save", "Close" });
     }
 

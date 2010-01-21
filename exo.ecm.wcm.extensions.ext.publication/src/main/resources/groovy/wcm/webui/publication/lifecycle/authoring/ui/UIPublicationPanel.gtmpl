@@ -83,7 +83,7 @@
 			else{%>
 			<a class="DisableStatus">
 			<%}%>
-			Redigé</a>
+			<%=_ctx.appRes("UIPublicationPanel.status.pending")%></a>
 			<%if(!lastState){%>
 			
 			<span class="StatusArrow"></span>
@@ -102,7 +102,7 @@
 			else{%>
 			<a class="DisableStatus">
 			<%}%>
-			Validé</a>
+			<%=_ctx.appRes("UIPublicationPanel.status.approved")%></a>
 			<%if(!lastState){%>
 			
 			<span class="StatusArrow"></span>
@@ -121,7 +121,7 @@
 			else{%>
 			<a class="DisableStatus">
 			<%}%>
-			Archivé</a>
+			<%=_ctx.appRes("UIPublicationPanel.status.archived")%></a>
 			<%if(!lastState){%>
 			
 			<span class="StatusArrow"></span>
@@ -142,7 +142,7 @@
 			else{%>
 			<a class="DisableStatus">
 			<%}%>
-			Publié</a>
+			<%=_ctx.appRes("UIPublicationPanel.status.published")%></a>
 			<%if(!lastState){%>
 			
 			<span class="StatusArrow"></span>
@@ -160,7 +160,7 @@
 			else{%>
 			<a class="DisableStatus">
 			<%}%>
-			Prêt à publier</a>
+			<%=_ctx.appRes("UIPublicationPanel.status.staged")%></a>
 			<%if(!lastState){%>
 			
 			<span class="StatusArrow"></span>
@@ -178,7 +178,7 @@
 			else{%>
 			<a class="DisableStatus">
 			<%}%>
-			Non Publié</a>
+			<%=_ctx.appRes("UIPublicationPanel.status.unpublished")%></a>
 			<%if(!lastState){%>
 			
 			<span class="StatusArrow"></span>
@@ -192,15 +192,11 @@
     </div>
   </fieldset>
   <fieldset class="StatusTable">
-  	<legend class="Legend">Date</legend>
+  	<legend class="Legend"><%=_ctx.appRes("UIPublicationPanel.scheduled.title")%></legend>
   	<table class="">
   		<tr>
-  			<td>Du</td>
-  			<td><% uicomponent.renderChild(UIPublicationPanel.START_PUBLICATION); %></td>
-  		</tr>
-  		<tr>
-  			<td>Au</td>
-  			<td><% uicomponent.renderChild(UIPublicationPanel.END_PUBLICATION); %></td>
+  			<td><%=_ctx.appRes("UIPublicationPanel.scheduled.from")%>&nbsp;<% uicomponent.renderChild(UIPublicationPanel.START_PUBLICATION); %></td>
+  			<td><%=_ctx.appRes("UIPublicationPanel.scheduled.to")%>&nbsp;<% uicomponent.renderChild(UIPublicationPanel.END_PUBLICATION); %></td>
   		</tr>
   	</table>
   </fieldset>
