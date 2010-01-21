@@ -16,6 +16,7 @@
  */
 package org.exoplatform.services.wcm.extensions.publication.lifecycle.authoring.ui;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 import javax.jcr.Node;
@@ -26,12 +27,16 @@ import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.authoring.AuthoringPublicationConstant;
 import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationContainer;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.form.UIFormDateTimeInput;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform
@@ -50,8 +55,11 @@ import org.exoplatform.webui.event.EventListener;
 	@EventConfig(listeners = UIPublicationPanel.PreviewVersionActionListener.class),
 	@EventConfig(listeners = UIPublicationPanel.RestoreVersionActionListener.class),
 	@EventConfig(listeners = UIPublicationPanel.SeeAllVersionActionListener.class),
-	@EventConfig(listeners = UIPublicationPanel.CloseActionListener.class) })
+	@EventConfig(listeners = UIPublicationPanel.SaveActionListener.class), @EventConfig(listeners = UIPublicationPanel.CloseActionListener.class) })
 public class UIPublicationPanel extends org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationPanel {
+    public static final String START_PUBLICATION = "UIPublicationPanelStartDateInput";
+
+    public static final String END_PUBLICATION = "UIPublicationPanelEndDateInput";
 
     /**
      * Instantiates a new uI publication panel.
@@ -60,6 +68,25 @@ public class UIPublicationPanel extends org.exoplatform.services.wcm.publication
      *             the exception
      */
     public UIPublicationPanel() throws Exception {
+	addChild(new UIFormDateTimeInput(START_PUBLICATION, START_PUBLICATION, null).addValidator(MandatoryValidator.class));
+	addChild(new UIFormDateTimeInput(END_PUBLICATION, END_PUBLICATION, null).addValidator(MandatoryValidator.class));
+	setActions(new String[] { "Save", "Close" });
+    }
+
+    public void init(Node node) throws Exception {
+	Calendar startDate = null;
+	Calendar endDate = null;
+	try {
+	    startDate = node.getProperty(AuthoringPublicationConstant.START_TIME_PROPERTY).getDate();
+	    endDate = node.getProperty(AuthoringPublicationConstant.END_TIME_PROPERTY).getDate();
+	} catch (Exception e) {
+	    startDate = Calendar.getInstance();
+	    endDate = Calendar.getInstance();
+	}
+	((UIFormDateTimeInput) getChildById(START_PUBLICATION)).setCalendar(startDate);
+	((UIFormDateTimeInput) getChildById(END_PUBLICATION)).setCalendar(endDate);
+
+	super.init(node);
     }
 
     /**
@@ -359,6 +386,33 @@ public class UIPublicationPanel extends org.exoplatform.services.wcm.publication
 	    }
 	    UIPublicationContainer publicationContainer = publicationPanel.getAncestorOfType(UIPublicationContainer.class);
 	    publicationContainer.setActiveTab(publicationPanel, event.getRequestContext());
+	}
+    }
+
+    public static class SaveActionListener extends EventListener<UIPublicationPanel> {
+	public void execute(Event<UIPublicationPanel> event) throws Exception {
+	    UIPublicationPanel publicationPanel = event.getSource();
+	    UIFormDateTimeInput startPublication = publicationPanel.getChildById(START_PUBLICATION);
+	    UIFormDateTimeInput endPublication = publicationPanel.getChildById(END_PUBLICATION);
+	    Calendar startDate = startPublication.getCalendar();
+	    Calendar endDate = endPublication.getCalendar();
+	    try {
+		startDate.getTime();
+		endDate.getTime();
+	    } catch (NullPointerException e) {
+		UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
+		uiApp.addMessage(new ApplicationMessage("UIPublicationPanel.msg.invalid-format", null));
+		event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+		return;
+	    }
+	    Node node = publicationPanel.getCurrentNode();
+	    node.setProperty(AuthoringPublicationConstant.START_TIME_PROPERTY, startDate);
+	    node.setProperty(AuthoringPublicationConstant.END_TIME_PROPERTY, endDate);
+	    node.getSession().save();
+
+	    UIPopupContainer uiPopupContainer = (UIPopupContainer) publicationPanel.getAncestorOfType(UIPopupContainer.class);
+	    uiPopupContainer.deActivate();
+	    event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer);
 	}
     }
 

@@ -83,7 +83,7 @@
 			else{%>
 			<a class="DisableStatus">
 			<%}%>
-			draft</a>
+			Redigé</a>
 			<%if(!lastState){%>
 			
 			<span class="StatusArrow"></span>
@@ -102,7 +102,7 @@
 			else{%>
 			<a class="DisableStatus">
 			<%}%>
-			approved</a>
+			Validé</a>
 			<%if(!lastState){%>
 			
 			<span class="StatusArrow"></span>
@@ -121,7 +121,7 @@
 			else{%>
 			<a class="DisableStatus">
 			<%}%>
-			archived</a>
+			Archivé</a>
 			<%if(!lastState){%>
 			
 			<span class="StatusArrow"></span>
@@ -130,7 +130,6 @@
 			<%}
 		} 
 		else if (PublicationDefaultStates.PUBLISHED.equals(state.getState())) {
-				System.out.println("rrrrrrrrrrr"+currentRevision);
 		    if (isCurrentRevision("published",currentRevision)){
 			
 			%>
@@ -143,7 +142,7 @@
 			else{%>
 			<a class="DisableStatus">
 			<%}%>
-			published</a>
+			Publié</a>
 			<%if(!lastState){%>
 			
 			<span class="StatusArrow"></span>
@@ -161,7 +160,7 @@
 			else{%>
 			<a class="DisableStatus">
 			<%}%>
-			staged</a>
+			Prêt à publier</a>
 			<%if(!lastState){%>
 			
 			<span class="StatusArrow"></span>
@@ -169,7 +168,7 @@
 			<div style="clear: left;"><span></span></div>  
 			<%}
 		}else if (PublicationDefaultStates.UNPUBLISHED.equals(state.getState())) {
-		    if (isCurrentRevision("unpublished",currentRevision)){%>
+		    if (isCurrentRevision("obselete",currentRevision)){%>
 			<a class="CurrentStatus">
 			<%} else  if(!isAutomatic&&identity.isMemberOf(membershipTab[1], membershipTab[0])){
 			%>	
@@ -179,7 +178,7 @@
 			else{%>
 			<a class="DisableStatus">
 			<%}%>
-			unpublished</a>
+			Non Publié</a>
 			<%if(!lastState){%>
 			
 			<span class="StatusArrow"></span>
@@ -191,6 +190,19 @@
 	    }%>
       </div>
     </div>
+  </fieldset>
+  <fieldset class="StatusTable">
+  	<legend class="Legend">Date</legend>
+  	<table class="">
+  		<tr>
+  			<td>Du</td>
+  			<td><% uicomponent.renderChild(UIPublicationPanel.START_PUBLICATION); %></td>
+  		</tr>
+  		<tr>
+  			<td>Au</td>
+  			<td><% uicomponent.renderChild(UIPublicationPanel.END_PUBLICATION); %></td>
+  		</tr>
+  	</table>
   </fieldset>
   <table class="RevisionsTable" border="1">
     <tr>
@@ -267,22 +279,27 @@
       <%
     }
   %>
-  <div class="UIAction"> 
-    <table align="center" class="ActionContainer">
-      <tr>
-        <td align="center">
-            <a href="<%= uicomponent.event("Close") %>" class="ActionButton LightBlueStyle">
-              <div class="ButtonLeft">
-                <div class="ButtonRight">
-                  <div class="ButtonMiddle">
-                    <%=_ctx.appRes("UIPublicationPanel.button.close")%>
-                  </div>
-                </div>
-              </div>
-            </a>
-        </td>
-      </tr>
-    </table>
-  </div>
+	<div class="UIAction"> 
+       <table class="ActionContainer">
+       	<tr>
+       		<td>
+	          <% for(action in uicomponent.getActions()) { 
+               	 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+                  String link = uicomponent.event(action) ;
+         		%>
+         		<div onclick="$link" class="ActionButton LightBlueStyle" onmouseover="this.style.color = '#058ee6'" onmouseout="this.style.color='black'">
+               <div class="ButtonLeft">
+                 <div class="ButtonRight">
+                   <div class="ButtonMiddle">
+                     <a href="$link">$actionLabel</a>
+                   </div>
+                 </div>
+               </div>
+          		</div>
+         		<%}%>        
+         	</td>
+         </tr>  
+       </table>
+     </div>
 </div>
 <% uicomponent.end(); %>

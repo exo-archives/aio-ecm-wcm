@@ -35,25 +35,25 @@ public interface AuthoringPublicationConstant {
     public static final String ENROLLED_TO_LIFECYCLE = "Publication.log.description.enrolled".intern();
 
     /** The Constant CHANGE_TO_DRAFT. */
-    public static final String CHANGE_TO_DRAFT = "Publication.log.description.change-to-draft-state".intern();
+    public static final String CHANGE_TO_DRAFT = "PublicationService.AuthoringPublicationPlugin.changeState.draft".intern();
 
     /** The Constant CHANGE_TO_LIVE. */
-    public static final String CHANGE_TO_LIVE = "Publication.log.description.change-to-live-state".intern();
+    public static final String CHANGE_TO_LIVE = "PublicationService.AuthoringPublicationPlugin.changeState.published".intern();
 
     /** The Constant CHANGE_TO_PENDING. */
-    public static final String CHANGE_TO_PENDING = "Publication.log.description.change-to-pending-state".intern();
+    public static final String CHANGE_TO_PENDING = "PublicationService.AuthoringPublicationPlugin.changeState.pending".intern();
 
     /** The Constant CHANGE_TO_APPROVED. */
-    public static final String CHANGE_TO_APPROVED = "Publication.log.description.change-to-approved-state".intern();
+    public static final String CHANGE_TO_APPROVED = "PublicationService.AuthoringPublicationPlugin.changeState.approved".intern();
 
     /** The Constant CHANGE_TO_STAGED. */
-    public static final String CHANGE_TO_STAGED = "Publication.log.description.change-to-staged-state".intern();
+    public static final String CHANGE_TO_STAGED = "PublicationService.AuthoringPublicationPlugin.changeState.staged".intern();
 
     /** The Constant CHANGE_TO_UNPUBLISHED. */
-    public static final String CHANGE_TO_UNPUBLISHED = "Publication.log.description.change-to-unpublished-state".intern();
+    public static final String CHANGE_TO_UNPUBLISHED = "PublicationService.AuthoringPublicationPlugin.changeState.unpublished".intern();
 
     /** The Constant CHANGE_TO_ARCHIVED. */
-    public static final String CHANGE_TO_ARCHIVED = "Publication.log.description.change-to-archived-state".intern();
+    public static final String CHANGE_TO_ARCHIVED = "PublicationService.AuthoringPublicationPlugin.changeState.archived".intern();
 
     /** The Constant PUBLICATION_LIFECYCLE_NAME. */
     public static final String PUBLICATION_LIFECYCLE_NAME = "publication:lifecycleName".intern();
@@ -81,7 +81,12 @@ public interface AuthoringPublicationConstant {
 
     /** The Constant CURRENT_REVISION_NAME. */
     public static final String CURRENT_REVISION_NAME = "Publication.context.currentVersion".intern();
-
+    
+    /** The Constant START_TIME_PROPERTY. */
+    public static final String START_TIME_PROPERTY =  "publication:startPublishedDate".intern();
+    
+    /** The Constant START_TIME_PROPERTY. */
+    public static final String END_TIME_PROPERTY =  "publication:endPublishedDate".intern();
     /**
      * The Enum SITE_MODE.
      */

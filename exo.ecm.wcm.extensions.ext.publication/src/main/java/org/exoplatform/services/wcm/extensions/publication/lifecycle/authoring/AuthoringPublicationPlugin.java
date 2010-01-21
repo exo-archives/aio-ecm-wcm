@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.jcr.Node;
 import javax.jcr.Value;
 import javax.jcr.ValueFactory;
+import javax.jcr.version.Version;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
@@ -70,6 +71,7 @@ public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin
 	}
 	Map<String, VersionData> revisionsMap = getRevisionData(node);
 	VersionLog versionLog = null;
+	ValueFactory valueFactory = node.getSession().getValueFactory();
 
 	if (PublicationDefaultStates.PENDING.equals(newState)) {
 
@@ -119,11 +121,19 @@ public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin
 	    revisionsMap.put(node.getUUID(), versionData);
 	    addRevisionData(node, revisionsMap.values());
 
-	} else if (PublicationDefaultStates.UNPUBLISHED.equals(newState)) {
-
+	}
+	if (PublicationDefaultStates.ENROLLED.equalsIgnoreCase(newState)) {
+	    versionLog = new VersionLog(logItemName, newState, node.getSession().getUserID(), GregorianCalendar.getInstance(),
+		    StageAndVersionPublicationConstant.PUBLICATION_LOG_LIFECYCLE);
+	    node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE, newState);
+	    VersionData revisionData = new VersionData(node.getUUID(), newState, userId);
+	    revisionsMap.put(node.getUUID(), revisionData);
+	    addRevisionData(node, revisionsMap.values());
+	    addLog(node, versionLog);
+	} else if (PublicationDefaultStates.DRAFT.equalsIgnoreCase(newState)) {
 	    node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE, newState);
 	    versionLog = new VersionLog(logItemName, newState, node.getSession().getUserID(), GregorianCalendar.getInstance(),
-		    AuthoringPublicationConstant.CHANGE_TO_UNPUBLISHED);
+		    StageAndVersionPublicationConstant.PUBLICATION_LOG_DRAFT);
 	    addLog(node, versionLog);
 	    VersionData versionData = revisionsMap.get(node.getUUID());
 	    if (versionData != null) {
@@ -134,22 +144,47 @@ public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin
 	    }
 	    revisionsMap.put(node.getUUID(), versionData);
 	    addRevisionData(node, revisionsMap.values());
-	} else if (PublicationDefaultStates.ARCHIVED.equals(newState)) {
-	    node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE, newState);
-	    versionLog = new VersionLog(logItemName, newState, node.getSession().getUserID(), GregorianCalendar.getInstance(),
-		    AuthoringPublicationConstant.CHANGE_TO_ARCHIVED);
-	    addLog(node, versionLog);
-	    VersionData versionData = revisionsMap.get(node.getUUID());
-	    if (versionData != null) {
-		versionData.setAuthor(userId);
-		versionData.setState(newState);
-	    } else {
-		versionData = new VersionData(node.getUUID(), newState, userId);
+	} else if (PublicationDefaultStates.PUBLISHED.equals(newState)) {
+	    if (!node.isCheckedOut()) {
+		node.checkout();
 	    }
-	    revisionsMap.put(node.getUUID(), versionData);
+	    Version liveVersion = node.checkin();
+	    node.checkout();
+	    // Change current live revision to unpublished
+	    Node oldLiveRevision = getLiveRevision(node);
+	    if (oldLiveRevision != null) {
+		VersionData versionData = revisionsMap.get(oldLiveRevision.getUUID());
+		if (versionData != null) {
+		    versionData.setAuthor(userId);
+		    versionData.setState(PublicationDefaultStates.UNPUBLISHED);
+		} else {
+		    versionData = new VersionData(oldLiveRevision.getUUID(), PublicationDefaultStates.UNPUBLISHED, userId);
+		}
+		revisionsMap.put(oldLiveRevision.getUUID(), versionData);
+		versionLog = new VersionLog(oldLiveRevision.getName(), PublicationDefaultStates.UNPUBLISHED, userId, new GregorianCalendar(),
+			AuthoringPublicationConstant.CHANGE_TO_UNPUBLISHED);
+		addLog(node, versionLog);
+	    }
+	    versionLog = new VersionLog(liveVersion.getName(), newState, userId, new GregorianCalendar(), AuthoringPublicationConstant.CHANGE_TO_LIVE);
+	    addLog(node, versionLog);
+	    // change base version to published state
+	    node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE, PublicationDefaultStates.PUBLISHED);
+	    VersionData editableRevision = revisionsMap.get(node.getUUID());
+	    if (editableRevision != null) {
+		editableRevision.setAuthor(userId);
+		editableRevision.setState(PublicationDefaultStates.ENROLLED);
+	    } else {
+		editableRevision = new VersionData(node.getUUID(), PublicationDefaultStates.ENROLLED, userId);
+	    }
+	    revisionsMap.put(node.getUUID(), editableRevision);
+	    versionLog = new VersionLog(node.getBaseVersion().getName(), PublicationDefaultStates.DRAFT, userId, new GregorianCalendar(),
+		    StageAndVersionPublicationConstant.PUBLICATION_LOG_LIFECYCLE);
+	    Value liveVersionValue = valueFactory.createValue(liveVersion);
+	    node.setProperty(StageAndVersionPublicationConstant.LIVE_REVISION_PROP, liveVersionValue);
+	    node.setProperty(StageAndVersionPublicationConstant.LIVE_DATE_PROP, new GregorianCalendar());
+	    VersionData liveRevisionData = new VersionData(liveVersion.getUUID(), PublicationDefaultStates.PUBLISHED, userId);
+	    revisionsMap.put(liveVersion.getUUID(), liveRevisionData);
 	    addRevisionData(node, revisionsMap.values());
-	} else {
-	    super.changeState(node, newState, context);
 	}
 
 	if (!node.isNew())
@@ -358,6 +393,23 @@ public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin
 
 	HashMap<String, String> context = new HashMap<String, String>();
 	changeState(node, newState, context);
+    }
+
+    /**
+     * Gets the live revision.
+     * 
+     * @param node
+     *            the node
+     * 
+     * @return the live revision
+     */
+    private Node getLiveRevision(Node node) {
+	try {
+	    String nodeVersionUUID = node.getProperty(StageAndVersionPublicationConstant.LIVE_REVISION_PROP).getString();
+	    return node.getVersionHistory().getSession().getNodeByUUID(nodeVersionUUID);
+	} catch (Exception e) {
+	    return null;
+	}
     }
 
 }
