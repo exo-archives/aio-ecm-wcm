@@ -16,18 +16,28 @@
  */
 package org.exoplatform.services.wcm.extensions.publication.lifecycle.authoring.ui;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.exoplatform.ecm.webui.utils.JCRExceptionManager; 
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.wcm.extensions.publication.PublicationManager;
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.authoring.AuthoringPublicationConstant;
+import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig.Lifecycle;
+import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig.State;
 import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationContainer;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -62,6 +72,8 @@ public class UIPublicationPanel extends org.exoplatform.services.wcm.publication
     public static final String START_PUBLICATION = "UIPublicationPanelStartDateInput";
 
     public static final String END_PUBLICATION = "UIPublicationPanelEndDateInput";
+    
+    public static final Log LOG = LogFactory.getLog(UIPublicationPanel.class);
 
     /**
      * Instantiates a new uI publication panel.
@@ -71,11 +83,7 @@ public class UIPublicationPanel extends org.exoplatform.services.wcm.publication
      */
     public UIPublicationPanel() throws Exception {
 	addChild(new UIFormDateTimeInput(START_PUBLICATION, START_PUBLICATION, null).addValidator(MandatoryValidator.class));
-	
-	// initialize default end date to tomorrow to avoid immediate unpublishing
-	Calendar defaultEndPublication = new GregorianCalendar();
-	defaultEndPublication.add(Calendar.HOUR, 24);
-	addChild(new UIFormDateTimeInput(END_PUBLICATION, END_PUBLICATION, defaultEndPublication.getTime()).addValidator(MandatoryValidator.class));
+	addChild(new UIFormDateTimeInput(END_PUBLICATION, END_PUBLICATION, null).addValidator(MandatoryValidator.class));
 	setActions(new String[] { "Save", "Close" });
     }
 
@@ -84,10 +92,17 @@ public class UIPublicationPanel extends org.exoplatform.services.wcm.publication
 	Calendar endDate = null;
 	try {
 	    startDate = node.getProperty(AuthoringPublicationConstant.START_TIME_PROPERTY).getDate();
-	    endDate = node.getProperty(AuthoringPublicationConstant.END_TIME_PROPERTY).getDate();
+
+	    // By default will end at now + 24H to avoid immediate unpublishing
+	    if (!node.hasProperty(AuthoringPublicationConstant.END_TIME_PROPERTY)) {
+	       endDate = new GregorianCalendar();
+	       endDate.add(Calendar.HOUR, 24);       
+	    } else {	    
+	      endDate = node.getProperty(AuthoringPublicationConstant.END_TIME_PROPERTY).getDate();
+	    }
 	} catch (Exception e) {
 	    startDate = Calendar.getInstance();
-	    endDate = Calendar.getInstance();
+	    endDate = Calendar.getInstance();    
 	}
 	((UIFormDateTimeInput) getChildById(START_PUBLICATION)).setCalendar(startDate);
 	((UIFormDateTimeInput) getChildById(END_PUBLICATION)).setCalendar(endDate);
@@ -421,5 +436,40 @@ public class UIPublicationPanel extends org.exoplatform.services.wcm.publication
 	    event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer);
 	}
     }
+    
+    
+    
+    public List<State> getStates(Node cNode) throws Exception {
+      List<State> states = new ArrayList<State>(); 
+      String lifecycleName = getLifeCycle(cNode);
+      if (lifecycleName == null) {
+        reEnroll(cNode);
+        lifecycleName = getLifeCycle(cNode);
+      }
+      
+      PublicationManager publicationManagerImpl = getApplicationComponent(PublicationManager.class);
+      Lifecycle lifecycle = publicationManagerImpl.getLifecycle(lifecycleName);
+      states = lifecycle.getStates();
+      return states;   
+    }
+
+    private String getLifeCycle(Node cNode) throws Exception {
+      String lifecycleName = null;
+      try {
+        lifecycleName = cNode.getProperty("publication:lifecycle").getString();
+      } catch (Exception e) {
+        LOG.error("Failed to get States for node " + cNode, e);
+      }
+      return lifecycleName;
+    }
+
+    private void reEnroll(Node cNode) throws Exception {
+      LOG.warn("Could not retrieve lifecycle, attempting to enroll again");
+      String remoteUser = Util.getPortalRequestContext().getRemoteUser();
+      String portalOwner = Util.getPortalRequestContext().getPortalOwner();
+      WCMPublicationService wcmPublicationService = this.getApplicationComponent(WCMPublicationService.class);
+      wcmPublicationService.enrollNodeInLifecycle(cNode, portalOwner, remoteUser);
+    }
+    
 
 }

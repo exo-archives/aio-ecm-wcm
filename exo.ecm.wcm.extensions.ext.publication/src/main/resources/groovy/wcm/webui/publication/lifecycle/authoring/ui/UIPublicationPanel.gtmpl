@@ -1,5 +1,6 @@
 <%
 	import java.util.List;
+    import java.util.ArrayList;
 	import javax.jcr.Node;
 	import javax.jcr.version.Version;
 	import org.exoplatform.services.wcm.extensions.publication.lifecycle.authoring.ui.UIPublicationPanel;
@@ -17,18 +18,20 @@
 	String remoteUser=context.getRemoteUser();
 	Node cNode = uicomponent.getCurrentNode();
 	boolean lastState=false;
-	String lifecycleName = cNode.getProperty("publication:lifecycle").getString();
-	ExoContainer container = ExoContainerContext.getCurrentContainer();
-	PublicationManagerImpl publicationManagerImpl = (PublicationManagerImpl) container.getComponentInstanceOfType(PublicationManagerImpl.class);
-	Lifecycle lifecycle = publicationManagerImpl.getLifecycle(lifecycleName);
-	List<State> states = lifecycle.getStates();
+    List<State> states = uicomponent.getStates(cNode);
+
 	public boolean isCurrentRevision(String inputStatus, Node revision) throws Exception {    
-	String state = uicomponent.getRevisionState(revision);
-	return inputStatus.equals(state) ? true : false;
+	  String state = uicomponent.getRevisionState(revision);
+	  return inputStatus.equals(state) ? true : false;
 	}  
 %>
 <% uicomponent.begin(); %>
 <div class="UIPublicationPanel" id="$uicomponent.id">
+
+  <% if (states.size == 0) { %>
+  <%=_ctx.appRes("UIPublicationPanel.msg.no-states")%> 
+  <% } %>
+
   <fieldset class="StatusTable">
     <% String versionName = currentRevision.getName();  %>
     <legend class="Legend"> <%=_ctx.appRes("UIPublicationPanel.status.version")%> $versionName </legend>
@@ -45,7 +48,7 @@
 		 String[] membershipTab=null;
 		 if(!"automatic".equals(membership)){
 		    membershipTab = membership.split(":");
-		    identityRegistry = (IdentityRegistry) container.getComponentInstanceOfType(IdentityRegistry.class);
+		    identityRegistry = uicomponent.getApplicationComponent(IdentityRegistry.class);
 		    identity = identityRegistry.getIdentity(remoteUser);
 		    }
 		    else{
