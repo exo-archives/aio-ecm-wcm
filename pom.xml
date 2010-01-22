@@ -15,6 +15,7 @@
 	<module>exo.ecm.wcm.extensions.config.multiserver.backcronjob</module>
 	<module>exo.ecm.wcm.extensions.config.multiserver.webservice.rest</module>
 	<module>exo.ecm.wcm.extensions.config.monoserver.cronjob</module>
+	<module>exo.ecm.wcm.extensions.config.ext.publication</module>
 
 	</modules>
 	<build>
