@@ -1,13 +1,19 @@
 package org.exoplatform.services.wcm.extensions.publication.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.component.ComponentPlugin;
+import org.exoplatform.services.security.Identity;
+import org.exoplatform.services.security.IdentityRegistry;
 import org.exoplatform.services.wcm.extensions.publication.PublicationManager;
 import org.exoplatform.services.wcm.extensions.publication.context.ContextPlugin;
 import org.exoplatform.services.wcm.extensions.publication.context.impl.ContextConfig.Context;
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.StatesLifecyclePlugin;
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig.Lifecycle;
+import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig.State;
 import org.picocontainer.Startable;
 
 public class PublicationManagerImpl implements PublicationManager, Startable {
@@ -38,7 +44,13 @@ public class PublicationManagerImpl implements PublicationManager, Startable {
     }
 
     public Context getContext(String name) {
-	// TODO Auto-generated method stub
+	if (name != null && contextPlugin != null && contextPlugin.getContextConfig() != null) {
+	    for (Context context : contextPlugin.getContextConfig().getContexts()) {
+		if (name.equals(context.getName())) {
+		    return context;
+		}
+	    }
+	}
 	return null;
     }
 
@@ -67,7 +79,27 @@ public class PublicationManagerImpl implements PublicationManager, Startable {
     }
 
     public List<Lifecycle> getLifecyclesFromUser(String remoteUser, String state) {
-	// TODO
-	return null;
+	List<Lifecycle> lifecycles = null;
+
+	if (statesLifecyclePlugin != null && statesLifecyclePlugin.getLifecyclesConfig() != null) {
+	    for (Lifecycle lifecycle : statesLifecyclePlugin.getLifecyclesConfig().getLifecycles()) {
+		if (lifecycles == null)
+		    lifecycles = new ArrayList<Lifecycle>();
+		ExoContainer container = ExoContainerContext.getCurrentContainer();
+		IdentityRegistry identityRegistry = (IdentityRegistry) container.getComponentInstanceOfType(IdentityRegistry.class);
+		Identity identity = identityRegistry.getIdentity(remoteUser);
+		for (State state_ : lifecycle.getStates()) {
+		    if (state_.getMembership() != "automatic" && state.equals(state_.getState())) {
+			String[] membershipTab = state_.getMembership().split(":");
+			if (identity.isMemberOf(membershipTab[1], membershipTab[0])) {
+			    lifecycles.add(lifecycle);
+			}
+		    }
+		}
+
+	    }
+
+	}
+	return lifecycles;
     }
 }
