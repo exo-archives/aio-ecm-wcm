@@ -110,9 +110,10 @@ public class WCMPublicationServiceImpl extends org.exoplatform.services.wcm.publ
 			node.setProperty("publication:lastUser", remoteUser);
 			node.setProperty("publication:lifecycle", lifecycle.getName());
 			
-            setInitialState(node, lifecycle);
+
   		  }
 		    enrollNodeInLifecycle(node, lifecycleName);
+        setInitialState(node, lifecycle);
 		    break;
 		}
 	    }
