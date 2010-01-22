@@ -62,7 +62,6 @@ public class ChangeStateCronJobImpl implements Job {
 		repository = pathTab[0];
 		workspace = pathTab[1];
 		contentPath = pathTab[2];
-
 	    }
 	    log.debug("Start Execute ChangeStateCronJob: change the State from " + fromState + " to " + toState);
 	    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
@@ -81,13 +80,21 @@ public class ChangeStateCronJobImpl implements Job {
 
 	    }
 	    if (property != null) {
+	      
+        // appends trailing / if missing
+        if (contentPath != null) {
+          if (!contentPath.endsWith("/")) {
+            contentPath += "/";
+          }
+        }
+	      
 		Query query = queryManager.createQuery("select * from nt:base where publication:currentState='" + fromState + "' and jcr:path like '"
-			+ contentPath + "/%'", Query.SQL);
+			+ contentPath + "%'", Query.SQL);
 		QueryResult queryResult = query.execute();
 		long numberOfItemsToChange = queryResult.getNodes().getSize();
 
 		if (numberOfItemsToChange > 0) {
-	    log.info(numberOfItemsToChange +  " '" + fromState + "' contents candidates to change to '" + toState + "' found in " + predefinedPath);
+	    log.info(numberOfItemsToChange +  " '" + fromState + "' candidates for state '" + toState + "' found in " + predefinedPath);
 		    for (NodeIterator iter = queryResult.getNodes(); iter.hasNext();) {
 			Node node_ = iter.nextNode();
 			if (node_.hasProperty(property)) {
