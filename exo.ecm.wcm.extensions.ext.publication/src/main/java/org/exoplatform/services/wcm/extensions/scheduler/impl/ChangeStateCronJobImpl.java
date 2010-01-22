@@ -2,6 +2,7 @@ package org.exoplatform.services.wcm.extensions.scheduler.impl;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import javax.jcr.Node;
@@ -49,7 +50,7 @@ public class ChangeStateCronJobImpl implements Job {
 	Session session = null;
 	try {
 
-	    log.info("Start Execute ChangeStateCronJob");
+	    log.debug("Start Execute ChangeStateCronJob");
 	    if (fromState == null) {
 
 		JobDataMap jdatamap = context.getJobDetail().getJobDataMap();
@@ -63,7 +64,7 @@ public class ChangeStateCronJobImpl implements Job {
 		contentPath = pathTab[2];
 
 	    }
-	    log.info("Start Execute ChangeStateCronJob: change the State from " + fromState + " to " + toState);
+	    log.debug("Start Execute ChangeStateCronJob: change the State from " + fromState + " to " + toState);
 	    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
 
 	    ExoContainer container = ExoContainerContext.getCurrentContainer();
@@ -83,17 +84,20 @@ public class ChangeStateCronJobImpl implements Job {
 		Query query = queryManager.createQuery("select * from nt:base where publication:currentState='" + fromState + "' and jcr:path like '"
 			+ contentPath + "/%'", Query.SQL);
 		QueryResult queryResult = query.execute();
-		if (queryResult.getNodes().getSize() > 0) {
+		long numberOfItemsToChange = queryResult.getNodes().getSize();
+
+		if (numberOfItemsToChange > 0) {
+	    log.info(numberOfItemsToChange +  " '" + fromState + "' contents candidates to change to '" + toState + "' found in " + predefinedPath);
 		    for (NodeIterator iter = queryResult.getNodes(); iter.hasNext();) {
 			Node node_ = iter.nextNode();
 			if (node_.hasProperty(property)) {
 
 			    SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy - HH:mm");
-
-			    System.out.println(toState + " " + property + " " + format.format(Calendar.getInstance().getTime()) + " "
-				    + format.format(node_.getProperty(property).getDate().getTime()) + "  "
-				    + Calendar.getInstance().compareTo(node_.getProperty(property).getDate()) );
-			    if (Calendar.getInstance().getTime().compareTo(node_.getProperty(property).getDate().getTime()) >= 0) {
+			    Date now = Calendar.getInstance().getTime();
+			    Date nodeDate = node_.getProperty(property).getDate().getTime();
+			    if (now.compareTo(nodeDate) >= 0) {
+			      log.info(node_.getPath() + " " + property + "=" + format.format(nodeDate) + " will be changed to '" + toState +"'");
+			      
 				PublicationService publicationService = (PublicationService) ExoContainerContext.getCurrentContainer()
 					.getComponentInstanceOfType(PublicationService.class);
 				PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(
@@ -118,13 +122,12 @@ public class ChangeStateCronJobImpl implements Job {
 			}
 		    }
 		} else {
-		    log.info("There is no contents to change their states from " + fromState + " to " + toState);
+		    log.info("No '" + fromState + "' content will be changed to '" + toState + "' in " + predefinedPath);
 		}
 	    }
-	    log.info("End Execute ChangeStateCronJob");
+	    log.debug("End Execute ChangeStateCronJob");
 	} catch (Exception ex) {
-	    ex.printStackTrace();
-	    log.error("error when change the state of the content" + ex.getMessage());
+	    log.error("error when changing the state of the content : " + ex.getMessage(), ex);
 	} finally {
 	    session.logout();
 	}
