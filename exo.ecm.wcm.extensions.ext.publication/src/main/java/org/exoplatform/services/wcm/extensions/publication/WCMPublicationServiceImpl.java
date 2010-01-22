@@ -17,9 +17,15 @@
 package org.exoplatform.services.wcm.extensions.publication;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.TreeSet;
 
 import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+import javax.jcr.ValueFormatException;
+import javax.jcr.lock.LockException;
+import javax.jcr.nodetype.ConstraintViolationException;
+import javax.jcr.version.VersionException;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
@@ -30,6 +36,7 @@ import org.exoplatform.services.security.IdentityRegistry;
 import org.exoplatform.services.wcm.extensions.publication.context.impl.ContextConfig.Context;
 import org.exoplatform.services.wcm.extensions.publication.impl.PublicationManagerImpl;
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig.Lifecycle;
+import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig.State;
 import org.exoplatform.services.wcm.extensions.utils.ContextComparator;
 import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
@@ -102,7 +109,9 @@ public class WCMPublicationServiceImpl extends org.exoplatform.services.wcm.publ
 			node.addMixin("publication:authoring");
 			node.setProperty("publication:lastUser", remoteUser);
 			node.setProperty("publication:lifecycle", lifecycle.getName());
-		    }
+			
+            setInitialState(node, lifecycle);
+  		  }
 		    enrollNodeInLifecycle(node, lifecycleName);
 		    break;
 		}
@@ -110,6 +119,22 @@ public class WCMPublicationServiceImpl extends org.exoplatform.services.wcm.publ
 	} catch (Exception ex) {
 	    ex.printStackTrace();
 	}
+    }
+
+    /**
+     *  Automatically move to initial state if 'automatic'
+     * @param node
+     * @param lifecycle
+     * @throws Exception
+     */
+    private void setInitialState(Node node, Lifecycle lifecycle) throws Exception {
+      List<State> states = lifecycle.getStates();
+      if (states != null && states.size() > 0) {
+        State initialState = states.get(0);
+        if ("automatic".equals(initialState.getMembership())) {
+          node.setProperty("publication:currentState", initialState.getState());
+        }
+      }
     }
 
     /**
