@@ -6,7 +6,7 @@
 	<artifactId>wcm.extensions</artifactId>
 	<packaging>pom</packaging>
 	<name>eXo WCM Extensions</name>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0.0Beta01</version>
 
 
 	<modules>
