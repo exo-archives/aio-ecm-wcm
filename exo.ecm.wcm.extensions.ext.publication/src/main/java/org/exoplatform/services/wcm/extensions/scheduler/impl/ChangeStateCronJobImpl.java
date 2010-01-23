@@ -94,7 +94,7 @@ public class ChangeStateCronJobImpl implements Job {
 		long numberOfItemsToChange = queryResult.getNodes().getSize();
 
 		if (numberOfItemsToChange > 0) {
-	    log.info(numberOfItemsToChange +  " '" + fromState + "' candidates for state '" + toState + "' found in " + predefinedPath);
+	    log.debug(numberOfItemsToChange +  " '" + fromState + "' candidates for state '" + toState + "' found in " + predefinedPath);
 		    for (NodeIterator iter = queryResult.getNodes(); iter.hasNext();) {
 			Node node_ = iter.nextNode();
 			if (node_.hasProperty(property)) {
@@ -103,7 +103,7 @@ public class ChangeStateCronJobImpl implements Job {
 			    Date now = Calendar.getInstance().getTime();
 			    Date nodeDate = node_.getProperty(property).getDate().getTime();
 			    if (now.compareTo(nodeDate) >= 0) {
-			      log.info(node_.getPath() + " " + property + "=" + format.format(nodeDate) + " will be changed to '" + toState +"'");
+			      log.info("'" + toState +"' " + node_.getPath() + " (" + property + "=" + format.format(nodeDate) +")");
 			      
 				PublicationService publicationService = (PublicationService) ExoContainerContext.getCurrentContainer()
 					.getComponentInstanceOfType(PublicationService.class);
@@ -128,8 +128,8 @@ public class ChangeStateCronJobImpl implements Job {
 			    }
 			}
 		    }
-		} else {
-		    log.info("No '" + fromState + "' content will be changed to '" + toState + "' in " + predefinedPath);
+		} else { 
+		    log.debug("no '" + fromState + "' content found in " + predefinedPath);
 		}
 	    }
 	    log.debug("End Execute ChangeStateCronJob");
