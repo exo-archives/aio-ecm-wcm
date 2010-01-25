@@ -21,29 +21,33 @@ import java.util.List;
 import java.util.TreeSet;
 
 import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.jcr.ValueFormatException;
-import javax.jcr.lock.LockException;
-import javax.jcr.nodetype.ConstraintViolationException;
-import javax.jcr.version.VersionException;
 
+import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.services.security.IdentityRegistry;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.extensions.publication.context.impl.ContextConfig.Context;
 import org.exoplatform.services.wcm.extensions.publication.impl.PublicationManagerImpl;
+import org.exoplatform.services.wcm.extensions.publication.lifecycle.authoring.AuthoringPublicationConstant;
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig.Lifecycle;
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig.State;
 import org.exoplatform.services.wcm.extensions.utils.ContextComparator;
+import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationContainer;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 public class WCMPublicationServiceImpl extends org.exoplatform.services.wcm.publication.WCMPublicationServiceImpl {
 
+  private static final Log log = ExoLogger.getLogger(WCMPublicationServiceImpl.class);
+  
     /** The publication service. */
     private PublicationService publicationService;
 
@@ -58,9 +62,9 @@ public class WCMPublicationServiceImpl extends org.exoplatform.services.wcm.publ
      *            the publication service
      */
     public WCMPublicationServiceImpl() {
-	super();
-	this.publicationService = WCMCoreUtils.getService(PublicationService.class);
-	this.wcmComposer = WCMCoreUtils.getService(WCMComposer.class);
+	    super();
+	    this.publicationService = WCMCoreUtils.getService(PublicationService.class);
+	    this.wcmComposer = WCMCoreUtils.getService(WCMComposer.class);
     }
 
     /**
@@ -106,10 +110,9 @@ public class WCMPublicationServiceImpl extends org.exoplatform.services.wcm.publ
 		    Lifecycle lifecycle = publicationManagerImpl.getLifecycle(context.getLifecycle());
 		    String lifecycleName = this.getWebpagePublicationPlugins().get(lifecycle.getPublicationPlugin()).getLifecycleName();
 		    if (node.canAddMixin("publication:authoring")) {
-			node.addMixin("publication:authoring");
-			node.setProperty("publication:lastUser", remoteUser);
-			node.setProperty("publication:lifecycle", lifecycle.getName());
-			
+   		  	node.addMixin("publication:authoring");
+		  	  node.setProperty("publication:lastUser", remoteUser);
+			    node.setProperty("publication:lifecycle", lifecycle.getName());
 
   		  }
 		    enrollNodeInLifecycle(node, lifecycleName);
@@ -122,20 +125,43 @@ public class WCMPublicationServiceImpl extends org.exoplatform.services.wcm.publ
 	}
     }
 
-    /**
-     *  Automatically move to initial state if 'automatic'
-     * @param node
-     * @param lifecycle
-     * @throws Exception
-     */
-    private void setInitialState(Node node, Lifecycle lifecycle) throws Exception {
-      List<State> states = lifecycle.getStates();
-      if (states != null && states.size() > 0) {
-        State initialState = states.get(0);
-        if ("automatic".equals(initialState.getMembership())) {
-          node.setProperty("publication:currentState", initialState.getState());
-        }
-      }
+  /**
+   * Automatically move to initial state if 'automatic'
+   * 
+   * @param node
+   * @param lifecycle
+   * @throws Exception
+   */
+  private void setInitialState(Node node, Lifecycle lifecycle) throws Exception {
+    List<State> states = lifecycle.getStates();
+    if (states == null || states.size() <= 0) {
+      log.warn("could not find an initial state in lifecycle " + lifecycle.getName());
+    }   
+    String initialState = states.get(0).getState();
+    PublicationService publicationService = (PublicationService) ExoContainerContext.getCurrentContainer()
+                                                                                    .getComponentInstanceOfType(PublicationService.class);
+    PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
+                                                            .get(AuthoringPublicationConstant.LIFECYCLE_NAME);
+    HashMap<String, String> context = new HashMap<String, String>();
+
+    NodeLocation currentNodeLocation = NodeLocation.make(node);
+    NodeLocation currentRevisionLocation = NodeLocation.make(node);
+
+    Node currentRevision = getCurrentRevision(currentRevisionLocation);
+    if (currentRevision != null) {
+      context.put(AuthoringPublicationConstant.CURRENT_REVISION_NAME, currentRevision.getName());
+    }
+    try {
+      publicationPlugin.changeState(node, initialState, context);
+      node.setProperty("publication:lastUser", "__system");
+    } catch (Exception e) {
+      log.error("Error setting staged state : ", e);
+    }
+
+  }
+    
+    public Node getCurrentRevision(NodeLocation currentRevisionLocation) {
+      return NodeLocation.getNodeByLocation(currentRevisionLocation); 
     }
 
     /**
