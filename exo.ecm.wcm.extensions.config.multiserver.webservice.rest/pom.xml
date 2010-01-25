@@ -8,7 +8,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>exo.ecm.wcm.extensions.config.multiserver.webservice.rest</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.0Beta02-SNAPSHOT</version>
 	<name>Copy Content File Web Service</name>
 
 </project>
