@@ -6,12 +6,12 @@
 	<artifactId>wcm.extensions</artifactId>
 	<packaging>pom</packaging>
 	<name>eXo WCM Extensions</name>
-	<version>1.0.0Beta02-SNAPSHOT</version>
+	<version>1.0.0Beta02</version>
 
 	<scm>
-		<connection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/branches/1.2-staging</connection>
-		<developerConnection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/branches/1.2-staging</developerConnection>
-		<url>http://fisheye.exoplatform.org/browse/projects/ecm/wcm/branches/1.2-staging</url>
+		<connection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/tags/1.2-staging-1.0.0Beta02</connection>
+		<developerConnection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/tags/1.2-staging-1.0.0Beta02</developerConnection>
+		<url>http://fisheye.exoplatform.org/browse/projects/ecm/wcm/tags/1.2-staging-1.0.0Beta02</url>
 	</scm>
 	<modules>
   	<module>exo.ecm.wcm.extensions.ext.publication</module>
