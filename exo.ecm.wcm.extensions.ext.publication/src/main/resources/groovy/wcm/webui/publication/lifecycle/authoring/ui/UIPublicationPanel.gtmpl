@@ -25,12 +25,8 @@
 	if(currentRevision.getUUID().equals(cNode.getUUID())){
 		isBaseVersion=true;
 	}
-		    System.out.println(currentRevision.getUUID()+ " "+cNode.getUUID()+ " "+isBaseVersion);
-
 	public boolean isCurrentRevision(String inputStatus, Node revision) throws Exception {    
 	  String state = uicomponent.getRevisionState(revision);
-	  		   System.out.println(inputStatus+ " "+state+ " "+inputStatus.equals(state));
-
 	  return inputStatus.equals(state) ? true : false;
 	}  
 %>
