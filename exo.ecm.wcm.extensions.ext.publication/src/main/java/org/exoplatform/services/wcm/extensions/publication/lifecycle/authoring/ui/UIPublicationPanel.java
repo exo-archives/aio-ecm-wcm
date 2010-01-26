@@ -82,31 +82,27 @@ public class UIPublicationPanel extends org.exoplatform.services.wcm.publication
      *             the exception
      */
     public UIPublicationPanel() throws Exception {
-	addChild(new UIFormDateTimeInput(START_PUBLICATION, START_PUBLICATION, null).addValidator(MandatoryValidator.class));
-	addChild(new UIFormDateTimeInput(END_PUBLICATION, END_PUBLICATION, null).addValidator(MandatoryValidator.class));
+	addUIFormInput(new UIFormDateTimeInput(START_PUBLICATION, START_PUBLICATION, null));
+	addUIFormInput(new UIFormDateTimeInput(END_PUBLICATION, END_PUBLICATION, null));
 	setActions(new String[] { "Save", "Close" });
     }
 
     public void init(Node node) throws Exception {
 	Calendar startDate = null;
 	Calendar endDate = null;
-	try {
-	    startDate = node.getProperty(AuthoringPublicationConstant.START_TIME_PROPERTY).getDate();
 
-	    // By default will end at now + 24H to avoid immediate unpublishing
-	    if (!node.hasProperty(AuthoringPublicationConstant.END_TIME_PROPERTY)) {
-	       endDate = new GregorianCalendar();
-	       endDate.add(Calendar.HOUR, 24);       
-	    } else {	    
-	      endDate = node.getProperty(AuthoringPublicationConstant.END_TIME_PROPERTY).getDate();
+	    if (node.hasProperty(AuthoringPublicationConstant.END_TIME_PROPERTY)) {
+		endDate = node.getProperty(AuthoringPublicationConstant.END_TIME_PROPERTY).getDate();     
 	    }
-	} catch (Exception e) {
-	    startDate = Calendar.getInstance();
-	    endDate = Calendar.getInstance();    
-	}
+	    if (node.hasProperty(AuthoringPublicationConstant.START_TIME_PROPERTY)) {
+		 startDate = node.getProperty(AuthoringPublicationConstant.START_TIME_PROPERTY).getDate();     
+	    }
+	if(startDate!=null){
 	((UIFormDateTimeInput) getChildById(START_PUBLICATION)).setCalendar(startDate);
+	}
+	if(endDate!=null){
 	((UIFormDateTimeInput) getChildById(END_PUBLICATION)).setCalendar(endDate);
-
+	}
 	super.init(node);
     }
 
@@ -417,20 +413,25 @@ public class UIPublicationPanel extends org.exoplatform.services.wcm.publication
 	    UIFormDateTimeInput endPublication = publicationPanel.getChildById(END_PUBLICATION);
 	    Calendar startDate = startPublication.getCalendar();
 	    Calendar endDate = endPublication.getCalendar();
+	    System.out.println(startPublication.getValue()+" "+endPublication.getValue()+" "+startDate+" "+endDate);
+	    Node node = publicationPanel.getCurrentNode();
 	    try {
-		startDate.getTime();
+		if(!"".equals(startPublication.getValue())){
+		   startDate.getTime();
+		   node.setProperty(AuthoringPublicationConstant.START_TIME_PROPERTY, startDate);
+		   node.getSession().save();
+		}
+		if(!"".equals(endPublication.getValue())){
 		endDate.getTime();
+		node.setProperty(AuthoringPublicationConstant.END_TIME_PROPERTY, endDate);
+		node.getSession().save();
+		}
 	    } catch (NullPointerException e) {
 		UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
 		uiApp.addMessage(new ApplicationMessage("UIPublicationPanel.msg.invalid-format", null));
 		event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
 		return;
 	    }
-	    Node node = publicationPanel.getCurrentNode();
-	    node.setProperty(AuthoringPublicationConstant.START_TIME_PROPERTY, startDate);
-	    node.setProperty(AuthoringPublicationConstant.END_TIME_PROPERTY, endDate);
-	    node.getSession().save();
-
 	    UIPopupContainer uiPopupContainer = (UIPopupContainer) publicationPanel.getAncestorOfType(UIPopupContainer.class);
 	    uiPopupContainer.deActivate();
 	    event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer);
