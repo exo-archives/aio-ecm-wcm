@@ -90,9 +90,15 @@ public class PublicationManagerImpl implements PublicationManager, Startable {
 		Identity identity = identityRegistry.getIdentity(remoteUser);
 		for (State state_ : lifecycle.getStates()) {
 		    if (state_.getMembership() != "automatic" && state.equals(state_.getState())) {
-			String[] membershipTab = state_.getMembership().split(":");
+			List<String> memberships=new ArrayList<String>();
+			memberships.add(state_.getMembership());
+			if(state_.getMemberships()!=null)memberships.addAll(state_.getMemberships());
+			for(String membership:memberships){
+			String[] membershipTab = membership.split(":");
 			if (identity.isMemberOf(membershipTab[1], membershipTab[0])) {
 			    lifecycles.add(lifecycle);
+			    break;
+			}
 			}
 		    }
 		}
