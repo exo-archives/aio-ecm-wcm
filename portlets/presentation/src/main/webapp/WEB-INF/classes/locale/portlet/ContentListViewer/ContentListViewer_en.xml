@@ -99,4 +99,14 @@
    <UIContentSelectorMulti>Multiple content selector panel</UIContentSelectorMulti>
   </title>
  </CorrectContentSelectorPopupWindow>
+ <UIMessageBoard>
+ 	<msg>
+ 		<contents-not-found>
+ 			This content does not found or deleted.
+ 		</contents-not-found>
+ 		<add-node-error>
+ 			An error when perform add new node.
+ 		</add-node-error>
+ 	</msg>
+ </UIMessageBoard>
 </bundle>

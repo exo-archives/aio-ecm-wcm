@@ -45,6 +45,7 @@ import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.cms.JcrInputProperty;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.impl.DMSRepositoryConfiguration;
+import org.exoplatform.services.cms.link.LinkManager;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
@@ -209,14 +210,24 @@ public class UIContentDialogForm extends UIDialogForm  implements UIPopupCompone
    * @throws Exception the exception
    */
   public void init(Node webcontent, boolean isAddNew) throws Exception {
-  	NodeLocation webcontentNodeLocation = NodeLocation.make(webcontent);
+	NodeLocation webcontentNodeLocation = null;
+	if(webcontent.isNodeType("exo:symlink")) {
+		LinkManager linkManager = getApplicationComponent(LinkManager.class);
+		Node realNode = linkManager.getTarget(webcontent);
+		webcontentNodeLocation = NodeLocation.make(realNode);
+		this.contentType = realNode.getPrimaryNodeType().getName();
+		this.nodePath = realNode.getPath();
+		setStoredPath(realNode.getParent().getPath());
+	} else {
+		webcontentNodeLocation = NodeLocation.make(webcontent);
+		this.contentType = webcontent.getPrimaryNodeType().getName();
+		this.nodePath = webcontent.getPath();
+		setStoredPath(webcontent.getParent().getPath());
+	}
   	this.webcontentNodeLocation = webcontentNodeLocation;
     this.repositoryName = webcontentNodeLocation.getRepository();
     this.workspaceName = webcontentNodeLocation.getWorkspace();
-    this.contentType = webcontent.getPrimaryNodeType().getName();
-    this.nodePath = webcontent.getPath();
     this.isAddNew = isAddNew;
-    setStoredPath(webcontent.getParent().getPath());
     resetProperties();
     TemplateService templateService = getApplicationComponent(TemplateService.class) ;
     String userName = Util.getPortalRequestContext().getRemoteUser();
