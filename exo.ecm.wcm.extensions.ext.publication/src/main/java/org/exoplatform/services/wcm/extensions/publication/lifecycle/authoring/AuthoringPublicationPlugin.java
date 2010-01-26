@@ -460,6 +460,8 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.services.ecm.publication.IncorrectStateUpdateLifecycleException;
 import org.exoplatform.services.wcm.extensions.publication.impl.PublicationManagerImpl;
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.authoring.ui.UIPublicationContainer;
+import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig.Lifecycle;
+import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig.State;
 import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
@@ -635,8 +637,19 @@ public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin
 	    node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE, PublicationDefaultStates.PUBLISHED);
 	    VersionData editableRevision = revisionsMap.get(node.getUUID());
 	    if (editableRevision != null) {
+		ExoContainer container = ExoContainerContext.getCurrentContainer();
+		PublicationManagerImpl publicationManagerImpl = (PublicationManagerImpl) container
+			.getComponentInstanceOfType(PublicationManagerImpl.class);
+		String lifecycleName = node.getProperty("publication:lifecycle").getString();
+		Lifecycle lifecycle = publicationManagerImpl.getLifecycle(lifecycleName);
+		List<State> states = lifecycle.getStates();
+		if (states == null || states.size() <= 0) {
+		    editableRevision.setState(PublicationDefaultStates.ENROLLED);
+		} else {
+		    editableRevision.setState(states.get(0).getState());
+		}
 		editableRevision.setAuthor(userId);
-		editableRevision.setState(PublicationDefaultStates.ENROLLED);
+
 	    } else {
 		editableRevision = new VersionData(node.getUUID(), PublicationDefaultStates.ENROLLED, userId);
 	    }
