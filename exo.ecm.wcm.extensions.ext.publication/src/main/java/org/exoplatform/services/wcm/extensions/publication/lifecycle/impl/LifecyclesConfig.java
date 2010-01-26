@@ -48,6 +48,7 @@ public class LifecyclesConfig {
     public static class State {
 	private String state;
 	private String membership;
+	private List<String> memberships;
 
 	public String getState() {
 	    return state;
@@ -63,6 +64,14 @@ public class LifecyclesConfig {
 
 	public void setMembership(String membership) {
 	    this.membership = membership;
+	}
+	
+	public List<String> getMemberships() {
+	    return memberships;
+	}
+
+	public void setMemberships(List<String> memberships) {
+	    this.memberships = memberships;
 	}
 
     }

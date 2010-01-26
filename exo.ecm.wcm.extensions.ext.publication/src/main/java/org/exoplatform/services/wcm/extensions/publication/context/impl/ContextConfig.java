@@ -18,6 +18,8 @@ public class ContextConfig {
 	private String priority;
 	private String lifecycle;
 	private String membership;
+	private List<String> memberships;
+
 	private String path;
 	private String nodetype;
 	private String site;
@@ -77,5 +79,14 @@ public class ContextConfig {
 	public void setSite(String site) {
 	    this.site = site;
 	}
+
+	public List<String> getMemberships() {
+	    return memberships;
+	}
+
+	public void setMemberships(List<String> memberships) {
+	    this.memberships = memberships;
+	}
+
     }
 }
