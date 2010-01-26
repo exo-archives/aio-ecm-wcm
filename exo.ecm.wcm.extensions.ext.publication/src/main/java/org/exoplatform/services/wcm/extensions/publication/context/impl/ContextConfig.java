@@ -2,6 +2,10 @@ package org.exoplatform.services.wcm.extensions.publication.context.impl;
 
 import java.util.List;
 
+/**
+ * Created by The eXo Platform MEA Author : 
+ * haikel.thamri@exoplatform.com
+ */
 public class ContextConfig {
     private List<Context> contexts;
 

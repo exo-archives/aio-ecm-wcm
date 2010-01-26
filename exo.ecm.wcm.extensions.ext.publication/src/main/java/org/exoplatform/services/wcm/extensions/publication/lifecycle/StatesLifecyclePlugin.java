@@ -4,7 +4,10 @@ import org.exoplatform.container.component.BaseComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ObjectParameter;
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig;
-
+/**
+ * Created by The eXo Platform MEA Author : 
+ * haikel.thamri@exoplatform.com
+ */
 public class StatesLifecyclePlugin extends BaseComponentPlugin {
     private LifecyclesConfig lifecyclesConfig;
 

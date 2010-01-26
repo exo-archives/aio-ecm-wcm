@@ -16,6 +16,10 @@ import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.Lifecy
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig.State;
 import org.picocontainer.Startable;
 
+/**
+ * Created by The eXo Platform MEA Author : 
+ * haikel.thamri@exoplatform.com
+ */
 public class PublicationManagerImpl implements PublicationManager, Startable {
 
     private StatesLifecyclePlugin statesLifecyclePlugin;

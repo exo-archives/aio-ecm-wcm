@@ -3,6 +3,10 @@ package org.exoplatform.services.wcm.extensions.publication.lifecycle.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by The eXo Platform MEA Author : 
+ * haikel.thamri@exoplatform.com
+ */
 public class LifecyclesConfig {
     private List<Lifecycle> lifecycles = new ArrayList<Lifecycle>();
 
@@ -65,7 +69,7 @@ public class LifecyclesConfig {
 	public void setMembership(String membership) {
 	    this.membership = membership;
 	}
-	
+
 	public List<String> getMemberships() {
 	    return memberships;
 	}

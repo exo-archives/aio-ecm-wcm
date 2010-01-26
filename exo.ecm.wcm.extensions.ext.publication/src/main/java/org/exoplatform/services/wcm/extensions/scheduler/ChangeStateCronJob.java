@@ -7,10 +7,11 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.scheduler.CronJob;
 import org.quartz.JobDataMap;
 
+/**
+ * Created by The eXo Platform MEA Author : 
+ * haikel.thamri@exoplatform.com
+ */
 public class ChangeStateCronJob extends CronJob {
-    /**
-     * @param args
-     */
 
     private static final Log log = ExoLogger.getLogger(ChangeStateCronJob.class);
 

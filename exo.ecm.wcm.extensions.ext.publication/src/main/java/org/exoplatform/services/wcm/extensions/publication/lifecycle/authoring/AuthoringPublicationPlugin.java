@@ -473,9 +473,8 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.form.UIForm;
 
 /**
- * 
- * @author nedved
- * 
+ * Created by The eXo Platform MEA Author : 
+ * haikel.thamri@exoplatform.com
  */
 
 public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin {
@@ -593,10 +592,30 @@ public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin
 	    }
 	    revisionsMap.put(selectedRevision.getUUID(), versionData);
 	    addLog(node, versionLog);
-	    // change base version to published state
+	    // change base version to unpublished state
 	    node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE, PublicationDefaultStates.UNPUBLISHED);
 	    addRevisionData(node, revisionsMap.values());
-	} else if (PublicationDefaultStates.DRAFT.equalsIgnoreCase(newState)) {
+	} else if (PublicationDefaultStates.ARCHIVED.equalsIgnoreCase(newState)) {
+	    Value value = valueFactory.createValue(selectedRevision);
+	    Value liveRevision = node.getProperty(StageAndVersionPublicationConstant.LIVE_REVISION_PROP).getValue();
+	    if (liveRevision != null && value.getString().equals(liveRevision.getString())) {
+		node.setProperty(StageAndVersionPublicationConstant.LIVE_REVISION_PROP, valueFactory.createValue(""));
+	    }
+	    versionLog = new VersionLog(selectedRevision.getName(), PublicationDefaultStates.ARCHIVED, userId, new GregorianCalendar(),
+		    AuthoringPublicationConstant.CHANGE_TO_ARCHIVED);
+	    VersionData versionData = revisionsMap.get(selectedRevision.getUUID());
+	    if (versionData != null) {
+		versionData.setAuthor(userId);
+		versionData.setState(PublicationDefaultStates.ARCHIVED);
+	    } else {
+		versionData = new VersionData(selectedRevision.getUUID(), PublicationDefaultStates.ARCHIVED, userId);
+	    }
+	    revisionsMap.put(selectedRevision.getUUID(), versionData);
+	    addLog(node, versionLog);
+	    // change base version to archived state
+	    node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE, PublicationDefaultStates.ARCHIVED);
+	    addRevisionData(node, revisionsMap.values());
+	}else if (PublicationDefaultStates.DRAFT.equalsIgnoreCase(newState)) {
 	    node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE, newState);
 	    versionLog = new VersionLog(logItemName, newState, node.getSession().getUserID(), GregorianCalendar.getInstance(),
 		    StageAndVersionPublicationConstant.PUBLICATION_LOG_DRAFT);

@@ -1,7 +1,10 @@
 package org.exoplatform.services.wcm.extensions.security;
 
 import java.security.MessageDigest;
-
+/**
+ * Created by The eXo Platform MEA Author : 
+ * haikel.thamri@exoplatform.com
+ */
 public class SHAMessageDigester {
     public static String getHash(String message) throws Exception {
 	MessageDigest msgDigest = MessageDigest.getInstance("SHA-1");

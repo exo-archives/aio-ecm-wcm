@@ -17,7 +17,10 @@ import org.exoplatform.services.rest.container.ResourceContainer;
 import org.exoplatform.services.rest.transformer.StringInputTransformer;
 import org.exoplatform.services.rest.transformer.StringOutputTransformer;
 import org.exoplatform.services.wcm.extensions.security.SHAMessageDigester;
-
+/**
+ * Created by The eXo Platform MEA Author : 
+ * haikel.thamri@exoplatform.com
+ */
 @URITemplate("/copyfile/")
 public class CopyContentFile implements ResourceContainer {
 

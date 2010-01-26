@@ -8,9 +8,8 @@ import org.exoplatform.services.scheduler.CronJob;
 import org.quartz.JobDataMap;
 
 /**
- * 
- * @author Thamri Haikel
- * 
+ * Created by The eXo Platform MEA Author : 
+ * haikel.thamri@exoplatform.com
  */
 public class BackCronJob extends CronJob {
     /**

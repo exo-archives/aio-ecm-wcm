@@ -6,6 +6,10 @@ import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.services.wcm.extensions.publication.context.impl.ContextConfig.Context;
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig.Lifecycle;
 
+/**
+ * Created by The eXo Platform MEA Author : 
+ * haikel.thamri@exoplatform.com
+ */
 public interface PublicationManager {
     public void addLifecycle(ComponentPlugin plugin);
 

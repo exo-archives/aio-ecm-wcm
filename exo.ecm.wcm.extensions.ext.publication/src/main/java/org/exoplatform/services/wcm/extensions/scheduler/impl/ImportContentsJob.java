@@ -25,7 +25,10 @@ import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-
+/**
+ * Created by The eXo Platform MEA Author : 
+ * haikel.thamri@exoplatform.com
+ */
 public class ImportContentsJob implements Job {
 	private static final Log log = ExoLogger.getLogger(ImportContentsJob.class);
 	private static final String MIX_TARGET_PATH = "mix:targetPath".intern();

@@ -37,7 +37,10 @@ import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-
+/**
+ * Created by The eXo Platform MEA Author : 
+ * haikel.thamri@exoplatform.com
+ */
 public class ExportContentJob implements Job {
     private static final Log log = ExoLogger.getLogger(ExportContentJob.class);
 

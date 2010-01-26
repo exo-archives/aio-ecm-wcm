@@ -3,7 +3,10 @@ package org.exoplatform.services.wcm.extensions.utils;
 import java.util.Comparator;
 
 import org.exoplatform.services.wcm.extensions.publication.context.impl.ContextConfig.Context;
-
+/**
+ * Created by The eXo Platform MEA Author : 
+ * haikel.thamri@exoplatform.com
+ */
 public class ContextComparator implements Comparator{
 
     public int compare(Object arg0, Object arg1) {

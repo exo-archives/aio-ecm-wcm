@@ -51,8 +51,8 @@ import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
- * Created by The eXo Platform SAS Author : eXoPlatform
- * chuong_phan@exoplatform.com Mar 2, 2009
+ * Created by The eXo Platform MEA Author : 
+ * haikel.thamri@exoplatform.com
  */
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "classpath:groovy/wcm/webui/publication/lifecycle/authoring/ui/UIPublicationPanel.gtmpl", events = {
 	@EventConfig(listeners = UIPublicationPanel.DraftActionListener.class),
