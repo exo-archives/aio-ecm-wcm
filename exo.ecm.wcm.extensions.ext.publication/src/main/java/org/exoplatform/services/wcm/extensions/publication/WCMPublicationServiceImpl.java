@@ -16,6 +16,7 @@
  */
 package org.exoplatform.services.wcm.extensions.publication;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
@@ -86,7 +87,13 @@ public class WCMPublicationServiceImpl extends org.exoplatform.services.wcm.publ
 		String path = context.getPath();
 		String nodetype = context.getNodetype();
 		String site = context.getSite();
-		String membership = context.getMembership();
+		List<String> memberships=new ArrayList<String>();
+		if(context.getMembership()!=null){
+		memberships.add(context.getMembership());
+		}
+		if(context.getMemberships()!=null){
+		memberships.addAll(context.getMemberships());
+		}
 		if (path != null) {
 		    String workspace = node.getSession().getWorkspace().getName();
 		    ManageableRepository manaRepository = (ManageableRepository) node.getSession().getRepository();
@@ -98,11 +105,14 @@ public class WCMPublicationServiceImpl extends org.exoplatform.services.wcm.publ
 		    nodetypeVerified = nodetype.equals(node.getPrimaryNodeType().getName());
 		if (site != null)
 		    siteVerified = site.equals(siteName);
-		if (membership != null) {
+		if (memberships.size()>0) {
+		    for(String membership:memberships){
 		    String[] membershipTab = membership.split(":");
 		    IdentityRegistry identityRegistry = (IdentityRegistry) container.getComponentInstanceOfType(IdentityRegistry.class);
 		    Identity identity = identityRegistry.getIdentity(remoteUser);
 		    membershipVerified = identity.isMemberOf(membershipTab[1], membershipTab[0]);
+		    if(membershipVerified) break;
+		    }
 		}
 		if (pathVerified && nodetypeVerified && siteVerified && membershipVerified) {
 		    Lifecycle lifecycle = publicationManagerImpl.getLifecycle(context.getLifecycle());
