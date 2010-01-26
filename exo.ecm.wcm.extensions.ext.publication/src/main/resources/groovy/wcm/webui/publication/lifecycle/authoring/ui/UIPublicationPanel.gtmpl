@@ -20,6 +20,7 @@
 	boolean lastState=false;
 	boolean isBaseVersion= false;
 	boolean isBeforeCurrentState = true;
+	boolean isMember = false;
     List<State> states = uicomponent.getStates(cNode);
 	if(currentRevision.getUUID().equals(cNode.getUUID())){
 		isBaseVersion=true;
@@ -57,9 +58,16 @@
 		 Identity identity=null;
 		 String[] membershipTab=null;
 		 if(!"automatic".equals(membership)){
-		    membershipTab = membership.split(":");
+		 List<String> memberships=new ArrayList<String>();
+			memberships.add(membership);
+			if(state.getMemberships()!=null)memberships.addAll(state.getMemberships());
+			for(String membership_:memberships){
+		    membershipTab = membership_.split(":");
 		    identityRegistry = uicomponent.getApplicationComponent(IdentityRegistry.class);
 		    identity = identityRegistry.getIdentity(remoteUser);
+			isMember = identity.isMemberOf(membershipTab[1], membershipTab[0]);
+			if(isMember) break;
+			}
 		    }
 		    else{
 		    isAutomatic=true;
@@ -97,10 +105,10 @@
 			<a class="CurrentStatus">
 		
 
-			<%} else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic) {%>
+			<%} else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic||!isMember) {%>
 			<a class="DisableStatus">
 			<%} 
-			else  if(!isAutomatic&&identity.isMemberOf(membershipTab[1], membershipTab[0])){
+			else  if(!isAutomatic&&isMember){
 			%>	
 			<a class="ActiveStatus" href="<%= uicomponent.event("Pending")%>">
 			
@@ -118,10 +126,10 @@
 			 isBeforeCurrentState = false;
 			%>
 			<a class="CurrentStatus">
-			<%} else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic) {%>
+			<%} else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic||!isMember) {%>
 			<a class="DisableStatus">
 			<%} 
-			else  if(!isAutomatic&&identity.isMemberOf(membershipTab[1], membershipTab[0])){
+			else  if(!isAutomatic&&isMember){
 			%>	
 			<a class="ActiveStatus" href="<%= uicomponent.event("Approved")%>">
 			<%}%>
@@ -142,7 +150,7 @@
 			<%} else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic) {%>
 			<a class="DisableStatus">
 			<%}
-			else  if(!isAutomatic&&identity.isMemberOf(membershipTab[1], membershipTab[0])){
+			else  if(!isAutomatic&&isMember){
 			%>	
 			<a class="ActiveStatus" href="<%= uicomponent.event("Archived")%>">
 			
@@ -161,12 +169,12 @@
 			isBeforeCurrentState = false;
 			%>
 			<a class="CurrentStatus">
-			<%} else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic) {
+			<%} else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic||!isMember) {
 			
 			%>
 			<a class="DisableStatus">
 			<%}
-			else  if(!isAutomatic&&identity.isMemberOf(membershipTab[1], membershipTab[0])){
+			else  if(!isAutomatic&&isMember){
 			%>	
 			<a class="ActiveStatus" href="<%= uicomponent.event("Live")%>">
 			
@@ -184,10 +192,10 @@
 			isBeforeCurrentState = false;
 			%>
 			<a class="CurrentStatus">
-			<%} else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic) {%>
+			<%} else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic||!isMember) {%>
 			<a class="DisableStatus">
 			<%}
-			else  if(!isAutomatic&&identity.isMemberOf(membershipTab[1], membershipTab[0])){
+			else  if(!isAutomatic&&isMember){
 			%>	
 			<a class="ActiveStatus" href="<%= uicomponent.event("Staged")%>">
 			
@@ -204,10 +212,10 @@
 			isBeforeCurrentState = false;
 			%>
 			<a class="CurrentStatus">
-			<%} else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic) {%>
+			<%} else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic||!isMember) {%>
 			<a class="DisableStatus">
 			<%}
-			else  if(!isAutomatic&&identity.isMemberOf(membershipTab[1], membershipTab[0])){
+			else  if(!isAutomatic&&isMember){
 			%>	
 			<a class="ActiveStatus" href="<%= uicomponent.event("Unpublished")%>">
 			
