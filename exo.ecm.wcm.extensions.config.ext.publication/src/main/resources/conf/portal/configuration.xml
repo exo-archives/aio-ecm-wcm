@@ -102,7 +102,7 @@
                       <value>
                         <object type="org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig$State">
                           <field name="state"><string>published</string></field>
-                          <field name="membership"><string>automatic</string></field>
+                          <field name="membership"><string>author:/platform/web-contributors</string></field>
                           <field name="memberships">                  
 		                      <collection type="java.util.ArrayList">
 		                        <value><string>author:/platform/web-contributors</string></value>
@@ -134,7 +134,7 @@
                       <value>
                         <object type="org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig$State">
                           <field name="state"><string>staged</string></field>
-                          <field name="membership"><string>automatic</string></field>
+                          <field name="membership"><string>publisher:/platform/web-contributors</string></field>
                         </object>
                       </value>
                       <value>
@@ -151,7 +151,7 @@
                       <value>
                         <object type="org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig$State">
                           <field name="state"><string>unpublished</string></field>
-                          <field name="membership"><string>jjjjj:/hhhhhh/web-contributors</string></field>
+                          <field name="membership"><string>publisher:/platform/web-contributors</string></field>
                           <field name="memberships">                  
 		                      <collection type="java.util.ArrayList">
 		                        <value><string>ffffff:/fffff/web-contributors</string></value>
