@@ -24,13 +24,10 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
-import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
-import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
@@ -103,9 +100,7 @@ public class UIPCLVContainer extends UIContainer {
    * @return the header
    */
   private String getHeader() throws Exception {
-    PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) portletRequestContext.getRequest();
-    String requestURI = requestWrapper.getRequestURI();
+    String requestURI = Util.getPortalRequestContext().getNodePath();
     String selectedPage = Util.getUIPortal().getSelectedNode().getUri();
     if (requestURI.endsWith(selectedPage)) return null;
     String[] param = requestURI.split("/");
@@ -120,22 +115,14 @@ public class UIPCLVContainer extends UIContainer {
 	 * @throws Exception the exception
 	 */
 	public void init() throws Exception {
-		PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-		HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) portletRequestContext.getRequest();
-		PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
-		UIPortal uiPortal = Util.getUIPortal();
-		String portalURI = portalRequestContext.getPortalURI();
-		String requestURI = requestWrapper.getRequestURI();
-		String pageNodeSelected = uiPortal.getSelectedNode().getUri();
-		String siteName = uiPortal.getOwner();
-		
 		String categoryPath = null;
 		try {
-			categoryPath = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected + "/")), "UTF-8");
+			categoryPath = URLDecoder.decode(StringUtils.substringAfter(Util.getPortalRequestContext().getNodePath(), Util.getUIPortal().getSelectedNode().getUri() + "/"), "UTF-8");
 		} catch (Exception e) {
 		  Utils.createPopupMessage(this, "UIPCLVConfig.msg.decode", null, ApplicationMessage.ERROR);
 		}
 
+		PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
 		PortletRequest portletRequest = portletRequestContext.getRequest();
 		PortletPreferences portletPreferences = portletRequest.getPreferences();
 		String preferenceRepository = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_REPOSITORY, "");
@@ -180,7 +167,7 @@ public class UIPCLVContainer extends UIContainer {
 		String server =  Util.getPortalRequestContext().getRequest().getRequestURL().toString();
 		server = server.substring(0, server.indexOf('/', 8));
 		
-		parameterizedContentListViewer.setRssLink("/rest/rss/generate?repository=" + preferenceRepository + "&workspace=" + workspace + "&server=" + server + "&siteName=" + siteName + "&categoryPath=" + ("".equals(categoryPath) ? preferenceTreeName : preferenceTreeName + "/" + categoryPath));
+		parameterizedContentListViewer.setRssLink("/rest/rss/generate?repository=" + preferenceRepository + "&workspace=" + workspace + "&server=" + server + "&siteName=" + Util.getUIPortal().getOwner() + "&categoryPath=" + ("".equals(categoryPath) ? preferenceTreeName : preferenceTreeName + "/" + categoryPath));
 	}
 
 	/**

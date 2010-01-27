@@ -30,7 +30,7 @@
     <access-permissions>Everyone</access-permissions>
     <edit-permission>editor:/platform/web-contributors</edit-permission>
     <container id="ACMEBody" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
-      <container id="ACMELeft" template="system:/groovy/portal/webui/container/UIContainer.gtmpl" width="640px">
+      <container id="ACMELeft" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
         <portlet-application>
           <portlet>
             <application-ref>presentation</application-ref>
@@ -305,7 +305,7 @@
           <show-application-mode>false</show-application-mode>
         </portlet-application>
       </container>
-      <container id="ACMERight" template="system:/groovy/portal/webui/container/UIContainer.gtmpl" width="230px">
+      <container id="ACMERight" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
         <portlet-application>
           <portlet>
             <application-ref>presentation</application-ref>
@@ -535,7 +535,7 @@
     <access-permissions>Everyone</access-permissions>
     <edit-permission>editor:/platform/web-contributors</edit-permission>
     <container id="ACMEBody" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
-      <container id="ACMECategories" template="system:/groovy/portal/webui/container/UIContainer.gtmpl" width="200px">
+      <container id="ACMECategories" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
         <portlet-application>
           <portlet>
             <application-ref>presentation</application-ref>
@@ -585,7 +585,7 @@
           <show-application-mode>false</show-application-mode>
         </portlet-application>
       </container>
-      <container id="ACMEParameterized" template="system:/groovy/portal/webui/container/UIContainer.gtmpl" width="680px">
+      <container id="ACMEParameterized" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
         <portlet-application>
           <portlet>
             <application-ref>presentation</application-ref>

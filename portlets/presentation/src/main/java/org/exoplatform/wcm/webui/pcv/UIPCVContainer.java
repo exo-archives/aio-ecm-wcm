@@ -26,13 +26,9 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.portlet.PortletPreferences;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.lang.StringUtils;
-import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
-import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.wcm.webui.Utils;
@@ -250,14 +246,7 @@ public class UIPCVContainer extends UIContainer {
 	    }
 	    uiContentViewer.setRepository(this.getRepository());
 	    uiContentViewer.setWorkspace(nodeView.getSession().getWorkspace().getName());
-	    
-	    PortletRequestContext porletRequestContext = WebuiRequestContext.getCurrentInstance();
-	    HttpServletRequest request = (HttpServletRequest) porletRequestContext.getRequest();
-	    if(request.getQueryString() == null) {
-	      isPrint = false;
-	    } else {
-	      isPrint = request.getQueryString().endsWith("isPrint=true") ? true : false;
-	    }
+	    isPrint = Boolean.parseBoolean(Util.getPortalRequestContext().getRequestParameter("isPrint"));
     }    
     return nodeView;
   }
@@ -268,16 +257,9 @@ public class UIPCVContainer extends UIContainer {
    * @return the request parameters
    */
   private String getRequestParameters() throws Exception {
-    PortletRequestContext porletRequestContext = WebuiRequestContext.getCurrentInstance();
-    HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
-    PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
-    UIPortal uiPortal = Util.getUIPortal();
-    String portalURI = portalRequestContext.getPortalURI();
-    String requestURI = requestWrapper.getRequestURI();
-    String pageNodeSelected = uiPortal.getSelectedNode().getUri();
     String parameters = null;
     try {
-      parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected + "/")), "UTF-8");
+      parameters = URLDecoder.decode(StringUtils.substringAfter(Util.getPortalRequestContext().getNodePath(), Util.getUIPortal().getSelectedNode().getUri() + "/"), "UTF-8");
     } catch (UnsupportedEncodingException e) {
       return null;
     }

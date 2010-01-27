@@ -152,12 +152,12 @@
 							<% 
 						}
 						if (uicomponent.showPaginator()) { 
-							uicomponent.renderChild(UICustomizeablePaginator.class)
+							uicomponent.renderChild(UICustomizeablePaginator.class);
 						} 
 					%>
 					<div style="clear:left"><span></span></div>
 				</div>
 			<%
-		uiform.end()
+		uiform.end();
 	%>
 </div>
