@@ -179,12 +179,18 @@ public class XSkinService implements Startable {
    */
   private void addPortalSkin(Node portalNode, Node cssFile, boolean isStartup) throws Exception {
     String cssData = mergeCSSData(portalNode, cssFile, isStartup);
-    String skinPath = StringUtils.replaceOnce(SKIN_PATH_PATTERN, "(.*)", portalNode.getName()).replaceFirst("\\{docBase\\}", servletContext.getServletContextName());    
-    for(Iterator<String> iterator= skinService.getAvailableSkinNames().iterator();iterator.hasNext();) {
-      String skinName = iterator.next();
-      skinPath = StringUtils.replaceOnce(skinPath,"(.*)",skinName);
-      skinService.addSkin(portalNode.getName(), skinName, skinPath, cssData);
-    }       
+    String skinPath = StringUtils.replaceOnce(SKIN_PATH_PATTERN, "(.*)", portalNode.getName()).replaceFirst("\\{docBase\\}", servletContext.getServletContextName());
+    Iterator<String> iterator = skinService.getAvailableSkinNames().iterator();
+    if (iterator.hasNext() == false) {
+      skinPath = StringUtils.replaceOnce(skinPath,"(.*)", "Default");
+      skinService.addSkin(portalNode.getName(), "Default", skinPath, cssData);
+    } else {
+      while (iterator.hasNext()) {
+        String skinName = iterator.next();
+        skinPath = StringUtils.replaceOnce(skinPath,"(.*)",skinName);
+        skinService.addSkin(portalNode.getName(), skinName, skinPath, cssData);  
+      } 
+    }
   }  
 
   /**
@@ -226,7 +232,7 @@ public class XSkinService implements Startable {
   	Node cssFolder = schemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class).getCSSFolder(portalNode);
   	String statement = StringUtils.replaceOnce(SHARED_CSS_QUERY, "{path}", cssFolder.getPath());
   	RepositoryService repositoryService = WCMCoreUtils.getService(RepositoryService.class);
-    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
     NodeLocation portalNodeLocation = NodeLocation.make(portalNode);
     ManageableRepository repository = repositoryService.getRepository(portalNodeLocation.getRepository());
     Session session = sessionProvider.getSession(portalNodeLocation.getWorkspace(), repository);
@@ -267,19 +273,18 @@ public class XSkinService implements Startable {
    * @see org.picocontainer.Startable#start()
    */
   public void start() {  
-//    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();    
-//    try {      
-//      LivePortalManagerService livePortalManagerService = WCMCoreUtils.getService(LivePortalManagerService.class);
-//      Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
-//      addSharedPortalSkin(sharedPortal, null, true);
-//      List<Node> livePortals = livePortalManagerService.getLivePortals(sessionProvider);
-//      for(Node portal: livePortals) {
-//        addPortalSkin(portal, null, true);
-//      }
-//    }catch (Exception e) {
-//    	log.error("Exception when start XSkinService", e.fillInStackTrace());
-//    }
-//    sessionProvider.close();
+    SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();    
+    try {      
+      LivePortalManagerService livePortalManagerService = WCMCoreUtils.getService(LivePortalManagerService.class);
+      Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
+      addSharedPortalSkin(sharedPortal, null, true);
+      List<Node> livePortals = livePortalManagerService.getLivePortals(sessionProvider);
+      for(Node portal: livePortals) {
+        addPortalSkin(portal, null, true);
+      }
+    }catch (Exception e) {
+    	log.error("Exception when start XSkinService", e.fillInStackTrace());
+    }
   }
 
   /* (non-Javadoc)

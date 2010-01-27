@@ -80,12 +80,12 @@
     <css-path>/skin/ParameterizedContentListViewer/DefaultStylesheet.css</css-path>
   </portlet-skin>
   
-  <javascript>
+  <!-- javascript>
     <param>
       <js-module>eXo.SiteAdministration.ShowAdminToolbar</js-module>
       <js-path>/javascript/eXo/SiteAdministration/ShowAdminToolbar.js</js-path>
     </param>
-  </javascript>
+  </javascript-->
   
 </gatein-resources>
 

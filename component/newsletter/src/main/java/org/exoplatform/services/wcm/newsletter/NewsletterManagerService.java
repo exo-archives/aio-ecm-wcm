@@ -141,7 +141,7 @@ public class NewsletterManagerService {
     RepositoryService repositoryService =
       (RepositoryService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
     Session session = sessionProvider.getSession(workspaceName, manageableRepository);
     List<String> listEmails = new ArrayList<String>();
     try{
@@ -158,9 +158,6 @@ public class NewsletterManagerService {
       log.info("User node is not created!");
     }catch(Exception ex){
       log.error("Error when get all users who can't get newsletter: ", ex.fillInStackTrace());
-    }finally{
-      session.logout();
-      sessionProvider.close();
     }
     return listEmails;
   }
@@ -194,7 +191,7 @@ public class NewsletterManagerService {
 		RepositoryService repositoryService =
 			(RepositoryService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
 		ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-		SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+		SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
 		Session session = sessionProvider.getSession(workspaceName, manageableRepository);
 
 		ExoContainer container = ExoContainerContext.getCurrentContainer();
@@ -243,8 +240,6 @@ public class NewsletterManagerService {
 			newsletterEntry.setProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_SENT);
 		}
 		session.save();
-		session.logout();
-		sessionProvider.close();
 	}
 
 	/**

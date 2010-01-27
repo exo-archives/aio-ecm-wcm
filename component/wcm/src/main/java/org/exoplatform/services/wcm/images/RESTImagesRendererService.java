@@ -21,8 +21,8 @@ import java.io.InputStream;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
-import javax.jcr.Session;
 import javax.jcr.version.VersionHistory;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -38,6 +38,8 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.rest.resource.ResourceContainer;
+import org.exoplatform.services.wcm.core.WCMService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -81,38 +83,36 @@ public class RESTImagesRendererService implements ResourceContainer{
    * @return the response
    */
   @GET
-  //@PathParam("type=file")
-  @Path("/{repositoryName}/{workspaceName}/{nodeIdentifier}/?type=file")
-//  @InputTransformer(PassthroughInputTransformer.class)
-//  @OutputTransformer(PassthroughOutputTransformer.class)
-  public Response serveImage(@PathParam("repositoryName") String repository, 
-		  					 @PathParam("workspaceName") String workspace,
-		  					 @PathParam("nodeIdentifier") String nodeIdentifier) { 
-    Node node = null;
-    SessionProvider sessionProvider = sessionProviderService.getSessionProvider(null);
-    Session session = null;
-    try {            
-      session = sessionProvider.getSession(workspace,repositoryService.getRepository(repository));
-      if(nodeIdentifier.contains("/"))
-        node = session.getRootNode().getNode(nodeIdentifier);
-      else
-        node = session.getNodeByUUID(nodeIdentifier);
-      if(node == null) {
-        return Response.status(HTTPStatus.NOT_FOUND).build();
+  @Path("/{repositoryName}/{workspaceName}/{nodeIdentifier}")
+  public Response serveImageWithType(@PathParam("repositoryName") String repository, 
+                                     @PathParam("workspaceName") String workspace,
+                                     @PathParam("nodeIdentifier") String nodeIdentifier,
+                                     @QueryParam("param") @DefaultValue("file") String param) { 
+    try {
+      SessionProvider sessionProvider = sessionProviderService.getSessionProvider(null);
+      WCMService wcmService = WCMCoreUtils.getService(WCMService.class);
+      Node node = wcmService.getReferencedContent(sessionProvider, repository, workspace, nodeIdentifier);
+      if (node == null) return Response.status(HTTPStatus.NOT_FOUND).build();
+      
+      
+      if ("file".equals(param)) {
+        Node dataNode = null; 
+        if(node.isNodeType("nt:file")) {
+          dataNode = node;
+        }else if(node.isNodeType("nt:versionedChild")) {
+          VersionHistory versionHistory = (VersionHistory)node.getProperty("jcr:childVersionHistory").getNode();
+          String versionableUUID = versionHistory.getVersionableUUID();
+          dataNode = sessionProvider.getSession(workspace,repositoryService.getRepository(repository)).getNodeByUUID(versionableUUID);
+        }else {
+          return Response.status(HTTPStatus.NOT_FOUND).build();
+        }     
+        InputStream jcrData = dataNode.getNode("jcr:content").getProperty("jcr:data").getStream();
+        return Response.ok(jcrData, "image").build();  
+      } else {
+        InputStream jcrData = node.getProperty(param).getStream();
+        return Response.ok(jcrData, "image").build();        
       }
-      Node dataNode = null; 
-      InputStream jcrData = null;
-      if(node.isNodeType("nt:file")) {
-        dataNode = node;
-      }else if(node.isNodeType("nt:versionedChild")) {
-        VersionHistory versionHistory = (VersionHistory)node.getProperty("jcr:childVersionHistory").getNode();
-        String versionableUUID = versionHistory.getVersionableUUID();
-        dataNode = session.getNodeByUUID(versionableUUID);
-      }else {
-        return Response.status(HTTPStatus.NOT_FOUND).build();
-      }     
-      jcrData = dataNode.getNode("jcr:content").getProperty("jcr:data").getStream();
-      return Response.ok(jcrData, "image").build();
+      
     } catch (PathNotFoundException e) {
       return Response.status(HTTPStatus.NOT_FOUND).build();
     }catch (ItemNotFoundException e) {
@@ -120,54 +120,6 @@ public class RESTImagesRendererService implements ResourceContainer{
     }catch (Exception e) {
       log.error("Error when serveImage: ", e.fillInStackTrace());
       return Response.serverError().build(); 
-    } finally {
-      if (session != null) session.logout();
-      sessionProvider.close();
-    }
-  }
-  
-  /**
-   * Serve image.
-   * 
-   * @param repository the repository
-   * @param workspace the workspace
-   * @param nodeIdentifier the node identifier
-   * @param propertyName the property name
-   * 
-   * @return the response
-   */
-  @GET  
-  @Path("/{repositoryName}/{workspaceName}/{nodeIdentifier}/")
-//  @InputTransformer(PassthroughInputTransformer.class)
-//  @OutputTransformer(PassthroughOutputTransformer.class)
-  public Response serveImage(@PathParam("repositoryName") String repository, 
-		  					 @PathParam("workspaceName") String workspace,
-		  					 @PathParam("nodeIdentifier") String nodeIdentifier, 
-		  					 @QueryParam("propertyName") String propertyName) {
-    Node node = null;
-    SessionProvider sessionProvider = sessionProviderService.getSessionProvider(null);
-    Session session = null;
-    try {            
-      session = sessionProvider.getSession(workspace,repositoryService.getRepository(repository));
-      if(nodeIdentifier.contains("/"))
-        node = session.getRootNode().getNode(nodeIdentifier);
-      else
-        node = session.getNodeByUUID(nodeIdentifier);
-      if(node == null) {
-        return Response.status(HTTPStatus.NOT_FOUND).build();
-      }            
-      InputStream jcrData = node.getProperty(propertyName).getStream();
-      return Response.ok(jcrData, "image").build();
-    } catch (PathNotFoundException e) {
-      return Response.status(HTTPStatus.NOT_FOUND).build();
-    }catch (ItemNotFoundException e) {
-      return Response.status(HTTPStatus.NOT_FOUND).build();
-    }catch (Exception e) {
-      log.error("Error when serve image: ", e.fillInStackTrace());
-      return Response.serverError().build(); 
-    } finally {
-      if (session != null) session.logout();
-      sessionProvider.close();
     }
   }
   
@@ -200,7 +152,7 @@ public class RESTImagesRendererService implements ResourceContainer{
       accessURI = baseRestURI.concat("private/");
     }
     return builder.append(accessURI).append("images/").append(repository).append("/")
-                  .append(workspaceName).append("/").append(nodeIdentifiler).append("?type=file").toString();
+                  .append(workspaceName).append("/").append(nodeIdentifiler).append("?param=file").toString();
   }
   
   /**
@@ -229,6 +181,6 @@ public class RESTImagesRendererService implements ResourceContainer{
       accessURI = baseRestURI.concat("private/");
     }
     return builder.append(accessURI).append("images/").append(repository).append("/").append(workspaceName)
-      .append("/").append(nodeIdentifiler).append("?propertyName=").append(propertyName).toString();
+      .append("/").append(nodeIdentifiler).append("?param=").append(propertyName).toString();
   }
 }

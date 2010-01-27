@@ -56,7 +56,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	public void setUp() throws Exception {
 		
 		super.setUp();
-		sessionProvider = WCMCoreUtils.getSessionProvider();
+		sessionProvider = WCMCoreUtils.getSystemSessionProvider();
 		javascriptService = getService(XJavascriptService.class);
 		documentNode = (Node) session.getItem("/sites content/live/classic/documents");
 		sharedJsNode = (Node) session.getItem("/sites content/live/classic/js");
@@ -607,6 +607,5 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 		  sharedIterator.nextNode().remove();
 		}
 		session.save();
-		sessionProvider.close();
 	}
 }

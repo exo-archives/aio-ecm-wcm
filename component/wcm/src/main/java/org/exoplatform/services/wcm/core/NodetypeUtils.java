@@ -46,14 +46,12 @@ public class NodetypeUtils {
    * @throws Exception the exception
    */
   public static void displayAllNode(String workspaceName, String repositoryName) throws Exception {
-    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
     RepositoryService repositoryService = (RepositoryService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
     ManageableRepository repository = repositoryService.getRepository(repositoryName); 
     Session session = sessionProvider.getSession(workspaceName, repository);
     Node root = session.getRootNode();
     displayAllChildNode(root);
-    session.logout();
-    sessionProvider.close();
   }
   
   /**

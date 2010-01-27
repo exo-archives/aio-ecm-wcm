@@ -50,7 +50,7 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 	 */
 	public void setUp() throws Exception {
 		super.setUp();
-		sessionProvider = WCMCoreUtils.getSessionProvider();
+		sessionProvider = WCMCoreUtils.getSystemSessionProvider();
 		categoriesNode = session.getRootNode().getNode("sites content/live/classic/ApplicationData/NewsletterApplication/Categories");
 		categoriesNode.setProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR, new String[]{this.userRoot});
 		session.save();	

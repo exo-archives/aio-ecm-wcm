@@ -11,7 +11,6 @@ import javax.portlet.PortletPreferences;
 
 import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.portal.UIPortal;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -186,8 +185,7 @@ public class UIContentSearchResult extends UIGrid {
       NodeLocation nodeLocation = wcmConfService.getLivePortalsLocation(repository);
       workspace = nodeLocation.getWorkspace();
     }
-    Session session = 
-      SessionProviderFactory.createSessionProvider().getSession(workspace, maRepository);
+    Session session = Utils.getSessionProvider().getSession(workspace, maRepository);
     return session;
   }
 

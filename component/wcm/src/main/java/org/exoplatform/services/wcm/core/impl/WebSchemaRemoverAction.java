@@ -21,12 +21,12 @@ import javax.jcr.Node;
 import org.apache.commons.chain.Context;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.command.action.Action;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -42,13 +42,12 @@ public class WebSchemaRemoverAction implements Action{
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     WebSchemaConfigService schemaConfigService = 
       (WebSchemaConfigService) container.getComponentInstanceOfType(WebSchemaConfigService.class);    
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
     try {      
       schemaConfigService.updateSchemaOnRemove(sessionProvider, node);
     } catch (Exception e) { 
       log.error("Error when update web schema before remove node: " + node.getPath() , e.fillInStackTrace());
     }       
-    sessionProvider.close();
     return false;    
   }
 

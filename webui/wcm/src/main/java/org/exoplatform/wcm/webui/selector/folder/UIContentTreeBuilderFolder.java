@@ -19,10 +19,10 @@ package org.exoplatform.wcm.webui.selector.folder;
 import javax.jcr.Node;
 import javax.jcr.Session;
 
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.selector.UISelectPathPanel;
 import org.exoplatform.wcm.webui.selector.content.UIContentTreeBuilder;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -82,15 +82,13 @@ public class UIContentTreeBuilderFolder extends UIContentTreeBuilder {
       String workSpaceName = values.substring(values.lastIndexOf("/") + 1);
       String nodePath = values.substring(0, values.lastIndexOf("/"));
       ManageableRepository manageableRepository = contentTreeBuilder.getApplicationComponent(RepositoryService.class).getDefaultRepository();
-      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+      SessionProvider sessionProvider = Utils.getSessionProvider();
       Session session = sessionProvider.getSession(workSpaceName, manageableRepository);
       Node rootNode = (Node)session.getItem(nodePath);
       UISelectPathPanel selectPathPanel = contentTreeBuilder.getAncestorOfType(UIContentBrowsePanelFolder.class).getChild(UISelectPathPanelFolder.class);
       selectPathPanel.setParentNode(rootNode);
       selectPathPanel.updateGrid();
       event.getRequestContext().addUIComponentToUpdateByAjax(selectPathPanel);
-      session.logout();
-      sessionProvider.close();
     }
   }
 }

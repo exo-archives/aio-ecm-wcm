@@ -28,9 +28,7 @@ import javax.jcr.Session;
 
 import org.exoplatform.ecm.webui.utils.Utils;
 import org.exoplatform.portal.webui.container.UIContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.services.cms.BasePath;
 import org.exoplatform.services.cms.drives.DriveData;
 import org.exoplatform.services.cms.drives.ManageDriveService;
@@ -223,7 +221,7 @@ public class UIContentTreeBuilder extends UIContainer {
    * @throws Exception the exception
    */
   protected Session getSession(String workSpaceName) throws Exception {  
-    return SessionProviderFactory.createSessionProvider().getSession(workSpaceName, 
+    return org.exoplatform.wcm.webui.Utils.getSessionProvider().getSession(workSpaceName, 
                                                                      getApplicationComponent(RepositoryService.class).getDefaultRepository());
   }
 
@@ -265,7 +263,7 @@ public class UIContentTreeBuilder extends UIContainer {
     List<DriveData> listDris = getDrives(repositoryService);
     ManageableRepository manageableRepository = repositoryService.getDefaultRepository();
     this.repositoryName = manageableRepository.getConfiguration().getName();
-    SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+    SessionProvider sessionProvider = org.exoplatform.wcm.webui.Utils.getSessionProvider();
 
     // Add General Drives into tree view
     list.add(new UIContentTreeNode("General Drives"));
@@ -278,8 +276,6 @@ public class UIContentTreeBuilder extends UIContainer {
     // Add Personal Drives into tree view
     list.add(new UIContentTreeNode("Personal Drives"));
     addTreeFromDrives(sessionProvider, manageableRepository, "/Personal Drives", list, personalDrives(nodeHierarchyCreator, listDris));
-    
-    sessionProvider.close();
   }
 
   /**
@@ -326,15 +322,13 @@ public class UIContentTreeBuilder extends UIContainer {
       String workSpaceName = values.substring(values.lastIndexOf("/") + 1);
       String nodePath = values.substring(0, values.lastIndexOf("/"));
       ManageableRepository manageableRepository = contentTreeBuilder.getApplicationComponent(RepositoryService.class).getDefaultRepository();
-      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+      SessionProvider sessionProvider = org.exoplatform.wcm.webui.Utils.getSessionProvider();
       Session session = sessionProvider.getSession(workSpaceName, manageableRepository);
       Node rootNode = (Node)session.getItem(nodePath);
       UISelectPathPanel selectPathPanel = contentTreeBuilder.getAncestorOfType(UIContentBrowsePanel.class).getChild(UISelectPathPanel.class);
       selectPathPanel.setParentNode(rootNode);
       selectPathPanel.updateGrid();
       event.getRequestContext().addUIComponentToUpdateByAjax(selectPathPanel);
-      session.logout();
-      sessionProvider.close();
     }
   }
 }

@@ -91,8 +91,6 @@ public class NodeLocation {
       SessionProvider sessionProvider = sessionProviderService.getSessionProvider(null);
       Session session = sessionProvider.getSession(nodeLocation.getWorkspace(), repository);
       Node node = (Node)session.getItem(nodeLocation.getPath());
-      session.logout();
-      sessionProvider.close();
       return node;
     } catch (Exception e) {
       log.error("Exception in getNodeByLocation: ", e.fillInStackTrace());

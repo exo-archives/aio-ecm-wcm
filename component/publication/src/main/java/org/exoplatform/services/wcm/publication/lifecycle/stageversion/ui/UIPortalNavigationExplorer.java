@@ -81,7 +81,7 @@ public class UIPortalNavigationExplorer extends UIContainer {
     UIPortalApplication portalApplication = Util.getUIPortalApplication();
     LocaleConfig localeConfig = getApplicationComponent(LocaleConfigService.class).getLocaleConfig(portalApplication.getLocale().getLanguage());
     WCMService wcmService = getApplicationComponent(WCMService.class);
-    SessionProvider sessionProvider =WCMCoreUtils.getSessionProvider();
+    SessionProvider sessionProvider =WCMCoreUtils.getSystemSessionProvider();
     if(wcmService.isSharedPortal(sessionProvider, portalName)) {
       UIPublicationTree tree = addChild(UIPublicationTree.class, null, "UIPortalTree");      
       for(String portal : this.runningPortals) {
@@ -110,7 +110,6 @@ public class UIPortalNavigationExplorer extends UIContainer {
       tree.setIcon("DefaultPageIcon");    
       tree.setSelectedIcon("DefaultPageIcon");
     }
-    sessionProvider.close();
   }
 
   /**

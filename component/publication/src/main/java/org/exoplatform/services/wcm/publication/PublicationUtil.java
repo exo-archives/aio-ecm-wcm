@@ -261,7 +261,7 @@ public class PublicationUtil {
         nodeIdentifier = preference.getValues().get(0).toString();
       }      
     }
-    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
     if (repositoryName != null && workspaceName != null && nodeIdentifier != null) {
       Session session = sessionProvider.getSession(workspaceName, repositoryService.getRepository(repositoryName));        
       Node content = null;
@@ -271,9 +271,6 @@ public class PublicationUtil {
         try {
 	        content = (Node)session.getItem(nodeIdentifier);
         } catch (RepositoryException re) {}
-      } finally {
-        if (session != null) session.logout();
-        sessionProvider.close();
       }
       return content;
     }

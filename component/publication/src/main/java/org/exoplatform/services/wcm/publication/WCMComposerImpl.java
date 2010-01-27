@@ -244,10 +244,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 				if (node!=null) oid = node.getUUID();
 			} catch (RepositoryException e) {
 				if (log.isInfoEnabled()) log.info("Can't find UUID for path : "+workspace+":"+path);
-			} finally {
-				sessionProvider.close();
 			}
-
 	  		
 			/* remove live cache */
 			String hash = getHash(path, null);

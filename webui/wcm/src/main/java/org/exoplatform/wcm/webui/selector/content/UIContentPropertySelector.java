@@ -10,13 +10,13 @@ import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.NodeTypeManager;
 import javax.jcr.nodetype.PropertyDefinition;
 
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cms.BasePath;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPopupWindow;
@@ -64,7 +64,7 @@ public class UIContentPropertySelector extends UIForm{
     UIFormSelectBox uiSelect = new UIFormSelectBox(METADATA_TYPE, METADATA_TYPE, options);
     uiSelect.setOnChange("ChangeMetadataType");
     addUIFormInput(uiSelect);
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = Utils.getSystemSessionProvider();
     RepositoryService repoService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manRepository = repoService.getCurrentRepository();
     //String workspaceName = manRepository.getConfiguration().getSystemWorkspaceName();
@@ -83,15 +83,13 @@ public class UIContentPropertySelector extends UIForm{
     }
     addUIFormInput(new UIFormRadioBoxInput(PROPERTY_SELECT, null, properties).
         setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN));
-    session.logout();
-    sessionProvider.close();
   }
 
   public void setFieldName(String fieldName) { this.fieldName = fieldName ; }
 
   public void renderProperties(String metadata) throws Exception {
     properties.clear() ;
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = Utils.getSystemSessionProvider();
     RepositoryService repoService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manRepository = repoService.getCurrentRepository();
     String workspaceName = manRepository.getConfiguration().getSystemWorkspaceName();

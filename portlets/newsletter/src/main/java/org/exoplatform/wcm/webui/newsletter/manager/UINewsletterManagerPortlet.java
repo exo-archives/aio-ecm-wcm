@@ -97,7 +97,6 @@ public class UINewsletterManagerPortlet extends UIPortletApplication {
       editPermission.add(supperUser);
       SessionProvider sessionProvider = Utils.getSessionProvider();
       managerUserHandler.addAdministrator(sessionProvider, NewsLetterUtil.getPortalName(), supperUser);
-      sessionProvider.close();
     }
     return editPermission;
 	}

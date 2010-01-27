@@ -146,6 +146,10 @@
     </init-params>
   </component>
 
+  <component>
+    <type>org.exoplatform.services.jcr.impl.ext.action.SessionActionCatalog</type>
+  </component>
+
   <external-component-plugins>
     <target-component>org.exoplatform.portal.config.UserACL</target-component>
     <component-plugin>

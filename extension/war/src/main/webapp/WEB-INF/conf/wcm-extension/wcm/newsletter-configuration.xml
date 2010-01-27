@@ -227,7 +227,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/templates/newsletterBasicTemplate.xml</string>
+              <string>war:/conf/wcm-artifacts/site-resources/newsletter/newsletterBasicTemplate.xml</string>
             </field>
           </object>
         </object-param>
@@ -249,7 +249,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/templates/newsletterBasicTemplate.xml</string>
+              <string>war:/conf/wcm-artifacts/site-resources/newsletter/newsletterBasicTemplate.xml</string>
             </field>
           </object>
         </object-param>
@@ -283,7 +283,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/templates/newsletterBasicTemplate.xml</string>
+              <string>war:/conf/wcm-artifacts/site-resources/newsletter/newsletterBasicTemplate.xml</string>
             </field>
           </object>
         </object-param>

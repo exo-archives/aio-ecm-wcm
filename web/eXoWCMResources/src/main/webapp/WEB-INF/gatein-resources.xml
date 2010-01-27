@@ -32,7 +32,7 @@
     <css-path>/skin/DefaultSkin/Stylesheet.css</css-path>
   </portal-skin>
   
-  <javascript>
+  <!-- javascript>
     <param>
       <js-module>eXo.wcm.Util</js-module>
       <js-path>/javascript/eXo/wcm/Util.js</js-path>
@@ -45,7 +45,7 @@
       <js-module>eXo.wcm.Util</js-module>
       <js-path>/javascript/eXo/wcm/Services.js</js-path>
     </param>
-  </javascript>
+  </javascript-->
   
 </gatein-resources>
 

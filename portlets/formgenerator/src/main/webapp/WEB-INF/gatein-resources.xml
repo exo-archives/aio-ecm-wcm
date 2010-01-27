@@ -53,12 +53,12 @@
     <css-path>/skin/FormGeneratorPortlet/DefaultStylesheet.css</css-path>
   </portlet-skin>
   
-  <javascript>
+  <!-- javascript>
     <param>
       <js-module>eXo.wcm.UIFormGeneratorPortlet</js-module>
       <js-path>/javascript/eXo/wcm/FormGeneratorPortlet/UIFormGeneratorPortlet.js</js-path>
     </param>
-  </javascript>
+  </javascript-->
   
 </gatein-resources>
 

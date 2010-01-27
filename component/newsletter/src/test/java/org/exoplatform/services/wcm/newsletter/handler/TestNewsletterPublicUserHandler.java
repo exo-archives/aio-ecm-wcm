@@ -75,7 +75,7 @@ public class TestNewsletterPublicUserHandler extends BaseWCMTestCase {
 		newsletterSubscriptionHandler = newsletterManagerService.getSubscriptionHandler();
 		newsletterPublicUserHandler = newsletterManagerService.getPublicUserHandler();
 		
-		sessionProvider = WCMCoreUtils.getSessionProvider();
+		sessionProvider = WCMCoreUtils.getSystemSessionProvider();
 		
 		newsletterCategoryConfig = new NewsletterCategoryConfig();
 		newsletterCategoryConfig.setName("CatNameNewsletters");
@@ -221,10 +221,6 @@ public class TestNewsletterPublicUserHandler extends BaseWCMTestCase {
       super.tearDown();
       session.getRootNode().getNode("sites content/live").getNode("classic").remove();
       session.save();
-    } catch (Exception e) {
-      sessionProvider.close();
-    } finally {
-      sessionProvider.close();
-    }
+    } catch (Exception e) {}
 	}
 }

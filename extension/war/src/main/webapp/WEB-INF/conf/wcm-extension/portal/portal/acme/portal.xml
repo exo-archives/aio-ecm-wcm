@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!--
+  <!--
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -60,6 +60,26 @@
                 <value>false</value>
                 <read-only>false</read-only>
               </preference>
+              <preference>
+                <name>ShowTOC</name>
+                <value>false</value>
+                <read-only>false</read-only>
+              </preference>
+              <preference>
+                <name>ShowTags</name>
+                <value>false</value>
+                <read-only>false</read-only>
+              </preference>
+              <preference>
+                <name>ShowCategories</name>
+                <value>false</value>
+                <read-only>false</read-only>
+              </preference>
+              <preference>
+                <name>ShowTitle</name>
+                <value>false</value>
+                <read-only>false</read-only>
+              </preference>
             </preferences>
           </portlet>
           <title>Banner</title>
@@ -99,6 +119,26 @@
                 <value>false</value>
                 <read-only>false</read-only>
               </preference>
+              <preference>
+                <name>ShowTOC</name>
+                <value>false</value>
+                <read-only>false</read-only>
+              </preference>
+              <preference>
+                <name>ShowTags</name>
+                <value>false</value>
+                <read-only>false</read-only>
+              </preference>
+              <preference>
+                <name>ShowCategories</name>
+                <value>false</value>
+                <read-only>false</read-only>
+              </preference>
+              <preference>
+                <name>ShowTitle</name>
+                <value>false</value>
+                <read-only>false</read-only>
+              </preference>
             </preferences>
           </portlet>
           <title>Searchbox</title>
@@ -135,6 +175,26 @@
               </preference>
               <preference>
                 <name>ShowPrintAction</name>
+                <value>false</value>
+                <read-only>false</read-only>
+              </preference>
+              <preference>
+                <name>ShowTOC</name>
+                <value>false</value>
+                <read-only>false</read-only>
+              </preference>
+              <preference>
+                <name>ShowTags</name>
+                <value>false</value>
+                <read-only>false</read-only>
+              </preference>
+              <preference>
+                <name>ShowCategories</name>
+                <value>false</value>
+                <read-only>false</read-only>
+              </preference>
+              <preference>
+                <name>ShowTitle</name>
                 <value>false</value>
                 <read-only>false</read-only>
               </preference>
@@ -178,6 +238,26 @@
             <value>false</value>
             <read-only>false</read-only>
           </preference>
+          <preference>
+            <name>ShowTOC</name>
+            <value>false</value>
+            <read-only>false</read-only>
+          </preference>
+          <preference>
+            <name>ShowTags</name>
+            <value>false</value>
+            <read-only>false</read-only>
+          </preference>
+          <preference>
+            <name>ShowCategories</name>
+            <value>false</value>
+            <read-only>false</read-only>
+          </preference>
+          <preference>
+            <name>ShowTitle</name>
+            <value>false</value>
+            <read-only>false</read-only>
+          </preference>
         </preferences>
       </portlet>
       <title>Navigation</title>
@@ -216,6 +296,26 @@
           </preference>
           <preference>
             <name>ShowPrintAction</name>
+            <value>false</value>
+            <read-only>false</read-only>
+          </preference>
+          <preference>
+            <name>ShowTOC</name>
+            <value>false</value>
+            <read-only>false</read-only>
+          </preference>
+          <preference>
+            <name>ShowTags</name>
+            <value>false</value>
+            <read-only>false</read-only>
+          </preference>
+          <preference>
+            <name>ShowCategories</name>
+            <value>false</value>
+            <read-only>false</read-only>
+          </preference>
+          <preference>
+            <name>ShowTitle</name>
             <value>false</value>
             <read-only>false</read-only>
           </preference>

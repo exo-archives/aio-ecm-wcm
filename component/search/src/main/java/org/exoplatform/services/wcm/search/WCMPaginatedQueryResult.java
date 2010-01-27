@@ -112,7 +112,7 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
     WCMComposer wcmComposer = WCMCoreUtils.getService(WCMComposer.class);
     HashMap<String, String> filters = new HashMap<String, String>();
     filters.put(WCMComposer.FILTER_MODE, WCMComposer.MODE_LIVE);
-    return wcmComposer.getContent(nodeLocation.getRepository(), nodeLocation.getWorkspace(), nodeLocation.getPath(), filters, WCMCoreUtils.getSessionProvider());
+    return wcmComposer.getContent(nodeLocation.getRepository(), nodeLocation.getWorkspace(), nodeLocation.getPath(), filters, WCMCoreUtils.getSystemSessionProvider());
   }
   
   protected Node getNodeToCheckState(Node node)throws Exception{

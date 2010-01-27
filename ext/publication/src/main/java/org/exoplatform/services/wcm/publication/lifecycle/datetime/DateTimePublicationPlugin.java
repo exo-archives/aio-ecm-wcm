@@ -115,7 +115,7 @@ public class DateTimePublicationPlugin extends StageAndVersionPublicationPlugin 
 	public void publishContent() {
 		RepositoryService repositoryService = WCMCoreUtils.getService(RepositoryService.class);
 		WCMPublicationService wcmPublicationService = WCMCoreUtils.getService(WCMPublicationService.class);
-		SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+		SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
 		try {
 			for (String repository : repositories) {
 				for (String workspace : workspaces) {
@@ -151,8 +151,6 @@ public class DateTimePublicationPlugin extends StageAndVersionPublicationPlugin 
 			}
 		} catch (Exception e) {
 			log.error("Exception when publish content by date time", e);
-		} finally {
-			sessionProvider.close();
 		}
 	}
 }

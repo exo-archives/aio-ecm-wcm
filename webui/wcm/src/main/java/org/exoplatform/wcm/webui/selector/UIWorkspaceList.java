@@ -180,12 +180,9 @@ public class UIWorkspaceList extends UIForm {
   private Node getRootNode(String repositoryName, String workspaceName) throws RepositoryException, RepositoryConfigurationException {
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-    SessionProvider sessionProvider =  WCMCoreUtils.getSessionProvider();
+    SessionProvider sessionProvider =  WCMCoreUtils.getSystemSessionProvider();
     Session session = sessionProvider.getSession(workspaceName, manageableRepository);
-    Node rootNode = session.getRootNode();
-    session.logout();
-    sessionProvider.close();
-    return rootNode;
+    return session.getRootNode();
   }
   
   /**

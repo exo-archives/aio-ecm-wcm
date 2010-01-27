@@ -14,9 +14,9 @@
   </component>
   
   <component>
-    <type>org.exoplatform.services.wcm.images.RESTImagesRendererService</type>    
+    <type>org.exoplatform.services.wcm.images.RESTImagesRendererService</type>
   </component>
-    
+
   <component>
     <key>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService</key>
     <type>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsServiceImpl</type>
@@ -145,13 +145,13 @@
 	<external-component-plugins>
 		<target-component>org.exoplatform.services.listener.ListenerService</target-component>
 		<component-plugin>
-      <name>UserPortalConfigService.portal.event.createPortal</name>
+      <name>UserPortalConfigService.portal.onCreate</name>
       <set-method>addListener</set-method>
       <type>org.exoplatform.services.wcm.portal.listener.CreateLivePortalEventListener</type>
       <description>this listener create new live portal content storage</description>
     </component-plugin>
     <component-plugin>
-      <name>UserPortalConfigService.portal.event.removePortal</name>
+      <name>UserPortalConfigService.portal.onRemove</name>
       <set-method>addListener</set-method>
       <type>org.exoplatform.services.wcm.portal.listener.RemoveLivePortalEventListener</type>
       <description>this listener  new live portal content storage</description>

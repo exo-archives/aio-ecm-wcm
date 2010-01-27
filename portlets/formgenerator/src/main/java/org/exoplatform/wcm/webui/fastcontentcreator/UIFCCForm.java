@@ -39,7 +39,6 @@ import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.ecm.webui.tree.selectone.UIOneNodePathSelector;
 import org.exoplatform.ecm.webui.tree.selectone.UIOneTaxonomySelector;
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.BasePath;
@@ -157,7 +156,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
     String userName = Util.getPortalRequestContext().getRemoteUser() ;
     String repository = UIFCCUtils.getPreferenceRepository() ;
     try {      
-      if(SessionProviderFactory.isAnonim()) {
+      if(userName == null) {
         return templateService.getTemplatePathByAnonymous(true, documentType_, repository);
       }
       return templateService.getTemplatePathByUser(true, documentType_, userName, repository) ;

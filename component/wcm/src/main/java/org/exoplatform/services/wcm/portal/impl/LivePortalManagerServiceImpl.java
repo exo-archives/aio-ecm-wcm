@@ -212,25 +212,21 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService, S
 
   public void start() {
     log.info("Start LivePortalManagementService....");
-//    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
-//    Session session = null;
-//    try {
-//      ManageableRepository repository = repositoryService.getCurrentRepository();
-//      NodeLocation nodeLocation = wcmConfigService.getLivePortalsLocation(repository.getConfiguration().getName());
-//      session = sessionProvider.getSession(nodeLocation.getWorkspace(),repository);
-//      String statement = "select * from exo:portalFolder where jcr:path like '" + nodeLocation.getPath() + "/%'";
-//      Query query = session.getWorkspace().getQueryManager().createQuery(statement,Query.SQL);
-//      QueryResult result = query.execute();
-//      for(NodeIterator iterator = result.getNodes(); iterator.hasNext();) {
-//        Node portalNode = iterator.nextNode();
-//        livePortalPaths.putIfAbsent(portalNode.getName(),portalNode.getPath());
-//      }
-//    } catch (Exception e) {
-//      log.error("Error when starting LivePortalManagerService: ", e.fillInStackTrace());
-//    } finally {
-//      if (session != null) session.logout();
-//      sessionProvider.close();
-//    }
+    try {
+      SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
+      ManageableRepository repository = repositoryService.getCurrentRepository();
+      NodeLocation nodeLocation = wcmConfigService.getLivePortalsLocation(repository.getConfiguration().getName());
+      Session session = sessionProvider.getSession(nodeLocation.getWorkspace(),repository);
+      String statement = "select * from exo:portalFolder where jcr:path like '" + nodeLocation.getPath() + "/%'";
+      Query query = session.getWorkspace().getQueryManager().createQuery(statement,Query.SQL);
+      QueryResult result = query.execute();
+      for(NodeIterator iterator = result.getNodes(); iterator.hasNext();) {
+        Node portalNode = iterator.nextNode();
+        livePortalPaths.putIfAbsent(portalNode.getName(),portalNode.getPath());
+      }
+    } catch (Exception e) {
+      log.error("Error when starting LivePortalManagerService: ", e.fillInStackTrace());
+    }
   }
 
   public void stop() {    

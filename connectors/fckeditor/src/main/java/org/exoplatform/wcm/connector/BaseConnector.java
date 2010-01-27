@@ -130,9 +130,8 @@ public abstract class BaseConnector {
                                               String repositoryName,
                                               String jcrPath,
                                               String command) throws Exception {
-    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
     Node sharedPortalNode = livePortalManagerService.getLiveSharedPortal(sessionProvider, repositoryName);
-    sessionProvider.close();
     Node activePortalNode = getCurrentPortalNode(repositoryName,
                                                  jcrPath,
                                                  runningPortal,
@@ -351,11 +350,10 @@ public abstract class BaseConnector {
   protected Node getContent(String repositoryName, String workspaceName, String jcrPath, String NodeTypeFilter, boolean isSystemSession) throws Exception {
     if (jcrPath == null || jcrPath.trim().length() == 0)
       return null;
-    SessionProvider sessionProvider = isSystemSession?WCMCoreUtils.getSessionProvider():WCMCoreUtils.getUserSessionProvider();
-    Session session = null;
     try {
+      SessionProvider sessionProvider = isSystemSession?WCMCoreUtils.getSystemSessionProvider():WCMCoreUtils.getUserSessionProvider();
       ManageableRepository repository = repositoryService.getRepository(repositoryName);
-      session = sessionProvider.getSession(workspaceName, repository);
+      Session session = sessionProvider.getSession(workspaceName, repository);
       Node content = (Node) session.getItem(jcrPath);
       if (content.isNodeType("exo:taxonomyLink")) {
     	  content = linkManager.getTarget(content);
@@ -365,9 +363,6 @@ public abstract class BaseConnector {
     	  return content;
     } catch (Exception e) {
       log.error("Error when perform getContent: ", e.fillInStackTrace());
-    } finally {
-      if (session != null) session.logout();
-      sessionProvider.close();
     }
     return null;
   }
@@ -406,7 +401,7 @@ public abstract class BaseConnector {
       return null;
     Node currentPortal = null;
     List<Node> livePortaNodes = new ArrayList<Node>();
-    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
     try {
       livePortaNodes = livePortalManagerService.getLivePortals(sessionProvider, repositoryName);
       if (sharedPortal != null)
@@ -418,8 +413,6 @@ public abstract class BaseConnector {
       }
       if (currentPortal == null)
         currentPortal = livePortalManagerService.getLivePortal(sessionProvider, repositoryName, runningPortal);
-      
-      sessionProvider.close();
       return currentPortal;
     } catch (Exception e) {
       return null;

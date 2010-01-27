@@ -51,10 +51,11 @@ public class CreateLivePortalEventListener extends Listener<DataStorageImpl, Por
    */
   public final void onEvent(final Event<DataStorageImpl, PortalConfig> event) throws Exception {
     PortalConfig portalConfig = event.getData();
+    if (!PortalConfig.PORTAL_TYPE.equals(portalConfig.getType())) return;
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     LivePortalManagerService livePortalManagerService = (LivePortalManagerService) container
     .getComponentInstanceOfType(LivePortalManagerService.class);
-    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
     // Create site content storage for the portal
     try {
       livePortalManagerService.addLivePortal(sessionProvider, portalConfig);
@@ -84,7 +85,6 @@ public class CreateLivePortalEventListener extends Listener<DataStorageImpl, Por
       log.error("Error when create drive for portal: " + portalConfig.getName(),
                 e.fillInStackTrace());
     }
-    sessionProvider.close();
   }
 
   private void createPortalDrive(Node portal, PortalConfig portalConfig, WCMConfigurationService wcmConfigService,ManageDriveService driveService) throws Exception {

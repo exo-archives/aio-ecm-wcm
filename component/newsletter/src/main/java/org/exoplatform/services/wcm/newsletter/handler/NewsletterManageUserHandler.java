@@ -139,9 +139,9 @@ public class NewsletterManageUserHandler {
    * @throws Exception the exception
    */
   public void addAdministrator(SessionProvider sessionProvider, String portalName, String userId) throws Exception{
-    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    Session session = sessionProvider.getSession(workspace, manageableRepository);
     try{
+      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       Node categoriesNode = (Node) session.getItem(NewsletterConstant.generateCategoryPath(portalName));
       List<String> listUsers = new ArrayList<String>();
       if(categoriesNode.hasProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR))
@@ -170,9 +170,6 @@ public class NewsletterManageUserHandler {
       session.save();
     }catch(Exception ex){
       log.info("Add administrator for newsletter failed because of ", ex.fillInStackTrace());
-    }finally{
-      session.logout();
-      sessionProvider.close();
     }
   }
   

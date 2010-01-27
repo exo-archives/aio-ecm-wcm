@@ -56,7 +56,7 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 		userHomeNode = newsletterApplicationNode.getNode("Users");
 		session.save();
 		
-		sessionProvider = WCMCoreUtils.getSessionProvider();
+		sessionProvider = WCMCoreUtils.getSystemSessionProvider();
 		newsletterManagerService = getService(NewsletterManagerService.class);
 		NewsletterCategoryHandler newsletterCategoryHandler = newsletterManagerService.getCategoryHandler();
 		NewsletterCategoryConfig newsletterCategoryConfig = new NewsletterCategoryConfig();
@@ -164,7 +164,7 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 	 * @throws Exception the exception
 	 */
 	public void testGetSubscriptionIdsByPublicUser() throws Exception {
-		SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+		SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
 		java.util.List<String> list = new ArrayList<String>();
 		for(int i = 0 ; i < 5; i++) {
 			newsletterSubscriptionConfig = new	NewsletterSubscriptionConfig();

@@ -298,7 +298,6 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent, UISel
         newsletterSubscriptionConfig.setRedactor(inputRedactorValue);
         subscriptionHandler.edit(sessionProvider, NewsLetterUtil.getPortalName(), newsletterSubscriptionConfig);
       }
-      sessionProvider.close();
       Utils.closePopupWindow(uiSubcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW);
     }
   }

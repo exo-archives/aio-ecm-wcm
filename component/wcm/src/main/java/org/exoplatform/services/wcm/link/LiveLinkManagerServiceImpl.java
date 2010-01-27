@@ -110,7 +110,7 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
    * @see org.exoplatform.services.wcm.link.LiveLinkManagerService#getBrokenLinks(java.lang.String)
    */
   public List<LinkBean> getBrokenLinks(String portalName) throws Exception {
-    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
     Node portal = livePortalManagerService.getLivePortal(sessionProvider, portalName);
     String path = portal.getPath();
     Session session = portal.getSession();
@@ -127,8 +127,6 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
         listBrokenLinks.add(linkBean);
       }      
     }
-    session.logout();
-    sessionProvider.close();
     return listBrokenLinks;
   }
 
@@ -156,10 +154,10 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
    * @see org.exoplatform.services.wcm.link.LiveLinkManagerService#validateLink()
    */
   public void updateLinks() throws Exception {
-    Collection<NodeLocation> nodeLocationCollection = configurationService.getAllLivePortalsLocation();
-    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
-    Session session = null;
     try {
+      Collection<NodeLocation> nodeLocationCollection = configurationService.getAllLivePortalsLocation();
+      SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
+      Session session = null;
       for (NodeLocation nodeLocation : nodeLocationCollection) {
         String repository = nodeLocation.getRepository();
         String workspace = nodeLocation.getWorkspace();
@@ -171,29 +169,20 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
     } catch (Exception e) {
       log.error("Error when perform updateLinks: ", e.fillInStackTrace());
     }
-    finally {
-      if (session != null) session.logout();
-      sessionProvider.close();
-    }
   }
 
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.link.LiveLinkManagerService#validateLink(java.lang.String)
    */
   public void updateLinks(String portalName) throws Exception {
-    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
-    Session session = null;
     try {
+      SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
       Node portal = livePortalManagerService.getLivePortal(sessionProvider, portalName);
       String path = portal.getPath();
-      session = portal.getSession();
+      Session session = portal.getSession();
       updateLinkStatus(session, "select * from exo:linkable where jcr:path like '" + path + "/%'"); 
     } catch (Exception e) {
       log.error("Error when perform updateLinks: ", e.fillInStackTrace());
-    }
-    finally {
-      if (session != null) session.logout();
-      sessionProvider.close();
     }
   }
 

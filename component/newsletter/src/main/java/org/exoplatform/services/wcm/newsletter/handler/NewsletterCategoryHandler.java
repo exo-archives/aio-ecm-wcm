@@ -174,10 +174,9 @@ public class NewsletterCategoryHandler {
    */
   public void add(SessionProvider sessionProvider, String portalName, NewsletterCategoryConfig categoryConfig) {
     log.info("Trying to add category " + categoryConfig.getName());
-    Session session = null;
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      session = sessionProvider.getSession(workspace, manageableRepository);
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
       Node categoriesNode = (Node)session.getItem(categoryPath);
       Node categoryNode = categoriesNode.addNode(categoryConfig.getName(), NewsletterConstant.CATEGORY_NODETYPE);
@@ -199,9 +198,6 @@ public class NewsletterCategoryHandler {
       session.save();
     } catch(Exception e) {
       log.error("Add category " + categoryConfig.getName() + " failed because of: ", e.fillInStackTrace());
-    } finally {
-      if (session != null) session.logout();
-      sessionProvider.close();
     }
   }
   
@@ -233,8 +229,6 @@ public class NewsletterCategoryHandler {
       log.info("Edit category " + categoryConfig.getName() + " failed because of ", ie.fillInStackTrace());
     } catch (Exception e) {
       log.info("Edit category " + categoryConfig.getName() + " failed because of ", e.fillInStackTrace());
-    }finally{
-      sessionProvider.close();
     }
   }
   

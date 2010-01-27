@@ -22,13 +22,13 @@ import java.util.List;
 import javax.jcr.Node;
 
 import org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.selector.UISelectPathPanel;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -132,11 +132,9 @@ public abstract class UIContentBrowsePanel extends UIBaseNodeTreeSelector implem
     selectPathPanel.setAcceptedMimeTypes(acceptedMimeTypes);
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     String currentPortalName = Util.getUIPortal().getName();
-    SessionProvider provider = SessionProviderFactory.createSessionProvider();
+    SessionProvider provider = Utils.getSessionProvider();
     currentPortal = livePortalManagerService.getLivePortal(provider, currentPortalName);
     currentPortalLocation = NodeLocation.make(currentPortal);
-    
-    provider.close();
   }
 
   @Override

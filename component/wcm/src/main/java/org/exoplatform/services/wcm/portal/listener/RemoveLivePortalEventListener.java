@@ -48,7 +48,7 @@ public class RemoveLivePortalEventListener extends Listener<DataStorageImpl, Por
   	PortalConfig portalConfig = event.getData();
   	String portalName = portalConfig.getName();
   	LivePortalManagerService livePortalManagerService = WCMCoreUtils.getService(LivePortalManagerService.class);
-  	SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();    
+  	SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();    
   	Node portal = livePortalManagerService.getLivePortal(sessionProvider, portalName);
   	
   	// Remove drive for the site content storage
@@ -72,8 +72,6 @@ public class RemoveLivePortalEventListener extends Listener<DataStorageImpl, Por
 		} catch (Exception e) {
 			log.error("Error when remove resource storage: " + portalName, e.fillInStackTrace());
 		}
-  	
-    sessionProvider.close();
   }
 
 }

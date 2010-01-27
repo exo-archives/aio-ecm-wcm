@@ -16,23 +16,13 @@
  */
 package org.exoplatform.services.wcm.newsletter;
 
-import java.util.Date;
 import java.util.List;
-
-import javax.jcr.Node;
-import javax.jcr.Session;
 
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.portal.config.UserPortalConfigService;
-import org.exoplatform.services.jcr.access.PermissionType;
-import org.exoplatform.services.jcr.core.ExtendedNode;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
-import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
-import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
-import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.picocontainer.Startable;
@@ -89,11 +79,10 @@ public class NewsletterInitializationService implements Startable {
    */
   public void start() {
     log.info("Starting NewsletterInitializationService ... ");
-//    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
-//    Session session = null;
 //    try {
+//      SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
 //      Node dummyNode = livePortalManagerService.getLivePortal(sessionProvider, portalNames.get(0));
-//      session = dummyNode.getSession();
+//      Session session = dummyNode.getSession();
 //      Node serviceFolder = session.getRootNode().getNode("exo:services");
 //      Node newsletterInitializationService = null;
 //      if (serviceFolder.hasNode("NewsletterInitializationService")) {
@@ -135,9 +124,6 @@ public class NewsletterInitializationService implements Startable {
 //      }
 //    } catch (Throwable e) {
 //      log.info("Starting NewsletterInitializationService fail because of ", e.fillInStackTrace());
-//    } finally {
-//      if (session != null) session.logout();
-//      sessionProvider.close();
 //    }
   }
 

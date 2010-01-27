@@ -25,7 +25,6 @@ import javax.jcr.Session;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.component.ComponentPlugin;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -133,7 +132,7 @@ public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Start
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     RepositoryService repositoryService = 
       (RepositoryService)container.getComponentInstanceOfType(RepositoryService.class);
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
     for (NodeLocation locationEntry: wcmConfigService.getAllLivePortalsLocation()) {
       String repoName = locationEntry.getRepository();
       try {
@@ -149,7 +148,6 @@ public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Start
         log.error("Error when try to create share portal folder for repository: "+ repoName, e.fillInStackTrace());
       }            
     }
-    sessionProvider.close();
   }
   
   /* (non-Javadoc)

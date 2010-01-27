@@ -70,7 +70,7 @@ public class TestNewsletterEntryHandler extends BaseWCMTestCase {
 		newsletterApplicationNode = (Node) session.getItem("/sites content/live/classic/ApplicationData/NewsletterApplication");
 		categoriesNode = newsletterApplicationNode.getNode("Categories");
 		
-		sessionProvider = WCMCoreUtils.getSessionProvider();
+		sessionProvider = WCMCoreUtils.getSystemSessionProvider();
 		
 		newsletterManagerService = getService(NewsletterManagerService.class);
 		newsletterCategoryHandler = newsletterManagerService.getCategoryHandler();
@@ -190,10 +190,6 @@ public class TestNewsletterEntryHandler extends BaseWCMTestCase {
       while(nodeIterator.hasNext()) {
     	  nodeIterator.nextNode().remove();
       }
-    } catch (Exception e) {
-      sessionProvider.close();
-    } finally {
-      sessionProvider.close();
-    }
+    } catch (Exception e) {}
   }
 }

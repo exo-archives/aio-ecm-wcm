@@ -108,13 +108,12 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
                                               String repositoryName,
                                               String jcrPath,
                                               String command) throws Exception {
-    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
     Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider, repositoryName);
     Node currentPortalNode = getCurrentPortalNode(repositoryName,
                                                   jcrPath,
                                                   runningPortal,
                                                   sharedPortal);
-    sessionProvider.close();
     if (currentFolder.length() == 0 || "/".equals(currentFolder))
       return buildXMLResponseForRoot(currentPortalNode, sharedPortal, command);
     String currentPortalRelPath = "/" + currentPortalNode.getName() + "/";

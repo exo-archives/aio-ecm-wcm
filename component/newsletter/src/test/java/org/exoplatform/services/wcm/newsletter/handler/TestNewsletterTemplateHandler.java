@@ -73,7 +73,7 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 	 * @throws Exception the exception
 	 */
 	public void testGetTemplate() throws Exception {
-		sessionProvider = WCMCoreUtils.getSessionProvider();
+		sessionProvider = WCMCoreUtils.getSystemSessionProvider();
 		newsletterCategoryConfig = new NewsletterCategoryConfig();
 		newsletterCategoryConfig.setName("CategoryName");
 		newsletterCategoryConfig.setTitle("CategoryTitle");
@@ -115,7 +115,7 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 	 * @throws Exception the exception
 	 */
 	public void testConvertAsTemplate() throws Exception {
-		sessionProvider = WCMCoreUtils.getSessionProvider();
+		sessionProvider = WCMCoreUtils.getSystemSessionProvider();
 		NewsletterCategoryConfig newsletterCategoryConfig1 = new NewsletterCategoryConfig();
 		newsletterCategoryConfig1.setName("CategoryName1");
 		newsletterCategoryConfig1.setTitle("CategoryTitle1");
@@ -160,7 +160,7 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 	 */
 	@SuppressWarnings("unchecked")
   public void testGetTemplates() throws Exception {
-		sessionProvider = WCMCoreUtils.getSessionProvider();
+		sessionProvider = WCMCoreUtils.getSystemSessionProvider();
 		NewsletterCategoryConfig newsletterCategoryConfig2 = new NewsletterCategoryConfig();
 		newsletterCategoryConfig2.setName("CategoryName2");
 		newsletterCategoryConfig2.setTitle("CategoryTitle2");

@@ -46,7 +46,7 @@ public class WCMCoreUtils {
    * 
    * @return the system session provider
    */
-  public static SessionProvider getSessionProvider() {
+  public static SessionProvider getSystemSessionProvider() {
     SessionProviderService sessionProviderService = getService(SessionProviderService.class);
     SessionProvider sessionProvider = sessionProviderService.getSystemSessionProvider(null);
     return sessionProvider;

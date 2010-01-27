@@ -98,7 +98,6 @@ public class NewsletterTemplateHandler {
         }
       }
       this.templates = templates;
-      sessionProvider.close();
       return templates;
     } catch (Exception e) {
       log.error("Get templates of category " + categoryConfig + " failed because of ", e.fillInStackTrace());

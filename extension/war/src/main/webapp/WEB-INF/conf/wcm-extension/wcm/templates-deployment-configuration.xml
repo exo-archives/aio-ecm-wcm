@@ -226,7 +226,7 @@
         </value-param>
         <value-param>
           <name>portlet.template.path</name>
-          <value>war:/conf/wcm/artifacts/application-templates/wcm-search</value>
+          <value>war:/conf/wcm-artifacts/application-templates/wcm-search</value>
         </value-param>
         <object-param>
           <name>default.searchPageLayout</name>
@@ -307,7 +307,7 @@
         </value-param>
         <value-param>
           <name>portlet.template.path</name>
-          <value>war:/conf/wcm/artifacts/application-templates/category-navigation</value>
+          <value>war:/conf/wcm-artifacts/application-templates/category-navigation</value>
         </value-param>
         <!-- object-param>        
             <name>DefaultVerticalHierachy</name>

@@ -419,9 +419,8 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
   @SuppressWarnings("unused")
   private boolean isSharedPortal(String portalName) throws Exception{
     LivePortalManagerService livePortalManagerService = PublicationUtil.getServices(LivePortalManagerService.class);
-    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
     Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
-    sessionProvider.close();
     return sharedPortal.getName().equals(portalName);    
   }
 

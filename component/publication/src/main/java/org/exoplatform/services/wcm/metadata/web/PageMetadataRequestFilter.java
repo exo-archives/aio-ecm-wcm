@@ -99,11 +99,10 @@ public class PageMetadataRequestFilter implements Filter {
   private void setPortalMetadata(HttpServletRequest req) throws Exception {
     String pathInfo = req.getPathInfo();
     PageMetadataService metadataRegistry = getService(PageMetadataService.class);
-    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
     HashMap<String,String> metadata = metadataRegistry.getPortalMetadata(sessionProvider, pathInfo);
     if(metadata != null) 
       req.setAttribute(PortalRequestContext.REQUEST_METADATA, metadata);
-    sessionProvider.close();
   }    
   
   /**
@@ -139,11 +138,10 @@ public class PageMetadataRequestFilter implements Filter {
     String workspace = parameter.substring(firstSlash + 1, secondSlash);
     String nodeIdentifier = parameter.substring(secondSlash + 1);
     RepositoryService repositoryService = getService(RepositoryService.class);
-    SessionProvider sessionProvider =WCMCoreUtils.getSessionProvider();
+    SessionProvider sessionProvider =WCMCoreUtils.getSystemSessionProvider();
     Node node = null;
-    Session session = null;
     try {
-      session = sessionProvider.getSession(workspace,repositoryService.getRepository(repository));
+      Session session = sessionProvider.getSession(workspace,repositoryService.getRepository(repository));
       if(nodeIdentifier.indexOf("/")<0) {
         node = session.getNodeByUUID(nodeIdentifier);
       }else {         
@@ -156,9 +154,6 @@ public class PageMetadataRequestFilter implements Filter {
       req.setAttribute("ParameterizedContentViewerPortlet.data.object",e);     
     }catch (Exception e) {
       req.setAttribute("ParameterizedContentViewerPortlet.data.object",new ItemNotFoundException());
-    }finally {
-      if (session != null) session.logout();
-      sessionProvider.close();
     }
     if(node != null) {      
       req.setAttribute("ParameterizedContentViewerPortlet.data.object",node);

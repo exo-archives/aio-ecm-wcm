@@ -156,7 +156,7 @@ public class NavigationEventListenerDelegate {
     String repositoryName = nodeLocation.getRepository();
     String workspaceName = nodeLocation.getWorkspace();
     String path = nodeLocation.getPath();
-    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
     Session session = sessionProvider.getSession(workspaceName, repositoryService.getRepository(repositoryName));
 
     QueryManager queryManager = session.getWorkspace().getQueryManager();
@@ -190,8 +190,6 @@ public class NavigationEventListenerDelegate {
         saveRemovedPageNode(navigationNodeUri, pageId, applicationId, content);
       }
     }
-    session.logout();
-    sessionProvider.close();
   }
 
   /**

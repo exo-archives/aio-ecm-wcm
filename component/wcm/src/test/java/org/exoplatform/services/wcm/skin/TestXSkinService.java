@@ -56,7 +56,7 @@ public class TestXSkinService extends BaseWCMTestCase {
 	 */
 	public void setUp() throws Exception {
 		super.setUp();
-		sessionProvider = WCMCoreUtils.getSessionProvider();
+		sessionProvider = WCMCoreUtils.getSystemSessionProvider();
 		skinService = getService(XSkinService.class);
 		documentNode = (Node) session.getItem("/sites content/live/classic/documents");
 		sharedCssNode = (Node) session.getItem("/sites content/live/classic/css");

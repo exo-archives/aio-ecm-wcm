@@ -225,7 +225,6 @@ public class NewsletterEntryHandler {
       sb.append(removeEncodedCharacter(xSkService.getActiveStylesheet(newsletterNode)));
       sb.append("</style>");
       sb.append(newsletterNode.getNode("default.html").getNode("jcr:content").getProperty("jcr:data").getString());
-      sessionProvider.close();
       return sb.toString();
     } catch (Exception e) {
       log.error("Error when get content: ", e.fillInStackTrace());
