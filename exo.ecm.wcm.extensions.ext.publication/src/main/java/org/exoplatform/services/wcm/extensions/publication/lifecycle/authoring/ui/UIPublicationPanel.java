@@ -443,11 +443,6 @@ public class UIPublicationPanel extends org.exoplatform.services.wcm.publication
     public List<State> getStates(Node cNode) throws Exception {
       List<State> states = new ArrayList<State>(); 
       String lifecycleName = getLifeCycle(cNode);
-      if (lifecycleName == null) {
-        reEnroll(cNode);
-        lifecycleName = getLifeCycle(cNode);
-      }
-      
       PublicationManager publicationManagerImpl = getApplicationComponent(PublicationManager.class);
       Lifecycle lifecycle = publicationManagerImpl.getLifecycle(lifecycleName);
       states = lifecycle.getStates();
@@ -464,13 +459,7 @@ public class UIPublicationPanel extends org.exoplatform.services.wcm.publication
       return lifecycleName;
     }
 
-    private void reEnroll(Node cNode) throws Exception {
-      LOG.warn("Could not retrieve lifecycle, attempting to enroll again");
-      String remoteUser = Util.getPortalRequestContext().getRemoteUser();
-      String portalOwner = Util.getPortalRequestContext().getPortalOwner();
-      WCMPublicationService wcmPublicationService = this.getApplicationComponent(WCMPublicationService.class);
-      wcmPublicationService.enrollNodeInLifecycle(cNode, portalOwner, remoteUser);
-    }
+  
     
 
 }
