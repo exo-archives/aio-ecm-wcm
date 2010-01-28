@@ -2,11 +2,11 @@
 
 <configuration>
 	<component>
-		<type>org.exoplatform.wcm.extentions.component.rest.CopyContentFile</type>
+		<type>org.exoplatform.wcm.extensions.component.rest.CopyContentFile</type>
 		<init-params>
 		    <value-param>
 		     <name>stagingStorage</name>
-		     <value>D:\exo-bin\eXoWCM-1.2.2-tomcat_\eXoWCM-1.2.2-tomcat\export</value>
+		     <value>D:\exo-bin\eXoWCM-1.2.2-tomcat_33\eXoWCM-1.2.2-tomcat\export</value>
 		    </value-param>
 		    <value-param>
 		     <name>targetKey</name>
