@@ -23,19 +23,20 @@ import org.exoplatform.services.wcm.extensions.publication.lifecycle.authoring.u
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig.Lifecycle;
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig.State;
 import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
+import org.exoplatform.services.wcm.publication.WCMComposer;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.config.VersionData;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.config.VersionLog;
 import org.exoplatform.services.wcm.publication.listener.navigation.NavigationEventListenerDelegate;
 import org.exoplatform.services.wcm.publication.listener.page.PageEventListenerDelegate;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.form.UIForm;
 
-
 /**
- * Created by The eXo Platform MEA Author : 
- * haikel.thamri@exoplatform.com
+ * Created by The eXo Platform MEA Author : haikel.thamri@exoplatform.com
  */
 public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin {
 
@@ -462,12 +463,41 @@ public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin
     private Node getLiveRevision(Node node) {
 	try {
 	    String nodeVersionUUID = node.getProperty(StageAndVersionPublicationConstant.LIVE_REVISION_PROP).getString();
-	    if ("".equals(nodeVersionUUID) && PublicationDefaultStates.PUBLISHED.equals(StageAndVersionPublicationConstant.CURRENT_STATE))
+	    if ("".equals(nodeVersionUUID)
+		    && PublicationDefaultStates.PUBLISHED.equals(node.getProperty(StageAndVersionPublicationConstant.CURRENT_STATE).getString()))
 		return node;
 	    return node.getVersionHistory().getSession().getNodeByUUID(nodeVersionUUID);
 	} catch (Exception e) {
 	    return null;
 	}
+    }
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getNodeView(javax.jcr.Node, java.util.Map)
+     */
+    public Node getNodeView(Node node, Map<String, Object> context) throws Exception {
+	// don't display content if state is enrolled or obsolete
+	WCMPublicationService wcmPublicationService = WCMCoreUtils.getService(WCMPublicationService.class);
+	String name=node.getName();
+	String uuid=node.getProperty("jcr:uuid").getString();
+	String state=node.getProperty("publication:currentState").getString();
+	String currentState = wcmPublicationService.getContentState(node);
+	if (PublicationDefaultStates.ENROLLED.equals(currentState) || PublicationDefaultStates.OBSOLETE.equals(currentState))
+	    return null;
+
+	// if current mode is edit mode
+	if (context.get(WCMComposer.FILTER_MODE).equals(WCMComposer.MODE_EDIT))
+	    return node;
+
+	// if current mode is live mode
+	Node liveNode = getLiveRevision(node);
+	if(liveNode.hasNode("jcr:frozenNode")){
+	    return liveNode.getNode("jcr:frozenNode");
+	}
+	else{
+	    return liveNode;
+	}
+	
     }
 
 }
