@@ -151,7 +151,7 @@ public abstract class UICLVContainer extends UIContainer implements RefreshDeleg
     public void execute(Event<UICLVFolderMode> event) throws Exception {
       UICLVContainer uiListViewerBase = event.getSource();
       UICLVConfig viewerManagementForm = uiListViewerBase.createUIComponent(UICLVConfig.class, null, null);
-      Utils.createPopupWindow(uiListViewerBase, viewerManagementForm, "UIViewerManagementPopupWindow", 800, 600);
+      Utils.createPopupWindow(uiListViewerBase, viewerManagementForm, "UIViewerManagementPopupWindow", 800);
     }    
   }
 

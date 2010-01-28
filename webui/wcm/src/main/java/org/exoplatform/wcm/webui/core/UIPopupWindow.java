@@ -29,7 +29,7 @@ import org.exoplatform.webui.event.EventListener;
  * Oct 29, 2009  
  */
 @ComponentConfig(  
-	template =  "system:/groovy/webui/core/UIPopupWindow.gtmpl",
+	template =  "classpath:groovy/wcm/webui/core/UIPopupWindow.gtmpl",
 	events = @EventConfig(listeners = UIPopupWindow.CloseActionListener.class, name = "ClosePopup")  
 )
 public class UIPopupWindow extends org.exoplatform.webui.core.UIPopupWindow {

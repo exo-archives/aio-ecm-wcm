@@ -173,7 +173,7 @@ public class UIPresentationContainer extends UIContainer{
 			UIPortletConfig portletConfig = presentationContainer.createUIComponent(UIPortletConfig.class, null, null);
 			WebUIPropertiesConfigService propertiesConfigService = presentationContainer.getApplicationComponent(WebUIPropertiesConfigService.class);
 			PopupWindowProperties popupProperties = (PopupWindowProperties)propertiesConfigService.getProperties(WebUIPropertiesConfigService.SCV_POPUP_SIZE_QUICK_EDIT);
-			Utils.createPopupWindow(presentationContainer, portletConfig, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW, popupProperties.getWidth(), popupProperties.getHeight());
+			Utils.createPopupWindow(presentationContainer, portletConfig, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW, popupProperties.getWidth());
 			portletConfig.init();
 		}
 	}

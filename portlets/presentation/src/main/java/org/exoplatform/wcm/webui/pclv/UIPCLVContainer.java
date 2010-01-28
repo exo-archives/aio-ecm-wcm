@@ -245,11 +245,7 @@ public class UIPCLVContainer extends UIContainer {
 		public void execute(Event<UIPCLVContainer> event) throws Exception {
 			UIPCLVContainer uiContentViewerContainer = event.getSource();
 			UIPCLVConfig parameterizedForm = uiContentViewerContainer.createUIComponent(UIPCLVConfig.class, null, null);
-			Utils.createPopupWindow(uiContentViewerContainer,
-															parameterizedForm,
-															UIPCLVPortlet.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW,
-															650,
-															800);
+			Utils.createPopupWindow(uiContentViewerContainer, parameterizedForm, UIPCLVPortlet.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW, 650);
 		}
 	}
 

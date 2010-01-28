@@ -76,9 +76,9 @@
 											<% 
 												if (isShowTitle) {
 													if (isShowLink) {
-														%><a class="TitleContentHotNews" href="$itemLink">$itemName</a><%
+														%><a class="TitleContentHotNews" href="$itemLink"><%= itemName %></a><%
 													} else {
-														%>$itemName<%
+														%><%= itemName %><%
 													} 
 												}
 											
@@ -112,9 +112,9 @@
 														<div>
 															<%
 																if (isShowLink) {
-																	%><a class="TitleContentNormalNews" href="$itemLink">$itemName</a><%
+																	%><a class="TitleContentNormalNews" href="$itemLink"><%= itemName %></a><%
 																} else {
-																		%>$itemName<%
+																		%><%= itemName %><%
 																} 
 															%>
 														</div>

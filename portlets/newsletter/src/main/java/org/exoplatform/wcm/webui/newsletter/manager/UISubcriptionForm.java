@@ -342,7 +342,7 @@ public static class SelectUserActionListener extends EventListener<UISubcription
       userMemberSelector.setShowSearch(true);
       userMemberSelector.setSourceComponent(uiSubcriptionForm, new String[] {SELECT_REDACTOR});
       userMemberSelector.init();
-      Utils.createPopupWindow(uiSubcriptionForm, userMemberSelector, UINewsletterConstant.USER_SELECTOR_POPUP_WINDOW, 750, 315);
+      Utils.createPopupWindow(uiSubcriptionForm, userMemberSelector, UINewsletterConstant.USER_SELECTOR_POPUP_WINDOW, 750);
       uiSubcriptionForm.setPopupId(UINewsletterConstant.USER_SELECTOR_POPUP_WINDOW);
     }
   }
@@ -369,7 +369,7 @@ public static class SelectUserActionListener extends EventListener<UISubcription
       UIGroupMemberSelector groupMemberSelector = uiSubcriptionForm.createUIComponent(UIGroupMemberSelector.class, null, null);
       groupMemberSelector.setShowAnyPermission(false);
       groupMemberSelector.setSourceComponent(uiSubcriptionForm, new String[] {SELECT_REDACTOR});
-      Utils.createPopupWindow(uiSubcriptionForm, groupMemberSelector, UINewsletterConstant.GROUP_SELECTOR_POPUP_WINDOW, 540, 300);
+      Utils.createPopupWindow(uiSubcriptionForm, groupMemberSelector, UINewsletterConstant.GROUP_SELECTOR_POPUP_WINDOW, 540);
       uiSubcriptionForm.setPopupId(UINewsletterConstant.GROUP_SELECTOR_POPUP_WINDOW);
     }
   }
@@ -394,7 +394,7 @@ public static class SelectUserActionListener extends EventListener<UISubcription
       removeModerators.permissionForSubscriptionForm();
       removeModerators.init(((UIFormStringInput)((UIFormInputSetWithAction)subscriptionForm.getChildById(FORM_SUBSCRIPTION_REDACTOR)).
                               getChildById(SELECT_REDACTOR)).getValue(), subscriptionForm.isAdmin);
-      Utils.createPopupWindow(subscriptionForm, removeModerators, UINewsletterConstant.REMOVE_MODERATORS_FORM_POPUP_WINDOW, 480, 300);
+      Utils.createPopupWindow(subscriptionForm, removeModerators, UINewsletterConstant.REMOVE_MODERATORS_FORM_POPUP_WINDOW, 480);
       subscriptionForm.setPopupId(UINewsletterConstant.REMOVE_MODERATORS_FORM_POPUP_WINDOW);
     }
   }

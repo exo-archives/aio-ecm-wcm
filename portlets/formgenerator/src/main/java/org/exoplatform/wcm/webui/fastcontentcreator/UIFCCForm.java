@@ -490,7 +490,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
         ((UIOneTaxonomySelector)component).setRootNodeLocation(fastContentCreatorForm.repositoryName, workspaceName, rootTreePath);
         ((UIOneTaxonomySelector)component).init(sessionProvider);
       }
-      Utils.createPopupWindow(fastContentCreatorForm, component, UIFCCConstant.TAXONOMY_POPUP_WINDOW, 640, 300);
+      Utils.createPopupWindow(fastContentCreatorForm, component, UIFCCConstant.TAXONOMY_POPUP_WINDOW, 640);
       String param = "returnField=" + fieldName ;
       String[] params = selectorParams == null ? new String[]{param} : new String[]{param, "selectorParams=" + selectorParams};
       ((ComponentSelector)component).setSourceComponent(fastContentCreatorForm, params) ;
@@ -567,7 +567,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
             uiOneTaxonomySelector.init(Utils.getSessionProvider());
             String param = "returnField=" + FIELD_TAXONOMY;        
             uiOneTaxonomySelector.setSourceComponent(fastContentCreatorForm, new String[]{param});
-            Utils.createPopupWindow(fastContentCreatorForm, uiOneTaxonomySelector, UIFCCConstant.TAXONOMY_POPUP_WINDOW, 640, 300);
+            Utils.createPopupWindow(fastContentCreatorForm, uiOneTaxonomySelector, UIFCCConstant.TAXONOMY_POPUP_WINDOW, 640);
           }
         }
         event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorPortlet);

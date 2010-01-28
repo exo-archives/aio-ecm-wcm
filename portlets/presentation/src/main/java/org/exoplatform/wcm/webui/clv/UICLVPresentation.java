@@ -605,7 +605,7 @@ import org.exoplatform.webui.event.EventListener;
   	  Node node = (Node) session.getItem(path);
       UIContentDialogForm uiDocumentDialogForm = contentListPresentation.createUIComponent(UIContentDialogForm.class, null, null);
       uiDocumentDialogForm.init(node, false);
-      Utils.createPopupWindow(contentListPresentation, uiDocumentDialogForm, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW, 800, 600);
+      Utils.createPopupWindow(contentListPresentation, uiDocumentDialogForm, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW, 800);
     }
   }
 

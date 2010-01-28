@@ -289,11 +289,7 @@ public class UIPCVContainer extends UIContainer {
     public void execute(Event<UIPCVContainer> event) throws Exception {
       UIPCVContainer uiContentViewerContainer = event.getSource();
       UIPCVConfig pcvConfigForm = uiContentViewerContainer.createUIComponent(UIPCVConfig.class, null, null);
-      Utils.createPopupWindow(uiContentViewerContainer,
-                              pcvConfigForm,
-                              UIPCVPortlet.PCV_CONFIG_POPUP_WINDOW,
-                              600,
-                              450);
+      Utils.createPopupWindow(uiContentViewerContainer, pcvConfigForm, UIPCVPortlet.PCV_CONFIG_POPUP_WINDOW, 600);
     }
   }
   
@@ -321,7 +317,7 @@ public class UIPCVContainer extends UIContainer {
       UIContentDialogForm uiDocumentDialogForm = uiContentViewerContainer.createUIComponent(UIContentDialogForm.class, null, null);
       try{
         uiDocumentDialogForm.init(orginialNode, false);
-        Utils.createPopupWindow(uiContentViewerContainer, uiDocumentDialogForm, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW, 800, 600);
+        Utils.createPopupWindow(uiContentViewerContainer, uiDocumentDialogForm, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW, 800);
       }catch(Exception ex){
         UIApplication uiApp = uiContentViewerContainer.getAncestorOfType(UIApplication.class);
         Object[] arg = {orginialNode.getPrimaryNodeType().getName()};

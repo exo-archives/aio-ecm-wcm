@@ -398,7 +398,7 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
       UIPCLVConfig viewerManagementForm = event.getSource();
       UIPageSelector pageSelector = viewerManagementForm.createUIComponent(UIPageSelector.class, null, null);
       pageSelector.setSourceComponent(viewerManagementForm, new String[] {TARGET_PAGE_INPUT});
-      Utils.createPopupWindow(viewerManagementForm, pageSelector, UICategoryNavigationConstant.TARGET_PATH_SELECTOR_POPUP_WINDOW, 800, 600);
+      Utils.createPopupWindow(viewerManagementForm, pageSelector, UICategoryNavigationConstant.TARGET_PATH_SELECTOR_POPUP_WINDOW, 800);
       viewerManagementForm.setPopupId(UICategoryNavigationConstant.TARGET_PATH_SELECTOR_POPUP_WINDOW);
     }
   }

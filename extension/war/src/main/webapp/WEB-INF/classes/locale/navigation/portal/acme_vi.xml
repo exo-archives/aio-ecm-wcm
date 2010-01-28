@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <portal>
+    <acme>
+      <overview>Giới thiệu</overview>
+      <news>Tin tức</news>
+      <contactus>Liên hệ</contactus>
+      <newsletters>Thư giới thiệu</newsletters>
+      <confirmation>Xác nhận</confirmation>
+      <pcv>Chi tiết</pcv>
+    </acme>
+  </portal>
+</bundle>
+

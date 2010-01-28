@@ -256,7 +256,7 @@ public class UISubscriptions extends UIForm {
       UISubscriptions subsriptions = event.getSource();
       UICategoryForm categoryForm = subsriptions.createUIComponent(UICategoryForm.class, null, null);
       categoryForm.setCategoryInfo(subsriptions.categoryConfig, subsriptions.isAdmin);
-      Utils.createPopupWindow(subsriptions, categoryForm, UINewsletterConstant.CATEGORY_FORM_POPUP_WINDOW, 480, 300);
+      Utils.createPopupWindow(subsriptions, categoryForm, UINewsletterConstant.CATEGORY_FORM_POPUP_WINDOW, 480);
     }
   }
 
@@ -311,7 +311,7 @@ public class UISubscriptions extends UIForm {
       UIFormSelectBox selectedCategoryName = subcriptionForm.getChildById("CategoryName");
       selectedCategoryName.setValue(subsriptions.categoryConfig.getName());
       selectedCategoryName.setDisabled(true);
-      Utils.createPopupWindow(subsriptions, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 500, 350);
+      Utils.createPopupWindow(subsriptions, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 500);
       subcriptionForm.setSubscriptionInfor(null, subsriptions.isAdmin);
     }
   }
@@ -345,7 +345,7 @@ public class UISubscriptions extends UIForm {
       NewsletterSubscriptionConfig subscriptionConfig 
       = subsriptions.subscriptionHandler.getSubscriptionsByName(Utils.getSessionProvider(), NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(), subId);
       subcriptionForm.setSubscriptionInfor(subscriptionConfig, subsriptions.isAdmin);
-      Utils.createPopupWindow(subsriptions, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 500, 350);
+      Utils.createPopupWindow(subsriptions, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 500);
     }
   }
 
@@ -507,7 +507,7 @@ public class UISubscriptions extends UIForm {
       UISubscriptions uiSubscription = event.getSource();
       UIManagerUsers managerUsers = uiSubscription.createUIComponent(UIManagerUsers.class, null, null);
       managerUsers.setInfor(uiSubscription.categoryConfig.getName(), null);
-      Utils.createPopupWindow(uiSubscription, managerUsers, UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW, 550, 350);
+      Utils.createPopupWindow(uiSubscription, managerUsers, UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW, 550);
     }
   }
   
@@ -532,7 +532,7 @@ public class UISubscriptions extends UIForm {
       UINewsletterEntryContainer entryContainer = uiSubscriptions.createUIComponent(UINewsletterEntryContainer.class, null, null);
       entryContainer.setCategoryConfig(uiSubscriptions.categoryConfig);
       entryContainer.getChild(UINewsletterEntryDialogSelector.class).init(uiSubscriptions.categoryConfig.getName(), null);
-      Utils.createPopupWindow(uiSubscriptions, entryContainer, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW, 800, 600);
+      Utils.createPopupWindow(uiSubscriptions, entryContainer, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW, 800);
     }
   }
 }

@@ -288,7 +288,7 @@ public class UICategoryNavigationConfig extends UIForm implements UISelectable {
       UIPopupContainer popupContainer = categoryNavigationPortlet.getChild(UIPopupContainer.class);
       UIPageSelector pageSelector = popupContainer.createUIComponent(UIPageSelector.class, null, null);
       pageSelector.setSourceComponent(categoryNavigationConfig, new String[] {UICategoryNavigationConstant.TARGET_PATH_FORM_STRING_INPUT});
-      Utils.createPopupWindow(popupContainer, pageSelector, UICategoryNavigationConstant.TARGET_PATH_SELECTOR_POPUP_WINDOW, 700, 500);
+      Utils.createPopupWindow(popupContainer, pageSelector, UICategoryNavigationConstant.TARGET_PATH_SELECTOR_POPUP_WINDOW, 700);
       categoryNavigationConfig.setPopupId(UICategoryNavigationConstant.TARGET_PATH_SELECTOR_POPUP_WINDOW);
     }
   }

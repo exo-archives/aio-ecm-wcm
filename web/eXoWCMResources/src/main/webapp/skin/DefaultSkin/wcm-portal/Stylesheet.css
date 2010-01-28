@@ -238,3 +238,12 @@ td {
 	width: 296px;
 	margin: 3px auto;
 }
+
+.ACMECategoriesTDContainer {
+  padding: 10px;
+}
+
+.ACMEParameterizedTDContainer {
+  padding: 10px;
+  width: 730px;
+}

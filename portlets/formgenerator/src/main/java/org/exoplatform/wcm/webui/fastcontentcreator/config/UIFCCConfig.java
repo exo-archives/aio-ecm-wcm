@@ -333,7 +333,7 @@ public class UIFCCConfig extends UIForm implements UISelectable {
       uiOneNodePathSelector.setRootNodeLocation(repositoryName, workspaceName, "/");
       uiOneNodePathSelector.init(Utils.getSessionProvider()) ;
       uiOneNodePathSelector.setSourceComponent(fastContentCreatorConfig, new String[] {UIFCCConstant.LOCATION_FORM_STRING_INPUT}) ;
-      Utils.createPopupWindow(fastContentCreatorConfig, uiOneNodePathSelector, UIFCCConstant.SELECTOR_POPUP_WINDOW, 610, 300);
+      Utils.createPopupWindow(fastContentCreatorConfig, uiOneNodePathSelector, UIFCCConstant.SELECTOR_POPUP_WINDOW, 710);
     }
   }
   

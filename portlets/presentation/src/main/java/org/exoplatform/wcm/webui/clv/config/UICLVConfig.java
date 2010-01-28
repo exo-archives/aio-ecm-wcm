@@ -735,7 +735,7 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
         UIContentBrowsePanelFolder contentBrowserPanel= contentSelector.getChild(UIContentBrowsePanelFolder.class);
         contentBrowserPanel.setSourceComponent(uiViewerManagementForm, new String[] { UICLVConfig.FOLDER_PATH_INPUT });
         contentBrowserPanel.init();
-        Utils.createPopupWindow(uiViewerManagementForm, contentSelector, FOLDER_PATH_SELECTOR_POPUP_WINDOW, 800, 600);
+        Utils.createPopupWindow(uiViewerManagementForm, contentSelector, FOLDER_PATH_SELECTOR_POPUP_WINDOW, 800);
         uiViewerManagementForm.setPopupId(FOLDER_PATH_SELECTOR_POPUP_WINDOW);
       } else {
         orderBySelector.setRendered(false);
@@ -747,7 +747,7 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
         
         UICLVContentSelectedGrid uiclvContentSelectedGrid = contentBrowserPanel.getChild(UICLVContentSelectedGrid.class);
         uiclvContentSelectedGrid.init(uiViewerManagementForm.getViewAbleContentList());
-        Utils.createPopupWindow(uiViewerManagementForm, contentSelector, CORRECT_CONTENT_SELECTOR_POPUP_WINDOW, 800, 600);
+        Utils.createPopupWindow(uiViewerManagementForm, contentSelector, CORRECT_CONTENT_SELECTOR_POPUP_WINDOW, 800);
         uiViewerManagementForm.setPopupId(CORRECT_CONTENT_SELECTOR_POPUP_WINDOW);
       }
     }
@@ -860,7 +860,7 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
       UICLVConfig viewerManagementForm = event.getSource();
       UIPageSelector pageSelector = viewerManagementForm.createUIComponent(UIPageSelector.class, null, null);
       pageSelector.setSourceComponent(viewerManagementForm, new String[] {BASE_PATH_INPUT});
-      Utils.createPopupWindow(viewerManagementForm, pageSelector, BASE_PATH_SELECTOR_POPUP_WINDOW, 800, 600);
+      Utils.createPopupWindow(viewerManagementForm, pageSelector, BASE_PATH_SELECTOR_POPUP_WINDOW, 800);
       viewerManagementForm.setPopupId(BASE_PATH_SELECTOR_POPUP_WINDOW);
     }
   }

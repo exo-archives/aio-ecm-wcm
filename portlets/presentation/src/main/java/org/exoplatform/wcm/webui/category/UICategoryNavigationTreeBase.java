@@ -29,8 +29,6 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.utils.Utils;
-import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
@@ -199,17 +197,10 @@ public class UICategoryNavigationTreeBase extends UITree {
    * @return the string
    */
   public String resolveCategoryPathByUri(WebuiRequestContext context) throws Exception {
-    PortletRequestContext porletRequestContext = (PortletRequestContext) context;
-    HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
-    PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
-    UIPortal uiPortal = Util.getUIPortal();
-    String portalURI = portalRequestContext.getPortalURI();
-    String requestURI = requestWrapper.getRequestURI();
-    String pageNodeSelected = uiPortal.getSelectedNode().getName();
     String parameters = null;
     try {
       // parameters: Classic/News/France/Blah/Bom
-      parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected)),"UTF-8");
+      parameters = URLDecoder.decode(StringUtils.substringAfter(Util.getPortalRequestContext().getNodePath(), Util.getUIPortal().getSelectedNode().getUri()),"UTF-8");
     } catch (UnsupportedEncodingException e) {}
     
     // categoryPath: /News/France/Blah/Bom

@@ -25,20 +25,16 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.nodetype.NodeType;
 import javax.portlet.PortletPreferences;
-import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.ecm.webui.utils.Utils;
-import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
-import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.link.NodeFinder;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UITree;
@@ -182,16 +178,9 @@ public class UICategoryNavigationTree extends UIContainer {
    * @see org.exoplatform.webui.core.UIComponent#processRender(org.exoplatform.webui.application.WebuiRequestContext)
    */
   public void processRender(WebuiRequestContext context) throws Exception {
-    PortletRequestContext porletRequestContext = (PortletRequestContext) context;
-    HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
-    PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
-    UIPortal uiPortal = Util.getUIPortal();
-    String portalURI = portalRequestContext.getPortalURI();
-    String requestURI = requestWrapper.getRequestURI();
-    String pageNodeSelected = uiPortal.getSelectedNode().getName();
     String parameters = null;
     try {
-      parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected + "/")),"UTF-8");
+      parameters = URLDecoder.decode(StringUtils.substringAfter(Util.getPortalRequestContext().getNodePath(), Util.getUIPortal().getSelectedNode().getUri() + "/"),"UTF-8");
     } catch (UnsupportedEncodingException e) {
       org.exoplatform.wcm.webui.Utils.createPopupMessage(this, "UICategoryNavigationConfig.msg.not-support-encoding", null, ApplicationMessage.ERROR);
     }

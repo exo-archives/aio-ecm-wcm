@@ -185,7 +185,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		if (recursive==null) {
 			statement.append(" AND NOT jcr:path LIKE '" + path + "/%/%')");
 		}
-		statement.append(" AND (" + getTemlatesSQLFilter(repository) + ")");
+		statement.append(" AND " + getTemlatesSQLFilter(repository));
 		statement.append(orderFilter);
 		Query query = manager.createQuery(statement.toString(), Query.SQL);
 		return query.execute().getNodes();
@@ -372,7 +372,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 					if (i != (documentTypes.size() - 1)) documentTypeClause.append(" OR ");
 				}
 				templatesFilter = documentTypeClause.toString();
-				templatesFilter += "OR jcr:primaryType = 'exo:taxonomyLink')";
+				templatesFilter += " OR jcr:primaryType = 'exo:taxonomyLink')";
 				return templatesFilter;
 			} catch (Exception e) {
 				log.error("Error when perform getTemlatesSQLFilter: ", e);

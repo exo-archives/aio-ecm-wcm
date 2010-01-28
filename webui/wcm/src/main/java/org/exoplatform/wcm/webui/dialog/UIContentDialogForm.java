@@ -559,7 +559,7 @@ public class UIContentDialogForm extends UIDialogForm  implements UIPopupCompone
               uiOneTaxonomySelector.init(Utils.getSessionProvider());
               String param = "returnField=" + FIELD_TAXONOMY;
               uiOneTaxonomySelector.setSourceComponent(contentDialogForm, new String[]{param});
-              Utils.createPopupWindow(contentDialogForm, uiOneTaxonomySelector, TAXONOMY_CONTENT_POPUP_WINDOW, 700, 450);
+              Utils.createPopupWindow(contentDialogForm, uiOneTaxonomySelector, TAXONOMY_CONTENT_POPUP_WINDOW, 700);
             }
           }
         }catch (AccessDeniedException accessDeniedException) {

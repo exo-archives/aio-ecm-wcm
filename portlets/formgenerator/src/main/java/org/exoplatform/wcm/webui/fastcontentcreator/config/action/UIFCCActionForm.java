@@ -467,7 +467,7 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
         ((UIOneNodePathSelector)uiComp).setShowRootPathSelect(true);
         ((UIOneNodePathSelector)uiComp).init(Utils.getSessionProvider());
       }
-      Utils.createPopupWindow(fastContentCreatorActionForm, uiComp, UIFCCConstant.SELECTOR_POPUP_WINDOW, 640, 300);
+      Utils.createPopupWindow(fastContentCreatorActionForm, uiComp, UIFCCConstant.SELECTOR_POPUP_WINDOW, 640);
       String param = "returnField=" + fieldName ;
       String[] params = selectorParams == null ? new String[]{param} : new String[]{param, "selectorParams=" + selectorParams};
       ((ComponentSelector)uiComp).setSourceComponent(fastContentCreatorActionForm, params) ;

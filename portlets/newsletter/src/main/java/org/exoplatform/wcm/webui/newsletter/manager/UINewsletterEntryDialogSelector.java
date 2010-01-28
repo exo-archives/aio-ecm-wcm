@@ -230,7 +230,7 @@ public class UINewsletterEntryDialogSelector extends UIForm {
     public void execute(Event<UINewsletterEntryDialogSelector> event) throws Exception {
       UINewsletterEntryDialogSelector newsletterEntryDialogSelector = event.getSource();
       UINewsletterEntryWebcontentSelectorForm newsletterEntryWebcontentSelector = newsletterEntryDialogSelector.createUIComponent(UINewsletterEntryWebcontentSelectorForm.class, null, null);
-      Utils.createPopupWindow(newsletterEntryDialogSelector, newsletterEntryWebcontentSelector, UINewsletterConstant.WEBCONTENT_SELECTOR_FORM_POPUP_WINDOW, 300, 120);
+      Utils.createPopupWindow(newsletterEntryDialogSelector, newsletterEntryWebcontentSelector, UINewsletterConstant.WEBCONTENT_SELECTOR_FORM_POPUP_WINDOW, 300);
     }
   }
 

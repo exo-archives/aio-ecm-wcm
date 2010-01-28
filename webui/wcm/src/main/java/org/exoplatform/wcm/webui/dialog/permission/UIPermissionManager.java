@@ -449,7 +449,7 @@ public class UIPermissionManager extends UIForm implements UISelectable {
   	 UIUserContainer userContainer = permissionManager.createUIComponent(UIUserContainer.class, null, null);
   	 userContainer.setSelectable(permissionManager);
   	 userContainer.setSourceComponent(PERMISSION_STRING_INPUT);
-  	 Utils.createPopupWindow(permissionManager, userContainer, USER_SELECTOR_POPUP_WINDOW, 740, 320);
+  	 Utils.createPopupWindow(permissionManager, userContainer, USER_SELECTOR_POPUP_WINDOW, 740);
   	 permissionManager.setPopupId(USER_SELECTOR_POPUP_WINDOW);
    }
   }
@@ -475,7 +475,7 @@ public class UIPermissionManager extends UIForm implements UISelectable {
   		UIGroupMemberSelector groupContainer = permissionManager.createUIComponent(UIGroupMemberSelector.class, null, null);
   		groupContainer.setShowAnyPermission(false);
   		groupContainer.setSourceComponent(permissionManager, new String[] {PERMISSION_STRING_INPUT});
-  		Utils.createPopupWindow(permissionManager, groupContainer, GROUP_SELECTOR_POPUP_WINDOW, 600, 400);
+  		Utils.createPopupWindow(permissionManager, groupContainer, GROUP_SELECTOR_POPUP_WINDOW, 600);
   		permissionManager.setPopupId(GROUP_SELECTOR_POPUP_WINDOW);
   	}
   }

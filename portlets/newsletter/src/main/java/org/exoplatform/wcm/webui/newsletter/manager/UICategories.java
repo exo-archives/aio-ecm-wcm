@@ -179,7 +179,7 @@ public class UICategories extends UIContainer {
 		public void execute(Event<UICategories> event) throws Exception {
 			UICategories uiCategories = event.getSource();
       UICategoryForm categoryForm = uiCategories.createUIComponent(UICategoryForm.class, null, null);
-      Utils.createPopupWindow(uiCategories, categoryForm, UINewsletterConstant.CATEGORY_FORM_POPUP_WINDOW, 450, 298);
+      Utils.createPopupWindow(uiCategories, categoryForm, UINewsletterConstant.CATEGORY_FORM_POPUP_WINDOW, 450);
       categoryForm.setCategoryInfo(null, uiCategories.isAdmin);
 		}
 	}
@@ -203,7 +203,7 @@ public class UICategories extends UIContainer {
     public void execute(Event<UICategories> event) throws Exception {
       UICategories uiCategories = event.getSource();
       UISubcriptionForm subcriptionForm = uiCategories.createUIComponent(UISubcriptionForm.class, null, null);
-      Utils.createPopupWindow(uiCategories, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 500, 350);
+      Utils.createPopupWindow(uiCategories, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 500);
       subcriptionForm.setSubscriptionInfor(null, uiCategories.isAdmin);
     }
   }
@@ -256,7 +256,7 @@ public class UICategories extends UIContainer {
 	    UICategories uiCategories = event.getSource();
       UIManagerUsers managerUsers = uiCategories.createUIComponent(UIManagerUsers.class, null, null);
       managerUsers.setInfor(null, null);
-      Utils.createPopupWindow(uiCategories, managerUsers, UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW, 600, 350);
+      Utils.createPopupWindow(uiCategories, managerUsers, UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW, 600);
 	  }
 	}
 	
@@ -281,7 +281,7 @@ public class UICategories extends UIContainer {
       UINewsletterEntryContainer entryContainer = uiCategories.createUIComponent(UINewsletterEntryContainer.class, null, null);
       entryContainer.setCategoryConfig(null);
       entryContainer.getChild(UINewsletterEntryDialogSelector.class).init(null, null);
-      Utils.createPopupWindow(uiCategories, entryContainer, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW, 800, 600);
+      Utils.createPopupWindow(uiCategories, entryContainer, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW, 800);
     }
   }
 	

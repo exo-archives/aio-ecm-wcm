@@ -245,7 +245,15 @@
 	text-align: left;
 }
 
-.UIMaskWorkspace .UISingleContentViewerPortlet .UITabContent {
-	height: auto;
-	overflow: hidden;
+#UIContentSelectorFolder {
+	padding: 10px;
 }
+
+#UIContentSelectorFolder .UIHorizontalTabs .TabsContainer {
+    background: url(/eXoResources/skin/DefaultSkin/webui/component/UIPopup/UIPopupWindow/background/CenterHorizontalTabs.gif) repeat-x scroll left bottom;
+    height:25px;
+}
+
+.UITabPane .GrayTabContainer .UITabContent {
+	background: white;
+} 

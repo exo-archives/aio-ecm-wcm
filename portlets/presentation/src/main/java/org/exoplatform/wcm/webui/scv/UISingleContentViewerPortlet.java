@@ -82,7 +82,7 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
       WebUIPropertiesConfigService propertiesConfigService = getApplicationComponent(WebUIPropertiesConfigService.class);
       PopupWindowProperties popupProperties = (PopupWindowProperties)propertiesConfigService.getProperties(WebUIPropertiesConfigService.SCV_POPUP_SIZE_EDIT_PORTLET_MODE);
       UIPortletConfig portletConfig = createUIComponent(UIPortletConfig.class,null,null);      
-      Utils.createPopupWindow(this, portletConfig, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW, popupProperties.getWidth(), popupProperties.getHeight());
+      Utils.createPopupWindow(this, portletConfig, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW, popupProperties.getWidth());
       portletConfig.init();
     }
   }

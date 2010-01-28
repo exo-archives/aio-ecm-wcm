@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <portal>
+    <acme>
+      <overview>Présentation</overview>
+      <news>Actualités</news>
+      <contactus>Contactez Nous</contactus>
+      <newsletters>Newsletters</newsletters>
+      <confirmation>Confirmation de contact</confirmation>
+      <pcv>Détails</pcv>
+      <printviewer>Print page</printviewer>
+    </acme>
+  </portal>
+</bundle>
+

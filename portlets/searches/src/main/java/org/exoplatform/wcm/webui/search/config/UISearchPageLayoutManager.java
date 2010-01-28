@@ -332,7 +332,7 @@ public class UISearchPageLayoutManager extends UIForm  implements UISelectable {
       UISearchPageLayoutManager viewerManagementForm = event.getSource();
       UIPageSelector pageSelector = viewerManagementForm.createUIComponent(UIPageSelector.class, null, null);
       pageSelector.setSourceComponent(viewerManagementForm, new String[] {BASE_PATH_INPUT});
-      Utils.createPopupWindow(viewerManagementForm, pageSelector, BASE_PATH_SELECTOR_POPUP_WINDOW, 800, 600);
+      Utils.createPopupWindow(viewerManagementForm, pageSelector, BASE_PATH_SELECTOR_POPUP_WINDOW, 800);
       viewerManagementForm.setPopupId(BASE_PATH_SELECTOR_POPUP_WINDOW);
     }
   }

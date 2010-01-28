@@ -263,12 +263,12 @@ public class Utils {
    * @param height the height of the popup
    * @throws Exception the exception
    */
-  public static void createPopupWindow(UIContainer container, UIComponent component, String popupWindowId, int width, int height) throws Exception {
+  public static void createPopupWindow(UIContainer container, UIComponent component, String popupWindowId, int width) throws Exception {
     UIPopupContainer popupContainer = getPopupContainer(container);
     popupContainer.removeChildById(popupWindowId);
     UIPopupWindow popupWindow = popupContainer.addChild(UIPopupWindow.class, null, popupWindowId);
     popupWindow.setUIComponent(component);
-    popupWindow.setWindowSize(width, height);
+    popupWindow.setWindowSize(width, 0);
     popupWindow.setShow(true);
     popupWindow.setRendered(true);
     popupWindow.setResizable(true);

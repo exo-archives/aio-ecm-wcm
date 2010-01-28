@@ -3,6 +3,24 @@
 	import org.exoplatform.webui.application.portlet.PortletRequestContext;
 	import org.exoplatform.wcm.webui.clv.config.UICLVConfig;
 	
+  def HEADER                        = "Header";
+  def FOLDER_PATH_INPUTSET          = "FolderPathInputSet";
+  def FORM_VIEW_TEMPLATES_SELECTOR  = "FormViewTemplate";
+  def PAGINATOR_TEMPLATES_SELECTOR  = "PaginatorTemplate";
+  def ITEMS_PER_PAGE_INPUT          = "ItemsPerPage";
+  def VIEWER_BUTTON_REFRESH         = "ViewerButtonRefresh";
+  def VIEWER_READMORE               = "ViewerReadmore";
+  def VIEWER_THUMBNAILS_IMAGE       = "ViewerThumbnailsView";
+  def VIEWER_TITLE                  = "ViewerTitle";
+  def VIEWER_DATE_CREATED           = "ViewerDateCreated";
+  def VIEWER_SUMMARY                = "ViewerSummary";
+  def VIEWER_HEADER                 = "ViewerHeader";
+  def VIEWER_LINK                   = "ViewerLink";
+  def VIEWER_MODES                  = "ViewerMode";
+  def ORDER_BY                      = "OrderBy";
+  def ORDER_TYPES                   = "OrderTypes";
+  def BASE_PATH_INPUT_SET_ACTION    = "UICLVBasePathInputSetAction";
+	
 	PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
 	def portletId = pContext.getWindowId();
 	def quickEditingBlockId = portletId + "-QuickEditingBlock";
@@ -21,24 +39,24 @@
 	      <table class="UIFormGrid">
 	      	<tr>
 			      <td class="FieldLabel">
-				      <%=uicomponent.getLabel(uiform.getChildById(UICLVConfig.VIEWER_MODES).getName()) %>
+				      <%=uicomponent.getLabel(uiform.getChildById(VIEWER_MODES).getName()) %>
 			      </td>
-						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UICLVConfig.VIEWER_MODES)) %></td>
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(VIEWER_MODES)) %></td>
 					</tr>
 					<tr>
 						<td class="FieldLabel"><span></span></td>
-						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UICLVConfig.FOLDER_PATH_INPUTSET)) %></td>				
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(FOLDER_PATH_INPUTSET)) %></td>				
 					</tr>
-					<% if (uiform.getChildById(UICLVConfig.ORDER_BY).isRendered()) { %>
+					<% if (uiform.getChildById(ORDER_BY).isRendered()) { %>
 					<tr class="OrderBlock">
 			      <td class="FieldLabel">
-				      <%=uicomponent.getLabel(uiform.getChildById(UICLVConfig.ORDER_BY).getName()) %>
+				      <%=uicomponent.getLabel(uiform.getChildById(ORDER_BY).getName()) %>
 			      </td>
-						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UICLVConfig.ORDER_BY)) %></td>														
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(ORDER_BY)) %></td>														
 					</tr>
 					<tr class="OrderBlock">	
 						<td><span></span></td>
-						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UICLVConfig.ORDER_TYPES)) %></td>													
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(ORDER_TYPES)) %></td>													
 					</tr>
 
 					<% } else {
@@ -98,21 +116,21 @@
 	      <table class="UIFormGrid">
 	      	<tr>
 			      <td class="FieldLabel">
-				      <%=uicomponent.getLabel(uiform.getChildById(UICLVConfig.HEADER).getName()) %>
+				      <%=uicomponent.getLabel(uiform.getChildById(HEADER).getName()) %>
 			      </td>
-						<td class="FieldComponent" colspan="2"><% uiform.renderField(uiform.getChildById(UICLVConfig.HEADER)) %></td>
+						<td class="FieldComponent" colspan="2"><% uiform.renderField(uiform.getChildById(HEADER)) %></td>
 					</tr>
 					<tr>
 			      <td class="FieldLabel">
-				      <%=uicomponent.getLabel(uiform.getChildById(UICLVConfig.FORM_VIEW_TEMPLATES_SELECTOR).getName()) %>
+				      <%=uicomponent.getLabel(uiform.getChildById(FORM_VIEW_TEMPLATES_SELECTOR).getName()) %>
 			      </td>
-						<td class="FieldComponent" colspan="2"><% uiform.renderField(uiform.getChildById(UICLVConfig.FORM_VIEW_TEMPLATES_SELECTOR)) %></td>				
+						<td class="FieldComponent" colspan="2"><% uiform.renderField(uiform.getChildById(FORM_VIEW_TEMPLATES_SELECTOR)) %></td>				
 					</tr>
 					<tr>
 			      <td class="FieldLabel">
-				      <%=uicomponent.getLabel(uiform.getChildById(UICLVConfig.PAGINATOR_TEMPLATES_SELECTOR).getName()) %>
+				      <%=uicomponent.getLabel(uiform.getChildById(PAGINATOR_TEMPLATES_SELECTOR).getName()) %>
 			      </td>
-						<td class="FieldComponent" colspan="2"><% uiform.renderField(uiform.getChildById(UICLVConfig.PAGINATOR_TEMPLATES_SELECTOR)) %></td>								
+						<td class="FieldComponent" colspan="2"><% uiform.renderField(uiform.getChildById(PAGINATOR_TEMPLATES_SELECTOR)) %></td>								
 					</tr>
 					
 					<tr>
@@ -124,60 +142,60 @@
 					
 					<tr>
 			      <td class="FieldLabel">
-				      <%=uicomponent.getLabel(uiform.getChildById(UICLVConfig.ITEMS_PER_PAGE_INPUT).getName()) %>
+				      <%=uicomponent.getLabel(uiform.getChildById(ITEMS_PER_PAGE_INPUT).getName()) %>
 			      </td>
 						<td class="FieldComponent ItemsPerPage" colspan="2">
-							<% uiform.renderField(uiform.getChildById(UICLVConfig.ITEMS_PER_PAGE_INPUT)) %>
+							<% uiform.renderField(uiform.getChildById(ITEMS_PER_PAGE_INPUT)) %>
 						</td>								
 					</tr>					
 	      </table>   					      
 				<table class="UIFormGrid">
 					<tr>
 			      <td class="FieldLabel">
-				      <%=uicomponent.getLabel(uiform.getChildById(UICLVConfig.VIEWER_THUMBNAILS_IMAGE).getName()) %>
+				      <%=uicomponent.getLabel(uiform.getChildById(VIEWER_THUMBNAILS_IMAGE).getName()) %>
 			      </td>
-						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UICLVConfig.VIEWER_THUMBNAILS_IMAGE)) %></td>								
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(VIEWER_THUMBNAILS_IMAGE)) %></td>								
 			      <td class="FieldLabel">
-				      <%=uicomponent.getLabel(uiform.getChildById(UICLVConfig.VIEWER_TITLE).getName()) %>
+				      <%=uicomponent.getLabel(uiform.getChildById(VIEWER_TITLE).getName()) %>
 			      </td>
-						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UICLVConfig.VIEWER_TITLE)) %></td>														
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(VIEWER_TITLE)) %></td>														
 					</tr>								
 					<tr>
 			      <td class="FieldLabel">
-				      <%=uicomponent.getLabel(uiform.getChildById(UICLVConfig.VIEWER_SUMMARY).getName()) %>
+				      <%=uicomponent.getLabel(uiform.getChildById(VIEWER_SUMMARY).getName()) %>
 			      </td>
-						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UICLVConfig.VIEWER_SUMMARY)) %></td>								
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(VIEWER_SUMMARY)) %></td>								
 			      <td class="FieldLabel">
-				      <%=uicomponent.getLabel(uiform.getChildById(UICLVConfig.VIEWER_DATE_CREATED).getName()) %>
+				      <%=uicomponent.getLabel(uiform.getChildById(VIEWER_DATE_CREATED).getName()) %>
 			      </td>
-						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UICLVConfig.VIEWER_DATE_CREATED)) %></td>														
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(VIEWER_DATE_CREATED)) %></td>														
 					</tr>																
 					<tr>
 			      <td class="FieldLabel">
-				      <%=uicomponent.getLabel(uiform.getChildById(UICLVConfig.VIEWER_HEADER).getName()) %>
+				      <%=uicomponent.getLabel(uiform.getChildById(VIEWER_HEADER).getName()) %>
 			      </td>
 						<td class="FieldComponent">
-							<% uiform.renderField(uiform.getChildById(UICLVConfig.VIEWER_HEADER)) %>
+							<% uiform.renderField(uiform.getChildById(VIEWER_HEADER)) %>
 						</td>								
 			      <td class="FieldLabel">
-				      <%=uicomponent.getLabel(uiform.getChildById(UICLVConfig.VIEWER_LINK).getName()) %>
+				      <%=uicomponent.getLabel(uiform.getChildById(VIEWER_LINK).getName()) %>
 			      </td>
 						<td class="FieldComponent">
-							<% uiform.renderField(uiform.getChildById(UICLVConfig.VIEWER_LINK)) %>
+							<% uiform.renderField(uiform.getChildById(VIEWER_LINK)) %>
 						</td>								
 					</tr>																												
 					<tr>
 			      <td class="FieldLabel">
-				      <%=uicomponent.getLabel(uiform.getChildById(UICLVConfig.VIEWER_BUTTON_REFRESH).getName()) %>
+				      <%=uicomponent.getLabel(uiform.getChildById(VIEWER_BUTTON_REFRESH).getName()) %>
 			      </td>
 						<td class="FieldComponent">
-							<% uiform.renderField(uiform.getChildById(UICLVConfig.VIEWER_BUTTON_REFRESH)) %>
+							<% uiform.renderField(uiform.getChildById(VIEWER_BUTTON_REFRESH)) %>
 						</td>								
 			      <td class="FieldLabel">
-                      <%=uicomponent.getLabel(uiform.getChildById(UICLVConfig.VIEWER_READMORE).getName()) %>
+                      <%=uicomponent.getLabel(uiform.getChildById(VIEWER_READMORE).getName()) %>
 			      </td>
 						<td class="FieldComponent">
-                            <% uiform.renderField(uiform.getChildById(UICLVConfig.VIEWER_READMORE)) %>
+                            <% uiform.renderField(uiform.getChildById(VIEWER_READMORE)) %>
 						</td>
 					</tr>																												
 	      </table>   					      	      
