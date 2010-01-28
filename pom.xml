@@ -29,6 +29,7 @@
     <org.exoplatform.jcr.version>1.12.0-Beta05</org.exoplatform.jcr.version>
     <org.exoplatform.jcr-services.version>1.12.0-Beta01</org.exoplatform.jcr-services.version>
     <org.exoplatform.portal.version>3.0.0-Beta05</org.exoplatform.portal.version>
+    <org.exoplatform.platform.version>3.0.0-Beta04-SNAPSHOT</org.exoplatform.platform.version>
     <org.exoplatform.exopackage.version>1.1.0-Beta05</org.exoplatform.exopackage.version>
     
     <org.exoplatform.ecm.dms.version>2.6-SNAPSHOT</org.exoplatform.ecm.dms.version>

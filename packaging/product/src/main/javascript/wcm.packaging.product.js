@@ -28,6 +28,10 @@ function getProduct(version) {
   product.addDependencies(portal.starter);
   //product.addDependencies(wcm.web.wcmportal) ;        
 	
+	portal.fck = new Project("org.exoplatform.platform", "exo.platform.web.fck", "war", "${org.exoplatform.platform.version}");
+  portal.fck.deployName = "fck";
+  product.addDependencies(portal.fck);
+	
 	product.addDependencies(portal.eXoGadgetServer) ;
 	product.addDependencies(portal.eXoGadgets) ;
   product.addDependencies(portal.portlet.exoadmin) ;
