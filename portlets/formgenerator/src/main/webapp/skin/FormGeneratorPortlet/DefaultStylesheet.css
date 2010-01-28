@@ -64,7 +64,6 @@
   padding: 0px 8px;
 }
 
-
 .UIFormGenerator .UITabPane .UITabContentContainer {
   background: #efefef;
   border: none;
@@ -164,7 +163,6 @@
   border: none;
 }
 
-
 .UIFormGenerator .UITabPane .UITabContentContainer .RightContent {
   border: 1px solid #cccaca;
   background: #fff;
@@ -172,8 +170,7 @@
   padding: 9px;
 }
 
-
-.UIFormGenerator .UITabPane .UITabContentContainer .RightContent .MiddleCenterViewBoxStyle  {
+.UIFormGenerator .UITabPane .UITabContentContainer .RightContent .MiddleCenterViewBoxStyle {
   padding: 5px 10px;
 }
 
@@ -184,7 +181,7 @@
 
 .UIFormGenerator .UITabPane .UITabContentContainer .RightContent .TopContentBoxStyle {
   padding: 5px 0px;
-} 
+}
 
 .UIFormGenerator .UITabPane .UITabContentContainer .RightContent .MiddleContentBoxStyle {
   background: #f3f7fb;
@@ -192,19 +189,19 @@
   padding: 10px 0px;
 }
 
-.UIFormGenerator .UITabPane .UITabContentContainer .UIFormGrid  {
+.UIFormGenerator .UITabPane .UITabContentContainer .UIFormGrid {
   width: 100%;
 }
 
-.UIFormGenerator .UITabPane .UITabContentContainer .UIFormGrid .FieldLabel  {
+.UIFormGenerator .UITabPane .UITabContentContainer .UIFormGrid .FieldLabel {
   width: 15%;
 }
 
-.UIFormGenerator .UITabPane .UITabContentContainer .UIFormGrid .FieldComponent  {
+.UIFormGenerator .UITabPane .UITabContentContainer .UIFormGrid .FieldComponent {
   width: 69%;
 }
 
-.UIFormGenerator .UITabPane .UITabContentContainer .UIFormGrid .FieldIcon  {
+.UIFormGenerator .UITabPane .UITabContentContainer .UIFormGrid .FieldIcon {
   padding: 0px;
 }
 
@@ -212,7 +209,7 @@
   width: 98%;
   border: 1px solid #e0dfdf;
   height: 16px;
-} 
+}
 
 .UIFormGenerator .UIFormEditBox select {
   border: 1px solid #e0dfdf;
@@ -248,13 +245,13 @@
 .UIFormGenerator .UIFormEditBox .CheckBox {
   width: auto;
   margin: 0px;
-  float:left;
+  float: left;
 }
 
 .UIFormGenerator .UIFormEditBox .Radio {
   width: auto;
   margin: 0px;
-  float:left;
+  float: left;
 }
 
 .UIFormGenerator .UIFormEditBox .SelectBox {
@@ -270,7 +267,7 @@
   height: auto;
 }
 
-.UIFormGenerator .UITabPane .UITabContentContainer .RightContent .UIFormEditBox .FieldIcon .EditBox  {
+.UIFormGenerator .UITabPane .UITabContentContainer .RightContent .UIFormEditBox .FieldIcon .EditBox {
   background: #f8fbfd;
   border: 1px solid #edecec;
   float: right;
@@ -278,7 +275,7 @@
   width: 40px;
 }
 
-.UIFormGenerator .UIFormEditBox .FieldIcon .ControlIcon  {
+.UIFormGenerator .UIFormEditBox .FieldIcon .ControlIcon {
   float: right;
   width: 15px;
   height: 16px;
@@ -325,15 +322,14 @@
 }
 
 .UIFormGenerator .UIFormEditBox .FieldIcon .DivIcon {
-  width : 40px;
-  padding :2px; 
+  width: 40px;
+  padding: 2px;
   height: 16px;
 }
 
 .UIFormGenerator .UIAction {
   padding: 15px 0px;
 }
-
 
 .UIFormGenerator .BoxAddNew {
   background: #fafafa;

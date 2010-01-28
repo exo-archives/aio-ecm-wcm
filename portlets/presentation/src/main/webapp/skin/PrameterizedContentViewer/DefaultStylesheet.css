@@ -22,8 +22,7 @@
 
 .UIPCVContainer .DraftIcon {
   padding-left: 20px;
-  background: url('DefaultSkin/images/DraftIcon.gif') no-repeat left
-    center;
+  background: url('DefaultSkin/images/DraftIcon.gif') no-repeat left center;
 }
 
 .UIPCVContainer .ActionContainer {
@@ -44,13 +43,11 @@
 }
 
 .UIPCVContainer .ActionContainer .PrintIcon {
-  background: url('DefaultSkin/images/PrintFrameIcon.gif') no-repeat top
-    left;
+  background: url('DefaultSkin/images/PrintFrameIcon.gif') no-repeat top left;
 }
 
 .UIPCVContainer .ActionContainer .CloseIcon {
-  background: url('DefaultSkin/images/PrintFrameIcon.gif') no-repeat left
-    -19px;
+  background: url('DefaultSkin/images/PrintFrameIcon.gif') no-repeat left -19px;
 }
 
 .UIPCVContainer a {
@@ -100,9 +97,7 @@
 }
 
 .UIPCVPortlet .UIPCVConfig .TitleBar {
-  background: transparent
-    url('DefaultSkin/images/BgCategoryTitle1x25.gif') repeat-x scroll 0
-    0;
+  background: transparent url('DefaultSkin/images/BgCategoryTitle1x25.gif') repeat-x scroll 0 0;
   border-top: 1px solid #B7B7B7;
   border-left: 1px solid #B7B7B7;
   border-right: 1px solid #B7B7B7;
