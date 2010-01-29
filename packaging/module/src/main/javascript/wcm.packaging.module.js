@@ -56,6 +56,19 @@ function getModule(params) {
   module.extension.war.deployName = "ecm-wcm-extension";	      
   //module.web.wcmportal = 
   //  new Project("org.exoplatform.ecm", "exo.ecm.wcm.web.portal", "exo-portal", module.version);
+
+  module.demo = {};
+  module.demo.portal = new Project("org.exoplatform.ecm", "exo.ecm.wcm.demo.war", "war", module.version).
+		addDependency(new Project("org.exoplatform.ecm", "exo.ecm.wcm.demo.config", "jar", module.version));
+  module.demo.portal.deployName = "ecmdemo";	      
     
+  module.demo.rest = new Project("org.exoplatform.ecm", "exo.ecm.wcm.demo.rest-war", "war", module.version);
+  module.demo.rest.deployName = "rest-ecmdemo";	      
+ 
+   module.server = {};
+
+   module.server.tomcat = {};
+   module.server.tomcat.patch = new Project("org.exoplatform.ecm", "exo.ecm.wcm.server.tomcat.patch", "jar", module.version);
+   
   return module;
 }
