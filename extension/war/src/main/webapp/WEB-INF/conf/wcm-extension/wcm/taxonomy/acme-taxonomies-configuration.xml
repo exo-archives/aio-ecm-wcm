@@ -20,10 +20,7 @@
 
 -->
 
-<configuration
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
-   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd" xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
 
   <external-component-plugins>
     <target-component>org.exoplatform.services.cms.taxonomy.TaxonomyService</target-component>
@@ -161,6 +158,20 @@
                     </field>
                     <field name="roles">
                       <string>*:/platform/users</string>
+                    </field>
+                    <field name="mixins">
+                      <collection type="java.util.ArrayList">
+                        <value>
+                          <object type="org.exoplatform.services.cms.actions.impl.ActionConfig$Mixin">
+                            <field name="name">
+                              <string>mix:affectedNodeTypes</string>
+                            </field>
+                            <field name="properties">
+                              <string>exo:affectedNodeTypeNames=exo:article,exo:podcast,exo:sample,kfx:document,nt:file,rma:filePlan,exo:contact_us,exo:cssFile,exo:htmlFile,exo:jsFile,exo:pictureOnHeadWebcontent,exo:siteSearchBox,exo:siteNavigationWebContent,exo:siteBreadcrumb</string>
+                            </field>
+                          </object>
+                        </value>
+                      </collection>
                     </field>
                   </object>
                 </value>

@@ -9,6 +9,7 @@
       <confirmation>Contact Form Confirmation</confirmation>
       <pcv>Details</pcv>
       <printviewer>Print page</printviewer>
+      <searchResult>Search</searchResult>
     </acme>
   </portal>
 </bundle>

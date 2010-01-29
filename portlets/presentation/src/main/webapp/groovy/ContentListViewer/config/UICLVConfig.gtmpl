@@ -6,8 +6,8 @@
 	PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
 	def portletId = pContext.getWindowId();
 	def quickEditingBlockId = portletId + "-QuickEditingBlock";
-	def rcontext = _ctx.getRequestContext() ;
- 	rcontext.getJavascriptManager().addOnLoadJavascript("showHideOrderBy");
+	def jsManager = _ctx.getRequestContext().getJavascriptManager();
+	jsManager.addOnLoadJavascript("showHideOrderBy");
 %>
 <div class="UIForm $uicomponent.id">
 	<div class="TitleBar">

@@ -28,12 +28,10 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
@@ -370,23 +368,16 @@ public class UIPCLVForm extends UIForm {
 	 * @throws Exception the exception
 	 */
 	public String generateLink(Node node) throws Exception {
-		PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-		HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) portletRequestContext.getRequest();
-		PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
-		UIPortal uiPortal = Util.getUIPortal();
-
-		String link = null;
-		String portalURI = portalRequestContext.getPortalURI();
-		String requestURI = requestWrapper.getRequestURI();
-		String pageNodeSelected = uiPortal.getSelectedNode().getUri();
 		String categoryPath = null;
-
+		PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
+    String pageNodeSelected = Util.getUIPortal().getSelectedNode().getUri();
 		try {
-			categoryPath = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected+ "/")), "UTF-8");
+			categoryPath = URLDecoder.decode(StringUtils.substringAfter(portalRequestContext.getNodePath(), pageNodeSelected + "/"), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 		  Utils.createPopupMessage(this, "UIPCLVConfig.msg.decode", null, ApplicationMessage.ERROR);
 		}
 
+		PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
 		PortletRequest portletRequest = portletRequestContext.getRequest();
 		PortletPreferences portletPreferences = portletRequest.getPreferences();
 		String preferenceRepository = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_REPOSITORY, "");
@@ -416,6 +407,8 @@ public class UIPCLVForm extends UIForm {
 		Node newNode = categoryNode.getNode(nodeName);
 		String path = newNode.getPath();
 
+		String link = null;
+		
 		String itemPath = path.substring(path.lastIndexOf(preferenceTreeName));
 		String backToCategory = "";
 		if (categoryPath.equals("")) {
@@ -423,6 +416,7 @@ public class UIPCLVForm extends UIForm {
 		} else {
 			backToCategory = itemPath.substring(0, itemPath.indexOf(newNode.getName()) - 1);
 		}
+		String portalURI = portalRequestContext.getPortalURI();
 		link = portalURI + preferenceTargetPage + "/" + itemPath + "?back" + "=" + "/" + backToCategory;
 
 		return link;

@@ -9,6 +9,7 @@
       <confirmation>Confirmation de contact</confirmation>
       <pcv>Détails</pcv>
       <printviewer>Print page</printviewer>
+      <searchResult>Résultats de recherche</searchResult>
     </acme>
   </portal>
 </bundle>

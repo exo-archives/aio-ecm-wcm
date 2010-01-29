@@ -16,7 +16,6 @@
  */
 package org.exoplatform.wcm.webui.search;
 
-import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,7 +25,6 @@ import javax.jcr.Node;
 import javax.jcr.Value;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.commons.utils.PageList;
@@ -126,19 +124,14 @@ public class UISearchResult extends UIContainer {
 		if (resultType == null || resultType.length() == 0) {
 			resultType = "DocumentAndPage";
 		}
-		HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
-		String queryString = requestWrapper.getQueryString();
-		if (queryString != null && queryString.trim().length() != 0 && queryString.matches(PARAMETER_REGX)) {
-			queryString = URLDecoder.decode(queryString, "UTF-8");
-			String[] params = queryString.split("&");
-			String portalParam = params[0];
-			String currentPortal = portalParam.split("=")[1];
-			String keywordParam = queryString.substring(portalParam.length() + 1);
-			String keyword = keywordParam.substring("keyword=".length());
+		PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
+		String portal = portalRequestContext.getRequestParameter("portal");
+		String keyword = portalRequestContext.getRequestParameter("keyword");
+		if (portal != null && keyword != null) {
 			setKeyword(keyword);
 			SiteSearchService siteSearchService = getApplicationComponent(SiteSearchService.class);
 			QueryCriteria queryCriteria = new QueryCriteria();
-			queryCriteria.setSiteName(currentPortal);
+			queryCriteria.setSiteName(portal);
 			queryCriteria.setKeyword(keyword.toLowerCase());
 			//queryCriteria.setSearchWebpage(true);
 			queryCriteria.setSearchWebpage(false);
@@ -158,7 +151,7 @@ public class UISearchResult extends UIContainer {
 				setSearchTime(paginatedQueryResult.getQueryTimeInSecond());
 				setSuggestion(paginatedQueryResult.getSpellSuggestion());
 				String suggestionURL = Util.getPortalRequestContext().getRequestURI();
-				suggestionURL += "?portal=" + currentPortal + "&keyword=" + getSuggestion();
+				suggestionURL += "?portal=" + portal + "&keyword=" + getSuggestion();
 				setSuggestionURL(suggestionURL);
 				setPageList(paginatedQueryResult);
 			} catch (Exception e) {

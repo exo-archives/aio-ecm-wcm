@@ -16,11 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.PortletPreferences;
-import javax.servlet.http.HttpServletRequestWrapper;
 
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.wcm.search.QueryCriteria;
 import org.exoplatform.services.wcm.search.SiteSearchService;
@@ -113,26 +114,13 @@ public class UISearchForm extends UIForm {
 	 * application.WebuiRequestContext)
 	 */
 	public void processRender(WebuiRequestContext context) throws Exception {
-		PortletRequestContext portletRequestContext = (PortletRequestContext) context;
-		HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) portletRequestContext.getRequest();
-		String queryString = requestWrapper.getQueryString();
 		UIFormStringInput keywordInput = getUIStringInput(KEYWORD_INPUT);
-		if (queryString != null && queryString.matches(UISearchResult.PARAMETER_REGX)) {
-			keywordInput.setValue(null);
-			queryString = URLDecoder.decode(queryString, "UTF-8");
-			String[] params = queryString.split("&");
-			for (String param : params) {
-				String[] pair = param.split("=");
-				if (pair.length == 2) {
-					String key = pair[0];
-					String val = pair[1];
-					if ("portal".equals(key)) {
-						getUIFormSelectBox(PORTALS_SELECTOR).setValue(val);
-					} else if ("keyword".equals(key)) {
-						keywordInput.setValue(val);
-					}
-				}
-			}
+		PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
+		String portal = URLDecoder.decode(portalRequestContext.getRequestParameter("portal"), "UTF-8");
+		String keyword = URLDecoder.decode(portalRequestContext.getRequestParameter("keyword"), "UTF-8");
+		if (portal != null && keyword != null) {
+			keywordInput.setValue(keyword);
+			getUIFormSelectBox(PORTALS_SELECTOR).setValue(portal);
 		}
 		super.processRender(context);
 	}

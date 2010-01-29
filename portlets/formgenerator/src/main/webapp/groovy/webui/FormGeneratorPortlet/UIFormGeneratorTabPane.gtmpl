@@ -5,8 +5,9 @@
 	 *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
 	 * Jun 23, 2009  
 	 */
-  	def rcontext = _ctx.getRequestContext() ;
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs') ;
+  def jsManager = _ctx.getRequestContext().getJavascriptManager();
+  jsManager.importJavascript('eXo.webui.UIHorizontalTabs') ;
+  jsManager.importJavascript('eXo.wcm.FormGeneratorPortlet.UIFormGeneratorPortlet', '/formgenerator/javascript/') ;
 %>
 
 <div class="UIFormGenerator">
