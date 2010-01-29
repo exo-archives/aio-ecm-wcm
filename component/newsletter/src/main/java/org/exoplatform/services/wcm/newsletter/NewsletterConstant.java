@@ -32,6 +32,7 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
@@ -47,7 +48,6 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
-import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.webui.core.UIComponent;
 
 /**
@@ -283,26 +283,19 @@ public class NewsletterConstant {
    * @throws Exception  The exception
    */
   public static List<String> getAllGroupAndMembershipOfCurrentUser(String userId) throws Exception{
-    List<String> userGroupMembership = new ArrayList<String>();
-    userGroupMembership.add(userId);
-    String value = "";
-    String id = "";
-    Membership membership = null;
-    OrganizationService organizationService_ = WCMCoreUtils.getService(OrganizationService.class);
-    try{
-      for(Object object : organizationService_.getMembershipHandler().findMembershipsByUser(userId).toArray()){
-        id = object.toString();
-        id = id.replace("Membership[", "").replace("]", "");
-        membership = organizationService_.getMembershipHandler().findMembership(id);
-        value = membership.getGroupId();
-        userGroupMembership.add(value);
-        value = membership.getMembershipType() + ":" + value;
-        userGroupMembership.add(value);
-      }
-    }catch(Exception ex){
-      return null;
+    OrganizationService oservice = (OrganizationService)
+    ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
+    List<String> userMemberships = new ArrayList<String> ();
+    userMemberships.add(userId);
+    Collection<?> memberships = oservice.getMembershipHandler().findMembershipsByUser(userId);
+    if(memberships == null || memberships.size() < 0) return userMemberships;
+    Object[] objects = memberships.toArray();
+    for(int i = 0; i < objects.length; i ++ ){
+      Membership membership = (Membership)objects[i];
+      String role = membership.getMembershipType() + ":" + membership.getGroupId();
+      userMemberships.add(role);     
     }
-    return userGroupMembership;
+    return userMemberships;
   }
   
   /**

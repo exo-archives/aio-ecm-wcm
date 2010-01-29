@@ -18,11 +18,11 @@ package org.exoplatform.wcm.webui.newsletter.manager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
-import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
@@ -39,22 +39,19 @@ public class NewsLetterUtil {
    */
   public static List<String> getAllGroupAndMembershipOfCurrentUser() throws Exception{
     String userId = getCurrentUser();
-    List<String> userGroupMembership = new ArrayList<String>();
-    userGroupMembership.add(userId);
-    String value = "";
-    String id = "";
-    Membership membership = null;
-    OrganizationService organizationService_ = (OrganizationService) PortalContainer.getComponent(OrganizationService.class);
-    for(Object object : organizationService_.getMembershipHandler().findMembershipsByUser(userId).toArray()){
-      id = object.toString();
-      id = id.replace("Membership[", "").replace("]", "");
-      membership = organizationService_.getMembershipHandler().findMembership(id);
-      value = membership.getGroupId();
-      userGroupMembership.add(value);
-      value = membership.getMembershipType() + ":" + value;
-      userGroupMembership.add(value);
+    OrganizationService oservice = (OrganizationService)
+    ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
+    List<String> userMemberships = new ArrayList<String> ();
+    userMemberships.add(userId);
+    Collection<?> memberships = oservice.getMembershipHandler().findMembershipsByUser(userId);
+    if(memberships == null || memberships.size() < 0) return userMemberships;
+    Object[] objects = memberships.toArray();
+    for(int i = 0; i < objects.length; i ++ ){
+      Membership membership = (Membership)objects[i];
+      String role = membership.getMembershipType() + ":" + membership.getGroupId();
+      userMemberships.add(role);     
     }
-    return userGroupMembership;
+    return userMemberships;
   }
   
 	/**
@@ -63,8 +60,7 @@ public class NewsLetterUtil {
 	 * @return the portal name
 	 */
 	public static String getPortalName() {
-		UIPortal portal = Util.getUIPortal();
-		return portal.getName();  
+	  return Util.getUIPortalApplication().getOwner();
 	}
 	
 	/**
