@@ -55,6 +55,8 @@
     <module>connectors/fckeditor</module>
     <module>web/eXoWCMResources</module>
     <module>extension</module>
+    <module>server/tomcat/patch</module>
+    <module>demo</module>
     <module>packaging</module>
   </modules>
 

@@ -53,8 +53,11 @@ function getProduct(version) {
   product.addDependencies(wcm.portlet.newsletter); 
   product.addDependencies(wcm.portlet.formgenerator);
   product.addDependencies(wcm.web.eXoWCMResources) ;
+
+	product.addDependencies(wcm.demo.portal);
+	product.addDependencies(wcm.demo.rest);
   
-  product.addServerPatch("tomcat", portal.server.tomcat.patch) ;
+  product.addServerPatch("tomcat", wcm.server.tomcat.patch) ;
   product.addServerPatch("jboss",  portal.server.jboss.patch) ;
   product.addServerPatch("jbossear",  portal.server.jbossear.patch) ;  
   //product.addServerPatch("jonas",  portal.server.jonas.patch) ;
