@@ -1,4 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">  
+<project 
+   xmlns="http://maven.apache.org/POM/4.0.0"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   
   <parent>
     <groupId>org.exoplatform.ecm</groupId>
     <artifactId>wcm</artifactId>
@@ -10,7 +14,7 @@
   <name>eXo WCM Extension EAR</name>
   <packaging>ear</packaging>
   <description>eXo WCM Extension EAR's configuration</description>
-  
+
   <dependencies>
     <dependency>
       <groupId>org.exoplatform.ecm</groupId>
@@ -22,32 +26,32 @@
       <artifactId>exo.ecm.wcm.extension.war</artifactId>
       <version>${project.version}</version>
       <type>war</type>
-    </dependency>		
-  </dependencies>  
+    </dependency>
+  </dependencies>
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-ear-plugin</artifactId>
         <configuration>
-           <displayName>wcm-extension</displayName>        
-           <defaultLibBundleDir>lib</defaultLibBundleDir>
-           <modules>            
-              <jarModule>
-                <groupId>org.exoplatform.ecm</groupId>
-                <artifactId>exo.ecm.wcm.extension.config</artifactId>
-                <includeInApplicationXml>true</includeInApplicationXml>
-              </jarModule>           
-              <webModule>
-                <groupId>org.exoplatform.ecm</groupId>
-                <artifactId>exo.ecm.wcm.extension.war</artifactId>
-                <contextRoot>wcm</contextRoot>
+          <displayName>wcm-extension</displayName>
+          <defaultLibBundleDir>lib</defaultLibBundleDir>
+          <modules>
+            <jarModule>
+              <groupId>org.exoplatform.ecm</groupId>
+              <artifactId>exo.ecm.wcm.extension.config</artifactId>
+              <includeInApplicationXml>true</includeInApplicationXml>
+            </jarModule>
+            <webModule>
+              <groupId>org.exoplatform.ecm</groupId>
+              <artifactId>exo.ecm.wcm.extension.war</artifactId>
+              <contextRoot>wcm</contextRoot>
               <bundleFileName>wcm.war</bundleFileName>
-             </webModule>
+            </webModule>
           </modules>
         </configuration>
       </plugin>
-    </plugins>  
-    <finalName>gatein-exo-wcm-${project.version}</finalName>    
+    </plugins>
+    <finalName>gatein-exo-wcm-${project.version}</finalName>
   </build>
 </project>
