@@ -39,9 +39,9 @@
 
   <portlet-skin>
     <application-name>presentation</application-name>
-    <portlet-name>SiteAdministrationPortlet</portlet-name>
+    <portlet-name>EditingPortlet</portlet-name>
     <skin-name>Default</skin-name>
-    <css-path>/skin/SiteAdministration/DefaultStylesheet.css</css-path>
+    <css-path>/skin/Editing/DefaultStylesheet.css</css-path>
   </portlet-skin>
   
   <!-- CategoryNavigationPortlet skins -->

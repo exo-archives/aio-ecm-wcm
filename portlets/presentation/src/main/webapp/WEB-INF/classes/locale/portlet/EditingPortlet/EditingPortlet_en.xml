@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+ <EditingPortlet>
+  <action>
+   <draft>Draft</draft>
+   <published>Published</published>
+  </action>
+  <label>
+   <Editing>Editing</Editing>
+  </label>
+  <msg>
+   <not-permission>You don't have permission to do this action.</not-permission>
+  </msg>
+ </EditingPortlet>
+</bundle>

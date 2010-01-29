@@ -1,0 +1,39 @@
+<% 
+	import org.exoplatform.web.application.JavascriptManager;
+	import org.exoplatform.portal.application.PortalRequestContext;
+	import org.exoplatform.wcm.webui.Utils;
+	import org.exoplatform.portal.webui.util.Util;
+	import org.exoplatform.webui.application.portlet.PortletRequestContext;
+	
+	def rcontext = _ctx.getRequestContext();
+	JavascriptManager jsmanager = rcontext.getJavascriptManager();
+	
+	String published = uicomponent.event("Published");
+	String draft = uicomponent.event("Draft");		
+	
+	String draftLabel = _ctx.appRes("EditingPortlet.action.draft");
+	String publishedLabel = _ctx.appRes("EditingPortlet.action.published");
+	String editing = _ctx.appRes("EditingPortlet.label.Editing");
+	PortalRequestContext context = Util.getPortalRequestContext();
+	String isDraft = context.getRequest().getSession().getAttribute(Utils.TURN_ON_QUICK_EDIT);
+%>
+
+<div class="UISiteAdminToolBar">
+	<div class="BoxOnOff SelectOff">
+		<div style="float:left; font-weight:bold; margin-top:3px;">$editing : </div>
+		<div class="LeftSelect" style="float: left;">
+	    	<div>
+		    	<select class="RightSelect">
+		    	<%if(!Boolean.valueOf(isDraft)) {%>
+		    		<option onclick="$published" selected="selected">$publishedLabel</option>
+		    		<option onclick="$draft">$draftLabel</option>
+		    		<%} else {%>
+		    			<option onclick="$published" >$publishedLabel</option>
+		    			<option onclick="$draft" selected="selected">$draftLabel</option>
+		    		<%} %>
+		    	</select>
+		    </div>
+	    </div>
+	    <div style="clear:both"><span></span></div>
+	</div>		
+</div>

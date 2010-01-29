@@ -86,13 +86,13 @@
 	</portlet>
 	
 	<portlet>
-		<description xml:lang="EN">Site Administration ToolBar</description>
-		<portlet-name>SiteAdministrationPortlet</portlet-name>
-		<display-name>Site Admin</display-name>
+		<description xml:lang="EN">Editing ToolBar</description>
+		<portlet-name>EditingPortlet</portlet-name>
+		<display-name>Editing ToolBar</display-name>
 		<portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
 		<init-param>
 			<name>webui.configuration</name>
-			<value>/WEB-INF/conf/portlet/SiteAdministration/webui/configuration.xml</value>
+			<value>/WEB-INF/conf/portlet/Editing/webui/configuration.xml</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
@@ -100,12 +100,12 @@
 			<portlet-mode>help</portlet-mode>
 		</supports>
 		<supported-locale>en</supported-locale>
-		<resource-bundle>locale.portlet.SiteAdministration.SiteAdministration</resource-bundle>
+		<resource-bundle>locale.portlet.EditingPortlet.EditingPortlet</resource-bundle>
 		
 		<portlet-info>
-			<title>Site Administration ToolBar</title>
-			<short-title>Site Administration ToolBar</short-title>
-			<keywords>SiteAdministration</keywords>
+			<title>Editing ToolBar</title>
+			<short-title>Editing ToolBar</short-title>
+			<keywords>Editing</keywords>
 		</portlet-info>
 		<portlet-preferences>
 			<preference>
