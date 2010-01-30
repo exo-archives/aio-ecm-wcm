@@ -19,11 +19,11 @@
 %>
 
 <div class="UISiteAdminToolBar">
-	<div class="BoxOnOff SelectOff">
+	<div style="width: 136px;">
 		<div style="float:left; font-weight:bold; margin-top:3px;">$editing : </div>
 		<div class="LeftSelect" style="float: left;">
 	    	<div>
-		    	<select class="RightSelect">
+		    	<select>
 		    	<%if(!Boolean.valueOf(isDraft)) {%>
 		    		<option onclick="$published" selected="selected">$publishedLabel</option>
 		    		<option onclick="$draft">$draftLabel</option>

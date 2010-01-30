@@ -48,6 +48,7 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.webui.core.UIComponent;
 
 /**
@@ -158,6 +159,8 @@ public class NewsletterConstant {
   private static Session session;
   
   public static Session getSession() {
+    LivePortalManagerService livePortalManagerService = (LivePortalManagerService)
+      ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(LivePortalManagerService.class);
     return session;
   }
 

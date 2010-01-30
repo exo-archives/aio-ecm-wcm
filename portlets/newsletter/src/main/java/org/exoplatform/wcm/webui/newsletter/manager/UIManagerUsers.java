@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.jcr.Node;
+import javax.jcr.Session;
+
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.UserACL;
@@ -36,6 +39,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterUserInfor;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
+import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.publication.PublicationUtil;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
@@ -217,11 +221,14 @@ public class UIManagerUsers extends UITabPane {
     List<String> listUserEdit = this.getAllEditPermission();
     List<String> listModerator = new ArrayList<String>();
     List<String> listRedactor = new ArrayList<String>();
-    
+    String portalName = NewsLetterUtil.getPortalName();
+    LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
+    Node portalNode = livePortalManagerService.getLivePortal(Utils.getSessionProvider(), portalName);
+    Session session = portalNode.getSession();
+    NewsletterConstant.setSession(session);
     // get list of moderator
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
-    String portalName = NewsLetterUtil.getPortalName();
     for(NewsletterCategoryConfig categoryConfig : categoryHandler.getListCategories(portalName, Utils.getSessionProvider())){
       for(String str : categoryConfig.getModerator().split(",")){
         if(!listModerator.contains(str)) {
