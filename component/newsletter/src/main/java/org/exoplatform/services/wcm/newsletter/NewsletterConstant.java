@@ -159,8 +159,6 @@ public class NewsletterConstant {
   private static Session session;
   
   public static Session getSession() {
-    LivePortalManagerService livePortalManagerService = (LivePortalManagerService)
-      ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(LivePortalManagerService.class);
     return session;
   }
 
