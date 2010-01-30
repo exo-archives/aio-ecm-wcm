@@ -40,13 +40,13 @@ import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
-import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PropertiesParam;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.rest.resource.ResourceContainer;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -81,9 +81,9 @@ public class GadgetConnector implements ResourceContainer {
    * @param container the container
    * @param initParams the init params
    */
-  public GadgetConnector(ExoContainer container, InitParams initParams) {
-    applicationRegistryService = (ApplicationRegistryService)container.getComponentInstanceOfType(ApplicationRegistryService.class);
-    gadgetRegistryService = (GadgetRegistryService) container.getComponentInstanceOfType(GadgetRegistryService.class) ;
+  public GadgetConnector(InitParams initParams) {
+    applicationRegistryService = WCMCoreUtils.getService(ApplicationRegistryService.class);
+    gadgetRegistryService = WCMCoreUtils.getService(GadgetRegistryService.class);
     readServerConfig(initParams);
   }
   

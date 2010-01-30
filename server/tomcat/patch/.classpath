@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/tomcat"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
-	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
-	<classpathentry kind="output" path="target/classes"/>
+  <classpathentry kind="src" path="src/main/tomcat" including="**/*" excluding="**/*.java"/>
+  <classpathentry kind="output" path="target/classes"/>
+  <classpathentry kind="var" path="M2_REPO/org/exoplatform/portal/exo.portal.server.tomcat.patch/3.0.0-Beta05/exo.portal.server.tomcat.patch-3.0.0-Beta05.jar" sourcepath="M2_REPO/org/exoplatform/portal/exo.portal.server.tomcat.patch/3.0.0-Beta05/exo.portal.server.tomcat.patch-3.0.0-Beta05-sources.jar"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 </classpath>

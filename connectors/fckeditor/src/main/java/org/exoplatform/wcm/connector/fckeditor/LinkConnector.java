@@ -23,8 +23,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
-import org.exoplatform.common.http.HTTPMethods;
-import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
@@ -54,9 +53,8 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
    * 
    * @param container the container
    */
-  public LinkConnector(ExoContainer container) {
-    super(container);
-    linkFileHandler = new LinkFileHandler(container);
+  public LinkConnector() {
+    linkFileHandler = new LinkFileHandler();
   }
 
   /**

@@ -41,7 +41,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.lang.StringUtils;
-import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
@@ -103,8 +102,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    * @param container the container
    * @param params the params
    */
-  public DriverConnector(ExoContainer container, InitParams params) {
-    super(container);
+  public DriverConnector(InitParams params) {
     limit = Integer.parseInt(params.getValueParam("upload.limit.size").getValue());
   }
 	

@@ -27,6 +27,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.ecm.connector.fckeditor.FCKFileHandler;
 import org.exoplatform.ecm.connector.fckeditor.FCKFolderHandler;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
@@ -101,15 +102,17 @@ public abstract class BaseConnector {
    * 
    * @param container the container
    */
-  public BaseConnector(ExoContainer container) {
-    livePortalManagerService = (LivePortalManagerService) container.getComponentInstanceOfType(LivePortalManagerService.class);
-    repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
-    webSchemaConfigService = (WebSchemaConfigService) container.getComponentInstanceOfType(WebSchemaConfigService.class);
-    votingService = (VotingService) container.getComponentInstanceOfType(VotingService.class);
-    linkManager = (LinkManager) container.getComponentInstanceOfType(LinkManager.class);
+  public BaseConnector() {
+    livePortalManagerService = WCMCoreUtils.getService(LivePortalManagerService.class);
+    repositoryService = WCMCoreUtils.getService(RepositoryService.class);
+    webSchemaConfigService = WCMCoreUtils.getService(WebSchemaConfigService.class);
+    votingService = WCMCoreUtils.getService(VotingService.class);
+    linkManager = WCMCoreUtils.getService(LinkManager.class);
+    
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
     folderHandler = new FCKFolderHandler(container);
     fileHandler = new FCKFileHandler(container);
-    fileUploadHandler = new FileUploadHandler(container);
+    fileUploadHandler = new FileUploadHandler();
   }
 
   /**

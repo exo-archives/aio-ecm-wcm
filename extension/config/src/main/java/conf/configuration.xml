@@ -64,7 +64,7 @@
                   <string>dms-extension</string>
                 </value>
                 <value>
-                  <string>wcm-extension</string>
+                  <string>ecm-wcm-extension</string>
                 </value>
               </collection>
             </field>

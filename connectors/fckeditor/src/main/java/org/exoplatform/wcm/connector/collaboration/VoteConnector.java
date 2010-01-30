@@ -23,8 +23,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
@@ -47,11 +45,7 @@ public class VoteConnector extends BaseConnector implements ResourceContainer {
    * 
    * @param container the container
    */
-  public VoteConnector() {
-	  super(ExoContainerContext.getCurrentContainer());
-	  
-	  
-  }
+  public VoteConnector() {}
 
   /**
    * post a Vote for a content

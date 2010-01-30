@@ -58,11 +58,9 @@
                 <value>
                   <string>ecm</string>
                 </value>
-                <!-- 
                 <value>
-                  <string>wcm-extension</string>
+                  <string>ecm-wcm-extension</string>
                 </value>
-                 -->
 								<value>
 									<string>ecmdemo</string>
 								</value>

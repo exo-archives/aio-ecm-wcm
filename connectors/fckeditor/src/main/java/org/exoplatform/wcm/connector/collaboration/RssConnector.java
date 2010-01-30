@@ -35,8 +35,6 @@ import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.lang.StringUtils;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
@@ -110,11 +108,8 @@ public class RssConnector extends BaseConnector implements ResourceContainer {
    * @param container the container
    */
   public RssConnector() {
-	  super(ExoContainerContext.getCurrentContainer());
-	  ExoContainer container =ExoContainerContext.getCurrentContainer(); 
-//    super(container);
-    repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
-    wcmConfigurationService = (WCMConfigurationService) container.getComponentInstanceOfType(WCMConfigurationService.class);
+    repositoryService = WCMCoreUtils.getService(RepositoryService.class);
+    wcmConfigurationService = WCMCoreUtils.getService(WCMConfigurationService.class);
   }
 
   /**

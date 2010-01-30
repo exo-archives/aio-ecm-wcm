@@ -18,7 +18,6 @@ package org.exoplatform.wcm.connector.fckeditor;
 
 import javax.jcr.Node;
 
-import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.ecm.connector.fckeditor.FCKFileHandler;
 import org.exoplatform.services.jcr.access.AccessControlEntry;
@@ -27,8 +26,8 @@ import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.core.NodetypeConstant;
+import org.exoplatform.services.wcm.core.WCMConfigurationService;
 
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
@@ -50,8 +49,8 @@ public class DocumentLinkHandler extends FCKFileHandler {
    * 
    * @param container the container
    */
-  public DocumentLinkHandler(ExoContainer container) {
-    super(container);
+  public DocumentLinkHandler() {
+    super(ExoContainerContext.getCurrentContainer());
   }
 
   /**
