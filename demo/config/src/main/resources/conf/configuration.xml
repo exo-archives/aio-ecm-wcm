@@ -49,9 +49,12 @@
                 <value>
                   <string>web</string>
                 </value>
-                <!--value>
-                  <string>wsrp-producer</string>
-                </value-->  
+                <value>
+                  <string>eXoDMSResources</string>
+                </value>
+                <value>
+                  <string>eXoWCMResources</string>
+                </value>  
                 <value>
                   <string>dms-extension</string>
                 </value>

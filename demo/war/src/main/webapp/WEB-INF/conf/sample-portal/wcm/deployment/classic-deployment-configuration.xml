@@ -55,7 +55,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/classic/Logo.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/classic/Logo.xml</string>
             </field>
           </object>
         </object-param>
@@ -77,7 +77,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/classic/Searchbox.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/classic/Searchbox.xml</string>
             </field>
           </object>
         </object-param>
@@ -99,7 +99,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/classic/Signin.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/classic/Signin.xml</string>
             </field>
           </object>
         </object-param>
@@ -121,7 +121,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/classic/Footer.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/classic/Footer.xml</string>
             </field>
           </object>
         </object-param>
@@ -143,7 +143,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/classic/Introduce.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/classic/Introduce.xml</string>
             </field>
           </object>
         </object-param>
@@ -165,7 +165,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/classic/News.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/classic/News.xml</string>
             </field>
           </object>
         </object-param>
@@ -187,7 +187,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/classic/Howto.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/classic/Howto.xml</string>
             </field>
           </object>
         </object-param>
@@ -209,7 +209,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/classic/Test.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/classic/Test.xml</string>
             </field>
           </object>
         </object-param>
@@ -231,7 +231,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/classic/Stylesheet.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/classic/Stylesheet.xml</string>
             </field>
           </object>
         </object-param>

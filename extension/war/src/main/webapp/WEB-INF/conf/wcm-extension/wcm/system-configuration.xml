@@ -127,6 +127,25 @@
   </component>
 
   <component>
+    <key>org.exoplatform.wcm.webui.WebUIPropertiesConfigService</key>
+    <type>org.exoplatform.wcm.webui.WebUIPropertiesConfigService</type>
+    <init-params>
+      <properties-param>
+        <name>SCV.popup.size.in.edit.portlet.mode</name>
+        <description>size of popup in edit mode of portlet</description>
+        <property name="width" value="850" />
+        <property name="height" value="525" />
+      </properties-param>
+      <properties-param>
+        <name>SCV.popup.size.in.quickdedit</name>
+        <description>size of popup in edit mode of portlet</description>
+        <property name="width" value="950" />
+        <property name="height" value="750" />
+      </properties-param>
+    </init-params>
+  </component>
+
+  <component>
     <key>org.exoplatform.services.mail.MailService</key>
     <type>org.exoplatform.services.mail.impl.MailServiceImpl</type>
     <init-params>
@@ -478,7 +497,7 @@
         <values-param>
           <name>autoCreatedInNewRepository</name>
           <description>Node types configuration file</description>
-          <value>war:/conf/wcm-extension/wcm/wcm-ext-nodetypes.xml</value>
+          <value>war:/conf/wcm-extension/wcm/nodetypes-configuration.xml</value>
         </values-param>
       </init-params>
     </component-plugin>

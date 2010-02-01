@@ -55,7 +55,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/acme/Logo.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/acme/Logo.xml</string>
             </field>
           </object>
         </object-param>
@@ -77,7 +77,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/acme/Signin.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/acme/Signin.xml</string>
             </field>
           </object>
         </object-param>
@@ -99,7 +99,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/acme/Searchbox.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/acme/Searchbox.xml</string>
             </field>
           </object>
         </object-param>
@@ -121,7 +121,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/acme/Navigation.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/acme/Navigation.xml</string>
             </field>
           </object>
         </object-param>
@@ -143,7 +143,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/acme/Footer.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/acme/Footer.xml</string>
             </field>
           </object>
         </object-param>
@@ -165,7 +165,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/acme/Introduce.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/acme/Introduce.xml</string>
             </field>
           </object>
         </object-param>
@@ -187,7 +187,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/acme/StylesheetGreen.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/acme/StylesheetGreen.xml</string>
             </field>
           </object>
         </object-param>
@@ -209,7 +209,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/acme/StylesheetBlue.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/acme/StylesheetBlue.xml</string>
             </field>
           </object>
         </object-param>
@@ -231,7 +231,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/acme/Images.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/acme/Images.xml</string>
             </field>
           </object>
         </object-param>
@@ -253,7 +253,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/acme/News.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/acme/News.xml</string>
             </field>
           </object>
         </object-param>
@@ -275,7 +275,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/acme/Events.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/acme/Events.xml</string>
             </field>
           </object>
         </object-param>
@@ -290,7 +290,7 @@
               		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm-artifacts/site-resources/acme/Documents.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/sample-portal/wcm/artifacts/site-resources/acme/Documents.xml</string></field>
             </object>
           </object-param -->
         <object-param>
@@ -311,7 +311,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/acme/DocWord.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/acme/DocWord.xml</string>
             </field>
           </object>
         </object-param>
@@ -333,7 +333,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/acme/DocJpg.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/acme/DocJpg.xml</string>
             </field>
           </object>
         </object-param>
@@ -355,7 +355,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/acme/DocPdf.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/acme/DocPdf.xml</string>
             </field>
           </object>
         </object-param>
@@ -377,7 +377,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/acme/NewsletterHeader.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/acme/NewsletterHeader.xml</string>
             </field>
           </object>
         </object-param>
@@ -399,7 +399,7 @@
               </object>
             </field>
             <field name="sourcePath">
-              <string>war:/conf/wcm-artifacts/site-resources/acme/Confirmation.xml</string>
+              <string>war:/conf/sample-portal/wcm/artifacts/site-resources/acme/Confirmation.xml</string>
             </field>
           </object>
         </object-param>
