@@ -134,45 +134,48 @@ public class ExportContentJob implements Job {
 		xmlsw.writeStartDocument("UTF-8", "1.0");
 		xmlsw.writeStartElement("xs", "contents", URL);
 		xmlsw.writeNamespace("xs", URL);
+		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy - HH:mm");
+		ValueFactory valueFactory = session.getValueFactory();
+		Date nodeDate = null;
+		Date now = null;
 		for (NodeIterator iter = queryResult.getNodes(); iter.hasNext();) {
 		    Node node_ = iter.nextNode();
 		    if (node_.hasProperty(START_TIME_PROPERTY)) {
+			now = Calendar.getInstance().getTime();
+			nodeDate = node_.getProperty(START_TIME_PROPERTY).getDate().getTime();
+		    }
+		    if (nodeDate == null || now.compareTo(nodeDate) >= 0) {
+			if (node_.canAddMixin(MIX_TARGET_PATH))
+			    node_.addMixin(MIX_TARGET_PATH);
+			node_.setProperty(MIX_TARGET_PATH, node_.getPath());
 
-			SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy - HH:mm");
-			Date now = Calendar.getInstance().getTime();
-			Date nodeDate = node_.getProperty(START_TIME_PROPERTY).getDate().getTime();
-			ValueFactory valueFactory = session.getValueFactory();
-			if (now.compareTo(nodeDate) >= 0) {
-			    if (node_.canAddMixin(MIX_TARGET_PATH))
-				node_.addMixin(MIX_TARGET_PATH);
-			    node_.setProperty(MIX_TARGET_PATH, node_.getPath());
+			if (node_.canAddMixin(MIX_TARGET_WORKSPACE))
+			    node_.addMixin(MIX_TARGET_WORKSPACE);
+			node_.setProperty(MIX_TARGET_WORKSPACE, workspace);
+			node_.setProperty(StageAndVersionPublicationConstant.LIVE_REVISION_PROP, valueFactory.createValue(""));
+			Map<String, VersionData> revisionsMap = getRevisionData(node_);
+			node_.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE, PublicationDefaultStates.PUBLISHED);
 
-			    if (node_.canAddMixin(MIX_TARGET_WORKSPACE))
-				node_.addMixin(MIX_TARGET_WORKSPACE);
-			    node_.setProperty(MIX_TARGET_WORKSPACE, workspace);
-			    node_.setProperty(StageAndVersionPublicationConstant.LIVE_REVISION_PROP, valueFactory.createValue(""));
-			    Map<String, VersionData> revisionsMap = getRevisionData(node_);
-			    node_.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE, PublicationDefaultStates.PUBLISHED);
-
-			    VersionData versionData = revisionsMap.get(node_.getUUID());
-			    if (versionData != null) {
-				versionData.setAuthor(node_.getSession().getUserID());
-				versionData.setState(PublicationDefaultStates.PUBLISHED);
-			    } else {
-				versionData = new VersionData(node_.getUUID(), PublicationDefaultStates.PUBLISHED, node_.getSession().getUserID());
-			    }
-			    revisionsMap.put(node_.getUUID(), versionData);
-			    addRevisionData(node_, revisionsMap.values());
-			    session.save();
-			    bos = new ByteArrayOutputStream();
-			    session.exportSystemView(node_.getPath(), bos, false, false);
-			    isExported = true;
-			    xmlsw.writeStartElement("xs", "content", URL);
-			    xmlsw.writeCData(bos.toString());
-			    xmlsw.writeEndElement();
+			VersionData versionData = revisionsMap.get(node_.getUUID());
+			if (versionData != null) {
+			    versionData.setAuthor(node_.getSession().getUserID());
+			    versionData.setState(PublicationDefaultStates.PUBLISHED);
+			} else {
+			    versionData = new VersionData(node_.getUUID(), PublicationDefaultStates.PUBLISHED, node_.getSession().getUserID());
 			}
+			revisionsMap.put(node_.getUUID(), versionData);
+			addRevisionData(node_, revisionsMap.values());
+			session.save();
+			bos = new ByteArrayOutputStream();
+			session.exportSystemView(node_.getPath(), bos, false, false);
+			if (!isExported)
+			    isExported = true;
+			xmlsw.writeStartElement("xs", "content", URL);
+			xmlsw.writeCData(bos.toString());
+			xmlsw.writeEndElement();
 		    }
 		}
+
 		if (bos != null) {
 		    bos.close();
 		}
