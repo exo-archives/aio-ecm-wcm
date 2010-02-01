@@ -343,10 +343,6 @@
     </msg>
   </ZeroValidator>
 
-  <ACMESite>
-    <label>Mẫu website ACME</label>
-  </ACMESite>
-
   <UIDropDownPageTemp>
     <item>
       <WCMPageConfigs>Kiểu WCM</WCMPageConfigs>

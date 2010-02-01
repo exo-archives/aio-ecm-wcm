@@ -341,10 +341,6 @@
     </msg>
   </ZeroValidator>
 
-  <ACMESite>
-    <label>ACME Template</label>
-  </ACMESite>
-
   <UIDropDownPageTemp>
     <item>
       <WCMPageConfigs>WCM page configs</WCMPageConfigs>

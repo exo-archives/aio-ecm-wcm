@@ -12,5 +12,9 @@
       <searchResult>Résultats de recherche</searchResult>
     </acme>
   </portal>
+  
+  <ACMESite>
+    <label>ACME Template</label>
+  </ACMESite>
 </bundle>
 

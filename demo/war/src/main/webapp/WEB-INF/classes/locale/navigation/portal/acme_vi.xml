@@ -12,5 +12,9 @@
       <searchResult>Kết quả tìm kiếm</searchResult>
     </acme>
   </portal>
+  
+  <ACMESite>
+    <label>Mẫu website ACME</label>
+  </ACMESite>
 </bundle>
 

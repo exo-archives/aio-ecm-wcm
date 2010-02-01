@@ -36,8 +36,7 @@
   <import>war:/conf/wcm-extension/wcm/overwrite-configuration.xml</import>
   <import>war:/conf/wcm-extension/wcm/system-configuration.xml</import>
   <import>war:/conf/wcm-extension/wcm/publication-configuration.xml</import>
-  <import>war:/conf/wcm-extension/wcm/template/contents-configuration.xml</import>
-  <import>war:/conf/wcm-extension/wcm/template/taxonomies-configuration.xml</import>
+  <import>war:/conf/wcm-extension/wcm/taxonomies-configuration.xml</import>
   <import>war:/conf/wcm-extension/wcm/metadata-configuration.xml</import>
   <import>war:/conf/wcm-extension/wcm/newsletter-configuration.xml</import>
   <import>war:/conf/wcm-extension/wcm/wcm-configuration.xml</import>
