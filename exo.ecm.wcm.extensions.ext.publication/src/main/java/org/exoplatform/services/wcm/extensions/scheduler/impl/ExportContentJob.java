@@ -115,7 +115,6 @@ public class ExportContentJob implements Job {
 
 	    ExoContainer container = ExoContainerContext.getCurrentContainer();
 	    RepositoryService repositoryService_ = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
-	    PublicationService publicationService_ = (PublicationService) container.getComponentInstanceOfType(PublicationService.class);
 	    ManageableRepository manageableRepository = repositoryService_.getRepository(repository);
 	    session = sessionProvider.getSession(workspace, manageableRepository);
 	    QueryManager queryManager = session.getWorkspace().getQueryManager();
@@ -124,22 +123,19 @@ public class ExportContentJob implements Job {
 		    + contentPath + "/%'", Query.SQL);
 	    QueryResult queryResult = query.execute();
 	    if (queryResult.getNodes().getSize() > 0) {
-	      TaxonomyService taxonomyService = (TaxonomyService) container.getComponentInstanceOfType(TaxonomyService.class);
+		TaxonomyService taxonomyService = (TaxonomyService) container.getComponentInstanceOfType(TaxonomyService.class);
 		File exportFolder = new File(localTempDir);
 		if (!exportFolder.exists())
 		    exportFolder.mkdirs();
 		File file = new File(localTempDir + File.separatorChar + "contents.xml");
 		ByteArrayOutputStream bos = null;
-		
-    List<Node> categorySymLinks = null; 
-		
+		List<Node> categorySymLinks = null;
 		XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
 		FileOutputStream output = new FileOutputStream(file);
 		XMLStreamWriter xmlsw = outputFactory.createXMLStreamWriter(output, "UTF-8");
 		xmlsw.writeStartDocument("UTF-8", "1.0");
 		xmlsw.writeStartElement("xs", "contents", URL);
 		xmlsw.writeNamespace("xs", URL);
-		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy - HH:mm");
 		ValueFactory valueFactory = session.getValueFactory();
 		Date nodeDate = null;
 		Date now = null;
@@ -172,54 +168,53 @@ public class ExportContentJob implements Job {
 			addRevisionData(node_, revisionsMap.values());
 			session.save();
 			bos = new ByteArrayOutputStream();
-			
-			 NodeLocation nodeLocation = NodeLocation.make(node_);
-       StringBuffer contenTargetPath = new StringBuffer();
-       contenTargetPath.append(nodeLocation.getRepository());
-       contenTargetPath.append(":");
-       contenTargetPath.append(nodeLocation.getWorkspace());
-       contenTargetPath.append(":");
-       contenTargetPath.append(nodeLocation.getPath());
-			
+
+			NodeLocation nodeLocation = NodeLocation.make(node_);
+			StringBuffer contenTargetPath = new StringBuffer();
+			contenTargetPath.append(nodeLocation.getRepository());
+			contenTargetPath.append(":");
+			contenTargetPath.append(nodeLocation.getWorkspace());
+			contenTargetPath.append(":");
+			contenTargetPath.append(nodeLocation.getPath());
+
 			session.exportSystemView(node_.getPath(), bos, false, false);
 			if (!isExported)
 			    isExported = true;
 			xmlsw.writeStartElement("xs", "content", URL);
-			xmlsw.writeAttribute("targetPath",contenTargetPath.toString());
-      xmlsw.writeStartElement("xs", "data", URL);
+			xmlsw.writeAttribute("targetPath", contenTargetPath.toString());
+			xmlsw.writeStartElement("xs", "data", URL);
 			xmlsw.writeCData(bos.toString());
 			xmlsw.writeEndElement();
 			xmlsw.writeStartElement("xs", "links", URL);
-			
-			 categorySymLinks = taxonomyService.getAllCategories(node_, true);
-			
-			 for(Node nodeSymlink : categorySymLinks){
-         
-         NodeLocation symlinkLocation = NodeLocation.make(nodeSymlink);
-         StringBuffer symlinkTargetPath = new StringBuffer();
-         symlinkTargetPath.append(symlinkLocation.getRepository());
-         symlinkTargetPath.append(":");
-         symlinkTargetPath.append(symlinkLocation.getWorkspace());
-         symlinkTargetPath.append(":");
-         symlinkTargetPath.append(symlinkLocation.getPath());
-         
-         
-         xmlsw.writeStartElement("xs", "link", URL);
-         xmlsw.writeStartElement("xs", "type", URL);
-         xmlsw.writeCharacters(nodeSymlink.getPrimaryNodeType().getName());
-         xmlsw.writeEndElement();
-         xmlsw.writeStartElement("xs", "title", URL);
-         xmlsw.writeCharacters(nodeSymlink.getName());
-         xmlsw.writeEndElement();
-         xmlsw.writeStartElement("xs", "targetPath", URL);    
-         xmlsw.writeCharacters(symlinkTargetPath.toString());
-         xmlsw.writeEndElement();
-         xmlsw.writeEndElement();
-                               
-       }
-			 xmlsw.writeEndElement();        
-       xmlsw.writeEndElement();
-			 
+
+			categorySymLinks = taxonomyService.getAllCategories(node_, true);
+
+			for (Node nodeSymlink : categorySymLinks) {
+
+			    NodeLocation symlinkLocation = NodeLocation.make(nodeSymlink);
+			    StringBuffer symlinkTargetPath = new StringBuffer();
+			    symlinkTargetPath.append(symlinkLocation.getRepository());
+			    symlinkTargetPath.append(":");
+			    symlinkTargetPath.append(symlinkLocation.getWorkspace());
+			    symlinkTargetPath.append(":");
+			    symlinkTargetPath.append(symlinkLocation.getPath());
+
+			    xmlsw.writeStartElement("xs", "link", URL);
+			    xmlsw.writeStartElement("xs", "type", URL);
+			    xmlsw.writeCharacters(nodeSymlink.getPrimaryNodeType().getName());
+			    xmlsw.writeEndElement();
+			    xmlsw.writeStartElement("xs", "title", URL);
+			    xmlsw.writeCharacters(nodeSymlink.getName());
+			    xmlsw.writeEndElement();
+			    xmlsw.writeStartElement("xs", "targetPath", URL);
+			    xmlsw.writeCharacters(symlinkTargetPath.toString());
+			    xmlsw.writeEndElement();
+			    xmlsw.writeEndElement();
+
+			}
+			xmlsw.writeEndElement();
+			xmlsw.writeEndElement();
+
 		    }
 		}
 
