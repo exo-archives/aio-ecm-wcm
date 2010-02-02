@@ -2,11 +2,11 @@
 <bundle>
  <EditingPortlet>
   <action>
-   <draft>Brouillon</draft>
-   <published>Publiés</published>
+   <draft>Edition</draft>
+   <published>En ligne</published>
   </action>
   <label>
-  	<Editing>Montage</Editing>
+  	<Editing>Mode : </Editing>
   </label>
   <msg>
    <not-permission>Vous n'avez pas les droits nécessaires pour effectuer cette action.</not-permission>

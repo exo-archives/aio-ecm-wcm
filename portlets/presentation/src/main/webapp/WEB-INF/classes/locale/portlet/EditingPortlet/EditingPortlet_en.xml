@@ -2,11 +2,11 @@
 <bundle>
  <EditingPortlet>
   <action>
-   <draft>Draft</draft>
-   <published>Published</published>
+   <draft>Edit</draft>
+   <published>Live</published>
   </action>
   <label>
-   <Editing>Editing</Editing>
+   <Editing>Mode :</Editing>
   </label>
   <msg>
    <not-permission>You don't have permission to do this action.</not-permission>

@@ -30,6 +30,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import org.exoplatform.common.http.HTTPStatus;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -60,7 +61,7 @@ public class RESTImagesRendererService implements ResourceContainer{
   static Log log = ExoLogger.getLogger(RESTImagesRendererService.class);
   
   /** The base rest uri. */
-  private String baseRestURI = "/portal/rest/";
+//  private String baseRestURI = "/portal/rest/";
   
   /**
    * Instantiates a new rEST images renderer service.
@@ -146,6 +147,7 @@ public class RESTImagesRendererService implements ResourceContainer{
     } else {
      nodeIdentifiler = file.getPath().replaceFirst("/","");
     }  
+    String baseRestURI = getBaseRestURI();
     String accessURI = baseRestURI;
     String userId = file.getSession().getUserID();    
     if (!SystemIdentity.ANONIM.equals(userId) && SystemIdentity.SYSTEM.equalsIgnoreCase(userId)) {
@@ -175,6 +177,7 @@ public class RESTImagesRendererService implements ResourceContainer{
     }else {
      nodeIdentifiler = file.getPath().replaceFirst("/","");
     }       
+    String baseRestURI = getBaseRestURI();
     String accessURI = baseRestURI;
     String userId = file.getSession().getUserID();    
     if(!SystemIdentity.ANONIM.equals(userId) && SystemIdentity.SYSTEM.equalsIgnoreCase(userId)) {
@@ -183,4 +186,19 @@ public class RESTImagesRendererService implements ResourceContainer{
     return builder.append(accessURI).append("images/").append(repository).append("/").append(workspaceName)
       .append("/").append(nodeIdentifiler).append("?param=").append(propertyName).toString();
   }
+
+  /**
+   * Generate the current rest base uri.
+   * 
+   * @return the current base uri
+   */
+  private String getBaseRestURI() {
+	  StringBuffer s = new StringBuffer("/");
+	  s.append(PortalContainer.getCurrentPortalContainerName());
+	  s.append("/");
+	  s.append(PortalContainer.getCurrentRestContextName());
+	  s.append("/");
+	  return s.toString();
+  }
+  
 }
