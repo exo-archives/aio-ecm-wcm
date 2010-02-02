@@ -276,7 +276,7 @@ public class UIWikiContentForm extends UIForm {
    * @throws Exception the exception
    */
   private Node createNewWebContentNode(String webContentName, String title, String content) throws Exception {
-    String portalName = Util.getUIPortal().getName();
+    String portalName = Util.getUIPortalApplication().getOwner();
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     Node portalNode = livePortalManagerService.getLivePortal(Utils.getSessionProvider(), portalName);
     WebSchemaConfigService webSchemaConfigService = getApplicationComponent(WebSchemaConfigService.class);

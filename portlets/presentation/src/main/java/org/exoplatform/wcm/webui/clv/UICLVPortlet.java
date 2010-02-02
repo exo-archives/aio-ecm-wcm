@@ -180,7 +180,7 @@ public class UICLVPortlet extends UIPortletApplication {
   		StringBuilder persistenceId = new StringBuilder();
   		persistenceId.append(PortalConfig.PORTAL_TYPE)
   		.append("#")
-  		.append(Util.getUIPortal().getName())
+  		.append(Util.getUIPortalApplication().getOwner())
   		.append(":")
   		.append(configurationService.getRuntimeContextParam(WCMConfigurationService.CLV_PORTLET))
   		.append("/")

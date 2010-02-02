@@ -374,12 +374,12 @@ public class PublicationUtil {
    */
   public static boolean isNodeContentPublishedToPageNode(Node contentNode, String navNodeURI) throws Exception{
   	DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
-  	PageNavigation pageNavigation = dataStorage.getPageNavigation(PortalConfig.PORTAL_TYPE, Util.getUIPortal().getName());
+  	PageNavigation pageNavigation = dataStorage.getPageNavigation(PortalConfig.PORTAL_TYPE, Util.getUIPortalApplication().getOwner());
   	ArrayList<PageNode> lisPageNodes = PublicationUtil.getAllPageNodeFromPageNavigation(pageNavigation);
   	PageNode pageNode = null;
   	
   	for (PageNode tempPageNode : lisPageNodes) {
-	    if (tempPageNode.getUri().equals(navNodeURI.replace("/" + Util.getUIPortal().getName() + "/", ""))){
+	    if (tempPageNode.getUri().equals(navNodeURI.replace("/" + Util.getUIPortalApplication().getOwner() + "/", ""))){
 	    	pageNode = tempPageNode;
 	    	break;
 	    }

@@ -153,7 +153,7 @@ public class UINameWebContentForm extends UIForm {
     public void execute(Event<UINameWebContentForm> event) throws Exception {
       UINameWebContentForm uiNameWebContentForm = event.getSource();
       UIApplication uiApplication = uiNameWebContentForm.getAncestorOfType(UIApplication.class);
-      String portalName = Util.getUIPortal().getName();
+      String portalName = Util.getUIPortalApplication().getOwner();
       LivePortalManagerService livePortalManagerService = uiNameWebContentForm.getApplicationComponent(LivePortalManagerService.class);
       Node portalNode = livePortalManagerService.getLivePortal(Utils.getSessionProvider(), portalName);
       WebSchemaConfigService webSchemaConfigService = uiNameWebContentForm.getApplicationComponent(WebSchemaConfigService.class);

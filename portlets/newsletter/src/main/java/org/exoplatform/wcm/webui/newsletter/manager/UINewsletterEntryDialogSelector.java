@@ -201,7 +201,7 @@ public class UINewsletterEntryDialogSelector extends UIForm {
       UINewsletterEntryForm newsletterEntryForm = newsletterEntryContainer.getChild(UINewsletterEntryForm.class) ;
       newsletterEntryForm.setNodePath(newsletterTemplateHandler.getTemplate(
                                                                             Utils.getSessionProvider(),
-                                                                            Util.getUIPortal().getName(), 
+                                                                            NewsLetterUtil.getPortalName(), 
                                                                             newsletterEntryContainer.getCategoryConfig(), 
                                                                             templateName).getPath());
       newsletterEntryForm.getChildren().clear();
@@ -259,7 +259,7 @@ public class UINewsletterEntryDialogSelector extends UIForm {
       List<SelectItemOption<String>> subscriptions = new ArrayList<SelectItemOption<String>>();
       NewsletterManagerService newsletterManagerService = newsletterEntryDialogSelector.getApplicationComponent(NewsletterManagerService.class);
       NewsletterSubscriptionHandler newsletterSubscriptionHandler = newsletterManagerService.getSubscriptionHandler();
-      String portalName = Util.getUIPortal().getName();
+      String portalName = NewsLetterUtil.getPortalName();
       SessionProvider sessionProvider = Utils.getSessionProvider();
       NewsletterCategoryConfig categoryConfig = newsletterManagerService.getCategoryHandler().getCategoryByName(sessionProvider, portalName, 
                                                                                                                 categorySelectBox.getValue());

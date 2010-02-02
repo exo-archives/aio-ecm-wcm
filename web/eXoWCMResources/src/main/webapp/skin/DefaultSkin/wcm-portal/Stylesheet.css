@@ -104,4 +104,5 @@ td {
 .UIToolbarContainer  .EditingPortletTDContainer {
   float: right;
   margin: 7px 0px 0px 5px;
+  width: 138px;
 }

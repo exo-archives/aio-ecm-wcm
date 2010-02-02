@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.search.PaginatedQueryResult;
@@ -119,7 +120,7 @@ public class UIContentSearchForm extends UIForm {
 
   private List<String> getPortalNames() throws Exception {
     List<String> portalNames = new ArrayList<String>();
-    String currentPortalName = org.exoplatform.portal.webui.util.Util.getUIPortal().getName();
+    String currentPortalName = Util.getUIPortalApplication().getOwner();
     RepositoryService repoService = getApplicationComponent(RepositoryService.class);
     String repository = repoService.getCurrentRepository().getConfiguration().getName();
     WCMConfigurationService configService = getApplicationComponent(WCMConfigurationService.class);

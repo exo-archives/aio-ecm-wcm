@@ -465,13 +465,13 @@ public class UINewsletterEntryManager extends UIForm {
           RepositoryService repositoryService = newsletterEntryManager.getApplicationComponent(RepositoryService.class);
           ManageableRepository manageableRepository = repositoryService.getRepository(newsletterManagerService.getRepositoryName()); 
           Session session = Utils.getSessionProvider().getSession(newsletterManagerService.getWorkspaceName(), manageableRepository);
-          String newsletterPath = NewsletterConstant.generateNewsletterPath(Util.getUIPortal().getName(), categoryName, subscriptionName, newsletterName) ;
+          String newsletterPath = NewsletterConstant.generateNewsletterPath(NewsLetterUtil.getPortalName(), categoryName, subscriptionName, newsletterName) ;
           Node newsletterNode = (Node) session.getItem(newsletterPath);
           NewsletterTemplateHandler newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
           newsletterTemplateHandler.convertAsTemplate(
                                                       Utils.getSessionProvider(),
                                                       newsletterNode.getPath(),
-                                                      Util.getUIPortal().getName(),
+                                                      NewsLetterUtil.getPortalName(),
                                                       categoryName);
           message = "UISubscription.msg.convertSuccessful";
           messageType = ApplicationMessage.INFO;

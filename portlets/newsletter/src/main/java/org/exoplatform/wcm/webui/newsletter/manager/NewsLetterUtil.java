@@ -75,7 +75,7 @@ public class NewsLetterUtil {
                       .replaceFirst("UINewsletterViewerForm", "UINewsletterViewerPortlet")
                       .replaceAll("&amp;", "&");
     String selectedNode = Util.getUIPortal().getSelectedNode().getUri() ;
-    String portalName = "/" + Util.getUIPortal().getName() ;
+    String portalName = "/" + getPortalName() ;
     if(link.indexOf(portalName) > 0) {
       if(link.indexOf(portalName + "/" + selectedNode) < 0){
         link = link.replaceFirst(portalName, portalName + "/" + selectedNode) ;

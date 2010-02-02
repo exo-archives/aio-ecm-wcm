@@ -131,7 +131,7 @@ public abstract class UIContentBrowsePanel extends UIBaseNodeTreeSelector implem
     selectPathPanel.setAcceptedNodeTypes(acceptedNodeTypes);
     selectPathPanel.setAcceptedMimeTypes(acceptedMimeTypes);
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
-    String currentPortalName = Util.getUIPortal().getName();
+    String currentPortalName = Util.getUIPortalApplication().getOwner();
     SessionProvider provider = Utils.getSessionProvider();
     currentPortal = livePortalManagerService.getLivePortal(provider, currentPortalName);
     currentPortalLocation = NodeLocation.make(currentPortal);

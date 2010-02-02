@@ -48,7 +48,6 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
-import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.webui.core.UIComponent;
 
 /**

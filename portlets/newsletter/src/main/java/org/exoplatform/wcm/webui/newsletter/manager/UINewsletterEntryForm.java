@@ -134,7 +134,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
     UINewsletterEntryDialogSelector newsletterEntryDialogSelector = newsletterEntryContainer.getChild(UINewsletterEntryDialogSelector.class);
     String selectedCategory = ((UIFormSelectBox)newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_CATEGORY_SELECTBOX)).getValue();
     String selectedSubsctiption = ((UIFormSelectBox)newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_SUBSCRIPTION_SELECTBOX)).getValue();
-    setStoredPath(NewsletterConstant.generateSubscriptionPath(Util.getUIPortal().getName(), selectedCategory, selectedSubsctiption));
+    setStoredPath(NewsletterConstant.generateSubscriptionPath(NewsLetterUtil.getPortalName(), selectedCategory, selectedSubsctiption));
     
     // Prepare node: use title as a node name
     Map<String, JcrInputProperty> inputProperties = DialogFormUtil.prepareMap(getChildren(), getInputProperties());
