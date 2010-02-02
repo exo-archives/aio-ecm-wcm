@@ -32,13 +32,12 @@ import javax.ws.rs.core.Response;
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.access.SystemIdentity;
-import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.rest.resource.ResourceContainer;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMService;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
@@ -59,10 +58,7 @@ public class RESTImagesRendererService implements ResourceContainer{
   
   /** The log. */
   static Log log = ExoLogger.getLogger(RESTImagesRendererService.class);
-  
-  /** The base rest uri. */
-//  private String baseRestURI = "/portal/rest/";
-  
+
   /**
    * Instantiates a new rEST images renderer service.
    * 
@@ -85,7 +81,7 @@ public class RESTImagesRendererService implements ResourceContainer{
    */
   @GET
   @Path("/{repositoryName}/{workspaceName}/{nodeIdentifier}")
-  public Response serveImageWithType(@PathParam("repositoryName") String repository, 
+  public Response serveImage(@PathParam("repositoryName") String repository, 
                                      @PathParam("workspaceName") String workspace,
                                      @PathParam("nodeIdentifier") String nodeIdentifier,
                                      @QueryParam("param") @DefaultValue("file") String param) { 
@@ -123,82 +119,49 @@ public class RESTImagesRendererService implements ResourceContainer{
       return Response.serverError().build(); 
     }
   }
-  
-  /**
-   * Generate uri.
-   * 
-   * @param file the file
-   * 
-   * @return the string
-   * 
-   * @throws Exception the exception
-   */
-  public String generateURI(Node file) throws Exception {
-    if(!file.isNodeType("nt:file")) throw new UnsupportedOperationException("The node isn't nt:file");
-    StringBuilder builder = new StringBuilder();    
-    String repository = ((ManageableRepository)file.getSession().getRepository()).getConfiguration().getName();
-    String workspaceName = file.getSession().getWorkspace().getName();
-    String nodeIdentifiler = null;
-    InputStream stream = file.getNode("jcr:content").getProperty("jcr:data").getStream();
-    if (stream.available() == 0) return null;
-    stream.close();
-    if (file.isNodeType("mix:referenceable")) {
-      nodeIdentifiler = file.getUUID();
-    } else {
-     nodeIdentifiler = file.getPath().replaceFirst("/","");
-    }  
-    String baseRestURI = getBaseRestURI();
-    String accessURI = baseRestURI;
-    String userId = file.getSession().getUserID();    
-    if (!SystemIdentity.ANONIM.equals(userId) && SystemIdentity.SYSTEM.equalsIgnoreCase(userId)) {
-      accessURI = baseRestURI.concat("private/");
-    }
-    return builder.append(accessURI).append("images/").append(repository).append("/")
-                  .append(workspaceName).append("/").append(nodeIdentifiler).append("?param=file").toString();
-  }
-  
-  /**
-   * Generate uri.
-   * 
-   * @param file the file
-   * @param propertyName the property name
-   * 
-   * @return the string
-   * 
-   * @throws Exception the exception
-   */
-  public String generateURI(Node file, String propertyName) throws Exception {
-    StringBuilder builder = new StringBuilder();    
-    String repository = ((ManageableRepository)file.getSession().getRepository()).getConfiguration().getName();
-    String workspaceName = file.getSession().getWorkspace().getName();
-    String nodeIdentifiler = null;
-    if(file.isNodeType("mix:referenceable")) {
-      nodeIdentifiler = file.getUUID();
-    }else {
-     nodeIdentifiler = file.getPath().replaceFirst("/","");
-    }       
-    String baseRestURI = getBaseRestURI();
-    String accessURI = baseRestURI;
-    String userId = file.getSession().getUserID();    
-    if(!SystemIdentity.ANONIM.equals(userId) && SystemIdentity.SYSTEM.equalsIgnoreCase(userId)) {
-      accessURI = baseRestURI.concat("private/");
-    }
-    return builder.append(accessURI).append("images/").append(repository).append("/").append(workspaceName)
-      .append("/").append(nodeIdentifiler).append("?param=").append(propertyName).toString();
-  }
 
   /**
-   * Generate the current rest base uri.
+   * Generate uri.
    * 
-   * @return the current base uri
+   * @param file the node
+   * @param propertyName the image property name, null if file is an image node
+   * 
+   * @return the string
+   * 
+   * @throws Exception the exception
    */
-  private String getBaseRestURI() {
-	  StringBuffer s = new StringBuffer("/");
-	  s.append(PortalContainer.getCurrentPortalContainerName());
-	  s.append("/");
-	  s.append(PortalContainer.getCurrentRestContextName());
-	  s.append("/");
-	  return s.toString();
+  public String generateImageURI(Node file, String propertyName) throws Exception {
+    StringBuilder builder = new StringBuilder();
+    NodeLocation fielLocation = NodeLocation.make(file);
+    String repository = fielLocation.getRepository();
+    String workspaceName = fielLocation.getWorkspace();
+    String nodeIdentifiler = file.isNodeType("mix:referenceable") ? file.getUUID() : file.getPath().replaceFirst("/","");
+    String portalName = PortalContainer.getCurrentPortalContainerName();
+    String restContextName = PortalContainer.getCurrentRestContextName();
+    
+    if (propertyName == null) {
+      if(!file.isNodeType("nt:file")) throw new UnsupportedOperationException("The node isn't nt:file");
+      InputStream stream = file.getNode("jcr:content").getProperty("jcr:data").getStream();
+      if (stream.available() == 0) return null;
+      stream.close();
+      builder.append("/").append(portalName).append("/")
+             .append(restContextName).append("/")
+             .append("images/")
+             .append(repository).append("/")
+             .append(workspaceName).append("/")
+             .append(nodeIdentifiler)
+             .append("?param=file");
+      return builder.toString();
+    } else {
+      builder.append(portalName).append("/")
+             .append(restContextName).append("/")
+             .append("images/")
+             .append(repository).append("/")
+             .append(workspaceName).append("/")
+             .append(nodeIdentifiler)
+             .append("?param=").append(propertyName);
+      return builder.toString();
+    }
   }
   
 }

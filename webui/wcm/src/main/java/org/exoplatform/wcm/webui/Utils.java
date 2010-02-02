@@ -20,6 +20,7 @@ import java.util.HashMap;
 
 import javax.jcr.Node;
 
+import org.exoplatform.container.definition.PortalContainerConfig;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
@@ -349,4 +350,14 @@ public class Utils {
   public static SessionProvider getSystemSessionProvider() {
     return WCMCoreUtils.getSystemSessionProvider();
   }
+  
+  /**
+   * Gets the rest context name, it's depends on portal.
+   * @return the system session provider
+   */
+  public static String getRestContextName() {
+    PortalContainerConfig portalContainerConfig = WCMCoreUtils.getService(PortalContainerConfig.class);
+    return portalContainerConfig.getRestContextName(Util.getUIPortalApplication().getOwner());
+  }
+  
 }

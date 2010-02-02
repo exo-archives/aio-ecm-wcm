@@ -351,7 +351,7 @@ public class UIPCLVForm extends UIForm {
 		String uri = null;
 		try {
 			illustrativeImage = contentSchemaHandler.getIllustrationImage(node);
-			uri = imagesRendererService.generateURI(illustrativeImage);
+			uri = imagesRendererService.generateImageURI(illustrativeImage, null);
 		} catch (Exception e) {
 		  // You shouldn't throw popup message, because some exception often rise here.
 		}

@@ -39,7 +39,7 @@
 
 	if (currentNode.hasProperty("exo:image")) {
 		RESTImagesRendererService imagesRenderer = uicomponent.getApplicationComponent(RESTImagesRendererService.class);								
-		def imageURI = imagesRenderer.generateURI(currentNode,"exo:image")
+		def imageURI = imagesRenderer.generateImageURI(currentNode,"exo:image")
 		String imageWidth = getRimOfImage("exo:imageWidth", currentNode);
 		String imageHeight = getRimOfImage("exo:imageHeight", currentNode);
 		%>

@@ -487,7 +487,7 @@ import org.exoplatform.webui.event.EventListener;
     String uri = null;
     try{
       illustrativeImage = contentSchemaHandler.getIllustrationImage(node);
-      uri = imagesRendererService.generateURI(illustrativeImage);
+      uri = imagesRendererService.generateImageURI(illustrativeImage, null);
     } catch(PathNotFoundException ex) {
       // We don't do anything here because so many documents doesn't have illustration image
     } catch (Exception e) {
