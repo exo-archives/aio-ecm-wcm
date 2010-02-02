@@ -321,10 +321,6 @@
     <Invalid-number>Giá trị 0 không được chấp nhận ở trường '{0}'</Invalid-number>
    </msg>
   </ZeroValidator>
-
-<ACMESite>
-  <label>Mẫu website ACME</label>
- </ACMESite>
   
   <UIDropDownPageTemp>
   <item>
@@ -353,12 +349,4 @@
    <ThreeRowsTwoColumnsLayout>Three rows Two columns layout </ThreeRowsTwoColumnsLayout>
   </label>
  </UIWizardPageSelectLayoutForm>
- 
- <Signin>
-   <welcome>Chào mừng</welcome>
-   <login>Đăng nhập</login>
-   <logout>Thoát</logout>
-   <language>Thay đổi ngôn ngữ</language>
-   <register>Đăng ký</register>
- </Signin>
 </bundle>

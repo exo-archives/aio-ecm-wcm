@@ -23,9 +23,11 @@ import java.util.ResourceBundle;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.dom.DOMSource;
 
 import org.exoplatform.services.resources.ResourceBundleService;
 import org.exoplatform.services.rest.resource.ResourceContainer;
@@ -67,7 +69,11 @@ public class ResourceBundleConnector implements ResourceContainer {
 				}
 			}
 			document.appendChild(bundles);
-		  return Response.ok(document, new MediaType("text", "xml")).build();
+			
+			CacheControl cacheControl = new CacheControl();
+	    cacheControl.setNoCache(true);
+	    cacheControl.setNoStore(true);
+		  return Response.ok(new DOMSource(document), MediaType.TEXT_XML).cacheControl(cacheControl).build();
 		} catch (Exception e) {
 			return Response.serverError().build();
 		}

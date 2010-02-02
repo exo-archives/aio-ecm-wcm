@@ -25,6 +25,7 @@ import javax.jcr.Session;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.transform.dom.DOMSource;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
@@ -338,7 +339,8 @@ public abstract class BaseConnector {
   protected Response getResponse(Document document) {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
-    return Response.ok(document, new MediaType("text", "xml")).cacheControl(cacheControl).build();
+    cacheControl.setNoStore(true);
+    return Response.ok(new DOMSource(document), MediaType.TEXT_XML).cacheControl(cacheControl).build();
   }
 
   /**

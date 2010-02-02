@@ -322,10 +322,6 @@
    </msg>
   </ZeroValidator>
 
- <ACMESite>
-  <label>ACME Template</label>
- </ACMESite>
-
  <UIDropDownPageTemp>
   <item>
    <WCMPageConfigs>WCM page configs</WCMPageConfigs>
@@ -353,12 +349,4 @@
    <ThreeRowsTwoColumnsLayout>Three rows Two columns layout </ThreeRowsTwoColumnsLayout>
   </label>
  </UIWizardPageSelectLayoutForm>
- 
- <Signin>
-   <welcome>Welcome</welcome>
-   <login>Login</login>
-   <logout>Logout</logout>
-   <language>Change language</language>
-   <register>Register</register>
- </Signin>
 </bundle>

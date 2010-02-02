@@ -39,6 +39,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.dom.DOMSource;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.container.ExoContainerContext;
@@ -141,7 +142,8 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
-    return Response.ok(document, new MediaType("text", "xml")).cacheControl(cacheControl).build();
+    cacheControl.setNoStore(true);
+    return Response.ok(new DOMSource(document), MediaType.TEXT_XML).cacheControl(cacheControl).build();
   }
 
   /**

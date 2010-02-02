@@ -319,10 +319,6 @@
     <Invalid-number>Zéro n'est pas acceptée dans le domaine '{0}'</Invalid-number>
    </msg>
   </ZeroValidator>
-
- <ACMESite>
-  <label>ACME Template</label>
- </ACMESite>
   
   <UIDropDownPageTemp>
   <item>
@@ -351,12 +347,4 @@
    <ThreeRowsTwoColumnsLayout>Three rows Two columns layout </ThreeRowsTwoColumnsLayout>
   </label>
  </UIWizardPageSelectLayoutForm>
- 
- <Signin>
-   <welcome>Bienvenue</welcome>
-   <login>Connexion</login>
-   <logout>Déconnexion</logout>
-   <language>Changer de langue</language>
-   <register>Enregistrer</register>
- </Signin>
 </bundle>

@@ -26,6 +26,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.dom.DOMSource;
 
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.commons.utils.IOUtil;
@@ -94,13 +95,13 @@ public class FileUploadHandler {
    * @throws Exception the exception
    */
   public Response upload(String uploadId, String contentType, double contentLength, InputStream inputStream, Node currentNode, String language, int limit) throws Exception {
-    CacheControl cacheControl = new CacheControl();
-    cacheControl.setNoCache(true);
-    
     // Require from portal 2.5.5
     uploadService.addUploadLimit(uploadId, limit);
     uploadService.createUploadResource(uploadId,null,contentType,contentLength,inputStream);
-    return Response.ok(null, new MediaType("text", "xml")).cacheControl(cacheControl).build();            
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    cacheControl.setNoStore(true);
+    return Response.ok(null, MediaType.TEXT_XML).cacheControl(cacheControl).build();            
   }
 
   /**
@@ -116,15 +117,16 @@ public class FileUploadHandler {
   public Response control(String uploadId, String action) throws Exception {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
+    cacheControl.setNoStore(true);
     if(FileUploadHandler.PROGRESS_ACTION.equals(action)) {
       Document currentProgress = getProgress(uploadId);      
-      return Response.ok(currentProgress, new MediaType("text", "xml")).cacheControl(cacheControl).build();
+      return Response.ok(new DOMSource(currentProgress), MediaType.TEXT_XML).cacheControl(cacheControl).build();
     }else if(FileUploadHandler.ABORT_ACTION.equals(action)) {
       uploadService.removeUpload(uploadId);
-      return Response.ok(null, new MediaType("text", "xml")).cacheControl(cacheControl).build();    
+      return Response.ok(null, MediaType.TEXT_XML).cacheControl(cacheControl).build();    
     }else if(FileUploadHandler.DELETE_ACTION.equals(action)) {
       uploadService.removeUpload(uploadId);
-      return Response.ok(null, new MediaType("text", "xml")).cacheControl(cacheControl).build();    
+      return Response.ok(null, MediaType.TEXT_XML).cacheControl(cacheControl).build();    
     }
     return Response.status(HTTPStatus.BAD_REQUEST).cacheControl(cacheControl).build();
   }
@@ -148,13 +150,13 @@ public class FileUploadHandler {
     if (parent == null) {
       Document fileNotUploaded = 
         fckMessage.createMessage(FCKMessage.FILE_NOT_UPLOADED, FCKMessage.ERROR, language, null);
-      return Response.ok(fileNotUploaded, new MediaType("text", "xml")).cacheControl(cacheControl).build();
+      return Response.ok(new DOMSource(fileNotUploaded), MediaType.TEXT_XML).cacheControl(cacheControl).build();
     }
     if(!FCKUtils.hasAddNodePermission(parent)) {
       Object[] args = { parent.getPath() };
       Document message = 
         fckMessage.createMessage(FCKMessage.FILE_UPLOAD_RESTRICTION,FCKMessage.ERROR,language,args);
-      return Response.ok(message, new MediaType("text", "xml")).cacheControl(cacheControl).build();
+      return Response.ok(message, MediaType.TEXT_XML).cacheControl(cacheControl).build();
     }
     if((fileName == null) || (fileName.length() == 0)) {
       fileName = resource.getFileName();
@@ -163,7 +165,7 @@ public class FileUploadHandler {
       Object args[] = { fileName, parent.getPath() };
       Document fileExisted = 
         fckMessage.createMessage(FCKMessage.FILE_EXISTED, FCKMessage.ERROR, language, args);
-      return Response.ok(fileExisted, new MediaType("text", "xml")).cacheControl(cacheControl).build();
+      return Response.ok(fileExisted, MediaType.TEXT_XML).cacheControl(cacheControl).build();
     }                
     String location = resource.getStoreLocation();
     byte[] uploadData = IOUtil.getFileContentAsBytes(location);
@@ -178,7 +180,7 @@ public class FileUploadHandler {
     uploadService.removeUpload(uploadId);
     WCMPublicationService wcmPublicationService = WCMCoreUtils.getService(WCMPublicationService.class);
     wcmPublicationService.updateLifecyleOnChangeContent(file, siteName, userId);
-    return Response.ok(null, new MediaType("text", "xml")).cacheControl(cacheControl).build();
+    return Response.ok(null, MediaType.TEXT_XML).cacheControl(cacheControl).build();
   }
   
   /**

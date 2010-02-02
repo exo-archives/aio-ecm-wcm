@@ -31,6 +31,7 @@ import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.dom.DOMSource;
 
 import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.commons.utils.PageList;
@@ -160,7 +161,8 @@ public class PortalLinkConnector implements ResourceContainer {
     }
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
-    return Response.ok(document, new MediaType("text", "xml")).cacheControl(cacheControl).build();
+    cacheControl.setNoStore(true);
+    return Response.ok(new DOMSource(document), MediaType.TEXT_XML).cacheControl(cacheControl).build();
   }
 
   /**
