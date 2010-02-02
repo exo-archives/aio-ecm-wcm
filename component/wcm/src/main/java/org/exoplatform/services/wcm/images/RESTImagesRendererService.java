@@ -164,4 +164,14 @@ public class RESTImagesRendererService implements ResourceContainer{
     }
   }
   
+  @Deprecated
+  public String generateURI(Node file) throws Exception {
+    return generateImageURI(file, null); 
+  }
+  
+  @Deprecated
+  public String generateURI(Node file, String propertyName) throws Exception {
+    return generateImageURI(file, propertyName); 
+  }
+  
 }

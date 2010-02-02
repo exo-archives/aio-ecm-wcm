@@ -34,22 +34,7 @@
       <portlet>
         <application-ref>ecm</application-ref>
         <portlet-ref>FileExplorerPortlet</portlet-ref>
-        <preferences>
-          <preference>
-            <name>usecase</name>
-            <value>jailed</value>
-          </preference>
-          <preference>
-            <name>driveName</name>
-            <value>Managed Sites</value>
-            <read-only>false</read-only>
-          </preference>
-          <preference>
-            <name>nodePath</name>
-            <value>/</value>
-            <read-only>false</read-only>
-          </preference>
-        </preferences>
+        <preferences></preferences>
       </portlet>
       <title>Site Explorer</title>
       <show-info-bar>false</show-info-bar>
@@ -70,22 +55,7 @@
       <portlet>
         <application-ref>ecm</application-ref>
         <portlet-ref>FileExplorerPortlet</portlet-ref>
-        <preferences>
-          <preference>
-            <name>usecase</name>
-            <value>jailed</value>
-          </preference>
-          <preference>
-            <name>driveName</name>
-            <value>Managed Sites</value>
-            <read-only>false</read-only>
-          </preference>
-          <preference>
-            <name>nodePath</name>
-            <value>/</value>
-            <read-only>false</read-only>
-          </preference>
-        </preferences>
+        <preferences></preferences>
       </portlet>
       <title>Site Explorer</title>
       <show-info-bar>false</show-info-bar>
