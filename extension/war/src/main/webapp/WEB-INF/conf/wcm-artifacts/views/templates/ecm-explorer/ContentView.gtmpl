@@ -84,6 +84,7 @@
   def rcontext = _ctx.getRequestContext() ;
   def size = uicomponent.getChildrenList().size();
   rcontext.getJavascriptManager().importJavascript('eXo.ecm.UIListView','/ecm/javascript/'); 
+  rcontext.getJavascriptManager().importJavascript('eXo.ecm.DMSBrowser','/ecm/javascript/') ;
   rcontext.getJavascriptManager().addJavascript("eXo.ecm.UIListView.initAllEvent('${componentId}-$viewComponentId', '$enableDragAndDrop');");
   rcontext.getJavascriptManager().addOnLoadJavascript("eXo.ecm.UIListView.setHeight");
   rcontext.getJavascriptManager().addOnLoadJavascript("eXo.ecm.ECMUtils.initClipboard('clip_button','1','$size')");
@@ -118,7 +119,7 @@
         </div>
         <div class="LineLeft"><span></span></div>
 <!-- Title -->
-        <div class="ColumnName" style="width: 250px;" onclick="<%=uicomponent.event("Sort", typeActionLink + "Alphabetic")%>">
+        <div class="ColumnName" style="width: 220px;" onclick="<%=uicomponent.event("Sort", typeActionLink + "Alphabetic")%>">
           <%
             if (selectedSortType.equals("Alphabetic")) {
               %>
@@ -190,26 +191,20 @@
             </div>
           </div>
           <div class="GroundContextMenu" style="position: absolute; top: 0px; left: 0px; display: none;">
-            <% 
-              if (uicomponent.getDocumentSourceType() == DocumentProviderUtils.CURRENT_NODE_ITEMS) {
-                %>
-                  <div class="UIRightClickPopupMenu" style="display: block;">
-                    <div class="UIRightPopupMenuContainer" onmousedown="event.cancelBubble = true;" style="border: 2px solid #b7b7b7">
-                      <%
-                        for(itemGroundContext in managersGroundContext) {
-                          action = itemGroundContext.getUIExtensionName();
-                          %>
-                            <a class="MenuItem" href="<%=itemGroundContext.event(action)%>" style="display: block;">
-                              <div class="MenuIcon ${action}16x16Icon"><%=_ctx.appRes("ECMContextMenu.event." + action)%></div>
-                            </a> 
-                          <%
-                        }
-                      %>
-                    </div>
-                  </div>
+            <div class="UIRightClickPopupMenu" style="display: block;">
+              <div class="UIRightPopupMenuContainer" onmousedown="event.cancelBubble = true;" style="border: 2px solid #b7b7b7">
                 <%
-              }
-            %>
+                  for(itemGroundContext in managersGroundContext) {
+                    action = itemGroundContext.getUIExtensionName();
+                    %>
+                      <a class="MenuItem" href="<%=itemGroundContext.event(action)%>" style="display: block;">
+                        <div class="MenuIcon ${action}16x16Icon"><%=_ctx.appRes("ECMContextMenu.event." + action)%></div>
+                      </a> 
+                    <%
+                  }
+                %>
+              </div>
+            </div>
           </div>
         </div>
       </div> <!-- End TitleTable -->
@@ -218,6 +213,7 @@
         String serverUrl = uicomponent.getWebDAVServerPrefix();
         String portalName = uicomponent.getPortalName() ;
         String repository = uicomponent.getRepository();
+        String restContextName = Utils.getRestContextName(portalName);
         WCMPublicationService wcmPublicationService = uicomponent.getApplicationComponent(WCMPublicationService.class);
         def permlink;
         int i = 0;
@@ -271,7 +267,7 @@
           if (!data.isNodeType(Utils.EXO_RESTORELOCATION) && !Utils.isTrashHomeNode(data)) {
             if (data.getPrimaryNodeType().getName().equals("nt:file")) {
               String mimeType=data.getNode("jcr:content").getProperty("jcr:mimeType").getString();
-              String link ="javascript:eXo.ecm.ECMUtils.generateWebDAVLink('"+serverUrl+"','"+ portalName +"','"+repository+"','"+ preferenceWS+ "','" +Utils.formatNodeName(data.getPath())+"','"+mimeType+"')";                                   
+              String link ="javascript:eXo.ecm.ECMUtils.generateWebDAVLink('"+serverUrl+"','"+ portalName +"','"+ restContextName +"','"+repository+"','"+ preferenceWS+ "','" +Utils.formatNodeName(data.getPath())+"','"+mimeType+"')";                                   
               strActs +=    "<a class=\"MenuItem\" onclick=\"return eXo.webui.UIRightClickPopupMenu.prepareObjectId(event, this);\" href=\"" + link + "\" >" ;          
               strActs +=    "  <div class=\"ItemIcon WebDAV16x16Icon\">Download And Allow Edition</div>" ;
               strActs +=    "</a>" ;            
@@ -328,7 +324,7 @@
                 </div>
               </div>
 <!-- Title-->
-              <div class="ColumnName" style="width: 250px;">
+              <div class="ColumnName" style="width: 220px;">
                 <div class="NodeLabel">
                   <div style="cursor: pointer; -moz-outline: none; -moz-user-select: none;" title="$title">$title
                     <%

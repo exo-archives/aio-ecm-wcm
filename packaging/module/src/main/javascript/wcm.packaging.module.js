@@ -54,8 +54,6 @@ function getModule(params) {
   module.extension.war = new Project("org.exoplatform.ecm", "exo.ecm.wcm.extension.war", "war", module.version).
 		addDependency(new Project("org.exoplatform.ecm", "exo.ecm.wcm.extension.config", "jar", module.version));
   module.extension.war.deployName = "ecm-wcm-extension";	      
-  //module.web.wcmportal = 
-  //  new Project("org.exoplatform.ecm", "exo.ecm.wcm.web.portal", "exo-portal", module.version);
 
   module.demo = {};
   module.demo.portal = new Project("org.exoplatform.ecm", "exo.ecm.wcm.demo.war", "war", module.version).
