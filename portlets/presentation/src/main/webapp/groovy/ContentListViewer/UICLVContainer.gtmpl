@@ -7,7 +7,7 @@
 		def quickEditingBlockId = uicomponent.getPortletId() + "-QuickEditingBlock";
 		def rcontext = _ctx.getRequestContext() ;
 		def jsManager = rcontext.getJavascriptManager();
-	  jsManager.importJavascript('eXo.wcm.private.backoffice.QuickEdit.QuickEdit', '/eXoWCMResources/javascript/') ;
+		jsManager.importJavascript('eXo.wcm.frontoffice.private.QuickEdit', '/eXoWCMResources/javascript/') ;
 		jsManager.addOnLoadJavascript('eXo.wcm.QuickEdit.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
 		if (Utils.isShowQuickEdit()) {					
 	%>

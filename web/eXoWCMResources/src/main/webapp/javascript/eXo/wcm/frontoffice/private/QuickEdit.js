@@ -1,7 +1,7 @@
-function QuickEdit() {
+function WCMQuickEdit() {
 };
 
-QuickEdit.prototype.removeQuickeditingBlock = function(portletID, quickEditingBlockId) {
+WCMQuickEdit.prototype.removeQuickeditingBlock = function(portletID, quickEditingBlockId) {
 	var presentation = document.getElementById(portletID);
 	var pNode = presentation.parentNode;
 	var quickEditingBlock = document.getElementById(quickEditingBlockId);
@@ -10,7 +10,7 @@ QuickEdit.prototype.removeQuickeditingBlock = function(portletID, quickEditingBl
 	}
 };
 
-QuickEdit.prototype.insertQuickeditingBlock = function(portletID, quickEditingBlockId) {
+WCMQuickEdit.prototype.insertQuickeditingBlock = function(portletID, quickEditingBlockId) {
 	var presentation = document.getElementById(portletID);		
 	var parentNode = presentation.parentNode;
 	var fistChild = eXo.core.DOMUtil.getChildrenByTagName(parentNode, "div")[0];
@@ -35,4 +35,4 @@ QuickEdit.prototype.insertQuickeditingBlock = function(portletID, quickEditingBl
 };
 
 if(!window.wcm) eXo.wcm = new Object();
-if(!eXo.wcm.QuickEdit) eXo.wcm.QuickEdit = new QuickEdit();
+if(!eXo.wcm.QuickEdit) eXo.wcm.QuickEdit = new WCMQuickEdit();

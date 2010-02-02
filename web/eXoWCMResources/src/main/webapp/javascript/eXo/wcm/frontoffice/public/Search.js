@@ -14,24 +14,19 @@ SearchPortlet.prototype.getRuntimeContextPath = function() {
 	return eXo.wcm.WCMUtils.getHostName() + eXo.env.portal.context + '/' + eXo.env.portal.accessMode + '/' + eXo.env.portal.portalName + '/';
 };
 
-SearchPorlet.prototype.quickSearch = function(){
+SearchPortlet.prototype.quickSearch = function(){
 	var searchBox = document.getElementById("siteSearchBox");
 	var keyWordInput = eXo.core.DOMUtil.findFirstDescendantByClass(searchBox, "input", "keyword");
 	var keyword = encodeURI(keyWordInput.value);
 	var resultPageURIDefault = "searchResult";
 	var params = "portal=" + eXo.env.portal.portalName + "&keyword=" + keyword;
-	var baseURI = getHostName() + eXo.env.portal.context + "/" + eXo.env.portal.accessMode + "/" + eXo.env.portal.portalName; 
+	var baseURI = eXo.wcm.WCMUtils.getHostName() + eXo.env.portal.context + "/" + eXo.env.portal.accessMode + "/" + eXo.env.portal.portalName; 
 	if (resultPageURI != undefined) {
 		baseURI = baseURI + "/" + resultPageURI; 
 	} else {
 		baseURI = baseURI + "/" + resultPageURIDefault;  
 	}
 	window.location = baseURI + "?" + params;
-};
-
-SearchPortlet.prototype.quickSearchOnEnter = function(event, resultPageURI) {
-	var keyNum = eXo.core.Keyboard.getKeynum(event)
-  if (keyNum == 13)	quickSearch(resultPageURI);
 };
 
 SearchPortlet.prototype.search = function(){
@@ -60,6 +55,6 @@ SearchPortlet.prototype.keepKeywordOnBoxSearch = function() {
 	}
 };
 
-eXo.core.Browser.addOnLoadCallback("keepKeywordOnBoxSearch", eXo.wcm.SearchPortlet.keepKeywordOnBoxSearch);
-if(!window.wcm) eXo.wcm = new Object();
+//eXo.core.Browser.addOnLoadCallback("keepKeywordOnBoxSearch", eXo.wcm.SearchPortlet.keepKeywordOnBoxSearch);
+//if(!window.wcm) eXo.wcm = new Object();
 eXo.wcm.SearchPortlet = new SearchPortlet();
