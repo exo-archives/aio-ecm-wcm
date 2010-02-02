@@ -106,3 +106,18 @@ td {
   margin: 7px 0px 0px 5px;
   width: 138px;
 }
+
+.UISiteAdminToolBar {
+  height: 32px;
+  padding-right: 10px;
+}
+
+.UISiteAdminToolBar .Editing {
+  float:left;
+  font-weight:bold;
+  margin-top:3px;
+}
+
+.UISiteAdminToolBar .LeftSelect {
+  float:left;
+}

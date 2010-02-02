@@ -35,15 +35,6 @@
     <css-path>/skin/SingleContentViewer/DefaultSkin/Stylesheet.css</css-path>
   </portlet-skin>
   
-  <!-- SiteAdministrationPortlet skins -->
-
-  <portlet-skin>
-    <application-name>presentation</application-name>
-    <portlet-name>EditingPortlet</portlet-name>
-    <skin-name>Default</skin-name>
-    <css-path>/skin/Editing/DefaultStylesheet.css</css-path>
-  </portlet-skin>
-  
   <!-- CategoryNavigationPortlet skins -->
 
   <portlet-skin>
