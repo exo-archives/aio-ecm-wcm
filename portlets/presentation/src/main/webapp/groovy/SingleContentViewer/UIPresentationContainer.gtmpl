@@ -8,7 +8,9 @@
 		def rcontext = _ctx.getRequestContext() ;
 		def portletId = rcontext.getWindowId();
 		def quickEditingBlockId = portletId + "-QuickEditingBlock";
-		//rcontext.getJavascriptManager().addJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '");');
+		def jsManager = _ctx.getRequestContext().getJavascriptManager();
+		jsManager.importJavascript('eXo.wcm.private.backoffice.QuickEdit.QuickEdit', '/eXoWCMResources/javascript/') ;
+		jsManager.addOnLoadJavascript('eXo.wcm.QuickEdit.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
 		
 		//def scvPortlet = uicomponent.getAncestorOfType(UISingleContentViewerPortlet.class); 
 		def node = uicomponent.getNodeView();

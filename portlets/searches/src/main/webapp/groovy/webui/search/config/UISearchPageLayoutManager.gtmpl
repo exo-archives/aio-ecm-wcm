@@ -6,7 +6,9 @@
 	def portletId = pContext.getWindowId();
 	def quickEditingBlockId = portletId + "-QuickEditingBlock";
 	def rcontext = _ctx.getRequestContext() ;
-	rcontext.getJavascriptManager().addOnLoadJavascript('eXo.wcm.removeQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
+	def jsManager = rcontext.getJavascriptManager();
+	jsManager.importJavascript('eXo.wcm.private.backoffice.QuickEdit.QuickEdit', '/eXoWCMResources/javascript/') ;
+	jsManager.addOnLoadJavascript('eXo.wcm.QuickEdit.removeQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
 	String fieldName;
 %>
 <div class="UIForm $uicomponent.id">

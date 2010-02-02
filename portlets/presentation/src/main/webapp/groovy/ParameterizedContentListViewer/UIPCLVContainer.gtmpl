@@ -5,7 +5,9 @@ import	org.exoplatform.wcm.webui.Utils;
 def portletId = uicomponent.getPortletId();
 def quickEditingBlockId = uicomponent.getPortletId() + "-QuickEditingBlock";
 def rcontext = _ctx.getRequestContext() ;
-//rcontext.getJavascriptManager().addJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '");');
+def jsManager = _ctx.getRequestContext().getJavascriptManager();
+jsManager.importJavascript('eXo.wcm.private.backoffice.QuickEdit.QuickEdit', '/eXoWCMResources/javascript/') ;
+jsManager.addOnLoadJavascript('eXo.wcm.QuickEdit.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
 
 %>
 <div class="$uicomponent.id" id="$uicomponent.id">

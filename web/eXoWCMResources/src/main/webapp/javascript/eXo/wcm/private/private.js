@@ -1,0 +1,1 @@
+if(!window.wcm) eXo.wcm = new Object();

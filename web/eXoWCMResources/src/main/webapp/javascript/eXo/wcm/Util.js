@@ -1,7 +1,6 @@
 window.wcm = function() {}
 wcm.insertCSSFromTextArea2FCK = function(Instance, ContentCSS) {
 	if (!Instance) return;
-	
 	var eContentCSS = document.getElementById(ContentCSS);
 	var sContentCSSId = ContentCSS + "_Inline";
 	var count = 1;
@@ -142,7 +141,7 @@ function search(comId) {
 		if (keyNum == 13) {
 			var searchButton = eXo.core.DOMUtil.findFirstDescendantByClass(this.form, "div", "SearchButton");
 			searchButton.onclick();
-  	  	}		
+  	 }		
 	}
 }	
 
@@ -419,6 +418,8 @@ function showHideOrderBy() {
 		}
 	}
 }  
+
+
 function showPopupMenu(obj) {
 	if(!obj) return;
 	var uiNavi = document.getElementById('PortalNavigationTopContainer');

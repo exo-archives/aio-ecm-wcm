@@ -2,7 +2,6 @@
  * General methods to access REST content.
  */
 WCMServices = function() {
-	
 	WCMServices.prototype.parseXML = function(text) {
 		var xmlDoc;
 		try //Internet Explorer
@@ -25,7 +24,7 @@ WCMServices = function() {
 			  }
 		  }
 		return xmlDoc;
-	}
+	};
 }	
 eXo.wcm.services = new WCMServices();
 
@@ -36,7 +35,6 @@ Vote = function(){
 	
 	Vote.prototype.getVote = function(repository, workspace, path) {
 		var retText = ajaxAsyncGetRequest("/rest/private/contents/vote/getVote/?repositoryName="+repository+"&workspaceName="+workspace+"&jcrPath="+path, false);
-		//alert(retText);
 		var doc = parseXML(retText);
 		rate = doc.getElementsByTagName("rate")[0].childNodes[0].nodeValue;
 		total = doc.getElementsByTagName("total")[0].childNodes[0].nodeValue;
