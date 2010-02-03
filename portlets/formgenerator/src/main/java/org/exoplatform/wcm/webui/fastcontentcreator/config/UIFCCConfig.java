@@ -65,7 +65,7 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "system:/groovy/webui/form/UIFormWithFieldSet.gtmpl",
+    template = "app:/groovy/webui/FastContentCreatorPortlet/UIFormWithFieldSet.gtmpl",
     events = {
       @EventConfig(listeners = UIFCCConfig.SaveActionListener.class),
       @EventConfig(listeners = UIFCCConfig.SelectPathActionListener.class, phase=Phase.DECODE),

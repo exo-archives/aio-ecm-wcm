@@ -26,4 +26,5 @@ Vote.prototype.showVoteWindow = function(div) {
 	target.innerHTML = html;
 };
 
+if(!window.wcm) eXo.wcm = new Object();
 eXo.wcm.Vote = new Vote();

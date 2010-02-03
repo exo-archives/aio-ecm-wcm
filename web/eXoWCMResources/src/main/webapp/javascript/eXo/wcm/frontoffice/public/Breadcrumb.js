@@ -97,5 +97,5 @@ WCMBreadScrumbPortlet.prototype.getBreadcrumbs = function(){
 };
 
 
-
+if(!window.wcm) eXo.wcm = new Object();
 eXo.wcm.WCMBreadScrumbPortlet = new WCMBreadScrumbPortlet();

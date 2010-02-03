@@ -29,7 +29,9 @@
 
   <portal-layout>
     <container id="ACMEBanner" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
+      <access-permissions>Everyone</access-permissions>
       <container id="ACMELogo" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+        <access-permissions>Everyone</access-permissions>
         <portlet-application>
           <portlet>
             <application-ref>presentation</application-ref>
@@ -83,12 +85,14 @@
             </preferences>
           </portlet>
           <title>Banner</title>
+          <access-permissions>Everyone</access-permissions>
           <show-info-bar>false</show-info-bar>
           <show-application-state>false</show-application-state>
           <show-application-mode>false</show-application-mode>
         </portlet-application>
       </container>
       <container id="ACMESignin" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+        <access-permissions>Everyone</access-permissions>
         <portlet-application>
           <portlet>
             <application-ref>presentation</application-ref>
@@ -142,12 +146,14 @@
             </preferences>
           </portlet>
           <title>Signin</title>
+          <access-permissions>Everyone</access-permissions>
           <show-info-bar>false</show-info-bar>
           <show-application-state>false</show-application-state>
           <show-application-mode>false</show-application-mode>
         </portlet-application>
       </container>
       <container id="ACMESearch" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+        <access-permissions>Everyone</access-permissions>
         <portlet-application>
           <portlet>
             <application-ref>presentation</application-ref>
@@ -201,6 +207,7 @@
             </preferences>
           </portlet>
           <title>Searchbox</title>
+          <access-permissions>Everyone</access-permissions>
           <show-info-bar>false</show-info-bar>
           <show-application-state>false</show-application-state>
           <show-application-mode>false</show-application-mode>
@@ -261,6 +268,7 @@
         </preferences>
       </portlet>
       <title>Navigation</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
@@ -322,6 +330,7 @@
         </preferences>
       </portlet>
       <title>Footer</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>

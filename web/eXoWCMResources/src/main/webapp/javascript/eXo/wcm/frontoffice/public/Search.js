@@ -56,5 +56,5 @@ SearchPortlet.prototype.keepKeywordOnBoxSearch = function() {
 };
 
 //eXo.core.Browser.addOnLoadCallback("keepKeywordOnBoxSearch", eXo.wcm.SearchPortlet.keepKeywordOnBoxSearch);
-//if(!window.wcm) eXo.wcm = new Object();
+if(!window.wcm) eXo.wcm = new Object();
 eXo.wcm.SearchPortlet = new SearchPortlet();

@@ -161,5 +161,6 @@ UIWCMTreeView.prototype.OpenPath = function(path) {
 		eXo.wcm.UIWCMTreeView.OpenOnePath(ids[i]);
 	}
 };
-	
+
+if(!window.wcm) eXo.wcm = new Object();
 eXo.wcm.UIWCMTreeView = new UIWCMTreeView();

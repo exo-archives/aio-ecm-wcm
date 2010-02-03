@@ -30,7 +30,9 @@
     <access-permissions>Everyone</access-permissions>
     <edit-permission>editor:/platform/web-contributors</edit-permission>
     <container id="ACMEBody" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
+      <access-permissions>Everyone</access-permissions>
       <container id="ACMELeft" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+        <access-permissions>Everyone</access-permissions>
         <portlet-application>
           <portlet>
             <application-ref>presentation</application-ref>
@@ -84,6 +86,7 @@
             </preferences>
           </portlet>
           <title>Homepage</title>
+          <access-permissions>Everyone</access-permissions>
           <show-info-bar>false</show-info-bar>
           <show-application-state>false</show-application-state>
           <show-application-mode>false</show-application-mode>
@@ -306,6 +309,7 @@
         </portlet-application>
       </container>
       <container id="ACMERight" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+        <access-permissions>Everyone</access-permissions>
         <portlet-application>
           <portlet>
             <application-ref>presentation</application-ref>
@@ -535,7 +539,9 @@
     <access-permissions>Everyone</access-permissions>
     <edit-permission>editor:/platform/web-contributors</edit-permission>
     <container id="ACMEBody" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
+      <access-permissions>Everyone</access-permissions>
       <container id="ACMECategories" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+        <access-permissions>Everyone</access-permissions>
         <portlet-application>
           <portlet>
             <application-ref>presentation</application-ref>
@@ -586,6 +592,7 @@
         </portlet-application>
       </container>
       <container id="ACMEParameterized" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+        <access-permissions>Everyone</access-permissions>
         <portlet-application>
           <portlet>
             <application-ref>presentation</application-ref>
@@ -909,6 +916,7 @@
         </preferences>
       </portlet>
       <title>SearchResult</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
@@ -956,6 +964,7 @@
         </preferences>
       </portlet>
       <title>Parameterized content viewer portlet</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
@@ -978,6 +987,7 @@
         <preferences></preferences>
       </portlet>
       <title>Print viewer</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
@@ -999,6 +1009,7 @@
         <preferences></preferences>
       </portlet>
       <title>Parameterized Content List Viewer Portlet</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
@@ -1056,6 +1067,7 @@
         </preferences>
       </portlet>
       <title>Category navigation portlet</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
@@ -1077,6 +1089,7 @@
         <preferences></preferences>
       </portlet>
       <title>Content List Viewer Portlet</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
@@ -1098,6 +1111,7 @@
         <preferences></preferences>
       </portlet>
       <title>Single Content Viewer Portlet</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
@@ -1165,6 +1179,7 @@
         </preferences>
       </portlet>
       <title>Newsletter Header</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
@@ -1176,6 +1191,7 @@
         <preferences></preferences>
       </portlet>
       <title>Newsletter Viewer</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
@@ -1197,7 +1213,7 @@
         <preferences>
           <preference>
             <name>redirectPath</name>
-            <value>/portal/public/acme/contactus/confirmation</value>
+            <value>/ecmdemo/public/acme/contactus/confirmation</value>
           </preference>
           <preference>
             <name>mode</name>
@@ -1240,9 +1256,10 @@
         </preferences>
       </portlet>
       <title>Contact Us</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
-      <show-application-mode>true</show-application-mode>
+      <show-application-mode>false</show-application-mode>
     </portlet-application>
   </page>
 
@@ -1287,6 +1304,10 @@
         </preferences>
       </portlet>
       <title>Contact Form Confirmation</title>
+      <access-permissions>Everyone</access-permissions>
+      <show-info-bar>false</show-info-bar>
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode>
     </portlet-application>
   </page>
 
@@ -1305,6 +1326,7 @@
         <preferences></preferences>
       </portlet>
       <title>New Account</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>

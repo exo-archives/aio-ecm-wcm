@@ -7,7 +7,7 @@
 	def portletId = pContext.getWindowId();
 	def quickEditingBlockId = portletId + "-QuickEditingBlock";
 	def jsManager = _ctx.getRequestContext().getJavascriptManager();
-	jsManager.import("eXo.wcm.private.private.js", "/eXoWCMResources/javascript");
+	jsManager.importJavascript("eXo.wcm.frontoffice.private.CLV", "/eXoWCMResources/javascript");
 	jsManager.addOnLoadJavascript("showHideOrderBy");
 %>
 <div class="UIForm $uicomponent.id">
