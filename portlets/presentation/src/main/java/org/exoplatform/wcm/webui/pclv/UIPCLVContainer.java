@@ -167,7 +167,7 @@ public class UIPCLVContainer extends UIContainer {
 		String server =  Util.getPortalRequestContext().getRequest().getRequestURL().toString();
 		server = server.substring(0, server.indexOf('/', 8));
 		
-		parameterizedContentListViewer.setRssLink("/rest/rss/generate?repository=" + preferenceRepository + "&workspace=" + workspace + "&server=" + server + "&siteName=" + Util.getUIPortal().getOwner() + "&categoryPath=" + ("".equals(categoryPath) ? preferenceTreeName : preferenceTreeName + "/" + categoryPath));
+		parameterizedContentListViewer.setRssLink("/ecmdemo/rest-ecmdemo/rss/generate?repository=" + preferenceRepository + "&workspace=" + workspace + "&server=" + server + "&siteName=" + Util.getUIPortal().getOwner() + "&categoryPath=" + ("".equals(categoryPath) ? preferenceTreeName : preferenceTreeName + "/" + categoryPath));
 	}
 
 	/**

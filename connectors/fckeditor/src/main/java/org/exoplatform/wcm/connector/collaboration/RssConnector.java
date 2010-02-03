@@ -31,8 +31,10 @@ import javax.jcr.query.QueryResult;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.dom.DOMSource;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -151,7 +153,7 @@ public class RssConnector extends BaseConnector implements ResourceContainer {
     contextRss.put(LINK, server + "/portal/public/"+siteName);
     String feedXML = generateRSS(contextRss);
     Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(feedXML.getBytes()));
-    Response response = Response.ok(document).build();
+    Response response = Response.ok(new DOMSource(document), MediaType.TEXT_XML).build();
     return response;
   }
   
