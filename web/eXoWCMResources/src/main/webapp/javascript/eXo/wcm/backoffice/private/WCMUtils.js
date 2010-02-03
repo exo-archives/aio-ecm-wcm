@@ -23,5 +23,4 @@ WCMUtils.prototype.request = function(url) {
 	return null;
 };
 
-if(!window.wcm) eXo.wcm = new Object();
-eXo.wcm.WCMUtils = new WCMUtils();
+eXo.ecm.WCMUtils = new WCMUtils();

@@ -1,7 +1,7 @@
-function WCMBreadScrumbPortlet(){
+function WCMBreadcrumbPortlet(){
 }
 
-WCMBreadScrumbPortlet.prototype.getCurrentNodes = function(navigations, selectedNodeUri) {
+WCMBreadcrumbPortlet.prototype.getCurrentNodes = function(navigations, selectedNodeUri) {
 	var currentNodes = new Array();
 	var currentNodeUris = new Array();	
 	currentNodeUris = selectedNodeUri.split("/");	
@@ -30,7 +30,7 @@ WCMBreadScrumbPortlet.prototype.getCurrentNodes = function(navigations, selected
 	return currentNodes;
 };
 
-WCMBreadScrumbPortlet.prototype.getBreadscrumbArr = function(navigations, previousURI, wcmContentTitle){
+WCMBreadcrumbPortlet.prototype.getBreadcrumbArr = function(navigations, previousURI, wcmContentTitle){
 	var breadcrumbNodes = new Array();
 	var breadcrumbForNavigations = new Array();
 	var previousNodeUris = previousURI.split("/");
@@ -80,7 +80,7 @@ WCMBreadScrumbPortlet.prototype.getBreadscrumbArr = function(navigations, previo
 	return breadcrumbNodes;
 };
 
-WCMBreadScrumbPortlet.prototype.getBreadcrumbs = function(){
+WCMBreadcrumbPortlet.prototype.getBreadcrumbs = function(){
 	var navigations = eXo.env.portal.navigations;
 	var selectedNodeUri = eXo.env.portal.selectedNodeUri;
 	var wcmContentTitle = eXo.env.portal.wcmContentTitle;
@@ -88,14 +88,11 @@ WCMBreadScrumbPortlet.prototype.getBreadcrumbs = function(){
 	var breadcumbs = new Array();
 		
 	if (wcmContentTitle != 'null') {
-		breadcumbs = getBreadcrumbArr(navigations, previousURI, wcmContentTitle);
+		breadcumbs = eXo.ecm.WCMBreadcrumbPortlet.getBreadcrumbArr(navigations, previousURI, wcmContentTitle);
 	} else {
-		breadcumbs = eXo.wcm.WCMBreadScrumbPortlet.getCurrentNodes(navigations, selectedNodeUri);
+		breadcumbs = eXo.ecm.WCMBreadcrumbPortlet.getCurrentNodes(navigations, selectedNodeUri);
 	}
-	
 	return breadcumbs;
 };
 
-
-if(!window.wcm) eXo.wcm = new Object();
-eXo.wcm.WCMBreadScrumbPortlet = new WCMBreadScrumbPortlet();
+eXo.ecm.WCMBreadcrumbPortlet = new WCMBreadcrumbPortlet();

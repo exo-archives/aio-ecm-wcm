@@ -1,5 +1,5 @@
 <% 
-	import javax.jcr.Node;
+	import javax.jcr.Node;z
 	def rcontext = _ctx.getRequestContext() ;
 	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs');
 	def String htmlWYSIWYGFormId = "htmlData[" + uicomponent.hashCode() + "]";
@@ -150,7 +150,7 @@
 										}
 									}
 									if ("".equals(htmlContent)) {
-										htmlContent = "<div class=\"UIWCMSearchBoxPortlet\"><div class=\"ACMESearchBox\"><div class=\"siteSearchBox\" id=\"siteSearchBox\"><div class=\"keywordInput\"><input type=\"text\" onkeypress=\"eXo.wcm.SearchPortlet.quickSearchOnEnter(event)\" name=\"keyword\" class=\"keyword\"/></div><div class=\"SearchBoxIcon\" onclick=\"quickSearch()\"><span></span></div></div><div style=\"clear: right;\"><span></span></div></div></div>";
+										htmlContent = "<div class=\"UIWCMSearchBoxPortlet\"><div class=\"ACMESearchBox\"><div class=\"siteSearchBox\" id=\"siteSearchBox\"><div class=\"keywordInput\"><input type=\"text\" onkeypress=\"eXo.ecm.SearchPortlet.quickSearchOnEnter(event)\" name=\"keyword\" class=\"keyword\"/></div><div class=\"SearchBoxIcon\" onclick=\"eXo.ecm.SearchPortlet.quickSearch()\"><span></span></div></div><div style=\"clear: right;\"><span></span></div></div></div>";
 									}
 									String[] htmlArguments = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=toolbar:CompleteWCM,width:100%,height:410px", htmlContent];
 			    					uicomponent.addWYSIWYGField(htmlWYSIWYGFormId, htmlArguments) ;
