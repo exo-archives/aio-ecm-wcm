@@ -104,12 +104,12 @@ td {
 .UIToolbarContainer  .EditingPortletTDContainer {
   float: right;
   margin: 7px 0px 0px 5px;
-  width: 138px;
 }
 
 .UISiteAdminToolBar {
   height: 32px;
   padding-right: 10px;
+  float: right;
 }
 
 .UISiteAdminToolBar .Editing {

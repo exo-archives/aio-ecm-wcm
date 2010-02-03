@@ -8,7 +8,8 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  * ngoc.tran@exoplatform.com Jan 28, 2010
  */
 @ComponentConfig(
-                 lifecycle = UIApplicationLifecycle.class
+                 lifecycle = UIApplicationLifecycle.class,
+                 template = "app:/groovy/Editing/UIEditingPortlet.gtmpl"
                )
 public class UIEditingPortlet extends UIPortletApplication {
 

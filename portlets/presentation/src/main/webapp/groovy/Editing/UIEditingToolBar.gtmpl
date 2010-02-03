@@ -1,7 +1,6 @@
-
 <div class="UISiteAdminToolBar">
 	<% uiform.begin(); %>
-	<div style="width: 150px;">
+	<div>
 		<div class="LeftSelect">
 	    	<div>
 		    	<%uiform.renderChild(uiform.EDITING_OPTIONS); %>
