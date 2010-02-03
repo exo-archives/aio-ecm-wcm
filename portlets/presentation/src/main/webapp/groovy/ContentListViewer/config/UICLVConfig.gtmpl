@@ -2,13 +2,15 @@
 	import org.exoplatform.webui.application.WebuiRequestContext;
 	import org.exoplatform.webui.application.portlet.PortletRequestContext;
 	import org.exoplatform.wcm.webui.clv.config.UICLVConfig;
+	import org.exoplatform.wcm.webui.Utils;
 	
-	PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-	def portletId = pContext.getWindowId();
+  def rcontext = _ctx.getRequestContext();
+  def portletId = rcontext.getWindowId();
+  portletId = Utils.isPortalEditting() ? "EditMode-" + portletId : portletId;
 	def quickEditingBlockId = portletId + "-QuickEditingBlock";
-	def jsManager = _ctx.getRequestContext().getJavascriptManager();
+	def jsManager = rcontext.getJavascriptManager();
 	jsManager.importJavascript("eXo.wcm.frontoffice.private.CLV", "/eXoWCMResources/javascript");
-	jsManager.addOnLoadJavascript("showHideOrderBy");
+	jsManager.addOnLoadJavascript("eXo.wcm.CLV.showHideOrderBy");
 %>
 <div class="UIForm $uicomponent.id">
 	<div class="TitleBar">

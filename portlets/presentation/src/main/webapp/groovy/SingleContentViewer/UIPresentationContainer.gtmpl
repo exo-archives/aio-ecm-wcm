@@ -6,9 +6,10 @@
 <div class="$uicomponent.id">
 	<%
 		def rcontext = _ctx.getRequestContext() ;
-		def portletId = rcontext.getWindowId();
+    def portletId = rcontext.getWindowId();
+    portletId = Utils.isPortalEditting() ? "EditMode-" + portletId : portletId;
 		def quickEditingBlockId = portletId + "-QuickEditingBlock";
-		def jsManager = _ctx.getRequestContext().getJavascriptManager();
+		def jsManager = rcontext.getJavascriptManager();
 		jsManager.importJavascript('eXo.wcm.frontoffice.private.QuickEdit', '/eXoWCMResources/javascript/') ;
 		jsManager.addOnLoadJavascript('eXo.wcm.QuickEdit.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
 		

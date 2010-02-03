@@ -11,6 +11,8 @@
       <printviewer>Print page</printviewer>
       <searchResult>Résultats de recherche</searchResult>
       <newAccount>Nouveau compte</newAccount>
+      <groupnavigation>Navigation du Groupe</groupnavigation>
+      <portalnavigation>Navigation du Portail</portalnavigation>
     </acme>
   </portal>
   

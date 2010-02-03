@@ -11,6 +11,8 @@
       <printviewer>Trang in</printviewer>
       <searchResult>Kết quả tìm kiếm</searchResult>
       <newAccount>Đăng ký</newAccount>
+      <groupnavigation>Quản lý thanh điều hướng cho nhóm</groupnavigation>
+      <portalnavigation>Quản lý thanh điều hướng chung</portalnavigation>
     </acme>
   </portal>
   

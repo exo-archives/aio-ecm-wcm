@@ -86,6 +86,10 @@ public class Utils {
     return true;
   }
   
+  public static boolean isPortalEditting() {
+    return Util.getUIPortalApplication().getModeState() != UIPortalApplication.NORMAL_MODE;
+  }
+  
   /**
    * Can edit current portal.
    * 

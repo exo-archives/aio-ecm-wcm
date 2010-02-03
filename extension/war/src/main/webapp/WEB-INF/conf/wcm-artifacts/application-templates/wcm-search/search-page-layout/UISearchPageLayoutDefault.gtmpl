@@ -6,10 +6,11 @@ import org.exoplatform.wcm.webui.Utils;
 %>
 <div id="$uicomponent.id">
 	<%
-		def portletId = uicomponent.getPortletId();
-		def quickEditingBlockId = uicomponent.getPortletId() + "-QuickEditingBlock";
 		def rcontext = _ctx.getRequestContext() ;
-		def jsManager = _ctx.getRequestContext().getJavascriptManager();
+    def portletId = rcontext.getWindowId();
+    portletId = Utils.isPortalEditting() ? "EditMode-" + portletId : portletId;
+		def quickEditingBlockId = portletId + "-QuickEditingBlock";
+		def jsManager = rcontext.getJavascriptManager();
 		jsManager.importJavascript('eXo.wcm.frontoffice.private.QuickEdit', '/eXoWCMResources/javascript/') ;
 		jsManager.addOnLoadJavascript('eXo.wcm.QuickEdit.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
 		if(Utils.isShowQuickEdit()) {		
