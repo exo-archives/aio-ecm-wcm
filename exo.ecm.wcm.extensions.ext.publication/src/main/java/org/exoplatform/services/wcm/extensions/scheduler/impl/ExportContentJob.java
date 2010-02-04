@@ -37,6 +37,7 @@ import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.listener.ListenerService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.authoring.AuthoringPublicationConstant;
@@ -55,13 +56,16 @@ import org.quartz.JobExecutionException;
 public class ExportContentJob implements Job {
   private static final Log    log                  = ExoLogger.getLogger(ExportContentJob.class);
 
-  private static final String MIX_TARGET_PATH      = "mix:targetPath";
+  private static final String MIX_TARGET_PATH      = "mix:targetPath".intern();
 
-  private static final String MIX_TARGET_WORKSPACE = "mix:targetWorkspace";
+  private static final String MIX_TARGET_WORKSPACE = "mix:targetWorkspace".intern();
 
-  private static final String URL                  = "http://www.w3.org/2001/XMLSchema";
+  private static final String URL                  = "http://www.w3.org/2001/XMLSchema".intern();
 
   private static final String START_TIME_PROPERTY  = "publication:startPublishedDate".intern();
+  
+  private static final String POST_CHANGE_STATE_EVENT = "PublicationService.event.postUpdate".intern();
+
 
   private static String       fromState            = null;
 
@@ -86,7 +90,7 @@ public class ExportContentJob implements Job {
     Session session = null;
     try {
 
-      log.info("Start Execute ExportContentJob");
+      log.debug("Start Execute ExportContentJob");
       if (fromState == null) {
 
         JobDataMap jdatamap = context.getJobDetail().getJobDataMap();
@@ -114,6 +118,7 @@ public class ExportContentJob implements Job {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       RepositoryService repositoryService_ = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService_.getRepository(repository);
+      ListenerService listenerService = (ListenerService) container.getComponentInstanceOfType(ListenerService.class);
       session = sessionProvider.getSession(workspace, manageableRepository);
       QueryManager queryManager = session.getWorkspace().getQueryManager();
       boolean isExported = false;
@@ -159,7 +164,9 @@ public class ExportContentJob implements Job {
             Map<String, VersionData> revisionsMap = getRevisionData(node_);
             node_.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE,
                               PublicationDefaultStates.PUBLISHED);
-
+            listenerService.broadcast(POST_CHANGE_STATE_EVENT, null, node_);
+            log.info("Change the state of " + node_.getPath() + " from " + fromState + " to "
+                + toState);
             VersionData versionData = revisionsMap.get(node_.getUUID());
             if (versionData != null) {
               versionData.setAuthor(node_.getSession().getUserID());
@@ -268,18 +275,17 @@ public class ExportContentJob implements Job {
           out.close();
           String string = null;
           while ((string = inStream.readLine()) != null) {
-            log.info("Server: " + string);
+            log.debug("The response of the production server:" + string);
           }
 
           connection.disconnect();
         }
       } else {
-        log.info("there is no content to be exported");
+        log.debug("There are no contents to be exported...");
       }
 
-      log.info("End Execute ExportContentJob");
+      log.debug("End Execute ExportContentJob");
     } catch (Exception ex) {
-      ex.printStackTrace();
       log.error("error when exporting content" + ex.getMessage());
     } finally {
       session.logout();
