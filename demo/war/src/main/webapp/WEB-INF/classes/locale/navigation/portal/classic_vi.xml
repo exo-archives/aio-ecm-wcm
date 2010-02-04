@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <portal>
+    <acme>
+      <home>Trang chủ</home>
+      <searchResult>Kết quả tìm kiếm</searchResult>
+      <parameterizedviewer>Chi tiết</parameterizedviewer>
+      <newAccount>Đăng ký</newAccount>
+    </acme>
+  </portal>
+  
+  <ACMESite>
+    <label>Mẫu website ACME</label>
+  </ACMESite>
+</bundle>
+

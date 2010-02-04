@@ -16,8 +16,8 @@
     </acme>
   </portal>
   
-  <ACMESite>
+  <ACMEPortal>
     <label>Mẫu website ACME</label>
-  </ACMESite>
+  </ACMEPortal>
 </bundle>
 

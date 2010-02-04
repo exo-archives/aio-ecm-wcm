@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <portal>
+    <acme>
+      <home>Overview</home>
+      <searchResult>Search</searchResult>
+      <parameterizedviewer>Details</parameterizedviewer>
+      <newAccount>New Account</newAccount>
+    </acme>
+  </portal>
+</bundle>
+
