@@ -40,8 +40,8 @@ public class CopyContentFile implements ResourceContainer {
 	@InputTransformer(StringInputTransformer.class)
 	@OutputTransformer(StringOutputTransformer.class)
 	public Response copyFile(String param) throws Exception {
-		if (log.isInfoEnabled()) {
-			log.info("Start Execute CopyContentFile Web Service");
+		if (log.isDebugEnabled()) {
+			log.debug("Start Execute CopyContentFile Web Service");
 		}
 		try {
 
@@ -65,17 +65,17 @@ public class CopyContentFile implements ResourceContainer {
 				ops.write(contents.getBytes());
 				ops.close();
 			} else {
-				log.info("echec authentification...");
-				return Response.Builder.ok(KO_RESPONSE, "text/plain").build();
+				log.warn("Anthentification failed...");
+				return Response.Builder.ok(KO_RESPONSE+"...Anthentification failed", "text/plain").build();
 			}
 		} catch (Exception ex) {
-			log.error("error when copying content file");
-			return Response.Builder.ok(KO_RESPONSE, "text/plain").build();
+			log.error("error when copying content file"+ex.getMessage());
+			return Response.Builder.ok(KO_RESPONSE+"..."+ex.getMessage(), "text/plain").build();
 		}
-		if (log.isInfoEnabled()) {
-			log.info("Start Execute CopyContentFile Web Service");
+		if (log.isDebugEnabled()) {
+			log.debug("Start Execute CopyContentFile Web Service");
 		}
-		return Response.Builder.ok(OK_RESPONSE, "text/plain").build();
+		return Response.Builder.ok(OK_RESPONSE+"...content has been successfully copied in the production server", "text/plain").build();
 
 	}
 
