@@ -47,7 +47,7 @@ SearchPortlet.prototype.quickSearchOnEnter = function(event, resultPageURI) {
 	}
 };
 
-SearchPortlet.prototype.search = function() {
+SearchPortlet.prototype.search = function(comId) {
 	var searchForm = document.getElementById(comId);
 	var inputKey = eXo.core.DOMUtil.findDescendantById(searchForm,
 			"keywordInput");
