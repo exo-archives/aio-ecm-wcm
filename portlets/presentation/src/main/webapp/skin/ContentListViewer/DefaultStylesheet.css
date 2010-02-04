@@ -239,6 +239,7 @@
 
 .UIForm .FieldComponent .FieldComponent input {
   width: 220px;
+  margin-left: 3px;
 }
 
 .UIContainerConfigOptions .ContainerConfigOptions {

@@ -17,7 +17,7 @@
       <Title>Content list viewer configuration</Title>
       <ContentSelectionBlock>Contents selection</ContentSelectionBlock>
       <ViewerMode>Mode</ViewerMode>
-      <FolderPathInput>Folder path</FolderPathInput>
+      <FolderPathInputSet>Folder path</FolderPathInputSet>
       <OrderBy>Order by</OrderBy>
       <option>
         <exo:title>Title</exo:title>

@@ -258,14 +258,15 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
     UIFormSelectBox orderBySelectBox = new UIFormSelectBox(ORDER_BY, ORDER_BY, orderByOptions);
     String orderByPref = portletPreferences.getValue(UICLVPortlet.ORDER_BY, null);
     orderBySelectBox.setValue(orderByPref); 
+    
     UIFormInputSetWithAction folderPathInputSet = new UIFormInputSetWithAction(FOLDER_PATH_INPUTSET);
-    UIFormStringInput folderPathInput = new UIFormStringInput(FOLDER_PATH_INPUT, FOLDER_PATH_INPUT, null);
+    UIFormStringInput folderPathInput = new UIFormStringInput(FOLDER_PATH_INPUT, FOLDER_PATH_INPUT, folderPath);
     folderPathInput.setEditable(false);
-    if (folderPath != null) {
-      folderPathInput.setValue(folderPath);
-    }
-    folderPathInputSet.addChild(folderPathInput);
-    folderPathInputSet.setActionInfo(FOLDER_PATH_INPUT, new String[] { "SelectFolderPath" });
+    folderPathInput.setValue(folderPath);
+    
+    folderPathInputSet.setActionInfo(FOLDER_PATH_INPUT, new String[] { "SelectFolderPath" }) ;
+    folderPathInputSet.addUIFormInput(folderPathInput);
+    
     UIFormStringInput itemsPerPageStringInput = new UIFormStringInput(ITEMS_PER_PAGE_INPUT, ITEMS_PER_PAGE_INPUT, null);
     UIFormSelectBox formViewTemplateSelector = new UIFormSelectBox(FORM_VIEW_TEMPLATES_SELECTOR, FORM_VIEW_TEMPLATES_SELECTOR, formViewerTemplateList);
     UIFormSelectBox paginatorTemplateSelector = new UIFormSelectBox(PAGINATOR_TEMPLATES_SELECTOR, PAGINATOR_TEMPLATES_SELECTOR, paginatorTemplateList);    
@@ -320,14 +321,14 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
       orderBySelectBox.setRendered(true);
     }
     
-    String preferenceBasePath = portletPreferences.getValue(UICLVPortlet.BASE_PATH, null);
-    UIFormInputSetWithAction targetPathFormInputSet = new UIFormInputSetWithAction(BASE_PATH_INPUT_SET_ACTION);
-    UIFormStringInput targetPathFormStringInput = new UIFormStringInput(BASE_PATH_INPUT, BASE_PATH_INPUT, preferenceBasePath);
-    targetPathFormStringInput.setValue(preferenceBasePath);
-    targetPathFormStringInput.setEditable(false);
-    targetPathFormInputSet.setActionInfo(BASE_PATH_INPUT, new String[] {"SelectBasePath"}) ;
-    targetPathFormInputSet.addUIFormInput(targetPathFormStringInput);
-
+    String basepath = portletPreferences.getValue(UICLVPortlet.BASE_PATH, null);
+    UIFormInputSetWithAction basepathInputSet = new UIFormInputSetWithAction(BASE_PATH_INPUT_SET_ACTION);
+    UIFormStringInput basePathInput = new UIFormStringInput(BASE_PATH_INPUT, BASE_PATH_INPUT, basepath);
+    basePathInput.setValue(basepath);
+    basePathInput.setEditable(false);
+    basepathInputSet.setActionInfo(BASE_PATH_INPUT, new String[] {"SelectBasePath"}) ;
+    basepathInputSet.addUIFormInput(basePathInput);
+    
     addChild(viewerModeRadioBoxInput);
     addChild(folderPathInputSet);
     addChild(orderBySelectBox);
@@ -344,7 +345,7 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
     addChild(viewerHeader);
     addChild(viewerLink);
     addChild(viewerReadmoreCheckbox);
-    addChild(targetPathFormInputSet);
+    addChild(basepathInputSet);
 
     setActions(new String[] { "Save", "Cancel" });
   }
