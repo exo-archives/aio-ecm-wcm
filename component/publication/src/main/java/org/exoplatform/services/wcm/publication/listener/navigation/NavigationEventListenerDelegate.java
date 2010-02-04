@@ -113,7 +113,11 @@ public class NavigationEventListenerDelegate {
     UserPortalConfigService userPortalConfigService = PublicationUtil.getServices(UserPortalConfigService.class);
     WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
     for (PageNode pageNode : PublicationUtil.getAllPageNodeFromPageNavigation(pageNavigation)) {
-      Page page = userPortalConfigService.getPage(pageNode.getPageReference(), remoteUser);
+      Page page = null;
+      if (remoteUser == null) 
+        page = userPortalConfigService.getPage(pageNode.getPageReference());
+      else 
+        page = userPortalConfigService.getPage(pageNode.getPageReference(), remoteUser);
       if (page != null) {
         for (String applicationId : PublicationUtil.getListApplicationIdByPage(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET))) {
           Node content = PublicationUtil.getNodeByApplicationId(applicationId);
@@ -179,7 +183,11 @@ public class NavigationEventListenerDelegate {
       if (!pageId.equals("")) {
         String applicationId = "";
         UserPortalConfigService userPortalConfigService = PublicationUtil.getServices(UserPortalConfigService.class);
-        Page page = userPortalConfigService.getPage(pageId, remoteUser);
+        Page page = null;
+        if (remoteUser == null) 
+          page = userPortalConfigService.getPage(pageId);
+        else 
+          page = userPortalConfigService.getPage(pageId, remoteUser);
         for (String applicationIdTmp : PublicationUtil.getListApplicationIdByPage(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET))) {
           applicationIdTmp = PublicationUtil.setMixedApplicationId(pageId, applicationIdTmp);
           List<String> listExistedApplicationId = PublicationUtil.getValuesAsString(content, "publication:applicationIDs");

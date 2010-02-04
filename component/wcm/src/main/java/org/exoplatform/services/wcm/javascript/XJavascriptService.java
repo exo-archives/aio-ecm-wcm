@@ -178,7 +178,7 @@ public class XJavascriptService implements Startable {
     if(jsConfigService.isModuleLoaded(MODULE_NAME)) {      
       jsConfigService.removeExtendedJavascript(MODULE_NAME, javascriptPath, sContext) ;
     }
-    jsConfigService.addExtendedJavascript(MODULE_NAME, javascriptPath, sContext, jsData) ;
+//    jsConfigService.addExtendedJavascript(MODULE_NAME, javascriptPath, sContext, jsData) ;
   }
   
   /**
@@ -192,7 +192,7 @@ public class XJavascriptService implements Startable {
     if(jsConfigService.isModuleLoaded(MODULE_NAME)) {      
       jsConfigService.removeExtendedJavascript(MODULE_NAME, javascriptPath, sContext) ;
     }
-    jsConfigService.addExtendedJavascript(MODULE_NAME, javascriptPath, sContext, jsData) ;
+//    jsConfigService.addExtendedJavascript(MODULE_NAME, javascriptPath, sContext, jsData) ;
   }
 
   /**

@@ -151,13 +151,13 @@
   <external-component-plugins>
     <target-component>org.exoplatform.services.listener.ListenerService</target-component>
     <component-plugin>
-      <name>UserPortalConfigService.portal.onCreate</name>
+      <name>org.exoplatform.portal.config.DataStorage.portalConfigCreated</name>
       <set-method>addListener</set-method>
       <type>org.exoplatform.services.wcm.portal.listener.CreateLivePortalEventListener</type>
       <description>this listener create new live portal content storage</description>
     </component-plugin>
     <component-plugin>
-      <name>UserPortalConfigService.portal.onRemove</name>
+      <name>org.exoplatform.portal.config.DataStorage.portalConfigRemoved</name>
       <set-method>addListener</set-method>
       <type>org.exoplatform.services.wcm.portal.listener.RemoveLivePortalEventListener</type>
       <description>this listener new live portal content storage</description>

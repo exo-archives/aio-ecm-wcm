@@ -18,7 +18,7 @@ package org.exoplatform.services.wcm.publication.listener.navigation;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.DataStorageImpl;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
@@ -32,7 +32,7 @@ import org.exoplatform.services.wcm.publication.WCMPublicationService;
  * hoa.pham@exoplatform.com
  * Sep 24, 2008
  */
-public class RemoveNavigationEventListener extends Listener<UserPortalConfigService, PageNavigation>{
+public class RemoveNavigationEventListener extends Listener<DataStorageImpl, PageNavigation>{
   
   /** The log. */
   private static Log log = ExoLogger.getLogger(RemoveNavigationEventListener.class);
@@ -40,7 +40,7 @@ public class RemoveNavigationEventListener extends Listener<UserPortalConfigServ
   /* (non-Javadoc)
    * @see org.exoplatform.services.listener.Listener#onEvent(org.exoplatform.services.listener.Event)
    */
-  public void onEvent(Event<UserPortalConfigService, PageNavigation> event) throws Exception {
+  public void onEvent(Event<DataStorageImpl, PageNavigation> event) throws Exception {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     WCMPublicationService publicationService = 
       (WCMPublicationService)container.getComponentInstanceOfType(WCMPublicationService.class);
