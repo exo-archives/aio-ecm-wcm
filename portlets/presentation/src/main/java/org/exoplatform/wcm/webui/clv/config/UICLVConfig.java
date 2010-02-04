@@ -497,6 +497,7 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
       String workspace = manageableRepository.getConfiguration().getDefaultWorkspaceName();
       String folderPath = uiViewerManagementForm.getUIStringInput(UICLVConfig.FOLDER_PATH_INPUT).getValue();
       String header = uiViewerManagementForm.getUIStringInput(UICLVConfig.HEADER).getValue();
+      if (header == null) header = "";
       String formViewTemplatePath = uiViewerManagementForm.getUIFormSelectBox(UICLVConfig.FORM_VIEW_TEMPLATES_SELECTOR).getValue();
       String paginatorTemplatePath = uiViewerManagementForm.getUIFormSelectBox(UICLVConfig.PAGINATOR_TEMPLATES_SELECTOR).getValue();
       String itemsPerPage = uiViewerManagementForm.getUIStringInput(UICLVConfig.ITEMS_PER_PAGE_INPUT).getValue();      
@@ -541,12 +542,12 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
       portletPreferences.setValue(UICLVPortlet.ORDER_TYPE, orderType);
       portletPreferences.setValue(UICLVPortlet.BASE_PATH, basePath);
       
-      if (!uiViewerManagementForm.isManualMode()) {
+      if (uiViewerManagementForm.isManualMode()) {   
         String[] sl = (String[]) uiViewerManagementForm.getViewAbleContentList().toArray(new String[0]);
         portletPreferences.setValues(UICLVPortlet.CONTENT_LIST, sl);
       } else {
         portletPreferences.setValue(UICLVPortlet.ORDER_BY, orderBy);
-        portletPreferences.setValues(UICLVPortlet.CONTENT_LIST, new String [] {});
+        portletPreferences.setValues(UICLVPortlet.CONTENT_LIST, new String [] {""});
       }
       portletPreferences.store();
       if (!Utils.isQuickEditMode(uiViewerManagementForm, "UIViewerManagementPopupWindow")) {
