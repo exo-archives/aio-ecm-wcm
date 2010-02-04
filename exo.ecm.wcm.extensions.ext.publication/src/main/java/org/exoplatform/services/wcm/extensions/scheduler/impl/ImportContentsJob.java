@@ -113,10 +113,9 @@ public class ImportContentsJob implements Job {
                     if (eventType == XMLEvent.START_ELEMENT
                         && "content".equals(reader.getLocalName())) {
                       linkObj.setSourcePath(reader.getAttributeValue(0)); // --Attribute
-                      // number
-                      // 0
-                      // =
-                      // targetPath
+                                                                          // number
+                                                                          // 0 =
+                                                                          // targetPath
                     }
                     if (eventType == XMLEvent.START_ELEMENT && "type".equals(reader.getLocalName())) {
                       linkObj.setLinkType(reader.getElementText());
@@ -240,12 +239,11 @@ public class ImportContentsJob implements Job {
           }
         }
       }
-      if (log.isInfoEnabled()) {
-        log.info("End Execute ImportXMLJob");
+      if (log.isDebugEnabled()) {
+        log.debug("End Execute ImportXMLJob");
       }
     } catch (Exception ex) {
-      ex.printStackTrace();
-      log.error("Error when importing Contents");
+      log.error("Error when importing Contents " + ex.getMessage());
     }
   }
 
