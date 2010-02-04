@@ -11,69 +11,73 @@ SearchPortlet.prototype.showObject = function(obj) {
 };
 
 SearchPortlet.prototype.getRuntimeContextPath = function() {
-	return eXo.wcm.WCMUtils.getHostName() + eXo.env.portal.context + '/' + eXo.env.portal.accessMode + '/' + eXo.env.portal.portalName + '/';
+	return eXo.ecm.WCMUtils.getHostName() + eXo.env.portal.context + '/'
+			+ eXo.env.portal.accessMode + '/' + eXo.env.portal.portalName + '/';
 };
 
 SearchPortlet.prototype.getKeynum = function(event) {
-  var keynum = false ;
-  if(window.event) { /* IE */
-    keynum = window.event.keyCode;
-    event = window.event ;
-  } else if(event.which) { /* Netscape/Firefox/Opera */
-    keynum = event.which ;
-  }
-  if(keynum == 0) {
-    keynum = event.keyCode ;
-  }
-  return keynum ;
-};
-
-SearchPortlet.prototype.quickSearch = function(){
-	var searchBox = document.getElementById("siteSearchBox");
-	var keyWordInput = eXo.core.DOMUtil.findFirstDescendantByClass(searchBox, "input", "keyword");
-	var keyword = encodeURI(keyWordInput.value);
-	var resultPageURIDefault = "searchResult";
-	var params = "portal=" + eXo.env.portal.portalName + "&keyword=" + keyword;
-	var baseURI = eXo.wcm.WCMUtils.getHostName() + eXo.env.portal.context + "/" + eXo.env.portal.accessMode + "/" + eXo.env.portal.portalName; 
-	if (resultPageURI != undefined) {
-		baseURI = baseURI + "/" + resultPageURI; 
-	} else {
-		baseURI = baseURI + "/" + resultPageURIDefault;  
+	var keynum = false;
+	if (window.event) { /* IE */
+		keynum = window.event.keyCode;
+		event = window.event;
+	} else if (event.which) { /* Netscape/Firefox/Opera */
+		keynum = event.which;
 	}
-	window.location = baseURI + "?" + params;
+	if (keynum == 0) {
+		keynum = event.keyCode;
+	}
+	return keynum;
 };
 
 SearchPortlet.prototype.quickSearchOnEnter = function(event, resultPageURI) {
 	var keyNum = eXo.ecm.SearchPortlet.getKeynum(event);
-  if (keyNum == 13) {
-    eXo.ecm.SearchPortlet.quickSearch(resultPageURI);
-  }
+	if (keyNum == 13) {
+		var searchBox = document.getElementById("siteSearchBox");
+		var keyWordInput = eXo.core.DOMUtil.findFirstDescendantByClass(searchBox, "input", "keyword");
+		var keyword = encodeURI(keyWordInput.value);
+		var resultPageURIDefault = "searchResult";
+		var params = "portal=" + eXo.env.portal.portalName + "&keyword=" + keyword;
+		var baseURI = eXo.ecm.WCMUtils.getHostName() + eXo.env.portal.context + "/" + eXo.env.portal.accessMode + "/" + eXo.env.portal.portalName;
+		if (resultPageURI != undefined) {
+			baseURI = baseURI + "/" + resultPageURI;
+		} else {
+			baseURI = baseURI + "/" + resultPageURIDefault;
+		}
+		window.location = baseURI + "?" + params;
+	}
 };
 
-
-SearchPortlet.prototype.search = function(){
+SearchPortlet.prototype.search = function() {
 	var searchForm = document.getElementById(comId);
-	var inputKey = eXo.core.DOMUtil.findDescendantById(searchForm, "keywordInput");
-	searchForm.onsubmit = function() {return false;};
+	var inputKey = eXo.core.DOMUtil.findDescendantById(searchForm,
+			"keywordInput");
+	searchForm.onsubmit = function() {
+		return false;
+	};
 	inputKey.onkeypress = function(event) {
 		var keyNum = eXo.ecm.SearchPortlet.getKeynum(event);
 		if (keyNum == 13) {
-			var searchButton = eXo.core.DOMUtil.findFirstDescendantByClass(this.form, "div", "SearchButton");
+			var searchButton = eXo.core.DOMUtil.findFirstDescendantByClass(
+					this.form, "div", "SearchButton");
 			searchButton.onclick();
-  	 }		
+		}
 	}
 };
 
 SearchPortlet.prototype.keepKeywordOnBoxSearch = function() {
 	var queryRegex = /^portal=[\w%]+&keyword=[\w%]+/;
 	var searchBox = document.getElementById("siteSearchBox");
-	var keyWordInput = eXo.core.DOMUtil.findFirstDescendantByClass(searchBox, "input", "keyword");
+	var keyWordInput = eXo.core.DOMUtil.findFirstDescendantByClass(searchBox,
+			"input", "keyword");
 	var queryString = location.search.substring(1);
-	if (!queryString.match(queryRegex)) {return;}
+	if (!queryString.match(queryRegex)) {
+		return;
+	}
 	var portalParam = queryString.split('&')[0];
-	var keyword = decodeURI(queryString.substring((portalParam + "keyword=").length +1));
+	var keyword = decodeURI(queryString
+			.substring((portalParam + "keyword=").length + 1));
 	if (keyword != undefined && keyword.length != 0) {
-		keyWordInput.value = unescape(keyword); 
+		keyWordInput.value = unescape(keyword);
 	}
 };
 

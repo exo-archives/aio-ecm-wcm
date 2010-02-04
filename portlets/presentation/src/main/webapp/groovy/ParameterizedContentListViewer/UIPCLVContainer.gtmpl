@@ -9,7 +9,7 @@ portletId = Utils.isPortalEditting() ? "EditMode-" + portletId : portletId;
 def quickEditingBlockId = portletId + "-QuickEditingBlock";
 def jsManager = rcontext.getJavascriptManager();
 jsManager.importJavascript('eXo.wcm.frontoffice.private.QuickEdit', '/eXoWCMResources/javascript/') ;
-jsManager.addOnLoadJavascript('eXo.wcm.QuickEdit.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
+jsManager.addOnLoadJavascript('eXo.ecm.QuickEdit.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
 
 %>
 <div class="$uicomponent.id" id="$uicomponent.id">

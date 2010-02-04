@@ -11,7 +11,7 @@
 		def quickEditingBlockId = portletId + "-QuickEditingBlock";
 		def jsManager = rcontext.getJavascriptManager();
 		jsManager.importJavascript('eXo.wcm.frontoffice.private.QuickEdit', '/eXoWCMResources/javascript/') ;
-		jsManager.addOnLoadJavascript('eXo.wcm.QuickEdit.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
+		jsManager.addOnLoadJavascript('eXo.ecm.QuickEdit.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
 		
 		//def scvPortlet = uicomponent.getAncestorOfType(UISingleContentViewerPortlet.class); 
 		def node = uicomponent.getNodeView();

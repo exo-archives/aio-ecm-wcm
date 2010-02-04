@@ -50,8 +50,8 @@
 							list = list[0].getElementsByTagName("childNode");
 							objChild.innerHTML="";
 							parentPath = document.getElementById(
-														objChild.id.replace(eXo.wcm.MyUIWCMTreeView.constChildNode, 
-																			eXo.wcm.MyUIWCMTreeView.constParentNode)
+														objChild.id.replace(eXo.ecm.MyUIWCMTreeView.constChildNode, 
+																			eXo.ecm.MyUIWCMTreeView.constParentNode)
 																			).getAttribute("treePath");
 							var restAction = "";
 							for(var i = 0; i < list.length; i ++){;
@@ -61,18 +61,18 @@
 								nodePath = list[i].getElementsByTagName("nodePath")[0].childNodes[0].nodeValue;
 							
 								treePath = parentPath + "/" + name;
-								firstId = eXo.wcm.MyUIWCMTreeView.replaceAll(
-															eXo.wcm.MyUIWCMTreeView.replaceAll(treePath, "/", "rp"), " ", "");
-								restAction = "eXo.wcm.MyUIWCMTreeView.selectNode('"+firstId+"','"+nodePath+"', '"+workspaceName+"', '"+repositoryName+"');" + 
-															eXo.wcm.MyUIWCMTreeView.ajaxAction.replace("WCMTreeBuilderParameters",
-															eXo.wcm.MyUIWCMTreeView.replaceAll(eXo.wcm.MyUIWCMTreeView.replaceAll(
+								firstId = eXo.ecm.MyUIWCMTreeView.replaceAll(
+															eXo.ecm.MyUIWCMTreeView.replaceAll(treePath, "/", "rp"), " ", "");
+								restAction = "eXo.ecm.MyUIWCMTreeView.selectNode('"+firstId+"','"+nodePath+"', '"+workspaceName+"', '"+repositoryName+"');" + 
+															eXo.ecm.MyUIWCMTreeView.ajaxAction.replace("WCMTreeBuilderParameters",
+															eXo.ecm.MyUIWCMTreeView.replaceAll(eXo.ecm.MyUIWCMTreeView.replaceAll(
 																																	nodePath+"/"+workspaceName+"/"+firstId,"/", "%2F"), " ", "+"));
 																																	
 								objChild.innerHTML += '<div class="NoneSelectNodeIcon" onclick="' + restAction + '" id="'+
-																			eXo.wcm.MyUIWCMTreeView.constParentNode + firstId+'" treePath="'+treePath+'">'+
+																			eXo.ecm.MyUIWCMTreeView.constParentNode + firstId+'" treePath="'+treePath+'">'+
 																			'<div class="DefaultPageIcon">'+name+'</div>'+
 																			'</div>'+
-																			'<div class="ViewChildNodes" id="'+eXo.wcm.MyUIWCMTreeView.constChildNode + firstId+'"></div>';
+																			'<div class="ViewChildNodes" id="'+eXo.ecm.MyUIWCMTreeView.constChildNode + firstId+'"></div>';
 							}
 						}
 					}else{alert(httpRequest.status +":"+ httpRequest.statusText);}
@@ -95,20 +95,20 @@
 	}
 	
 	MyUIWCMTreeView.prototype.selectNode = function(childId, nodePath, workspaceName, repositoryName) {
-		var objParent = document.getElementById(eXo.wcm.MyUIWCMTreeView.constParentNode + childId);
+		var objParent = document.getElementById(eXo.ecm.MyUIWCMTreeView.constParentNode + childId);
 		if(objParent){
 			objParent.style.fontWeight="bold";
 			if(objParent.className == "NoneSelectNodeIcon")objParent.className = "SelectNodeIcon";
 			else objParent.className = "NoneSelectNodeIcon";
-			if(eXo.wcm.MyUIWCMTreeView.oldId != (eXo.wcm.MyUIWCMTreeView.constParentNode + childId)){
-				oldObject = document.getElementById(eXo.wcm.MyUIWCMTreeView.oldId);
+			if(eXo.ecm.MyUIWCMTreeView.oldId != (eXo.ecm.MyUIWCMTreeView.constParentNode + childId)){
+				oldObject = document.getElementById(eXo.ecm.MyUIWCMTreeView.oldId);
 				if(oldObject) oldObject.style.fontWeight="normal";
-				eXo.wcm.MyUIWCMTreeView.oldId = eXo.wcm.MyUIWCMTreeView.constParentNode + childId;
-				eXo.wcm.MyUIWCMTreeView.updateBreadcumbsElement(objParent);
+				eXo.ecm.MyUIWCMTreeView.oldId = eXo.ecm.MyUIWCMTreeView.constParentNode + childId;
+				eXo.ecm.MyUIWCMTreeView.updateBreadcumbsElement(objParent);
 			}
 		}
 		
-		var objChild = document.getElementById(eXo.wcm.MyUIWCMTreeView.constChildNode + childId);
+		var objChild = document.getElementById(eXo.ecm.MyUIWCMTreeView.constChildNode + childId);
 		if(workspaceName && repositoryName) this.getDir(nodePath, workspaceName, repositoryName, objChild);
 		if(objChild)
 			if(objChild.style.display === "block") objChild.style.display = "none";
@@ -123,7 +123,7 @@
 		for(var i = nodeNames.length - 1; i >=0; i --){
 			var action = "";
 			newDiv = document.createElement("div");
-			newDiv.id = eXo.wcm.MyUIWCMTreeView.constBreadcumbsElement + i;
+			newDiv.id = eXo.ecm.MyUIWCMTreeView.constBreadcumbsElement + i;
 			if(i <= 1) newDiv.className ="FirstNode";
 			else newDiv.className ="RightArrowIcon";
 			if(i != 0) newDiv.innerHTML = nodeNames[i];
@@ -134,19 +134,19 @@
 			} else action = "javaScript: void(0)";
 			newDiv.setAttribute('onclick', action);
 			
-			brotherDiv = document.getElementById(eXo.wcm.MyUIWCMTreeView.constBreadcumbsElement + (i + 1));
+			brotherDiv = document.getElementById(eXo.ecm.MyUIWCMTreeView.constBreadcumbsElement + (i + 1));
 			if(brotherDiv) objBreadcumbs.insertBefore(newDiv, brotherDiv)
 			else objBreadcumbs.appendChild(newDiv);
 			
 			if(objParent != null)objParent = objParent.parentNode;
-			if(objParent && objParent != null && objParent.id && objParent.id != null && objParent.id.indexOf(eXo.wcm.MyUIWCMTreeView.constChildNode) > -1){
-				objParentId = objParent.id.replace(eXo.wcm.MyUIWCMTreeView.constChildNode, eXo.wcm.MyUIWCMTreeView.constParentNode);
+			if(objParent && objParent != null && objParent.id && objParent.id != null && objParent.id.indexOf(eXo.ecm.MyUIWCMTreeView.constChildNode) > -1){
+				objParentId = objParent.id.replace(eXo.ecm.MyUIWCMTreeView.constChildNode, eXo.ecm.MyUIWCMTreeView.constParentNode);
 				objParent = document.getElementById(objParentId);
 			}else{
 				objParent = null;
 			}
 		}
-		objParent = document.getElementById(eXo.wcm.MyUIWCMTreeView.constBreadcumbsElement + (nodeNames.length - 1));
+		objParent = document.getElementById(eXo.ecm.MyUIWCMTreeView.constBreadcumbsElement + (nodeNames.length - 1));
 		objParent.style.color="#1B59AA";
 		objParent.setAttribute('onclick', 'javaScript:void(0)');
 	}
@@ -157,7 +157,7 @@
 			var action = obj.getAttribute("onclick");
 			if(action.indexOf("javascript:ajaxGet") > 0) action = action.substring(0, action.indexOf("javascript:ajaxGet"));
 			eval(action);
-		}else setTimeout('eXo.wcm.MyUIWCMTreeView.OpenOnePath("'+id+'",'+isLoad+')', 100);
+		}else setTimeout('eXo.ecm.MyUIWCMTreeView.OpenOnePath("'+id+'",'+isLoad+')', 100);
 	}
 	
 	MyUIWCMTreeView.prototype.OpenPath = function(path) {		
@@ -169,11 +169,11 @@
 				var parent = obj.parentNode;
 				if(parent) parent.style.display="block";
 			} 
-			eXo.wcm.MyUIWCMTreeView.OpenOnePath(ids[i]);
+			eXo.ecm.MyUIWCMTreeView.OpenOnePath(ids[i]);
 		}
 	}
 	
-	eXo.wcm.MyUIWCMTreeView = new MyUIWCMTreeView();
+	eXo.ecm.MyUIWCMTreeView = new MyUIWCMTreeView();
 </script>
 
 <div class="UIWebContentTreeView $uicomponent.id" id = "$uicomponent.id">
@@ -197,8 +197,8 @@
 		id = treeNode.getTreePath().replaceAll("/", "rp").replaceAll(" ", "");;
 		if(treeNode.getNodePath() != null)action = uicomponent.event("ChangeNode",treeNode.getNodePath()+"/"+treeNode.getWorkSpaceName()+"/" + id);
 		else action = "javaScript:void(0)";
-		if(treeNode.getDeep() > 0) restAction = "eXo.wcm.MyUIWCMTreeView.selectNode('"+id+"','"+treeNode.getNodePath()+"', '"+treeNode.getWorkSpaceName()+"', '"+uicomponent.repositoryName+"')";
-		else restAction = "eXo.wcm.MyUIWCMTreeView.selectNode('"+id+"')";
+		if(treeNode.getDeep() > 0) restAction = "eXo.ecm.MyUIWCMTreeView.selectNode('"+id+"','"+treeNode.getNodePath()+"', '"+treeNode.getWorkSpaceName()+"', '"+uicomponent.repositoryName+"')";
+		else restAction = "eXo.ecm.MyUIWCMTreeView.selectNode('"+id+"')";
 		%>
 		<div onclick="$restAction;$action" treePath="<%=treeNode.getTreePath()%>" style="" id="UIWCMTreeParentNode$id" class="NoneSelectNodeIcon">
 			<div class="DefaultPageIcon"><%=((i != 2)?treeNode.getName():treeNode.getName().replaceAll("\\.", "/"))%></div>
@@ -217,9 +217,9 @@
 			if(path.length() > 0) path += "/";
 			path += str;
 		}
-		//rcontext.getJavascriptManager().addJavascript("eXo.wcm.MyUIWCMTreeView.OpenPath('" + uicomponent.path + "');");
+		//rcontext.getJavascriptManager().addJavascript("eXo.ecm.MyUIWCMTreeView.OpenPath('" + uicomponent.path + "');");
 		println "<script type=\"text/javascript\">";
-		println "eXo.wcm.MyUIWCMTreeView.OpenPath('" + path + "');";
+		println "eXo.ecm.MyUIWCMTreeView.OpenPath('" + path + "');";
 		println "</script>"
 	}
 %>

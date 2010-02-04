@@ -17,14 +17,13 @@ Vote.prototype.addVote = function(repository, workspace, path, vote, lang) {
 Vote.prototype.showVoteWindow = function(div) {
 	var target = document.getElementById(div);
 	target.style.display = "inline";
-//		var l1 = '<a href="#" onclick="javascript:eXo.wcm.vote.addVote("1.0");">1</a>';
+//		var l1 = '<a href="#" onclick="javascript:eXo.ecm.vote.addVote("1.0");">1</a>';
 	var html = '<div style="border:1px solid #FF0000;">';
 	for (i=1 ; i<=5 ; i++) {
-		html += '<a href="#" onclick="javascript:eXo.wcm.vote.addVote(\'repository\', \'collaboration\', \'/sites%20content/live/classic/categories/Classic/test\',  \''+i+'.0\', \'en\')">'+i+'</a>';
+		html += '<a href="#" onclick="javascript:eXo.ecm.vote.addVote(\'repository\', \'collaboration\', \'/sites%20content/live/classic/categories/Classic/test\',  \''+i+'.0\', \'en\')">'+i+'</a>';
 	}
 	html += '</div>';
 	target.innerHTML = html;
 };
 
-if(!window.wcm) eXo.wcm = new Object();
-eXo.wcm.Vote = new Vote();
+eXo.ecm.Vote = new Vote();

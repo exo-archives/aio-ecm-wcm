@@ -10,7 +10,7 @@
 	def quickEditingBlockId = portletId + "-QuickEditingBlock";
 	def jsManager = rcontext.getJavascriptManager();
 	jsManager.importJavascript("eXo.wcm.frontoffice.private.CLV", "/eXoWCMResources/javascript");
-	jsManager.addOnLoadJavascript("eXo.wcm.CLV.showHideOrderBy");
+	jsManager.addOnLoadJavascript("eXo.ecm.CLV.showHideOrderBy");
 %>
 <div class="UIForm $uicomponent.id">
 	<div class="TitleBar">

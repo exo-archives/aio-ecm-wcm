@@ -7,9 +7,9 @@
 	def String jsFormId = "ContentJS[" + uicomponent.hashCode() + "]";
 	def jsManager = rcontext.getJavascriptManager();
 	jsManager.importJavascript('eXo.wcm.backoffice.private.WCMUtils', '/eXoWCMResources/javascript/') ;
-	jsManager.importJavascript('eXo.wcm.frontoffice.public.Navigation', '/eXoWCMResources/javascript/') ;
+	jsManager.importJavascript('eXo.wcm.frontoffice.public.Breadcrumb', '/eXoWCMResources/javascript/') ;
   jsManager.importJavascript('eXo.wcm.frontoffice.private.FCKEditor', '/eXoWCMResources/javascript/') ;
-	jsManager.addOnLoadJavascript("eXo.wcm.FCKEditor.insertCSSFromTextArea2FCK('" + htmlWYSIWYGFormId + "', '" + cssFormId + "')");
+	jsManager.addOnLoadJavascript("eXo.ecm.FCKEditor.insertCSSFromTextArea2FCK('" + htmlWYSIWYGFormId + "', '" + cssFormId + "')");
 	
 	private void setUploadFields() {
 			String[] illustrationHiddenField1 = ["jcrPath=/node/medias/images/illustration", "nodetype=nt:file", "defaultValues=illustration"];
@@ -125,7 +125,7 @@
 							</tr>		
 							<tr>
 					 			<td class="FieldLabel">
-					 				<div title="<%=_ctx.appRes("WebContent.dialog.label.Synchronize")%>" class="WebContentSynchronize Refresh16x16Icon" onclick="eXo.wcm.FCKEditor.insertCSSFromTextArea2FCK('<%= htmlWYSIWYGFormId %>', '<%= cssFormId %>')"></div>
+					 				<div title="<%=_ctx.appRes("WebContent.dialog.label.Synchronize")%>" class="WebContentSynchronize Refresh16x16Icon" onclick="eXo.ecm.FCKEditor.insertCSSFromTextArea2FCK('<%= htmlWYSIWYGFormId %>', '<%= cssFormId %>')"></div>
 									<div class="WebContentMain"><%=_ctx.appRes("WebContent.dialog.label.WebContentHtml")%></div>
 					 			</td>
 					  			<td class="FieldComponent">
@@ -384,7 +384,7 @@
 																	"\tif (navigation.resolvedLabel.length > 40) {\n" +
 																	"\t\tnavigation.resolvedLabel = navigation.resolvedLabel.substring(0,37) + \"...\";\n" +
 																	"\t}\n" +
-																	"\tvar link = eXo.wcm.WCMUtils.getHostName() + eXo.env.portal.context + '/' + eXo.env.portal.accessMode + '/' + eXo.env.portal.portalName + '/' +  navigation.uri;\n" +
+																	"\tvar link = eXo.ecm.WCMUtils.getHostName() + eXo.env.portal.context + '/' + eXo.env.portal.accessMode + '/' + eXo.env.portal.portalName + '/' +  navigation.uri;\n" +
 																	"\tvar arrowIcon = '';\n" +
 																	"\tif (navigation.children && navigation.children.length)\n" +
 																	"\t\tarrowIcon = 'ArrowIcon';\n" +
@@ -420,10 +420,10 @@
 																	"\t\t\t\tnavigation.resolvedLabel = navigation.resolvedLabel.substring(0,29) + \"...\";\n" +
 																	"\t\t\t}\n" +
 																	"\t\t\tvar tabStyleNavigation = 'NormalNavigationTab';\n" +
-																	"\t\t\tvar currentNodes = eXo.wcm.WCMNavigationPortlet.getCurrentNodes(navigations, eXo.env.portal.selectedNodeUri);\n" +
+																	"\t\t\tvar currentNodes = eXo.ecm.Breadcrumb.getCurrentNodes(navigations, eXo.env.portal.selectedNodeUri);\n" +
 																	"\t\t\tif (navigation.uri == currentNodes[currentNodes.length - 1].uri)\n" +
 																	"\t\t\t\ttabStyleNavigation = 'SelectedNavigationTab';\n" +
-																	"\t\t\tvar link = eXo.wcm.WCMUtils.getHostName() + eXo.env.portal.context + '/' + eXo.env.portal.accessMode + '/' + eXo.env.portal.portalName + '/' +  navigation.uri;\n" +
+																	"\t\t\tvar link = eXo.ecm.WCMUtils.getHostName() + eXo.env.portal.context + '/' + eXo.env.portal.accessMode + '/' + eXo.env.portal.portalName + '/' +  navigation.uri;\n" +
 																	"\t\t\tvar arrowIcon = '';\n" +
 																	"\t\t\tif (navigation.children && navigation.children.length) \n" +
 																	"\t\t\t\tarrowIcon = 'DropDownArrowIcon';\n" +

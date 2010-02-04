@@ -16,5 +16,4 @@ ContentListViewer.prototype.showHideOrderBy = function() {
 	}
 }
 
-if(!window.wcm) eXo.wcm = new Object();
-eXo.wcm.CLV = new ContentListViewer();
+eXo.ecm.CLV = new ContentListViewer();

@@ -23,7 +23,7 @@
   def resultType = uicomponent.getResultType();
   def rcontext = _ctx.getRequestContext() ;
 	def jsManager = rcontext.getJavascriptManager();
-	jsManager.importJavascript('eXo.wcm.private.backoffice.SearchPortlet.SearchPortlet', '/eXoWCMResources/javascript/') ;
+	jsManager.importJavascript('eXo.wcm.frontoffice.public.SearchPortlet', '/eXoWCMResources/javascript/') ;
   %>
    <div class="ResultHeader">
     <div class="CaptionSearchType"><b><%= _ctx.appRes("UIDefaultSearchResult.label." + resultType) %></b></div>
@@ -93,7 +93,7 @@
          if (!listNavigationNodeUris.isEmpty()) {
           if (listNavigationNodeUris.size() != 1) {
            %> 
-            - <span class="ItemSame" onclick="eXo.wcm.SearchPortlet.showObject(this)">
+            - <span class="ItemSame" onclick="eXo.ecm.SearchPortlet.showObject(this)">
              <a href="javascript:void(0)"><%= _ctx.appRes("UIDefaultSearchResult.label.similar") %></a>
             </span>
            <%

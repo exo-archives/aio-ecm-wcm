@@ -23,5 +23,4 @@ NewsletterManager.prototype.checkBeforeDelete = function(checkBox, checkMess, co
 	return confirm(confirmMess);
 }
 
-if(!window.wcm) eXo.wcm = new Object();
-eXo.wcm.NewsletterManager = new NewsletterManager();
+eXo.ecm.NewsletterManager = new NewsletterManager();

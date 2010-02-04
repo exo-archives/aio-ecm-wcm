@@ -86,7 +86,7 @@ WCMNavigationPortlet.prototype.onLoad = function(navigationId) {
   var uiNavPortlets = eXo.core.DOMUtil.findDescendantsByClass(uiWorkingWorkspace, "div", navigationId);
   if (uiNavPortlets.length) {
   		var mainContainer = eXo.core.DOMUtil.findFirstDescendantByClass(uiNavPortlets[0], "div", "TabsContainer");
-	 		eXo.wcm.WCMNavigationPortlet.init(uiNavPortlets[0], mainContainer, 0, 0);
+	 		eXo.ecm.WCMNavigationPortlet.init(uiNavPortlets[0], mainContainer, 0, 0);
   		for (var i = 1; i < uiNavPortlets.length; ++i) {
 					uiNavPortlets[i].style.display = "none";
   		}
@@ -113,10 +113,10 @@ WCMNavigationPortlet.prototype.buildMenu = function(popupMenu) {
   var topItems = DOMUtil.findDescendantsByClass(topContainer, "div", "UITab");
   for (var i = 0; i < topItems.length; i++) {
     var item = topItems[i];
-    item.onmouseover = eXo.wcm.WCMNavigationPortlet.setTabStyleOnMouseOver ;
-    item.onmouseout = eXo.wcm.WCMNavigationPortlet.setTabStyleOnMouseOut ;
+    item.onmouseover = eXo.ecm.WCMNavigationPortlet.setTabStyleOnMouseOver ;
+    item.onmouseout = eXo.ecm.WCMNavigationPortlet.setTabStyleOnMouseOut ;
     if (!item.getAttribute('hidesubmenu')) {
-      item.onmousemove = eXo.wcm.WCMNavigationPortlet.tabOnMouseMove ;
+      item.onmousemove = eXo.ecm.WCMNavigationPortlet.tabOnMouseMove ;
     }
     item.style.width = item.offsetWidth + 3 +"px";
     /**
@@ -136,8 +136,8 @@ WCMNavigationPortlet.prototype.buildMenu = function(popupMenu) {
   var menuItems = DOMUtil.findDescendantsByClass(topContainer, "div", this.tabStyleClass);
   for(var i = 0; i < menuItems.length; i++) {
     var menuItem = menuItems[i];
-    menuItem.onmouseover = eXo.wcm.WCMNavigationPortlet.onMenuItemOver;
-    menuItem.onmouseout = eXo.wcm.WCMNavigationPortlet.onMenuItemOut;
+    menuItem.onmouseover = eXo.ecm.WCMNavigationPortlet.onMenuItemOver;
+    menuItem.onmouseout = eXo.ecm.WCMNavigationPortlet.onMenuItemOut;
 
     // Set an id to each container for future reference
     var cont = DOMUtil.findAncestorByClass(menuItem, this.containerStyleClass) ;
@@ -157,7 +157,7 @@ WCMNavigationPortlet.prototype.setTabStyle = function() {
     // highlights the tab
     eXo.webui.UIHorizontalTabs.changeTabNavigationStyle(tab, true);
   } else {
-    if(tabChildren.length <= 1 || tabChildren[1].id != eXo.wcm.WCMNavigationPortlet.currentOpenedMenu) {
+    if(tabChildren.length <= 1 || tabChildren[1].id != eXo.ecm.WCMNavigationPortlet.currentOpenedMenu) {
       // de-highlights the tab if it doesn't have a submenu (cond 1) or its submenu isn't visible (cond 2)
       eXo.webui.UIHorizontalTabs.changeTabNavigationStyle(tab, false);
     }
@@ -166,19 +166,19 @@ WCMNavigationPortlet.prototype.setTabStyle = function() {
 
 WCMNavigationPortlet.prototype.setTabStyleOnMouseOver = function(e) {
   var tab = this ;
-  if (eXo.wcm.WCMNavigationPortlet.previousMenuItem != tab) {
-    eXo.wcm.WCMNavigationPortlet.hideMenu() ;
+  if (eXo.ecm.WCMNavigationPortlet.previousMenuItem != tab) {
+    eXo.ecm.WCMNavigationPortlet.hideMenu() ;
   }
-	eXo.wcm.WCMNavigationPortlet.setTabStyleOnMouseOut(e, tab) ;
-  eXo.wcm.WCMNavigationPortlet.previousMenuItem = tab ;
-  if (!eXo.wcm.WCMNavigationPortlet.menuVisible) {
-    var menuItemContainer = eXo.core.DOMUtil.findFirstDescendantByClass(tab, "div", eXo.wcm.WCMNavigationPortlet.containerStyleClass);
+	eXo.ecm.WCMNavigationPortlet.setTabStyleOnMouseOut(e, tab) ;
+  eXo.ecm.WCMNavigationPortlet.previousMenuItem = tab ;
+  if (!eXo.ecm.WCMNavigationPortlet.menuVisible) {
+    var menuItemContainer = eXo.core.DOMUtil.findFirstDescendantByClass(tab, "div", eXo.ecm.WCMNavigationPortlet.containerStyleClass);
     var hideSubmenu = tab.getAttribute('hideSubmenu') ;
     if (menuItemContainer && !hideSubmenu) {
-      eXo.wcm.WCMNavigationPortlet.toggleSubMenu(e, tab, menuItemContainer) ;
+      eXo.ecm.WCMNavigationPortlet.toggleSubMenu(e, tab, menuItemContainer) ;
     }
   }
-  eXo.wcm.WCMNavigationPortlet.menuVisible = true ;  
+  eXo.ecm.WCMNavigationPortlet.menuVisible = true ;  
 } ;
 
 WCMNavigationPortlet.prototype.setTabStyleOnMouseOut = function(e, src) {
@@ -191,16 +191,16 @@ WCMNavigationPortlet.prototype.setTabStyleOnMouseOut = function(e, src) {
     // highlights the tab
     eXo.webui.UIHorizontalTabs.changeTabNavigationStyle(tab, true);
   } else {
-    if(tabChildren.length <= 1 || tabChildren[1].id != eXo.wcm.WCMNavigationPortlet.currentOpenedMenu) {
+    if(tabChildren.length <= 1 || tabChildren[1].id != eXo.ecm.WCMNavigationPortlet.currentOpenedMenu) {
       // de-highlights the tab if it doesn't have a submenu (cond 1) or its submenu isn't visible (cond 2)
       eXo.webui.UIHorizontalTabs.changeTabNavigationStyle(tab, false);
     }
   }
-  eXo.wcm.WCMNavigationPortlet.hideMenuTimeout(500) ;
+  eXo.ecm.WCMNavigationPortlet.hideMenuTimeout(500) ;
 };
 
 WCMNavigationPortlet.prototype.tabOnMouseMove = function() {
-  eXo.wcm.WCMNavigationPortlet.cancelHideMenuContainer() ;
+  eXo.ecm.WCMNavigationPortlet.cancelHideMenuContainer() ;
 } ;
 
 /**
@@ -230,23 +230,23 @@ WCMNavigationPortlet.prototype.toggleSubMenu = function(e, tab, menuItemContaine
     if (menuItemContainer.style.display == "none") {
       // shows the sub menu
       // hides a previously opened sub menu
-      if (eXo.wcm.WCMNavigationPortlet.currentOpenedMenu) eXo.wcm.WCMNavigationPortlet.hideMenu();
+      if (eXo.ecm.WCMNavigationPortlet.currentOpenedMenu) eXo.ecm.WCMNavigationPortlet.hideMenu();
       
-      eXo.wcm.WCMNavigationPortlet.superClass.pushVisibleContainer(menuItemContainer.id);
+      eXo.ecm.WCMNavigationPortlet.superClass.pushVisibleContainer(menuItemContainer.id);
       var y = item.offsetHeight + item.offsetTop;
       var x = item.offsetLeft + 2;
-      eXo.wcm.WCMNavigationPortlet.superClass.setPosition(menuItemContainer, x, y);
-      eXo.wcm.WCMNavigationPortlet.superClass.show(menuItemContainer);
+      eXo.ecm.WCMNavigationPortlet.superClass.setPosition(menuItemContainer, x, y);
+      eXo.ecm.WCMNavigationPortlet.superClass.show(menuItemContainer);
       
       menuItemContainer.style.width = menuItemContainer.offsetWidth - parseInt(DOMUtil.getStyle(menuItemContainer, 'borderLeftWidth')) - parseInt(DOMUtil.getStyle(menuItemContainer, 'borderRightWidth')) + "px";
-      eXo.wcm.WCMNavigationPortlet.currentOpenedMenu = menuItemContainer.id;
+      eXo.ecm.WCMNavigationPortlet.currentOpenedMenu = menuItemContainer.id;
       
       /*Hide eXoStartMenu whenever click on the UIApplication*/
       var uiPortalApplication = document.getElementById("UIPortalApplication") ;
-      uiPortalApplication.onclick = eXo.wcm.WCMNavigationPortlet.hideMenu ;
+      uiPortalApplication.onclick = eXo.ecm.WCMNavigationPortlet.hideMenu ;
     } else {
       // hides the sub menu
-      eXo.wcm.WCMNavigationPortlet.hideMenuContainer();
+      eXo.ecm.WCMNavigationPortlet.hideMenuContainer();
     }
   }
 };
@@ -258,7 +258,7 @@ WCMNavigationPortlet.prototype.cancelHideMenuContainer = function() {
 } ;
 
 WCMNavigationPortlet.prototype.closeMenuTimeout = function() {
-  eXo.wcm.WCMNavigationPortlet.hideMenuTimeout(200) ;
+  eXo.ecm.WCMNavigationPortlet.hideMenuTimeout(200) ;
 } ;
 
 WCMNavigationPortlet.prototype.hideMenuTimeout = function(time) {
@@ -267,7 +267,7 @@ WCMNavigationPortlet.prototype.hideMenuTimeout = function(time) {
     time = 200 ;
   }
   //this.hideMenuTimeoutId = window.setTimeout(this.hideMenu, time) ;
-  this.hideMenuTimeoutId = window.setTimeout('eXo.wcm.WCMNavigationPortlet.hideMenu() ;', time) ;
+  this.hideMenuTimeoutId = window.setTimeout('eXo.ecm.WCMNavigationPortlet.hideMenu() ;', time) ;
 } ;
 
 /**
@@ -277,28 +277,28 @@ WCMNavigationPortlet.prototype.hideMenuTimeout = function(time) {
  * Uses the methods from the superClass (eXo.webui.UIPopupMenu) to perform these operations
  */
 WCMNavigationPortlet.prototype.hideMenuContainer = function() {
-  var menuItemContainer = document.getElementById(eXo.wcm.WCMNavigationPortlet.currentOpenedMenu);
+  var menuItemContainer = document.getElementById(eXo.ecm.WCMNavigationPortlet.currentOpenedMenu);
   if (menuItemContainer) {
-    eXo.wcm.WCMNavigationPortlet.superClass.pushHiddenContainer(menuItemContainer.id);
-    eXo.wcm.WCMNavigationPortlet.superClass.popVisibleContainer();
-    eXo.wcm.WCMNavigationPortlet.superClass.setCloseTimeout();
-    eXo.wcm.WCMNavigationPortlet.superClass.hide(menuItemContainer);
-    eXo.wcm.WCMNavigationPortlet.currentOpenedMenu = null;
+    eXo.ecm.WCMNavigationPortlet.superClass.pushHiddenContainer(menuItemContainer.id);
+    eXo.ecm.WCMNavigationPortlet.superClass.popVisibleContainer();
+    eXo.ecm.WCMNavigationPortlet.superClass.setCloseTimeout();
+    eXo.ecm.WCMNavigationPortlet.superClass.hide(menuItemContainer);
+    eXo.ecm.WCMNavigationPortlet.currentOpenedMenu = null;
   }
   this.previousMenuItem = false ;
-  eXo.wcm.WCMNavigationPortlet.menuVisible = false ;
+  eXo.ecm.WCMNavigationPortlet.menuVisible = false ;
 };
 
 /**
  * Changes the style of the parent button when a submenu has to be hidden
  */
 WCMNavigationPortlet.prototype.hideMenu = function() {
-  if (eXo.wcm.WCMNavigationPortlet.currentOpenedMenu) {
+  if (eXo.ecm.WCMNavigationPortlet.currentOpenedMenu) {
     var currentItemContainer = document.getElementById(eXo.portal.WCMNavigationPortlet.currentOpenedMenu);
     var tab = eXo.core.DOMUtil.findAncestorByClass(currentItemContainer, "UITab");
     eXo.webui.UIHorizontalTabs.changeTabNavigationStyle(tab, false);
   }
-  eXo.wcm.WCMNavigationPortlet.hideMenuContainer();
+  eXo.ecm.WCMNavigationPortlet.hideMenuContainer();
 };
 
 /**
@@ -309,16 +309,16 @@ WCMNavigationPortlet.prototype.hideMenu = function() {
 WCMNavigationPortlet.prototype.onMenuItemOver = function(e) {
   var menuItem = this;
   var DOMUtil = eXo.core.DOMUtil;
-  var subContainer = DOMUtil.findFirstDescendantByClass(menuItem, "div", eXo.wcm.WCMNavigationPortlet.containerStyleClass);
+  var subContainer = DOMUtil.findFirstDescendantByClass(menuItem, "div", eXo.ecm.WCMNavigationPortlet.containerStyleClass);
   if (subContainer) {
-    eXo.wcm.WCMNavigationPortlet.superClass.pushVisibleContainer(subContainer.id);
-    eXo.wcm.WCMNavigationPortlet.showMenuItemContainer(menuItem, subContainer) ;
+    eXo.ecm.WCMNavigationPortlet.superClass.pushVisibleContainer(subContainer.id);
+    eXo.ecm.WCMNavigationPortlet.showMenuItemContainer(menuItem, subContainer) ;
     if (!subContainer.firstTime) {
         subContainer.style.width = subContainer.offsetWidth + 2 + "px";
         subContainer.firstTime = true;
     }
   }
-  eXo.wcm.WCMNavigationPortlet.cancelHideMenuContainer() ;
+  eXo.ecm.WCMNavigationPortlet.cancelHideMenuContainer() ;
 };
 
 /**
@@ -337,11 +337,11 @@ WCMNavigationPortlet.prototype.showMenuItemContainer = function(menuItem, menuIt
  */
 WCMNavigationPortlet.prototype.onMenuItemOut = function(e) {
   var menuItem = this;
-  var subContainer = eXo.core.DOMUtil.findFirstDescendantByClass(menuItem, "div", eXo.wcm.WCMNavigationPortlet.containerStyleClass);
+  var subContainer = eXo.core.DOMUtil.findFirstDescendantByClass(menuItem, "div", eXo.ecm.WCMNavigationPortlet.containerStyleClass);
   if (subContainer) {
-    eXo.wcm.WCMNavigationPortlet.superClass.pushHiddenContainer(subContainer.id);
-    eXo.wcm.WCMNavigationPortlet.superClass.popVisibleContainer();
-    eXo.wcm.WCMNavigationPortlet.superClass.setCloseTimeout(300);
+    eXo.ecm.WCMNavigationPortlet.superClass.pushHiddenContainer(subContainer.id);
+    eXo.ecm.WCMNavigationPortlet.superClass.popVisibleContainer();
+    eXo.ecm.WCMNavigationPortlet.superClass.setCloseTimeout(300);
   }
 };
 
@@ -354,7 +354,7 @@ WCMNavigationPortlet.prototype.onMenuItemOut = function(e) {
  *  . Calls the initScroll function
  */
 WCMNavigationPortlet.prototype.loadScroll = function(e) {
-  var uiNav = eXo.wcm.WCMNavigationPortlet;
+  var uiNav = eXo.ecm.WCMNavigationPortlet;
   var portalNav = document.getElementById("PortalNavigationTopContainer");
   if (portalNav) {
     // Creates new ScrollManager and initializes it
@@ -385,8 +385,8 @@ WCMNavigationPortlet.prototype.loadScroll = function(e) {
  *  . Renders the tabs
  */
 WCMNavigationPortlet.prototype.initScroll = function(e) {
-  if (!eXo.wcm.WCMNavigationPortlet.scrollManagerLoaded) eXo.wcm.WCMNavigationPortlet.loadScroll();
-  var scrollMgr = eXo.wcm.WCMNavigationPortlet.scrollMgr;
+  if (!eXo.ecm.WCMNavigationPortlet.scrollManagerLoaded) eXo.ecm.WCMNavigationPortlet.loadScroll();
+  var scrollMgr = eXo.ecm.WCMNavigationPortlet.scrollMgr;
   scrollMgr.init();
   // Gets the maximum width available for the tabs
   scrollMgr.checkAvailableSpace();
@@ -429,5 +429,5 @@ WCMNavigationPortlet.prototype.getCurrentNodes = function(navigations, selectedN
 	return currentNodes;
 };
 
-if(!window.wcm) eXo.wcm = new Object();
-eXo.wcm.WCMNavigationPortlet = new WCMNavigationPortlet();
+if(!window.wcm) eXo.ecm = new Object();
+eXo.ecm.WCMNavigationPortlet = new WCMNavigationPortlet();
