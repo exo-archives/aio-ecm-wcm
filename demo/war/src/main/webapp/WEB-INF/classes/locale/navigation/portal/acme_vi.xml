@@ -15,9 +15,5 @@
       <portalnavigation>Quản lý thanh điều hướng chung</portalnavigation>
     </acme>
   </portal>
-  
-  <ACMEPortal>
-    <label>Mẫu website ACME</label>
-  </ACMEPortal>
 </bundle>
 

@@ -15,9 +15,4 @@
       <portalnavigation>Navigation du Portail</portalnavigation>
     </acme>
   </portal>
-  
-  <ACMEPortal>
-    <label>ACME Template</label>
-  </ACMEPortal>
 </bundle>
-

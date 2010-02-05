@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
   <portal>
-    <acme>
+    <classic>
       <home>Accueil</home>
+      <sitemap>Site map</sitemap>
       <searchResult>Résultats de recherche</searchResult>
       <parameterizedviewer>Visualiseur de contenu paramétré</parameterizedviewer>
       <newAccount>Nouveau compte</newAccount>
-    </acme>
+      <groupnavigation>Navigation du Groupe</groupnavigation>
+      <portalnavigation>Navigation du Portail</portalnavigation>
+    </classic>
   </portal>
 </bundle>
-
