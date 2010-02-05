@@ -1,6 +1,0 @@
-<classpath>
-  <classpathentry kind="src" path="src/main/tomcat" including="**/*" excluding="**/*.java"/>
-  <classpathentry kind="output" path="target/classes"/>
-  <classpathentry kind="var" path="M2_REPO/org/exoplatform/portal/exo.portal.server.tomcat.patch/3.0.0-Beta05/exo.portal.server.tomcat.patch-3.0.0-Beta05.jar" sourcepath="M2_REPO/org/exoplatform/portal/exo.portal.server.tomcat.patch/3.0.0-Beta05/exo.portal.server.tomcat.patch-3.0.0-Beta05-sources.jar"/>
-  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-</classpath>
