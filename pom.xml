@@ -14,9 +14,9 @@
   <description>eXo Web Content Management</description>
 
   <scm>
-    <connection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/branches/2.0.x</connection>
-    <developerConnection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/branches/2.0.x</developerConnection>
-    <url>http://fisheye.exoplatform.org/browse/projects/ecm/wcm/branches/2.0.x</url>
+    <connection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/trunk</connection>
+    <developerConnection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/trunk</developerConnection>
+    <url>http://fisheye.exoplatform.org/browse/projects/ecm/wcm/trunk</url>
   </scm>
 
   <properties>
