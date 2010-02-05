@@ -67,7 +67,7 @@
                       <string>portlet</string>
                     </field>
                     <field name="contentId">
-                      <string>WCM presentation/SingleContentViewer</string>
+                      <string>presentation/SingleContentViewer</string>
                     </field>
                     <field name="accessPermissions">
                       <collection type="java.util.ArrayList" item-type="java.lang.String">
@@ -93,7 +93,7 @@
                       <string>portlet</string>
                     </field>
                     <field name="contentId">
-                      <string>WCM presentation/ContentListViewerPortlet</string>
+                      <string>presentation/ContentListViewerPortlet</string>
                     </field>
                     <field name="accessPermissions">
                       <collection type="java.util.ArrayList" item-type="java.lang.String">
@@ -119,7 +119,7 @@
                       <string>portlet</string>
                     </field>
                     <field name="contentId">
-                      <string>WCM presentation/ParameterizedContentViewerPortlet</string>
+                      <string>presentation/ParameterizedContentViewerPortlet</string>
                     </field>
                     <field name="accessPermissions">
                       <collection type="java.util.ArrayList" item-type="java.lang.String">
@@ -145,7 +145,7 @@
                       <string>portlet</string>
                     </field>
                     <field name="contentId">
-                      <string>WCM presentation/CategoryNavigationPortlet</string>
+                      <string>presentation/CategoryNavigationPortlet</string>
                     </field>
                     <field name="accessPermissions">
                       <collection type="java.util.ArrayList" item-type="java.lang.String">
@@ -171,7 +171,7 @@
                       <string>portlet</string>
                     </field>
                     <field name="contentId">
-                      <string>WCM presentation/ParameterizedContentListViewerPortlet</string>
+                      <string>presentation/ParameterizedContentListViewerPortlet</string>
                     </field>
                     <field name="accessPermissions">
                       <collection type="java.util.ArrayList" item-type="java.lang.String">
