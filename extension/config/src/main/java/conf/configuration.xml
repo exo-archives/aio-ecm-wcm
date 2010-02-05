@@ -14,6 +14,7 @@
       <set-method>registerPlugin</set-method>
       <!-- The full qualified name of the PortalContainerDefinitionPlugin -->
       <type>org.exoplatform.container.definition.PortalContainerDefinitionPlugin</type>
+      <priority>50</priority>
       <init-params>
         <object-param>
           <name>portal</name>
@@ -58,10 +59,16 @@
                   <string>web</string>
                 </value>
                 <value>
-                  <string>wsrp-producer</string>
+                  <string>eXoDMSResources</string>
                 </value>
                 <value>
+                  <string>eXoWCMResources</string>
+                </value>  
+                <value>
                   <string>dms-extension</string>
+                </value>
+                <value>
+                  <string>ecm</string>
                 </value>
                 <value>
                   <string>ecm-wcm-extension</string>
