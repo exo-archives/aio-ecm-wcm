@@ -221,7 +221,7 @@
                       <string>portlet</string>
                     </field>
                     <field name="contentId">
-                      <string>WCM Newsletter/NewsletterViewerPortlet</string>
+                      <string>newsletter/NewsletterViewerPortlet</string>
                     </field>
                     <field name="accessPermissions">
                       <collection type="java.util.ArrayList" item-type="java.lang.String">
@@ -247,7 +247,7 @@
                       <string>portlet</string>
                     </field>
                     <field name="contentId">
-                      <string>WCM Newsletter/NewsletterManagerPortlet</string>
+                      <string>newsletter/NewsletterManagerPortlet</string>
                     </field>
                     <field name="accessPermissions">
                       <collection type="java.util.ArrayList" item-type="java.lang.String">
@@ -297,7 +297,7 @@
                       <string>portlet</string>
                     </field>
                     <field name="contentId">
-                      <string>WCM Form Generator/FormGeneratorPortlet</string>
+                      <string>formgenerator/FormGeneratorPortlet</string>
                     </field>
                     <field name="accessPermissions">
                       <collection type="java.util.ArrayList" item-type="java.lang.String">
@@ -337,7 +337,7 @@
                       <string>portlet</string>
                     </field>
                     <field name="contentId">
-                      <string>WCM Form Generator/FastContentCreatorBasicPortlet</string>
+                      <string>formgenerator/FastContentCreatorBasicPortlet</string>
                     </field>
                     <field name="accessPermissions">
                       <collection type="java.util.ArrayList" item-type="java.lang.String">
