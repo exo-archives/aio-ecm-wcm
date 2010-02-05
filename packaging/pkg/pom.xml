@@ -23,7 +23,7 @@
    <parent>
       <groupId>org.exoplatform.ecm.wcm</groupId>
       <artifactId>exo.ecm.wcm.packaging</artifactId>
-      <version>2.0-SNAPSHOT</version>
+      <version>2.0.0-Alpha01</version>
    </parent>
 
    <modelVersion>4.0.0</modelVersion>
@@ -89,19 +89,19 @@
        <dependency>
          <groupId>org.exoplatform.ecm.wcm</groupId>
          <artifactId>wcm.packaging.module</artifactId>
-         <version>2.0-SNAPSHOT</version>
+         <version>2.0.0-Alpha01</version>
          <type>js</type>
        </dependency>
        <dependency>
          <groupId>org.exoplatform.ecm.wcm</groupId>
          <artifactId>wcm.packaging.module</artifactId>
-         <version>2.0-SNAPSHOT</version>
+         <version>2.0.0-Alpha01</version>
          <type>js</type>
        </dependency>
        <dependency>
          <groupId>org.exoplatform.ecm.wcm</groupId>
          <artifactId>wcm.packaging.product</artifactId>
-         <version>2.0-SNAPSHOT</version>
+         <version>2.0.0-Alpha01</version>
          <type>js</type>
        </dependency> 
    </dependencies>
