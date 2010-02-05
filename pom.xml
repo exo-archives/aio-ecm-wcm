@@ -2,11 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	
-	<groupId>org.exoplatform.ecm</groupId>
-	<artifactId>wcm.extensions</artifactId>
+	<groupId>org.exoplatform.ecm.wcm</groupId>
+	<artifactId>wcm.extensions.staging</artifactId>
 	<packaging>pom</packaging>
-	<name>eXo WCM Extensions</name>
-	<version>1.0.0Beta03-SNAPSHOT</version>
+	<name>eXo WCM Extensions Staging</name>
+	<version>1.0.0-Beta03-SNAPSHOT</version>
 
 	<scm>
 		<connection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/branches/1.2-staging</connection>
