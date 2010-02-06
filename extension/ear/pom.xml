@@ -31,18 +31,18 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-ear-plugin</artifactId>
         <configuration>
-          <displayName>wcm-extension</displayName>
-          <defaultLibBundleDir>lib</defaultLibBundleDir>
-          <modules>
-            <jarModule>
-              <groupId>org.exoplatform.ecm</groupId>
-              <artifactId>exo.ecm.wcm.extension.config</artifactId>
-              <includeInApplicationXml>true</includeInApplicationXml>
-            </jarModule>
-            <webModule>
-              <groupId>org.exoplatform.ecm</groupId>
-              <artifactId>exo.ecm.wcm.extension.war</artifactId>
-              <contextRoot>wcm</contextRoot>
+           <displayName>ecm-wcm-extension</displayName>        
+           <defaultLibBundleDir>lib</defaultLibBundleDir>
+           <modules>            
+              <jarModule>
+                <groupId>org.exoplatform.ecm</groupId>
+                <artifactId>exo.ecm.wcm.extension.config</artifactId>
+                <includeInApplicationXml>true</includeInApplicationXml>
+              </jarModule>           
+              <webModule>
+                <groupId>org.exoplatform.ecm</groupId>
+                <artifactId>exo.ecm.wcm.extension.war</artifactId>
+                <contextRoot>wcm</contextRoot>
               <bundleFileName>wcm.war</bundleFileName>
             </webModule>
           </modules>
