@@ -55,7 +55,9 @@
 		 String[] membershipTab=null;
 		 if(!"automatic".equals(membership)){
 		 List<String> memberships=new ArrayList<String>();
+		 	if(membership != null){
 			memberships.add(membership);
+			}
 			if(state.getMemberships()!=null)memberships.addAll(state.getMemberships());
 			for(String membership_:memberships){
 		    membershipTab = membership_.split(":");
