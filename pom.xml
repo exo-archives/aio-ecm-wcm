@@ -19,44 +19,20 @@
 		<url>http://fisheye.exoplatform.org/browse/projects/ecm/wcm/branches/1.2-staging</url>
 	</scm>
 	<modules>
-  	<module>exo.ecm.wcm.ext.staging.publication</module>
-  	<module>exo.ecm.wcm.ext.staging.config.multiserver.frontcronjob</module>
-  	<module>exo.ecm.wcm.ext.staging.config.multiserver.backcronjob</module>
-  	<module>exo.ecm.wcm.ext.staging.config.multiserver.webservice.rest</module>
-  	<module>exo.ecm.wcm.ext.staging.config.monoserver.cronjob</module>
-  	<module>exo.ecm.wcm.ext.staging.config.publication</module>
+		<module>exo.ecm.wcm.ext.staging.publication</module>
+		<module>exo.ecm.wcm.ext.staging.config.multiserver.frontcronjob</module>
+		<module>exo.ecm.wcm.ext.staging.config.multiserver.backcronjob</module>
+		<module>exo.ecm.wcm.ext.staging.config.multiserver.webservice.rest</module>
+		<module>exo.ecm.wcm.ext.staging.config.monoserver.cronjob</module>
+		<module>exo.ecm.wcm.ext.staging.config.publication</module>
 	</modules>
   
-	<build>
-	<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-					<encoding>UTF-8</encoding>
-					<optimize>true</optimize>
-				</configuration>
-			</plugin>
-	</plugins>
-	</build>
-
-	<profiles>
-		<profile>
-			<id>default</id>
-			<activation>
-				<property><name>default</name></property>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<properties>
-				<org.exoplatform.portal.version>2.5.8-SNAPSHOT</org.exoplatform.portal.version>
-				<org.exoplatform.ecm.dms.version>2.5.4-SNAPSHOT</org.exoplatform.ecm.dms.version>
-				<org.exoplatform.ecm.wcm.version>1.2.3-SNAPSHOT</org.exoplatform.ecm.wcm.version>
-				<exo.test.classes>Test</exo.test.classes>
-				<exo.test.skip>true</exo.test.skip>
-			</properties>
-		</profile>	
-	</profiles>
 	
+	<properties>
+		<org.exoplatform.portal.version>2.5.8-SNAPSHOT</org.exoplatform.portal.version>
+		<org.exoplatform.ecm.dms.version>2.5.4-SNAPSHOT</org.exoplatform.ecm.dms.version>
+		<org.exoplatform.ecm.wcm.version>1.2.3-SNAPSHOT</org.exoplatform.ecm.wcm.version>
+		<exo.test.classes>Test</exo.test.classes>
+		<exo.test.skip>true</exo.test.skip>
+	</properties>
 </project>
