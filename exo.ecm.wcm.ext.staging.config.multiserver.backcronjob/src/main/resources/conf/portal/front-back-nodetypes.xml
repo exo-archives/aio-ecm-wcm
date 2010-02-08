@@ -1,0 +1,23 @@
+  <nodeType name="mix:targetPath" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+  	<supertypes>
+      <supertype>nt:base</supertype>      
+    </supertypes>
+    <propertyDefinitions>
+    	<propertyDefinition name="mix:targetPath" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+        protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+    </propertyDefinitions>
+  </nodeType>
+  
+    <nodeType name="mix:targetWorkspace" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+  	<supertypes>
+      <supertype>nt:base</supertype>      
+    </supertypes>
+    <propertyDefinitions>
+    	<propertyDefinition name="mix:targetWorkspace" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+        protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+    </propertyDefinitions>
+  </nodeType>

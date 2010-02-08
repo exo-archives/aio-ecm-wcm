@@ -24,7 +24,7 @@
   	<module>exo.ecm.wcm.ext.staging.config.multiserver.backcronjob</module>
   	<module>exo.ecm.wcm.ext.staging.config.multiserver.webservice.rest</module>
   	<module>exo.ecm.wcm.ext.staging.config.monoserver.cronjob</module>
-  	<module>exo.ecm.wcm.ext.staging.config.ext.publication</module>
+  	<module>exo.ecm.wcm.ext.staging.config.publication</module>
 	</modules>
   
 	<build>
