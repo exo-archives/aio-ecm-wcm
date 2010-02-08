@@ -7,8 +7,7 @@ import org.exoplatform.wcm.webui.Utils;
 <div id="$uicomponent.id">
 	<%
 		def rcontext = _ctx.getRequestContext() ;
-    def portletId = rcontext.getWindowId();
-    portletId = Utils.isPortalEditting() ? "EditMode-" + portletId : portletId;
+		String portletId = Utils.getRealPortletId(rcontext);
 		def quickEditingBlockId = portletId + "-QuickEditingBlock";
 		def jsManager = rcontext.getJavascriptManager();
 		jsManager.importJavascript('eXo.wcm.frontoffice.private.QuickEdit', '/eXoWCMResources/javascript/') ;

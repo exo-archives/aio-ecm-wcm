@@ -86,8 +86,18 @@ public class Utils {
     return true;
   }
   
-  public static boolean isPortalEditting() {
-    return Util.getUIPortalApplication().getModeState() != UIPortalApplication.NORMAL_MODE;
+  public static String getRealPortletId(PortletRequestContext portletRequestContext) {
+    String portletId = portletRequestContext.getWindowId();
+    int modeState = Util.getUIPortalApplication().getModeState();
+    if(modeState == UIPortalApplication.NORMAL_MODE) {
+      return portletId;
+    } else if(modeState == UIPortalApplication.APP_BLOCK_EDIT_MODE) {
+      return "UIPortlet-" + portletId;
+    } else if(modeState == UIPortalApplication.APP_VIEW_EDIT_MODE){
+      return "EditMode-" + portletId;
+    } else {
+      return null;
+    }
   }
   
   /**

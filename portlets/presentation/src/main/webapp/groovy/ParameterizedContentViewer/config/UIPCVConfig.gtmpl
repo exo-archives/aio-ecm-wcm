@@ -4,8 +4,7 @@
 	import org.exoplatform.wcm.webui.Utils;
 	
 	def rcontext = _ctx.getRequestContext() ;
-  def portletId = rcontext.getWindowId();
-  portletId = Utils.isPortalEditting() ? "EditMode-" + portletId : portletId;
+	String portletId = Utils.getRealPortletId(rcontext);
 	def quickEditingBlockId = portletId + "-QuickEditingBlock";
 %>
 <div class="UIForm $uicomponent.id">
