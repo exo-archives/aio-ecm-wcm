@@ -32,20 +32,13 @@
     <css-path>/skin/DefaultSkin/Stylesheet.css</css-path>
   </portal-skin>
   
-  <!-- javascript>
+  <javascript>
     <param>
-      <js-module>eXo.wcm.Util</js-module>
-      <js-path>/javascript/eXo/wcm/Util.js</js-path>
+      <js-module>eXo.ecm.WCMUtils</js-module>
+      <js-path>/javascript/eXo/wcm/backoffice/private/WCMUtils.js</js-path>
+      <js-priority>50</js-priority>
     </param>
-    <param>
-      <js-module>eXo.wcm.Util</js-module>
-      <js-path>/javascript/eXo/wcm/Navigation.js</js-path>
-    </param>
-    <param>
-      <js-module>eXo.wcm.Util</js-module>
-      <js-path>/javascript/eXo/wcm/Services.js</js-path>
-    </param>
-  </javascript-->
+  </javascript>
   
 </gatein-resources>
 

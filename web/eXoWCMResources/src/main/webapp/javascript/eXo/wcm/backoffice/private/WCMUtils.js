@@ -23,4 +23,8 @@ WCMUtils.prototype.request = function(url) {
 	return null;
 };
 
+WCMUtils.prototype.getRestContext = function() {
+	return eXo.env.portal.context + "/" + eXo.env.portal.rest; 
+}
+
 eXo.ecm.WCMUtils = new WCMUtils();

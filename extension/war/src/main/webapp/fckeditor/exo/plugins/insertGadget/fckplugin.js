@@ -1,5 +1,5 @@
 //InsertGadGet
-FCKCommands.RegisterCommand( "WCMInsertGadget", new WCMDialogCommand("WCMInsertGadget", "", FCKConfig.eXoPath + "explorer/explorer.html?Type=Gadget&Thumbnail=true&Connector=/portal/rest/wcmGadget/&disableUploading=true&disableCreatingFolder=true" , 800, 600) );
+FCKCommands.RegisterCommand( "WCMInsertGadget", new WCMDialogCommand("WCMInsertGadget", "", FCKConfig.eXoPath + "explorer/explorer.html?Type=Gadget&Thumbnail=true&Connector=" + eXoPlugin.WCMUtils.getRestContext() + "/wcmGadget/&disableUploading=true&disableCreatingFolder=true" , 800, 600) );
 var oElement = new FCKToolbarButton( "WCMInsertGadget", FCKLang.WCMInsertGadgetPlugins) ;
 oElement.IconPath = FCKConfig.eXoPath + "plugins/insertGadget/insertGadget.gif" ;
 FCKToolbarItems.RegisterItem( "WCMInsertGadget", oElement );

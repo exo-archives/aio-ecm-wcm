@@ -87,7 +87,7 @@
 		var parentLocation = window.parent.location;
 		hostName = parentLocation.href.substring(0, parentLocation.href.indexOf(parentLocation.pathname));
 		var connector = window.location.protocol + "//" + window.location.host + eXo.env.portal.context + 
-						"/rest/wcmTreeContent/getChildNodes";
+						"/rest-ecmdemo/wcmTreeContent/getChildNodes";
 		connector += "?nodePath=" + nodePath + "&workspaceName=" + workspaceName + "&repositoryName="+repositoryName;
 		try{
 			this.request(connector, objChild);

@@ -10,7 +10,7 @@
 			sOptions += ",height=" + height;
 			sOptions += ",left=" + iLeft;
 			sOptions += ",top=" + iTop;
-			var newWindow = window.open( FCKConfig.eXoPath + "explorer/explorer.html?Type=File&Connector=/portal/rest/fckconnector/jcr/", "eXoExplorer", sOptions );
+			var newWindow = window.open( FCKConfig.eXoPath + "explorer/explorer.html?Type=File&Connector=" + eXoPlugin.WCMUtils.getRestContext() + "/fckconnector/jcr/", "eXoExplorer", sOptions );
 			newWindow.focus();
 		}
 		FCKCommands.RegisterCommand( "Explorer", oExplorer );

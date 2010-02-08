@@ -75,8 +75,7 @@ UIWCMTreeView.prototype.getDir = function(nodePath, workspaceName, repositoryNam
 	if(objChild.innerHTML && objChild.innerHTML.trim().length > 0 && objChild.innerHTML != "<span></span>") return;
 	var parentLocation = window.parent.location;
 	hostName = parentLocation.href.substring(0, parentLocation.href.indexOf(parentLocation.pathname));
-	var connector = window.location.protocol + "//" + window.location.host + eXo.env.portal.context + 
-					"/rest/wcmTreeContent/getChildNodes";
+	var connector = eXo.ecm.WCMUtils.getRestContext() + "/wcmTreeContent/getChildNodes";
 	connector += "?nodePath=" + nodePath + "&workspaceName=" + workspaceName + "&repositoryName="+repositoryName;
 	try{
 		this.request(connector, objChild);

@@ -49,34 +49,35 @@ window.eXoPlugin = {
 			this.context = context;
 			this.accessMode = accessMode;
 			this.userId = userName;
+			this.WCMUtils = window.parent.eXo.ecm.WCMUtils;
 		}
 		
 		var parentLocation = window.parent.location;
 		this.hostName = parentLocation.href.substring(0, parentLocation.href.indexOf(parentLocation.pathname));
 		
 		this.eXoFileManager = {
-			Connector: "/portal/rest/fckconnector/jcr/",
+			Connector: eXoPlugin.WCMUtils.getRestContext() + "/fckconnector/jcr/",
 			ResourceType : "File"
 		};				
-		this.ExoPortalLinkBrowserURL = FCKConfig.eXoPath + 'explorer/explorer.html?Type=PortalLink&Connector=/portal/rest/portalLinks/&disableUploading=true&disableCreatingFolder=true' ;		
+		this.ExoPortalLinkBrowserURL = FCKConfig.eXoPath + 'explorer/explorer.html?Type=PortalLink&Connector=' + eXoPlugin.WCMUtils.getRestContext() + '/portalLinks/&disableUploading=true&disableCreatingFolder=true' ;		
 //-Set link for Insert/Edit Link button
 		FCKConfig.LinkBrowser = true ;
-		FCKConfig.LinkBrowserURL = FCKConfig.eXoPath + 'explorer/explorer.html?Type=PortalLink&Connector=/portal/rest/portalLinks/&disableUploading=true&disableCreatingFolder=true' ;
+		FCKConfig.LinkBrowserURL = FCKConfig.eXoPath + 'explorer/explorer.html?Type=PortalLink&Connector=' + eXoPlugin.WCMUtils.getRestContext() + '/portalLinks/&disableUploading=true&disableCreatingFolder=true' ;
 		FCKConfig.LinkBrowserWindowWidth	= FCKConfig.ScreenWidth * 0.7 ;		// 70%
 		FCKConfig.LinkBrowserWindowHeight	= FCKConfig.ScreenHeight * 0.7 ;	// 70%		
 //Set Link for browser URL
 		FCKConfig.ImageBrowser = true ;
-		FCKConfig.ImageBrowserURL = FCKConfig.eXoPath + 'content/content.html?Type=File&Connector=/portal/rest/wcmDriver/getDrivers?repositoryName=repository&workspaceName=collaboration&browserType=txtUrl';
+		FCKConfig.ImageBrowserURL = FCKConfig.eXoPath + 'content/content.html?Type=File&Connector=' + eXoPlugin.WCMUtils.getRestContext() + '/wcmDriver/getDrivers?repositoryName=repository&workspaceName=collaboration&browserType=txtUrl';
 		FCKConfig.ImageBrowserWindowWidth  = FCKConfig.ScreenWidth * 0.7 ;	// 70% ;
 		FCKConfig.ImageBrowserWindowHeight = FCKConfig.ScreenHeight * 0.7 ;	// 70% ;
 //Set Link for browser image when right click on an image and select Image Properties
 		FCKConfig.ImageBrowserLink = true ;
-		FCKConfig.ImageBrowserLink = FCKConfig.eXoPath + 'content/content.html?Type=File&Connector=/portal/rest/wcmDriver/getDrivers?repositoryName=repository&workspaceName=collaboration&browserType=txtLnkUrl';
+		FCKConfig.ImageBrowserLink = FCKConfig.eXoPath + 'content/content.html?Type=File&Connector=' + eXoPlugin.WCMUtils.getRestContext() + '/wcmDriver/getDrivers?repositoryName=repository&workspaceName=collaboration&browserType=txtLnkUrl';
 		FCKConfig.ImageBrowserLinkWindowWidth  = FCKConfig.ScreenWidth * 0.7 ;	// 70% ;
 		FCKConfig.ImageBrowserLinkWindowHeight = FCKConfig.ScreenHeight * 0.7 ;	// 70% ;
 //Set link for Insert/edit Flash button links
 		FCKConfig.FlashBrowser = true ;
-		FCKConfig.FlashBrowserURL = FCKConfig.eXoPath + 'content/content.html?Type=File&Connector=/portal/rest/wcmDriver/getDrivers?repositoryName=repository&workspaceName=collaboration&browserType=txtUrl';		
+		FCKConfig.FlashBrowserURL = FCKConfig.eXoPath + 'content/content.html?Type=File&Connector=' + eXoPlugin.WCMUtils.getRestContext() + '/wcmDriver/getDrivers?repositoryName=repository&workspaceName=collaboration&browserType=txtUrl';		
 		FCKConfig.FlashBrowserWindowWidth  = FCKConfig.ScreenWidth * 0.7 ;	//70% ;
 		FCKConfig.FlashBrowserWindowHeight = FCKConfig.ScreenHeight * 0.7 ;	//70% ;		
 //detect user language

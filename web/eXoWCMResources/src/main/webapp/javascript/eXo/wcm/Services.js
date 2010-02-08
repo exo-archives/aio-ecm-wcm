@@ -34,7 +34,7 @@ eXo.wcm.services = new WCMServices();
 Vote = function(){
 	
 	Vote.prototype.getVote = function(repository, workspace, path) {
-		var retText = ajaxAsyncGetRequest("/rest/private/contents/vote/getVote/?repositoryName="+repository+"&workspaceName="+workspace+"&jcrPath="+path, false);
+		var retText = ajaxAsyncGetRequest(eXo.ecm.WCMUtils.getRestContext() + "/contents/vote/getVote/?repositoryName="+repository+"&workspaceName="+workspace+"&jcrPath="+path, false);
 		var doc = parseXML(retText);
 		rate = doc.getElementsByTagName("rate")[0].childNodes[0].nodeValue;
 		total = doc.getElementsByTagName("total")[0].childNodes[0].nodeValue;
@@ -42,9 +42,8 @@ Vote = function(){
 		document.all['result'].innerHTML = rate+' / '+total;
 	};
 	
-	Vote.prototype.addVote = function(repository, workspace, path, vote, lang) {
-		var mode = (eXo.env.portal.accessMode=="private")?"/private":""; 
-		ajaxAsyncGetRequest("/rest"+mode+"/contents/vote/postVote/?repositoryName="+repository+"&workspaceName="+workspace+"&jcrPath="+path+"&vote="+vote+"&lang="+lang, false);
+	Vote.prototype.addVote = function(repository, workspace, path, vote, lang) { 
+		ajaxAsyncGetRequest(eXo.ecm.WCMUtils.getRestContext() + "/contents/vote/postVote/?repositoryName="+repository+"&workspaceName="+workspace+"&jcrPath="+path+"&vote="+vote+"&lang="+lang, false);
 	};
 
 	Vote.prototype.showVoteWindow = function(div) {

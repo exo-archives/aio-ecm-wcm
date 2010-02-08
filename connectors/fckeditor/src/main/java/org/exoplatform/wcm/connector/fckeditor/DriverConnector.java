@@ -43,6 +43,8 @@ import javax.xml.transform.dom.DOMSource;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
 import org.exoplatform.services.cms.BasePath;
@@ -97,6 +99,10 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
   /** The limit. */
   private int limit;
   
+  private PortalContainer manager;
+  
+  private OrganizationService organizationService;
+  
   /**
    * Instantiates a new driver connector.
    * 
@@ -105,6 +111,8 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    */
   public DriverConnector(InitParams params) {
     limit = Integer.parseInt(params.getValueParam("upload.limit.size").getValue());
+    manager = PortalContainer.getInstance() ;
+    organizationService = WCMCoreUtils.getService(OrganizationService.class);
   }
 	
   /**
@@ -447,12 +455,11 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    * 
    * @throws Exception the exception
    */
-  private static List<String> getMemberships(String userId) throws Exception {
-  	OrganizationService oservice = (OrganizationService)
-  		ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
+  private List<String> getMemberships(String userId) throws Exception {
+  	((ComponentRequestLifecycle) organizationService).startRequest(manager);
     List<String> userMemberships = new ArrayList<String> ();
     userMemberships.add(userId);
-    Collection<?> memberships = oservice.getMembershipHandler().findMembershipsByUser(userId);
+    Collection<?> memberships = organizationService.getMembershipHandler().findMembershipsByUser(userId);
     if(memberships == null || memberships.size() < 0) return userMemberships;
     Object[] objects = memberships.toArray();
     for(int i = 0; i < objects.length; i ++ ){
@@ -460,6 +467,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
       String role = membership.getMembershipType() + ":" + membership.getGroupId();
       userMemberships.add(role);     
     }
+    ((ComponentRequestLifecycle) organizationService).endRequest(manager);
     return userMemberships;
   }
 
@@ -472,11 +480,10 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
    * 
    * @throws Exception the exception
    */
-  private static List<String> getGroups(String userId) throws Exception {
-    OrganizationService oservice = (OrganizationService) 
-    	ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
+  private List<String> getGroups(String userId) throws Exception {
+    ((ComponentRequestLifecycle) organizationService).startRequest(manager);
     List<String> groupList = new ArrayList<String> ();
-    Collection<?> groups = oservice.getGroupHandler().findGroupsOfUser(userId);
+    Collection<?> groups = organizationService.getGroupHandler().findGroupsOfUser(userId);
     Object[] objects = groups.toArray();
     for(int i = 0; i < objects.length; i ++ ){
       Group group = (Group)objects[i];
