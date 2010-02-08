@@ -19,12 +19,12 @@
 		<url>http://fisheye.exoplatform.org/browse/projects/ecm/wcm/branches/1.2-staging</url>
 	</scm>
 	<modules>
-  	<module>exo.ecm.wcm.extensions.ext.publication</module>
-  	<module>exo.ecm.wcm.extensions.config.multiserver.frontcronjob</module>
-  	<module>exo.ecm.wcm.extensions.config.multiserver.backcronjob</module>
-  	<module>exo.ecm.wcm.extensions.config.multiserver.webservice.rest</module>
-  	<module>exo.ecm.wcm.extensions.config.monoserver.cronjob</module>
-  	<module>exo.ecm.wcm.extensions.config.ext.publication</module>
+  	<module>exo.ecm.wcm.ext.staging.publication</module>
+  	<module>exo.ecm.wcm.ext.staging.config.multiserver.frontcronjob</module>
+  	<module>exo.ecm.wcm.ext.staging.config.multiserver.backcronjob</module>
+  	<module>exo.ecm.wcm.ext.staging.config.multiserver.webservice.rest</module>
+  	<module>exo.ecm.wcm.ext.staging.config.monoserver.cronjob</module>
+  	<module>exo.ecm.wcm.ext.staging.config.ext.publication</module>
 	</modules>
   
 	<build>
@@ -50,9 +50,9 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
-				<org.exoplatform.portal.version>2.5.7</org.exoplatform.portal.version>
-				<org.exoplatform.ecm.dms.version>2.5.3</org.exoplatform.ecm.dms.version>
-                <org.exoplatform.ecm.wcm.version>1.2.2</org.exoplatform.ecm.wcm.version>
+				<org.exoplatform.portal.version>2.5.8-SNAPSHOT</org.exoplatform.portal.version>
+				<org.exoplatform.ecm.dms.version>2.5.4-SNAPSHOT</org.exoplatform.ecm.dms.version>
+				<org.exoplatform.ecm.wcm.version>1.2.3-SNAPSHOT</org.exoplatform.ecm.wcm.version>
 				<exo.test.classes>Test</exo.test.classes>
 				<exo.test.skip>true</exo.test.skip>
 			</properties>
