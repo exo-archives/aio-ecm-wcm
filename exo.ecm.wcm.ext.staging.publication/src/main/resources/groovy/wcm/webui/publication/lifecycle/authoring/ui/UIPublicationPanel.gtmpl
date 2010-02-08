@@ -75,17 +75,12 @@
 			println(isBaseVersion.toString());
 			println(cNode.hasProperty("publication:currentState").toString());
 			println(cNode.getProperty("publication:currentState").getString().equals("draft").toString());
-			if (isCurrentRevision("draft",currentRevision)){
-			println("gggggggg"+cNode.getProperty("publication:currentState").getString());			
+			if (isCurrentRevision("draft",currentRevision)){		
 			isBeforeCurrentState=false;
-			println(isBaseVersion);
-			System.out.println(cNode.hasProperty("publication:currentState"));
-			System.out.println(cNode.getProperty("publication:currentState").getString().equals("draft"));
-			%>
 			
-			<% if(isBaseVersion&&cNode.hasProperty("publication:currentState")&&!cNode.getProperty("publication:currentState").getString().equals("draft")){
-			println("ffffffffffffffffff");%>
-			<a class="CurrentStatus" href="<%= uicomponent.event("Draft")%>">
+			if(isBaseVersion&&cNode.hasProperty("publication:currentState")&&!cNode.getProperty("publication:currentState").getString().equals("draft")){
+			%>
+			<a class="CurrentStatus"  style="cursor:pointer;" href="<%= uicomponent.event("Draft")%>">
 			<%}
 			else{%>
 			<a class="CurrentStatus">
@@ -113,11 +108,14 @@
 		} else if (PublicationDefaultStates.PENDING.equals(state.getState())) {
 			if (isCurrentRevision("pending",currentRevision)){
 			isBeforeCurrentState = false;
+			if(isBaseVersion&&cNode.hasProperty("publication:currentState")&&!cNode.getProperty("publication:currentState").getString().equals("pending")){
 			%>
+			<a class="CurrentStatus"  style="cursor:pointer;" href="<%= uicomponent.event("Pending")%>">
+			<%}
+			else{%>
 			<a class="CurrentStatus">
-		
-
-			<%} else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic||!isMember) {%>
+			<%}
+			} else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic||!isMember) {%>
 			<a class="DisableStatus">
 			<%} 
 			else  if(!isAutomatic&&isMember){
@@ -133,12 +131,17 @@
 			<div style="clear: left;"><span></span></div>  
 			<%}
 			
-		} else if (PublicationDefaultStates.APPROVED.equals(state.getState())) {
+		    } else if (PublicationDefaultStates.APPROVED.equals(state.getState())) {
 			if (isCurrentRevision("approved",currentRevision)){
 			 isBeforeCurrentState = false;
+			if(isBaseVersion&&cNode.hasProperty("publication:currentState")&&!cNode.getProperty("publication:currentState").getString().equals("approved")){
 			%>
+			<a class="CurrentStatus"  style="cursor:pointer;" href="<%= uicomponent.event("Approved")%>">
+			<%}
+			else{%>
 			<a class="CurrentStatus">
-			<%} else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic||!isMember) {%>
+			<%}
+			} else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic||!isMember) {%>
 			<a class="DisableStatus">
 			<%} 
 			else  if(!isAutomatic&&isMember){
@@ -153,13 +156,17 @@
 			<div style="clear: left;"><span></span></div>  
 			<%}
 			
-		} else if (PublicationDefaultStates.ARCHIVED.equals(state.getState())) {
+		   } else if (PublicationDefaultStates.ARCHIVED.equals(state.getState())) {
 			if (isCurrentRevision("archived",currentRevision)){
 			isBeforeCurrentState = false;
+			if(isBaseVersion&&cNode.hasProperty("publication:currentState")&&!cNode.getProperty("publication:currentState").getString().equals("archived")){
 			%>
-				
+			<a class="CurrentStatus"  style="cursor:pointer;" href="<%= uicomponent.event("Archived")%>">
+			<%}
+			else{%>
 			<a class="CurrentStatus">
-			<%} else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic) {%>
+			<%}
+			} else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic) {%>
 			<a class="DisableStatus">
 			<%}
 			else  if(!isAutomatic&&isMember){
@@ -202,10 +209,14 @@
 
 			if (isCurrentRevision("staged",currentRevision)){
 			isBeforeCurrentState = false;
+			if(isBaseVersion&&cNode.hasProperty("publication:currentState")&&!cNode.getProperty("publication:currentState").getString().equals("staged")){
 			%>
+			<a class="CurrentStatus"  style="cursor:pointer;" href="<%= uicomponent.event("Staged")%>">
+			<%}
+			else{%>
 			<a class="CurrentStatus">
-			
-			<%} else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic||!isMember) {%>
+			<%}
+			}else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic||!isMember) {%>
 			<a class="DisableStatus">
 			<%}
 			else  if(!isAutomatic&&isMember){
@@ -223,9 +234,14 @@
 		}else if (PublicationDefaultStates.UNPUBLISHED.equals(state.getState())) {
 			if (isCurrentRevision("unpublished",currentRevision)){
 			isBeforeCurrentState = false;
+			if(isBaseVersion&&cNode.hasProperty("publication:currentState")&&!cNode.getProperty("publication:currentState").getString().equals("unpublished")){
 			%>
+			<a class="CurrentStatus"  style="cursor:pointer;" href="<%= uicomponent.event("Unpublished")%>">
+			<%}
+			else{%>
 			<a class="CurrentStatus">
-			<%} else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic||!isMember) {%>
+			<%}
+			} else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic||!isMember) {%>
 			<a class="DisableStatus">
 			<%}
 			else  if(!isAutomatic&&isMember){
