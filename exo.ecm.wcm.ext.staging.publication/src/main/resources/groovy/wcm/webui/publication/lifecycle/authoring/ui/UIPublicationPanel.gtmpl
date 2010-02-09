@@ -71,10 +71,6 @@
 		    isAutomatic=true;
 		    }
 		if (PublicationDefaultStates.DRAFT.equals(state.getState())) {
-			println("nnnnnnnnnnnnnnnn"+cNode.getProperty("publication:currentState").getString());
-			println(isBaseVersion.toString());
-			println(cNode.hasProperty("publication:currentState").toString());
-			println(cNode.getProperty("publication:currentState").getString().equals("draft").toString());
 			if (isCurrentRevision("draft",currentRevision)){		
 			isBeforeCurrentState=false;
 			
