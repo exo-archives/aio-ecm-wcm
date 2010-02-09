@@ -413,7 +413,6 @@ public class UIPublicationPanel extends org.exoplatform.services.wcm.publication
 	    UIFormDateTimeInput endPublication = publicationPanel.getChildById(END_PUBLICATION);
 	    Calendar startDate = startPublication.getCalendar();
 	    Calendar endDate = endPublication.getCalendar();
-	    System.out.println(startPublication.getValue()+" "+endPublication.getValue()+" "+startDate+" "+endDate);
 	    Node node = publicationPanel.getCurrentNode();
 	    try {
 		if(!"".equals(startPublication.getValue())){
