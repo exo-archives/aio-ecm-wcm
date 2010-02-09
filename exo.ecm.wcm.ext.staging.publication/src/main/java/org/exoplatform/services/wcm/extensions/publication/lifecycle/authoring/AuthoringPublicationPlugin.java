@@ -523,11 +523,14 @@ public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin
 
     // if current mode is live mode
     Node liveNode = getLiveRevision(node);
+    if(liveNode!=null){
     if (liveNode.hasNode("jcr:frozenNode")) {
       return liveNode.getNode("jcr:frozenNode");
     } else {
       return liveNode;
     }
+    }
+    else return null;
 
   }
 
