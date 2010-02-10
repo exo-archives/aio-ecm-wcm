@@ -140,54 +140,6 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
     return portalFolder.getNode("web contents");
   }    
   
-  /**
-   * Gets the banner themes.
-   * 
-   * @param portalFolder the portal folder
-   * @return the banner themes
-   * @throws Exception the exception
-   */
-  public Node getBannerThemes(Node portalFolder) throws Exception{
-    return portalFolder.getNode("web contents/site artifacts/banner");
-  }
-  
-  /**
-   * Gets the footer themes.
-   * 
-   * @param portalFolder the portal folder
-   * @return the footer themes
-   * @throws Exception the exception
-   */
-  public Node getFooterThemes(Node portalFolder) throws Exception{
-    return portalFolder.getNode("web contents/site artifacts/footer");
-  }
-  
-  /**
-   * Gets the navigation themes.
-   * 
-   * @param portalFolder the portal folder
-   * @return the navigation themes
-   * @throws Exception the exception
-   */
-  public Node getNavigationThemes(Node portalFolder) throws Exception{
-    return portalFolder.getNode("web contents/site artifacts/navigation");
-  }
-  
-  /**
-   * Gets the breadcums themes.
-   * 
-   * @param portalFolder the portal folder
-   * @return the breadcums themes
-   * @throws Exception the exception
-   */
-  public Node getBreadcumsThemes(Node portalFolder) throws Exception{
-    return portalFolder.getNode("web contents/site artifacts/breadcums");
-  }
-  
-  public Node getHomepageThemes(Node portalFolder) throws Exception{
-    return portalFolder.getNode("web contents/site artifacts/home page");
-  }
-  
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#getHandlerNodeType()
    */
@@ -253,46 +205,6 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
     addMixin(themes,"exo:owneable");
     addMixin(themes,"exo:datetime");
     themes.setProperty("exo:dateCreated",calendar);   
-    
-    Node bannerFolder = themes.addNode("banner","nt:unstructured");
-    addMixin(bannerFolder,"exo:owneable");
-    addMixin(bannerFolder,"exo:datetime");
-    bannerFolder.setProperty("exo:dateCreated",calendar);    
-    
-    Node searchboxFolder = themes.addNode("searchbox","nt:unstructured");
-    addMixin(searchboxFolder,"exo:owneable");
-    addMixin(searchboxFolder,"exo:datetime");
-    searchboxFolder.setProperty("exo:dateCreated",calendar);   
-    
-    Node navigationFolder = themes.addNode("navigation","nt:unstructured");
-    addMixin(navigationFolder,"exo:owneable");
-    addMixin(navigationFolder,"exo:datetime");
-    navigationFolder.setProperty("exo:dateCreated",calendar);       
-    
-    Node breadcumbsFolder = themes.addNode("breadcrumb","nt:unstructured");
-    addMixin(breadcumbsFolder,"exo:owneable");
-    addMixin(breadcumbsFolder,"exo:datetime");
-    breadcumbsFolder.setProperty("exo:dateCreated",calendar);    
-    
-    Node homepageFolder = themes.addNode("homepage","nt:unstructured");
-    addMixin(homepageFolder,"exo:owneable");
-    addMixin(homepageFolder,"exo:datetime");
-    homepageFolder.setProperty("exo:dateCreated",calendar);    
-    
-    Node footerFolder = themes.addNode("footer","nt:unstructured");
-    addMixin(footerFolder,"exo:owneable");
-    addMixin(footerFolder,"exo:datetime");
-    footerFolder.setProperty("exo:dateCreated",calendar);    
-    
-    Node sitemapFolder = themes.addNode("sitemap","nt:unstructured");
-    addMixin(sitemapFolder,"exo:owneable");
-    addMixin(sitemapFolder,"exo:datetime");
-    sitemapFolder.setProperty("exo:dateCreated",calendar);    
-    
-    Node accessFolder = themes.addNode("access","nt:unstructured");
-    addMixin(accessFolder,"exo:owneable");
-    addMixin(accessFolder,"exo:datetime");
-    accessFolder.setProperty("exo:dateCreated",calendar);    
     
     Node links = portalFolder.addNode("links", "exo:linkFolder");
     addMixin(links,"exo:owneable");
