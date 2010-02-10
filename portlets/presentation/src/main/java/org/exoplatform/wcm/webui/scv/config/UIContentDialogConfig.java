@@ -87,7 +87,7 @@ public class UIContentDialogConfig extends UIForm {
       prefs.setValue("ShowPrintAction", Boolean.toString(isShowPrint));
       prefs.store();
       UIApplication uiApplication = uiMiscellaneousInfo.getAncestorOfType(UIApplication.class);
-      uiApplication.addMessage(new ApplicationMessage("UISCVConfig.msg.saved-successfully", null, ApplicationMessage.INFO));
+      uiApplication.addMessage(new ApplicationMessage("UIContentDialogConfig.msg.saved-successfully", null, ApplicationMessage.INFO));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
     }     
   }
