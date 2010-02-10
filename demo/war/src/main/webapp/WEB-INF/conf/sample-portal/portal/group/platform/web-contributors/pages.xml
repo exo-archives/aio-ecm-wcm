@@ -37,6 +37,7 @@
         <preferences></preferences>
       </portlet>
       <title>Site Explorer</title>
+      <access-permissions>*:/platform/web-contributors</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
@@ -58,6 +59,7 @@
         <preferences></preferences>
       </portlet>
       <title>Site Explorer</title>
+      <access-permissions>*:/platform/web-contributors</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
@@ -100,6 +102,7 @@
         <preferences></preferences>
       </portlet>
       <title>Newsletter manager</title>
+      <access-permissions>*:/platform/web-contributors</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
@@ -112,7 +115,7 @@
     <owner-id>platform/web-contributors</owner-id>
     <name>formgenerator</name>
     <title>Form Generator Portlet</title>
-    <access-permissions>manager:/platform/web-contributors</access-permissions>
+    <access-permissions>*:/platform/web-contributors</access-permissions>
     <edit-permission>manager:/platform/web-contributors</edit-permission>
     <portlet-application>
       <portlet>
@@ -121,6 +124,7 @@
         <preferences></preferences>
       </portlet>
       <title>Form generator</title>
+      <access-permissions>*:/platform/web-contributors</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
