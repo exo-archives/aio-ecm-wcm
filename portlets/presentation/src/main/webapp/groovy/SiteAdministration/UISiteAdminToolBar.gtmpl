@@ -134,7 +134,7 @@
    	if (navigations != null && navigations.size() > 0) {
 	   	for(navigation in navigations) {
 		  	nodes = navigation.getNodes();
-		  	if (nodes.size() < 1) return;			  	
+		  	if (nodes.size() < 1) continue;			  	
 		  	int index = 1;
 		    for(node in nodes) {    			
 		      if(node.getChildren() != null && node.getChildren().size() > 0) {
