@@ -81,6 +81,7 @@
         <preferences></preferences>
       </portlet>
       <title>WCM Administration</title>
+      <access-permissions>*:/platform/web-contributors</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
