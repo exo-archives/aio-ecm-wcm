@@ -228,6 +228,7 @@
           
           //   Author
           def author = uicomponent.getNodeOwner(data);
+          if ("__system".equals(author)) author = "";
           // Content view
           
           String subName ;
