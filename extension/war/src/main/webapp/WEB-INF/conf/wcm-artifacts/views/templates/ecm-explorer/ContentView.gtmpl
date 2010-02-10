@@ -26,25 +26,6 @@
   import org.exoplatform.services.wcm.publication.WCMPublicationService;
   // Content view
   
-  /**
-   * Finds and returns <code>Node</code> title. If the given node has no title
-   * value, the name of the node is returned instead.
-   *
-   * @return a string of a <code>Node</code> title or name.
-   */
-  public String getNodeTitle(Node node){
-    String title = null;
-    try {
-      title = node.getProperty("exo:title").getValue().getString();
-    } catch (Exception e) {
-	    title = node.getName();   
-	  }
-    if(title != null && title.length() > 50) {
-      title = title.substring(0, 50) + "...";
-    }
-    return title;
-  }
-   
    /**
     * Finds and returns the date information of the given node.
     *
@@ -234,7 +215,7 @@
           if (status == null) status = "";
           
           //   Title
-          def title = getNodeTitle(data);
+          def title = uiWorkingArea.getTitle(data);
           title = Text.unescapeIllegalJcrChars(title);
           
           //   Name
