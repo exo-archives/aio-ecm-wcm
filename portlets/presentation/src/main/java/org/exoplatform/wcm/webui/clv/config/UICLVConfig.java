@@ -311,7 +311,7 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
     if (isManualMode()) {
       orderBySelectBox.setRendered(false);
       viewerModeRadioBoxInput.setValue(VIEWER_MANUAL_MODE);
-      String [] listContent = UICLVPortlet.getContentsByPreference();
+      String [] listContent = portletPreferences.getValues(UICLVPortlet.CONTENT_LIST, null);
       if (listContent != null && listContent.length != 0) {
       	contentList = Arrays.asList(listContent);   
       	oldContentList = contentList;
@@ -481,14 +481,7 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
       List<String> oldContentList = uiViewerManagementForm.getOldContentList();
       PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();
 
-      String portletId = "";
-      UIPortlet uiPortlet = Util.getUIPortal().findComponentById(portletRequestContext.getWindowId());
-      if (uiPortlet != null) {
-      	portletId = uiPortlet.getWindowId();
-      } else if (!portletRequestContext.getWindowId().contains("#")) {
-      	portletId = generatePorletId(portletRequestContext.getWindowId(), portletRequestContext);
-      }
-      
+      String portletId = generatePorletId(portletRequestContext.getWindowId(), portletRequestContext);
       PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
       String currentViewerMode = portletPreferences.getValue(UICLVPortlet.VIEWER_MODE, null);
       if (currentViewerMode == null) currentViewerMode = UICLVConfig.VIEWER_AUTO_MODE;

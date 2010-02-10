@@ -16,17 +16,9 @@
  */
 package org.exoplatform.wcm.webui.clv;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
-import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.wcm.core.WCMConfigurationService;
-import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.clv.config.UICLVConfig;
 import org.exoplatform.webui.application.WebuiApplication;
@@ -170,34 +162,5 @@ public class UICLVPortlet extends UIPortletApplication {
     PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();    
     String userId = context.getRemoteUser();       
     return Utils.canEditCurrentPortal(userId);
-  }
-  
-  @SuppressWarnings("unchecked")
-	public static String[] getContentsByPreference() {
-  	try {
-  		WCMConfigurationService configurationService = WCMCoreUtils.getService(WCMConfigurationService.class);
-  		PortletRequestContext context = WebuiRequestContext.getCurrentInstance();
-  		StringBuilder persistenceId = new StringBuilder();
-  		persistenceId.append(PortalConfig.PORTAL_TYPE)
-  		.append("#")
-  		.append(Util.getUIPortalApplication().getOwner())
-  		.append(":")
-  		.append(configurationService.getRuntimeContextParam(WCMConfigurationService.CLV_PORTLET))
-  		.append("/")
-  		.append(context.getWindowId());
-  		List<String> contents = new ArrayList<String>();
-  		DataStorage dataStorage = WCMCoreUtils.getService(DataStorage.class);
-//  		List<?> preferences = dataStorage.getPortletPreferences(new ExoWindowID(persistenceId.toString())).getPreferences();
-//  		for (Object object : preferences) {
-//  			Preference preference = (Preference) object;
-//  			if (UICLVPortlet.CONTENT_LIST.equals(preference.getName())) {
-//  				contents = preference.getValues();
-//  				break;
-//  			}
-//  		}
-  		return contents.toArray(new String[contents.size()]);
-		} catch (Exception e) {
-			return null;
-		}
   }
 }

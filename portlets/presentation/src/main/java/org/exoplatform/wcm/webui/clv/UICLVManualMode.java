@@ -53,7 +53,7 @@ public class UICLVManualMode extends UICLVContainer {
     setViewAbleContent(true);
     String repositoryName = portletPreferences.getValue(UICLVPortlet.REPOSITORY, null);
     String workspaceName = portletPreferences.getValue(UICLVPortlet.WORKSPACE, null);
-    String[] listContent = UICLVPortlet.getContentsByPreference();
+    String[] listContent = portletPreferences.getValues(UICLVPortlet.CONTENT_LIST, null);
     if (listContent == null || listContent.length == 0) {
       messageKey = "UIMessageBoard.msg.contents-not-found";
       setViewAbleContent(false);
