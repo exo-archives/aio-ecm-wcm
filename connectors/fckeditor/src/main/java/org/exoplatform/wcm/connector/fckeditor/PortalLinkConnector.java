@@ -35,8 +35,8 @@ import javax.xml.transform.dom.DOMSource;
 
 import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.commons.utils.PageList;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
@@ -46,10 +46,14 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.pom.config.POMSession;
+import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -84,6 +88,10 @@ public class PortalLinkConnector implements ResourceContainer {
   /** The log. */
   private static Log log = ExoLogger.getLogger(PortalLinkConnector.class);
   
+  private POMSessionManager manager;
+  
+  private POMSession session;
+  
   /**
    * Instantiates a new portal link connector.
    * 
@@ -98,6 +106,7 @@ public class PortalLinkConnector implements ResourceContainer {
     this.portalDataStorage = dataStorage;
     this.portalUserACL = userACL;
     this.servletContext = servletContext;
+    this.manager = WCMCoreUtils.getService(POMSessionManager.class);
   }
 
   /**
@@ -177,6 +186,7 @@ public class PortalLinkConnector implements ResourceContainer {
    * @throws Exception the exception
    */
   private Document buildPortalXMLResponse(String currentFolder, String command, String userId) throws Exception {
+    if (manager.getSession() == null) session = manager.openSession();
     Element rootElement = initRootElement(command, currentFolder);
     Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, null, PortalConfig.class);
     PageList pageList = portalDataStorage.find(query, new Comparator<PortalConfig>() {
@@ -199,6 +209,7 @@ public class PortalLinkConnector implements ResourceContainer {
       folderElement.setAttribute("folderType", "");
       foldersElement.appendChild(folderElement);
     }
+    session.close();
     return rootElement.getOwnerDocument();
   }
 
@@ -214,14 +225,15 @@ public class PortalLinkConnector implements ResourceContainer {
    * @throws Exception the exception
    */
   private Document buildNavigationXMLResponse(String currentFolder, String command, String userId) throws Exception {
+    if (manager.getSession() == null) session = manager.openSession();
+    PortalContainer container = PortalContainer.getInstance();
+    OrganizationService organizationService = WCMCoreUtils.getService(OrganizationService.class);
+    ((ComponentRequestLifecycle) organizationService).startRequest(container);
     Element rootElement = initRootElement(command, currentFolder);
     String portalName = currentFolder.substring(1, currentFolder.indexOf('/', 1));
     String pageNodeUri = currentFolder.substring(portalName.length() + 1);
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    UserPortalConfigService pConfig = (UserPortalConfigService) container.getComponentInstanceOfType(UserPortalConfigService.class);
-
-    List<PageNavigation> navigations = pConfig.getUserPortalConfig(portalName, userId)
-                                              .getNavigations();
+    UserPortalConfigService pConfig = WCMCoreUtils.getService(UserPortalConfigService.class);
+    List<PageNavigation> navigations = pConfig.getUserPortalConfig(portalName, userId).getNavigations();
     Element foldersElement = rootElement.getOwnerDocument().createElement("Folders");
     Element filesElement = rootElement.getOwnerDocument().createElement("Files");
     rootElement.appendChild(foldersElement);
@@ -240,6 +252,8 @@ public class PortalLinkConnector implements ResourceContainer {
         }
       }
     }
+    ((ComponentRequestLifecycle) organizationService).endRequest(container);
+    session.close();
     return rootElement.getOwnerDocument();
   }
 
