@@ -58,6 +58,9 @@
     <ShowTitle>Hiển thị tiêu đề</ShowTitle>
     <ShowPrintAction>Hiển thị biểu tượng in</ShowPrintAction>
    </label>
+   <msg>
+    <saved-successfully>Tùy chọn của bạn đã được lưu lại</saved-successfully>
+   </msg>
   </UIContentDialogConfig>
   
   <UIContentDialogFormPopupWindow>

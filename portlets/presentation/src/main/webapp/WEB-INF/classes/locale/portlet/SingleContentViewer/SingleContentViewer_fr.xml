@@ -58,6 +58,9 @@
     <ShowTitle>Afficher le titre</ShowTitle>
     <ShowPrintAction>Afficher l'imprimer</ShowPrintAction>
    </label>
+   <msg>
+    <saved-successfully>Vos préférences sont enregistrées</saved-successfully>
+   </msg>
   </UIContentDialogConfig>
   
   <UIContentDialogFormPopupWindow>
