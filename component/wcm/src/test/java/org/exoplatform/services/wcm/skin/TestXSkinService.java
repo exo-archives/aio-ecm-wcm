@@ -102,14 +102,12 @@ public class TestXSkinService extends BaseWCMTestCase {
 		try {
 			Node webContent = documentNode.addNode(WEB_CONTENT_NODE_NAME, "exo:webContent");
 			webContent.setProperty("exo:title", WEB_CONTENT_NODE_NAME);
-			webContent.addNode("js", "exo:jsFolder");
-			webContent.addNode("css", "exo:cssFolder");
-			webContent.addNode("medias");
 			session.save();
 			
 			String cssData = skinService.getActiveStylesheet(webContent);
 			assertEquals("", cssData);
 		} catch(Exception e) {
+		  e.printStackTrace();
 			fail();
 		}
 	}
@@ -245,7 +243,7 @@ public class TestXSkinService extends BaseWCMTestCase {
 			configService.addSkin("", "Default", "", "");
 			skinService.updatePortalSkinOnModify(portal, cssNode);
 			session.save();
-			String cssData = configService.getMergedCSS("/portlet_app_1/css/jcr/classic/Default/Stylesheet.css");
+			String cssData = configService.getMergedCSS("/portal/css/jcr/classic/Default/Stylesheet.css");
 			assertEquals("This is the default.css file.", cssData);
 		} catch(Exception e) {
 			fail();
@@ -267,7 +265,7 @@ public class TestXSkinService extends BaseWCMTestCase {
 			configService.addSkin("", "Default", "", "");
 			skinService.updatePortalSkinOnModify(portal, cssNode);
 			session.save();
-			String cssData = configService.getMergedCSS("/portlet_app_1/css/jcr/classic/Default/Stylesheet.css");
+			String cssData = configService.getMergedCSS("/portal/css/jcr/classic/Default/Stylesheet.css");
 			assertEquals("This is the default.css file.", cssData);
 		} catch(Exception e) {
 			fail();
@@ -336,7 +334,7 @@ public class TestXSkinService extends BaseWCMTestCase {
 			configService.addSkin("", "Default", "", "");
 			skinService.updatePortalSkinOnRemove(portal, cssNode);
 			session.save();
-			String cssData = configService.getMergedCSS("/portlet_app_1/css/jcr/classic/Default/Stylesheet.css");
+			String cssData = configService.getMergedCSS("/portal/css/jcr/classic/Default/Stylesheet.css");
 			assertEquals("", cssData);
 		} catch(Exception e) {
 			fail();
@@ -359,7 +357,7 @@ public class TestXSkinService extends BaseWCMTestCase {
 			skinService.updatePortalSkinOnRemove(portal, cssNode);
 			session.save();
 
-			String cssData = configService.getMergedCSS("/portlet_app_1/css/jcr/classic/Default/Stylesheet.css");
+			String cssData = configService.getMergedCSS("/portal/css/jcr/classic/Default/Stylesheet.css");
 			assertEquals("Test XSkin Service", cssData);
 		} catch(Exception e) {
 			fail();
@@ -385,7 +383,7 @@ public class TestXSkinService extends BaseWCMTestCase {
       skinService.updatePortalSkinOnRemove(portal, cssNode);
       session.save();
 
-      String cssData = configService.getMergedCSS("/portlet_app_1/css/jcr/classic/Default/Stylesheet.css");
+      String cssData = configService.getMergedCSS("/portal/css/jcr/classic/Default/Stylesheet.css");
       assertEquals("This is the default.css file.", cssData);
     } catch(Exception e) {
       fail();
@@ -411,7 +409,7 @@ public class TestXSkinService extends BaseWCMTestCase {
       skinService.updatePortalSkinOnRemove(portal, cssNode);
       session.save();
 
-      String cssData = configService.getMergedCSS("/portlet_app_1/css/jcr/" + sharedPortalName + "/Default/Stylesheet.css");
+      String cssData = configService.getMergedCSS("/portal/css/jcr/" + sharedPortalName + "/Default/Stylesheet.css");
       assertEquals("Test XSkin Service", cssData);
     } catch(Exception e) {
       fail();
