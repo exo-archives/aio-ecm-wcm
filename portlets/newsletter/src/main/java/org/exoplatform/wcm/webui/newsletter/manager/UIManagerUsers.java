@@ -239,7 +239,7 @@ public class UIManagerUsers extends UITabPane {
     listModerator = getAllUsersFromGroupMemebers(listModerator);
     
     // get list redactor from subscriptions
-    listRedactor.addAll(getAllUsersFromGroupMemebers(NewsletterConstant.getAllRedactor(NewsLetterUtil.getPortalName())));
+    listRedactor.addAll(getAllUsersFromGroupMemebers(NewsletterConstant.getAllRedactor(NewsLetterUtil.getPortalName(), session)));
     
     // Remove all user who is administrator from moderators and accesspermission
     for(String uId : managerUserHandler.getAllAdministrator(Utils.getSessionProvider(), NewsLetterUtil.getPortalName())){
