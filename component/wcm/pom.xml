@@ -10,6 +10,13 @@
   <artifactId>exo.ecm.wcm.component.wcm</artifactId>
   <name>eXo WCM Service</name>
   <dependencies>
+	<dependency>
+		<groupId>org.chromattic</groupId>
+		<artifactId>chromattic.core</artifactId>
+		<version>1.0.0-beta14</version>
+		<scope>test</scope>
+	</dependency>
+
     <dependency>
       <groupId>org.exoplatform.kernel</groupId>
       <artifactId>exo.kernel.container</artifactId>
