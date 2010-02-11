@@ -70,7 +70,7 @@ public class TestNewsletterPublicUserHandler extends BaseWCMTestCase {
 		userHomeNode  = newsletterApplicationNode.addNode("Users");
 		session.save();
 		
-		newsletterManagerService = getService(NewsletterManagerService.class);
+		newsletterManagerService = WCMCoreUtils.getService(NewsletterManagerService.class);
 		newsletterCategoryHandler = newsletterManagerService.getCategoryHandler();
 		newsletterSubscriptionHandler = newsletterManagerService.getSubscriptionHandler();
 		newsletterPublicUserHandler = newsletterManagerService.getPublicUserHandler();

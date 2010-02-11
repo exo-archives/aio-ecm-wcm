@@ -259,7 +259,7 @@ public class NewsletterSubscriptionHandler {
       String path = NewsletterConstant.generateCategoryPath(portalName);
       Node categoryNode = ((Node)session.getItem(path)).getNode(categoryName);
       Node subscriptionNode = categoryNode.getNode(subscription.getName());
-      List<String> candicateRemove = NewsletterConstant.getAllRedactor(portalName);
+      List<String> candicateRemove = NewsletterConstant.getAllRedactor(portalName, session);
       if(isRemove) {
         List<String> ableToRemove = NewsletterConstant.removePermission(subscriptionNode, null, candicateRemove, false, portalName, session);
         String [] removePer = new String [ableToRemove.size()];

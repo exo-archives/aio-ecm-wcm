@@ -22,9 +22,10 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.exoplatform.container.StandaloneContainer;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.impl.core.NodeImpl;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.test.BasicTestCase;
 
 /**
@@ -36,7 +37,7 @@ import org.exoplatform.test.BasicTestCase;
 public abstract class BaseWCMTestCase extends BasicTestCase {
 
 	/** The container. */
-	protected StandaloneContainer   container;
+	protected PortalContainer   container;
 
 	/** The session. */
 	protected Session               session;
@@ -61,15 +62,8 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
 	 * @see junit.framework.TestCase#setUp()
 	 */
 	public void setUp() throws Exception {
-		String containerConf = getClass().getResource("/conf/standalone/test-configuration.xml").toString();
-		String loginConf = Thread.currentThread().getContextClassLoader().getResource("login.conf").toString();
-		StandaloneContainer.addConfigurationURL(containerConf);
-		container = StandaloneContainer.getInstance();
-
-		if (System.getProperty("java.security.auth.login.config") == null)
-			System.setProperty("java.security.auth.login.config", loginConf);
-
-		RepositoryService repositoryService = getService(RepositoryService.class);
+		container = PortalContainer.getInstance();
+		RepositoryService repositoryService = WCMCoreUtils.getService(RepositoryService.class);
 		session = repositoryService.getRepository(REPO_NAME).getSystemSession(COLLABORATION_WS);
 	}
 
@@ -141,17 +135,6 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
 	protected String execTime(long from) {
 		return Math.round(((System.currentTimeMillis() - from) * 100.00d / 60000.00d)) / 100.00d
 		+ "min";
-	}
-
-	/**
-	 * Gets the service.
-	 * 
-	 * @param clazz the clazz
-	 * 
-	 * @return the service
-	 */
-	protected <T> T getService(Class<T> clazz) {
-		return clazz.cast(container.getComponentInstanceOfType(clazz));
 	}
 
 	/**

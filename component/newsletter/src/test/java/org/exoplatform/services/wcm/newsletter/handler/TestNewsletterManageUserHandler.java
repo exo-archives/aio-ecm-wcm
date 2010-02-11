@@ -3,6 +3,7 @@ package org.exoplatform.services.wcm.newsletter.handler;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -69,13 +70,19 @@ public class TestNewsletterManageUserHandler extends BaseWCMTestCase {
 	 */
 	public void setUp() throws Exception {
 		super.setUp();
-		Node newsletterApplicationNode = (Node) session.getItem("/sites content/live/classic/ApplicationData/NewsletterApplication");
+		Node newsletterApplicationNode = null;
+		try {
+		  newsletterApplicationNode = (Node) session.getItem("/sites content/live/classic/ApplicationData/NewsletterApplication");
+		} catch(ItemNotFoundException e) {
+		  e.printStackTrace();
+		  fail();
+		}
 		categoriesNode = newsletterApplicationNode.addNode("Categories");
 		userHomeNode   = newsletterApplicationNode.addNode("Users");
 
 		session.save();
 			
-		newsletterManagerService = getService(NewsletterManagerService.class);
+		newsletterManagerService = WCMCoreUtils.getService(NewsletterManagerService.class);
 		newsletterCategoryHandler = newsletterManagerService.getCategoryHandler();
 		newsSubscriptionHandler = newsletterManagerService.getSubscriptionHandler();
 		newsletterPublicUserHandler = newsletterManagerService.getPublicUserHandler();
@@ -284,8 +291,13 @@ public class TestNewsletterManageUserHandler extends BaseWCMTestCase {
 	protected void tearDown() {
 		try {
       super.tearDown();
-      session.getItem("/sites content/live/classic/ApplicationData/NewsletterApplication/Categories").remove();
-      session.getItem("/sites content/live/classic/ApplicationData/NewsletterApplication/Users").remove();
+      try {
+        session.getItem("/sites content/live/classic/ApplicationData/NewsletterApplication/Categories").remove();
+        session.getItem("/sites content/live/classic/ApplicationData/NewsletterApplication/Users").remove();
+      } catch(ItemNotFoundException e) {
+        e.printStackTrace();
+        fail();
+      }
       session.save();
     } catch (Exception e) {}
 	}

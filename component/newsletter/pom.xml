@@ -15,6 +15,13 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.chromattic</groupId>
+      <artifactId>chromattic.core</artifactId>
+      <version>1.0.0-beta14</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
       <groupId>org.exoplatform.kernel</groupId>
       <artifactId>exo.kernel.container</artifactId>
       <version>${org.exoplatform.kernel.version}</version>

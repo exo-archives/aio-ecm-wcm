@@ -33,7 +33,6 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 	private Node categoriesNode;
 	
 	/** The user home node. */
-	@SuppressWarnings("unused")
 	private Node userHomeNode;
 	
 	private Node newsletterApplicationNode; 
@@ -49,7 +48,7 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 		newsletterApplicationNode = (Node) session.getItem("/sites content/live/classic/ApplicationData/NewsletterApplication");
 		NodeIterator nodesList = newsletterApplicationNode.getNodes();
 		while(nodesList.hasNext()) {
-			System.out.println("\n\n\n\n TEST =================>"+nodesList.nextNode().getName());
+			System.out.println("\n\n\n\n TEST =================>" + nodesList.nextNode().getName());
 		}
 		categoriesNode = newsletterApplicationNode.getNode("Categories");
 		categoriesNode.setProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR, new String[]{this.userRoot});
@@ -57,7 +56,7 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 		session.save();
 		
 		sessionProvider = WCMCoreUtils.getSystemSessionProvider();
-		newsletterManagerService = getService(NewsletterManagerService.class);
+		newsletterManagerService = WCMCoreUtils.getService(NewsletterManagerService.class);
 		NewsletterCategoryHandler newsletterCategoryHandler = newsletterManagerService.getCategoryHandler();
 		NewsletterCategoryConfig newsletterCategoryConfig = new NewsletterCategoryConfig();
 		newsletterCategoryConfig.setName("CategoryNameNewsletterSubcription");
@@ -129,15 +128,14 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 	 */
 	public void testDeleteSubscription() throws Exception {
 		newsletterSubscriptionHandler.add(sessionProvider, classicPortal, newsletterSubscriptionConfig);
-		
 		newsletterSubscriptionHandler.delete(sessionProvider, classicPortal, "CategoryNameNewsletterSubcription", newsletterSubscriptionConfig);
-		assertEquals(3, categoriesNode.getNode("CategoryNameNewsletterSubcription").getNodes().getSize());
+		assertEquals(1, categoriesNode.getNode("CategoryNameNewsletterSubcription").getNodes().getSize());
 		
 		// Delete subscription which is not alreadly exist in system
 		try{
 		  newsletterSubscriptionHandler.delete(sessionProvider, classicPortal, "CategoryNameNewsletterSubcription_donotExist", newsletterSubscriptionConfig);
 		}catch(Exception ex){}
-		assertEquals(3, categoriesNode.getNode("CategoryNameNewsletterSubcription").getNodes().getSize());
+		assertEquals(1, categoriesNode.getNode("CategoryNameNewsletterSubcription").getNodes().getSize());
 	}
 	
 	/**
@@ -155,7 +153,7 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 			newsletterSubscriptionHandler.add(sessionProvider, classicPortal, newsletterSubscriptionConfig);
 		}
 		
-		assertEquals(7, newsletterSubscriptionHandler.getSubscriptionsByCategory(sessionProvider, classicPortal, "CategoryNameNewsletterSubcription").size());
+		assertEquals(5, newsletterSubscriptionHandler.getSubscriptionsByCategory(sessionProvider, classicPortal, "CategoryNameNewsletterSubcription").size());
 	}
 	
 	/**
@@ -234,29 +232,43 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 	}
 	
 	public void testGetAllRedactors() throws Exception{
-	  assertEquals(this.userRoot,NewsletterConstant.getAllRedactor(this.classicPortal).get(0));
+	  NewsletterCategoryConfig newsletterCategoryConfig = new NewsletterCategoryConfig();
+    NewsletterCategoryHandler newsletterCategoryHandler = newsletterManagerService.getCategoryHandler();
+    newsletterCategoryConfig.setName("CategoryName");
+    newsletterCategoryConfig.setTitle("CategoryTitle");
+    newsletterCategoryConfig.setDescription("CategoryDescription");
+    newsletterCategoryConfig.setModerator("root");
+    newsletterCategoryHandler.add(sessionProvider, classicPortal, newsletterCategoryConfig);
+    
+    categoriesNode.getNode("CategoryName");
+    
+    newsletterSubscriptionConfig = new NewsletterSubscriptionConfig();
+    newsletterSubscriptionConfig.setCategoryName("CategoryName");
+    newsletterSubscriptionConfig.setName("SubscriptionName");
+    newsletterSubscriptionConfig.setTitle("SubscriptionTitle");
+    newsletterSubscriptionConfig.setDescription("SubscriptionDescription");
+    newsletterSubscriptionHandler.add(sessionProvider, classicPortal, newsletterSubscriptionConfig);
+	  assertEquals(this.userRoot, NewsletterConstant.getAllRedactor(this.classicPortal, session).get(0));
 	}
 	
 	public void testGetSubscriptionsByRedactor()throws Exception{
-	  assertEquals(13, newsletterSubscriptionHandler.getSubscriptionByRedactor(this.classicPortal, newsletterSubscriptionConfig.getCategoryName(), this.userRoot, sessionProvider).size());
+	  assertEquals(0, newsletterSubscriptionHandler.getSubscriptionByRedactor(this.classicPortal, newsletterSubscriptionConfig.getCategoryName(), this.userRoot, sessionProvider).size());
 	}
 
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#tearDown()
 	 */
 	protected void tearDown() throws Exception {
-      super.tearDown();
-      /*
-	  NodeIterator Cat_nodes = newsletterApplicationNode.getNodes("Categories");
-	  while(Cat_nodes.hasNext()) {
-		Cat_nodes.nextNode().remove();
+    super.tearDown();
+	  NodeIterator categories = categoriesNode.getNodes();
+	  while(categories.hasNext()) {
+	    categories.nextNode().remove();
 	  }
 	  
-	  NodeIterator User_nodes = newsletterApplicationNode.getNodes("Users");
-	  while(User_nodes.hasNext()) {
-		  User_nodes.nextNode().remove();
+	  NodeIterator users = userHomeNode.getNodes();
+	  while(users.hasNext()) {
+	    users.nextNode().remove();
 	  }
-	  */
-      session.save();
+    session.save();
 	}
 }

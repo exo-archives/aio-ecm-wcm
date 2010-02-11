@@ -32,8 +32,8 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.webui.util.Util;
@@ -48,6 +48,7 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.webui.core.UIComponent;
 
 /**
@@ -155,6 +156,16 @@ public class NewsletterConstant {
   
   private static UIComponent component;
   
+  private static PortalContainer manager;
+  
+  public static PortalContainer getManager() {
+    return PortalContainer.getInstance();
+  }
+
+  public static void setManager(PortalContainer manager) {
+    NewsletterConstant.manager = manager;
+  }
+
   private static Session session;
   
   public static Session getSession() {
@@ -283,11 +294,11 @@ public class NewsletterConstant {
    * @throws Exception  The exception
    */
   public static List<String> getAllGroupAndMembershipOfCurrentUser(String userId) throws Exception{
-    OrganizationService oservice = (OrganizationService)
-    ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
+    OrganizationService organizationService = WCMCoreUtils.getService(OrganizationService.class);
+    ((ComponentRequestLifecycle) organizationService).startRequest(manager);
     List<String> userMemberships = new ArrayList<String> ();
     userMemberships.add(userId);
-    Collection<?> memberships = oservice.getMembershipHandler().findMembershipsByUser(userId);
+    Collection<?> memberships = organizationService.getMembershipHandler().findMembershipsByUser(userId);
     if(memberships == null || memberships.size() < 0) return userMemberships;
     Object[] objects = memberships.toArray();
     for(int i = 0; i < objects.length; i ++ ){
@@ -295,6 +306,7 @@ public class NewsletterConstant {
       String role = membership.getMembershipType() + ":" + membership.getGroupId();
       userMemberships.add(role);     
     }
+    ((ComponentRequestLifecycle) organizationService).endRequest(manager);
     return userMemberships;
   }
   
@@ -359,6 +371,7 @@ public class NewsletterConstant {
       groupName = editSitePermission.substring(editSitePermission.indexOf(":") + 1);
     }
     OrganizationService organizationService = component.getApplicationComponent(OrganizationService.class) ;
+    ((ComponentRequestLifecycle) organizationService).startRequest(manager);
     MembershipHandler memberShipHandler = organizationService.getMembershipHandler();
     Group group = organizationService.getGroupHandler().findGroupById(groupName);
     MembershipType membershipType = organizationService.getMembershipTypeHandler().findMembershipType(redactorMembershipType);
@@ -377,6 +390,7 @@ public class NewsletterConstant {
       // update access portlet permission
       listAccess.add(acc);
     }
+    ((ComponentRequestLifecycle) organizationService).endRequest(manager);
     page.setAccessPermissions(listAccess.toArray(new String[]{}));
     userService.update(page);
   }
@@ -396,6 +410,7 @@ public class NewsletterConstant {
       page = userService.getPage(Util.getUIPortal().getSelectedNode().getPageReference());
       List<String> listAccess = new ArrayList<String>();
       OrganizationService organizationService = component.getApplicationComponent(OrganizationService.class) ;
+      ((ComponentRequestLifecycle) organizationService).startRequest(manager);
       MembershipHandler memberShipHandler = organizationService.getMembershipHandler();
       listAccess.addAll(Arrays.asList(page.getAccessPermissions()));
       for(String acc : removePermissions){
@@ -404,6 +419,7 @@ public class NewsletterConstant {
           memberShipHandler.removeMembershipByUser(acc, true);
         }
       }
+      ((ComponentRequestLifecycle) organizationService).endRequest(manager);
       page.setAccessPermissions(listAccess.toArray(new String[]{}));
       userService.update(page);
     } catch (Exception e) {
@@ -423,7 +439,8 @@ public class NewsletterConstant {
     List<String> users = new ArrayList<String> () ;
     if(userGroupMembership == null || userGroupMembership.length <= 0 || 
         (userGroupMembership.length == 1 && userGroupMembership[0].equals(" "))) return users ; 
-    OrganizationService organizationService = (OrganizationService) PortalContainer.getComponent(OrganizationService.class);
+    OrganizationService organizationService = WCMCoreUtils.getService(OrganizationService.class);
+    ((ComponentRequestLifecycle) organizationService).startRequest(manager);
     for(String str : userGroupMembership) {
       str = str.trim();
       if(str.indexOf("/") >= 0) {
@@ -465,6 +482,7 @@ public class NewsletterConstant {
         }
       }
     }
+    ((ComponentRequestLifecycle) organizationService).endRequest(manager);
     return users ;
   }
   
@@ -483,8 +501,7 @@ public class NewsletterConstant {
    * @return                  List of redactor
    * @throws Exception        The exception
    */
-  public static List<String> getAllRedactor(String portalName)throws Exception{
-    Session session = NewsletterConstant.getSession();
+  public static List<String> getAllRedactor(String portalName, Session session)throws Exception{
     List<String> list = new ArrayList<String>();
     String path = NewsletterConstant.generateCategoryPath(portalName);
     QueryManager queryManager = session.getWorkspace().getQueryManager();
@@ -509,11 +526,10 @@ public class NewsletterConstant {
                                         boolean isAddNew,
                                         String portalName,
                                         Session session) {
-    NewsletterConstant.setSession(session);
     if(candidateRemove == null) candidateRemove = new ArrayList<String>();
     try {
      NodeIterator categoriesIterator = NewsletterConstant.getAllCategories(session);
-     List<String> allRedactor = NewsletterConstant.getAllRedactor(portalName);
+     List<String> allRedactor = NewsletterConstant.getAllRedactor(portalName, session);
      List<String> allpermissions = null;
      while(categoriesIterator.hasNext()) {
        allpermissions = NewsletterConstant.getAllPermissionOfNode(categoriesIterator.nextNode());

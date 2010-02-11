@@ -72,7 +72,7 @@ public class TestNewsletterEntryHandler extends BaseWCMTestCase {
 		
 		sessionProvider = WCMCoreUtils.getSystemSessionProvider();
 		
-		newsletterManagerService = getService(NewsletterManagerService.class);
+		newsletterManagerService = WCMCoreUtils.getService(NewsletterManagerService.class);
 		newsletterCategoryHandler = newsletterManagerService.getCategoryHandler();
 		newsletterSubscriptionHandler = newsletterManagerService.getSubscriptionHandler();
 		newsletterEntryHandler = newsletterManagerService.getEntryHandler();
@@ -186,7 +186,7 @@ public class TestNewsletterEntryHandler extends BaseWCMTestCase {
 	public void tearDown() {
     try {
       super.tearDown();
-      NodeIterator nodeIterator = newsletterApplicationNode.getNodes();
+      NodeIterator nodeIterator = categoriesNode.getNodes();
       while(nodeIterator.hasNext()) {
     	  nodeIterator.nextNode().remove();
       }

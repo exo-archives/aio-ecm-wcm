@@ -47,6 +47,8 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 	/** The newsletter application node. */
 	private Node newsletterApplicationNode ;
 	
+	private Node defaultTemplateNode;
+	
 	/** The categories node. */
 	private Node categoriesNode;
 	
@@ -58,13 +60,13 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 	 */
 	public void setUp() throws Exception {
 		super.setUp();
-		newsletterManagerService = getService(NewsletterManagerService.class);
+		newsletterManagerService = WCMCoreUtils.getService(NewsletterManagerService.class);
 		newsletterCategoryHandler = newsletterManagerService.getCategoryHandler();
 		newsletterSubscriptionHandler = newsletterManagerService.getSubscriptionHandler();
 		newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
 		newsletterApplicationNode = (Node) session.getItem("/sites content/live/classic/ApplicationData/NewsletterApplication");
 		categoriesNode = newsletterApplicationNode.getNode("Categories");
-		
+		defaultTemplateNode = newsletterApplicationNode.addNode("DefaultTemplates");
 	}
 	
 	/**
@@ -92,7 +94,7 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 		nodesTemp 	= createWebcontentNode(subscriptionNode, "testTemplate", null, null, null);
 		newsletterTemplateHandler.convertAsTemplate(sessionProvider, nodesTemp.getPath(), classicPortal, newsletterCategoryConfig.getName());
 		session.save();
-		// Get a template is exist in syastem
+		// Get a template is exist in system
 		Node nodeTmpl = newsletterTemplateHandler.getTemplate(sessionProvider, classicPortal, newsletterCategoryConfig, "testTemplate");
 		assertNotNull(nodeTmpl);
 		
@@ -133,7 +135,7 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 		subscriptionNode = categoriesNode.getNode("CategoryName1/SubscriptionName1");
 		for(int i = 0 ; i < 5; i++) {
 			try{
-				nodesTemp = subscriptionNode.getNode("testTemplate "+i);
+				nodesTemp = subscriptionNode.getNode("testTemplate " + i);
 			}catch(Exception ex){
 				nodesTemp = createWebcontentNode(subscriptionNode, "testTemplate"+i, null, null, null);
 			}
@@ -199,15 +201,12 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 	 */
 	public void tearDown() throws Exception {
 		super.tearDown();
-		NodeIterator Cat_nodes = newsletterApplicationNode.getNodes("categories");
-		while(Cat_nodes.hasNext()) {
-			Cat_nodes.nextNode().remove();
+		NodeIterator categories = newsletterApplicationNode.getNodes("categories");
+		while(categories.hasNext()) {
+		  categories.nextNode().remove();
 		}
 		
-//		NodeIterator nodesTmpls = newsletterApplicationNode.getNodes("DefaultTemplates");
-//		while(nodesTmpls.hasNext()) {
-//			nodesTmpls.nextNode().remove();
-//		}
+		session.getItem(defaultTemplateNode.getPath()).remove();
 		session.save();
 	}
 }
