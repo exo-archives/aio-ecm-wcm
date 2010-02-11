@@ -31,7 +31,7 @@
     <org.exoplatform.portal.version>3.0.0-Beta05-CP01</org.exoplatform.portal.version>
     <org.exoplatform.exopackage.version>1.1.0-Beta05</org.exoplatform.exopackage.version>
     
-    <org.exoplatform.ecm.dms.version>3.0.0-Alpha01</org.exoplatform.ecm.dms.version>
+    <org.exoplatform.ecm.dms.version>3.0.0-Alpha02-SNAPSHOT</org.exoplatform.ecm.dms.version>
     <org.exoplatform.ecm.workflow.version>1.0.5</org.exoplatform.ecm.workflow.version>
     <org.exoplatform.ecm.jbpm.version>3.0.2</org.exoplatform.ecm.jbpm.version>
     <bonita.version>4.0</bonita.version>        
