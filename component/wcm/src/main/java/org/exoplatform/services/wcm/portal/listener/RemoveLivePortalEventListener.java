@@ -46,6 +46,7 @@ public class RemoveLivePortalEventListener extends Listener<DataStorageImpl, Por
    */
   public void onEvent(Event<DataStorageImpl, PortalConfig> event) throws Exception {
   	PortalConfig portalConfig = event.getData();
+  	if (!PortalConfig.PORTAL_TYPE.equals(portalConfig.getType())) return;
   	String portalName = portalConfig.getName();
   	LivePortalManagerService livePortalManagerService = WCMCoreUtils.getService(LivePortalManagerService.class);
   	SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();    
