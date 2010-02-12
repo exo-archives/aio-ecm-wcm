@@ -244,7 +244,7 @@
 <external-component-plugins>
   <target-component>org.exoplatform.services.listener.ListenerService</target-component>
   <component-plugin>
-    <name>PublicationService.event.postUpdate</name>
+    <name>PublicationService.event.postUpdateState</name>
     <set-method>addListener</set-method>
     <type>org.exoplatform.services.wcm.extensions.publication.listener.post.PostUpdateStateEventListener</type>
     <description>this listener will be called every time a content changes its current state</description>
