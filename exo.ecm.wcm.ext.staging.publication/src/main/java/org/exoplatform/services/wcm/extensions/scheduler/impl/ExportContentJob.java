@@ -34,6 +34,8 @@ import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
+import org.exoplatform.services.ecm.publication.PublicationPlugin;
+import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -41,8 +43,6 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.authoring.AuthoringPublicationConstant;
 import org.exoplatform.services.wcm.extensions.security.SHAMessageDigester;
-import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.config.VersionData;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -114,6 +114,9 @@ public class ExportContentJob implements Job {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       RepositoryService repositoryService_ = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService_.getRepository(repository);
+      PublicationService publicationService = (PublicationService) container.getComponentInstanceOfType(PublicationService.class);
+      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
+                                                              .get(AuthoringPublicationConstant.LIFECYCLE_NAME);
       session = sessionProvider.getSession(workspace, manageableRepository);
       QueryManager queryManager = session.getWorkspace().getQueryManager();
       boolean isExported = false;
@@ -155,26 +158,10 @@ public class ExportContentJob implements Job {
             if (node_.canAddMixin(MIX_TARGET_WORKSPACE))
               node_.addMixin(MIX_TARGET_WORKSPACE);
             node_.setProperty(MIX_TARGET_WORKSPACE, workspace);
-            node_.setProperty(StageAndVersionPublicationConstant.LIVE_REVISION_PROP,
-                              valueFactory.createValue(""));
-            Map<String, VersionData> revisionsMap = getRevisionData(node_);
-            node_.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE,
-                              PublicationDefaultStates.PUBLISHED);
-
-            log.info("Change the state of " + node_.getPath() + " from " + fromState + " to "
-                + toState);
-            VersionData versionData = revisionsMap.get(node_.getUUID());
-            if (versionData != null) {
-              versionData.setAuthor(node_.getSession().getUserID());
-              versionData.setState(PublicationDefaultStates.PUBLISHED);
-            } else {
-              versionData = new VersionData(node_.getUUID(),
-                                            PublicationDefaultStates.PUBLISHED,
-                                            node_.getSession().getUserID());
-            }
-            revisionsMap.put(node_.getUUID(), versionData);
-            addRevisionData(node_, revisionsMap.values());
             session.save();
+            HashMap<String, String> context_ = new HashMap<String, String>();
+            publicationPlugin.changeState(node_, toState, context_);
+            log.info("change the status of the node " + node_.getPath() + " to " + toState);
             bos = new ByteArrayOutputStream();
 
             NodeLocation nodeLocation = NodeLocation.make(node_);
@@ -303,7 +290,7 @@ public class ExportContentJob implements Job {
 
       log.info("End Execute ExportContentJob");
     } catch (Exception ex) {
-      log.error("error when exporting content" + ex.getMessage());
+      log.error("error when exporting content " + ex.getMessage());
     } finally {
       session.logout();
     }
