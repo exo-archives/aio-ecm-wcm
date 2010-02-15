@@ -139,13 +139,9 @@ public class ChangeStateCronJobImpl implements Job {
 
                 }
                 publicationPlugin.changeState(node_, toState, context_);
-                listenerService.broadcast(POST_CHANGE_STATE_EVENT, null, node_);
-
               }
             } else if (START_TIME_PROPERTY.equals(property)) {
               publicationPlugin.changeState(node_, toState, context_);
-              listenerService.broadcast(POST_CHANGE_STATE_EVENT, null, node_);
-
             }
           }
         } else {
