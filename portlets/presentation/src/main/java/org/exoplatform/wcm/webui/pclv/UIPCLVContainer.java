@@ -26,6 +26,7 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.Util;
@@ -166,8 +167,9 @@ public class UIPCLVContainer extends UIContainer {
 		String workspace = portletPreferences.getValue(UIPCLVPortlet.WORKSPACE, null);
 		String server =  Util.getPortalRequestContext().getRequest().getRequestURL().toString();
 		server = server.substring(0, server.indexOf('/', 8));
-		
-		parameterizedContentListViewer.setRssLink("/ecmdemo/rest-ecmdemo/rss/generate?repository=" + preferenceRepository + "&workspace=" + workspace + "&server=" + server + "&siteName=" + Util.getUIPortal().getOwner() + "&categoryPath=" + ("".equals(categoryPath) ? preferenceTreeName : preferenceTreeName + "/" + categoryPath));
+		String portal = PortalContainer.getCurrentPortalContainerName();
+		String rest = PortalContainer.getCurrentRestContextName();
+		parameterizedContentListViewer.setRssLink("/"+portal+"/"+rest+"/rss/generate?repository=" + preferenceRepository + "&workspace=" + workspace + "&server=" + server + "&siteName=" + Util.getUIPortal().getOwner() + "&categoryPath=" + ("".equals(categoryPath) ? preferenceTreeName : preferenceTreeName + "/" + categoryPath));
 	}
 
 	/**
