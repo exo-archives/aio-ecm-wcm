@@ -18,6 +18,7 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.services.ecm.publication.IncorrectStateUpdateLifecycleException;
+import org.exoplatform.services.listener.ListenerService;
 import org.exoplatform.services.wcm.extensions.publication.impl.PublicationManagerImpl;
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.authoring.ui.UIPublicationContainer;
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig.Lifecycle;
@@ -74,10 +75,11 @@ public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin
     } else {
       selectedRevision = node.getVersionHistory().getVersion(versionName);
     }
+
     Map<String, VersionData> revisionsMap = getRevisionData(node);
     VersionLog versionLog = null;
     ValueFactory valueFactory = node.getSession().getValueFactory();
-
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
     if (PublicationDefaultStates.PENDING.equals(newState)) {
 
       node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE, newState);
@@ -257,7 +259,7 @@ public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin
                        PublicationDefaultStates.PUBLISHED);
       VersionData editableRevision = revisionsMap.get(node.getUUID());
       if (editableRevision != null) {
-        ExoContainer container = ExoContainerContext.getCurrentContainer();
+
         PublicationManagerImpl publicationManagerImpl = (PublicationManagerImpl) container.getComponentInstanceOfType(PublicationManagerImpl.class);
         String lifecycleName = node.getProperty("publication:lifecycle").getString();
         Lifecycle lifecycle = publicationManagerImpl.getLifecycle(lifecycleName);
@@ -292,6 +294,8 @@ public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin
 
     if (!node.isNew())
       node.save();
+    ListenerService listenerService = (ListenerService) container.getComponentInstanceOfType(ListenerService.class);
+    listenerService.broadcast(AuthoringPublicationConstant.POST_UPDATE_STATE_EVENT, null, node);
   }
 
   /*
@@ -523,14 +527,14 @@ public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin
 
     // if current mode is live mode
     Node liveNode = getLiveRevision(node);
-    if(liveNode!=null){
-    if (liveNode.hasNode("jcr:frozenNode")) {
-      return liveNode.getNode("jcr:frozenNode");
-    } else {
-      return liveNode;
-    }
-    }
-    else return null;
+    if (liveNode != null) {
+      if (liveNode.hasNode("jcr:frozenNode")) {
+        return liveNode.getNode("jcr:frozenNode");
+      } else {
+        return liveNode;
+      }
+    } else
+      return null;
 
   }
 
