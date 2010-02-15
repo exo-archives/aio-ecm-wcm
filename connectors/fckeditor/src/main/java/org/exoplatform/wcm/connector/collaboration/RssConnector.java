@@ -37,6 +37,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.dom.DOMSource;
 
 import org.apache.commons.lang.StringUtils;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
@@ -135,7 +136,8 @@ public class RssConnector extends BaseConnector implements ResourceContainer {
       @QueryParam("workspace") String workspaceName,
       @QueryParam("server") String server,
       @QueryParam("siteName") String siteName,
-      @QueryParam("categoryPath") String categoryPath) throws Exception {
+      @QueryParam("categoryPath") String categoryPath,
+	  @QueryParam("recursive") String recursive) throws Exception {
     
     this.categoryPath = categoryPath;
     String currentCat = categoryPath;
@@ -148,9 +150,12 @@ public class RssConnector extends BaseConnector implements ResourceContainer {
     contextRss.put("actionName", "actionName");
     contextRss.put(RSS_VERSION, "rss_2.0");
     contextRss.put(FEED_TITLE, currentCat);
-    contextRss.put(DESCRIPTION, "Powered by eXo WCM 1.2");
-    contextRss.put(QUERY_PATH, "select * from exo:taxonomyLink where jcr:path like '%/"+siteName+"/categories/" + categoryPath + "/%' and not jcr:path like '%/"+siteName+"/categories/" + categoryPath + "/%/%' order by exo:dateCreated DESC");    
-    contextRss.put(LINK, server + "/portal/public/"+siteName);
+    contextRss.put(DESCRIPTION, "Powered by eXo WCM 2.0");
+    String query = "select * from exo:taxonomyLink where jcr:path like '%/"+siteName+"/categories/" + categoryPath + "/%'";
+    if (recursive==null || "false".equals(recursive)) query += " and not jcr:path like '%/"+siteName+"/categories/" + categoryPath + "/%/%'";
+    query += " order by exo:dateCreated DESC";
+    contextRss.put(QUERY_PATH, query);   
+    contextRss.put(LINK, server + "/"+PortalContainer.getCurrentPortalContainerName()+"/public/"+siteName);
     String feedXML = generateRSS(contextRss);
     Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(feedXML.getBytes()));
     Response response = Response.ok(new DOMSource(document), MediaType.TEXT_XML).build();
