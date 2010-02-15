@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -20,10 +21,15 @@ import org.exoplatform.commons.utils.MimeTypeResolver;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.cms.link.LinkManager;
+import org.exoplatform.services.ecm.publication.PublicationPlugin;
+import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.extensions.publication.lifecycle.authoring.AuthoringPublicationConstant;
+import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -63,6 +69,9 @@ public class ImportContentsJob implements Job {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       RepositoryService repositoryService_ = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService_.getRepository("repository");
+      PublicationService publicationService = (PublicationService) container.getComponentInstanceOfType(PublicationService.class);
+      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
+                                                              .get(AuthoringPublicationConstant.LIFECYCLE_NAME);
       XMLInputFactory factory = XMLInputFactory.newInstance();
 
       File stagingFolder = new File(stagingStorage);
@@ -111,11 +120,11 @@ public class ImportContentsJob implements Job {
                   }
                   try {
                     if (eventType == XMLEvent.START_ELEMENT
-                        && "content".equals(reader.getLocalName())) {
+                        && "published-content".equals(reader.getLocalName())) {
                       linkObj.setSourcePath(reader.getAttributeValue(0)); // --Attribute
-                                                                          // number
-                                                                          // 0 =
-                                                                          // targetPath
+                      // number
+                      // 0 =
+                      // targetPath
                     }
                     if (eventType == XMLEvent.START_ELEMENT && "type".equals(reader.getLocalName())) {
                       linkObj.setLinkType(reader.getElementText());
@@ -130,7 +139,54 @@ public class ImportContentsJob implements Job {
                       listLink.add(linkObj);
                     }
 
+                    if (eventType == XMLEvent.START_ELEMENT
+                        && "unpublished-content".equals(reader.getLocalName())) {
+
+                      String contentTargetPath = reader.getAttributeValue(0);
+                      String[] strContentPath = contentTargetPath.split(":");
+                      String contentPath = "";
+                      boolean flag = true;
+                      for (int index = 2; index < strContentPath.length; index++) {
+                        if (flag) {
+                          contentPath += strContentPath[index];
+                          flag = false;
+                        } else {
+                          contentPath += ":";
+                          contentPath += strContentPath[index];
+                        }
+                      }
+                      sessionProvider = SessionProvider.createSystemProvider();
+
+                      String repository = strContentPath[0];
+                      manageableRepository = repositoryService_.getRepository(repository);
+                      String workspace = strContentPath[1];
+                      Session session = sessionProvider.getSession(workspace, manageableRepository);
+                      if (session.itemExists(contentPath)) {
+                        Node currentContent = (Node) session.getItem(contentPath);
+                        HashMap<String, String> variables = new HashMap<String, String>();
+                        variables.put("nodePath", contentTargetPath);
+                        variables.put("workspaceName", workspace);
+                        if (currentContent.hasProperty(StageAndVersionPublicationConstant.PUBLICATION_LIFECYCLE_NAME)
+                            && AuthoringPublicationConstant.LIFECYCLE_NAME.equals(currentContent.getProperty(StageAndVersionPublicationConstant.PUBLICATION_LIFECYCLE_NAME)
+                                                                                                .getString())
+                            && PublicationDefaultStates.PUBLISHED.equals(currentContent.getProperty(StageAndVersionPublicationConstant.CURRENT_STATE)
+                                                                                       .getString())) {
+
+                          publicationPlugin.changeState(currentContent,
+                                                        PublicationDefaultStates.UNPUBLISHED,
+                                                        variables);
+                          log.info("Change the status of the node " + currentContent.getPath()
+                              + " from " + PublicationDefaultStates.PUBLISHED + " to "
+                              + PublicationDefaultStates.UNPUBLISHED);
+                        }
+                      } else {
+                        log.warn("The node " + contentPath + " does not exist");
+                      }
+
+                    }
+
                   } catch (Exception ie) {
+                    ie.printStackTrace();
                     log.info("Error in ImportContentsJob: " + ie.getMessage());
                   }
                 }
@@ -239,10 +295,11 @@ public class ImportContentsJob implements Job {
           }
         }
       }
-      if (log.isDebugEnabled()) {
-        log.debug("End Execute ImportXMLJob");
+      if (log.isInfoEnabled()) {
+        log.info("End Execute ImportXMLJob");
       }
     } catch (Exception ex) {
+      ex.printStackTrace();
       log.error("Error when importing Contents " + ex.getMessage());
     }
   }
