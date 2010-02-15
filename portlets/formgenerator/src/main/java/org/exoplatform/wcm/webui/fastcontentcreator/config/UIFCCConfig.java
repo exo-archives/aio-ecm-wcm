@@ -421,7 +421,7 @@ public class UIFCCConfig extends UIForm implements UISelectable {
       String type = fastContentCreatorConfig.getUIFormSelectBox(UIFCCConstant.TEMPLATE_FORM_SELECTBOX).getValue() ;
       String path = fastContentCreatorConfig.getUIStringInput(UIFCCConstant.LOCATION_FORM_STRING_INPUT).getValue() ;
       String saveButton = fastContentCreatorConfig.getUIStringInput(UIFCCConstant.SAVE_FORM_STRING_INPUT).getValue() ;
-      String saveMessage = fastContentCreatorConfig.getUIStringInput(UIFCCConstant.MESSAGE_FORM_TEXTAREA_INPUT).getValue() ;
+      String saveMessage = fastContentCreatorConfig.getUIFormTextAreaInput(UIFCCConstant.MESSAGE_FORM_TEXTAREA_INPUT).getValue() ;
       String isRedirect = String.valueOf(fastContentCreatorConfig.getUIFormCheckBoxInput(UIFCCConstant.REDIRECT_FORM_CHECKBOX_INPUT).isChecked());
       String redirectPath = fastContentCreatorConfig.getUIStringInput(UIFCCConstant.REDIRECT_PATH_FORM_STRING_INPUT).getValue() ;
       
