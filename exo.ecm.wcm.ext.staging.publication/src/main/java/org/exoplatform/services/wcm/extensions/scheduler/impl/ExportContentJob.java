@@ -37,7 +37,6 @@ import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.listener.ListenerService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.authoring.AuthoringPublicationConstant;
@@ -63,9 +62,6 @@ public class ExportContentJob implements Job {
   private static final String URL                  = "http://www.w3.org/2001/XMLSchema".intern();
 
   private static final String START_TIME_PROPERTY  = "publication:startPublishedDate".intern();
-  
-  private static final String POST_CHANGE_STATE_EVENT = "PublicationService.event.postUpdate".intern();
-
 
   private static String       fromState            = null;
 
@@ -90,7 +86,7 @@ public class ExportContentJob implements Job {
     Session session = null;
     try {
 
-      log.debug("Start Execute ExportContentJob");
+      log.info("Start Execute ExportContentJob");
       if (fromState == null) {
 
         JobDataMap jdatamap = context.getJobDetail().getJobDataMap();
@@ -118,7 +114,6 @@ public class ExportContentJob implements Job {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       RepositoryService repositoryService_ = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService_.getRepository(repository);
-      ListenerService listenerService = (ListenerService) container.getComponentInstanceOfType(ListenerService.class);
       session = sessionProvider.getSession(workspace, manageableRepository);
       QueryManager queryManager = session.getWorkspace().getQueryManager();
       boolean isExported = false;
@@ -127,24 +122,25 @@ public class ExportContentJob implements Job {
                                                  + "' and jcr:path like '"
                                                  + contentPath + "/%'",
                                              Query.SQL);
+      File exportFolder = new File(localTempDir);
+      if (!exportFolder.exists())
+        exportFolder.mkdirs();
+      File file = new File(localTempDir + File.separatorChar + "contents.xml");
+      ByteArrayOutputStream bos = null;
+      List<Node> categorySymLinks = null;
+      XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
+      FileOutputStream output = new FileOutputStream(file);
+      XMLStreamWriter xmlsw = outputFactory.createXMLStreamWriter(output, "UTF-8");
+      xmlsw.writeStartDocument("UTF-8", "1.0");
+      xmlsw.writeStartElement("xs", "contents", URL);
+      xmlsw.writeNamespace("xs", URL);
       QueryResult queryResult = query.execute();
       if (queryResult.getNodes().getSize() > 0) {
         TaxonomyService taxonomyService = (TaxonomyService) container.getComponentInstanceOfType(TaxonomyService.class);
-        File exportFolder = new File(localTempDir);
-        if (!exportFolder.exists())
-          exportFolder.mkdirs();
-        File file = new File(localTempDir + File.separatorChar + "contents.xml");
-        ByteArrayOutputStream bos = null;
-        List<Node> categorySymLinks = null;
-        XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
-        FileOutputStream output = new FileOutputStream(file);
-        XMLStreamWriter xmlsw = outputFactory.createXMLStreamWriter(output, "UTF-8");
-        xmlsw.writeStartDocument("UTF-8", "1.0");
-        xmlsw.writeStartElement("xs", "contents", URL);
-        xmlsw.writeNamespace("xs", URL);
         ValueFactory valueFactory = session.getValueFactory();
         Date nodeDate = null;
         Date now = null;
+        xmlsw.writeStartElement("xs", "published-contents", URL);
         for (NodeIterator iter = queryResult.getNodes(); iter.hasNext();) {
           Node node_ = iter.nextNode();
           if (node_.hasProperty(START_TIME_PROPERTY)) {
@@ -164,7 +160,7 @@ public class ExportContentJob implements Job {
             Map<String, VersionData> revisionsMap = getRevisionData(node_);
             node_.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE,
                               PublicationDefaultStates.PUBLISHED);
-            listenerService.broadcast(POST_CHANGE_STATE_EVENT, null, node_);
+
             log.info("Change the state of " + node_.getPath() + " from " + fromState + " to "
                 + toState);
             VersionData versionData = revisionsMap.get(node_.getUUID());
@@ -192,7 +188,7 @@ public class ExportContentJob implements Job {
             session.exportSystemView(node_.getPath(), bos, false, false);
             if (!isExported)
               isExported = true;
-            xmlsw.writeStartElement("xs", "content", URL);
+            xmlsw.writeStartElement("xs", "published-content", URL);
             xmlsw.writeAttribute("targetPath", contenTargetPath.toString());
             xmlsw.writeStartElement("xs", "data", URL);
             xmlsw.writeCData(bos.toString());
@@ -222,69 +218,90 @@ public class ExportContentJob implements Job {
               xmlsw.writeCharacters(symlinkTargetPath.toString());
               xmlsw.writeEndElement();
               xmlsw.writeEndElement();
-
             }
             xmlsw.writeEndElement();
             xmlsw.writeEndElement();
-
           }
-        }
-
-        if (bos != null) {
-          bos.close();
         }
         xmlsw.writeEndElement();
-        xmlsw.flush();
-        output.close();
-        xmlsw.close();
-        if (isExported) {
-          // connect
-          URI uri = new URI(targetServerUrl + "/rest/copyfile/copy/");
-          URL url = uri.toURL();
-          HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+      }
+      query = queryManager.createQuery("select * from nt:base where publication:currentState='unpublished' and jcr:path like '"
+                                           + contentPath + "/%'",
+                                       Query.SQL);
+      queryResult = query.execute();
+      if (queryResult.getNodes().getSize() > 0) {
+        xmlsw.writeStartElement("xs", "unpublished-contents", URL);
+        for (NodeIterator iter = queryResult.getNodes(); iter.hasNext();) {
+          Node node_ = iter.nextNode();
 
-          // initialize the connection
-          connection.setDoOutput(true);
-          connection.setDoInput(true);
-          connection.setRequestMethod("POST");
-          connection.setUseCaches(false);
-          connection.setRequestProperty("Content-type", "text/plain");
-          connection.setRequestProperty("Connection", "Keep-Alive");
+          if (node_.isNodeType("nt:frozenNode"))
+            continue;
+          NodeLocation nodeLocation = NodeLocation.make(node_);
+          StringBuffer contenTargetPath = new StringBuffer();
+          contenTargetPath.append(nodeLocation.getRepository());
+          contenTargetPath.append(":");
+          contenTargetPath.append(nodeLocation.getWorkspace());
+          contenTargetPath.append(":");
+          contenTargetPath.append(nodeLocation.getPath());
 
-          OutputStream out = connection.getOutputStream();
-          BufferedReader reader = new BufferedReader(new FileReader(file.getPath()));
-          char[] buf = new char[1024];
-          int numRead = 0;
-          Date date = new Date();
-          Timestamp time = new Timestamp(date.getTime());
-          String[] tab = targetKey.split(":");
-          String superpassword = tab[1];
-          String hashCode = SHAMessageDigester.getHash(time.toString() + ":" + superpassword);
-          StringBuffer param = new StringBuffer();
-          param.append("timestamp=" + time.toString() + "&&hashcode=" + hashCode
-              + "&&contentsfile=");
-          while ((numRead = reader.read(buf)) != -1) {
-            String readData = String.valueOf(buf, 0, numRead);
-            param.append(readData);
-          }
-          reader.close();
-          out.write(param.toString().getBytes());
-          out.flush();
-          connection.connect();
-          BufferedReader inStream = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-          out.close();
-          String string = null;
-          while ((string = inStream.readLine()) != null) {
-            log.debug("The response of the production server:" + string);
-          }
-
-          connection.disconnect();
+          xmlsw.writeStartElement("xs", "unpublished-content", URL);
+          xmlsw.writeAttribute("targetPath", contenTargetPath.toString());
+          xmlsw.writeEndElement();
+          if (!isExported)
+            isExported = true;
         }
-      } else {
-        log.debug("There are no contents to be exported...");
+        xmlsw.writeEndElement();
+      }
+      xmlsw.writeEndElement();
+      if (bos != null) {
+        bos.close();
+      }
+      xmlsw.flush();
+      output.close();
+      xmlsw.close();
+      if (isExported) {
+        // connect
+        URI uri = new URI(targetServerUrl + "/rest/copyfile/copy/");
+        URL url = uri.toURL();
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        // initialize the connection
+        connection.setDoOutput(true);
+        connection.setDoInput(true);
+        connection.setRequestMethod("POST");
+        connection.setUseCaches(false);
+        connection.setRequestProperty("Content-type", "text/plain");
+        connection.setRequestProperty("Connection", "Keep-Alive");
+
+        OutputStream out = connection.getOutputStream();
+        BufferedReader reader = new BufferedReader(new FileReader(file.getPath()));
+        char[] buf = new char[1024];
+        int numRead = 0;
+        Date date = new Date();
+        Timestamp time = new Timestamp(date.getTime());
+        String[] tab = targetKey.split(":");
+        String superpassword = tab[1];
+        String hashCode = SHAMessageDigester.getHash(time.toString() + ":" + superpassword);
+        StringBuffer param = new StringBuffer();
+        param.append("timestamp=" + time.toString() + "&&hashcode=" + hashCode + "&&contentsfile=");
+        while ((numRead = reader.read(buf)) != -1) {
+          String readData = String.valueOf(buf, 0, numRead);
+          param.append(readData);
+        }
+        reader.close();
+        out.write(param.toString().getBytes());
+        out.flush();
+        connection.connect();
+        BufferedReader inStream = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        out.close();
+        String string = null;
+        while ((string = inStream.readLine()) != null) {
+          log.debug("The response of the production server:" + string);
+        }
+        connection.disconnect();
       }
 
-      log.debug("End Execute ExportContentJob");
+      log.info("End Execute ExportContentJob");
     } catch (Exception ex) {
       log.error("error when exporting content" + ex.getMessage());
     } finally {
