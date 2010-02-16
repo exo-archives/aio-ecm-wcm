@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
@@ -290,8 +291,11 @@ public class ExportContentJob implements Job {
       log.info("End Execute ExportContentJob");
     } catch (RepositoryException ex) {
       log.debug("Repository 'repository ' not found.");
-    } catch (Exception ex) {
-      log.error("error when exporting content : " + ex.getMessage(), ex);
+    } catch (ConnectException ex) {
+      log.debug("The front server is down.");
+    } 
+    catch (Exception ex) {
+      log.error("Error when exporting content : " + ex.getMessage(), ex);
     } finally {
       if (session != null)
         session.logout();
