@@ -76,7 +76,7 @@
 			
 			if(isBaseVersion&&cNode.hasProperty("publication:currentState")&&!cNode.getProperty("publication:currentState").getString().equals("draft")){
 			%>
-			<a class="CurrentStatus"  style="cursor:pointer;" href="<%= uicomponent.event("Draft")%>">
+			<a class="ActiveStatus" href="<%= uicomponent.event("Draft")%>">
 			<%}
 			else{%>
 			<a class="CurrentStatus">
@@ -106,7 +106,7 @@
 			isBeforeCurrentState = false;
 			if(isBaseVersion&&cNode.hasProperty("publication:currentState")&&!cNode.getProperty("publication:currentState").getString().equals("pending")){
 			%>
-			<a class="CurrentStatus"  style="cursor:pointer;" href="<%= uicomponent.event("Pending")%>">
+			<a class="ActiveStatus" href="<%= uicomponent.event("Pending")%>">
 			<%}
 			else{%>
 			<a class="CurrentStatus">
@@ -132,7 +132,7 @@
 			 isBeforeCurrentState = false;
 			if(isBaseVersion&&cNode.hasProperty("publication:currentState")&&!cNode.getProperty("publication:currentState").getString().equals("approved")){
 			%>
-			<a class="CurrentStatus"  style="cursor:pointer;" href="<%= uicomponent.event("Approved")%>">
+			<a class="ActiveStatus" href="<%= uicomponent.event("Approved")%>">
 			<%}
 			else{%>
 			<a class="CurrentStatus">
@@ -157,7 +157,7 @@
 			isBeforeCurrentState = false;
 			if(isBaseVersion&&cNode.hasProperty("publication:currentState")&&!cNode.getProperty("publication:currentState").getString().equals("archived")){
 			%>
-			<a class="CurrentStatus"  style="cursor:pointer;" href="<%= uicomponent.event("Archived")%>">
+			<a class="ActiveStatus" href="<%= uicomponent.event("Archived")%>">
 			<%}
 			else{%>
 			<a class="CurrentStatus">
@@ -207,7 +207,7 @@
 			isBeforeCurrentState = false;
 			if(isBaseVersion&&cNode.hasProperty("publication:currentState")&&!cNode.getProperty("publication:currentState").getString().equals("staged")){
 			%>
-			<a class="CurrentStatus"  style="cursor:pointer;" href="<%= uicomponent.event("Staged")%>">
+			<a class="ActiveStatus" href="<%= uicomponent.event("Staged")%>">
 			<%}
 			else{%>
 			<a class="CurrentStatus">
@@ -232,7 +232,7 @@
 			isBeforeCurrentState = false;
 			if(isBaseVersion&&cNode.hasProperty("publication:currentState")&&!cNode.getProperty("publication:currentState").getString().equals("unpublished")){
 			%>
-			<a class="CurrentStatus"  style="cursor:pointer;" href="<%= uicomponent.event("Unpublished")%>">
+			<a class="ActiveStatus" href="<%= uicomponent.event("Unpublished")%>">
 			<%}
 			else{%>
 			<a class="CurrentStatus">
