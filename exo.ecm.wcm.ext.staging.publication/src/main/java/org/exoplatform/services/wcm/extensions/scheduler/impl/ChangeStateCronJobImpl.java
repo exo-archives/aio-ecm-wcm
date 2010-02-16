@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
@@ -20,7 +21,6 @@ import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.listener.ListenerService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.authoring.AuthoringPublicationConstant;
 import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
@@ -34,25 +34,23 @@ import org.quartz.JobExecutionException;
  * Created by The eXo Platform MEA Author : haikel.thamri@exoplatform.com
  */
 public class ChangeStateCronJobImpl implements Job {
-  private static final Log    log                     = ExoLogger.getLogger(ChangeStateCronJobImpl.class);
+  private static final Log    log                 = ExoLogger.getLogger(ChangeStateCronJobImpl.class);
 
-  private static final String START_TIME_PROPERTY     = "publication:startPublishedDate".intern();
+  private static final String START_TIME_PROPERTY = "publication:startPublishedDate".intern();
 
-  private static final String END_TIME_PROPERTY       = "publication:endPublishedDate".intern();
+  private static final String END_TIME_PROPERTY   = "publication:endPublishedDate".intern();
 
-  private static final String POST_CHANGE_STATE_EVENT = "PublicationService.event.postUpdate".intern();
+  private String              fromState           = null;
 
-  private String              fromState               = null;
+  private String              toState             = null;
 
-  private String              toState                 = null;
+  private String              predefinedPath      = null;
 
-  private String              predefinedPath          = null;
+  private String              workspace           = null;
 
-  private String              workspace               = null;
+  private String              repository          = null;
 
-  private String              repository              = null;
-
-  private String              contentPath             = null;
+  private String              contentPath         = null;
 
   public void execute(JobExecutionContext context) throws JobExecutionException {
     Session session = null;
@@ -78,8 +76,12 @@ public class ChangeStateCronJobImpl implements Job {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       RepositoryService repositoryService_ = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
       PublicationService publicationService = (PublicationService) container.getComponentInstanceOfType(PublicationService.class);
-      ListenerService listenerService = (ListenerService) container.getComponentInstanceOfType(ListenerService.class);
       ManageableRepository manageableRepository = repositoryService_.getRepository(repository);
+      if (manageableRepository == null) {
+        if (log.isDebugEnabled())
+          log.debug("Repository '" + repository + "' not found., ignoring");
+        return;
+      }
       session = sessionProvider.getSession(workspace, manageableRepository);
       QueryManager queryManager = session.getWorkspace().getQueryManager();
       String property = null;
@@ -149,10 +151,13 @@ public class ChangeStateCronJobImpl implements Job {
         }
       }
       log.debug("End Execute ChangeStateCronJob");
+    } catch (RepositoryException ex) {
+      log.debug("Repository '" + repository + "' not found., ignoring");
     } catch (Exception ex) {
       log.error("error when changing the state of the content : " + ex.getMessage(), ex);
     } finally {
-      session.logout();
+      if (session != null)
+        session.logout();
     }
   }
 }

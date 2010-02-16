@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
@@ -53,6 +54,7 @@ public class ImportContentsJob implements Job {
   private static String       temporaryStorge;
 
   public void execute(JobExecutionContext context) throws JobExecutionException {
+    Session session = null;
     try {
       if (log.isInfoEnabled()) {
         log.info("Start Execute ImportXMLJob");
@@ -65,10 +67,10 @@ public class ImportContentsJob implements Job {
         log.debug("Init parameters first time :");
       }
       SessionProvider sessionProvider = SessionProvider.createSystemProvider();
-
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       RepositoryService repositoryService_ = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService_.getRepository("repository");
+
       PublicationService publicationService = (PublicationService) container.getComponentInstanceOfType(PublicationService.class);
       PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
                                                               .get(AuthoringPublicationConstant.LIFECYCLE_NAME);
@@ -160,7 +162,7 @@ public class ImportContentsJob implements Job {
                       String repository = strContentPath[0];
                       manageableRepository = repositoryService_.getRepository(repository);
                       String workspace = strContentPath[1];
-                      Session session = sessionProvider.getSession(workspace, manageableRepository);
+                      session = sessionProvider.getSession(workspace, manageableRepository);
                       if (session.itemExists(contentPath)) {
                         Node currentContent = (Node) session.getItem(contentPath);
                         HashMap<String, String> variables = new HashMap<String, String>();
@@ -230,7 +232,7 @@ public class ImportContentsJob implements Job {
           }
           reader.close();
           inputStream.close();
-          Session session = sessionProvider.getSession(workspace, manageableRepository);
+          session = sessionProvider.getSession(workspace, manageableRepository);
           if (session.itemExists(nodePath))
             session.getItem(nodePath).remove();
           session.save();
@@ -298,9 +300,13 @@ public class ImportContentsJob implements Job {
       if (log.isInfoEnabled()) {
         log.info("End Execute ImportXMLJob");
       }
+    } catch (RepositoryException ex) {
+      log.debug("Repository 'repository ' not found.");
     } catch (Exception ex) {
-      ex.printStackTrace();
-      log.error("Error when importing Contents " + ex.getMessage());
+      log.error("Error when importing Contents : " + ex.getMessage(), ex);
+    } finally {
+      if (session != null)
+        session.logout();
     }
   }
 

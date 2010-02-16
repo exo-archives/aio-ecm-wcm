@@ -11,19 +11,15 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.Value;
-import javax.jcr.ValueFactory;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -43,7 +39,6 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.authoring.AuthoringPublicationConstant;
 import org.exoplatform.services.wcm.extensions.security.SHAMessageDigester;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.config.VersionData;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -114,6 +109,11 @@ public class ExportContentJob implements Job {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       RepositoryService repositoryService_ = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService_.getRepository(repository);
+      if (manageableRepository == null) {
+        if (log.isDebugEnabled())
+          log.debug("Repository '" + repository + "' not found., ignoring");
+        return;
+      }
       PublicationService publicationService = (PublicationService) container.getComponentInstanceOfType(PublicationService.class);
       PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
                                                               .get(AuthoringPublicationConstant.LIFECYCLE_NAME);
@@ -140,7 +140,6 @@ public class ExportContentJob implements Job {
       QueryResult queryResult = query.execute();
       if (queryResult.getNodes().getSize() > 0) {
         TaxonomyService taxonomyService = (TaxonomyService) container.getComponentInstanceOfType(TaxonomyService.class);
-        ValueFactory valueFactory = session.getValueFactory();
         Date nodeDate = null;
         Date now = null;
         xmlsw.writeStartElement("xs", "published-contents", URL);
@@ -289,49 +288,13 @@ public class ExportContentJob implements Job {
       }
 
       log.info("End Execute ExportContentJob");
+    } catch (RepositoryException ex) {
+      log.debug("Repository 'repository ' not found.");
     } catch (Exception ex) {
-      log.error("error when exporting content " + ex.getMessage());
+      log.error("error when exporting content : " + ex.getMessage(), ex);
     } finally {
-      session.logout();
+      if (session != null)
+        session.logout();
     }
-
   }
-
-  /**
-   * Adds the revision data.
-   * 
-   * @param node the node
-   * @param list the list
-   * @throws Exception the exception
-   */
-  private void addRevisionData(Node node, Collection<VersionData> list) throws Exception {
-    List<Value> valueList = new ArrayList<Value>();
-    ValueFactory factory = node.getSession().getValueFactory();
-    for (VersionData versionData : list) {
-      valueList.add(factory.createValue(versionData.toStringValue()));
-    }
-    node.setProperty(AuthoringPublicationConstant.REVISION_DATA_PROP,
-                     valueList.toArray(new Value[] {}));
-  }
-
-  /**
-   * Gets the revision data.
-   * 
-   * @param node the node
-   * @return the revision data
-   * @throws Exception the exception
-   */
-  private Map<String, VersionData> getRevisionData(Node node) throws Exception {
-    Map<String, VersionData> map = new HashMap<String, VersionData>();
-    try {
-      for (Value v : node.getProperty(AuthoringPublicationConstant.REVISION_DATA_PROP).getValues()) {
-        VersionData versionData = VersionData.toVersionData(v.getString());
-        map.put(versionData.getUUID(), versionData);
-      }
-    } catch (Exception e) {
-      return map;
-    }
-    return map;
-  }
-
 }
