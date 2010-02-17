@@ -23,58 +23,59 @@ import java.util.Locale;
 import javax.jcr.Node;
 
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationHistory;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationPagesContainer;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
 /**
- * Created by The eXo Platform SAS
- * Author : eXoPlatform
- * chuong_phan@exoplatform.com
- * Mar 4, 2009
+ * Created by The eXo Platform SAS Author : eXoPlatform
+ * chuong_phan@exoplatform.com Mar 4, 2009
  */
 
-@ComponentConfig(
-  lifecycle = Lifecycle.class,
-  template = "system:/groovy/webui/core/UITabPane.gtmpl"              
-)
-public class UIPublicationContainer extends org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationContainer {  
-  
+@ComponentConfig(lifecycle = Lifecycle.class, template = "system:/groovy/webui/core/UITabPane.gtmpl")
+public class UIPublicationContainer
+                                   extends
+                                   org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationContainer {
+
   /**
    * Instantiates a new uI publication container.
    */
-  public UIPublicationContainer() { }
-  
+  public UIPublicationContainer() {
+  }
+
   /** The date time formater. */
   private DateFormat dateTimeFormater;
-  
+
   /**
    * Inits the container.
    * 
    * @param node the node
-   * 
    * @throws Exception the exception
    */
   public void initContainer(Node node) throws Exception {
     UIPublicationPanel publicationPanel = addChild(UIPublicationPanel.class, null, null);
     publicationPanel.init(node);
-    UIPublicationPagesContainer publicationPagesContainer = addChild(UIPublicationPagesContainer.class, null, null);
-    publicationPagesContainer.init(node);
-    publicationPagesContainer.setRendered(false);
+    // UIPublicationPagesContainer publicationPagesContainer =
+    // addChild(UIPublicationPagesContainer.class, null, null);
+    // publicationPagesContainer.init(node);
+    // publicationPagesContainer.setRendered(false);
     UIPublicationHistory publicationHistory = addChild(UIPublicationHistory.class, null, null);
     publicationHistory.init(node);
     publicationHistory.updateGrid();
     publicationHistory.setRendered(false);
     setSelectedTab(1);
     Locale locale = org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getLocale();
-    dateTimeFormater = SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.MEDIUM,SimpleDateFormat.MEDIUM,locale);
+    dateTimeFormater = SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.MEDIUM,
+                                                            SimpleDateFormat.MEDIUM,
+                                                            locale);
   }
-  
+
   /**
    * Gets the date time formater.
    * 
    * @return the date time formater
    */
-  public DateFormat getDateTimeFormater() { return dateTimeFormater; }
-  
+  public DateFormat getDateTimeFormater() {
+    return dateTimeFormater;
+  }
+
 }
