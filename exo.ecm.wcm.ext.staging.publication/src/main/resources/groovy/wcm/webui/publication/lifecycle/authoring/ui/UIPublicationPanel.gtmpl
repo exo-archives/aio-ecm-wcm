@@ -82,13 +82,13 @@
 			<a class="CurrentStatus">
 			<%}
 			
-			}else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic) {
+			}else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic||!isMember) {
 			
 			%>
 			<a class="DisableStatus">
 			<%}
 			
-			else  if(!isAutomatic&&identity.isMemberOf(membershipTab[1], membershipTab[0])){
+			else  if(!isAutomatic&&isMember){
 			%>	
 			<a class="ActiveStatus" href="<%= uicomponent.event("Draft")%>">
 			
@@ -162,7 +162,7 @@
 			else{%>
 			<a class="CurrentStatus">
 			<%}
-			} else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic) {%>
+			} else if((!isBaseVersion&&isBeforeCurrentState)||isBaseVersion||isAutomatic||!isMember) {%>
 			<a class="DisableStatus">
 			<%}
 			else  if(!isAutomatic&&isMember){
@@ -237,7 +237,7 @@
 			else{%>
 			<a class="CurrentStatus">
 			<%}
-			} else if((!isBaseVersion&&isBeforeCurrentState)||isAutomatic||!isMember) {%>
+			} else if((!isBaseVersion&&isBeforeCurrentState)||isBaseVersion||isAutomatic||!isMember) {%>
 			<a class="DisableStatus">
 			<%}
 			else  if(!isAutomatic&&isMember){
