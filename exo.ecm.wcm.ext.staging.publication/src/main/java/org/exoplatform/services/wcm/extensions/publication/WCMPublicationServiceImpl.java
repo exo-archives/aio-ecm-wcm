@@ -129,7 +129,7 @@ public class WCMPublicationServiceImpl
 
           }
           enrollNodeInLifecycle(node, lifecycleName);
-          setInitialState(node, lifecycle);
+          setInitialState(node, lifecycle, remoteUser);
           break;
         }
       }
@@ -145,7 +145,7 @@ public class WCMPublicationServiceImpl
    * @param lifecycle
    * @throws Exception
    */
-  private void setInitialState(Node node, Lifecycle lifecycle) throws Exception {
+  private void setInitialState(Node node, Lifecycle lifecycle, String remoteUser) throws Exception {
     List<State> states = lifecycle.getStates();
     if (states == null || states.size() <= 0) {
       log.warn("could not find an initial state in lifecycle " + lifecycle.getName());
@@ -166,7 +166,7 @@ public class WCMPublicationServiceImpl
       }
       try {
         publicationPlugin.changeState(node, initialState, context);
-        node.setProperty("publication:lastUser", "__system");
+        node.setProperty("publication:lastUser", remoteUser);
       } catch (Exception e) {
         log.error("Error setting staged state : ", e);
       }
