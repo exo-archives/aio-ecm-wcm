@@ -294,6 +294,7 @@ public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin
 
     if (!node.isNew())
       node.save();
+    node.setProperty("publication:lastUser", userId);
     ListenerService listenerService = (ListenerService) container.getComponentInstanceOfType(ListenerService.class);
     listenerService.broadcast(AuthoringPublicationConstant.POST_UPDATE_STATE_EVENT, null, node);
   }
@@ -476,7 +477,16 @@ public class AuthoringPublicationPlugin extends StageAndVersionPublicationPlugin
   public void updateLifecyleOnChangeContent(Node node, String remoteUser, String newState) throws Exception {
 
     String state = node.getProperty(StageAndVersionPublicationConstant.CURRENT_STATE).getString();
-
+    if (newState == null) {
+      ExoContainer container = ExoContainerContext.getCurrentContainer();
+      PublicationManagerImpl publicationManagerImpl = (PublicationManagerImpl) container.getComponentInstanceOfType(PublicationManagerImpl.class);
+      Lifecycle lifecycle = publicationManagerImpl.getLifecycle(node.getProperty("publication:lifecycle")
+                                                                    .getString());
+      List<State> states = lifecycle.getStates();
+      if (states != null && states.size() > 0) {
+        newState = states.get(0).getState();
+      }
+    }
     if (state.equals(newState))
       return;
 
