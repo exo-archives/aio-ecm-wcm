@@ -143,6 +143,7 @@ public class ChangeStateCronJobImpl implements Job {
                 publicationPlugin.changeState(node_, toState, context_);
               }
             } else if (START_TIME_PROPERTY.equals(property)) {
+              log.info("'" + toState + "' " + node_.getPath());
               publicationPlugin.changeState(node_, toState, context_);
             }
           }
