@@ -29,8 +29,6 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
-import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.container.StandaloneContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -56,6 +54,8 @@ public class NewsletterPublicUserHandler {
   /** The repository service. */
   private RepositoryService repositoryService;
   
+  private MailService mailService;
+  
   /** The repository. */
   private String repository;
   
@@ -69,7 +69,8 @@ public class NewsletterPublicUserHandler {
    * @param workspace the workspace
    */
   public NewsletterPublicUserHandler(String repository, String workspace) {
-    repositoryService = (RepositoryService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
+    repositoryService = WCMCoreUtils.getService(RepositoryService.class);
+    mailService = WCMCoreUtils.getService(MailService.class) ;
     this.repository = repository;
     this.workspace = workspace;
   }
@@ -193,7 +194,7 @@ public class NewsletterPublicUserHandler {
     log.info("Trying to subscribe user " + userMail);
     try {
       // add new user email into users node
-      NewsletterManagerService newsletterManagerService = (NewsletterManagerService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(NewsletterManagerService.class);
+      NewsletterManagerService newsletterManagerService = WCMCoreUtils.getService(NewsletterManagerService.class);
       NewsletterManageUserHandler manageUserHandler = newsletterManagerService.getManageUserHandler();
       Node userNode = manageUserHandler.add(sessionProvider, portalName, userMail);
       
@@ -209,11 +210,9 @@ public class NewsletterPublicUserHandler {
       message.setSubject(emailContent[0]) ;
       message.setBody(mailContent) ;
       try{
-        MailService mService = WCMCoreUtils.getService(MailService.class) ;
-        mService.sendMessage(message) ;   
+        mailService.sendMessage(message) ;   
       } catch(Exception e) {
-        MailService mService = (MailService)StandaloneContainer.getInstance().getComponentInstanceOfType(MailService.class) ;
-        mService.sendMessage(message) ;   
+        mailService.sendMessage(message) ;   
       }
     } catch(Exception e) {
       log.error("Subscribe user " + userMail + " failed because of ", e.fillInStackTrace());
@@ -263,7 +262,7 @@ public class NewsletterPublicUserHandler {
     try {
       clearEmailInSubscription(sessionProvider, email);
       //  update for users node
-      NewsletterManagerService newsletterManagerService = (NewsletterManagerService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(NewsletterManagerService.class);
+      NewsletterManagerService newsletterManagerService = WCMCoreUtils.getService(NewsletterManagerService.class);
       NewsletterManageUserHandler manageUserHandler = newsletterManagerService.getManageUserHandler();
       manageUserHandler.delete(sessionProvider, portalName, email);
     } catch(Exception e) {

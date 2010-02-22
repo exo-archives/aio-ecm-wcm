@@ -30,8 +30,6 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
 import org.exoplatform.commons.utils.ISO8601;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -74,6 +72,8 @@ public class NewsletterManagerService {
 	/** The public user handler. */
 	private NewsletterPublicUserHandler publicUserHandler;
 	
+	private RepositoryService repositoryService;
+	
 	/** The repository name. */
 	private String repositoryName;
 	
@@ -99,6 +99,8 @@ public class NewsletterManagerService {
 		manageUserHandler = new NewsletterManageUserHandler(repositoryName, workspaceName);
 		publicUserHandler = new NewsletterPublicUserHandler(repositoryName, workspaceName);
 		templateHandler = new NewsletterTemplateHandler(repositoryName, workspaceName);
+		
+		repositoryService = WCMCoreUtils.getService(RepositoryService.class);
 	}
 
 	/**
@@ -138,8 +140,6 @@ public class NewsletterManagerService {
 	}
 
   public List<String> getAllBannedUser()throws Exception{
-    RepositoryService repositoryService =
-      (RepositoryService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
     SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
     Session session = sessionProvider.getSession(workspaceName, manageableRepository);
@@ -188,14 +188,11 @@ public class NewsletterManagerService {
 	public void sendNewsletter() throws Exception {
 	  List<String> listBannedEmail = this.getAllBannedUser();
 	  
-		RepositoryService repositoryService =
-			(RepositoryService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
 		ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
 		SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
 		Session session = sessionProvider.getSession(workspaceName, manageableRepository);
 
-		ExoContainer container = ExoContainerContext.getCurrentContainer();
-		MailService mailService = (MailService) container.getComponentInstanceOfType(MailService.class);
+		MailService mailService = WCMCoreUtils.getService(MailService.class);
 
 		Message message = null;
 		QueryManager queryManager = session.getWorkspace().getQueryManager();

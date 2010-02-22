@@ -26,7 +26,6 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 import javax.jcr.Value;
 
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
@@ -36,6 +35,7 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -74,7 +74,7 @@ public class NewsletterCategoryHandler {
    * @param workspace the workspace
    */
   public NewsletterCategoryHandler(String repository, String workspace) {
-    repositoryService = (RepositoryService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
+    repositoryService = WCMCoreUtils.getService(RepositoryService.class);
     this.repository = repository;
     this.workspace = workspace;
   }

@@ -26,7 +26,6 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -35,6 +34,7 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterManagerConfig;
 import org.exoplatform.services.wcm.skin.XSkinService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -50,6 +50,8 @@ public class NewsletterEntryHandler {
   /** The repository service. */
   private RepositoryService repositoryService;
   
+  private XSkinService xSkinService;
+  
   /** The repository. */
   private String repository;
   
@@ -63,7 +65,8 @@ public class NewsletterEntryHandler {
    * @param workspace the workspace
    */
   public NewsletterEntryHandler(String repository, String workspace) {
-    repositoryService = (RepositoryService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
+    repositoryService = WCMCoreUtils.getService(RepositoryService.class);
+    xSkinService = WCMCoreUtils.getService(XSkinService.class);
     this.repository = repository;
     this.workspace = workspace;
   }
@@ -218,11 +221,10 @@ public class NewsletterEntryHandler {
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     String path = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName + "/" + newsletterName;
     Node newsletterNode = (Node)session.getItem(path);
-    XSkinService xSkService = (XSkinService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(XSkinService.class);
     try {
       StringBuilder sb = new StringBuilder();
       sb.append("<style type=\"text/css\">");
-      sb.append(removeEncodedCharacter(xSkService.getActiveStylesheet(newsletterNode)));
+      sb.append(removeEncodedCharacter(xSkinService.getActiveStylesheet(newsletterNode)));
       sb.append("</style>");
       sb.append(newsletterNode.getNode("default.html").getNode("jcr:content").getProperty("jcr:data").getString());
       return sb.toString();
@@ -242,7 +244,6 @@ public class NewsletterEntryHandler {
    * @throws Exception the exception
    */
   public String getContent(SessionProvider sessionProvider, Node webContent) throws Exception{
-		XSkinService xSkService = (XSkinService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(XSkinService.class);
 		try {
 		  StringBuilder sb = new StringBuilder();
 		  sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"  \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
@@ -250,7 +251,7 @@ public class NewsletterEntryHandler {
 		  sb.append("<head>");
 		  sb.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
 		  sb.append("<style type=\"text/css\">");
-		  sb.append(removeEncodedCharacter(xSkService.getActiveStylesheet(webContent)));
+		  sb.append(removeEncodedCharacter(xSkinService.getActiveStylesheet(webContent)));
 		  sb.append("</style>");
 		  sb.append("</head>");
 		  sb.append("<body>");

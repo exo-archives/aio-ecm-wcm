@@ -29,7 +29,6 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
@@ -40,6 +39,7 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -68,8 +68,7 @@ public class NewsletterManageUserHandler {
    * @param workspace the workspace
    */
   public NewsletterManageUserHandler(String repository, String workspace) {
-    repositoryService = (RepositoryService) ExoContainerContext
-      .getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
+    repositoryService = WCMCoreUtils.getService(RepositoryService.class);
     this.repository = repository;
     this.workspace = workspace;
   }

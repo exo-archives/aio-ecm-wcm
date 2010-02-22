@@ -16,12 +16,11 @@
  */
 package org.exoplatform.services.wcm.newsletter;
 
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.scheduler.BaseJob;
 import org.exoplatform.services.scheduler.JobContext;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -38,9 +37,7 @@ public class NewsletterEmailJob extends BaseJob {
    * @see org.exoplatform.services.scheduler.BaseJob#execute(org.exoplatform.services.scheduler.JobContext)
    */
   public void execute(JobContext arg0) throws Exception {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    NewsletterManagerService newsletterManagerService = 
-      (NewsletterManagerService)container.getComponentInstanceOfType(NewsletterManagerService.class);
+    NewsletterManagerService newsletterManagerService = WCMCoreUtils.getService(NewsletterManagerService.class);
     if(newsletterManagerService == null) return;
     try {
       newsletterManagerService.sendNewsletter();
