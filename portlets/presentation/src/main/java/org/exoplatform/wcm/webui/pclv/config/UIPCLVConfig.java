@@ -498,6 +498,7 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
       String autoDetect = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.AUTO_DETECT).isChecked() ? "true" : "false";
       String treeName = uiParameterizedManagementForm.getUIStringInput(UIPCLVConfig.TREE_NAME_FORM_SELECTBOX).getValue();
       String header = uiParameterizedManagementForm.getUIStringInput(UIPCLVConfig.HEADER).getValue();
+      if (header == null) header = "";
       String targetPage = uiParameterizedManagementForm.getUIStringInput(UIPCLVConfig.TARGET_PAGE_INPUT).getValue();
 
       portletPreferences.setValue(UIPCLVConfig.PREFERENCE_TREE_NAME, treeName);
