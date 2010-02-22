@@ -105,7 +105,11 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		  String[] params = nodeIdentifier.split("/");
 		  repository = params[0];
 		  workspace = params[1];
-		  nodeIdentifier = nodeIdentifier.substring(repository.length()+workspace.length()+1);
+		  try {
+		    repositoryService.getRepository(repository);
+		    nodeIdentifier = nodeIdentifier.substring(repository.length()+workspace.length()+1);
+      } catch (Exception e) {}
+		  
 		  if (nodeIdentifier.lastIndexOf("/") == 0) nodeIdentifier = nodeIdentifier.substring(1); 
 		}
 		if (MODE_LIVE.equals(mode) && isCached) {
@@ -117,7 +121,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		try {
 		  node = wcmService.getReferencedContent(sessionProvider, repository, workspace, nodeIdentifier);
 		} catch (RepositoryException e) {
-		  node = getNodeByCategory(repository + "/" + workspace + "/" + nodeIdentifier);
+		  node = getNodeByCategory(nodeIdentifier);
 		}
 		if (version == null || !BASE_VERSION.equals(version)) {
 			node = getViewableContent(node, filters);
