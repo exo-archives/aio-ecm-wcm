@@ -8,7 +8,7 @@ function UIWCMTreeView(){
 	while(this.ajaxAction.indexOf('amp;') > -1){
 		this.ajaxAction = this.ajaxAction.replace("amp;", "");
 	}
-};
+}
 	
 UIWCMTreeView.prototype.replaceAll = function(input, ch1, ch2){
 	while(input.indexOf(ch1) > -1){
@@ -161,5 +161,4 @@ UIWCMTreeView.prototype.OpenPath = function(path) {
 	}
 };
 
-if(!window.wcm) eXo.ecm = new Object();
 eXo.ecm.UIWCMTreeView = new UIWCMTreeView();

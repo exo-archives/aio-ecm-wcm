@@ -23,8 +23,37 @@ WCMUtils.prototype.request = function(url) {
 	return null;
 };
 
+WCMUtils.prototype.getCurrentNodes = function(navigations, selectedNodeUri) {
+	var currentNodes = new Array();
+	var currentNodeUris = new Array();	
+	currentNodeUris = selectedNodeUri.split("/");	
+	for (var i in navigations) {
+		for (var j in navigations[i].nodes) {
+			if(navigations[i].nodes[j].name == currentNodeUris[0]) {
+				currentNodes[0] = navigations[i].nodes[j];
+				break;
+			}
+		}
+	}		
+	var parent = currentNodes[0];	
+	for(var k = 1; k<currentNodeUris.length; k++) {		
+		if(parent.children == 'null')	{		
+			break;
+		}		
+		for(var n in parent.children) {	
+			var node = parent.children[n];			
+			if(currentNodeUris[k] == node.name) {
+				currentNodes[k]=node;
+				parent = node;			
+				break;
+			}
+		}
+	}
+	return currentNodes;
+};
+
 WCMUtils.prototype.getRestContext = function() {
 	return eXo.env.portal.context + "/" + eXo.env.portal.rest; 
-}
+};
 
 eXo.ecm.WCMUtils = new WCMUtils();

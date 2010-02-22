@@ -1,5 +1,5 @@
 function WCMQuickEdit() {
-};
+}
 
 WCMQuickEdit.prototype.removeQuickeditingBlock = function(portletID, quickEditingBlockId) {
 	var presentation = document.getElementById(portletID);

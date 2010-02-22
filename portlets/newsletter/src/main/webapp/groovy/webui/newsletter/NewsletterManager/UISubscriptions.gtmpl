@@ -1,6 +1,7 @@
 <%
-  	def rcontext = _ctx.getRequestContext() ;
-	rcontext.getJavascriptManager().importJavascript('UINewsletterUtil','/newsletter/javascript/eXo/wcm/newsletter/NewsletterManager/');
+  def rcontext = _ctx.getRequestContext() ;
+	def jsManager = rcontext.getJavascriptManager(); 
+	jsManager.importJavascript('eXo.wcm.backoffice.private.Newsletter','/eXoWCMResources/javascript/');
 %>
 <%
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
@@ -128,7 +129,7 @@ if(uicomponent.categoryConfig != null){
 																							if(uicomponent.isAdmin || uicomponent.isModerator){%>
 																								<div class="MenuItem" onclick="javaScript:void(0)">
 																									<div class="ItemIcon Remove16x16Icon" style="padding-left:30px;text-align:left;">
-																										<a href="javascript:if(eXo.ecm.UINewsletterUtil.checkBeforeDelete('UISubscriptionsCheckAll', '<%=_ctx.appRes("UISubscription.msg.checkOnlyOneSubScriptionToDelete")%>', '<%=_ctx.appRes("UISubscription.msg.confirmDeleteSubscription")%>')) <%=uicomponent.event("DeleteSubscription")%>">
+																										<a href="javascript:if(eXo.ecm.NewsletterManager.checkBeforeDelete('UISubscriptionsCheckAll', '<%=_ctx.appRes("UISubscription.msg.checkOnlyOneSubScriptionToDelete")%>', '<%=_ctx.appRes("UISubscription.msg.confirmDeleteSubscription")%>')) <%=uicomponent.event("DeleteSubscription")%>">
 																											<%=_ctx.appRes("UISubscription.title.Delete")%>
 																										</a>
 																									</div>
@@ -184,7 +185,7 @@ if(uicomponent.categoryConfig != null){
 								<%=_ctx.appRes("UICategories.title.AWaitingLetter")%>
 							</th>
 							<th class="thContent Title" style="border-right:none;">
-								<input id="UISubscriptionsCheckAll" type="checkbox" onclick="eXo.ecm.UINewsletterUtil.checkAllSelected(this);">
+								<input id="UISubscriptionsCheckAll" type="checkbox" onclick="eXo.ecm.NewsletterManager.checkAllSelected(this);">
 							</th>
 						</tr>
 						<%List<NewsletterSubscriptionConfig> listSubscriptions = uicomponent.getListSubscription();

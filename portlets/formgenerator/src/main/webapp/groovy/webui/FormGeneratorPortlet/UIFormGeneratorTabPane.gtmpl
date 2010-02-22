@@ -7,7 +7,7 @@
 	 */
   def jsManager = _ctx.getRequestContext().getJavascriptManager();
   jsManager.importJavascript('eXo.webui.UIHorizontalTabs') ;
-  jsManager.importJavascript('eXo.wcm.FormGeneratorPortlet.UIFormGeneratorPortlet', '/formgenerator/javascript/') ;
+  jsManager.importJavascript('eXo.wcm.backoffice.private.UIFormGeneratorPortlet', '/eXoWCMResources/javascript/') ;
 %>
 
 <div class="UIFormGenerator">

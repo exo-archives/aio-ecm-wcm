@@ -11,7 +11,8 @@
 	def jsManager = _ctx.getRequestContext().getJavascriptManager();
 	jsManager.importJavascript('eXo.wcm.private.backoffice.WCMUtils.WCMUtils', '/eXoWCMResources/javascript/') ;
 	jsManager.importJavascript('eXo.wcm.private.backoffice.WCMFCKEditor.WCMFCKEditor', '/eXoWCMResources/javascript/') ;
-	jsManager.addOnLoadJavascript("eXo.wcm.WCMFCKEditor.insertCSSFromTextArea2FCK('" + htmlWYSIWYGFormId + "', '" + cssFormId + "')");
+	jsManager.addOnLoadJavascript("eXo.ecm.WCMFCKEditor.insertCSSFromTextArea2FCK('" + htmlWYSIWYGFormId + "', '" + cssFormId + "')");
+	jsManager.importJavascript('eXo.wcm.frontoffice.public.Breadcrumb', '/eXoWCMResources/javascript/') ;
 	
 	private void setUploadFields() {
 			String[] illustrationHiddenField1 = ["jcrPath=/node/medias/images/illustration", "nodetype=nt:file", "mixintype=mix:referenceable", "defaultValues=illustration"];
@@ -127,7 +128,7 @@
 							</tr>
 							<tr>
 					 			<td class="FieldLabel">
-					 				<div title="<%=_ctx.appRes("WebContent.dialog.label.Synchronize")%>" class="WebContentSynchronize Refresh16x16Icon" onclick="eXo.wcm.WCMFCKEditor.insertCSSFromTextArea2FCK('<%= htmlWYSIWYGFormId %>', '<%= cssFormId %>')"></div>
+					 				<div title="<%=_ctx.appRes("WebContent.dialog.label.Synchronize")%>" class="WebContentSynchronize Refresh16x16Icon" onclick="eXo.ecm.WCMFCKEditor.insertCSSFromTextArea2FCK('<%= htmlWYSIWYGFormId %>', '<%= cssFormId %>')"></div>
 									<div class="WebContentMain"><%=_ctx.appRes("WebContent.dialog.label.WebContentHtml")%></div>
 					 			</td>
 					  			<td class="FieldComponent">
@@ -315,7 +316,7 @@
 									if("".equals(jsContent)) {
 										jsContent = 	"eXo.core.Browser.addOnLoadCallback('renderBreadcrumb', renderBreadcrumb);\n\n\t" +
 																			"function renderBreadcrumb() {\n\t" +
-																				"var breadcumbs = getBreadcrumbs();\n" +
+																				"var breadcumbs = eXo.ecm.WCMBreadcrumbPortlet.getBreadcrumbs();\n" +
 																				"var size = breadcumbs.length;\n" +
 																				"var html = '';\n" +
 																				"html += '<div class=\"UIWCMBreadcrumbsPortlet\">'+\n\t" +

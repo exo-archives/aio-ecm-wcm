@@ -25,5 +25,12 @@
    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_0.xsd"
    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_0.xsd">
 
+	<javascript>
+    <param>
+      <js-module>FCKEditor</js-module>
+      <js-path>/fckeditor/fckeditor.js</js-path>
+      <js-priority>50</js-priority>
+    </param>
+  </javascript>
 </gatein-resources>
 

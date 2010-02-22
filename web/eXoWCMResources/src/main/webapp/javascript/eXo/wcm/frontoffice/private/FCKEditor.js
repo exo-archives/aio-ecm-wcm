@@ -44,4 +44,4 @@ WCMFCKEditor.prototype.insertCSSFromTextArea2FCK = function(Instance, ContentCSS
 	})();
 };
 
-eXo.ecm.FCKEditor = new WCMFCKEditor();
+eXo.ecm.WCMFCKEditor = new WCMFCKEditor();

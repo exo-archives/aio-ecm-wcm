@@ -1,8 +1,9 @@
 <%
 	import org.exoplatform.web.application.JavascriptManager;
 	def rcontext = _ctx.getRequestContext() ;
-	JavascriptManager jsmanager = rcontext.getJavascriptManager();
-	jsmanager.addOnLoadJavascript('eXo.ecm.UIFormGeneratorPortlet.init()');
+	JavascriptManager jsManager = rcontext.getJavascriptManager();
+	jsManager.importJavascript('eXo.wcm.backoffice.private.UIFormGeneratorPortlet', '/eXoWCMResources/javascript/') ;	
+	jsManager.addOnLoadJavascript('eXo.ecm.UIFormGeneratorPortlet.init()');
 %>
 <div class="LeftContent">
 	<div class="UITabPane">

@@ -12,7 +12,7 @@
 		def rcontext = _ctx.getRequestContext() ;
 	def jsManager = rcontext.getJavascriptManager();
   jsManager.importJavascript('eXo.wcm.private.backoffice.WCMFCKEditor.WCMFCKEditor', '/eXoWCMResources/javascript/') ;
-	jsManager.addOnLoadJavascript("eXo.wcm.WCMFCKEditor.insertCSSFromTextArea2FCK('" + htmlWYSIWYGFormId + "', '" + cssFormId + "')");
+	jsManager.addOnLoadJavascript("eXo.ecm.WCMFCKEditor.insertCSSFromTextArea2FCK('" + htmlWYSIWYGFormId + "', '" + cssFormId + "')");
 	
 	private void setUploadFields() {
 			String[] illustrationHiddenField1 = ["jcrPath=/node/medias/images/illustration", "nodetype=nt:file", "mixintype=mix:referenceable", "defaultValues=illustration"];
@@ -183,7 +183,7 @@
 							</tr>
 							<tr>
 					 			<td class="FieldLabel">
-					 				<div title="<%=_ctx.appRes("WebContent.dialog.label.Synchronize")%>" class="WebContentSynchronize Refresh16x16Icon" onclick="eXo.wcm.WCMFCKEditor.insertCSSFromTextArea2FCK('<%= htmlWYSIWYGFormId %>', '<%= cssFormId %>')"></div>
+					 				<div title="<%=_ctx.appRes("WebContent.dialog.label.Synchronize")%>" class="WebContentSynchronize Refresh16x16Icon" onclick="eXo.ecm.WCMFCKEditor.insertCSSFromTextArea2FCK('<%= htmlWYSIWYGFormId %>', '<%= cssFormId %>')"></div>
 									<div class="WebContentMain"><%=_ctx.appRes("WebContent.dialog.label.WebContentHtml")%></div>
 					 			</td>
 				  			<td class="FieldComponent">
