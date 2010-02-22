@@ -421,11 +421,14 @@ public class UIFCCConfig extends UIForm implements UISelectable {
       String type = fastContentCreatorConfig.getUIFormSelectBox(UIFCCConstant.TEMPLATE_FORM_SELECTBOX).getValue() ;
       String path = fastContentCreatorConfig.getUIStringInput(UIFCCConstant.LOCATION_FORM_STRING_INPUT).getValue() ;
       String saveButton = fastContentCreatorConfig.getUIStringInput(UIFCCConstant.SAVE_FORM_STRING_INPUT).getValue() ;
+      if (saveButton == null) saveButton = "";
       String saveMessage = fastContentCreatorConfig.getUIFormTextAreaInput(UIFCCConstant.MESSAGE_FORM_TEXTAREA_INPUT).getValue() ;
+      if (saveMessage == null) saveMessage = "";
       String isRedirect = String.valueOf(fastContentCreatorConfig.getUIFormCheckBoxInput(UIFCCConstant.REDIRECT_FORM_CHECKBOX_INPUT).isChecked());
       String redirectPath = fastContentCreatorConfig.getUIStringInput(UIFCCConstant.REDIRECT_PATH_FORM_STRING_INPUT).getValue() ;
+      if (redirectPath == null) redirectPath = "";
       
-      if ("true".equals(isRedirect) && redirectPath == null) {
+      if ("true".equals(isRedirect) && "".equals(redirectPath)) {
       	Utils.createPopupMessage(fastContentCreatorConfig, "UIFCCConfig.msg.redirectpath-empty", null, ApplicationMessage.WARNING);
         return ;
       }
