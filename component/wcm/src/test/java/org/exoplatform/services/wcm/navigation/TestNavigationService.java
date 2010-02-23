@@ -55,15 +55,17 @@ public class TestNavigationService extends BaseWCMTestCase {
     
     String jsonExpert = "[" +
     		                  "{" +
+    		                    "\"modifier\":" + pageNavigation.getModifier() + "," +
+    		                    "\"id\":" + pageNavigation.getId() + "," +
+    		                    "\"storageName\":" + pageNavigation.getStorageName() + "," +
+    		                    "\"ownerId\":\"" + pageNavigation.getOwnerId() + "\"," +
+    		                    "\"nodes\":" + pageNavigation.getNodes().toString() + "," +
+    		                    "\"description\":" + pageNavigation.getDescription() + "," +
+    		                    "\"priority\":" + pageNavigation.getPriority() + "," +
     		                    "\"ownerType\":\"" + pageNavigation.getOwnerType() + "\"," +
-    		                  	"\"creator\":" + pageNavigation.getCreator() + "," +
-    		                  	"\"modifier\":" + pageNavigation.getModifier() + "," +
-    		                  	"\"owner\":\"" + pageNavigation.getOwner() + "\"," +
-    		                  	"\"description\":" + pageNavigation.getDescription() + "," +
-    		                  	"\"ownerId\":\"" + pageNavigation.getOwnerId() + "\"," +
-    		                  	"\"nodes\":" + pageNavigation.getNodes().toString() + "," +
-    		                  	"\"priority\":" + pageNavigation.getPriority() + "," +
-    		                  	"\"id\":" + pageNavigation.getId() + "" +
+    		                    "\"owner\":\"" + pageNavigation.getOwner() + "\"," +
+    		                    "\"storageId\":" + pageNavigation.getStorageId() + "," +
+    		                  	"\"creator\":" + pageNavigation.getCreator() +
     		                  "}" +
     		                "]";
     assertEquals(jsonExpert, jsonResult);

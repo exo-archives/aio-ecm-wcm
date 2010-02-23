@@ -331,7 +331,6 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
     session.save();
     Node result = (Node)session.getItem("/sites content/live/classic/documents/html/htmlFile/default.html");
     assertTrue(result.isNodeType(NodetypeConstant.EXO_HTML_FILE));
-    assertTrue(result.isNodeType(NodetypeConstant.EXO_OWNEABLE));
     assertEquals(result.getProperty(NodetypeConstant.EXO_PRESENTATION_TYPE).getString(), NodetypeConstant.EXO_HTML_FILE);
   }
   
@@ -384,7 +383,6 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
     Node result = (Node)session.getItem("/sites content/live/classic/documents/html/htmlFile/default.html");
 
     assertTrue(result.isNodeType(NodetypeConstant.EXO_HTML_FILE));
-    assertTrue(result.isNodeType(NodetypeConstant.EXO_OWNEABLE));
     assertEquals(result.getProperty(NodetypeConstant.EXO_PRESENTATION_TYPE).getString(), NodetypeConstant.EXO_HTML_FILE);
     webSchemaConfigService.updateSchemaOnModify(sessionProvider, htmlFile);
     

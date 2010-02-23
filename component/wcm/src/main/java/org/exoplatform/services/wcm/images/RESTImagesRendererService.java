@@ -153,7 +153,7 @@ public class RESTImagesRendererService implements ResourceContainer{
              .append("?param=file");
       return builder.toString();
     } else {
-      builder.append(portalName).append("/")
+      builder.append("/").append(portalName).append("/")
              .append(restContextName).append("/")
              .append("images/")
              .append(repository).append("/")

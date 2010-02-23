@@ -24,6 +24,7 @@ import java.util.Date;
 
 import javax.jcr.Node;
 
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
 
 /**
@@ -58,7 +59,7 @@ public class TestRESTImagesRendererService extends BaseWCMTestCase {
    */
   public void testGenerateURI_01() {
     try {
-      restImagesRendererService.generateURI(null);
+      restImagesRendererService.generateImageURI(null, null);
       fail();
     } catch (Exception e) {
       assertNotNull(e.fillInStackTrace());
@@ -74,7 +75,7 @@ public class TestRESTImagesRendererService extends BaseWCMTestCase {
     try {
       File file = new File("src/test/resources/test.html");
       Node imageNode = this.createdNodeImages(documentNode, file.getName(), getFileImages(file));
-      restImagesRendererService.generateURI(imageNode.getParent());
+      restImagesRendererService.generateImageURI(imageNode.getParent(), null);
       fail();
     } catch (Exception e) {
       if(e instanceof UnsupportedOperationException) {
@@ -95,10 +96,12 @@ public class TestRESTImagesRendererService extends BaseWCMTestCase {
       File file = new File("src/test/resources/test.html");
       Node imageNode = this.createdNodeImages(documentNode,file.getName(), getFileImages(file));
       imageNode.getNode("jcr:content");
-      String uri = restImagesRendererService.generateURI(imageNode);
+      String uri = restImagesRendererService.generateImageURI(imageNode, null);
       
-      String expected = "/portal/rest/private/images/repository/collaboration/webContent/medias/images/"
-        + file.getName() + "?type=file";
+      String expected = "/" + PortalContainer.getCurrentPortalContainerName() + "/" + 
+                        PortalContainer.getCurrentRestContextName() + 
+                        "/images/repository/collaboration/sites content/live/classic/documents/webContent/medias/images/"
+                        + file.getName() + "?param=file";
       assertEquals(expected, uri);
     } catch (Exception e) {
       fail();
@@ -115,10 +118,12 @@ public class TestRESTImagesRendererService extends BaseWCMTestCase {
       File file = new File("src/test/resources/08_resize.jpg");
       Node imageNode = this.createdNodeImages(documentNode,file.getName(), getFileImages(file));
       imageNode.getNode("jcr:content");
-      String uri = restImagesRendererService.generateURI(imageNode);
+      String uri = restImagesRendererService.generateImageURI(imageNode, null);
       
-      String expected = "/portal/rest/private/images/repository/collaboration/webContent/medias/images/"
-        + file.getName() + "?type=file";
+      String expected = "/" + PortalContainer.getCurrentPortalContainerName() + "/" + 
+                        PortalContainer.getCurrentRestContextName() +
+                        "/images/repository/collaboration/sites content/live/classic/documents/webContent/medias/images/"
+                        + file.getName() + "?param=file";
       assertEquals(expected, uri);
     } catch (Exception e) {
       fail();
@@ -135,10 +140,12 @@ public class TestRESTImagesRendererService extends BaseWCMTestCase {
       File file = new File("src/test/resources/08_resize.jpg");
       Node imageNode = this.createdNodeImages(documentNode, file.getName(), getFileImages(file));
       imageNode.getNode("jcr:content");
-      String uri = restImagesRendererService.generateURI(imageNode, null);
+      String uri = restImagesRendererService.generateImageURI(imageNode, null);
       
-      String expected = "/portal/rest/private/images/repository/collaboration/webContent/medias/images/"
-        + file.getName() + "?propertyName=" + null;
+      String expected = "/" + PortalContainer.getCurrentPortalContainerName() + "/" + 
+                        PortalContainer.getCurrentRestContextName() + 
+                        "/images/repository/collaboration/sites content/live/classic/documents/webContent/medias/images/"
+                        + file.getName() + "?param=file";
       assertEquals(expected, uri);
     } catch (Exception e) {
       fail();
@@ -155,10 +162,12 @@ public class TestRESTImagesRendererService extends BaseWCMTestCase {
       File file = new File("src/test/resources/08_resize.jpg");
       Node imageNode = this.createdNodeImages(documentNode, file.getName(), getFileImages(file));
       imageNode.getNode("jcr:content");
-      String uri = restImagesRendererService.generateURI(imageNode, "");
+      String uri = restImagesRendererService.generateImageURI(imageNode, "");
       
-      String expected = "/portal/rest/private/images/repository/collaboration/webContent/medias/images/"
-        + file.getName() + "?propertyName=";
+      String expected = "/" + PortalContainer.getCurrentPortalContainerName() + "/" + 
+                        PortalContainer.getCurrentRestContextName() + 
+                        "/images/repository/collaboration/sites content/live/classic/documents/webContent/medias/images/"
+                        + file.getName() + "?param=";
       assertEquals(expected, uri);
     } catch (Exception e) {
       fail();
@@ -175,9 +184,11 @@ public class TestRESTImagesRendererService extends BaseWCMTestCase {
       File file = new File("src/test/resources/08_resize.jpg");
       Node imageNode = this.createdNodeImages(documentNode, file.getName(), getFileImages(file));
       imageNode.getNode("jcr:content");
-      String uri = restImagesRendererService.generateURI(imageNode, "test property name");
-      String expected = "/portal/rest/private/images/repository/collaboration/webContent/medias/images/"
-        + file.getName() + "?propertyName=" + "test property name";
+      String uri = restImagesRendererService.generateImageURI(imageNode, "test property name");
+      String expected = "/" + PortalContainer.getCurrentPortalContainerName() + "/" + 
+                        PortalContainer.getCurrentRestContextName() + 
+                        "/images/repository/collaboration/sites content/live/classic/documents/webContent/medias/images/"
+                        + file.getName() + "?param=test property name";
       assertEquals(expected, uri);
     } catch (Exception e) {
       fail();
@@ -233,7 +244,8 @@ public class TestRESTImagesRendererService extends BaseWCMTestCase {
    */
   public void tearDown() throws Exception {
     super.tearDown();
-    documentNode.getNode(WEB_CONTENT_NODE_NAME).remove();
+    if (documentNode.hasNode(WEB_CONTENT_NODE_NAME))
+      documentNode.getNode(WEB_CONTENT_NODE_NAME).remove();
     session.save();
   }
 }
