@@ -49,6 +49,8 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.pom.config.POMSession;
+import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.ecm.publication.IncorrectStateUpdateLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -260,6 +262,9 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
    * @throws Exception the exception
    */
   private List<String> getRunningPortals(String userId) throws Exception {
+    POMSessionManager manager = WCMCoreUtils.getService(POMSessionManager.class);
+    POMSession session = null;
+    if (manager.getSession() == null) session = manager.openSession();
     List<String> listPortalName = new ArrayList<String>();
     DataStorage service = PublicationUtil.getServices(DataStorage.class);
     Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, null, PortalConfig.class) ;
@@ -268,9 +273,11 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
     for(Object object:pageList.getAll()) {
       PortalConfig portalConfig = (PortalConfig)object;
 //      if(userACL.hasPermission(portalConfig, userId)) {
-//        listPortalName.add(portalConfig.getName());
-//      }
+      if(userACL.hasPermission(portalConfig)) {
+        listPortalName.add(portalConfig.getName());
+      }
     }
+    session.close();
     return listPortalName;
   }
 
