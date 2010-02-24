@@ -22,16 +22,15 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.ext.app.SessionProviderService;
+import org.exoplatform.portal.pom.config.POMSession;
+import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.log.Log;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
 import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
@@ -41,6 +40,7 @@ import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndV
 import org.exoplatform.services.wcm.search.QueryCriteria.DATE_RANGE_SELECTED;
 import org.exoplatform.services.wcm.search.QueryCriteria.DatetimeRange;
 import org.exoplatform.services.wcm.search.QueryCriteria.QueryProperty;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -51,160 +51,48 @@ import org.exoplatform.services.wcm.search.QueryCriteria.QueryProperty;
 public class TestSearchService extends BaseWCMTestCase {
   QueryCriteria queryCriteria = new QueryCriteria();
 
-  /** The log. */
-  private static Log log = ExoLogger.getLogger(TestSearchService.class);
+  private SiteSearchService siteSearchService;
 
-  /** The session provider. */
-  protected SessionProvider sessionProvider;
+  private WCMPublicationService wcmPublicationService;
+  
+  private WebpagePublicationPlugin publicationPlugin ;
+  
+  private UserPortalConfigService userPortalConfigService;
 
-  /** The site search service. */
-  public SiteSearchService siteSearchService;
+  private String searchKeyword = "This is";
 
-  /** The repository service. */
-  RepositoryService repositoryService;
+  private SessionProvider sessionProvider;
+  
+  private POMSessionManager pomManager;
+  
+  private POMSession  pomSession;
+  
+  
+  private boolean searchPageChecked = true; 
 
-  /** The session provider service. */
-  private static SessionProviderService sessionProviderService = null;
+  private boolean searchDocumentChecked = true;
 
-  /** The page. */
-  Page page;
+  private String searchSelectedPortal = "shared";
 
-  /** The publication plugin. */
-  WebpagePublicationPlugin publicationPlugin ;
+  private int seachItemsPerPage = 100;
 
-  /** The wcm publication service. */
-  WCMPublicationService wcmPublicationService;
-
-  /** The keyword. */
-  String searchKeyword = "This is";
-
-  /** The page checked. */
-  boolean searchPageChecked = true; 
-
-  /** The document checked. */
-  boolean searchDocumentChecked = true;
-
-  /** Name of portal which is searched. if this parameter is null then search all portal 
-   * else only search with all nodes which in selected portal 
-   */
-  String searchSelectedPortal = "shared";
-
-  /** page index: number of item per pages. */
-  int seachItemsPerPage = 100;
-
-  /** is search with publication property. If isLiveMode = <code>true</code> then only search nodes 
-   * which have property publication else search with all (have or don't have publication property) 
-   */
-  boolean searchIsLiveMode = false;
-
-  static boolean isRunInitData = true;
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.services.wcm.BaseWCMTestCase#setUp()
-   */
+  private boolean searchIsLiveMode = false;
+  
   public void setUp() throws Exception {
     super.setUp();
     queryCriteria = new QueryCriteria();
-    siteSearchService = (SiteSearchService) container.getComponentInstanceOfType(SiteSearchService.class);
-    repositoryService = getService(RepositoryService.class);
-    session = repositoryService.getRepository("repository").getSystemSession("collaboration");
-    sessionProviderService = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class) ;
-    sessionProvider = sessionProviderService.getSystemSessionProvider(null) ;
-    wcmPublicationService = getService(WCMPublicationService.class);
+    siteSearchService = WCMCoreUtils.getService(SiteSearchService.class);
+    userPortalConfigService = WCMCoreUtils.getService(UserPortalConfigService.class);
+    pomManager = WCMCoreUtils.getService(POMSessionManager.class);
+    sessionProvider = WCMCoreUtils.getSystemSessionProvider();
+    wcmPublicationService = WCMCoreUtils.getService(WCMPublicationService.class);
+    
     publicationPlugin = new StageAndVersionPublicationPlugin();
-    initData();
-  }
-
-  /*
-  private String cutPath(String path) throws Exception {
-    String pathTaxonomy = getPathTaxonomy() + "/";
-    String returnString = path.replaceAll(pathTaxonomy, "");
-
-    return returnString;
-  }*/
-
-  /**
-   * Init the data: Create publicationPlugin and wcmPublicationService.
-   * 
-   * @throws Exception the exception
-   */
-  protected void initData()throws Exception{
-    try{
-      publicationPlugin.setName(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
-      wcmPublicationService.addPublicationPlugin(publicationPlugin);
-      session.save();
-      if(isRunInitData){
-        addContentForLiveNode();
-        addContentForSharedPortal();
-        addAnotherNode();
-      }
-      isRunInitData = false;
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
-  }
-
-  /**
-   * Adds the child nodes.
-   * 
-   * @param parentNode the parent node
-   * 
-   * @throws Exception the exception
-   */
-  private void addChildNodes(Node parentNode)throws Exception{
-    UserPortalConfigService userPortalConfigService = getService(UserPortalConfigService.class);
-    try{
-      page = userPortalConfigService.getPage("portal::"+parentNode.getName()+"::testpage");
-    }catch(Exception ex){ }
-
-    if(page == null){
-      page = new Page();
-      page.setPageId("portal::"+parentNode.getName()+"::testpage");
-      page.setName("testpage");
-      page.setOwnerType("portal");
-      page.setOwnerId("classic");
-      userPortalConfigService.create(page);
-    }
-
-    Node webContentNode = null;
-
-    // Create 5 nodes which have status is PUBLISHED
-    for(int i = 0; i < 5; i ++){
-      try{
-        webContentNode = createWebcontentNode(parentNode, parentNode.getName() + " webcontentNode " + i, null, null, null);
-        if(!webContentNode.isNodeType("metadata:siteMetadata"))webContentNode.addMixin("metadata:siteMetadata");
-        wcmPublicationService.enrollNodeInLifecycle(webContentNode, StageAndVersionPublicationConstant.LIFECYCLE_NAME);
-        wcmPublicationService.publishContentSCV(webContentNode, page, parentNode.getName());
-        HashMap<String, String> context = new HashMap<String, String>();
-        context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, webContentNode.getName());
-        publicationPlugin.changeState(webContentNode, PublicationDefaultStates.PUBLISHED, context);
-      }catch(Exception ex){continue;};
-    }
-    session.save();
-
-    // Create 5 nodes which have status is DRAFT
-    for(int i = 5; i < 10; i ++){
-      try{
-        webContentNode = createWebcontentNode(parentNode, parentNode.getName() + " webcontentNode " + i, null, null, null);
-        if(!webContentNode.isNodeType("metadata:siteMetadata"))webContentNode.addMixin("metadata:siteMetadata");
-        wcmPublicationService.enrollNodeInLifecycle(webContentNode, StageAndVersionPublicationConstant.LIFECYCLE_NAME);
-        wcmPublicationService.publishContentSCV(webContentNode, page, parentNode.getName());
-        HashMap<String, String> context = new HashMap<String, String>();
-        context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, webContentNode.getName());
-        publicationPlugin.changeState(webContentNode, PublicationDefaultStates.DRAFT, context);
-      }catch(Exception ex){continue;}
-    }
-    session.save();
-  }
-
-  /**
-   * Gets the search result.
-   * 
-   * @return the search result
-   * 
-   * @throws Exception the exception
-   */
-  private WCMPaginatedQueryResult getSearchResult() throws Exception{
+    publicationPlugin.setName(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+    wcmPublicationService.addPublicationPlugin(publicationPlugin);
+    
+    addDocuments();
+    
     queryCriteria.setSiteName(searchSelectedPortal);
     queryCriteria.setKeyword(searchKeyword);
     if (searchDocumentChecked) {
@@ -216,45 +104,65 @@ public class TestSearchService extends BaseWCMTestCase {
     }
     queryCriteria.setSearchWebpage(searchPageChecked);
     queryCriteria.setLiveMode(searchIsLiveMode);
-    WCMPaginatedQueryResult queryResult = this.siteSearchService.searchSiteContents(sessionProvider, queryCriteria, seachItemsPerPage, false); 
-    return queryResult;
   }
 
-  /**
-   * Test add content for shared portal.
-   * 
-   * @throws Exception the exception
-   */
-  public void addContentForSharedPortal() throws Exception{
-    Node parentNode = (Node)session.getItem("/sites content/live/shared/documents");
-    this.addChildNodes(parentNode);
-    assertEquals(parentNode.getNodes().getSize(), 10);
+  private void addDocuments() throws Exception {
+    Node classicPortal = (Node)session.getItem("/sites content/live/classic/web contents");
+    addChildNodes(classicPortal); 
+    
+    Node sharedPortal = (Node)session.getItem("/sites content/live/shared/documents");
+    addChildNodes(sharedPortal);
+    
+//  private void addAnotherNode() throws Exception{
+//  Node parentNode = (Node)session.getItem("/sites content/live");
+//  for(int i = 0; i < 10; i ++){
+//    parentNode.addNode(parentNode.getName() + " anotherNode " + i);
+//  }
+//  session.save();
+//}
   }
+  
+  private void addChildNodes(Node parentNode)throws Exception{
+    if (pomManager.getSession() == null) pomSession = pomManager.openSession();
+    Page page = userPortalConfigService.getPage("portal::classic::testpage");
+    if(page == null){
+      page = new Page();
+      page.setPageId("portal::classic::testpage");
+      page.setName("testpage");
+      page.setOwnerType("portal");
+      page.setOwnerId("classic");
+      userPortalConfigService.create(page);
+    }
+    
+    Node webContentNode = null;
+    HashMap<String, String> context = null;
+    // Create 5 nodes which have status is PUBLISHED
+    for(int i = 0; i < 5; i++){
+      webContentNode = createWebcontentNode(parentNode, "webcontent" + i, null, null, null);
+      if(!webContentNode.isNodeType("metadata:siteMetadata"))webContentNode.addMixin("metadata:siteMetadata");
+      wcmPublicationService.enrollNodeInLifecycle(webContentNode, StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+      wcmPublicationService.publishContentSCV(webContentNode, page, parentNode.getName());
+      context = new HashMap<String, String>();
+      context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, webContentNode.getName());
+      publicationPlugin.changeState(webContentNode, PublicationDefaultStates.PUBLISHED, context);
+    }
 
-  /**
-   * Test add content for live node.
-   * 
-   * @throws Exception the exception
-   */
-  public void addContentForLiveNode() throws Exception{
-    Node parentNode = (Node)session.getItem("/sites content/live");
-    this.addChildNodes(parentNode);
-    assertEquals(parentNode.getNodes().getSize(), 12);
-  }
-
-  private void addAnotherNode() throws Exception{
-    Node parentNode = (Node)session.getItem("/sites content/live");
-    try{
-      parentNode = parentNode.addNode("web contents");
-    }catch (Exception e) {}
-    try{
-      parentNode = parentNode.addNode("site artifacts");
-    }catch(Exception ex){}
-    System.out.println("\n\n\n\n----------------> path:" + parentNode.getPath());
-    for(int i = 0; i < 10; i ++){
-      parentNode.addNode(parentNode.getName() + " anotherNode " + i);
+    // Create 5 nodes which have status is DRAFT
+    for(int i = 5; i < 10; i++){
+      webContentNode = createWebcontentNode(parentNode, "webcontent" + i, null, null, null);
+      if(!webContentNode.isNodeType("metadata:siteMetadata"))webContentNode.addMixin("metadata:siteMetadata");
+      wcmPublicationService.enrollNodeInLifecycle(webContentNode, StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+      wcmPublicationService.publishContentSCV(webContentNode, page, parentNode.getName());
+      context = new HashMap<String, String>();
+      context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, webContentNode.getName());
+      publicationPlugin.changeState(webContentNode, PublicationDefaultStates.DRAFT, context);
     }
     session.save();
+    pomSession.close();
+  }
+
+  private WCMPaginatedQueryResult getSearchResult() throws Exception{
+    return siteSearchService.searchSiteContents(WCMCoreUtils.getSystemSessionProvider(), queryCriteria, seachItemsPerPage, false); 
   }
 
   /**
@@ -268,18 +176,8 @@ public class TestSearchService extends BaseWCMTestCase {
    * @throws Exception the exception
    */
   public void testSearchSharedPortalNotLiveMode() throws Exception {
-    searchPageChecked = true;
-    searchDocumentChecked = true;
-    searchSelectedPortal = "shared";
-    searchIsLiveMode = false;
-    try{
-      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
-      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
-      log.info("\n\tTest case 1: search in shared portal and not live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(5, paginatedQueryResult.getPage(1).size());
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
+    WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+    assertEquals(5, paginatedQueryResult.getPage(1).size());
   }
 
   /**
@@ -293,19 +191,10 @@ public class TestSearchService extends BaseWCMTestCase {
    * @throws Exception the exception
    */
   public void testSearchSharedPortalLiveMode() throws Exception {
-    searchPageChecked = true;
-    searchDocumentChecked = true;
-    searchSelectedPortal = "shared";
     searchIsLiveMode = true;
-    try{
-      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
-      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
-      log.info("\n\tTest case 2: search int Shared Portal to find all node with live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(5, paginatedQueryResult.getPage(1).size());
-      assertEquals(10, paginatedQueryResult.getTotalNodes());
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
+    WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+    assertEquals(5, paginatedQueryResult.getPage(1).size());
+    assertEquals(10, paginatedQueryResult.getTotalNodes());
   }
 
   /**
@@ -319,19 +208,10 @@ public class TestSearchService extends BaseWCMTestCase {
    * @throws Exception the exception
    */
   public void testSearchAllPortalNotLiveMode() throws Exception {
-    searchPageChecked = true;
-    searchDocumentChecked = true;
     searchSelectedPortal = null;
-    searchIsLiveMode = false;
-    try{
-      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
-      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
-      log.info("\n\t Search in All Portals, find nodes which not live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(20, paginatedQueryResult.getTotalNodes());
-      assertEquals(10, paginatedQueryResult.getPage(1).size());
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
+    WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+    assertEquals(10, paginatedQueryResult.getTotalNodes());
+    assertEquals(5, paginatedQueryResult.getPage(1).size());
   }
 
   /**
@@ -345,19 +225,11 @@ public class TestSearchService extends BaseWCMTestCase {
    * @throws Exception the exception
    */
   public void testSearchAllPortalLiveMode() throws Exception {
-    searchPageChecked = true;
-    searchDocumentChecked = true;
     searchSelectedPortal = null;
     searchIsLiveMode = true;
-    try{
-      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
-      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
-      log.info("\n\tTest case 4: search in All Portals, find nodes which are live move \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(10, paginatedQueryResult.getPage(1).size());
-      assertEquals(20, paginatedQueryResult.getTotalNodes());
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
+    WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+    assertEquals(5, paginatedQueryResult.getPage(1).size());
+    assertEquals(10, paginatedQueryResult.getTotalNodes());
   }
 
   //---------------------------------------------- Test search document -----------------------------------------------------------
@@ -369,19 +241,13 @@ public class TestSearchService extends BaseWCMTestCase {
    * searchSelectedPortal = null<br>
    * searchIsLiveMode = true<br>
    */
-  public void testSearchDocumentLiveMode(){
-    this.searchDocumentChecked = true;
+  public void testSearchDocumentLiveMode() throws Exception {
     this.searchPageChecked = false;
+    this.searchDocumentChecked = true;
     this.searchIsLiveMode = true;
     this.searchSelectedPortal = null;
-    try{
-      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
-      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
-      log.info("\n\tTest case 5: search document with all portal and live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(10, paginatedQueryResult.getPage(1).size());
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
+    WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+    assertEquals(5, paginatedQueryResult.getPage(1).size());
   }
 
   /**
@@ -392,19 +258,11 @@ public class TestSearchService extends BaseWCMTestCase {
    * searchSelectedPortal = null<br>
    * searchIsLiveMode = false<br>
    */
-  public void testSearchDocumentNotLiveMode(){
-    this.searchDocumentChecked = true;
+  public void testSearchDocumentNotLiveMode() throws Exception {
     this.searchPageChecked = false;
-    this.searchIsLiveMode = false;
     this.searchSelectedPortal = null;
-    try{
-      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
-      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
-      log.info("\n\tTest case 6: search document with all portal and not live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(20, paginatedQueryResult.getTotalNodes());
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
+    WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+    assertEquals(10, paginatedQueryResult.getTotalNodes());
   }
 
   /**
@@ -415,19 +273,10 @@ public class TestSearchService extends BaseWCMTestCase {
    * searchSelectedPortal = shared<br>
    * searchIsLiveMode = false<br>
    */
-  public void testSearchDocumentOfSharedPortal(){
-    this.searchDocumentChecked = true;
+  public void testSearchDocumentOfSharedPortal() throws Exception {
     this.searchPageChecked = false;
-    this.searchIsLiveMode = false;
-    this.searchSelectedPortal = "shared";
-    try{
-      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
-      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
-      log.info("\n\tTest case 7: search document shared portal and not live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(10, paginatedQueryResult.getTotalNodes());
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
+    WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+    assertEquals(10, paginatedQueryResult.getTotalNodes());
   }
 
   /**
@@ -438,20 +287,12 @@ public class TestSearchService extends BaseWCMTestCase {
    * searchSelectedPortal = shared<br>
    * searchIsLiveMode = true<br>
    */
-  public void testSearchDocumentOfSharedPortalLiveMode(){
-    this.searchDocumentChecked = true;
+  public void testSearchDocumentOfSharedPortalLiveMode() throws Exception {
     this.searchPageChecked = false;
     this.searchIsLiveMode = true;
-    this.searchSelectedPortal = "shared";
-    try{
-      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
-      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
-      log.info("\n\tTest case 8: search document in shared portal and live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(5, paginatedQueryResult.getPage(1).size());
-      assertEquals(10, paginatedQueryResult.getTotalNodes());
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
+    WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+    assertEquals(5, paginatedQueryResult.getPage(1).size());
+    assertEquals(10, paginatedQueryResult.getTotalNodes());
   }
 
   //------------------------------------------- Test search pages ------------------------------------------------------------------
@@ -463,23 +304,12 @@ public class TestSearchService extends BaseWCMTestCase {
    * searchSelectedPortal = null<br>
    * searchIsLiveMode = true<br>
    */
-  public void testSearchPagesLiveMode(){
-    //this.searchKeyword = "webcontentNode";
+  public void testSearchPagesLiveMode() throws Exception {
     this.searchDocumentChecked = false;
-    this.searchPageChecked = true;
     this.searchIsLiveMode = true;
     this.searchSelectedPortal = null;
-    try{
-      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
-      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
-      log.info("\n\tTest case 9: search pages with all portal and live mode \n\tTime search: " +
-               timeSearch + " s\n" +
-               "\t with this case, don't search any webcontent node type. In this test now, all nodet" +
-      "have node type is webcontent then reult is 0");
-      assertEquals(0, paginatedQueryResult.getPage(1).size());
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
+    WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+    assertEquals(5, paginatedQueryResult.getPage(1).size());
   }
 
   /**
@@ -490,19 +320,11 @@ public class TestSearchService extends BaseWCMTestCase {
    * searchSelectedPortal = null<br>
    * searchIsLiveMode = false<br>
    */
-  public void testSearchPages(){
+  public void testSearchPages() throws Exception {
     this.searchDocumentChecked = false;
-    this.searchPageChecked = true;
-    this.searchIsLiveMode = false;
     this.searchSelectedPortal = null;
-    try{
-      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
-      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
-      log.info("\n\tTest case 10: search pages with all portal and not live mode \tTime search: " + timeSearch + " s\n");
-      assertEquals(20, paginatedQueryResult.getTotalNodes());
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
+    WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+    assertEquals(10, paginatedQueryResult.getTotalNodes());
   }
 
   /**
@@ -513,20 +335,12 @@ public class TestSearchService extends BaseWCMTestCase {
    * searchSelectedPortal = shared<br>
    * searchIsLiveMode = true<br>
    */
-  public void testSearchPagesSharedLiveMode(){
+  public void testSearchPagesSharedLiveMode() throws Exception {
     this.searchDocumentChecked = false;
-    this.searchPageChecked = true;
     this.searchIsLiveMode = true;
-    this.searchSelectedPortal = "shared";
-    try{
-      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
-      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
-      log.info("\n\tTest case 11: search pages in shared portal and live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(0, paginatedQueryResult.getPage(1).size());
-      assertEquals(10, paginatedQueryResult.getTotalNodes());
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
+    WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+    assertEquals(5, paginatedQueryResult.getPage(1).size());
+    assertEquals(10, paginatedQueryResult.getTotalNodes());
   }
 
   /**
@@ -537,20 +351,11 @@ public class TestSearchService extends BaseWCMTestCase {
    * searchSelectedPortal = shared<br>
    * searchIsLiveMode = true<br>
    */
-  public void testSearchPagesShared(){
+  public void testSearchPagesShared() throws Exception {
     this.searchDocumentChecked = false;
-    this.searchPageChecked = true;
-    this.searchIsLiveMode = false;
-    this.searchSelectedPortal = "shared";
-    try{
-      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
-      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
-      log.info("\n\tTest case 12: search pages shared portal and not live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(0, paginatedQueryResult.getPage(1).size());
-      assertEquals(10, paginatedQueryResult.getTotalNodes());
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
+    WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+    assertEquals(5, paginatedQueryResult.getPage(1).size());
+    assertEquals(10, paginatedQueryResult.getTotalNodes());
   }
 
   //------------------------------------- test with not document or page --------------------------------------------------------------------
@@ -563,20 +368,14 @@ public class TestSearchService extends BaseWCMTestCase {
    * searchSelectedPortal = null<br>
    * searchIsLiveMode = true<br>
    */
-  public void testSearchNotPagesDocument_AllPortalLiveMode(){
+  public void testSearchNotPagesDocument_AllPortalLiveMode() throws Exception {
     this.searchDocumentChecked = false;
     this.searchPageChecked = false;
     this.searchIsLiveMode = true;
     this.searchSelectedPortal = null;
-    try{
-      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
-      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
-      log.info("\n\tTest case 13: search contents are not page/documents with all portal and live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(0, paginatedQueryResult.getPage(1).size());
-      assertEquals(20, paginatedQueryResult.getTotalNodes());
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
+    WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+    assertEquals(5, paginatedQueryResult.getPage(1).size());
+    assertEquals(10, paginatedQueryResult.getTotalNodes());
   }
 
   /**
@@ -587,20 +386,13 @@ public class TestSearchService extends BaseWCMTestCase {
    * searchSelectedPortal = null<br>
    * searchIsLiveMode = true<br>
    */
-  public void testSearchNotPagesDocument_AllPortalNotLiveMode(){
+  public void testSearchNotPagesDocument_AllPortalNotLiveMode() throws Exception {
     this.searchDocumentChecked = false;
     this.searchPageChecked = false;
-    this.searchIsLiveMode = false;
     this.searchSelectedPortal = null;
-    try{
-      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
-      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
-      log.info("\n\tTest case 14: search contents are not page/documents with all portal and not live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(0, paginatedQueryResult.getPage(1).size());
-      assertEquals(20, paginatedQueryResult.getTotalNodes());
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
+    WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+    assertEquals(5, paginatedQueryResult.getPage(1).size());
+    assertEquals(10, paginatedQueryResult.getTotalNodes());
   }
 
   /**
@@ -611,20 +403,13 @@ public class TestSearchService extends BaseWCMTestCase {
    * searchSelectedPortal = null<br>
    * searchIsLiveMode = true<br>
    */
-  public void testSearchNotPagesDocument_SharedLiveMode(){
+  public void testSearchNotPagesDocument_SharedLiveMode() throws Exception {
     this.searchDocumentChecked = false;
     this.searchPageChecked = false;
     this.searchIsLiveMode = true;
-    this.searchSelectedPortal = "shared";
-    try{
-      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
-      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
-      log.info("\n\tTest case 15: search contents are not page/documents with shared portal and live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(0, paginatedQueryResult.getPage(1).size());
-      assertEquals(10, paginatedQueryResult.getTotalNodes());
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
+    WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+    assertEquals(5, paginatedQueryResult.getPage(1).size());
+    assertEquals(10, paginatedQueryResult.getTotalNodes());
   }
 
   /**
@@ -635,20 +420,12 @@ public class TestSearchService extends BaseWCMTestCase {
    * searchSelectedPortal = null<br>
    * searchIsLiveMode = true<br>
    */
-  public void testSearchNotPagesDocument_SharedNoLiveMode(){
+  public void testSearchNotPagesDocument_SharedNoLiveMode() throws Exception {
     this.searchDocumentChecked = false;
     this.searchPageChecked = false;
-    this.searchIsLiveMode = false;
-    this.searchSelectedPortal = "shared";
-    try{
-      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
-      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
-      log.info("\n\tTest case 16: search contents are not page/documents with shared portal and not live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(0, paginatedQueryResult.getPage(1).size());
-      assertEquals(10, paginatedQueryResult.getTotalNodes());
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
+    WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+    assertEquals(5, paginatedQueryResult.getPage(1).size());
+    assertEquals(10, paginatedQueryResult.getTotalNodes());
   }
 
   /**
@@ -661,9 +438,7 @@ public class TestSearchService extends BaseWCMTestCase {
    * searchIsLiveMode = true<br>
    */
   @SuppressWarnings("deprecation")
-  public void testSearchPagesDocument_Date(){
-    this.searchDocumentChecked = true;
-    this.searchPageChecked = true;
+  public void testSearchPagesDocument_Date() throws Exception {
     this.searchIsLiveMode = true;
     this.searchSelectedPortal = null;
     Date date = new Date(2009, 05, 05);
@@ -674,15 +449,9 @@ public class TestSearchService extends BaseWCMTestCase {
     calTo.setTime(date);
     DatetimeRange datetimeRange = new DatetimeRange(calFrom, calTo);
     queryCriteria.setCreatedDateRange(datetimeRange);
-    try{
-      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
-      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
-      log.info("\n\tTest case 16: search contents are not page/documents with shared portal and not live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(10, paginatedQueryResult.getPage(1).size());
-      assertEquals(20, paginatedQueryResult.getTotalNodes());
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
+    WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+    assertEquals(5, paginatedQueryResult.getPage(1).size());
+    assertEquals(10, paginatedQueryResult.getTotalNodes());
   }
 
   /**
@@ -694,20 +463,12 @@ public class TestSearchService extends BaseWCMTestCase {
    * searchSelectedPortal = null<br>
    * searchIsLiveMode = true<br>
    */
-  public void testSearchPagesDocument_NotFultextSearch(){
-    this.searchDocumentChecked = true;
-    this.searchPageChecked = true;
+  public void testSearchPagesDocument_NotFultextSearch() throws Exception {
     this.searchIsLiveMode = true;
     this.searchSelectedPortal = null;
     queryCriteria.setFulltextSearch(false);
-    try{
-      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
-      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
-      log.info("\n\tTest case 16: search contents are not page/documents with shared portal and not live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(0, paginatedQueryResult.getPage(1).size());
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
+    WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+    assertEquals(0, paginatedQueryResult.getPage(1).size());
   }
 
   /**
@@ -720,21 +481,13 @@ public class TestSearchService extends BaseWCMTestCase {
    * searchIsLiveMode = true<br>
    * keyWord = null;
    */
-  public void testSearchPagesDocument_ContentType(){
-    this.searchDocumentChecked = true;
-    this.searchPageChecked = true;
+  public void testSearchPagesDocument_ContentType() throws Exception {
     this.searchIsLiveMode = true;
     this.searchSelectedPortal = null;
     this.searchKeyword = null;
     queryCriteria.setContentTypes(new String[]{"exo:webContent", "exo:htmlFile"});
-    try{
-      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
-      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
-      log.info("\n\tTest case 19: search contents are not page/documents with shared portal and not live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(10, paginatedQueryResult.getPage(1).size());
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
+    WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+    assertEquals(5, paginatedQueryResult.getPage(1).size());
   }
 
   /**
@@ -747,9 +500,7 @@ public class TestSearchService extends BaseWCMTestCase {
    * searchIsLiveMode = true<br>
    * keyWord = null;
    */
-  public void testSearchPagesDocument_Property(){
-    this.searchDocumentChecked = true;
-    this.searchPageChecked = true;
+  public void testSearchPagesDocument_Property() throws Exception {
     this.searchIsLiveMode = true;
     this.searchSelectedPortal = null;
     this.searchKeyword = "This is*";
@@ -760,14 +511,8 @@ public class TestSearchService extends BaseWCMTestCase {
     queryProperty2.setName("jcr:data");
     queryProperty2.setValue("the default.css file");
     queryCriteria.setQueryMetadatas(new QueryProperty[]{queryProperty1, queryProperty2});
-    try{
-      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
-      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
-      log.info("\n\tTest case 20: search contents are not page/documents with shared portal and not live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(0, paginatedQueryResult.getPage(1).size());
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
+    WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+    assertEquals(0, paginatedQueryResult.getPage(1).size());
   }
 
   /**
@@ -783,21 +528,14 @@ public class TestSearchService extends BaseWCMTestCase {
    * @throws PathNotFoundException 
    */
   public void testSearchPagesDocument_CategoryUUIDS() throws Exception{
-    this.searchDocumentChecked = true;
-    this.searchPageChecked = true;
     this.searchIsLiveMode = true;
     this.searchSelectedPortal = null;
-    this.searchKeyword = "This is";
-    Node documentNode = ((Node)session.getItem("/sites content/live/shared/documents")).getNode("documents webcontentNode 0");
-    Node livenode = ((Node)session.getItem("/sites content/live")).getNode("live webcontentNode 0");
+    Node documentNode = ((Node)session.getItem("/sites content/live/shared/documents")).getNode("webcontent0");
+    Node livenode = ((Node)session.getItem("/sites content/live/classic/web contents")).getNode("webcontent0");
     queryCriteria.setCategoryUUIDs(new String[]{documentNode.getUUID(), livenode.getUUID()});
     WCMPaginatedQueryResult paginatedQueryResult = new WCMPaginatedQueryResult(20);
     paginatedQueryResult.setQueryCriteria(this.queryCriteria);
     paginatedQueryResult = getSearchResult();
-//    String querry = paginatedQueryResult.getQueryCriteria().getFulltextSearchProperty();
-//    String spellSuggestion = paginatedQueryResult.getSpellSuggestion();
-    float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
-    log.info("\n\tTest case 21: search contents are not page/documents with shared portal and not live mode \n\tTime search: " + timeSearch + " s\n");
     assertEquals(0, paginatedQueryResult.getTotalNodes());
   }
 
@@ -818,22 +556,6 @@ public class TestSearchService extends BaseWCMTestCase {
     return siteSearchService.searchSiteContents(sessionProvider, qCriteria, pageSize, true);
   }
   
-  private QueryCriteria createQueryCriteria() throws Exception{
-    QueryCriteria queryCriteria = new QueryCriteria();
-    queryCriteria.setSiteName(searchSelectedPortal);
-    queryCriteria.setKeyword(searchKeyword);
-    if (searchDocumentChecked) {
-      queryCriteria.setSearchDocument(true);
-      queryCriteria.setSearchWebContent(true);
-    } else  {
-      queryCriteria.setSearchDocument(false);
-      queryCriteria.setSearchWebContent(false);
-    }
-    queryCriteria.setSearchWebpage(searchPageChecked);
-    queryCriteria.setLiveMode(searchIsLiveMode);
-    return queryCriteria;
-  }
-
   /**
    * Test case 22:test search document bay created date
    * with created date and modified Date.
@@ -847,84 +569,47 @@ public class TestSearchService extends BaseWCMTestCase {
    * @throws PathNotFoundException 
    */
   public void testSearchByCreatedDate() throws Exception{
-    this.searchDocumentChecked = true;
-    this.searchPageChecked = true;
     this.searchIsLiveMode = true;
-    this.searchSelectedPortal = "shared";
     this.searchKeyword = null;
-    
-    queryCriteria = createQueryCriteria();
     Calendar startDate = new GregorianCalendar();
     startDate.setTimeInMillis((new Date()).getTime() - 216000000);
     Calendar endDate = new GregorianCalendar();
     endDate.setTimeInMillis((new Date()).getTime() + 216000000);
-    assertEquals(20, searchWebContentByDate(DATE_RANGE_SELECTED.CREATED, startDate, endDate, queryCriteria, 10).getTotalNodes());
+    assertEquals(10, searchWebContentByDate(DATE_RANGE_SELECTED.CREATED, startDate, endDate, queryCriteria, 10).getTotalNodes());
   }
   
   public void testSearchByEndPublicationDate() throws Exception{
-    this.searchDocumentChecked = true;
-    this.searchPageChecked = true;
     this.searchIsLiveMode = true;
-    this.searchSelectedPortal = "shared";
     this.searchKeyword = null;
-    
-    queryCriteria = createQueryCriteria();
     Calendar startDate = new GregorianCalendar();
     startDate.setTimeInMillis((new Date()).getTime() - 216000000);
     Calendar endDate = new GregorianCalendar();
     endDate.setTimeInMillis((new Date()).getTime() + 216000000);
-    try{
-      assertEquals(20, searchWebContentByDate(DATE_RANGE_SELECTED.END_PUBLICATION, startDate, endDate, queryCriteria, 10).getTotalNodes());
-    }catch (Exception e) {
-      log.error(e);
-    }
-    log.info("Because Search service has not yet supported for search by end publication date");
-    assertTrue(true);
+    assertEquals(10, searchWebContentByDate(DATE_RANGE_SELECTED.END_PUBLICATION, startDate, endDate, queryCriteria, 10).getTotalNodes());
   }
   
   public void testSearchByStartPublicationDate() throws Exception{
-    this.searchDocumentChecked = true;
-    this.searchPageChecked = true;
     this.searchIsLiveMode = true;
-    this.searchSelectedPortal = "shared";
     this.searchKeyword = null;
-    
-    queryCriteria = createQueryCriteria();
     Calendar startDate = new GregorianCalendar();
     startDate.setTimeInMillis((new Date()).getTime() - 216000000);
     Calendar endDate = new GregorianCalendar();
     endDate.setTimeInMillis((new Date()).getTime() + 216000000);
-    try{
-      assertEquals(20, searchWebContentByDate(DATE_RANGE_SELECTED.START_PUBLICATION, startDate, endDate, queryCriteria, 10).getTotalNodes());
-    }catch (Exception e) {
-      log.error(e);
-    }
-    log.info("Because Search service has not yet supported for search by start publication date");
-    assertTrue(true);
+    assertEquals(10, searchWebContentByDate(DATE_RANGE_SELECTED.START_PUBLICATION, startDate, endDate, queryCriteria, 10).getTotalNodes());
   }
   
   public void testSearchByModifiedDate() throws Exception{
-    this.searchDocumentChecked = true;
-    this.searchPageChecked = true;
     this.searchIsLiveMode = true;
-    this.searchSelectedPortal = "shared";
     this.searchKeyword = null;
-    
-    queryCriteria = createQueryCriteria();
     Calendar startDate = new GregorianCalendar();
     startDate.setTimeInMillis((new Date()).getTime() - 216000000);
     Calendar endDate = new GregorianCalendar();
     endDate.setTimeInMillis((new Date()).getTime() + 216000000);
-    assertEquals(20, searchWebContentByDate(DATE_RANGE_SELECTED.MODIFIDED, startDate, endDate, queryCriteria, 10).getTotalNodes());
+    assertEquals(10, searchWebContentByDate(DATE_RANGE_SELECTED.MODIFIDED, startDate, endDate, queryCriteria, 10).getTotalNodes());
   }
   
   public void testSearchByProperty()throws Exception{
-    this.searchDocumentChecked = true;
-    this.searchPageChecked = true;
     this.searchIsLiveMode = true;
-    this.searchSelectedPortal = "shared";
-    this.searchKeyword = "This is";
-    queryCriteria = createQueryCriteria();
     queryCriteria.setFulltextSearch(true);
     queryCriteria.setFulltextSearchProperty("dc:description");
     assertEquals(0, siteSearchService.searchSiteContents(sessionProvider, queryCriteria, 10, true).getTotalNodes());
@@ -932,13 +617,8 @@ public class TestSearchService extends BaseWCMTestCase {
   
   public void testSearchByDocumentType()throws Exception{
     String documentType = "exo:webContent";
-    this.searchDocumentChecked = true;
-    this.searchPageChecked = true;
     this.searchIsLiveMode = true;
-    this.searchSelectedPortal = "shared";
     this.searchKeyword = null;
-    queryCriteria = createQueryCriteria();
-    
     queryCriteria.setFulltextSearch(true);
     queryCriteria.setFulltextSearchProperty(null);
     queryCriteria.setContentTypes(documentType.split(","));
@@ -947,48 +627,51 @@ public class TestSearchService extends BaseWCMTestCase {
   
   public void testSearchByDocumentAuthor()throws Exception{
     String author = "root";
-    this.searchDocumentChecked = true;
-    this.searchPageChecked = true;
     this.searchIsLiveMode = true;
-    this.searchSelectedPortal = "shared";
     this.searchKeyword = null;
-    queryCriteria = createQueryCriteria();
-    
     queryCriteria.setFulltextSearch(true);
     queryCriteria.setFulltextSearchProperty(null);
     queryCriteria.setAuthors(new String[]{author});
-    assertEquals(20, siteSearchService.searchSiteContents(sessionProvider, queryCriteria, 10, true).getTotalNodes());
+    assertEquals(10, siteSearchService.searchSiteContents(sessionProvider, queryCriteria, 10, true).getTotalNodes());
   }
   
   public void testSearchByMimeTypes()throws Exception{
-    this.searchDocumentChecked = true;
-    this.searchPageChecked = true;
     this.searchIsLiveMode = true;
-    this.searchSelectedPortal = "shared";
     this.searchKeyword = null;
-    queryCriteria = createQueryCriteria();
-    
     queryCriteria.setFulltextSearch(true);
     queryCriteria.setFulltextSearchProperty(null);
     queryCriteria.setMimeTypes(new String[]{"exo:webContent", " exo:siteBreadcrumb"});
-    assertEquals(20, siteSearchService.searchSiteContents(sessionProvider, queryCriteria, 10, true).getTotalNodes());
+    assertEquals(10, siteSearchService.searchSiteContents(sessionProvider, queryCriteria, 10, true).getTotalNodes());
   }
   
   public void testSearchByTagUUID() throws Exception{
-    Node node = (Node)session.getItem("/sites content/live");
-    node = node.getNode("live webcontentNode 0");
+    Node node = (Node)session.getItem("/sites content/live/classic/web contents/webcontent0");
     String uuid = node.getUUID();
-    
-    this.searchDocumentChecked = true;
-    this.searchPageChecked = true;
     this.searchIsLiveMode = true;
-    this.searchSelectedPortal = "live";
+    this.searchSelectedPortal = "classic";
     this.searchKeyword = null;
-    queryCriteria = createQueryCriteria();
-    
     queryCriteria.setFulltextSearch(true);
     queryCriteria.setFulltextSearchProperty(null);
     queryCriteria.setTagUUIDs(new String[]{uuid});
-    assertEquals(0, siteSearchService.searchSiteContents(sessionProvider, queryCriteria, 10, true).getTotalNodes());
+    assertEquals(10, siteSearchService.searchSiteContents(sessionProvider, queryCriteria, 10, true).getTotalNodes());
+  }
+  
+  protected void tearDown() throws Exception {
+    super.tearDown();
+    
+    NodeIterator iterator = null; 
+    Node classicPortal = (Node)session.getItem("/sites content/live/classic/web contents");
+    iterator = classicPortal.getNodes();
+    while (iterator.hasNext()) {
+      iterator.nextNode().remove();
+    }
+    
+    Node sharedPortal = (Node)session.getItem("/sites content/live/shared/documents");
+    iterator = sharedPortal.getNodes();
+    while (iterator.hasNext()) {
+      iterator.nextNode().remove();
+    }
+    
+    session.save();
   }
 }

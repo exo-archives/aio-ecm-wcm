@@ -22,9 +22,10 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.exoplatform.container.StandaloneContainer;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.impl.core.NodeImpl;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.test.BasicTestCase;
 
 /**
@@ -35,7 +36,7 @@ import org.exoplatform.test.BasicTestCase;
  */
 public abstract class BaseWCMTestCase extends BasicTestCase {
 
-  protected StandaloneContainer   container;
+  protected PortalContainer   container;
   
   protected Session               session;
   
@@ -48,16 +49,8 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
   protected final String          COLLABORATION_WS = "collaboration".intern();
 
   public void setUp() throws Exception {
-    String containerConf = getClass().getResource("/conf/standalone/test-configuration.xml").toString();
-    String loginConf = Thread.currentThread().getContextClassLoader().getResource("login.conf").toString();
-
-    StandaloneContainer.addConfigurationURL(containerConf);
-    container = StandaloneContainer.getInstance();
-
-    if (System.getProperty("java.security.auth.login.config") == null)
-      System.setProperty("java.security.auth.login.config", loginConf);
-    
-    RepositoryService repositoryService = getService(RepositoryService.class);
+    container = PortalContainer.getInstance();
+    RepositoryService repositoryService = WCMCoreUtils.getService(RepositoryService.class);
     session = repositoryService.getRepository(REPO_NAME).getSystemSession(COLLABORATION_WS);
   }
 
@@ -101,12 +94,9 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
     + "min";
   }
 
-  protected <T> T getService(Class<T> clazz) {
-    return clazz.cast(container.getComponentInstanceOfType(clazz));
-  }
-
   protected Node createWebcontentNode(Node parentNode, String nodeName, String htmlData, String cssData, String jsData) throws Exception {
     Node webcontent = parentNode.addNode(nodeName, "exo:webContent");
+    webcontent.addMixin("exo:datetime");
     webcontent.setProperty("exo:title", nodeName);
     Node htmlNode;
     try{

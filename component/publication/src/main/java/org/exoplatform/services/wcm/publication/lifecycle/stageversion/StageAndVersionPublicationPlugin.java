@@ -44,10 +44,14 @@ import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Application;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.pom.config.POMSession;
+import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.services.ecm.publication.IncorrectStateUpdateLifecycleException;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.util.IdGenerator;
@@ -76,6 +80,12 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
   
   /** The navigation event listener delegate. */
   private NavigationEventListenerDelegate navigationEventListenerDelegate;  
+  
+  private DataStorage dataStorage;
+  
+  private POMSessionManager pomManager;
+  
+  private POMSession pomSession;
 
   /**
    * Instantiates a new stage and version publication plugin.
@@ -83,6 +93,8 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
   public StageAndVersionPublicationPlugin() {
     pageEventListenerDelegate = new PageEventListenerDelegate(StageAndVersionPublicationConstant.LIFECYCLE_NAME, ExoContainerContext.getCurrentContainer());
     navigationEventListenerDelegate = new NavigationEventListenerDelegate(StageAndVersionPublicationConstant.LIFECYCLE_NAME, ExoContainerContext.getCurrentContainer());
+    dataStorage = WCMCoreUtils.getService(DataStorage.class);
+    pomManager = WCMCoreUtils.getService(POMSessionManager.class);
   }
 
   public String getLifecycleType() {
@@ -369,10 +381,9 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
    * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#publishContentToSCV(javax.jcr.Node, org.exoplatform.portal.config.model.Page, java.lang.String)
    */
   public void publishContentToSCV(Node content, Page page, String portalOwnerName) throws Exception {
+    if (pomManager.getSession() == null) pomSession = pomManager.openSession();
     // Create portlet
-//    Application portlet = new Application();
-    Application portlet = null;
-//    portlet.setApplicationType(org.exoplatform.web.application.Application.EXO_PORTLET_TYPE);
+    Application<Portlet> portlet = new Application<Portlet>(ApplicationType.PORTLET);
     portlet.setShowInfoBar(false);
     
     //// generate new portlet's id
@@ -406,6 +417,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
 //    page.setChildren(listPortlet);
     UserPortalConfigService userPortalConfigService = PublicationUtil.getServices(UserPortalConfigService.class);
     userPortalConfigService.update(page);
+    if (pomSession != null) pomSession.close();
   }
 
   /* (non-Javadoc)
@@ -415,11 +427,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
   public void publishContentToCLV(Node content, Page page, String clvPortletId, String portalOwnerName, String remoteUser) throws Exception {
     WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
     ArrayList<Preference> preferences = new ArrayList<Preference>();
-    
-    DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
-//    PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
-    PortletPreferences portletPreferences = null;
-    
+    PortletPreferences portletPreferences = dataStorage.getPortletPreferences(clvPortletId);
     if (portletPreferences == null) {
       preferences.add(addPreference("repository", ((ManageableRepository) content.getSession().getRepository()).getConfiguration().getName()));
       preferences.add(addPreference("workspace", content.getSession().getWorkspace().getName()));
@@ -585,28 +593,26 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
    * @throws Exception the exception
    */
   private void savePortletPreferences(String portletId, ArrayList<Preference> listPreference, String portalOwnerName) throws Exception {
+    if (pomManager.getSession() == null) pomSession = pomManager.openSession();
     PortletPreferences portletPreferences = new PortletPreferences();
     portletPreferences.setWindowId(portletId);
 //    portletPreferences.setOwnerType(PortalConfig.PORTAL_TYPE);
 //    portletPreferences.setOwnerId(portalOwnerName);
     portletPreferences.setPreferences(listPreference);
-    DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
     dataStorage.save(portletPreferences);
+    if (pomSession != null) pomSession.close();
   }
   
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#suspendPublishedContentFromPage(javax.jcr.Node, org.exoplatform.portal.config.model.Page, java.lang.String)
    */
-  @SuppressWarnings("unchecked")
   public void suspendPublishedContentFromPage(Node content, Page page, String remoteUser) throws Exception {
     // Remove content from CLV portlet
-    DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
     WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
     List<String> clvPortletsId = PublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.CLV_PORTLET));
     if (content != null && !clvPortletsId.isEmpty()) {
       for (String clvPortletId : clvPortletsId) {
-//        PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
-        PortletPreferences portletPreferences = null;
+        PortletPreferences portletPreferences = dataStorage.getPortletPreferences(clvPortletId);
         if (portletPreferences != null) {
           ArrayList<Preference> preferences = new ArrayList<Preference>();
           for (Object preferenceTmp : portletPreferences.getPreferences()) {
