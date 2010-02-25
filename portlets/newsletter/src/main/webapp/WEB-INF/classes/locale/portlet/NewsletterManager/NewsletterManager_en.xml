@@ -193,13 +193,13 @@
       <subcriptionNameIsAlreadyExist>This subcription's name is already exist!</subcriptionNameIsAlreadyExist>
       <selectRedactorPermission>You must select user or member redactor! </selectRedactorPermission>
     </msg>
-    <title>
+    <label>
       <SubcriptionName>Name</SubcriptionName>
       <SubcriptionTitle>Title</SubcriptionTitle>
       <SubcriptionDescription>Description</SubcriptionDescription>
       <CategoryName>Category</CategoryName>
       <UIWCMFormSubscriptionRedactor>Redactor</UIWCMFormSubscriptionRedactor>
-    </title>
+    </label>
   </UISubcriptionForm>
 
   <UINewsletterEntryForm>

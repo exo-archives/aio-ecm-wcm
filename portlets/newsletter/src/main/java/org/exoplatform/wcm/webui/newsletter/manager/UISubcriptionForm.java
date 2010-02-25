@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.exoplatform.ecm.webui.form.UIFormInputSetWithAction;
+//import org.exoplatform.ecm.webui.form.UIFormInputSetWithAction;
 import org.exoplatform.ecm.webui.selector.UIGroupMemberSelector;
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -48,6 +48,7 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.NameValidator;
 import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
@@ -60,7 +61,7 @@ import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
  */
 @ComponentConfig(
                  lifecycle = UIFormLifecycle.class ,
-                 template = "app:/groovy/webui/newsletter/NewsletterManager/UISubcriptionForm.gtmpl",
+                 template = "system:/groovy/webui/form/UIForm.gtmpl",
                  events = {
                    @EventConfig(listeners = UISubcriptionForm.SaveActionListener.class),
                    @EventConfig(listeners = UISubcriptionForm.CancelActionListener.class, phase = Phase.DECODE),

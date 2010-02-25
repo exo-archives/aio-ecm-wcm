@@ -193,13 +193,13 @@
       <subcriptionNameIsAlreadyExist>Le nom de cet abonnement existe déjà!</subcriptionNameIsAlreadyExist>
       <selectRedactorPermission>Vous devez sélectionner l'utilisateur ou rédacteur membre!</selectRedactorPermission>
     </msg>
-    <title>
+    <label>
       <SubcriptionName>Nom</SubcriptionName>
       <SubcriptionTitle>Titre</SubcriptionTitle>
       <SubcriptionDescription>Description</SubcriptionDescription>
       <CategoryName>Catégorie</CategoryName>
       <UIWCMFormSubscriptionRedactor>Redactor</UIWCMFormSubscriptionRedactor>
-    </title>
+    </label>
   </UISubcriptionForm>
 
   <UINewsletterEntryForm>

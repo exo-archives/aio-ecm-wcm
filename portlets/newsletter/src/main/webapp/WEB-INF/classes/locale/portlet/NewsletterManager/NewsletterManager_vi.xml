@@ -183,12 +183,12 @@
       <subcriptionTitleIsNotEmpty>Subcription title cannot be empty!</subcriptionTitleIsNotEmpty>
       <subcriptionNameIsAlreadyExist>This subcription's name is already exist!</subcriptionNameIsAlreadyExist>
     </msg>
-    <title>
+    <label>
       <SubcriptionName>Subcription Name</SubcriptionName>
       <SubcriptionTitle>Subcription Title</SubcriptionTitle>
       <SubcriptionDescription>Description</SubcriptionDescription>
       <CategoryName>Category</CategoryName>
-    </title>
+    </label>
   </UISubcriptionForm>
 
   <UINewsletterEntryForm>
