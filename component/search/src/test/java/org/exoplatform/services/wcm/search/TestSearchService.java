@@ -16,7 +16,6 @@
  */
 package org.exoplatform.services.wcm.search;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -37,7 +36,6 @@ import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
-import org.exoplatform.services.wcm.search.QueryCriteria.DATE_RANGE_SELECTED;
 import org.exoplatform.services.wcm.search.QueryCriteria.DatetimeRange;
 import org.exoplatform.services.wcm.search.QueryCriteria.QueryProperty;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
@@ -539,75 +537,6 @@ public class TestSearchService extends BaseWCMTestCase {
     assertEquals(0, paginatedQueryResult.getTotalNodes());
   }
 
-  private PaginatedQueryResult searchWebContentByDate(DATE_RANGE_SELECTED dateRangeSelected, 
-                                                      Calendar fromDate, Calendar endDate, QueryCriteria qCriteria, int pageSize) throws Exception {
-    qCriteria.setDateRangeSelected(dateRangeSelected);
-    DatetimeRange dateTimeRange = new QueryCriteria.DatetimeRange(fromDate, endDate);
-    if(DATE_RANGE_SELECTED.CREATED.equals(dateRangeSelected)) {
-      qCriteria.setCreatedDateRange(dateTimeRange);
-    } else if(DATE_RANGE_SELECTED.MODIFIDED.equals(dateRangeSelected)) {
-      qCriteria.setLastModifiedDateRange(dateTimeRange);
-    } else if(DATE_RANGE_SELECTED.END_PUBLICATION.equals(dateRangeSelected)){
-      qCriteria.setStartPublicationDateRange(dateTimeRange);
-      qCriteria.setEndPublicationDateRange(dateTimeRange);
-    }
-    qCriteria.setFulltextSearch(true);
-    qCriteria.setFulltextSearchProperty(null);
-    return siteSearchService.searchSiteContents(sessionProvider, qCriteria, pageSize, true);
-  }
-  
-  /**
-   * Test case 22:test search document bay created date
-   * with created date and modified Date.
-   * Search all pages in share and live mode. With this case, values of parameters are:<br/>
-   * searchPageChecked = true<br>
-   * searchDocumentChecked = true<br>
-   * searchSelectedPortal = shared<br>
-   * searchIsLiveMode = true<br>
-   * keyWord = null;
-   * @throws RepositoryException 
-   * @throws PathNotFoundException 
-   */
-  public void testSearchByCreatedDate() throws Exception{
-    this.searchIsLiveMode = true;
-    this.searchKeyword = null;
-    Calendar startDate = new GregorianCalendar();
-    startDate.setTimeInMillis((new Date()).getTime() - 216000000);
-    Calendar endDate = new GregorianCalendar();
-    endDate.setTimeInMillis((new Date()).getTime() + 216000000);
-    assertEquals(10, searchWebContentByDate(DATE_RANGE_SELECTED.CREATED, startDate, endDate, queryCriteria, 10).getTotalNodes());
-  }
-  
-  public void testSearchByEndPublicationDate() throws Exception{
-    this.searchIsLiveMode = true;
-    this.searchKeyword = null;
-    Calendar startDate = new GregorianCalendar();
-    startDate.setTimeInMillis((new Date()).getTime() - 216000000);
-    Calendar endDate = new GregorianCalendar();
-    endDate.setTimeInMillis((new Date()).getTime() + 216000000);
-    assertEquals(10, searchWebContentByDate(DATE_RANGE_SELECTED.END_PUBLICATION, startDate, endDate, queryCriteria, 10).getTotalNodes());
-  }
-  
-  public void testSearchByStartPublicationDate() throws Exception{
-    this.searchIsLiveMode = true;
-    this.searchKeyword = null;
-    Calendar startDate = new GregorianCalendar();
-    startDate.setTimeInMillis((new Date()).getTime() - 216000000);
-    Calendar endDate = new GregorianCalendar();
-    endDate.setTimeInMillis((new Date()).getTime() + 216000000);
-    assertEquals(10, searchWebContentByDate(DATE_RANGE_SELECTED.START_PUBLICATION, startDate, endDate, queryCriteria, 10).getTotalNodes());
-  }
-  
-  public void testSearchByModifiedDate() throws Exception{
-    this.searchIsLiveMode = true;
-    this.searchKeyword = null;
-    Calendar startDate = new GregorianCalendar();
-    startDate.setTimeInMillis((new Date()).getTime() - 216000000);
-    Calendar endDate = new GregorianCalendar();
-    endDate.setTimeInMillis((new Date()).getTime() + 216000000);
-    assertEquals(10, searchWebContentByDate(DATE_RANGE_SELECTED.MODIFIDED, startDate, endDate, queryCriteria, 10).getTotalNodes());
-  }
-  
   public void testSearchByProperty()throws Exception{
     this.searchIsLiveMode = true;
     queryCriteria.setFulltextSearch(true);
