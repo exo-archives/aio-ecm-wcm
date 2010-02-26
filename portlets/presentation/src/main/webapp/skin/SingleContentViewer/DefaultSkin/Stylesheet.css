@@ -1,5 +1,5 @@
 .UISingleContentViewerPortlet {
-	overflow: auto;
+	overflow: hidden;
 }
 
 .UISingleContentViewerPortlet .WebContentContainer {
