@@ -17,6 +17,8 @@
 package org.exoplatform.services.wcm.navigation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.exoplatform.portal.config.model.PageNavigation;
@@ -52,6 +54,7 @@ public class TestNavigationService extends BaseWCMTestCase {
     List<PageNavigation> pageNavigations = new ArrayList<PageNavigation>();
     pageNavigations.add(pageNavigation);
     String jsonResult = navigationService.getNavigationsAsJSON(pageNavigations);
+    jsonResult = sortJSONString(jsonResult);
     
     String jsonExpert = "[" +
     		                  "{" +
@@ -68,6 +71,24 @@ public class TestNavigationService extends BaseWCMTestCase {
     		                  	"\"creator\":" + pageNavigation.getCreator() +
     		                  "}" +
     		                "]";
+    jsonExpert = sortJSONString(jsonExpert);
     assertEquals(jsonExpert, jsonResult);
+  }
+  
+  private String sortJSONString(String json) {
+    json = json.substring(2, json.length() - 2);
+    List<String> objects = Arrays.asList(json.split(","));
+    Collections.sort(objects);
+    String newJson = "[" +
+    		               "{";
+    for (String object : objects) {
+      if (objects.indexOf(object) == objects.size())
+        newJson += object;
+      else
+        newJson += object + ",";
+    }
+    newJson +=          "}" +
+                     "]";
+    return newJson;
   }
 }
