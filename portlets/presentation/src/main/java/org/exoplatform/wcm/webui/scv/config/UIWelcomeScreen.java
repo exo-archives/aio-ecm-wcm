@@ -19,6 +19,8 @@ package org.exoplatform.wcm.webui.scv.config;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.exoplatform.portal.application.PortletPreferences;
+import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Application;
@@ -130,6 +132,7 @@ public class UIWelcomeScreen extends UIForm {
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
+    @SuppressWarnings("unchecked")
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
       UIWelcomeScreen welcomeScreen = event.getSource();
       UserPortalConfigService userPortalConfigService = welcomeScreen.getApplicationComponent(UserPortalConfigService.class);
@@ -144,26 +147,26 @@ public class UIWelcomeScreen extends UIForm {
       for (Object applicationObject : applicationsTmp) {
         if (applicationObject instanceof Container) continue;
         Application application = Application.class.cast(applicationObject);
-//        String applicationId = application.getInstanceId();
-//        PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(applicationId));
-//        if (portletPreferences == null) continue;
+        String applicationId = application.getId();
+        PortletPreferences portletPreferences = dataStorage.getPortletPreferences(applicationId);
+        if (portletPreferences == null) continue;
         
         boolean isQuickCreate = false;
         String nodeIdentifier = null;
         
-//        for (Object preferenceObject : portletPreferences.getPreferences()) {
-//        	Preference preference = Preference.class.cast(preferenceObject);
-//
-//        	if ("isQuickCreate".equals(preference.getName())) {
-//        		isQuickCreate = Boolean.valueOf(preference.getValues().get(0).toString());
-//        		if (!isQuickCreate) break;
-//        	}
-//
-//        	if ("nodeIdentifier".equals(preference.getName())) {
-//        		nodeIdentifier = preference.getValues().get(0).toString();
-//        		if (nodeIdentifier == null || "".equals(nodeIdentifier)) break;
-//        	}
-//        }
+        for (Object preferenceObject : portletPreferences.getPreferences()) {
+        	Preference preference = Preference.class.cast(preferenceObject);
+
+        	if ("isQuickCreate".equals(preference.getName())) {
+        		isQuickCreate = Boolean.valueOf(preference.getValues().get(0).toString());
+        		if (!isQuickCreate) break;
+        	}
+
+        	if ("nodeIdentifier".equals(preference.getName())) {
+        		nodeIdentifier = preference.getValues().get(0).toString();
+        		if (nodeIdentifier == null || "".equals(nodeIdentifier)) break;
+        	}
+        }
 
         if (isQuickCreate && (nodeIdentifier == null || "".equals(nodeIdentifier))) {
         	applications.remove(applicationObject);

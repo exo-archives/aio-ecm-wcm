@@ -58,6 +58,7 @@ import org.exoplatform.webui.form.UIForm;
  * Created by The eXo Platform SAS Author : eXoPlatform
  * ngoc.tran@exoplatform.com Jun 23, 2009
  */
+@SuppressWarnings("deprecation")
 @ComponentConfigs( {
 	@ComponentConfig(
 		lifecycle = UIFormLifecycle.class, 
@@ -139,7 +140,8 @@ public class UIPCLVForm extends UIForm {
 	 * 
 	 * @throws Exception the exception
 	 */
-	public void init(String templatePath, ResourceResolver resourceResolver, PageList dataPageList) throws Exception {
+	@SuppressWarnings("unchecked")
+  public void init(String templatePath, ResourceResolver resourceResolver, PageList dataPageList) throws Exception {
 
 		PortletPreferences portletPreferences = getPortletPreferences();
 		String paginatorTemplatePath = portletPreferences.getValue(	UIPCLVPortlet.PAGINATOR_TEMPlATE_PATH, null);

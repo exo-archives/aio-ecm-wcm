@@ -43,6 +43,7 @@ import org.exoplatform.webui.event.EventListener;
  * chuong.phan@exoplatform.com
  * June 4, 2009 13:42:23 AM
  */
+@SuppressWarnings("deprecation")
 @ComponentConfig(
     template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/ui/UIPublicationHistory.gtmpl",
     events = {
@@ -102,6 +103,7 @@ public class UIPublicationHistory extends UIComponentDecorator {
    * 
    * @throws Exception the exception
    */
+  @SuppressWarnings("unchecked")
   public void updateGrid() throws Exception {   
     ObjectPageList objPageList = new ObjectPageList(getLog(), 10) ;
     uiPageIterator_.setPageList(objPageList) ;

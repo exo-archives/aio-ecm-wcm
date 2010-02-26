@@ -56,6 +56,7 @@ import org.exoplatform.webui.form.UIForm;
  * Sep 25, 2008
  */
 
+@SuppressWarnings("deprecation")
 @ComponentConfig (
     lifecycle = UIFormLifecycle.class,
     template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/ui/UIPublicationAction.gtmpl",
@@ -192,6 +193,7 @@ public class UIPublicationAction extends UIForm {
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
+    @SuppressWarnings("unchecked")
     public void execute(Event<UIPublicationAction> event) throws Exception {
       UIPublicationAction publicationAction = event.getSource();
       UIPublicationPages publicationPages = publicationAction.getAncestorOfType(UIPublicationPages.class);
@@ -280,8 +282,7 @@ public class UIPublicationAction extends UIForm {
     List<String> applicationIDs = new ArrayList<String>();
     for (String clvPortletId : clvPortletsId) {
     	boolean isManualViewerMode = false;
-//      PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
-      PortletPreferences portletPreferences = null;
+      PortletPreferences portletPreferences = dataStorage.getPortletPreferences(clvPortletId);
       if (portletPreferences != null) {
         for (Object object : portletPreferences.getPreferences()) {
           Preference preference = (Preference) object;

@@ -434,7 +434,7 @@ public class NewsletterConstant {
    * @return list users
    * @throws Exception
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({ "unchecked", "deprecation" })
   public static List<String> getUserPermission(String[] userGroupMembership) throws Exception {
     List<String> users = new ArrayList<String> () ;
     if(userGroupMembership == null || userGroupMembership.length <= 0 || 

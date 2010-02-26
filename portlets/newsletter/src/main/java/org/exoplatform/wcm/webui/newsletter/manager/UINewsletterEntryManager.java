@@ -23,7 +23,6 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 
 import org.exoplatform.commons.utils.ObjectPageList;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
@@ -54,6 +53,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
  * ngoc.tran@exoplatform.com
  * Jun 9, 2009
  */
+@SuppressWarnings("deprecation")
 @ComponentConfig(
      lifecycle = UIFormLifecycle.class,
      template = "app:/groovy/webui/newsletter/NewsletterManager/UINewsletterEntryManager.gtmpl",
@@ -106,6 +106,7 @@ public class UINewsletterEntryManager extends UIForm {
    * 
    * @throws Exception the exception
    */
+  @SuppressWarnings("unchecked")
   public void init() throws Exception{
     ObjectPageList objPageList = new ObjectPageList(setListNewsletterEntries(), 10) ;
     uiPageIterator_ = createUIComponent(UIPageIterator.class, null, PAGEITERATOR_ID);

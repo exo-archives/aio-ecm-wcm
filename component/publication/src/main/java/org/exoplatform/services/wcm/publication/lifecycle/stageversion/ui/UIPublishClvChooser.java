@@ -27,6 +27,7 @@ import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
@@ -113,16 +114,15 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
    * 
    * @throws Exception the exception
    */
-  public List<Application> getClvPortlets() throws Exception {
+  public List<Application<Portlet>> getClvPortlets() throws Exception {
     WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
     DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
     List<String> clvPortletsId = PublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.CLV_PORTLET));
-    List<Application> applications = new ArrayList<Application>();
+    List<Application<Portlet>> applications = new ArrayList<Application<Portlet>>();
     for (String clvPortletId : clvPortletsId) {
     	boolean isManualViewerMode = false;
-      Application application = PublicationUtil.findAppInstancesById(page, clvPortletId);
-//      PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));      
-      PortletPreferences portletPreferences = null;
+      Application<Portlet> application = PublicationUtil.findAppInstancesById(page, clvPortletId);
+      PortletPreferences portletPreferences = dataStorage.getPortletPreferences(clvPortletId);      
       if (portletPreferences != null) {
         for (Object object : portletPreferences.getPreferences()) {
           Preference preference = (Preference) object;
@@ -162,8 +162,7 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
       WCMPublicationService presentationService = clvChooser.getApplicationComponent(WCMPublicationService.class);
 //      clvPortletId = PortalConfig.PORTAL_TYPE + "#" + org.exoplatform.portal.webui.util.Util.getUIPortal().getOwner() + ":" + clvPortletId;
       DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
-//      PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
-      PortletPreferences portletPreferences = null;
+      PortletPreferences portletPreferences = dataStorage.getPortletPreferences(clvPortletId);
       Node node = clvChooser.getNode();
       if (portletPreferences != null) {
         for (Object object : portletPreferences.getPreferences()) {

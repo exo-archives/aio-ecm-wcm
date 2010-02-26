@@ -56,7 +56,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	private WCMService wcmService;
 	
 	/** The cache. */
-	private ExoCache cache;
+	private ExoCache<String, Object> cache;
 	
 	private boolean isCached = true;
 	

@@ -36,6 +36,7 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
  * anh.do@exoplatform.com, anhdn86@gmail.com
  * Feb 23, 2009
  */
+@SuppressWarnings("deprecation")
 @ComponentConfig(      
   lifecycle = Lifecycle.class,                 
    template = "app:/groovy/ContentListViewer/UICLVContainer.gtmpl",
@@ -48,7 +49,8 @@ public class UICLVManualMode extends UICLVContainer {
   /* (non-Javadoc)
    * @see org.exoplatform.wcm.webui.clv.UICLVContainer#init()
    */
-	public void init() throws Exception {                       
+	@SuppressWarnings("unchecked")
+  public void init() throws Exception {                       
     PortletPreferences portletPreferences = getPortletPreference();
     setViewAbleContent(true);
     String repositoryName = portletPreferences.getValue(UICLVPortlet.REPOSITORY, null);

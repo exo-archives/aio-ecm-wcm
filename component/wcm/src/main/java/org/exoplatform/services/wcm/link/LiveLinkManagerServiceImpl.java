@@ -58,7 +58,7 @@ import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
 
   /** The broken links cache. */
-  private ExoCache                 brokenLinksCache;
+  private ExoCache<String, List<String>>                 brokenLinksCache;
   
   /** The configuration service. */
   private WCMConfigurationService  configurationService;
@@ -133,7 +133,6 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.link.LiveLinkManagerService#getBrokenLinks(javax.jcr.Node)
    */
-  @SuppressWarnings("unchecked")
   public List<String> getBrokenLinks(Node webContent) throws Exception {    
     List<String> listBrokenUrls = (List<String>)brokenLinksCache.get(webContent.getUUID());
     if(listBrokenUrls == null) {

@@ -65,7 +65,6 @@ public class InitialNewsletterPlugin extends CreatePortalPlugin {
    * @param newsletterManagerService the newsletter manager service
    * @param livePortalManagerService the live portal manager service
    */
-  @SuppressWarnings("unchecked")
   public InitialNewsletterPlugin(InitParams initParams,
                                  ConfigurationManager configurationManager,
                                  RepositoryService repositoryService,

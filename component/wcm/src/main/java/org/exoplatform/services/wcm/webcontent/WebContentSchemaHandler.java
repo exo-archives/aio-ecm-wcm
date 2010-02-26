@@ -16,8 +16,6 @@
  */
 package org.exoplatform.services.wcm.webcontent;
 
-import java.util.Calendar;
-
 import javax.jcr.Node;
 import javax.jcr.Session;
 

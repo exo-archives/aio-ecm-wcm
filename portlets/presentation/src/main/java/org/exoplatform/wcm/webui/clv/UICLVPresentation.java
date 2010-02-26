@@ -60,6 +60,7 @@ import org.exoplatform.webui.event.EventListener;
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 21, 2008
  */
+@SuppressWarnings("deprecation")
 @ComponentConfigs( {
   @ComponentConfig(
       lifecycle = Lifecycle.class, 
@@ -113,6 +114,7 @@ import org.exoplatform.webui.event.EventListener;
    * 
    * @throws Exception the exception
    */
+  @SuppressWarnings("unchecked")
   public void init(String templatePath, ResourceResolver resourceResolver, PageList dataPageList) throws Exception {
     PortletPreferences portletPreferences = getPortletPreferences();
     String paginatorTemplatePath = portletPreferences.getValue(UICLVPortlet.PAGINATOR_TEMPlATE_PATH,

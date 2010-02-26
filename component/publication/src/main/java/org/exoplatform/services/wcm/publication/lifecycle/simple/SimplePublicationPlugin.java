@@ -45,12 +45,14 @@ import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Application;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.services.ecm.publication.IncorrectStateUpdateLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -76,6 +78,7 @@ import org.exoplatform.webui.form.UIForm;
  * hoa.pham@exoplatform.com
  * Sep 30, 2008
  */
+@SuppressWarnings("deprecation")
 public class SimplePublicationPlugin extends WebpagePublicationPlugin{
 
   /** The Constant DEFAULT_STATE. */
@@ -261,6 +264,7 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
    * 
    * @throws Exception the exception
    */
+  @SuppressWarnings("unchecked")
   private List<String> getRunningPortals(String userId) throws Exception {
     POMSessionManager manager = WCMCoreUtils.getService(POMSessionManager.class);
     POMSession session = null;
@@ -272,12 +276,11 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
     UserACL userACL = PublicationUtil.getServices(UserACL.class);
     for(Object object:pageList.getAll()) {
       PortalConfig portalConfig = (PortalConfig)object;
-//      if(userACL.hasPermission(portalConfig, userId)) {
       if(userACL.hasPermission(portalConfig)) {
         listPortalName.add(portalConfig.getName());
       }
     }
-    session.close();
+    if (session != null) session.close();
     return listPortalName;
   }
 
@@ -286,9 +289,7 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
    */
   public void publishContentToPage(Node content, Page page) throws Exception {
     UserPortalConfigService userPortalConfigService = PublicationUtil.getServices(UserPortalConfigService.class);
-//    Application portlet = new Application();
-    Application portlet = null;
-//    portlet.setApplicationType(org.exoplatform.web.application.Application.EXO_PORTLET_TYPE);
+    Application<Portlet> portlet = new Application<Portlet>(ApplicationType.PORTLET);
     portlet.setShowInfoBar(false);
 
     // Create portlet
@@ -378,6 +379,7 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
    * 
    * @throws Exception the exception
    */
+  @SuppressWarnings("unchecked")
   public List<String> getListPageNavigationUri(Page page, String remoteUser) throws Exception {
     List<String> listPageNavigationUri = new ArrayList<String>();
     DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);    

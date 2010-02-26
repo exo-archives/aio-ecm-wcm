@@ -85,6 +85,7 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
    * 
    * @throws Exception the exception
    */
+  @SuppressWarnings("deprecation")
   public PaginatedQueryResult(QueryResult queryResult,int pageSize) throws Exception{
     super(pageSize);         
     NodeIterator nodeIterator = queryResult.getNodes();
@@ -102,7 +103,7 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
   /* (non-Javadoc)
    * @see org.exoplatform.wcm.webui.paginator.PaginatedNodeIterator#populateCurrentPage(int)
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({ "unchecked", "deprecation" })
   protected void populateCurrentPage(int page) throws Exception {
     if(page == currentPage_ && (currentListPage_ != null && !currentListPage_.isEmpty())) {
       return;

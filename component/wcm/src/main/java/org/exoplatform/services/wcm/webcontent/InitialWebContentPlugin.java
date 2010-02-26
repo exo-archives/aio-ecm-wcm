@@ -55,7 +55,7 @@ public class InitialWebContentPlugin extends CreatePortalPlugin {
   private InitParams initParams;   
   private ConfigurationManager configurationManager;  
   private RepositoryService repositoryService;
-  private ExoCache artifactsCache; 
+  private ExoCache<String, String> artifactsCache; 
   private LivePortalManagerService livePortalManagerService;
   /**
    * Instantiates a new initial web content plugin.

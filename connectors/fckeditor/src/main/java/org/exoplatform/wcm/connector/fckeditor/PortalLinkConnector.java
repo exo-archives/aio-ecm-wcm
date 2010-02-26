@@ -61,6 +61,7 @@ import org.w3c.dom.Element;
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Jul 11, 2008
  */
+@SuppressWarnings("deprecation")
 @Path("/portalLinks/")
 public class PortalLinkConnector implements ResourceContainer {
 
@@ -185,6 +186,7 @@ public class PortalLinkConnector implements ResourceContainer {
    * 
    * @throws Exception the exception
    */
+  @SuppressWarnings("unchecked")
   private Document buildPortalXMLResponse(String currentFolder, String command, String userId) throws Exception {
     if (manager.getSession() == null) session = manager.openSession();
     Element rootElement = initRootElement(command, currentFolder);

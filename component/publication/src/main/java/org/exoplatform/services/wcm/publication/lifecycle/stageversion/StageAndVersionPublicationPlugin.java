@@ -73,6 +73,7 @@ import org.exoplatform.webui.form.UIForm;
 /**
  * The Class StageAndVersionPublicationPlugin.
  */
+@SuppressWarnings("deprecation")
 public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
 
   /** The page event listener delegate. */
@@ -700,6 +701,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
    * 
    * @throws Exception the exception
    */
+  @SuppressWarnings("unchecked")
   private List<String> getRunningPortals(String userId) throws Exception {
     List<String> listPortalName = new ArrayList<String>();
     DataStorage service = PublicationUtil.getServices(DataStorage.class);
@@ -708,9 +710,9 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     UserACL userACL = PublicationUtil.getServices(UserACL.class);
     for(Object object:pageList.getAll()) {
       PortalConfig portalConfig = (PortalConfig)object;
-//      if(userACL.hasPermission(portalConfig, userId)) {
-//        listPortalName.add(portalConfig.getName());
-//      }
+      if(userACL.hasPermission(portalConfig)) {
+        listPortalName.add(portalConfig.getName());
+      }
     }
     return listPortalName;
   }
@@ -725,6 +727,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
    * 
    * @throws Exception the exception
    */
+  @SuppressWarnings("unchecked")
   public List<String> getListPageNavigationUri(Page page, String remoteUser) throws Exception {
     List<String> listPageNavigationUri = new ArrayList<String>();
     DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);    

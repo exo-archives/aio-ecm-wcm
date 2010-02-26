@@ -57,6 +57,7 @@ public class SmallPaginatedQueryResult extends WCMPaginatedQueryResult{
    * 
    * @throws Exception the exception
    */
+  @SuppressWarnings("deprecation")
   public SmallPaginatedQueryResult(QueryResult queryResult, QueryCriteria queryCriteria, int pageSize, boolean isSearchContent) throws Exception {
     super(queryResult, queryCriteria, pageSize, isSearchContent);   
       RowIterator rowIterator = queryResult.getRows();
@@ -82,7 +83,7 @@ public class SmallPaginatedQueryResult extends WCMPaginatedQueryResult{
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.utils.PaginatedNodeIterator#getPage(int)
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({ "unchecked", "deprecation" })
   public List getPage(int page) throws Exception {
     checkAndSetPage(page);
     populateCurrentPage(page);
@@ -92,6 +93,7 @@ public class SmallPaginatedQueryResult extends WCMPaginatedQueryResult{
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.search.PaginatedQueryResult#populateCurrentPage(int)
    */
+  @SuppressWarnings({ "deprecation", "unchecked" })
   protected void populateCurrentPage(int page) throws Exception {    
     currentListPage_ = arrayList.subList(getFrom(), getTo());
   }
@@ -99,6 +101,7 @@ public class SmallPaginatedQueryResult extends WCMPaginatedQueryResult{
   /* (non-Javadoc)
    * @see org.exoplatform.commons.utils.PageList#checkAndSetPage(int)
    */
+  @SuppressWarnings({ "deprecation", "unchecked" })
   protected void checkAndSetPage(int page) throws Exception {
     if (page < 1 || page > availablePage_) {
       Object[] args = { Integer.toString(page), Integer.toString(availablePage_) };

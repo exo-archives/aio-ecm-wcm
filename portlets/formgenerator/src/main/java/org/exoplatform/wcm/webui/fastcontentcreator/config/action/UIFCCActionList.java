@@ -48,6 +48,7 @@ import org.exoplatform.webui.event.EventListener;
  * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
  * Jun 25, 2009
  */
+@SuppressWarnings("deprecation")
 @ComponentConfig(
     lifecycle = Lifecycle.class,
     template = "app:/groovy/webui/FastContentCreatorPortlet/UIFCCActionList.gtmpl",
@@ -83,6 +84,7 @@ public class UIFCCActionList extends UIContainer {
    * 
    * @throws Exception the exception
    */
+  @SuppressWarnings("unchecked")
   public void updateGrid(Node node, int currentPage) throws Exception {
     UIPageIterator uiIterator = getChild(UIGrid.class).getUIPageIterator();
     ObjectPageList objPageList = new ObjectPageList(getAllActions(node), 10) ;

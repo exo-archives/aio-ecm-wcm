@@ -34,6 +34,7 @@ public class NoneHTMLValidator implements Validator {
   private String startHtmlTag = ".*<.*>.*";
   private String finishHtmlTag = ".*</.*>.*";
 
+  @SuppressWarnings("unchecked")
   public void validate(UIFormInput uiInput) throws Exception {
     if((uiInput.getValue() == null)) return;        
     String input = ((String)uiInput.getValue()).trim();

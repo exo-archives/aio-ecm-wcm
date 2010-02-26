@@ -50,6 +50,7 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 31, 2008
  */
+@SuppressWarnings("deprecation")
 @ComponentConfigs( {
 	@ComponentConfig(
 		lifecycle = Lifecycle.class),
@@ -167,7 +168,8 @@ public class UISearchResult extends UIContainer {
 	 * 
 	 * @param dataPageList the new page list
 	 */
-	public void setPageList(PageList dataPageList) {
+	@SuppressWarnings("unchecked")
+  public void setPageList(PageList dataPageList) {
 		uiPaginator.setPageList(dataPageList);
 	}
 

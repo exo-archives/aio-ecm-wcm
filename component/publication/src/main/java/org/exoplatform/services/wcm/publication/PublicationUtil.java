@@ -38,6 +38,7 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -140,7 +141,7 @@ public class PublicationUtil {
   }   
   
   /** The application. */
-  private static Application application = null;
+  private static Application<Portlet> application = null;
   
   /**
    * Find app instances by id.
@@ -150,7 +151,7 @@ public class PublicationUtil {
    * 
    * @return the application
    */
-  public static Application findAppInstancesById(Container container, String applicationId) {
+  public static Application<Portlet> findAppInstancesById(Container container, String applicationId) {
 //    ArrayList<Object> chidren = container.getChildren();
 //    if(chidren == null) return null;
 //    for(Object object: chidren) {
@@ -173,6 +174,7 @@ public class PublicationUtil {
    * @param container the container
    * @param removingApplicationIds the removing application ids
    */
+  @SuppressWarnings("unchecked")
   private static void removedAppInstancesInContainerByNames(
   		Container container, List<String> removingApplicationIds) {
   	ArrayList<Object> childrenTmp = new ArrayList<Object>();    
@@ -181,7 +183,7 @@ public class PublicationUtil {
     if(chidren == null) return ;
     for(Object object: chidren) {
       if(object instanceof Application) {
-        Application application = Application.class.cast(object);
+//        Application application = Application.class.cast(object);
 //        if(!removingApplicationIds.contains(application.getInstanceId())) {
 //        	childrenTmp.add(object);
 //        }        
@@ -245,8 +247,7 @@ public class PublicationUtil {
   public static Node getNodeByApplicationId(String applicationId) throws Exception {
     DataStorage dataStorage = getServices(DataStorage.class);
     RepositoryService repositoryService = getServices(RepositoryService.class);
-//    PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(applicationId));
-    PortletPreferences portletPreferences = null;
+    PortletPreferences portletPreferences = dataStorage.getPortletPreferences(applicationId);
     if (portletPreferences == null) return null;
     String repositoryName = null;
     String workspaceName = null;

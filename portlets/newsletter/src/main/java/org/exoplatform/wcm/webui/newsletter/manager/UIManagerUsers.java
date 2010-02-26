@@ -59,6 +59,7 @@ import org.exoplatform.webui.event.EventListener;
  * Jun 10, 2009
  */
 
+@SuppressWarnings("deprecation")
 @ComponentConfig(
     //lifecycle = UIFormLifecycle.class ,
     template = "app:/groovy/webui/newsletter/NewsletterManager/UIManagerUsers.gtmpl",
@@ -111,6 +112,7 @@ public class UIManagerUsers extends UITabPane {
    * 
    * @return the list public user
    */
+  @SuppressWarnings("unchecked")
   public void getListPublicUser(){
     try{
       UIGrid uiGrid = getChildById(UIGRID_MANAGER_USERS);
@@ -215,6 +217,7 @@ public class UIManagerUsers extends UITabPane {
    * 
    * @throws Exception the exception
    */
+  @SuppressWarnings("unchecked")
   private void updateListUser() throws Exception{
     // get all administrator of newsletter
     List<String> listUserAccess = this.getAllAccesPermissions();

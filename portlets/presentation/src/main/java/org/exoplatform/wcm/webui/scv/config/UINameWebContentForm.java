@@ -28,6 +28,7 @@ import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.webui.comparator.ItemOptionNameComparator;
 import org.exoplatform.ecm.webui.form.validator.ECMNameValidator;
+import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Application;
@@ -217,6 +218,7 @@ public class UINameWebContentForm extends UIForm {
    */
   public static class AbortActionListener extends EventListener<UINameWebContentForm> {
 
+    @SuppressWarnings("unchecked")
     public void execute(Event<UINameWebContentForm> event) throws Exception {
       UINameWebContentForm nameWebcontentForm = event.getSource();
       UserPortalConfigService userPortalConfigService = nameWebcontentForm.getApplicationComponent(UserPortalConfigService.class);
@@ -233,25 +235,25 @@ public class UINameWebContentForm extends UIForm {
         Application application = Application.class.cast(applicationObject);
 //        String applicationId = application.getInstanceId();
         String applicationId = application.getId();
-//        org.exoplatform.portal.application.PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(applicationId));
-//        if (portletPreferences == null) continue;
+        org.exoplatform.portal.application.PortletPreferences portletPreferences = dataStorage.getPortletPreferences(applicationId);
+        if (portletPreferences == null) continue;
         
         boolean isQuickCreate = false;
         String nodeIdentifier = null;
         
-//        for (Object preferenceObject : portletPreferences.getPreferences()) {
-//        	Preference preference = Preference.class.cast(preferenceObject);
-//
-//        	if ("isQuickCreate".equals(preference.getName())) {
-//        		isQuickCreate = Boolean.valueOf(preference.getValues().get(0).toString());
-//        		if (!isQuickCreate) break;
-//        	}
-//
-//        	if ("nodeIdentifier".equals(preference.getName())) {
-//        		nodeIdentifier = preference.getValues().get(0).toString();
-//        		if (nodeIdentifier == null || nodeIdentifier == "") break;
-//        	}
-//        }
+        for (Object preferenceObject : portletPreferences.getPreferences()) {
+        	Preference preference = Preference.class.cast(preferenceObject);
+
+        	if ("isQuickCreate".equals(preference.getName())) {
+        		isQuickCreate = Boolean.valueOf(preference.getValues().get(0).toString());
+        		if (!isQuickCreate) break;
+        	}
+
+        	if ("nodeIdentifier".equals(preference.getName())) {
+        		nodeIdentifier = preference.getValues().get(0).toString();
+        		if (nodeIdentifier == null || nodeIdentifier == "") break;
+        	}
+        }
         
         if (isQuickCreate && (nodeIdentifier == null || nodeIdentifier == "")) {
         	applications.remove(applicationObject);

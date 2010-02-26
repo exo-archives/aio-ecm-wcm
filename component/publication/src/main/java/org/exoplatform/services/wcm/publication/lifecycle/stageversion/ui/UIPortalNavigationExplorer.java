@@ -45,6 +45,7 @@ import org.exoplatform.webui.event.EventListener;
  * Created by The eXo Platform SAS Author : Hoa Pham hoa.pham@exoplatform.com
  * Sep 9, 2008
  */
+@SuppressWarnings("deprecation")
 @ComponentConfig(lifecycle = Lifecycle.class, template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/ui/UIPortalNavigationExplorer.gtmpl", events = { @EventConfig(listeners = UIPortalNavigationExplorer.ChangeNodeActionListener.class) })
 public class UIPortalNavigationExplorer extends UIContainer {
 
@@ -121,6 +122,7 @@ public class UIPortalNavigationExplorer extends UIContainer {
    * 
    * @throws Exception the exception
    */
+  @SuppressWarnings("unchecked")
   private PageNavigation getPortalNavigation(String portalName) throws Exception {
     DataStorage dataStorage = getApplicationComponent(DataStorage.class);
     Query<PageNavigation> query = new Query<PageNavigation>(PortalConfig.PORTAL_TYPE,

@@ -31,6 +31,7 @@ import org.exoplatform.services.jcr.impl.core.query.lucene.TwoWayRangeIterator;
  * hoa.phamvu@exoplatform.com
  * Oct 17, 2008
  */
+@SuppressWarnings({ "deprecation", "unchecked" })
 public class PaginatedNodeIterator  extends PageList {
 
   /** The nodes. */
@@ -79,7 +80,6 @@ public class PaginatedNodeIterator  extends PageList {
   /* (non-Javadoc)
    * @see org.exoplatform.commons.utils.PageList#populateCurrentPage(int)
    */
-  @SuppressWarnings("unchecked")
   protected void populateCurrentPage(int page) throws Exception {
     if(page == currentPage_) {
       if(currentListPage_ != null)
@@ -128,7 +128,6 @@ public class PaginatedNodeIterator  extends PageList {
    * 
    * @throws Exception the exception
    */
-  @SuppressWarnings("unchecked")
   public List getCurrentPageData() throws Exception {
     return currentPage();
   }
@@ -136,7 +135,6 @@ public class PaginatedNodeIterator  extends PageList {
   /* (non-Javadoc)
    * @see org.exoplatform.commons.utils.PageList#getPage(int)
    */
-  @SuppressWarnings("unchecked")
   public List getPage(int page) throws Exception {
     if (page < 1 || page > availablePage_) {
       Object[] args = { Integer.toString(page), Integer.toString(availablePage_) };
@@ -180,7 +178,6 @@ public class PaginatedNodeIterator  extends PageList {
   /* (non-Javadoc)
    * @see org.exoplatform.commons.utils.PageList#getAll()
    */
-  @SuppressWarnings("unchecked")
   public List getAll() throws Exception {
     throw new UnsupportedOperationException();
   }

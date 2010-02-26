@@ -121,6 +121,7 @@ public class UIWikiContentForm extends UIForm {
    * 
    * @throws Exception the exception
    */
+  @SuppressWarnings("unchecked")
   public String createNewPage(String pageName, String newNodeUUID) throws Exception {
     //Step 1 : create a UIPortlet
     UIPortal uiPortal = Util.getUIPortal(); 
@@ -187,6 +188,7 @@ public class UIWikiContentForm extends UIForm {
    * 
    * @throws Exception the exception
    */
+  @SuppressWarnings("unchecked")
   private UIPortlet createSCVPortlet(UIPortal uiPortal, String newNodeUUID) throws Exception {
     UIPortlet scvPortlet = new UIPortlet();
     scvPortlet.setShowInfoBar(false);
@@ -253,6 +255,7 @@ public class UIWikiContentForm extends UIForm {
    * 
    * @throws Exception the exception
    */
+  @SuppressWarnings("unchecked")
   private void addSCVPortletIntoPage(UIPortlet scvPortlet, UIPage uiPage, 
       Page page,
       UserPortalConfigService userPortalCfgService) throws Exception {

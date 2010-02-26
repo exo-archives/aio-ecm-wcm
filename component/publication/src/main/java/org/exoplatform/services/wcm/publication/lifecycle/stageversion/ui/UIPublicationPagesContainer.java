@@ -39,6 +39,7 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
  * chuong_phan@exoplatform.com
  * Mar 19, 2009
  */
+@SuppressWarnings("deprecation")
 @ComponentConfig(
   lifecycle = UIContainerLifecycle.class
 )
@@ -70,6 +71,7 @@ public class UIPublicationPagesContainer extends UIContainer {
    * 
    * @throws Exception the exception
    */
+  @SuppressWarnings("unchecked")
   private List<String> getRunningPortals(String userId) throws Exception {
     List<String> listPortalName = new ArrayList<String>();
     DataStorage service = PublicationUtil.getServices(DataStorage.class);
@@ -78,9 +80,9 @@ public class UIPublicationPagesContainer extends UIContainer {
     UserACL userACL = PublicationUtil.getServices(UserACL.class);
     for(Object object:pageList.getAll()) {
       PortalConfig portalConfig = (PortalConfig)object;
-//      if(userACL.hasPermission(portalConfig, userId)) {
-//        listPortalName.add(portalConfig.getName());
-//      }
+      if(userACL.hasPermission(portalConfig)) {
+        listPortalName.add(portalConfig.getName());
+      }
     }
     return listPortalName;
   }

@@ -101,10 +101,10 @@ public class VoteConnector extends BaseConnector implements ResourceContainer {
 	  try {
 		  Node content = getContent(repositoryName, workspaceName, jcrPath);
 		  if (content.isNodeType("mix:votable")) {
-			  String votingRate = "";
-			  if (content.hasProperty("exo:votingRate")) votingRate = content.getProperty("exo:votingRate").getString();
-			  String votingTotal = "";
-			  if (content.hasProperty("exo:voteTotalOfLang")) votingTotal = content.getProperty("exo:voteTotalOfLang").getString();
+//			  String votingRate = "";
+//			  if (content.hasProperty("exo:votingRate")) votingRate = content.getProperty("exo:votingRate").getString();
+//			  String votingTotal = "";
+//			  if (content.hasProperty("exo:voteTotalOfLang")) votingTotal = content.getProperty("exo:voteTotalOfLang").getString();
 			  
 			  Document document =
 					DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
