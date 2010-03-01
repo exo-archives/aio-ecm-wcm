@@ -16,6 +16,7 @@
  */
 package org.exoplatform.wcm.webui.fastcontentcreator.config.action;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.jcr.Node;
@@ -23,6 +24,7 @@ import javax.jcr.RepositoryException;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.form.UIDialogForm;
+import org.exoplatform.ecm.webui.nodetype.selector.UINodeTypeSelector;
 import org.exoplatform.ecm.webui.selector.ComponentSelector;
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.ecm.webui.tree.selectone.UIOneNodePathSelector;
@@ -55,6 +57,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormInputBase;
+import org.exoplatform.webui.form.UIFormMultiValueInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
@@ -466,6 +469,11 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
         ((UIOneNodePathSelector)uiComp).setRootNodeLocation(UIFCCUtils.getPreferenceRepository(), wsName, rootPath) ;
         ((UIOneNodePathSelector)uiComp).setShowRootPathSelect(true);
         ((UIOneNodePathSelector)uiComp).init(Utils.getSessionProvider());
+      } else if (uiComp instanceof UINodeTypeSelector) {
+          ((UINodeTypeSelector)uiComp).setRepositoryName(fastContentCreatorActionForm.repositoryName);
+          UIFormMultiValueInputSet uiFormMultiValueInputSet = fastContentCreatorActionForm.getChildById(fieldName);
+          List values = uiFormMultiValueInputSet.getValue();
+          ((UINodeTypeSelector)uiComp).init(1, values);
       }
       Utils.createPopupWindow(fastContentCreatorActionForm, uiComp, UIFCCConstant.SELECTOR_POPUP_WINDOW, 640);
       String param = "returnField=" + fieldName ;
