@@ -121,3 +121,9 @@ td {
 .UISiteAdminToolBar .LeftSelect {
   float:left;
 }
+.UICategoryForm .UIForm .HorizontalLayout .UIFormInputSet {
+	padding: 0px;
+}
+.UISubcriptionForm .UIForm .HorizontalLayout .UIFormInputSet {
+	padding: 0px;
+}
