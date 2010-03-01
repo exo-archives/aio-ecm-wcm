@@ -44,6 +44,7 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
      @EventConfig(listeners = UICLVManualMode.QuickEditActionListener.class) 
    }
 )
+@SuppressWarnings("deprecation")
 public class UICLVManualMode extends UICLVContainer {
 
   /* (non-Javadoc)
@@ -52,13 +53,11 @@ public class UICLVManualMode extends UICLVContainer {
 	@SuppressWarnings("unchecked")
   public void init() throws Exception {                       
     PortletPreferences portletPreferences = getPortletPreference();
-    setViewAbleContent(true);
     String repositoryName = portletPreferences.getValue(UICLVPortlet.REPOSITORY, null);
     String workspaceName = portletPreferences.getValue(UICLVPortlet.WORKSPACE, null);
     String[] listContent = portletPreferences.getValues(UICLVPortlet.CONTENT_LIST, null);
     if (listContent == null || listContent.length == 0) {
       messageKey = "UIMessageBoard.msg.contents-not-found";
-      setViewAbleContent(false);
       return;
     }
     int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UICLVPortlet.ITEMS_PER_PAGE, null));
@@ -75,8 +74,6 @@ public class UICLVManualMode extends UICLVContainer {
     }
     if (nodes.size() == 0) {
       messageKey = "UIMessageBoard.msg.contents-not-found";
-      setViewAbleContent(false);
-      return;
     }    
     getChildren().clear();
     ObjectPageList pageList = new ObjectPageList(nodes, itemsPerPage);    

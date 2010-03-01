@@ -18,7 +18,7 @@
 			if (uicomponent.getUIPageIterator().getAvailable() == 0) {
 				%>
 					<div style="height: 20px; text-align: center; font-size: 13px; background: white; padding: 10px; margin: 5px;">
-						<%= uicomponent.getParent().getMessage() %>
+						<span><%= _ctx.appRes(uicomponent.getParent().getMessageKey()) %></span>
 					</div>
 				<%
 			} else {			

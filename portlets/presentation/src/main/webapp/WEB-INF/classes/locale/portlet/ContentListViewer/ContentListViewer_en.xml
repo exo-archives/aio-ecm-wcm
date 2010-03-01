@@ -109,14 +109,12 @@
       <UIContentDialogForm>Web content form</UIContentDialogForm>
     </title>
   </UIContentDialogFormPopupWindow>
+  
   <UIMessageBoard>
     <msg>
-      <contents-not-found>
-        This content does not found or deleted.
- 		</contents-not-found>
-      <add-node-error>
-        An error when perform add new node.
- 		</add-node-error>
+      <contents-not-found>This content does not found or deleted.</contents-not-found>
+      <add-node-error>An error when perform add new node.</add-node-error> 	 
+ 	  <folder-empty>This folder is empty</folder-empty>	 
     </msg>
   </UIMessageBoard>
 </bundle>

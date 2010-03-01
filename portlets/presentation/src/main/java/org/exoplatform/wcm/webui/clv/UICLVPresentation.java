@@ -235,7 +235,7 @@ import org.exoplatform.webui.event.EventListener;
    * @return the uI page iterator
    */
   public UIPageIterator getUIPageIterator() {
-    return uiPaginator;
+    return uiPaginator;    
   }
 
   /*

@@ -19,14 +19,6 @@
 	<% } %>		
 
 	<% 			
-	if (uicomponent.isViewAbleContent()) {			
 		uicomponent.renderChild(UICLVPresentation.class);
-	} else {
 	%>
-	<div class="CLV">
-		<div style="height: 100px; text-align: center; font-size: 13px; background: white;border: 1px solid gray; padding: 10px;margin: 5px;">
-			<span><%= _ctx.appRes(uicomponent.getMessageKey()) %></span>
-		</div>
-	</div>
-	<% } %>
 </div>
