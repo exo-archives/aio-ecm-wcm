@@ -30,6 +30,7 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.Util;
@@ -362,12 +363,14 @@ import org.exoplatform.webui.event.EventListener;
   	String workspace = portletPreferences.getValue(UICLVPortlet.WORKSPACE, null);
   	String baseURI = portletRequest.getScheme() + "://" + portletRequest.getServerName() + ":" + String.format("%s", portletRequest.getServerPort());
   	
+  	String portalName = PortalContainer.getCurrentPortalContainerName();
+	String restContextName = PortalContainer.getCurrentRestContextName();
   	if (node.isNodeType("nt:frozenNode")){
   		String uuid = node.getProperty("jcr:frozenUuid").getString();
-  		Node originalNode = node.getSession().getNodeByUUID(uuid);
-  		return baseURI + "/rest/jcr/" + repository + "/" + workspace + originalNode.getPath() + "?version=" + node.getParent().getName();
+  		Node originalNode = node.getSession().getNodeByUUID(uuid);  		
+  		return baseURI + "/" + portalName + "/" + restContextName + "/jcr/" + repository + "/" + workspace + originalNode.getPath() + "?version=" + node.getParent().getName();
   	} else {
-  		return baseURI + "/rest/jcr/" + repository + "/" + workspace + node.getPath();
+  		return baseURI + "/" + portalName + "/" + restContextName + "/jcr/" + repository + "/" + workspace + node.getPath();
   	}
 	  
   }
