@@ -60,27 +60,21 @@ public class UICLVFolderMode extends UICLVContainer {
     PortletPreferences portletPreferences = getPortletPreference();    
     
     List<Node> nodes = null;
-    setViewAbleContent(true);
     messageKey = null;
     try {
       nodes = getRenderedContentNodes();
     } catch (ItemNotFoundException e) {
       messageKey = "UIMessageBoard.msg.folder-not-found";
-      setViewAbleContent(false);
       return;
     } catch (AccessDeniedException e) {
       messageKey = "UIMessageBoard.msg.no-permission";
-      setViewAbleContent(false);
       return;
     } catch (Exception e) {
       messageKey = "UIMessageBoard.msg.error-nodetype";
-      setViewAbleContent(false);
       return;
     }
     if (nodes.size() == 0) {
       messageKey = "UIMessageBoard.msg.folder-empty";
-      setViewAbleContent(false);
-      return;
     }
     int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UICLVPortlet.ITEMS_PER_PAGE, null));
     PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(nodes, itemsPerPage);

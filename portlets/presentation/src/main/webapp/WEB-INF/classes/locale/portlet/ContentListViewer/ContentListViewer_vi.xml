@@ -99,4 +99,13 @@
    <UIContentSelectorMulti>Multiple content selector panel</UIContentSelectorMulti>
   </title>
  </CorrectContentSelectorPopupWindow>
+ 
+ <UIMessageBoard>
+    <msg>
+      <contents-not-found>Nội dung này không được tìm thấy hoặc đã bị xóa</contents-not-found>
+      <add-node-error>Một lỗi xảy ra khi thêm mới node</add-node-error>
+ 	  <folder-empty>Thư mục này không có nội dung</folder-empty>	
+    </msg>
+  </UIMessageBoard>
+ 
 </bundle>

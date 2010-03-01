@@ -100,13 +100,10 @@
   </title>
  </CorrectContentSelectorPopupWindow>
  <UIMessageBoard>
- 	<msg>
- 		<contents-not-found>
- 			Ce contenu n'a pas été trouvée ou supprimé.
- 		</contents-not-found>
- 		<add-node-error>
- 			Une erreur lorsque vous effectuez ajouter un nouveau noeud.
- 		</add-node-error>
- 	</msg>
- </UIMessageBoard>
+    <msg>
+      <contents-not-found>Ce contenu n'a pas été trouvée ou supprimé.</contents-not-found>
+      <add-node-error>Une erreur lorsque vous effectuez ajouter un nouveau noeud.</add-node-error>
+ 	  <folder-empty>Ce dossier est vide</folder-empty>	
+    </msg>
+  </UIMessageBoard>
 </bundle>

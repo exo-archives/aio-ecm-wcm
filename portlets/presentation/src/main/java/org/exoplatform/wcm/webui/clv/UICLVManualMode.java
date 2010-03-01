@@ -50,13 +50,11 @@ public class UICLVManualMode extends UICLVContainer {
    */
 	public void init() throws Exception {                       
     PortletPreferences portletPreferences = getPortletPreference();
-    setViewAbleContent(true);
     String repositoryName = portletPreferences.getValue(UICLVPortlet.REPOSITORY, null);
     String workspaceName = portletPreferences.getValue(UICLVPortlet.WORKSPACE, null);
     String[] listContent = UICLVPortlet.getContentsByPreference();
     if (listContent == null || listContent.length == 0) {
       messageKey = "UIMessageBoard.msg.contents-not-found";
-      setViewAbleContent(false);
       return;
     }
     int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UICLVPortlet.ITEMS_PER_PAGE, null));
@@ -73,8 +71,6 @@ public class UICLVManualMode extends UICLVContainer {
     }
     if (nodes.size() == 0) {
       messageKey = "UIMessageBoard.msg.contents-not-found";
-      setViewAbleContent(false);
-      return;
     }    
     getChildren().clear();
     ObjectPageList pageList = new ObjectPageList(nodes, itemsPerPage);    

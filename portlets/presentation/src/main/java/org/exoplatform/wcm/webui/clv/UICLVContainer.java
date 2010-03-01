@@ -37,8 +37,6 @@ import org.exoplatform.webui.event.EventListener;
  */
 public abstract class UICLVContainer extends UIContainer implements RefreshDelegateActionListener {
 
-  /** The view able content. */
-  protected boolean viewAbleContent = false;
 
   /** The message key. */
   protected String  messageKey;
@@ -59,24 +57,6 @@ public abstract class UICLVContainer extends UIContainer implements RefreshDeleg
    */
   public String getMessageKey() throws Exception {
     return messageKey;
-  }
-
-  /**
-   * Checks if is view able content.
-   * 
-   * @return true, if is view able content
-   */
-  public boolean isViewAbleContent() {
-    return viewAbleContent;
-  }
-
-  /**
-   * Sets the view able content.
-   * 
-   * @param bool the new view able content
-   */
-  public void setViewAbleContent(boolean bool) {
-    viewAbleContent = bool;
   }
 
   /**
