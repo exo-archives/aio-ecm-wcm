@@ -36,7 +36,6 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
  * anh.do@exoplatform.com, anhdn86@gmail.com
  * Feb 23, 2009
  */
-@SuppressWarnings("deprecation")
 @ComponentConfig(      
   lifecycle = Lifecycle.class,                 
    template = "app:/groovy/ContentListViewer/UICLVContainer.gtmpl",
