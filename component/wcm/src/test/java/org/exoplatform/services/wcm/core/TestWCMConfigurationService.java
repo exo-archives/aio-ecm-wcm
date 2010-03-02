@@ -89,7 +89,7 @@ public class TestWCMConfigurationService extends BaseWCMTestCase {
    */
   public void testGetRuntimeContextParams() {
     Collection<String> runtimeContextParams = configurationService.getRuntimeContextParams();
-    assertTrue(runtimeContextParams.contains("redactor"));
+    assertTrue(runtimeContextParams.contains("redactor:/platform/web-contributors"));
     assertTrue(runtimeContextParams.contains("/detail"));
     assertTrue(runtimeContextParams.contains("/printviewer"));
     assertTrue(runtimeContextParams.contains("printviewer"));
