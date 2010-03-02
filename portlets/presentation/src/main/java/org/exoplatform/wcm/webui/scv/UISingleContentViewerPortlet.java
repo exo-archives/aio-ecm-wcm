@@ -32,6 +32,7 @@ import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPortletApplication;
+import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
 /**
  * Created by The eXo Platform SAS
@@ -40,7 +41,8 @@ import org.exoplatform.webui.core.UIPortletApplication;
  * Jun 9, 2008
  */
 @ComponentConfig(
-    template = "app:/groovy/SingleContentViewer/UISingleContentView.gtmpl"
+  lifecycle = UIApplicationLifecycle.class,
+  template = "app:/groovy/SingleContentViewer/UISingleContentView.gtmpl"
 )
 
 public class UISingleContentViewerPortlet extends UIPortletApplication {
