@@ -16,13 +16,21 @@
  */
 package org.exoplatform.wcm.webui.pcv;
 
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.jcr.Node;
 
+import org.exoplatform.download.DownloadService;
+import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
+import org.exoplatform.services.cms.mimetype.DMSMimeTypeResolver;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.wcm.webui.Utils;
@@ -31,6 +39,8 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
+import org.exoplatform.webui.ext.UIExtension;
+import org.exoplatform.webui.ext.UIExtensionManager;
 
 /*
  * Created by The eXo Platform SAS 
@@ -116,6 +126,22 @@ public class UIPCVPresentation extends UIBaseNodePresentation {
    */
   public String getWorkspaceName() throws Exception {
     return workspace;
+  }
+  
+  public String getDownloadLink(Node node) throws Exception { 	  	 
+	  DownloadService dservice = getApplicationComponent(DownloadService.class) ;    
+	  Node jcrContentNode = node.getNode(org.exoplatform.ecm.webui.utils.Utils.JCR_CONTENT) ;
+	  InputStream input = jcrContentNode.getProperty(org.exoplatform.ecm.webui.utils.Utils.JCR_DATA).getStream() ;
+	  String mimeType = jcrContentNode.getProperty(org.exoplatform.ecm.webui.utils.Utils.JCR_MIMETYPE).getString() ;
+	  InputStreamDownloadResource dresource = new InputStreamDownloadResource(input, mimeType) ;
+	  DMSMimeTypeResolver mimeTypeSolver = DMSMimeTypeResolver.getInstance();
+	  String ext = mimeTypeSolver.getExtension(mimeType) ;
+	  String fileName = node.getName() ;    
+	  if(fileName.lastIndexOf("."+ext)<0){
+	    fileName = fileName + "." +ext ;
+	  } 
+	  dresource.setDownloadName(fileName) ;
+	  return dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;	 
   }
 
   /* (non-Javadoc)
@@ -217,6 +243,14 @@ public class UIPCVPresentation extends UIBaseNodePresentation {
 
 public UIComponent getUIComponent(String mimeType) throws Exception {
 	// TODO Auto-generated method stub
-	return null;
+	UIExtensionManager manager = getApplicationComponent(UIExtensionManager.class);
+	List<UIExtension> extensions = manager.getUIExtensions(org.exoplatform.ecm.webui.utils.Utils.FILE_VIEWER_EXTENSION_TYPE);
+    Map<String, Object> context = new HashMap<String, Object>();
+    context.put(org.exoplatform.ecm.webui.utils.Utils.MIME_TYPE, mimeType);
+    for (UIExtension extension : extensions) {
+      UIComponent uiComponent = manager.addUIExtension(extension, context, this);
+      if(uiComponent != null) return uiComponent;
+    }
+    return null;
 }
 }

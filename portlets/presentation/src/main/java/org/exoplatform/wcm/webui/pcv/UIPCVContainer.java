@@ -137,7 +137,8 @@ public class UIPCVContainer extends UIContainer {
 		      title = null;
 		    }
 		  }
-	  } else if (node.hasProperty("exo:title")) {
+	  } 
+	  if (node.hasProperty("exo:title")) {
 		  title = node.getProperty("exo:title").getValue().getString();
 	  }
 	  if (title==null) title = node.getName();
