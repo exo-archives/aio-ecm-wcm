@@ -312,16 +312,16 @@ public class NewsletterSubscriptionHandler {
     List<NewsletterSubscriptionConfig> listSubs = new ArrayList<NewsletterSubscriptionConfig>();
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     Session session = sessionProvider.getSession(workspace, manageableRepository);
-    String path = NewsletterConstant.generateCategoryPath(portalName);
-    List<String> userPermissionMembership = NewsletterConstant.getAllGroupAndMembershipOfCurrentUser(userName);
-    List<String> allPermission;
-    Node childNode;
-    for(NodeIterator nodeIterator = ((Node)session.getItem(path)).getNode(categoryName).getNodes();nodeIterator.hasNext();){
+    String categoriesPath = NewsletterConstant.generateCategoryPath(portalName);
+    String categoryPath = categoriesPath + "/" + categoryName;
+    Node categoryNode = (Node)session.getItem(categoryPath);
+    Node subscriptionNode;
+    NodeIterator subscriptionIterator = categoryNode.getNodes();
+    while(subscriptionIterator.hasNext()){
       try{
-        childNode = nodeIterator.nextNode();
-        if(!childNode.isNodeType(NewsletterConstant.SUBSCRIPTION_NODETYPE)) continue;
-        allPermission = NewsletterConstant.getAllPermissionOfNode(childNode);
-        if(NewsletterConstant.havePermission(allPermission, userPermissionMembership)) listSubs.add(getSubscriptionFormNode(childNode));
+        subscriptionNode = subscriptionIterator.nextNode();
+        if(!subscriptionNode.isNodeType(NewsletterConstant.SUBSCRIPTION_NODETYPE)) continue;
+        if(NewsletterConstant.hasPermission(userName, subscriptionNode)) listSubs.add(getSubscriptionFormNode(subscriptionNode));
       }catch(Exception ex){
         log.error("Error when get subcriptions by category " + categoryName + " failed because of ", ex.fillInStackTrace());
       }

@@ -47,7 +47,7 @@
             <string>You want to know where we are, where we go ?</string>
           </field>
           <field name="moderator">
-            <string>root</string>
+            <string>*:/platform/web-contributors</string>
           </field>
         </object>
       </object-param>
@@ -65,7 +65,7 @@
             <string>General information about us</string>
           </field>
           <field name="moderator">
-            <string>root</string>
+            <string>*:/platform/web-contributors</string>
           </field>
         </object>
       </object-param>
@@ -86,7 +86,7 @@
             <string>general</string>
           </field>
           <field name="redactor">
-            <string>root</string>
+            <string>*:/platform/web-contributors</string>
           </field>
         </object>
       </object-param>
@@ -107,7 +107,7 @@
             <string>general</string>
           </field>
           <field name="redactor">
-            <string>root</string>
+            <string>*:/platform/web-contributors</string>
           </field>
         </object>
       </object-param>
@@ -128,7 +128,7 @@
             <string>marketing</string>
           </field>
           <field name="redactor">
-            <string>root</string>
+            <string>*:/platform/web-contributors</string>
           </field>
         </object>
       </object-param>

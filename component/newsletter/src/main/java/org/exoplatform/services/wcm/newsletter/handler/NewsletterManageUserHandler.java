@@ -29,6 +29,7 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
+import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
@@ -37,6 +38,7 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
@@ -124,7 +126,7 @@ public class NewsletterManageUserHandler {
         return convertValuesToArray(categoriesNode.getProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR).getValues());
       }
     } catch(Exception ex){
-      log.error("getAllAdministrator() failed because of ", ex.fillInStackTrace());
+      log.error("getAllAdministrator() failed because of ", ex);
     }
     return new ArrayList<String>();
   }
@@ -453,4 +455,54 @@ public class NewsletterManageUserHandler {
     }
     return false;
   }
+  
+  
+  
+  
+  
+  
+
+  /**
+   * Check if user is an administrator or not
+   * 
+   * @param userId the current user
+   * 
+   * @return true if user is an administrator, otherwise return false
+   * 
+   * @throws Exception the exception
+   */
+  public boolean isAdministrator(String portalName, String userId) {
+    try {
+      List<String> administrators = getAllAdministrator(WCMCoreUtils.getSystemSessionProvider(), portalName);
+      String superuser = WCMCoreUtils.getService(UserACL.class).getSuperUser();
+      if (!administrators.contains(superuser)) {
+        administrators.add(superuser);
+      }
+      return WCMCoreUtils.hasPermission(userId, administrators, false);
+    } catch (Exception e) {
+      log.error("isAdministrator() failed because of ", e);
+    }
+    return false;
+  }
+  
+  /**
+   * Check if user is a moderator of current category or not
+   * 
+   * @param userId the current user
+   * @param categoryName the current category's name
+   * 
+   * @return true if user is an administrator, otherwise return false
+   * 
+   * @throws Exception the exception
+   */
+  public boolean isModerator(String userId, NewsletterCategoryConfig config) {
+    try {
+      List<String> moderators = Arrays.asList(config.getModerator().split(","));
+      return WCMCoreUtils.hasPermission(userId, moderators, false);
+    } catch (Exception e) {
+      log.error("isModerator() failed because of ", e);
+    }
+    return false;
+  }
+  
 }

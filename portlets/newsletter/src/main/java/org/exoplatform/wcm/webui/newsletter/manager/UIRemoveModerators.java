@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.exoplatform.ecm.webui.form.UIFormInputSetWithAction;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -34,6 +33,7 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
 
 /**
  * Created by The eXo Platform SAS
@@ -53,9 +53,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 public class UIRemoveModerators extends UIForm {
   private boolean setForCategoryForm = true;
   private List<String> listModerators = new ArrayList<String>();
-  private boolean isAdmin = false;
-  public void init(String input, boolean isAdmin){
-    this.isAdmin = isAdmin;
+  public void init(String input){
     listModerators.clear();
     listModerators.addAll(Arrays.asList(input.split(",")));
     this.removeChild(UIFormCheckBoxInput.class);
@@ -99,21 +97,21 @@ public class UIRemoveModerators extends UIForm {
       
       // if current user is not admin of newsletterManager portle and in list permision don't have him selt 
       // then view waring and stop processing 
-      if(!removeModerators.isAdmin){
-        boolean havePermission = false;
-        List<String> listGrouptMembers = NewsLetterUtil.getAllGroupAndMembershipOfCurrentUser();
-        for(String str : result.split(",")){
-          if(listGrouptMembers.contains(str)){
-            havePermission = true;
-            break;
-          }
-        }
-        if(havePermission == false){
-          uiApp.addMessage(new ApplicationMessage("UIRemoveModeratorsFormPopupWindow.msg.donotMoveYourSelt", null, ApplicationMessage.WARNING));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-          return;
-        }
-      }
+//      if(!removeModerators.isAdmin){
+//        boolean havePermission = false;
+//        List<String> listGrouptMembers = NewsLetterUtil.getAllGroupAndMembershipOfCurrentUser();
+//        for(String str : result.split(",")){
+//          if(listGrouptMembers.contains(str)){
+//            havePermission = true;
+//            break;
+//          }
+//        }
+//        if(havePermission == false){
+//          uiApp.addMessage(new ApplicationMessage("UIRemoveModeratorsFormPopupWindow.msg.donotMoveYourSelt", null, ApplicationMessage.WARNING));
+//          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+//          return;
+//        }
+//      }
       
       UIPopupContainer popupContainer = (UIPopupContainer)removeModerators.getAncestorOfType(UIPopupContainer.class);
       UIFormInputSetWithAction formInputSetWithAction;

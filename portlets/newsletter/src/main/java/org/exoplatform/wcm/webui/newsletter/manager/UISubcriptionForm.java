@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-//import org.exoplatform.ecm.webui.form.UIFormInputSetWithAction;
 import org.exoplatform.ecm.webui.selector.UIGroupMemberSelector;
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -94,8 +93,6 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent, UISel
   private NewsletterSubscriptionConfig subscriptionConfig            = null;
   
   private String popupId;
-  
-  private boolean isAdmin = false;
   
   private boolean isRemove;
   
@@ -188,8 +185,7 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent, UISel
    * 
    * @param subscriptionConfig the new subscription infor
    */
-  public void setSubscriptionInfor(NewsletterSubscriptionConfig subscriptionConfig, boolean isAdmin){
-    this.isAdmin = isAdmin;
+  public void setSubscriptionInfor(NewsletterSubscriptionConfig subscriptionConfig){
     if(subscriptionConfig == null) return;
     this.subscriptionConfig = subscriptionConfig;
 
@@ -270,7 +266,7 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent, UISel
       }
       
       // Update Redactors into access permissions of newsletter manager page
-      NewsletterConstant.updateAccessPermission(inputRedactorValue.split(","), uiSubcriptionForm);
+      NewsletterConstant.updateAccessPermission(inputRedactorValue.split(","));
       
       if(uiSubcriptionForm.subscriptionConfig == null) {
         newsletterSubscriptionConfig = subscriptionHandler
@@ -393,8 +389,7 @@ public static class SelectUserActionListener extends EventListener<UISubcription
       };
       UIRemoveModerators removeModerators = subscriptionForm.createUIComponent(UIRemoveModerators.class, null, null);
       removeModerators.permissionForSubscriptionForm();
-      removeModerators.init(((UIFormStringInput)((UIFormInputSetWithAction)subscriptionForm.getChildById(FORM_SUBSCRIPTION_REDACTOR)).
-                              getChildById(SELECT_REDACTOR)).getValue(), subscriptionForm.isAdmin);
+      removeModerators.init(((UIFormStringInput)((UIFormInputSetWithAction)subscriptionForm.getChildById(FORM_SUBSCRIPTION_REDACTOR)).getChildById(SELECT_REDACTOR)).getValue());
       Utils.createPopupWindow(subscriptionForm, removeModerators, UINewsletterConstant.REMOVE_MODERATORS_FORM_POPUP_WINDOW, 480);
       subscriptionForm.setPopupId(UINewsletterConstant.REMOVE_MODERATORS_FORM_POPUP_WINDOW);
     }

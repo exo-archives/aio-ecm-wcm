@@ -73,7 +73,7 @@ public class TestWCMConfigurationService extends BaseWCMTestCase {
    * Test get runtime context param.
    */
   public void testGetRuntimeContextParam() {
-    assertEquals("redactor", configurationService.getRuntimeContextParam(WCMConfigurationService.REDACTOR_MEMBERSHIP_TYPE));
+    assertEquals("redactor:/platform/web-contributors", configurationService.getRuntimeContextParam(WCMConfigurationService.NEWSLETTER_MANAGE_MEMBERSHIP));
     assertEquals("/detail", configurationService.getRuntimeContextParam(WCMConfigurationService.PARAMETERIZED_PAGE_URI));
     assertEquals("/printviewer", configurationService.getRuntimeContextParam(WCMConfigurationService.PRINT_PAGE_URI));
     assertEquals("printviewer", configurationService.getRuntimeContextParam(WCMConfigurationService.PRINT_VIEWER_PAGE));

@@ -16,45 +16,15 @@
  */
 package org.exoplatform.wcm.webui.newsletter.manager;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.organization.Membership;
-import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 
 /**
  * The Class NewsLetterUtil.
  */
 public class NewsLetterUtil {
+	
   /**
-   * Get all group and membership of current user
-   * @return
-   * @throws Exception
-   */
-  public static List<String> getAllGroupAndMembershipOfCurrentUser() throws Exception{
-    String userId = getCurrentUser();
-    OrganizationService oservice = (OrganizationService)
-    ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
-    List<String> userMemberships = new ArrayList<String> ();
-    userMemberships.add(userId);
-    Collection<?> memberships = oservice.getMembershipHandler().findMembershipsByUser(userId);
-    if(memberships == null || memberships.size() < 0) return userMemberships;
-    Object[] objects = memberships.toArray();
-    for(int i = 0; i < objects.length; i ++ ){
-      Membership membership = (Membership)objects[i];
-      String role = membership.getMembershipType() + ":" + membership.getGroupId();
-      userMemberships.add(role);     
-    }
-    return userMemberships;
-  }
-  
-	/**
 	 * Gets the portal name.
 	 * 
 	 * @return the portal name
@@ -98,22 +68,4 @@ public class NewsLetterUtil {
     return Util.getPortalRequestContext().getRemoteUser();
   }
 	
-	/**
-	 * Check permission of current user with category.
-	 * @param categoryConfig   The category which you want check
-	 * @return                 <code>True</code> if current user is moderator of the category and <code>False</code> if not
-	 * @throws Exception       The Exception
-	 */
-  public static boolean isModeratorOfCategory(NewsletterCategoryConfig categoryConfig) throws Exception{
-    List<String> listModerators = Arrays.asList(categoryConfig.getModerator().split(","));
-    if(listModerators.contains("any")) return true;
-    else{
-      for(String str : getAllGroupAndMembershipOfCurrentUser()){
-        if(listModerators.contains(str)){
-          return true;
-        }
-      }
-    }
-    return false;
-  }
 }

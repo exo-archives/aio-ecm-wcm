@@ -18,7 +18,6 @@ package org.exoplatform.services.wcm.newsletter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -40,8 +39,9 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.access.AccessControlEntry;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
-import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.MembershipHandler;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
@@ -49,7 +49,6 @@ import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
-import org.exoplatform.webui.core.UIComponent;
 
 /**
  * Created by The eXo Platform SAS
@@ -58,6 +57,8 @@ import org.exoplatform.webui.core.UIComponent;
  * May 21, 2009
  */
 public class NewsletterConstant {
+
+  private static Log log = ExoLogger.getLogger("wcm.NewsletterConstant");
   
   // Categories property
   /** The Constant CATEGORIES_PROPERTY_ADDMINISTRATOR. */
@@ -154,36 +155,8 @@ public class NewsletterConstant {
   /** The USER base path. */
   public static String       USER_BASE_PATH                      = "/sites content/live/" + PORTAL_NAME + "/ApplicationData/NewsletterApplication/Users";
   
-  private static UIComponent component;
-  
   private static PortalContainer manager;
   
-  public static PortalContainer getManager() {
-    return PortalContainer.getInstance();
-  }
-
-  public static void setManager(PortalContainer manager) {
-    NewsletterConstant.manager = manager;
-  }
-
-  private static Session session;
-  
-  public static Session getSession() {
-    return session;
-  }
-
-  public static void setSession(Session session) {
-    NewsletterConstant.session = session;
-  }
-
-  public static UIComponent getComponent() {
-    return component;
-  }
-
-  public static void setComponent(UIComponent component) {
-    NewsletterConstant.component = component;
-  }
-
   /**
    * Generate default template path.
    * 
@@ -288,29 +261,6 @@ public class NewsletterConstant {
   }
   
   /**
-   * Get all groups and membership where user is member
-   * @param userId      User name
-   * @return            List groups and memberships of <code>userId</code>
-   * @throws Exception  The exception
-   */
-  public static List<String> getAllGroupAndMembershipOfCurrentUser(String userId) throws Exception{
-    OrganizationService organizationService = WCMCoreUtils.getService(OrganizationService.class);
-    ((ComponentRequestLifecycle) organizationService).startRequest(manager);
-    List<String> userMemberships = new ArrayList<String> ();
-    userMemberships.add(userId);
-    Collection<?> memberships = organizationService.getMembershipHandler().findMembershipsByUser(userId);
-    if(memberships == null || memberships.size() < 0) return userMemberships;
-    Object[] objects = memberships.toArray();
-    for(int i = 0; i < objects.length; i ++ ){
-      Membership membership = (Membership)objects[i];
-      String role = membership.getMembershipType() + ":" + membership.getGroupId();
-      userMemberships.add(role);     
-    }
-    ((ComponentRequestLifecycle) organizationService).endRequest(manager);
-    return userMemberships;
-  }
-  
-  /**
    * Check permission by comparing two lists permission. If in <code>list1</code> have any element of <code>list2</code>
    * will return <code>true</code> and return false if don't have any element which contained in <code>list1</code> but 
    * don't contained in <code>list2</code>
@@ -358,40 +308,37 @@ public class NewsletterConstant {
    * @param component           UIComponent
    * @throws Exception          The exception
    */
-  public static void updateAccessPermission(String[] accessPermissions, UIComponent component) throws Exception{
-    NewsletterConstant.setComponent(component);
-    UserPortalConfigService userService = (UserPortalConfigService)component.getApplicationComponent(UserPortalConfigService.class);
-    Page page = userService.getPage(Util.getUIPortal().getSelectedNode().getPageReference());
-    List<String> listAccess = new ArrayList<String>();
-    WCMConfigurationService wcmConfigurationService = component.getApplicationComponent(WCMConfigurationService.class);
-    String editSitePermission = Util.getUIPortal().getEditPermission();
-    String redactorMembershipType = wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.REDACTOR_MEMBERSHIP_TYPE);
-    String groupName = null;
-    if (editSitePermission.indexOf(":") != -1) {
-      groupName = editSitePermission.substring(editSitePermission.indexOf(":") + 1);
-    }
-    OrganizationService organizationService = component.getApplicationComponent(OrganizationService.class) ;
+  @SuppressWarnings({ "deprecation", "unchecked" })
+  public static void updateAccessPermission(String[] accessPermissions) throws Exception{
+    OrganizationService organizationService = WCMCoreUtils.getService(OrganizationService.class) ;
     ((ComponentRequestLifecycle) organizationService).startRequest(manager);
-    MembershipHandler memberShipHandler = organizationService.getMembershipHandler();
-    Group group = organizationService.getGroupHandler().findGroupById(groupName);
-    MembershipType membershipType = organizationService.getMembershipTypeHandler().findMembershipType(redactorMembershipType);
+
+    WCMConfigurationService wcmConfigurationService = WCMCoreUtils.getService(WCMConfigurationService.class);
+    String membership = wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.NEWSLETTER_MANAGE_MEMBERSHIP);
+    MembershipType membershipType = organizationService.getMembershipTypeHandler().findMembershipType(membership.split(":")[0]);
+    Group group = organizationService.getGroupHandler().findGroupById(membership.split(":")[1]);
+    List<String> users = new ArrayList<String>();
+    
+    UserPortalConfigService userService = WCMCoreUtils.getService(UserPortalConfigService.class);
+    Page page = userService.getPage(Util.getUIPortal().getSelectedNode().getPageReference());
+    List<String> pageAccessPermissions = new ArrayList<String>(Arrays.asList(page.getAccessPermissions()));
+    
     UserHandler userHandler = organizationService.getUserHandler();
-    listAccess.addAll(Arrays.asList(page.getAccessPermissions()));
-    List<String> userViewAdminToolBar = getUserPermission(new String[]{editSitePermission});
-    for(String acc : accessPermissions){
-      if(listAccess.contains(acc)) continue;
-      // update view admintoolbar permission
-      for(String uid : getUserPermission(new String[]{acc})){
-          if(userViewAdminToolBar.contains(uid)) continue;
-          userViewAdminToolBar.add(uid);
-          memberShipHandler.linkMembership(userHandler.findUserByName(uid),
-                                         group, membershipType, true);
+    MembershipHandler membershipHandler = organizationService.getMembershipHandler();
+    for(String newAccessPermission : accessPermissions){
+      if(pageAccessPermissions.contains(newAccessPermission)) continue;
+      User currentUser = userHandler.findUserByName(newAccessPermission);
+      if (currentUser == null)
+        users = userHandler.findUsersByGroup(newAccessPermission.split(":")[1]).getAll();
+      else
+        users.add(currentUser.getUserName());
+      for(String user : users){
+        membershipHandler.linkMembership(userHandler.findUserByName(user), group, membershipType, true);
       }
-      // update access portlet permission
-      listAccess.add(acc);
+      pageAccessPermissions.add(newAccessPermission);
     }
     ((ComponentRequestLifecycle) organizationService).endRequest(manager);
-    page.setAccessPermissions(listAccess.toArray(new String[]{}));
+    page.setAccessPermissions(pageAccessPermissions.toArray(new String[]{}));
     userService.update(page);
   }
   
@@ -400,90 +347,23 @@ public class NewsletterConstant {
    * @param accessPermissions   list of user will be set access permission
    * @throws Exception          The exception
    */
-  public static void removeAccessPermission(String[] removePermissions) {
-    if(removePermissions == null) {
-      return;
-    }
-    UserPortalConfigService userService = (UserPortalConfigService)component.getApplicationComponent(UserPortalConfigService.class);
-    Page page;
-    try {
-      page = userService.getPage(Util.getUIPortal().getSelectedNode().getPageReference());
-      List<String> listAccess = new ArrayList<String>();
-      OrganizationService organizationService = component.getApplicationComponent(OrganizationService.class) ;
-      ((ComponentRequestLifecycle) organizationService).startRequest(manager);
-      MembershipHandler memberShipHandler = organizationService.getMembershipHandler();
-      listAccess.addAll(Arrays.asList(page.getAccessPermissions()));
-      for(String acc : removePermissions){
-        if(listAccess.contains(acc)) {
-          listAccess.remove(acc);
-          memberShipHandler.removeMembershipByUser(acc, true);
-        }
-      }
-      ((ComponentRequestLifecycle) organizationService).endRequest(manager);
-      page.setAccessPermissions(listAccess.toArray(new String[]{}));
-      userService.update(page);
-    } catch (Exception e) {
-      return;
-    }
-  }
-  
-  /**
-   * Get moderator in user,group,membership become list user
-   * 
-   * @param userGroupMembership is string user input to interface
-   * @return list users
-   * @throws Exception
-   */
-  @SuppressWarnings({ "unchecked", "deprecation" })
-  public static List<String> getUserPermission(String[] userGroupMembership) throws Exception {
-    List<String> users = new ArrayList<String> () ;
-    if(userGroupMembership == null || userGroupMembership.length <= 0 || 
-        (userGroupMembership.length == 1 && userGroupMembership[0].equals(" "))) return users ; 
-    OrganizationService organizationService = WCMCoreUtils.getService(OrganizationService.class);
+  public static void removeAccessPermission(String[] removedPermissions) throws Exception {
+    OrganizationService organizationService = WCMCoreUtils.getService(OrganizationService.class) ;
     ((ComponentRequestLifecycle) organizationService).startRequest(manager);
-    for(String str : userGroupMembership) {
-      str = str.trim();
-      if(str.indexOf("/") >= 0) {
-        if(str.indexOf(":") >= 0) { //membership
-          String[] array = str.split(":") ;
-          List<User> userList = organizationService.getUserHandler().findUsersByGroup(array[1]).getAll() ;
-          if(array[0].length() > 1){
-            for(User user: userList) {
-              if(!users.contains(user.getUserName())){
-                Collection<Membership> memberships = organizationService.getMembershipHandler().findMembershipsByUser(user.getUserName()) ;
-                for(Membership member : memberships){
-                  if(member.getMembershipType().equals(array[0])) {
-                    users.add(user.getUserName()) ;
-                    break ;
-                  }
-                }           
-              }
-            }
-          }else {
-            if(array[0].charAt(0)== 42) {
-              for(User user: userList) {
-                if(!users.contains(user.getUserName())){
-                  users.add(user.getUserName()) ;
-                }
-              }
-            }
-          }
-        }else { //group
-          List<User> userList = organizationService.getUserHandler().findUsersByGroup(str).getAll() ;
-          for(User user: userList) {
-            if(!users.contains(user.getUserName())){
-              users.add(user.getUserName()) ;
-            }
-          }
-        }
-      }else {//user
-        if(!users.contains(str)){
-          users.add(str) ;
-        }
+    MembershipHandler memberShipHandler = organizationService.getMembershipHandler();
+    
+    UserPortalConfigService userService = WCMCoreUtils.getService(UserPortalConfigService.class);
+    Page page = userService.getPage(Util.getUIPortal().getSelectedNode().getPageReference());
+    List<String> pageAccessPermissions = new ArrayList<String>(Arrays.asList(page.getAccessPermissions()));
+    for(String removedPermission : removedPermissions){
+      if(pageAccessPermissions.contains(removedPermission)) {
+        pageAccessPermissions.remove(removedPermission);
+        memberShipHandler.removeMembershipByUser(removedPermission, true);
       }
     }
     ((ComponentRequestLifecycle) organizationService).endRequest(manager);
-    return users ;
+    page.setAccessPermissions(pageAccessPermissions.toArray(new String[]{}));
+    userService.update(page);
   }
   
   public static NodeIterator getAllCategories(Session session) throws Exception {
@@ -563,4 +443,43 @@ public class NewsletterConstant {
     }
     return listString;
   }
+  
+  
+  
+  
+  
+  
+  /**
+   * Check current user has permission to access a node or not 
+   * -  List all node's permissions
+   * -    For each node's permissions, get AccessControlEntries
+   * -      For each AccessControlEntries, compare with user's permissions
+   * -        If AccessControlEntry has membership type is "*", just check the user's group id only
+   * -        If AccessControlEntry has other membership types, then check the user's membership type and user's group id
+   * -          If user have full access (READ, ADD_NODE, SET_PROPERTY, REMOVE) return true
+   * -          Otherwise return false
+   * - Other case, return false
+   *  
+   * @param userId the current user's name
+   * @param node the current node
+   * 
+   * @return the list of newsletter category object 
+   */
+  public static boolean hasPermission(String userId, Node node) {
+    try {
+      ExtendedNode categoryNode = (ExtendedNode)node;
+      AccessControlEntry accessControlEntry = null;
+      Iterator<?> permissionIterator = categoryNode.getACL().getPermissionEntries().iterator();
+      List<String> permissions = new ArrayList<String>();
+      while (permissionIterator.hasNext()) {
+        accessControlEntry = (AccessControlEntry) permissionIterator.next();
+        permissions.add(accessControlEntry.getIdentity()); 
+      }
+      return WCMCoreUtils.hasPermission(userId, permissions, true);
+    } catch (Exception e) {
+      log.error("Exception when call NewsletterConstant.hasPermission()", e);
+    }
+    return false;
+  }
+  
 }

@@ -228,7 +228,6 @@ public class UIManagerUsers extends UITabPane {
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     Node portalNode = livePortalManagerService.getLivePortal(Utils.getSessionProvider(), portalName);
     Session session = portalNode.getSession();
-    NewsletterConstant.setSession(session);
     // get list of moderator
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();

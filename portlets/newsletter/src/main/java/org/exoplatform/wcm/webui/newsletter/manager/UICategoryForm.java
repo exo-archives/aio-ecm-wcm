@@ -86,8 +86,6 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 	/** The Constant INPUT_CATEGORY_MODERATOR. */
 	public static final String INPUT_CATEGORY_MODERATOR      = "CategoryModerator"; 
 	
-	private boolean isAdmin = false;
-	
 	private boolean isRemove;
 
 	public boolean isRemove() {
@@ -182,8 +180,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 	 * 
 	 * @param categoryConfig the new category info
 	 */
-	public void setCategoryInfo(NewsletterCategoryConfig categoryConfig, boolean isAdmin){
-	  this.isAdmin = isAdmin;
+	public void setCategoryInfo(NewsletterCategoryConfig categoryConfig){
 	  if(categoryConfig == null) return;
 	  this.categoryConfig = categoryConfig;
 	  UIFormStringInput inputCateName = this.getChildById(INPUT_CATEGORY_NAME);
@@ -242,7 +239,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
       categoryConfig.setModerator(inputModeratorValue); 
       
       // Update access permission into newsletter manager page for moderators
-      NewsletterConstant.updateAccessPermission(inputModeratorValue.split(","), uiCategoryForm);
+      NewsletterConstant.updateAccessPermission(inputModeratorValue.split(","));
 			UIApplication uiApp = uiCategoryForm.getAncestorOfType(UIApplication.class);
 			NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
 			categoryHandler.setRemove(uiCategoryForm.isRemove());
@@ -363,8 +360,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 	    };
 	    UIRemoveModerators removeModerators = categoryForm.createUIComponent(UIRemoveModerators.class, null, null);
 	    removeModerators.init(((UIFormStringInput)((UIFormInputSetWithAction)categoryForm.
-	                          getChildById(FORM_CATEGORY_MODERATOR)).getChildById(INPUT_CATEGORY_MODERATOR)).getValue(),
-	                          categoryForm.isAdmin);
+	                          getChildById(FORM_CATEGORY_MODERATOR)).getChildById(INPUT_CATEGORY_MODERATOR)).getValue());
 	    categoryForm.setRemove(true);
 	    Utils.createPopupWindow(categoryForm, removeModerators, UINewsletterConstant.REMOVE_MODERATORS_FORM_POPUP_WINDOW, 480);
 	    categoryForm.setPopupId(UINewsletterConstant.REMOVE_MODERATORS_FORM_POPUP_WINDOW);

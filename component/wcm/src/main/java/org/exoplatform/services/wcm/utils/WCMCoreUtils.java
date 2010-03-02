@@ -16,10 +16,20 @@
  */
 package org.exoplatform.services.wcm.utils;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
+import org.exoplatform.services.organization.Membership;
+import org.exoplatform.services.organization.OrganizationService;
 
 /**
  * Created by The eXo Platform SAS
@@ -28,7 +38,11 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
  * Sep 8, 2009
  */
 public class WCMCoreUtils {
+  
+  private static Log log = ExoLogger.getLogger("wcm.WCMCoreUtils");
 
+  private static PortalContainer manager;
+  
   /**
    * Gets the service.
    * 
@@ -63,4 +77,70 @@ public class WCMCoreUtils {
 	  return sessionProvider;
   }
   
+  
+  
+  
+  
+  
+  
+  /**
+   * Check current user has permission to access a node or not 
+   * -    For each permission, compare with user's permissions
+   * -      If permission has membership type is "*", just check the user's group id only
+   * -      If permission has other membership types, then check the user's membership type and user's group id
+   *  
+   * @param userId the current user's name
+   * @param permissions the current node
+   * @param isNeedFullAccess if true, count full access (4) then return true, if false, return true if match first permission
+   * 
+   * @return true is user has permissions, otherwise return false 
+   */
+  public static boolean hasPermission(String userId, List<String> permissions, boolean isNeedFullAccess) {
+    try {
+      OrganizationService organizationService = WCMCoreUtils.getService(OrganizationService.class);
+      ((ComponentRequestLifecycle) organizationService).startRequest(manager);
+      Collection<?> memberships = null;
+      Membership userMembership = null;
+      String userMembershipTmp = null;
+      int count = 0;
+      String permissionTmp = "";
+      for (String permission : permissions) {
+        if (!permissionTmp.equals(permission)) count = 0;
+        memberships = organizationService.getMembershipHandler().findMembershipsByUser(userId);
+        Iterator<?> membershipIterator = memberships.iterator();
+        while (membershipIterator.hasNext()) {
+          userMembership = (Membership)membershipIterator.next();
+          if (permission.equals(userMembership.getUserName())) {
+            return true;
+          } else if ("any".equals(permission)) {
+            if (isNeedFullAccess) {
+              count++;
+              if (count == 4) return true;
+            }
+            else return true;
+          } else if (permission.startsWith("*") && permission.contains(userMembership.getGroupId())) {
+            if (isNeedFullAccess) {
+              count++;
+              if (count == 4) return true;
+            }
+            else return true;
+          } else {
+            userMembershipTmp = userMembership.getMembershipType() + ":" + userMembership.getGroupId();
+            if (permission.equals(userMembershipTmp)) {
+              if (isNeedFullAccess) {
+                count++;
+                if (count == 4) return true;
+              }
+              else return true;
+            } 
+          } 
+        }
+        permissionTmp = permission;
+      }
+//      ((ComponentRequestLifecycle) organizationService).endRequest(manager);
+    } catch (Exception e) {
+      log.error("hasPermission() failed because of ", e);
+    }
+    return false;
+  }
 }

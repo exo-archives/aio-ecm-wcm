@@ -67,6 +67,9 @@
             <field name="categoryName">
               <string>general</string>
             </field>
+            <field name="redactor">
+              <string>*:/platform/web-contributors</string>
+            </field>
           </object>
         </object-param>
       </init-params>
