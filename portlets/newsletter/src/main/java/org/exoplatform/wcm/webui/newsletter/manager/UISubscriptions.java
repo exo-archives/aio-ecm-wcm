@@ -26,6 +26,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -64,9 +65,6 @@ import org.exoplatform.webui.form.UIFormSelectBox;
     }
 )
 public class UISubscriptions extends UIForm {
-  boolean isAdmin = false;
-  boolean isModerator = false;
-  
   /** The subscription handler. */
   NewsletterSubscriptionHandler subscriptionHandler;
   
@@ -81,6 +79,8 @@ public class UISubscriptions extends UIForm {
   
   /** The portal name. */
   String portalName;
+  
+  String userId;
 
   /**
    * Instantiates a new uI subscriptions.
@@ -93,10 +93,7 @@ public class UISubscriptions extends UIForm {
     categoryHandler = newsletterManagerService.getCategoryHandler();
     userHandler = newsletterManagerService.getManageUserHandler();
     portalName = NewsLetterUtil.getPortalName();
-  }
-  
-  public void setAdmin(boolean isAdmin){
-    this.isAdmin = isAdmin;
+    userId = NewsLetterUtil.getCurrentUser();
   }
   
   /**
@@ -106,13 +103,6 @@ public class UISubscriptions extends UIForm {
    */
   public void setCategory(NewsletterCategoryConfig categoryConfig){
     this.categoryConfig = categoryConfig;
-    if(isAdmin == false){
-      try{
-        this.isModerator = NewsLetterUtil.isModeratorOfCategory(categoryConfig);
-      }catch(Exception ex){
-        this.isModerator = false;
-      }
-    }
   }
   
   /**
@@ -154,15 +144,11 @@ public class UISubscriptions extends UIForm {
   private List<NewsletterSubscriptionConfig> getListSubscription(){
     List<NewsletterSubscriptionConfig> listSubs = new ArrayList<NewsletterSubscriptionConfig>();
     try{
-      if(isAdmin || isModerator){
-        listSubs = subscriptionHandler.getSubscriptionsByCategory(Utils.getSessionProvider(), 
-                                                                  NewsLetterUtil.getPortalName(), 
-                                                                  this.categoryConfig.getName());
+      SessionProvider sessionProvider = WCMCoreUtils.getUserSessionProvider();
+      if(userHandler.isAdministrator(portalName, userId) || userHandler.isModerator(userId, categoryConfig)){
+        listSubs = subscriptionHandler.getSubscriptionsByCategory(sessionProvider, portalName, categoryConfig.getName());
       } else {
-        listSubs = subscriptionHandler.getSubscriptionByRedactor(NewsLetterUtil.getPortalName(), 
-                                                                 this.categoryConfig.getName(), 
-                                                                 NewsLetterUtil.getCurrentUser(), 
-                                                                 Utils.getSessionProvider());
+        listSubs = subscriptionHandler.getSubscriptionByRedactor(portalName, categoryConfig.getName(), userId, sessionProvider);
       }
       init(listSubs);
     }catch(Exception e){
@@ -210,6 +196,16 @@ public class UISubscriptions extends UIForm {
     return subscriptionId;
   }
 
+  @SuppressWarnings("unused")
+  private boolean isAdministrator() {
+    return userHandler.isAdministrator(portalName, userId);
+  }
+  
+  @SuppressWarnings("unused")
+  private boolean isModerator() {
+    return userHandler.isModerator(userId, categoryConfig);
+  }
+  
   /**
    * The listener interface for receiving backToCategoriesAction events.
    * The class that is interested in processing a backToCategoriesAction
@@ -255,8 +251,8 @@ public class UISubscriptions extends UIForm {
     public void execute(Event<UISubscriptions> event) throws Exception {
       UISubscriptions subsriptions = event.getSource();
       UICategoryForm categoryForm = subsriptions.createUIComponent(UICategoryForm.class, null, null);
-      categoryForm.setCategoryInfo(subsriptions.categoryConfig, subsriptions.isAdmin);
-      Utils.createPopupWindow(subsriptions, categoryForm, UINewsletterConstant.CATEGORY_FORM_POPUP_WINDOW, 480, 300);
+      categoryForm.setCategoryInfo(subsriptions.categoryConfig);
+      Utils.createPopupWindow(subsriptions, categoryForm, UINewsletterConstant.CATEGORY_FORM_POPUP_WINDOW, 480, 600);
     }
   }
 
@@ -311,8 +307,8 @@ public class UISubscriptions extends UIForm {
       UIFormSelectBox selectedCategoryName = subcriptionForm.getChildById("CategoryName");
       selectedCategoryName.setValue(subsriptions.categoryConfig.getName());
       selectedCategoryName.setDisabled(true);
-      Utils.createPopupWindow(subsriptions, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 500, 350);
-      subcriptionForm.setSubscriptionInfor(null, subsriptions.isAdmin);
+      Utils.createPopupWindow(subsriptions, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 500, 600);
+      subcriptionForm.setSubscriptionInfor(null);
     }
   }
 
@@ -344,8 +340,8 @@ public class UISubscriptions extends UIForm {
       UISubcriptionForm subcriptionForm = subsriptions.createUIComponent(UISubcriptionForm.class, null, null);
       NewsletterSubscriptionConfig subscriptionConfig 
       = subsriptions.subscriptionHandler.getSubscriptionsByName(Utils.getSessionProvider(), NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(), subId);
-      subcriptionForm.setSubscriptionInfor(subscriptionConfig, subsriptions.isAdmin);
-      Utils.createPopupWindow(subsriptions, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 500, 350);
+      subcriptionForm.setSubscriptionInfor(subscriptionConfig);
+      Utils.createPopupWindow(subsriptions, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 500, 600);
     }
   }
 
@@ -507,7 +503,7 @@ public class UISubscriptions extends UIForm {
       UISubscriptions uiSubscription = event.getSource();
       UIManagerUsers managerUsers = uiSubscription.createUIComponent(UIManagerUsers.class, null, null);
       managerUsers.setInfor(uiSubscription.categoryConfig.getName(), null);
-      Utils.createPopupWindow(uiSubscription, managerUsers, UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW, 550, 350);
+      Utils.createPopupWindow(uiSubscription, managerUsers, UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW, 550, 600);
     }
   }
   

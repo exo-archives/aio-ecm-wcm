@@ -29,7 +29,6 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
 import org.apache.commons.logging.Log;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
@@ -38,6 +37,7 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -147,8 +147,7 @@ public class NewsletterSubscriptionHandler {
    * @param workspace the workspace
    */
   public NewsletterSubscriptionHandler(String repository, String workspace) {
-    repositoryService = (RepositoryService)ExoContainerContext.getCurrentContainer()
-      .getComponentInstanceOfType(RepositoryService.class);
+    repositoryService = WCMCoreUtils.getService(RepositoryService.class);
     this.repository = repository;
     this.workspace = workspace;
   }
@@ -259,7 +258,7 @@ public class NewsletterSubscriptionHandler {
       String path = NewsletterConstant.generateCategoryPath(portalName);
       Node categoryNode = ((Node)session.getItem(path)).getNode(categoryName);
       Node subscriptionNode = categoryNode.getNode(subscription.getName());
-      List<String> candicateRemove = NewsletterConstant.getAllRedactor(portalName);
+      List<String> candicateRemove = NewsletterConstant.getAllRedactor(portalName, session);
       if(isRemove) {
         List<String> ableToRemove = NewsletterConstant.removePermission(subscriptionNode, null, candicateRemove, false, portalName, session);
         String [] removePer = new String [ableToRemove.size()];
@@ -313,16 +312,16 @@ public class NewsletterSubscriptionHandler {
     List<NewsletterSubscriptionConfig> listSubs = new ArrayList<NewsletterSubscriptionConfig>();
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     Session session = sessionProvider.getSession(workspace, manageableRepository);
-    String path = NewsletterConstant.generateCategoryPath(portalName);
-    List<String> userPermissionMembership = NewsletterConstant.getAllGroupAndMembershipOfCurrentUser(userName);
-    List<String> allPermission;
-    Node childNode;
-    for(NodeIterator nodeIterator = ((Node)session.getItem(path)).getNode(categoryName).getNodes();nodeIterator.hasNext();){
+    String categoriesPath = NewsletterConstant.generateCategoryPath(portalName);
+    String categoryPath = categoriesPath + "/" + categoryName;
+    Node categoryNode = (Node)session.getItem(categoryPath);
+    Node subscriptionNode;
+    NodeIterator subscriptionIterator = categoryNode.getNodes();
+    while(subscriptionIterator.hasNext()){
       try{
-        childNode = nodeIterator.nextNode();
-        if(!childNode.isNodeType(NewsletterConstant.SUBSCRIPTION_NODETYPE)) continue;
-        allPermission = NewsletterConstant.getAllPermissionOfNode(childNode);
-        if(NewsletterConstant.havePermission(allPermission, userPermissionMembership)) listSubs.add(getSubscriptionFormNode(childNode));
+        subscriptionNode = subscriptionIterator.nextNode();
+        if(!subscriptionNode.isNodeType(NewsletterConstant.SUBSCRIPTION_NODETYPE)) continue;
+        if(NewsletterConstant.hasPermission(userName, subscriptionNode)) listSubs.add(getSubscriptionFormNode(subscriptionNode));
       }catch(Exception ex){
         log.error("Error when get subcriptions by category " + categoryName + " failed because of ", ex.fillInStackTrace());
       }

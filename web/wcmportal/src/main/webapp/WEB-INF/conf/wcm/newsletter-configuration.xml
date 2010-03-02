@@ -16,7 +16,7 @@
 					<field name="name"><string>marketing</string></field>
 					<field name="title"><string>Marketing</string></field>
 					<field name="description"><string>You want to know where we are, where we go ?</string></field>
-					<field name="moderator"><string>root</string></field>
+					<field name="moderator"><string>*:/platform/web-contributors</string></field>
 				</object>
 			</object-param>
 			<object-param>
@@ -26,7 +26,7 @@
 					<field name="name"><string>general</string></field>
 					<field name="title"><string>General</string></field>
 					<field name="description"><string>General information about us</string></field>
-					<field name="moderator"><string>root</string></field>
+					<field name="moderator"><string>*:/platform/web-contributors</string></field>
 				</object>
 			</object-param>
 			<object-param>
@@ -37,7 +37,7 @@
 					<field name="title"><string>Results</string></field>
 					<field name="description"><string>Monthly newsletter about our results and forecasts</string></field>
 					<field name="categoryName"><string>general</string></field>
-					<field name="redactor"><string>root</string></field>
+					<field name="redactor"><string>*:/platform/web-contributors</string></field>
 				</object>
 			</object-param>
 			<object-param>
@@ -48,7 +48,7 @@
 					<field name="title"><string>Check-List</string></field>
 					<field name="description"><string>Weekly newsletter with general topics</string></field>
 					<field name="categoryName"><string>general</string></field>
-					<field name="redactor"><string>root</string></field>
+					<field name="redactor"><string>*:/platform/web-contributors</string></field>
 				</object>
 			</object-param>
 			<object-param>
@@ -59,7 +59,7 @@
 					<field name="title"><string>The market</string></field>
 					<field name="description"><string>What's on the market today ?</string></field>
 					<field name="categoryName"><string>marketing</string></field>
-					<field name="redactor"><string>root</string></field>
+					<field name="redactor"><string>*:/platform/web-contributors</string></field>
 				</object>
 			</object-param>
 			<object-param>
@@ -105,6 +105,7 @@
 						<field name="title"><string>Check-List</string></field>
 						<field name="description"><string>Weekly newsletter with general topics</string></field>
 						<field name="categoryName"><string>general</string></field>
+						<field name="redactor"><string>*:/platform/web-contributors</string></field>
 					</object>
 				</object-param>
 			</init-params>

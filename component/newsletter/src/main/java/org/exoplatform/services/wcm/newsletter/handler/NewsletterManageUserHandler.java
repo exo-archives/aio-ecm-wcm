@@ -30,7 +30,7 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
 import org.apache.commons.logging.Log;
-import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
@@ -38,8 +38,10 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -68,8 +70,7 @@ public class NewsletterManageUserHandler {
    * @param workspace the workspace
    */
   public NewsletterManageUserHandler(String repository, String workspace) {
-    repositoryService = (RepositoryService) ExoContainerContext
-      .getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
+    repositoryService = WCMCoreUtils.getService(RepositoryService.class);
     this.repository = repository;
     this.workspace = workspace;
   }
@@ -125,7 +126,7 @@ public class NewsletterManageUserHandler {
         return convertValuesToArray(categoriesNode.getProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR).getValues());
       }
     } catch(Exception ex){
-      log.error("getAllAdministrator() failed because of ", ex.fillInStackTrace());
+      log.error("getAllAdministrator() failed because of ", ex);
     }
     return new ArrayList<String>();
   }
@@ -139,9 +140,9 @@ public class NewsletterManageUserHandler {
    * @throws Exception the exception
    */
   public void addAdministrator(SessionProvider sessionProvider, String portalName, String userId) throws Exception{
-    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    Session session = sessionProvider.getSession(workspace, manageableRepository);
     try{
+      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       Node categoriesNode = (Node) session.getItem(NewsletterConstant.generateCategoryPath(portalName));
       List<String> listUsers = new ArrayList<String>();
       if(categoriesNode.hasProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR))
@@ -170,9 +171,6 @@ public class NewsletterManageUserHandler {
       session.save();
     }catch(Exception ex){
       log.info("Add administrator for newsletter failed because of ", ex.fillInStackTrace());
-    }finally{
-      session.logout();
-      sessionProvider.close();
     }
   }
   
@@ -280,8 +278,8 @@ public class NewsletterManageUserHandler {
   /**
    * Delete.
    * 
-   * @param portalName the portal name
-   * @param userMail the user mail
+   * @param portalName      the portal name
+   * @param userMail        the user mail
    * @param SessionProvider the sessionprovider
    */
   public void delete(SessionProvider sessionProvider, String portalName, String userMail) {
@@ -457,4 +455,54 @@ public class NewsletterManageUserHandler {
     }
     return false;
   }
+  
+  
+  
+  
+  
+  
+
+  /**
+   * Check if user is an administrator or not
+   * 
+   * @param userId the current user
+   * 
+   * @return true if user is an administrator, otherwise return false
+   * 
+   * @throws Exception the exception
+   */
+  public boolean isAdministrator(String portalName, String userId) {
+    try {
+      List<String> administrators = getAllAdministrator(WCMCoreUtils.getSessionProvider(), portalName);
+      String superuser = WCMCoreUtils.getService(UserACL.class).getSuperUser();
+      if (!administrators.contains(superuser)) {
+        administrators.add(superuser);
+      }
+      return WCMCoreUtils.hasPermission(userId, administrators, false);
+    } catch (Exception e) {
+      log.error("isAdministrator() failed because of ", e);
+    }
+    return false;
+  }
+  
+  /**
+   * Check if user is a moderator of current category or not
+   * 
+   * @param userId the current user
+   * @param categoryName the current category's name
+   * 
+   * @return true if user is an administrator, otherwise return false
+   * 
+   * @throws Exception the exception
+   */
+  public boolean isModerator(String userId, NewsletterCategoryConfig config) {
+    try {
+      List<String> moderators = Arrays.asList(config.getModerator().split(","));
+      return WCMCoreUtils.hasPermission(userId, moderators, false);
+    } catch (Exception e) {
+      log.error("isModerator() failed because of ", e);
+    }
+    return false;
+  }
+  
 }

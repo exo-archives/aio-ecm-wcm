@@ -157,7 +157,7 @@ public class UISiteAdminToolbar extends UIContainer {
     String editorMembershipType = userACL.getMakableMT();
     List<String> accessControlWorkspaceGroups = userACL.getAccessControlWorkspaceGroups();
     String editSitePermission = Util.getUIPortal().getEditPermission();
-    String redactorMembershipType = wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.REDACTOR_MEMBERSHIP_TYPE);   
+    String redactorMembershipType = wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.NEWSLETTER_MANAGE_MEMBERSHIP).split(":")[0];
     // admin
     if (userACL.getSuperUser().equals(userId)) {
       role = UISiteAdminToolbar.ADMIN;

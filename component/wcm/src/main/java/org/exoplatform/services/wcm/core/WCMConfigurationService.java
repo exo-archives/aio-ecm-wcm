@@ -45,7 +45,7 @@ public class WCMConfigurationService {
   public static final String SITE_PATH_EXP = "\\{sitePath\\}";
   public static final String SITE_NAME_EXP = "\\{siteName\\}";
   
-  public static final String REDACTOR_MEMBERSHIP_TYPE       = "redactorMembershipType";
+  public static final String NEWSLETTER_MANAGE_MEMBERSHIP   = "newsletterManageMembership";
   
   public static final String PARAMETERIZED_PAGE_URI         = "parameterizedPageURI";
   

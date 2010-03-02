@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.exoplatform.ecm.webui.form.UIFormInputSetWithAction;
 import org.exoplatform.ecm.webui.selector.UIGroupMemberSelector;
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -48,6 +47,7 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.NameValidator;
 import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
@@ -60,7 +60,7 @@ import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
  */
 @ComponentConfig(
                  lifecycle = UIFormLifecycle.class ,
-                 template = "app:/groovy/webui/newsletter/NewsletterManager/UISubcriptionForm.gtmpl",
+                 template = "system:/groovy/webui/form/UIForm.gtmpl",
                  events = {
                    @EventConfig(listeners = UISubcriptionForm.SaveActionListener.class),
                    @EventConfig(listeners = UISubcriptionForm.CancelActionListener.class, phase = Phase.DECODE),
@@ -93,8 +93,6 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent, UISel
   private NewsletterSubscriptionConfig subscriptionConfig            = null;
   
   private String popupId;
-  
-  private boolean isAdmin = false;
   
   private boolean isRemove;
   
@@ -187,8 +185,7 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent, UISel
    * 
    * @param subscriptionConfig the new subscription infor
    */
-  public void setSubscriptionInfor(NewsletterSubscriptionConfig subscriptionConfig, boolean isAdmin){
-    this.isAdmin = isAdmin;
+  public void setSubscriptionInfor(NewsletterSubscriptionConfig subscriptionConfig){
     if(subscriptionConfig == null) return;
     this.subscriptionConfig = subscriptionConfig;
 
@@ -269,7 +266,7 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent, UISel
       }
       
       // Update Redactors into access permissions of newsletter manager page
-      NewsletterConstant.updateAccessPermission(inputRedactorValue.split(","), uiSubcriptionForm);
+      NewsletterConstant.updateAccessPermission(inputRedactorValue.split(","));
       
       if(uiSubcriptionForm.subscriptionConfig == null) {
         newsletterSubscriptionConfig = subscriptionHandler
@@ -298,7 +295,6 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent, UISel
         newsletterSubscriptionConfig.setRedactor(inputRedactorValue);
         subscriptionHandler.edit(sessionProvider, NewsLetterUtil.getPortalName(), newsletterSubscriptionConfig);
       }
-      sessionProvider.close();
       Utils.closePopupWindow(uiSubcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW);
     }
   }
@@ -343,7 +339,7 @@ public static class SelectUserActionListener extends EventListener<UISubcription
       userMemberSelector.setShowSearch(true);
       userMemberSelector.setSourceComponent(uiSubcriptionForm, new String[] {SELECT_REDACTOR});
       userMemberSelector.init();
-      Utils.createPopupWindow(uiSubcriptionForm, userMemberSelector, UINewsletterConstant.USER_SELECTOR_POPUP_WINDOW, 750, 315);
+      Utils.createPopupWindow(uiSubcriptionForm, userMemberSelector, UINewsletterConstant.USER_SELECTOR_POPUP_WINDOW, 750, 600);
       uiSubcriptionForm.setPopupId(UINewsletterConstant.USER_SELECTOR_POPUP_WINDOW);
     }
   }
@@ -370,7 +366,7 @@ public static class SelectUserActionListener extends EventListener<UISubcription
       UIGroupMemberSelector groupMemberSelector = uiSubcriptionForm.createUIComponent(UIGroupMemberSelector.class, null, null);
       groupMemberSelector.setShowAnyPermission(false);
       groupMemberSelector.setSourceComponent(uiSubcriptionForm, new String[] {SELECT_REDACTOR});
-      Utils.createPopupWindow(uiSubcriptionForm, groupMemberSelector, UINewsletterConstant.GROUP_SELECTOR_POPUP_WINDOW, 540, 300);
+      Utils.createPopupWindow(uiSubcriptionForm, groupMemberSelector, UINewsletterConstant.GROUP_SELECTOR_POPUP_WINDOW, 540, 600);
       uiSubcriptionForm.setPopupId(UINewsletterConstant.GROUP_SELECTOR_POPUP_WINDOW);
     }
   }
@@ -393,9 +389,8 @@ public static class SelectUserActionListener extends EventListener<UISubcription
       };
       UIRemoveModerators removeModerators = subscriptionForm.createUIComponent(UIRemoveModerators.class, null, null);
       removeModerators.permissionForSubscriptionForm();
-      removeModerators.init(((UIFormStringInput)((UIFormInputSetWithAction)subscriptionForm.getChildById(FORM_SUBSCRIPTION_REDACTOR)).
-                              getChildById(SELECT_REDACTOR)).getValue(), subscriptionForm.isAdmin);
-      Utils.createPopupWindow(subscriptionForm, removeModerators, UINewsletterConstant.REMOVE_MODERATORS_FORM_POPUP_WINDOW, 480, 300);
+      removeModerators.init(((UIFormStringInput)((UIFormInputSetWithAction)subscriptionForm.getChildById(FORM_SUBSCRIPTION_REDACTOR)).getChildById(SELECT_REDACTOR)).getValue());
+      Utils.createPopupWindow(subscriptionForm, removeModerators, UINewsletterConstant.REMOVE_MODERATORS_FORM_POPUP_WINDOW, 480, 600);
       subscriptionForm.setPopupId(UINewsletterConstant.REMOVE_MODERATORS_FORM_POPUP_WINDOW);
     }
   }

@@ -26,6 +26,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -63,8 +64,7 @@ public class UICategories extends UIContainer {
 	/** The portal name. */
 	String portalName;
 	
-	/** is administrator of newsletter*/
-	boolean isAdmin = false;
+	String userId;
 	
 	/**
 	 * Instantiates a new uI categories.
@@ -77,14 +77,7 @@ public class UICategories extends UIContainer {
 		subscriptionHandler = newsletterManagerService.getSubscriptionHandler();
 		userHandler = newsletterManagerService.getManageUserHandler();
 		portalName = NewsLetterUtil.getPortalName();
-	}
-	
-	/**
-	 * Set permission of user is administrator or not
-	 * @param isAdmin <code>True</code> if user is administrator and <code>False</code> if not
-	 */
-	public void setAdmin(boolean isAdmin){
-	  this.isAdmin = isAdmin;
+		userId = NewsLetterUtil.getCurrentUser();
 	}
 	
 	/**
@@ -126,13 +119,20 @@ public class UICategories extends UIContainer {
 	private List<NewsletterCategoryConfig> getListCategories(){
 	  List<NewsletterCategoryConfig> listCategories = new ArrayList<NewsletterCategoryConfig>();
 		try{
-		  String portalName = NewsLetterUtil.getPortalName();
-			if(isAdmin)listCategories = categoryHandler.getListCategories(portalName, Utils.getSessionProvider());
-			else listCategories = categoryHandler.getListCategoriesCanView(portalName, NewsLetterUtil.getCurrentUser(), Utils.getSessionProvider());
+		  SessionProvider sessionProvider = WCMCoreUtils.getUserSessionProvider();
+			if (userHandler.isAdministrator(portalName, userId))
+			  listCategories = categoryHandler.getListCategories(portalName, sessionProvider);
+			else 
+			  listCategories = categoryHandler.getListCategoriesCanView(portalName, userId, sessionProvider);
 		}catch(Exception e){
 		  Utils.createPopupMessage(this, "UICategories.msg.get-list-categories", null, ApplicationMessage.ERROR);
 		}
 		return listCategories;
+	}
+	
+	@SuppressWarnings("unused")
+  private boolean isAdministrator(){
+	  return userHandler.isAdministrator(portalName, userId);
 	}
 	
 	/**
@@ -146,15 +146,14 @@ public class UICategories extends UIContainer {
   private List<NewsletterSubscriptionConfig> getListSubscription(String categoryName){
 	  List<NewsletterSubscriptionConfig> listSubscription = new ArrayList<NewsletterSubscriptionConfig>();
     try{
-      if(isAdmin || 
-          NewsLetterUtil.isModeratorOfCategory(categoryHandler.getCategoryByName(Utils.getSessionProvider(), portalName, categoryName)))
-        listSubscription = subscriptionHandler.getSubscriptionsByCategory(Utils.getSessionProvider(), 
-                                                                          NewsLetterUtil.getPortalName(), categoryName);
+      SessionProvider sessionProvider = WCMCoreUtils.getUserSessionProvider();
+      NewsletterCategoryConfig categoryConfig = categoryHandler.getCategoryByName(sessionProvider, portalName, categoryName); 
+      if(userHandler.isAdministrator(portalName, userId) || userHandler.isModerator(userId, categoryConfig))
+        listSubscription = subscriptionHandler.getSubscriptionsByCategory(sessionProvider, portalName, categoryName);
       else{
-        listSubscription = subscriptionHandler.getSubscriptionByRedactor(portalName, categoryName, NewsLetterUtil.getCurrentUser(), 
-                                                                         Utils.getSessionProvider());
+        listSubscription = subscriptionHandler.getSubscriptionByRedactor(portalName, categoryName, userId, sessionProvider);
       }
-    }catch(Exception e){
+    } catch(Exception e){
       Utils.createPopupMessage(this, "UICategories.msg.get-list-subscriptions", null, ApplicationMessage.ERROR);
     }
     return listSubscription;
@@ -179,8 +178,8 @@ public class UICategories extends UIContainer {
 		public void execute(Event<UICategories> event) throws Exception {
 			UICategories uiCategories = event.getSource();
       UICategoryForm categoryForm = uiCategories.createUIComponent(UICategoryForm.class, null, null);
-      Utils.createPopupWindow(uiCategories, categoryForm, UINewsletterConstant.CATEGORY_FORM_POPUP_WINDOW, 450, 298);
-      categoryForm.setCategoryInfo(null, uiCategories.isAdmin);
+      Utils.createPopupWindow(uiCategories, categoryForm, UINewsletterConstant.CATEGORY_FORM_POPUP_WINDOW, 450, 600);
+      categoryForm.setCategoryInfo(null);
 		}
 	}
   
@@ -203,8 +202,8 @@ public class UICategories extends UIContainer {
     public void execute(Event<UICategories> event) throws Exception {
       UICategories uiCategories = event.getSource();
       UISubcriptionForm subcriptionForm = uiCategories.createUIComponent(UISubcriptionForm.class, null, null);
-      Utils.createPopupWindow(uiCategories, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 500, 350);
-      subcriptionForm.setSubscriptionInfor(null, uiCategories.isAdmin);
+      Utils.createPopupWindow(uiCategories, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 500, 600);
+      subcriptionForm.setSubscriptionInfor(null);
     }
   }
 	
@@ -256,7 +255,7 @@ public class UICategories extends UIContainer {
 	    UICategories uiCategories = event.getSource();
       UIManagerUsers managerUsers = uiCategories.createUIComponent(UIManagerUsers.class, null, null);
       managerUsers.setInfor(null, null);
-      Utils.createPopupWindow(uiCategories, managerUsers, UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW, 600, 350);
+      Utils.createPopupWindow(uiCategories, managerUsers, UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW, 600, 600);
 	  }
 	}
 	

@@ -27,7 +27,6 @@ import javax.jcr.Session;
 import javax.jcr.Value;
 
 import org.apache.commons.logging.Log;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
@@ -36,6 +35,7 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -74,7 +74,7 @@ public class NewsletterCategoryHandler {
    * @param workspace the workspace
    */
   public NewsletterCategoryHandler(String repository, String workspace) {
-    repositoryService = (RepositoryService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
+    repositoryService = WCMCoreUtils.getService(RepositoryService.class);
     this.repository = repository;
     this.workspace = workspace;
   }
@@ -88,7 +88,7 @@ public class NewsletterCategoryHandler {
    * 
    * @throws Exception the exception
    */
-  protected NewsletterCategoryConfig getCategoryFromNode(Node categoryNode) throws Exception{
+  public NewsletterCategoryConfig getCategoryFromNode(Node categoryNode) throws Exception{
   	NewsletterCategoryConfig categoryConfig = null;
   	categoryConfig = new NewsletterCategoryConfig();
   	categoryConfig.setName(categoryNode.getName());
@@ -105,6 +105,39 @@ public class NewsletterCategoryHandler {
     categoryConfig.setModerator(permission);
   	return categoryConfig;
   }
+  
+  
+  
+  
+  
+  
+  
+  /**
+   * Gets the category node from NewsletterCategoryConfig.
+   * 
+   * @param SessionProvider the session provider
+   * @param portalName the current portal's name
+   * @param NewsletterCategoryConfig the newsletter category object
+   * 
+   * @return the category node
+   * 
+   * @throws Exception the exception
+   */
+  public Node getCategoryFromConfig(SessionProvider sessionProvider, String portalName, NewsletterCategoryConfig config) throws Exception{
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    Session session = sessionProvider.getSession(workspace, manageableRepository);
+    String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
+    Node categoriesNode = (Node)session.getItem(categoryPath);
+    return categoriesNode.getNode(config.getName());
+  }
+  
+  
+  
+  
+  
+  
+  
+  
   
   /**
    * Update permission for category node.
@@ -174,10 +207,9 @@ public class NewsletterCategoryHandler {
    */
   public void add(SessionProvider sessionProvider, String portalName, NewsletterCategoryConfig categoryConfig) {
     log.info("Trying to add category " + categoryConfig.getName());
-    Session session = null;
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      session = sessionProvider.getSession(workspace, manageableRepository);
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
       Node categoriesNode = (Node)session.getItem(categoryPath);
       Node categoryNode = categoriesNode.addNode(categoryConfig.getName(), NewsletterConstant.CATEGORY_NODETYPE);
@@ -199,9 +231,6 @@ public class NewsletterCategoryHandler {
       session.save();
     } catch(Exception e) {
       log.error("Add category " + categoryConfig.getName() + " failed because of: ", e.fillInStackTrace());
-    } finally {
-      if (session != null) session.logout();
-      sessionProvider.close();
     }
   }
   
@@ -233,8 +262,6 @@ public class NewsletterCategoryHandler {
       log.info("Edit category " + categoryConfig.getName() + " failed because of ", ie.fillInStackTrace());
     } catch (Exception e) {
       log.info("Edit category " + categoryConfig.getName() + " failed because of ", e.fillInStackTrace());
-    }finally{
-      sessionProvider.close();
     }
   }
   
@@ -316,6 +343,18 @@ public class NewsletterCategoryHandler {
     return listCategories;
   }
   
+  /**
+   * Get list of categories which 
+   * - Current user has permission in a category
+   * - Current user doesn't have permission but has permissions in one of subscriptions in a category  
+   * 
+   * @param portalName the current portal's name
+   * @param userName the current user's name
+   * @param sessionProvider the session provider
+   * 
+   * @return the list of newsletter category object 
+   */
+  
   public List<NewsletterCategoryConfig> getListCategoriesCanView(String portalName, String userName, 
                                                                  SessionProvider sessionProvider) throws Exception {
     List<NewsletterCategoryConfig> listCategories = new ArrayList<NewsletterCategoryConfig>();
@@ -323,23 +362,20 @@ public class NewsletterCategoryHandler {
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
     Node categoriesNode = (Node)session.getItem(categoryPath);
-    List<String> userGroupMembers = NewsletterConstant.getAllGroupAndMembershipOfCurrentUser(userName);
-    List<String> allPermission;
-    Node categoryNode;
-    Node subNode;
-    for(NodeIterator nodeIterator = categoriesNode.getNodes(); nodeIterator.hasNext();){
-      categoryNode = nodeIterator.nextNode();
-      allPermission = NewsletterConstant.getAllPermissionOfNode(categoryNode);
-      if(NewsletterConstant.havePermission(allPermission, userGroupMembers)) listCategories.add(getCategoryFromNode(categoryNode));
-      else{
-        for(NodeIterator ni = categoryNode.getNodes(); ni.hasNext();){
-          subNode = ni.nextNode();
-          if(subNode.isNodeType(NewsletterConstant.SUBSCRIPTION_NODETYPE)){
-            allPermission = NewsletterConstant.getAllPermissionOfNode(subNode);
-            if(NewsletterConstant.havePermission(allPermission, userGroupMembers)){
+    Node categoryNode = null;
+    Node subNode = null;
+    NodeIterator categoryIterator = categoriesNode.getNodes();
+    while(categoryIterator.hasNext()){
+      categoryNode = categoryIterator.nextNode();
+      if(NewsletterConstant.hasPermission(userName, categoryNode)) { 
+        listCategories.add(getCategoryFromNode(categoryNode));
+      } else {
+        NodeIterator subscriptionIterator = categoriesNode.getNodes();
+        while(subscriptionIterator.hasNext()){
+          subNode = subscriptionIterator.nextNode();
+          if(subNode.isNodeType(NewsletterConstant.SUBSCRIPTION_NODETYPE) && NewsletterConstant.hasPermission(userName, subNode)){
               listCategories.add(getCategoryFromNode(categoryNode));
               break;
-            }
           }
         }
       }
