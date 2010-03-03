@@ -4,7 +4,7 @@
 	<portlet>
 		<description xml:lang="EN">Single Content Viewer Portlet</description>
 		<portlet-name>SingleContentViewer</portlet-name>
-		<display-name>Single Content Viewer</display-name>
+		<display-name>Content Detail</display-name>
 		<portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
 		
 		<init-param>
@@ -22,9 +22,9 @@
 		<resource-bundle>locale.portlet.SingleContentViewer.SingleContentViewer</resource-bundle>
 		
 		<portlet-info>
-			<title>Single Content Viewer</title>
-			<short-title>Content Viewer</short-title>
-			<keywords>AdvancedPresentation</keywords>
+			<title>Content Detail</title>
+			<short-title>Content Detail</short-title>
+			<keywords>Contents</keywords>
 		</portlet-info>
 		
 		<portlet-preferences>
@@ -86,9 +86,9 @@
 	</portlet>
 	
 	<portlet>
-		<description xml:lang="EN">Editing ToolBar</description>
+		<description xml:lang="EN">Editing Toolbar</description>
 		<portlet-name>EditingPortlet</portlet-name>
-		<display-name>Editing ToolBar</display-name>
+		<display-name>Editing Toolbar</display-name>
 		<portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
 		<init-param>
 			<name>webui.configuration</name>
@@ -103,9 +103,9 @@
 		<resource-bundle>locale.portlet.EditingPortlet.EditingPortlet</resource-bundle>
 		
 		<portlet-info>
-			<title>Editing ToolBar</title>
-			<short-title>Editing ToolBar</short-title>
-			<keywords>Editing</keywords>
+			<title>Editing Toolbar</title>
+			<short-title>Editing Toolbar</short-title>
+			<keywords>WCM Admin</keywords>
 		</portlet-info>
 		<portlet-preferences>
 			<preference>
@@ -122,9 +122,9 @@
 	</portlet>
 	
 	<portlet>
-		<description xml:lang="EN">View content as list</description>
+		<description xml:lang="EN">Content List</description>
 		<portlet-name>ContentListViewerPortlet</portlet-name>
-		<display-name>Content List Viewer</display-name>
+		<display-name>Content List</display-name>
 		<portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
 		<init-param>
 			<name>webui.configuration</name>
@@ -139,9 +139,9 @@
 		<supported-locale>en</supported-locale>
 		<resource-bundle>locale.portlet.ContentListViewer.ContentListViewer</resource-bundle>
 		<portlet-info>
-			<title>Content List Viewer</title>
-			<short-title>Content List Viewer</short-title>
-			<keywords>Content List Viewer</keywords>
+			<title>Content List</title>
+			<short-title>Content List</short-title>
+			<keywords>Contents</keywords>
 		</portlet-info>
 		<portlet-preferences>
 			<preference>
@@ -257,9 +257,9 @@
 	</portlet>
 	
 	<portlet>
-		<description xml:lang="EN">Parameterized Content Viewer</description>
+		<description xml:lang="EN">Content by URL</description>
 		<portlet-name>ParameterizedContentViewerPortlet</portlet-name>
-		<display-name xml:lang="EN">Parameterized Content Viewer</display-name>
+		<display-name xml:lang="EN">Content by URL</display-name>
 		<portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
 		
 		<init-param>
@@ -278,9 +278,9 @@
 		<resource-bundle>locale.portlet.ParameterizedContentViewer.ParameterizedContentViewer</resource-bundle>
 		
 		<portlet-info>
-			<title>Parameterized Content Viewer</title>
-			<short-title>Parameterized Content Viewer</short-title>
-			<keywords>portlet, content</keywords>
+			<title>Content by URL</title>
+			<short-title>Content by URL</short-title>
+			<keywords>Contents</keywords>
 		</portlet-info>
 		
 		<portlet-preferences>
@@ -336,9 +336,9 @@
 	</portlet-->
 	
 	<portlet>
-		<description xml:lang="EN">Category Navigation Portlet</description>
+		<description xml:lang="EN">Category Navigation</description>
 		<portlet-name>CategoryNavigationPortlet</portlet-name>
-		<display-name xml:lang="EN">Category Navigation Portlet</display-name>
+		<display-name xml:lang="EN">Category Navigation</display-name>
 		<portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
 		<init-param>
 			<name>webui.configuration</name>
@@ -352,9 +352,9 @@
 		<supported-locale>en</supported-locale>
 		<resource-bundle>locale.portlet.CategoryNavigation.CategoryNavigation</resource-bundle>
 		<portlet-info>
-			<title>Category Navigation Portlet</title>
-			<short-title>Category Navigation Portlet</short-title>
-			<keywords>Category Navigation Portlet</keywords>
+			<title>Category Navigation</title>
+			<short-title>Category Navigation</short-title>
+			<keywords>Contents</keywords>
 		</portlet-info>
 		<portlet-preferences>
 			<preference>
@@ -396,9 +396,9 @@
 	</portlet>
 	
 	<portlet>
-		<description xml:lang="EN">Parameterized Content List Viewer Portlet</description>
+		<description xml:lang="EN">Category Contents</description>
 		<portlet-name>ParameterizedContentListViewerPortlet</portlet-name>
-		<display-name xml:lang="EN">Parameterized Content List Viewer</display-name>
+		<display-name xml:lang="EN">Category Contents</display-name>
 		<portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
 		<init-param>
 			<name>webui.configuration</name>
@@ -412,9 +412,9 @@
 		<supported-locale>en</supported-locale>
 		<resource-bundle>locale.portlet.ParameterizedContentListViewer.ParameterizedContentListViewer</resource-bundle>
 		<portlet-info>
-			<title>Parameterized Content List Viewer</title>
-			<short-title>Parameterized Content List Viewer</short-title>
-			<keywords>Parameterized Content List Viewer</keywords>
+			<title>Category Contents</title>
+			<short-title>Category Contents</short-title>
+			<keywords>Contents</keywords>
 		</portlet-info>
 		<portlet-preferences>
 			<preference>

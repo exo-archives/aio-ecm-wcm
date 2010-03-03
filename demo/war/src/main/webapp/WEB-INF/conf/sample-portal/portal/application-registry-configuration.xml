@@ -34,14 +34,14 @@
       <description>this listener init the portlets are registered in PortletRegister</description>
       <init-params>
         <object-param>
-          <name>WCM presentation</name>
-          <description>WCM presentation</description>
+          <name>Contents</name>
+          <description>Contents</description>
           <object type="org.exoplatform.application.registry.ApplicationCategory">
             <field name="name">
-              <string>WCM presentation</string>
+              <string>Contents</string>
             </field>
             <field name="displayName">
-              <string>WCM presentation</string>
+              <string>Contents</string>
             </field>
             <field name="accessPermissions">
               <collection type="java.util.ArrayList" item-type="java.lang.String">
@@ -55,13 +55,13 @@
                 <value>
                   <object type="org.exoplatform.application.registry.Application">
                     <field name="categoryName">
-                      <string>WCM presentation</string>
+                      <string>Contents</string>
                     </field>
                     <field name="applicationName">
                       <string>SingleContentViewer</string>
                     </field>
                     <field name="displayName">
-                      <string>Single content viewer</string>
+                      <string>Content Detail</string>
                     </field>
                     <field name="type">
                       <string>portlet</string>
@@ -81,13 +81,13 @@
                 <value>
                   <object type="org.exoplatform.application.registry.Application">
                     <field name="categoryName">
-                      <string>WCM presentation</string>
+                      <string>Contents</string>
                     </field>
                     <field name="applicationName">
                       <string>ContentListViewerPortlet</string>
                     </field>
                     <field name="displayName">
-                      <string>Content list viewer portlet</string>
+                      <string>Content List</string>
                     </field>
                     <field name="type">
                       <string>portlet</string>
@@ -107,13 +107,13 @@
                 <value>
                   <object type="org.exoplatform.application.registry.Application">
                     <field name="categoryName">
-                      <string>WCM presentation</string>
+                      <string>Contents</string>
                     </field>
                     <field name="applicationName">
                       <string>ParameterizedContentViewerPortlet</string>
                     </field>
                     <field name="displayName">
-                      <string>Parameterized content viewer portlet</string>
+                      <string>Content by URL</string>
                     </field>
                     <field name="type">
                       <string>portlet</string>
@@ -133,13 +133,13 @@
                 <value>
                   <object type="org.exoplatform.application.registry.Application">
                     <field name="categoryName">
-                      <string>WCM presentation</string>
+                      <string>Contents</string>
                     </field>
                     <field name="applicationName">
                       <string>CategoryNavigationPortlet</string>
                     </field>
                     <field name="displayName">
-                      <string>Category navigation portlet</string>
+                      <string>Category Navigation</string>
                     </field>
                     <field name="type">
                       <string>portlet</string>
@@ -159,13 +159,13 @@
                 <value>
                   <object type="org.exoplatform.application.registry.Application">
                     <field name="categoryName">
-                      <string>WCM presentation</string>
+                      <string>Contents</string>
                     </field>
                     <field name="applicationName">
                       <string>ParameterizedContentListViewerPortlet</string>
                     </field>
                     <field name="displayName">
-                      <string>Parameterized content list viewer portlet</string>
+                      <string>Category Contents</string>
                     </field>
                     <field name="type">
                       <string>portlet</string>
@@ -188,14 +188,14 @@
         </object-param>
 
         <object-param>
-          <name>WCM Newsletter</name>
-          <description>WCM Newsletter</description>
+          <name>Newsletter</name>
+          <description>Newsletter</description>
           <object type="org.exoplatform.application.registry.ApplicationCategory">
             <field name="name">
-              <string>WCM Newsletter</string>
+              <string>Newsletter</string>
             </field>
             <field name="displayName">
-              <string>WCM Newsletter</string>
+              <string>Newsletter</string>
             </field>
             <field name="accessPermissions">
               <collection type="java.util.ArrayList" item-type="java.lang.String">
@@ -209,7 +209,7 @@
                 <value>
                   <object type="org.exoplatform.application.registry.Application">
                     <field name="categoryName">
-                      <string>WCM Newsletter</string>
+                      <string>Newsletter</string>
                     </field>
                     <field name="applicationName">
                       <string>NewsletterViewerPortlet</string>
@@ -235,7 +235,7 @@
                 <value>
                   <object type="org.exoplatform.application.registry.Application">
                     <field name="categoryName">
-                      <string>WCM Newsletter</string>
+                      <string>Newsletter</string>
                     </field>
                     <field name="applicationName">
                       <string>NewsletterManagerPortlet</string>
@@ -264,14 +264,14 @@
         </object-param>
 
         <object-param>
-          <name>WCM Form Generator</name>
-          <description>WCM Form Generator</description>
+          <name>Forms</name>
+          <description>Forms</description>
           <object type="org.exoplatform.application.registry.ApplicationCategory">
             <field name="name">
-              <string>WCM Form Generator</string>
+              <string>Forms</string>
             </field>
             <field name="displayName">
-              <string>WCM Form Generator</string>
+              <string>Forms</string>
             </field>
             <field name="accessPermissions">
               <collection type="java.util.ArrayList" item-type="java.lang.String">
@@ -285,13 +285,13 @@
                 <value>
                   <object type="org.exoplatform.application.registry.Application">
                     <field name="categoryName">
-                      <string>WCM Form Generator</string>
+                      <string>Forms</string>
                     </field>
                     <field name="applicationName">
                       <string>FormGeneratorPortlet</string>
                     </field>
                     <field name="displayName">
-                      <string>Form generator portlet</string>
+                      <string>Form Generator</string>
                     </field>
                     <field name="type">
                       <string>portlet</string>
@@ -325,13 +325,13 @@
                 <value>
                   <object type="org.exoplatform.application.registry.Application">
                     <field name="categoryName">
-                      <string>WCM Form Generator</string>
+                      <string>Forms</string>
                     </field>
                     <field name="applicationName">
                       <string>FastContentCreatorBasicPortlet</string>
                     </field>
                     <field name="displayName">
-                      <string>Fast content creator basic portlet</string>
+                      <string>Content Creator</string>
                     </field>
                     <field name="type">
                       <string>portlet</string>

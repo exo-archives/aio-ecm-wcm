@@ -5,9 +5,9 @@
    xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
    
   <portlet>
-    <description xml:lang="EN">Form Generator Portlet</description>
+    <description xml:lang="EN">Form Generator</description>
     <portlet-name>FormGeneratorPortlet</portlet-name>
-    <display-name xml:lang="EN">Form Generator Portlet</display-name>
+    <display-name xml:lang="EN">Form Generator</display-name>
     <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
     <init-param>
       <name>webui.configuration</name>
@@ -21,9 +21,9 @@
     <supported-locale>en</supported-locale>
     <resource-bundle>locale.portlet.FormGeneratorPortlet.FormGeneratorPortlet</resource-bundle>
     <portlet-info>
-      <title>Form Generator Portlet</title>
-      <short-title>Form Generator Portlet</short-title>
-      <keywords>Form Generator Portlet</keywords>
+      <title>Form Generator</title>
+      <short-title>Form Generator</short-title>
+      <keywords>Forms</keywords>
     </portlet-info>
     <portlet-preferences>
       <preference>
@@ -35,9 +35,9 @@
   </portlet>
 
   <portlet>
-    <description xml:lang="EN">Fast Content Creator</description>
+    <description xml:lang="EN">Content Creator Extended</description>
     <portlet-name>FastContentCreatorPortlet</portlet-name>
-    <display-name xml:lang="EN">Fast Content Creator</display-name>
+    <display-name xml:lang="EN">Content Creator Extended</display-name>
     <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
     <init-param>
       <name>webui.configuration</name>
@@ -52,9 +52,9 @@
     <supported-locale>en</supported-locale>
     <resource-bundle>locale.portlet.FastContentCreatorPortlet.FastContentCreatorPortlet</resource-bundle>
     <portlet-info>
-      <title>Fast Content Creator</title>
-      <short-title>ECM Fast Content Creator</short-title>
-      <keywords>ecm, fastcontentcreator</keywords>
+      <title>Content Creator Extended</title>
+      <short-title>Content Creator Extended</short-title>
+      <keywords>Forms</keywords>
     </portlet-info>
     <portlet-preferences>
       <!-- Setup the default repository name for fast content creator portlet -->
@@ -128,7 +128,7 @@
     <portlet-info>
       <title>Content Creator</title>
       <short-title>Content Creator</short-title>
-      <keywords>ecm, fastcontentcreator</keywords>
+      <keywords>Forms</keywords>
     </portlet-info>
     <portlet-preferences>
       <!-- Setup the default mode for fast content creator portlet -->
