@@ -193,11 +193,9 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
         newsletterSubscriptionHandler.add(sessionProvider, classicPortal, subscriptionConfig);
       }
     }
-	  assertEquals(5, newsletterCategoryHandler.getListCategoriesCanView(this.classicPortal, 
-	                                                                     this.userRoot, 
-	                                                                     sessionProvider).size());
+	  assertEquals(5, newsletterCategoryHandler.getListCategories(this.classicPortal, sessionProvider).size());
 	  
-	  assertEquals(5, newsletterCategoryHandler.getListCategoriesCanView(this.classicPortal, 
+	  assertEquals(0, newsletterCategoryHandler.getListCategoriesCanView(this.classicPortal, 
 	                                                                     "demo", 
 	                                                                     sessionProvider).size());
 	}

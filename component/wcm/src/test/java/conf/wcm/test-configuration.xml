@@ -29,7 +29,7 @@
         <name>RuntimeContextParams</name>
         <description>some params for runtime</description>
 
-        <property name="redactorMembershipType" value="redactor" />
+        <property name="newsletterManageMembership" value="redactor:/platform/web-contributors" />
 
         <property name="parameterizedPageURI" value="/detail" />
         <property name="printPageURI" value="/printviewer" />
