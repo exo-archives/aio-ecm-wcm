@@ -20,8 +20,10 @@ import javax.jcr.Node;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.dom.DOMSource;
 
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
 import org.exoplatform.services.rest.resource.ResourceContainer;
@@ -101,23 +103,23 @@ public class VoteConnector extends BaseConnector implements ResourceContainer {
 	  try {
 		  Node content = getContent(repositoryName, workspaceName, jcrPath);
 		  if (content.isNodeType("mix:votable")) {
-//			  String votingRate = "";
-//			  if (content.hasProperty("exo:votingRate")) votingRate = content.getProperty("exo:votingRate").getString();
-//			  String votingTotal = "";
-//			  if (content.hasProperty("exo:voteTotalOfLang")) votingTotal = content.getProperty("exo:voteTotalOfLang").getString();
+			  String votingRate = "";
+			  if (content.hasProperty("exo:votingRate")) votingRate = content.getProperty("exo:votingRate").getString();
+			  String votingTotal = "";
+			  if (content.hasProperty("exo:voteTotalOfLang")) votingTotal = content.getProperty("exo:voteTotalOfLang").getString();
 			  
 			  Document document =
 					DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 			  Element element = document.createElement("vote");
 			  Element rate = document.createElement("rate");
-//			  rate.setTextContent(votingRate);
+			  rate.setTextContent(votingRate);
 			  Element total = document.createElement("total");
-//			  total.setTextContent(votingTotal);
+			  total.setTextContent(votingTotal);
 			  element.appendChild(rate);
 			  element.appendChild(total);
 			  document.appendChild(element);
 
-			  return Response.ok(document, "text/xml").build();
+			  return Response.ok(new DOMSource(document), MediaType.TEXT_XML).build();
 		  }
 	  } catch (Exception e) {
 		  Response.serverError().build();
