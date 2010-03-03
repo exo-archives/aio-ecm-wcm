@@ -41,6 +41,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  * Jun 9, 2008
  */
 @ComponentConfig(
+		lifecycle = UIApplicationLifecycle.class,
 		template = "app:/groovy/SingleContentViewer/UISingleContentView.gtmpl"    
 )
 
