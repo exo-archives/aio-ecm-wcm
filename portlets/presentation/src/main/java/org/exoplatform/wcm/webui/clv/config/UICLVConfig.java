@@ -541,7 +541,7 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
       portletPreferences.setValue(UICLVPortlet.ORDER_TYPE, orderType);
       portletPreferences.setValue(UICLVPortlet.BASE_PATH, basePath);
       
-      if (!uiViewerManagementForm.isManualMode()) {
+      if (uiViewerManagementForm.isManualMode()) {
         String[] sl = (String[]) uiViewerManagementForm.getViewAbleContentList().toArray(new String[0]);
         portletPreferences.setValues(UICLVPortlet.CONTENT_LIST, sl);
       } else {
