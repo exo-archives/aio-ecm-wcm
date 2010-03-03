@@ -138,4 +138,11 @@ public interface WCMComposer {
 	 * @throws Exception the exception
 	 */
 	public List<String> getAllowedStates(String mode) throws Exception ;
+
+	/**
+	 * initialize the templates hashmap
+	 * 
+	 * @throws Exception the exception
+	 */
+	public void cleanTemplates() throws Exception ;
 }

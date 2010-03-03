@@ -189,7 +189,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		if (recursive==null) {
 			statement.append(" AND NOT jcr:path LIKE '" + path + "/%/%')");
 		}
-		statement.append(" AND " + getTemlatesSQLFilter(repository));
+		statement.append(" AND " + getTemplatesSQLFilter(repository));
 		statement.append(orderFilter);
 		Query query = manager.createQuery(statement.toString(), Query.SQL);
 		return query.execute().getNodes();
@@ -332,6 +332,15 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		return states;
 	}
 
+
+	public void cleanTemplates() throws Exception {
+		this.templatesFilter = null;
+		getTemplatesSQLFilter("repository");
+		if (log.isInfoEnabled()) log.info("WCMComposer templates have been cleaned !");
+	}
+
+	
+	
 	/* (non-Javadoc)
 	 * @see org.picocontainer.Startable#start()
 	 */
@@ -364,7 +373,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	 * @param repository the repository's name
 	 * @return a part of the query allow search all document node and taxonomy link also. Return null if there is any exception.
 	 */
-	private String getTemlatesSQLFilter(String repository) {
+	private String getTemplatesSQLFilter(String repository) {
 		if (templatesFilter != null) return templatesFilter;
 		else {
 			try {
@@ -416,7 +425,5 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	  private String getHash(String path, String version) throws Exception {
 		  return getHash(path, version, null);
 	  }
-
-
 
 }
