@@ -23,8 +23,8 @@
 	        	<description>General parameters for job</description>
 	        	<property name="fromState" value="staged"/>
 	          	<property name="toState" value="published"/>
-	          	<property name="localTempDir" value="D:\exo-bin\eXoWCM-1.2.2-tomcat_22\eXoWCM-1.2.2-tomcat\export"/>
-	          	<property name="targetServerUrl" value="http://localhost:7070/portal"/>
+	          	<property name="localTempDir" value="/tmp/export"/>
+	          	<property name="targetServerUrl" value="http://localhost:7070/portal/rest"/>
 	          	<property name="targetKey" value="$TIMESTAMP:pmlnjkl"/>
 	          	<property name="predefinedPath" value="repository:collaboration:/sites content/live/acme"/>
 	        </properties-param>

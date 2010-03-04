@@ -140,12 +140,7 @@
                       <value>
                         <object type="org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig$State">
                           <field name="state"><string>published</string></field>
-                          <field name="membership"><string>publisher:/platform/web-contributors</string></field>
-                          <field name="memberships">                  
-		                      <collection type="java.util.ArrayList">
-		                        <value><string>author:/gggg/web-contributors</string></value>
-		                      </collection>
-                     	 </field>
+                          <field name="membership"><string>automatic</string></field>
                         </object>
                       </value>                      
                       <value>

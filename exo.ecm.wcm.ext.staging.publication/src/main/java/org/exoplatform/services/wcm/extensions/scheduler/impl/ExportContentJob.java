@@ -146,6 +146,8 @@ public class ExportContentJob implements Job {
         xmlsw.writeStartElement("xs", "published-contents", URL);
         for (NodeIterator iter = queryResult.getNodes(); iter.hasNext();) {
           Node node_ = iter.nextNode();
+
+          nodeDate = null;
           if (node_.hasProperty(START_TIME_PROPERTY)) {
             now = Calendar.getInstance().getTime();
             nodeDate = node_.getProperty(START_TIME_PROPERTY).getDate().getTime();
@@ -248,7 +250,7 @@ public class ExportContentJob implements Job {
       xmlsw.close();
       if (isExported) {
         // connect
-        URI uri = new URI(targetServerUrl + "/rest/copyfile/copy/");
+        URI uri = new URI(targetServerUrl + "/copyfile/copy/");
         URL url = uri.toURL();
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
