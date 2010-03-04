@@ -376,4 +376,11 @@
     <language>Changer de langue</language>
     <register>Enregistrer</register>
   </Signin>
+  
+  <UIDriveForm>
+	<label>
+		<wcm-category-view>L'affichage des catégories</wcm-category-view>	
+		<wcm-view>Voir le contenu</wcm-view>
+	</label>
+  </UIDriveForm>
 </bundle>

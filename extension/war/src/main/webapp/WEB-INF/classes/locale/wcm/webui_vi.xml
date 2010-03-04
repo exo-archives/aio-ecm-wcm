@@ -378,4 +378,11 @@
     <language>Thay đổi ngôn ngữ</language>
     <register>Đăng ký</register>
   </Signin>
+  
+  <UIDriveForm>
+	<label>
+		<wcm-category-view>Theo nhóm</wcm-category-view>	
+		<wcm-view>Theo nội dung</wcm-view>
+	</label>
+  </UIDriveForm>
 </bundle>
