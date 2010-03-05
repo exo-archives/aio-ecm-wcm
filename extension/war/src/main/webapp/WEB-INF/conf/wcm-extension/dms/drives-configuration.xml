@@ -69,7 +69,7 @@
               <boolean>false</boolean>
             </field>
             <field name="allowCreateFolders">
-              <string>Both</string>
+              <string>nt:folder,nt:unstructured</string>
             </field>
           </object>
         </object-param>
@@ -112,7 +112,7 @@
               <boolean>true</boolean>
             </field>
             <field name="allowCreateFolders">
-              <string>Both</string>
+              <string>nt:folder,nt:unstructured</string>
             </field>
           </object>
         </object-param>
@@ -155,7 +155,7 @@
               <boolean>true</boolean>
             </field>
             <field name="allowCreateFolders">
-              <string>Both</string>
+              <string>nt:folder,nt:unstructured</string>
             </field>
           </object>
         </object-param -->
