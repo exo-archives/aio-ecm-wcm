@@ -26,7 +26,7 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
-import org.exoplatform.services.wcm.publication.PublicationUtil;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UITree;
@@ -225,7 +225,7 @@ public class UIPublicationTree extends UITree {
     public void setChildrenByPageNodes(List<PageNode> pagesNodes) throws Exception {
       if(pagesNodes == null) return;
       List<TreeNode> list = new ArrayList<TreeNode>();
-      UserPortalConfigService userPortalConfigService = PublicationUtil.getServices(UserPortalConfigService.class);
+      UserPortalConfigService userPortalConfigService = WCMCoreUtils.getService(UserPortalConfigService.class);
       for(PageNode pNode: pagesNodes) {
       	if (pNode.getPageReference() == null) continue;
         Page page = userPortalConfigService.getPage(pNode.getPageReference(), org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser());

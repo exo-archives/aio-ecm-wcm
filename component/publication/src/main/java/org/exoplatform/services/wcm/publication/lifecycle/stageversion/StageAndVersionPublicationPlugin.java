@@ -388,7 +388,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     portlet.setShowInfoBar(false);
     
     //// generate new portlet's id
-    WCMConfigurationService configurationService = PublicationUtil.getServices(WCMConfigurationService.class);
+    WCMConfigurationService configurationService = WCMCoreUtils.getService(WCMConfigurationService.class);
     StringBuilder windowId = new StringBuilder();
     windowId.append(PortalConfig.PORTAL_TYPE)
             .append("#")
@@ -416,7 +416,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
 //    ArrayList<Object> listPortlet = page.getChildren();
 //    listPortlet.add(portlet);
 //    page.setChildren(listPortlet);
-    UserPortalConfigService userPortalConfigService = PublicationUtil.getServices(UserPortalConfigService.class);
+    UserPortalConfigService userPortalConfigService = WCMCoreUtils.getService(UserPortalConfigService.class);
     userPortalConfigService.update(page);
     if (pomSession != null) pomSession.close();
   }
@@ -426,7 +426,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
    */
   @SuppressWarnings("unchecked")
   public void publishContentToCLV(Node content, Page page, String clvPortletId, String portalOwnerName, String remoteUser) throws Exception {
-    WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
+    WCMConfigurationService wcmConfigurationService = WCMCoreUtils.getService(WCMConfigurationService.class);
     ArrayList<Preference> preferences = new ArrayList<Preference>();
     PortletPreferences portletPreferences = dataStorage.getPortletPreferences(clvPortletId);
     if (portletPreferences == null) {
@@ -609,7 +609,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
    */
   public void suspendPublishedContentFromPage(Node content, Page page, String remoteUser) throws Exception {
     // Remove content from CLV portlet
-    WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
+    WCMConfigurationService wcmConfigurationService = WCMCoreUtils.getService(WCMConfigurationService.class);
     List<String> clvPortletsId = PublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.CLV_PORTLET));
     if (content != null && !clvPortletsId.isEmpty()) {
       for (String clvPortletId : clvPortletsId) {
@@ -646,7 +646,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     }
     if(removedApplicationIDs.size() == 0) return;
     PublicationUtil.removeApplicationFromPage(page, removedApplicationIDs);
-    UserPortalConfigService userPortalConfigService = PublicationUtil.getServices(UserPortalConfigService.class);
+    UserPortalConfigService userPortalConfigService = WCMCoreUtils.getService(UserPortalConfigService.class);
     userPortalConfigService.update(page);
   }
 
@@ -704,10 +704,10 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
   @SuppressWarnings("unchecked")
   private List<String> getRunningPortals(String userId) throws Exception {
     List<String> listPortalName = new ArrayList<String>();
-    DataStorage service = PublicationUtil.getServices(DataStorage.class);
+    DataStorage service = WCMCoreUtils.getService(DataStorage.class);
     Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, null, PortalConfig.class) ;
     PageList pageList = service.find(query) ;
-    UserACL userACL = PublicationUtil.getServices(UserACL.class);
+    UserACL userACL = WCMCoreUtils.getService(UserACL.class);
     for(Object object:pageList.getAll()) {
       PortalConfig portalConfig = (PortalConfig)object;
       if(userACL.hasPermission(portalConfig)) {
@@ -730,7 +730,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
   @SuppressWarnings("unchecked")
   public List<String> getListPageNavigationUri(Page page, String remoteUser) throws Exception {
     List<String> listPageNavigationUri = new ArrayList<String>();
-    DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);    
+    DataStorage dataStorage = WCMCoreUtils.getService(DataStorage.class);    
     for (String portalName : getRunningPortals(remoteUser)) {
       Query<PageNavigation> query = new Query<PageNavigation>(PortalConfig.PORTAL_TYPE,portalName,PageNavigation.class);
       PageList list = dataStorage.find(query);

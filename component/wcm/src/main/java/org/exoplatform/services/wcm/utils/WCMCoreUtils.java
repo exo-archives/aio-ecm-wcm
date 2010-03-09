@@ -16,10 +16,12 @@
  */
 package org.exoplatform.services.wcm.utils;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
@@ -143,4 +145,14 @@ public class WCMCoreUtils {
     }
     return false;
   }
+  
+  public static <T> List<T> getAllElementsOfListAccess(ListAccess<T> listAccess) {
+    try {
+      return Arrays.asList(listAccess.load(0, listAccess.getSize()));
+    } catch (Exception e) {
+      log.error("getAllElementsOfListAccess() failed because of ", e);
+    }
+    return null;
+  }
+  
 }

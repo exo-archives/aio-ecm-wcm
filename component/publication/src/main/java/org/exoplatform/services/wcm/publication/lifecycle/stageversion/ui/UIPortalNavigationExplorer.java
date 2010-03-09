@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.commons.lang.StringUtils;
-import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.PageNavigation;
@@ -45,7 +45,6 @@ import org.exoplatform.webui.event.EventListener;
  * Created by The eXo Platform SAS Author : Hoa Pham hoa.pham@exoplatform.com
  * Sep 9, 2008
  */
-@SuppressWarnings("deprecation")
 @ComponentConfig(lifecycle = Lifecycle.class, template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/ui/UIPortalNavigationExplorer.gtmpl", events = { @EventConfig(listeners = UIPortalNavigationExplorer.ChangeNodeActionListener.class) })
 public class UIPortalNavigationExplorer extends UIContainer {
 
@@ -122,15 +121,15 @@ public class UIPortalNavigationExplorer extends UIContainer {
    * 
    * @throws Exception the exception
    */
-  @SuppressWarnings("unchecked")
   private PageNavigation getPortalNavigation(String portalName) throws Exception {
     DataStorage dataStorage = getApplicationComponent(DataStorage.class);
     Query<PageNavigation> query = new Query<PageNavigation>(PortalConfig.PORTAL_TYPE,
                                                             portalName,
                                                             PageNavigation.class);
-    PageList list = dataStorage.find(query);
-    for (Object object : list.getAll()) {
-      return PageNavigation.class.cast(object);
+    ListAccess<PageNavigation> list = dataStorage.find2(query);
+    List<PageNavigation> pageNavigations = WCMCoreUtils.getAllElementsOfListAccess(list);
+    for (PageNavigation pageNavigation : pageNavigations) {
+      return pageNavigation;
     }
     return null;
   }

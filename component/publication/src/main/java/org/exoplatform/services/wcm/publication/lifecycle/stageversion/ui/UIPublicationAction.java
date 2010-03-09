@@ -22,7 +22,6 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.Value;
 
-import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.DataStorage;
@@ -39,6 +38,7 @@ import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationTree.TreeNode;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -56,7 +56,6 @@ import org.exoplatform.webui.form.UIForm;
  * Sep 25, 2008
  */
 
-@SuppressWarnings("deprecation")
 @ComponentConfig (
     lifecycle = UIFormLifecycle.class,
     template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/ui/UIPublicationAction.gtmpl",
@@ -193,7 +192,6 @@ public class UIPublicationAction extends UIForm {
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
-    @SuppressWarnings("unchecked")
     public void execute(Event<UIPublicationAction> event) throws Exception {
       UIPublicationAction publicationAction = event.getSource();
       UIPublicationPages publicationPages = publicationAction.getAncestorOfType(UIPublicationPages.class);
@@ -214,9 +212,9 @@ public class UIPublicationAction extends UIForm {
       PageNavigation pageNavigation = null;
       Page page = null;
       Query<PageNavigation> query = new Query<PageNavigation>(PortalConfig.PORTAL_TYPE, portalName, PageNavigation.class);
-      PageList list = dataStorage.find(query);
-      for(Object object: list.getAll()) {
-        pageNavigation = PageNavigation.class.cast(object);
+      List<PageNavigation> pageNavigations = WCMCoreUtils.getAllElementsOfListAccess(dataStorage.find2(query));
+      for(PageNavigation object : pageNavigations) {
+        pageNavigation = object;
       }
       Node contentNode = null;
       if (pageNavigation != null) {
@@ -276,8 +274,8 @@ public class UIPublicationAction extends UIForm {
   }
   
   private static List<String> getManualModeCLVPortletIDs(Page page) throws Exception {
-    WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
-    DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
+    WCMConfigurationService wcmConfigurationService = WCMCoreUtils.getService(WCMConfigurationService.class);
+    DataStorage dataStorage = WCMCoreUtils.getService(DataStorage.class);
     List<String> clvPortletsId = PublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.CLV_PORTLET));
     List<String> applicationIDs = new ArrayList<String>();
     for (String clvPortletId : clvPortletsId) {

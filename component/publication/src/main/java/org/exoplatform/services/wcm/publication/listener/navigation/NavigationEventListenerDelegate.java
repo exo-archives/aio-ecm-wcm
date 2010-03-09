@@ -110,8 +110,8 @@ public class NavigationEventListenerDelegate {
    * @throws Exception the exception
    */
   private void updateAddedPageNode(PageNavigation pageNavigation, String remoteUser) throws Exception {
-    UserPortalConfigService userPortalConfigService = PublicationUtil.getServices(UserPortalConfigService.class);
-    WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
+    UserPortalConfigService userPortalConfigService = WCMCoreUtils.getService(UserPortalConfigService.class);
+    WCMConfigurationService wcmConfigurationService = WCMCoreUtils.getService(WCMConfigurationService.class);
     for (PageNode pageNode : PublicationUtil.getAllPageNodeFromPageNavigation(pageNavigation)) {
       Page page = null;
       if (remoteUser == null) 
@@ -152,8 +152,8 @@ public class NavigationEventListenerDelegate {
       listPageReference.add(portalPageNode.getPageReference());
     }
 
-    RepositoryService repositoryService = PublicationUtil.getServices(RepositoryService.class);
-    WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
+    RepositoryService repositoryService = WCMCoreUtils.getService(RepositoryService.class);
+    WCMConfigurationService wcmConfigurationService = WCMCoreUtils.getService(WCMConfigurationService.class);
     ManageableRepository repository = repositoryService.getCurrentRepository();
     NodeLocation nodeLocation = wcmConfigurationService.getLivePortalsLocation(repository.getConfiguration().getName());
 
@@ -182,7 +182,7 @@ public class NavigationEventListenerDelegate {
       }
       if (!pageId.equals("")) {
         String applicationId = "";
-        UserPortalConfigService userPortalConfigService = PublicationUtil.getServices(UserPortalConfigService.class);
+        UserPortalConfigService userPortalConfigService = WCMCoreUtils.getService(UserPortalConfigService.class);
         Page page = null;
         if (remoteUser == null) 
           page = userPortalConfigService.getPage(pageId);
@@ -211,7 +211,7 @@ public class NavigationEventListenerDelegate {
    * @throws Exception the exception
    */
   private void saveAddedPageNode(String portalName, PageNode pageNode, String applicationId, Node content) throws Exception {    
-    PublicationService publicationService = PublicationUtil.getServices(PublicationService.class);                 
+    PublicationService publicationService = WCMCoreUtils.getService(PublicationService.class);                 
     String nodeLifecycleName = null;
     try {
       nodeLifecycleName = publicationService.getNodeLifecycleName(content);

@@ -31,9 +31,10 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
+import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
-import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.access.AccessControlEntry;
@@ -308,7 +309,6 @@ public class NewsletterConstant {
    * @param component           UIComponent
    * @throws Exception          The exception
    */
-  @SuppressWarnings({ "deprecation", "unchecked" })
   public static void updateAccessPermission(String[] accessPermissions) throws Exception{
     OrganizationService organizationService = WCMCoreUtils.getService(OrganizationService.class) ;
     ((ComponentRequestLifecycle) organizationService).startRequest(manager);
@@ -317,10 +317,10 @@ public class NewsletterConstant {
     String membership = wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.NEWSLETTER_MANAGE_MEMBERSHIP);
     MembershipType membershipType = organizationService.getMembershipTypeHandler().findMembershipType(membership.split(":")[0]);
     Group group = organizationService.getGroupHandler().findGroupById(membership.split(":")[1]);
-    List<String> users = new ArrayList<String>();
+    List<User> users = new ArrayList<User>();
     
-    UserPortalConfigService userService = WCMCoreUtils.getService(UserPortalConfigService.class);
-    Page page = userService.getPage(Util.getUIPortal().getSelectedNode().getPageReference());
+    DataStorage dataStorage = WCMCoreUtils.getService(DataStorage.class);
+    Page page = dataStorage.getPage(Util.getUIPortal().getSelectedNode().getPageReference());
     List<String> pageAccessPermissions = new ArrayList<String>(Arrays.asList(page.getAccessPermissions()));
     
     UserHandler userHandler = organizationService.getUserHandler();
@@ -328,18 +328,19 @@ public class NewsletterConstant {
     for(String newAccessPermission : accessPermissions){
       if(pageAccessPermissions.contains(newAccessPermission)) continue;
       User currentUser = userHandler.findUserByName(newAccessPermission);
-      if (currentUser == null)
-        users = userHandler.findUsersByGroup(newAccessPermission.split(":")[1]).getAll();
-      else
-        users.add(currentUser.getUserName());
-      for(String user : users){
-        membershipHandler.linkMembership(userHandler.findUserByName(user), group, membershipType, true);
+      if (currentUser == null) {
+        ListAccess<User> listUsers = userHandler.findUsersByGroupId(newAccessPermission.split(":")[1]);
+        users = Arrays.asList(listUsers.load(0, listUsers.getSize()));
+      } else
+        users.add(currentUser);
+      for(User user : users){
+        membershipHandler.linkMembership(userHandler.findUserByName(user.getUserName()), group, membershipType, true);
       }
       pageAccessPermissions.add(newAccessPermission);
     }
     ((ComponentRequestLifecycle) organizationService).endRequest(manager);
     page.setAccessPermissions(pageAccessPermissions.toArray(new String[]{}));
-    userService.update(page);
+    dataStorage.save(page);
   }
   
   /**
@@ -352,8 +353,8 @@ public class NewsletterConstant {
     ((ComponentRequestLifecycle) organizationService).startRequest(manager);
     MembershipHandler memberShipHandler = organizationService.getMembershipHandler();
     
-    UserPortalConfigService userService = WCMCoreUtils.getService(UserPortalConfigService.class);
-    Page page = userService.getPage(Util.getUIPortal().getSelectedNode().getPageReference());
+    DataStorage dataStorage = WCMCoreUtils.getService(DataStorage.class);
+    Page page = dataStorage.getPage(Util.getUIPortal().getSelectedNode().getPageReference());
     List<String> pageAccessPermissions = new ArrayList<String>(Arrays.asList(page.getAccessPermissions()));
     for(String removedPermission : removedPermissions){
       if(pageAccessPermissions.contains(removedPermission)) {
@@ -363,7 +364,7 @@ public class NewsletterConstant {
     }
     ((ComponentRequestLifecycle) organizationService).endRequest(manager);
     page.setAccessPermissions(pageAccessPermissions.toArray(new String[]{}));
-    userService.update(page);
+    dataStorage.save(page);
   }
   
   public static NodeIterator getAllCategories(Session session) throws Exception {

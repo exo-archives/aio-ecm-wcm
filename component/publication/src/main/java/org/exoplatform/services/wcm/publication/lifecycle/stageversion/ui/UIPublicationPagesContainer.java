@@ -27,7 +27,7 @@ import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.wcm.publication.PublicationUtil;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
@@ -74,10 +74,10 @@ public class UIPublicationPagesContainer extends UIContainer {
   @SuppressWarnings("unchecked")
   private List<String> getRunningPortals(String userId) throws Exception {
     List<String> listPortalName = new ArrayList<String>();
-    DataStorage service = PublicationUtil.getServices(DataStorage.class);
+    DataStorage service = WCMCoreUtils.getService(DataStorage.class);
     Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, null, PortalConfig.class) ;
     PageList pageList = service.find(query) ;
-    UserACL userACL = PublicationUtil.getServices(UserACL.class);
+    UserACL userACL = WCMCoreUtils.getService(UserACL.class);
     for(Object object:pageList.getAll()) {
       PortalConfig portalConfig = (PortalConfig)object;
       if(userACL.hasPermission(portalConfig)) {

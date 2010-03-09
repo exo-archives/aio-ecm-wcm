@@ -22,7 +22,6 @@ import java.util.Collections;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelObject;
@@ -135,15 +134,14 @@ public class UIWelcomeScreen extends UIForm {
     @SuppressWarnings("unchecked")
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
       UIWelcomeScreen welcomeScreen = event.getSource();
-      UserPortalConfigService userPortalConfigService = welcomeScreen.getApplicationComponent(UserPortalConfigService.class);
       UIPortal portal = Util.getUIPortal();
       PageNode currentPageNode = portal.getSelectedNode();
-      Page currentPage = userPortalConfigService.getPage(currentPageNode.getPageReference());
+      DataStorage dataStorage = welcomeScreen.getApplicationComponent(DataStorage.class);
+      Page currentPage = dataStorage.getPage(currentPageNode.getPageReference());
       ArrayList<Object> applications = new ArrayList<Object>();
       applications.addAll(currentPage.getChildren());
       ArrayList<ModelObject> applicationsTmp = currentPage.getChildren(); 
       Collections.reverse(applicationsTmp);
-      DataStorage dataStorage = welcomeScreen.getApplicationComponent(DataStorage.class);
       for (Object applicationObject : applicationsTmp) {
         if (applicationObject instanceof Container) continue;
         Application application = Application.class.cast(applicationObject);
@@ -173,7 +171,7 @@ public class UIWelcomeScreen extends UIForm {
         }
       }
 //      currentPage.setChildren(applications);
-      userPortalConfigService.update(currentPage);
+      dataStorage.save(currentPage);
       UIPage uiPage = portal.findFirstComponentOfType(UIPage.class);
       if (uiPage != null) {
       	uiPage.setChildren(null);

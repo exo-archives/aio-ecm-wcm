@@ -35,6 +35,7 @@ import org.exoplatform.services.wcm.publication.PublicationUtil;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -115,8 +116,8 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
    * @throws Exception the exception
    */
   public List<Application<Portlet>> getClvPortlets() throws Exception {
-    WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
-    DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
+    WCMConfigurationService wcmConfigurationService = WCMCoreUtils.getService(WCMConfigurationService.class);
+    DataStorage dataStorage = WCMCoreUtils.getService(DataStorage.class);
     List<String> clvPortletsId = PublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.CLV_PORTLET));
     List<Application<Portlet>> applications = new ArrayList<Application<Portlet>>();
     for (String clvPortletId : clvPortletsId) {
@@ -161,7 +162,7 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
       String clvPortletId = URLDecoder.decode(event.getRequestContext().getRequestParameter(OBJECTID), "UTF-8");
       WCMPublicationService presentationService = clvChooser.getApplicationComponent(WCMPublicationService.class);
 //      clvPortletId = PortalConfig.PORTAL_TYPE + "#" + org.exoplatform.portal.webui.util.Util.getUIPortal().getOwner() + ":" + clvPortletId;
-      DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
+      DataStorage dataStorage = WCMCoreUtils.getService(DataStorage.class);
       PortletPreferences portletPreferences = dataStorage.getPortletPreferences(clvPortletId);
       Node node = clvChooser.getNode();
       if (portletPreferences != null) {

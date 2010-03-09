@@ -34,8 +34,8 @@ import org.exoplatform.services.cms.views.ApplicationTemplateManagerService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
-import org.exoplatform.services.wcm.publication.PublicationUtil;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.clv.UICLVContainer;
 import org.exoplatform.wcm.webui.clv.UICLVFolderMode;
@@ -662,7 +662,7 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
    * @return the string
    */
   private static String generatePorletId(String windowId, PortletRequestContext portletRequestContext) {
-    WCMConfigurationService configurationService = PublicationUtil.getServices(WCMConfigurationService.class);
+    WCMConfigurationService configurationService = WCMCoreUtils.getService(WCMConfigurationService.class);
     StringBuilder porletId = new StringBuilder();
     porletId.append(PortalConfig.PORTAL_TYPE)
             .append("#")

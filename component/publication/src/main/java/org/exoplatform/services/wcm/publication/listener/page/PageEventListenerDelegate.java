@@ -96,7 +96,7 @@ public class PageEventListenerDelegate {
    * @throws Exception the exception
    */
   public void updateLifecycleOnRemovePage(Page page, String remoteUser, WebpagePublicationPlugin plugin) throws Exception {
-    WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
+    WCMConfigurationService wcmConfigurationService = WCMCoreUtils.getService(WCMConfigurationService.class);
     List<String> listPageApplicationId = 
     	PublicationUtil.getListApplicationIdByPage(
     			page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET));
@@ -117,7 +117,7 @@ public class PageEventListenerDelegate {
    * @throws Exception the exception
    */
   private void updateAddedApplication(Page page, String remoteUser, WebpagePublicationPlugin plugin) throws Exception {
-    WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
+    WCMConfigurationService wcmConfigurationService = WCMCoreUtils.getService(WCMConfigurationService.class);
     List<String> listPageApplicationId = PublicationUtil.getListApplicationIdByPage(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET));
     for (String applicationtId : listPageApplicationId) {
       Node content = PublicationUtil.getNodeByApplicationId(applicationtId);
@@ -135,7 +135,7 @@ public class PageEventListenerDelegate {
    */
   private void updateRemovedApplication(Page page, String remoteUser, WebpagePublicationPlugin plugin) throws Exception {
     List<Node> listNode = getListNodeByApplicationId(page, plugin);
-    WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
+    WCMConfigurationService wcmConfigurationService = WCMCoreUtils.getService(WCMConfigurationService.class);
     List<String>	listApplicationId = new ArrayList<String>();
     listApplicationId.addAll(
     		PublicationUtil.getListApplicationIdByPage(
@@ -166,8 +166,8 @@ public class PageEventListenerDelegate {
    * @throws Exception the exception
    */
   private List<Node> getListNodeByApplicationId(Page page, WebpagePublicationPlugin plugin) throws Exception {
-    RepositoryService repositoryService = PublicationUtil.getServices(RepositoryService.class);
-    WCMConfigurationService configurationService = PublicationUtil.getServices(WCMConfigurationService.class);
+    RepositoryService repositoryService = WCMCoreUtils.getService(RepositoryService.class);
+    WCMConfigurationService configurationService = WCMCoreUtils.getService(WCMConfigurationService.class);
     ManageableRepository repository = repositoryService.getCurrentRepository();
     NodeLocation nodeLocation = configurationService.getLivePortalsLocation(repository.getConfiguration().getName());
 
@@ -202,7 +202,7 @@ public class PageEventListenerDelegate {
   		Page page, String applicationId, Node content, String lifecycleName,
   		String remoteUser, WebpagePublicationPlugin plugin) throws Exception {
   	if (!content.isCheckedOut()) content.checkout();
-    PublicationService publicationService = PublicationUtil.getServices(PublicationService.class);                 
+    PublicationService publicationService = WCMCoreUtils.getService(PublicationService.class);                 
     String nodeLifecycleName = null;
     try {
       nodeLifecycleName = publicationService.getNodeLifecycleName(content);

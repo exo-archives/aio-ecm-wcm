@@ -221,15 +221,14 @@ public class UINameWebContentForm extends UIForm {
     @SuppressWarnings("unchecked")
     public void execute(Event<UINameWebContentForm> event) throws Exception {
       UINameWebContentForm nameWebcontentForm = event.getSource();
-      UserPortalConfigService userPortalConfigService = nameWebcontentForm.getApplicationComponent(UserPortalConfigService.class);
       UIPortal uiPortal = Util.getUIPortal();
       PageNode currentPageNode = uiPortal.getSelectedNode();
-      Page currentPage = userPortalConfigService.getPage(currentPageNode.getPageReference());
+      DataStorage dataStorage = nameWebcontentForm.getApplicationComponent(DataStorage.class);
+      Page currentPage = dataStorage.getPage(currentPageNode.getPageReference());
       ArrayList<Object> applications = new ArrayList<Object>();
       applications.addAll(currentPage.getChildren());
       ArrayList<ModelObject> applicationsTmp = currentPage.getChildren(); 
       Collections.reverse(applicationsTmp);
-      DataStorage dataStorage = nameWebcontentForm.getApplicationComponent(DataStorage.class);
       for (Object applicationObject : applicationsTmp) {
         if (applicationObject instanceof Container) continue;
         Application application = Application.class.cast(applicationObject);
@@ -260,7 +259,7 @@ public class UINameWebContentForm extends UIForm {
         }
       }
 //      currentPage.setChildren(applications);
-      userPortalConfigService.update(currentPage);
+      dataStorage.save(currentPage);
       UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
       if (uiPage != null) {
       	uiPage.setChildren(null);

@@ -318,7 +318,6 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent, UISel
     public void execute(Event<UISubcriptionForm> event) throws Exception {
       UISubcriptionForm uiSubcriptionForm = event.getSource();
       if (uiSubcriptionForm.getSubmitAction().equals("Cancel")) {
-        uiSubcriptionForm.getComponentConfig().setValidators(null);
         uiSubcriptionForm.getChildren().clear();
       }
       uiSubcriptionForm.setRemove(false);

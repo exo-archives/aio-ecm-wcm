@@ -27,8 +27,6 @@ import javax.jcr.Value;
 import javax.jcr.ValueFactory;
 import javax.jcr.ValueFormatException;
 
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.DataStorage;
@@ -245,8 +243,8 @@ public class PublicationUtil {
    * @throws Exception the exception
    */
   public static Node getNodeByApplicationId(String applicationId) throws Exception {
-    DataStorage dataStorage = getServices(DataStorage.class);
-    RepositoryService repositoryService = getServices(RepositoryService.class);
+    DataStorage dataStorage = WCMCoreUtils.getService(DataStorage.class);
+    RepositoryService repositoryService = WCMCoreUtils.getService(RepositoryService.class);
     PortletPreferences portletPreferences = dataStorage.getPortletPreferences(applicationId);
     if (portletPreferences == null) return null;
     String repositoryName = null;
@@ -352,18 +350,6 @@ public class PublicationUtil {
   }
   
   /**
-   * Gets the services.
-   * 
-   * @param clazz the clazz
-   * 
-   * @return the services
-   */
-  public static <T> T getServices(Class<T> clazz) {
-    ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
-    return clazz.cast(exoContainer.getComponentInstanceOfType(clazz));
-  }
-  
-  /**
    * Checks if is node content published to page node.
    * 
    * @param contentNode the content node
@@ -374,7 +360,7 @@ public class PublicationUtil {
    * @throws Exception the exception
    */
   public static boolean isNodeContentPublishedToPageNode(Node contentNode, String navNodeURI) throws Exception{
-  	DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
+  	DataStorage dataStorage = WCMCoreUtils.getService(DataStorage.class);
   	PageNavigation pageNavigation = dataStorage.getPageNavigation(PortalConfig.PORTAL_TYPE, Util.getUIPortalApplication().getOwner());
   	ArrayList<PageNode> lisPageNodes = PublicationUtil.getAllPageNodeFromPageNavigation(pageNavigation);
   	PageNode pageNode = null;

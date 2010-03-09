@@ -40,7 +40,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterUserInfor;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
-import org.exoplatform.services.wcm.publication.PublicationUtil;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -159,7 +159,7 @@ public class UIManagerUsers extends UITabPane {
   
   private List<String> getAllEditPermission() throws Exception {
     List<String> userGroupMembership = new ArrayList<String>();
-    userGroupMembership.add(PublicationUtil.getServices(UserACL.class).getSuperUser());
+    userGroupMembership.add(WCMCoreUtils.getService(UserACL.class).getSuperUser());
     return getAllUsersFromGroupMemebers(userGroupMembership);
   }
   

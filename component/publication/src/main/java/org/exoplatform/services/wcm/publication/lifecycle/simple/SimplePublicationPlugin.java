@@ -36,14 +36,13 @@ import javax.jcr.Session;
 import javax.jcr.lock.LockException;
 import javax.jcr.version.VersionException;
 
-import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Page;
@@ -78,7 +77,6 @@ import org.exoplatform.webui.form.UIForm;
  * hoa.pham@exoplatform.com
  * Sep 30, 2008
  */
-@SuppressWarnings("deprecation")
 public class SimplePublicationPlugin extends WebpagePublicationPlugin{
 
   /** The Constant DEFAULT_STATE. */
@@ -159,7 +157,7 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
   public void changeState(Node node, String newState, HashMap<String, String> context) throws IncorrectStateUpdateLifecycleException, Exception {
     Session session = node.getSession();
     node.setProperty(CURRENT_STATE, newState);
-    PublicationService publicationService = PublicationUtil.getServices(PublicationService.class);
+    PublicationService publicationService = WCMCoreUtils.getService(PublicationService.class);
 
     if (newState.equals(PublicationDefaultStates.DRAFT)) {
       String lifecycleName = node.getProperty("publication:lifecycleName").getString();
@@ -264,18 +262,17 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
    * 
    * @throws Exception the exception
    */
-  @SuppressWarnings("unchecked")
   private List<String> getRunningPortals(String userId) throws Exception {
     POMSessionManager manager = WCMCoreUtils.getService(POMSessionManager.class);
     POMSession session = null;
     if (manager.getSession() == null) session = manager.openSession();
     List<String> listPortalName = new ArrayList<String>();
-    DataStorage service = PublicationUtil.getServices(DataStorage.class);
+    DataStorage service = WCMCoreUtils.getService(DataStorage.class);
     Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, null, PortalConfig.class) ;
-    PageList pageList = service.find(query) ;
-    UserACL userACL = PublicationUtil.getServices(UserACL.class);
-    for(Object object:pageList.getAll()) {
-      PortalConfig portalConfig = (PortalConfig)object;
+    ListAccess<PortalConfig> pageList = service.find2(query) ;
+    List<PortalConfig> portalConfigs = WCMCoreUtils.getAllElementsOfListAccess(pageList);
+    UserACL userACL = WCMCoreUtils.getService(UserACL.class);
+    for(PortalConfig portalConfig : portalConfigs) {
       if(userACL.hasPermission(portalConfig)) {
         listPortalName.add(portalConfig.getName());
       }
@@ -288,12 +285,11 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
    * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#publishContentToPage(javax.jcr.Node, org.exoplatform.portal.config.model.Page)
    */
   public void publishContentToPage(Node content, Page page) throws Exception {
-    UserPortalConfigService userPortalConfigService = PublicationUtil.getServices(UserPortalConfigService.class);
     Application<Portlet> portlet = new Application<Portlet>(ApplicationType.PORTLET);
     portlet.setShowInfoBar(false);
 
     // Create portlet
-    WCMConfigurationService configurationService = PublicationUtil.getServices(WCMConfigurationService.class);
+    WCMConfigurationService configurationService = WCMCoreUtils.getService(WCMConfigurationService.class);
     StringBuilder windowId = new StringBuilder();
     windowId.append(PortalConfig.PORTAL_TYPE)
             .append("#")
@@ -341,14 +337,14 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
     
     portletPreferences.setPreferences(listPreference);
 
-    DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
+    DataStorage dataStorage = WCMCoreUtils.getService(DataStorage.class);
     dataStorage.save(portletPreferences);
 
     // Add portlet to page
 //    ArrayList<Object> listPortlet = page.getChildren();
 //    listPortlet.add(portlet);
 //    page.setChildren(listPortlet);
-    userPortalConfigService.update(page);
+    dataStorage.save(page);
   }
 
   /* (non-Javadoc)
@@ -366,8 +362,7 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
     }
     if(removedApplicationIDs.size() == 0) return;
     PublicationUtil.removeApplicationFromPage(page, removedApplicationIDs);
-    UserPortalConfigService userPortalConfigService = PublicationUtil.getServices(UserPortalConfigService.class);
-    userPortalConfigService.update(page);
+    WCMCoreUtils.getService(DataStorage.class).save(page);
   }
 
   /**
@@ -379,15 +374,14 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
    * 
    * @throws Exception the exception
    */
-  @SuppressWarnings("unchecked")
   public List<String> getListPageNavigationUri(Page page, String remoteUser) throws Exception {
     List<String> listPageNavigationUri = new ArrayList<String>();
-    DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);    
+    DataStorage dataStorage = WCMCoreUtils.getService(DataStorage.class);    
     for (String portalName : getRunningPortals(remoteUser)) {
       Query<PageNavigation> query = new Query<PageNavigation>(PortalConfig.PORTAL_TYPE,portalName,PageNavigation.class);
-      PageList list = dataStorage.find(query);
-      for(Object object: list.getAll()) {
-        PageNavigation pageNavigation = PageNavigation.class.cast(object);
+      ListAccess<PageNavigation> list = dataStorage.find2(query);
+      List<PageNavigation> pageNavigations = WCMCoreUtils.getAllElementsOfListAccess(list);
+      for(PageNavigation pageNavigation : pageNavigations) {
         List<PageNode> listPageNode = PublicationUtil.findPageNodeByPageId(pageNavigation, page.getPageId());        
         for (PageNode pageNode : listPageNode) {
           listPageNavigationUri.add(PublicationUtil.setMixedNavigationUri(portalName, pageNode.getUri()));
@@ -407,7 +401,7 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
    * @throws Exception the exception
    */
   private String getPortalForContent(Node contentNode) throws Exception {
-    LivePortalManagerService livePortalManagerService = PublicationUtil.getServices(LivePortalManagerService.class);
+    LivePortalManagerService livePortalManagerService = WCMCoreUtils.getService(LivePortalManagerService.class);
     for(String portalPath:livePortalManagerService.getLivePortalsPath()) {
       if(contentNode.getPath().startsWith(portalPath)) {
         return livePortalManagerService.getPortalNameByPath(portalPath);
@@ -427,7 +421,7 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
    */
   @SuppressWarnings("unused")
   private boolean isSharedPortal(String portalName) throws Exception{
-    LivePortalManagerService livePortalManagerService = PublicationUtil.getServices(LivePortalManagerService.class);
+    LivePortalManagerService livePortalManagerService = WCMCoreUtils.getService(LivePortalManagerService.class);
     SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
     Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
     return sharedPortal.getName().equals(portalName);    
@@ -437,7 +431,7 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
    * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getNodeView(javax.jcr.Node, java.util.Map)
    */
   public Node getNodeView(Node node, Map<String, Object> context) throws Exception {
-    WCMPublicationService wcmPublicationService = PublicationUtil.getServices(WCMPublicationService.class);
+    WCMPublicationService wcmPublicationService = WCMCoreUtils.getService(WCMPublicationService.class);
     String contentState = wcmPublicationService.getContentState(node);
     
     // if node is obsolette

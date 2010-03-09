@@ -76,6 +76,7 @@ import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
       @EventConfig(listeners = UIWikiContentForm.CancelActionListener.class)
     }
 )
+@SuppressWarnings("deprecation")
 public class UIWikiContentForm extends UIForm {
 
   /** The Constant NAME_CONTENT. */
