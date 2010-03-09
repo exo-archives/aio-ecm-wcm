@@ -250,7 +250,7 @@
 						<param name="transparentatStart" value="true">
 						<param name="autoStart" value="true">
 						<param name="showControls" value="true">
-						<param name="Volume" value="100">
+						<param name="Volume" value="100">						
 						<embed type="application/x-mplayer2" pluginspage="http://www.microsoft.com/Windows/MediaPlayer/" src="$binarySrc" name="MediaPlayer1" width=400 height=300 autostart=1 showcontrols=1 volume=100>
 						</object>
 						
@@ -258,7 +258,7 @@
 						<!-- ############################ MP3 AUDIO ###################################### -->
 						<embed type="application/x-shockwave-flash" src="/portal/addons/audio-player.swf?audioUrl=$binarySrc" 
 							width="400" height="27" allowscriptaccess="never" quality="best" 
-							bgcolor="#ffffff" wmode="window" flashvars="playerMode=embedded" />						
+							bgcolor="#ffffff" wmode="transparent" flashvars="playerMode=embedded" />						
 						
 
 					<% } else if(mimeType.equals("application/octet-stream") && originalNode.name.toLowerCase().endsWith(".flv") ) { %>
