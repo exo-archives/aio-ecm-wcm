@@ -110,11 +110,6 @@ public class ExportContentJob implements Job {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       RepositoryService repositoryService_ = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService_.getRepository(repository);
-      if (manageableRepository == null) {
-        if (log.isDebugEnabled())
-          log.debug("Repository '" + repository + "' not found., ignoring");
-        return;
-      }
       PublicationService publicationService = (PublicationService) container.getComponentInstanceOfType(PublicationService.class);
       PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
                                                               .get(AuthoringPublicationConstant.LIFECYCLE_NAME);
@@ -129,7 +124,9 @@ public class ExportContentJob implements Job {
       File exportFolder = new File(localTempDir);
       if (!exportFolder.exists())
         exportFolder.mkdirs();
-      File file = new File(localTempDir + File.separatorChar + "contents.xml");
+      Date date = new Date();
+      long time = date.getTime();
+      File file = new File(localTempDir + File.separatorChar + time + ".xml");
       ByteArrayOutputStream bos = null;
       List<Node> categorySymLinks = null;
       XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
@@ -146,12 +143,12 @@ public class ExportContentJob implements Job {
         xmlsw.writeStartElement("xs", "published-contents", URL);
         for (NodeIterator iter = queryResult.getNodes(); iter.hasNext();) {
           Node node_ = iter.nextNode();
-
           nodeDate = null;
           if (node_.hasProperty(START_TIME_PROPERTY)) {
             now = Calendar.getInstance().getTime();
             nodeDate = node_.getProperty(START_TIME_PROPERTY).getDate().getTime();
           }
+
           if (nodeDate == null || now.compareTo(nodeDate) >= 0) {
             if (node_.canAddMixin(MIX_TARGET_PATH))
               node_.addMixin(MIX_TARGET_PATH);
@@ -248,56 +245,67 @@ public class ExportContentJob implements Job {
       xmlsw.flush();
       output.close();
       xmlsw.close();
-      if (isExported) {
-        // connect
-        URI uri = new URI(targetServerUrl + "/copyfile/copy/");
-        URL url = uri.toURL();
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+      if (!isExported)
+        file.delete();
+      File[] files = exportFolder.listFiles();
+      if (files != null) {
+        for (int i = 0; i < files.length; i++) {
+          // connect
+          URI uri = new URI(targetServerUrl + "/copyfile/copy/");
+          URL url = uri.toURL();
+          HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-        // initialize the connection
-        connection.setDoOutput(true);
-        connection.setDoInput(true);
-        connection.setRequestMethod("POST");
-        connection.setUseCaches(false);
-        connection.setRequestProperty("Content-type", "text/plain");
-        connection.setRequestProperty("Connection", "Keep-Alive");
+          // initialize the connection
+          connection.setDoOutput(true);
+          connection.setDoInput(true);
+          connection.setRequestMethod("POST");
+          connection.setUseCaches(false);
+          connection.setRequestProperty("Content-type", "text/plain");
+          connection.setRequestProperty("Connection", "Keep-Alive");
 
-        OutputStream out = connection.getOutputStream();
-        BufferedReader reader = new BufferedReader(new FileReader(file.getPath()));
-        char[] buf = new char[1024];
-        int numRead = 0;
-        Date date = new Date();
-        Timestamp time = new Timestamp(date.getTime());
-        String[] tab = targetKey.split(":");
-        String superpassword = tab[1];
-        String hashCode = SHAMessageDigester.getHash(time.toString() + ":" + superpassword);
-        StringBuffer param = new StringBuffer();
-        param.append("timestamp=" + time.toString() + "&&hashcode=" + hashCode + "&&contentsfile=");
-        while ((numRead = reader.read(buf)) != -1) {
-          String readData = String.valueOf(buf, 0, numRead);
-          param.append(readData);
+          OutputStream out = connection.getOutputStream();
+          BufferedReader reader = new BufferedReader(new FileReader(files[i].getPath()));
+          char[] buf = new char[1024];
+          int numRead = 0;
+          Date date_ = new Date();
+          Timestamp time_ = new Timestamp(date_.getTime());
+          String[] tab = targetKey.split("$TIMESTAMP");
+          StringBuffer resultKey = new StringBuffer();
+          for (int k = 0; k < tab.length; k++) {
+            resultKey.append(tab[k]);
+            if (k != (tab.length - 1))
+              resultKey.append(time_.toString());
+          }
+          String hashCode = SHAMessageDigester.getHash(resultKey.toString());
+          StringBuffer param = new StringBuffer();
+          param.append("timestamp=" + time_.toString() + "&&hashcode=" + hashCode
+              + "&&contentsfile=");
+          while ((numRead = reader.read(buf)) != -1) {
+            String readData = String.valueOf(buf, 0, numRead);
+            param.append(readData);
+          }
+          reader.close();
+          out.write(param.toString().getBytes());
+          out.flush();
+          connection.connect();
+          BufferedReader inStream = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+          out.close();
+          String string = null;
+          while ((string = inStream.readLine()) != null) {
+            log.debug("The response of the production server:" + string);
+          }
+          connection.disconnect();
+          files[i].delete();
         }
-        reader.close();
-        out.write(param.toString().getBytes());
-        out.flush();
-        connection.connect();
-        BufferedReader inStream = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        out.close();
-        String string = null;
-        while ((string = inStream.readLine()) != null) {
-          log.debug("The response of the production server:" + string);
-        }
-        connection.disconnect();
       }
 
       log.info("End Execute ExportContentJob");
     } catch (RepositoryException ex) {
-      log.debug("Repository 'repository ' not found.");
+      log.error("Repository 'repository ' not found.", ex);
     } catch (ConnectException ex) {
-      log.debug("The front server is down.");
-    } 
-    catch (Exception ex) {
-      log.error("Error when exporting content : " + ex.getMessage(), ex);
+      log.error("The front server is down.", ex);
+    } catch (Exception ex) {
+      log.error("Error when exporting content : ", ex);
     } finally {
       if (session != null)
         session.logout();
