@@ -58,7 +58,6 @@ public class TestNavigationService extends BaseWCMTestCase {
     
     String jsonExpert = "[" +
     		                  "{" +
-    		                    "\"modifier\":" + pageNavigation.getModifier() + "," +
     		                    "\"id\":" + pageNavigation.getId() + "," +
     		                    "\"storageName\":" + pageNavigation.getStorageName() + "," +
     		                    "\"ownerId\":\"" + pageNavigation.getOwnerId() + "\"," +
@@ -67,8 +66,7 @@ public class TestNavigationService extends BaseWCMTestCase {
     		                    "\"priority\":" + pageNavigation.getPriority() + "," +
     		                    "\"ownerType\":\"" + pageNavigation.getOwnerType() + "\"," +
     		                    "\"owner\":\"" + pageNavigation.getOwner() + "\"," +
-    		                    "\"storageId\":" + pageNavigation.getStorageId() + "," +
-    		                  	"\"creator\":" + pageNavigation.getCreator() +
+    		                    "\"storageId\":" + pageNavigation.getStorageId() +
     		                  "}" +
     		                "]";
     jsonExpert = sortJSONString(jsonExpert);

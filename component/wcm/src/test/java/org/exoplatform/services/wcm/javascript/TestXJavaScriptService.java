@@ -17,6 +17,7 @@
 
 package org.exoplatform.services.wcm.javascript;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Date;
 
 import javax.jcr.Node;
@@ -326,7 +327,10 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 			javascriptService.updatePortalJSOnModify(portalNode, null);
       session.save();
       configService = getService(JavascriptConfigService.class);
-      String jsData = new String(configService.getMergedJavascript());
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      configService.writeMergedJavascript(baos);
+      baos.close();
+      String jsData = baos.toString("UTF-8");
       assertEquals("", jsData);
 		} catch(Exception e) {
 		  fail();
@@ -365,7 +369,10 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 			session.save();
 			
 			configService = getService(JavascriptConfigService.class);
-			String jsData = new String(configService.getMergedJavascript());
+		    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		    configService.writeMergedJavascript(baos);
+		    baos.close();
+		    String jsData = baos.toString("UTF-8");
 			assertEquals("", jsData);
 		} catch(Exception e) {
 			fail();
