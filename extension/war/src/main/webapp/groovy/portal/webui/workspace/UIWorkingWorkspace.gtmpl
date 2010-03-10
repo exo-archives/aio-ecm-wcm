@@ -21,7 +21,7 @@
 <script type="text/javascript">
   eXo.env.portal.userName='<%= rcontext.getRemoteUser() %>';
   eXo.env.portal.language='<%= rcontext.getLocale().getLanguage() %>'
-  eXo.env.portal.navigations = <%= JSONnavigation %> ;
+  /* eXo.env.portal.navigations = <%= JSONnavigation %> ; */
   eXo.env.portal.selectedNodeUri = '<%= selectedNodeUri %>';
   eXo.env.portal.wcmContentTitle = '<%= _ctx.getRequestContext().getRequest().getAttribute("WCM.Content.Title") %>';
   eXo.env.portal.previousURI = '<%= previousURI %>';
