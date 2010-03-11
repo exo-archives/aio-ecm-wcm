@@ -1,28 +1,25 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">  
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.exoplatform</groupId>
     <artifactId>exo.parent</artifactId>
     <version>7</version>
   </parent>
-
-  <modelVersion>4.0.0</modelVersion>
   <groupId>org.exoplatform.ecm</groupId>
   <artifactId>wcm</artifactId>
-  <name>eXo ECM - WCM</name>
   <version>2.0.0-Beta01-SNAPSHOT</version>
   <packaging>pom</packaging>
+  <name>eXo ECM - WCM</name>
   <description>eXo Web Content Management</description>
-
   <scm>
     <connection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/trunk</connection>
     <developerConnection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/trunk</developerConnection>
     <url>http://fisheye.exoplatform.org/browse/projects/ecm/wcm/trunk</url>
   </scm>
-
   <properties>
     <exo.product.name>exo-wcm</exo.product.name>
     <exo.product.specification>2.0</exo.product.specification>
-
     <org.exoplatform.kernel.version>2.2.0-CR2</org.exoplatform.kernel.version>
     <org.exoplatform.core.version>2.3.0-CR2</org.exoplatform.core.version>
     <org.exoplatform.ws.version>2.1.0-CR2</org.exoplatform.ws.version>
@@ -30,33 +27,12 @@
     <org.exoplatform.jcr-services.version>1.12.0-Beta01</org.exoplatform.jcr-services.version>
     <org.exoplatform.portal.version>3.0.0-CR01-CP01</org.exoplatform.portal.version>
     <org.exoplatform.exopackage.version>1.1.0-Beta06-SNAPSHOT</org.exoplatform.exopackage.version>
-    
     <org.exoplatform.ecm.dms.version>3.0.0-Beta01-SNAPSHOT</org.exoplatform.ecm.dms.version>
     <org.exoplatform.ecm.workflow.version>1.0.5</org.exoplatform.ecm.workflow.version>
     <org.exoplatform.ecm.jbpm.version>3.0.2</org.exoplatform.ecm.jbpm.version>
     <bonita.version>4.0</bonita.version>
     <chromattic.version>1.0.0-cr2</chromattic.version>
-
   </properties>
-  
-  <modules>
-    <module>component/wcm</module>
-    <module>component/publication</module>
-    <module>component/search</module>
-    <module>component/newsletter</module>
-    <module>webui/wcm</module>
-    <module>portlets/presentation</module>
-    <module>portlets/searches</module>
-    <module>portlets/newsletter</module>
-    <module>portlets/formgenerator</module>
-    <module>connectors/fckeditor</module>
-    <module>web/eXoWCMResources</module>
-    <module>extension</module>
-    <module>server/tomcat/patch</module>
-    <module>demo</module>
-    <module>packaging</module>
-  </modules>
-
   <build>
     <resources>
       <resource>
@@ -67,7 +43,6 @@
         </includes>
       </resource>
     </resources>
-    
     <testResources>
       <testResource>
         <directory>src/test/java</directory>
@@ -77,7 +52,6 @@
         </includes>
       </testResource>
     </testResources>
-    
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -115,7 +89,6 @@
           </systemProperties>
         </configuration>
       </plugin>
-      
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
@@ -127,9 +100,9 @@
               <tasks>
                 <copy failonerror="false" todir="${project.build.directory}/${project.build.finalName}/WEB-INF/classes">
                   <fileset dir="${basedir}/src/main/webapp/WEB-INF/classes">
-                    <include name="**/*_en.properties" />
+                    <include name="**/*_en.properties"/>
                   </fileset>
-                  <globmapper from="*_en.properties" to="*.properties" />
+                  <globmapper from="*_en.properties" to="*.properties"/>
                 </copy>
               </tasks>
             </configuration>
@@ -141,5 +114,21 @@
       </plugin>
     </plugins>
   </build>
-  
+  <modules>
+    <module>component/wcm</module>
+    <module>component/publication</module>
+    <module>component/search</module>
+    <module>component/newsletter</module>
+    <module>webui/wcm</module>
+    <module>portlets/presentation</module>
+    <module>portlets/searches</module>
+    <module>portlets/newsletter</module>
+    <module>portlets/formgenerator</module>
+    <module>connectors/fckeditor</module>
+    <module>web/eXoWCMResources</module>
+    <module>extension</module>
+    <module>server/tomcat/patch</module>
+    <module>demo</module>
+    <module>packaging</module>
+  </modules>
 </project>

@@ -1,12 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-   
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.exoplatform.ecm</groupId>
     <artifactId>wcm</artifactId>
     <version>2.0.0-Beta01-SNAPSHOT</version>
   </parent>
-
-  <modelVersion>4.0.0</modelVersion>
   <artifactId>exo.ecm.wcm.webui.wcm</artifactId>
   <name>eXo WCM webui component</name>
   <dependencies>
@@ -15,62 +14,52 @@
       <artifactId>exo.portal.webui.core</artifactId>
       <version>${org.exoplatform.portal.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.webui.eXo</artifactId>
       <version>${org.exoplatform.portal.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.webui.portal</artifactId>
       <version>${org.exoplatform.portal.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.portal</artifactId>
       <version>${org.exoplatform.portal.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.exoplatform.ecm.dms.core</groupId>
       <artifactId>exo.ecm.dms.core.component.cms</artifactId>
       <version>${org.exoplatform.ecm.dms.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.exoplatform.jcr</groupId>
       <artifactId>exo.jcr.component.ext</artifactId>
       <version>${org.exoplatform.jcr.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.exoplatform.ecm.dms.core</groupId>
       <artifactId>exo.ecm.dms.core.webui.dms</artifactId>
       <version>${org.exoplatform.ecm.dms.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.exoplatform.ecm</groupId>
       <artifactId>exo.ecm.wcm.component.wcm</artifactId>
       <version>2.0.0-Beta01-SNAPSHOT</version>
     </dependency>
-
     <dependency>
       <groupId>org.exoplatform.ecm</groupId>
       <artifactId>exo.ecm.wcm.component.search</artifactId>
       <version>2.0.0-Beta01-SNAPSHOT</version>
     </dependency>
-
     <dependency>
       <groupId>org.exoplatform.ecm</groupId>
       <artifactId>exo.ecm.wcm.component.publication</artifactId>
       <version>2.0.0-Beta01-SNAPSHOT</version>
     </dependency>
   </dependencies>
-
   <build>
     <resources>
       <!-- This config to run rest service -->
@@ -80,7 +69,6 @@
           <include>**/*.xml</include>
         </includes>
       </resource>
-
       <resource>
         <directory>src/main/resources</directory>
         <includes>
