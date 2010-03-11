@@ -89,12 +89,6 @@
     </dependency>
     <dependency>
       <groupId>org.exoplatform.ecm.wcm</groupId>
-      <artifactId>wcm.packaging.module</artifactId>
-      <version>2.0.0-Beta01-SNAPSHOT</version>
-      <type>js</type>
-    </dependency>
-    <dependency>
-      <groupId>org.exoplatform.ecm.wcm</groupId>
       <artifactId>wcm.packaging.product</artifactId>
       <version>2.0.0-Beta01-SNAPSHOT</version>
       <type>js</type>
