@@ -137,7 +137,9 @@ public class RssConnector extends BaseConnector implements ResourceContainer {
       @QueryParam("server") String server,
       @QueryParam("siteName") String siteName,
       @QueryParam("categoryPath") String categoryPath,
-	  @QueryParam("recursive") String recursive) throws Exception {
+	  @QueryParam("recursive") String recursive,
+	  @QueryParam("desc") String desc
+	  ) throws Exception {
     
     this.categoryPath = categoryPath;
     String currentCat = categoryPath;
@@ -150,7 +152,8 @@ public class RssConnector extends BaseConnector implements ResourceContainer {
     contextRss.put("actionName", "actionName");
     contextRss.put(RSS_VERSION, "rss_2.0");
     contextRss.put(FEED_TITLE, currentCat);
-    contextRss.put(DESCRIPTION, "Powered by eXo WCM 2.0");
+    if (desc==null) desc = "Powered by eXo WCM 2.0";
+    contextRss.put(DESCRIPTION, desc);
     String query = "select * from exo:taxonomyLink where jcr:path like '%/"+siteName+"/categories/" + categoryPath + "/%'";
     if (recursive==null || "false".equals(recursive)) query += " and not jcr:path like '%/"+siteName+"/categories/" + categoryPath + "/%/%'";
     query += " order by exo:dateCreated DESC";
