@@ -31,7 +31,7 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
-import org.exoplatform.commons.utils.ListAccess;
+import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.portal.config.DataStorage;
@@ -57,6 +57,7 @@ import org.exoplatform.services.wcm.utils.WCMCoreUtils;
  * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
  * May 21, 2009
  */
+@SuppressWarnings("deprecation")
 public class NewsletterConstant {
 
   private static Log log = ExoLogger.getLogger("wcm.NewsletterConstant");
@@ -329,8 +330,8 @@ public class NewsletterConstant {
       if(pageAccessPermissions.contains(newAccessPermission)) continue;
       User currentUser = userHandler.findUserByName(newAccessPermission);
       if (currentUser == null) {
-        ListAccess<User> listUsers = userHandler.findUsersByGroupId(newAccessPermission.split(":")[1]);
-        users = Arrays.asList(listUsers.load(0, listUsers.getSize()));
+        PageList<User> listUsers = userHandler.findUsersByGroup(newAccessPermission.split(":")[1]);
+        users = listUsers.getAll();
       } else
         users.add(currentUser);
       for(User user : users){
