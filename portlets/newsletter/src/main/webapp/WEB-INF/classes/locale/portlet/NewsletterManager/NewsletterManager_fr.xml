@@ -149,7 +149,7 @@
       <Delete>Supprimer</Delete>
       <ManageUsers>Gérer les utilisateurs</ManageUsers>
       <Open>Ouvert</Open>
-    </title>
+    </title>    
   </UISubscription>
 
   <FormCategoryModerator>
@@ -198,8 +198,12 @@
       <SubcriptionTitle>Titre</SubcriptionTitle>
       <SubcriptionDescription>Description</SubcriptionDescription>
       <CategoryName>Catégorie</CategoryName>
-      <UIWCMFormSubscriptionRedactor>Redactor</UIWCMFormSubscriptionRedactor>
+      <UIWCMFormSubscriptionRedactor>Rédacteur</UIWCMFormSubscriptionRedactor>
     </label>
+    <action>
+    	<Save>Enregistrer</Save>
+    	<Cancel>Annuler</Cancel>
+    </action>
   </UISubcriptionForm>
 
   <UINewsletterEntryForm>
