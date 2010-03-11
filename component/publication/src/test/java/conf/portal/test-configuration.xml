@@ -119,6 +119,14 @@
   </component>
 
   <component>
+    <type>org.exoplatform.groovyscript.text.TemplateService</type>
+  </component>
+ 
+  <component>
+    <type>org.exoplatform.groovyscript.text.TemplateStatisticService</type>
+  </component>
+
+  <component>
     <key>org.exoplatform.services.organization.idm.PicketLinkIDMService</key>
     <type>org.exoplatform.services.organization.idm.PicketLinkIDMServiceImpl</type>
     <init-params>

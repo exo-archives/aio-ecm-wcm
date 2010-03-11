@@ -32,13 +32,12 @@ import org.exoplatform.ws.frameworks.json.value.JsonValue;
 public class NavigationService {
 
   public String getNavigationsAsJSON(List<PageNavigation> navigations) throws Exception {
-//    PortalNavigation portalNavigation = new PortalNavigation(navigations);
-//    JsonValue jsonValue = new JsonGeneratorImpl().createJsonObject(portalNavigation);
-//    String JSONnavigation = jsonValue.toString();
-//    JSONnavigation = JSONnavigation.substring(1, JSONnavigation.length() - 1);
-//    JSONnavigation = JSONnavigation.replaceFirst("\"navigations\":", "");
-//    return JSONnavigation;
-	  return "";
+    PortalNavigation portalNavigation = new PortalNavigation(navigations);
+    JsonValue jsonValue = new JsonGeneratorImpl().createJsonObject(portalNavigation);
+    String JSONnavigation = jsonValue.toString();
+    JSONnavigation = JSONnavigation.substring(1, JSONnavigation.length() - 1);
+    JSONnavigation = JSONnavigation.replaceFirst("\"navigations\":", "");
+    return JSONnavigation;
   }
 
   /**
