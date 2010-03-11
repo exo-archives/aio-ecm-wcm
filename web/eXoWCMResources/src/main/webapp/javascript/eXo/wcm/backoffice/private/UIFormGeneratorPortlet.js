@@ -166,7 +166,7 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 	node.setAttribute('typeComponent', typeComp);
 	document.getElementById('MiddleCenterViewBoxStyle').appendChild(node);
 
-	if(!FCKeditorAPI.GetInstance('RichTextEditorContent')) {
+	if(typeComp == 'wysiwyg' && !FCKeditorAPI.GetInstance('RichTextEditorContent')) {
 		var oFCKEditor = new FCKeditor('RichTextEditorContent');
 		oFCKEditor.BasePath = '/ecm-wcm-extension/fckeditor/';
 		oFCKEditor.ToolbarSet = 'SuperBasicWCM';
