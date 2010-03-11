@@ -15,7 +15,7 @@
               <property name="jobName" value="changeStateJobToPublished"/>
           	  <property name="groupName" value="group"/>
               <property name="job" value="org.exoplatform.services.wcm.extensions.scheduler.impl.ChangeStateCronJobImpl"/>
-              <property name="expression" value="59/120 * * * * ?"/>
+              <property name="expression" value="15/120 * * * * ?"/>
 	        </properties-param>
 	        <properties-param>
 	        	<name>changeStateCronJob.generalParams</name>
@@ -54,58 +54,5 @@
 	      </init-params>
 	    </component-plugin>
 	  </external-component-plugins>
-	  
-<!--	   <external-component-plugins>-->
-<!--		<target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>-->
-<!--	    <component-plugin>-->
-<!--	      <name>exportUnpublishedContentsCronJob</name>-->
-<!--	      <set-method>addCronJob</set-method>-->
-<!--	      <type>org.exoplatform.services.wcm.extensions.scheduler.ExportUnpublishedContentsCronJob</type>-->
-<!--	      <description>add a job to export all unpublished contents</description>-->
-<!--	      <init-params>	      	-->
-<!--	        <properties-param>-->
-<!--	          <name>cronjob.info</name>-->
-<!--	          <description>cron job info</description>-->
-<!--              <property name="jobName" value="exportUnpublishedContentsCronJob"/>-->
-<!--          	  <property name="groupName" value="group"/>-->
-<!--              <property name="job" value="org.exoplatform.services.wcm.extensions.scheduler.impl.ExportUnpublishedContentsCronJobImpl"/>-->
-<!--              <property name="expression" value="0/59 * * * * ?"/>-->
-<!--	        </properties-param>-->
-<!--	        <properties-param>-->
-<!--	        	<name>exportUnpublishedContentsCronJob.generalParams</name>-->
-<!--	        	<description>General parameters for job</description>	          	-->
-<!--	          	<property name="contentState" value="unpublished"/>-->
-<!--	          	<property name="stagingStorage" value="D:\exo-bin\test-Production_Server"/>-->
-<!--	          	<property name="predefinedPath" value="repository:collaboration:/sites content/live/acme"/>-->
-<!--	        </properties-param>-->
-<!--	      </init-params>-->
-<!--	    </component-plugin>-->
-<!--	  </external-component-plugins>-->
-	  
-<!--	  <external-component-plugins>-->
-<!--		<target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>-->
-<!--	    <component-plugin>-->
-<!--	      <name>importUnpublishedContentsCronJob</name>-->
-<!--	      <set-method>addCronJob</set-method>-->
-<!--	      <type>org.exoplatform.services.wcm.extensions.scheduler.ImportUnpublishedContentsCronJob</type>-->
-<!--	      <description>add a job to import all unpublished contents</description>-->
-<!--	      <init-params>	      	-->
-<!--	        <properties-param>-->
-<!--	          <name>cronjob.info</name>-->
-<!--	          <description>cron job info</description>-->
-<!--              <property name="jobName" value="importUnpublishedContentsCronJob"/>-->
-<!--          	  <property name="groupName" value="group"/>-->
-<!--              <property name="job" value="org.exoplatform.services.wcm.extensions.scheduler.impl.ImportUnpublishedContentsCronJobImpl"/>-->
-<!--              <property name="expression" value="0/90 * * * * ?"/>-->
-<!--	        </properties-param>-->
-<!--	        <properties-param>-->
-<!--	        	<name>importUnpublishedContentsCronJob.generalParams</name>-->
-<!--	        	<description>General parameters for job</description>	          	-->
-<!--	          	<property name="contentState" value="unpublished"/>-->
-<!--	          	<property name="stagingStorage" value="D:\exo-bin\test-Production_Server"/>	          	-->
-<!--	        </properties-param>-->
-<!--	      </init-params>-->
-<!--	    </component-plugin>-->
-<!--	  </external-component-plugins>-->
 	  
 </configuration>
