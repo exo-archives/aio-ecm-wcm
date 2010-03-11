@@ -7,6 +7,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>exo.ecm.wcm.ext.staging.config.publication</artifactId>
 	<packaging>jar</packaging>
-	<name>Config of the extended plugin</name>
+	<name>eXo ECM WCM Extensions Staging Publication Config </name>
 	
 </project>

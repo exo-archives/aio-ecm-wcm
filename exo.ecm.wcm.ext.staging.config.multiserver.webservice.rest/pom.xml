@@ -7,5 +7,5 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>exo.ecm.wcm.ext.staging.config.multiserver.webservice.rest</artifactId>
 	<packaging>jar</packaging>
-	<name>Copy Content File Web Service</name>
+	<name>eXo ECM WCM Extensions Staging CopyContentFile Web Service</name>
 </project>
