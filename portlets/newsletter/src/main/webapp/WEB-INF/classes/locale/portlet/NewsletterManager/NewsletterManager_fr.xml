@@ -193,13 +193,17 @@
       <subcriptionNameIsAlreadyExist>Le nom de cet abonnement existe déjà!</subcriptionNameIsAlreadyExist>
       <selectRedactorPermission>Vous devez sélectionner l'utilisateur ou rédacteur membre!</selectRedactorPermission>
     </msg>
-    <title>
+    <label>
     	<SubcriptionName>Nom</SubcriptionName>
     	<SubcriptionTitle>Titre</SubcriptionTitle>
     	<SubcriptionDescription>Description</SubcriptionDescription>
     	<CategoryName>Catégorie</CategoryName>
-    	<UIWCMFormSubscriptionRedactor>Redactor</UIWCMFormSubscriptionRedactor>
-    </title>
+    	<UIWCMFormSubscriptionRedactor>Rédacteur</UIWCMFormSubscriptionRedactor>
+    </label>
+    <action>
+    	<Save>Enregistrer</Save>
+    	<Cancel>Annuler</Cancel>
+    </action>    
   </UISubcriptionForm>
 	
 	<UINewsletterEntryForm>
@@ -318,5 +322,5 @@
 			<checkToRemove>S'il vous plaît, cocher une ou plusieurs autorisations dans la liste à supprimer</checkToRemove>
 			<donotMoveYourSelt>Vous avez seulement retirer votre autorisation dans la liste, s'il vous plaît vérifier à nouveau!</donotMoveYourSelt>
 		</msg>
-	</UIRemoveModeratorsFormPopupWindow>
+	</UIRemoveModeratorsFormPopupWindow>		
 </bundle>
