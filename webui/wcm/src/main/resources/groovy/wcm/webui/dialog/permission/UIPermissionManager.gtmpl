@@ -11,22 +11,22 @@
 %>
 
 <div class="UIForm $uicomponent.id">
-	<% uiform.renderField(UIPermissionManager.PERMISSION_MANAGER_GRID); %>
+	<% uiform.renderField(uicomponent.PERMISSION_MANAGER_GRID); %>
 	<% uiform.begin(); %>
 		<div class="HorizontalLayout">
 			<div class="FormContainer">
 				<table class="UIFormGrid">
 					<tr>
-						<td class="FieldLabel"><%= uicomponent.getLabel(UIPermissionManager.PERMISSION_INPUT_SET) %></td>
-						<td class="FieldComponent"><% uiform.renderField(UIPermissionManager.PERMISSION_INPUT_SET); %></td>
+						<td class="FieldLabel"><%= uicomponent.getLabel(uicomponent.PERMISSION_INPUT_SET) %></td>
+						<td class="FieldComponent"><% uiform.renderField(uicomponent.PERMISSION_INPUT_SET); %></td>
 					</tr>
 					<tr>
-						<td class="FieldLabel"><%= uicomponent.getLabel(UIPermissionManager.ACCESSIBLE_CHECKBOX_INPUT) %></td>
-						<td class="FieldComponent"><% uiform.renderField(UIPermissionManager.ACCESSIBLE_CHECKBOX_INPUT); %></td>
+						<td class="FieldLabel"><%= uicomponent.getLabel(uicomponent.ACCESSIBLE_CHECKBOX_INPUT) %></td>
+						<td class="FieldComponent"><% uiform.renderField(uicomponent.ACCESSIBLE_CHECKBOX_INPUT); %></td>
 					</tr>
 					<tr>
-						<td class="FieldLabel"><%= uicomponent.getLabel(UIPermissionManager.EDITABLE_CHECKBOX_INPUT) %></td>
-						<td class="FieldComponent"><% uiform.renderField(UIPermissionManager.EDITABLE_CHECKBOX_INPUT); %></td>
+						<td class="FieldLabel"><%= uicomponent.getLabel(uicomponent.EDITABLE_CHECKBOX_INPUT) %></td>
+						<td class="FieldComponent"><% uiform.renderField(uicomponent.EDITABLE_CHECKBOX_INPUT); %></td>
 					</tr>
 				</table>
 				<div class="UIAction"> 
