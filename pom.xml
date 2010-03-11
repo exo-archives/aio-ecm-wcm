@@ -17,6 +17,14 @@
     <developerConnection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/trunk</developerConnection>
     <url>http://fisheye.exoplatform.org/browse/projects/ecm/wcm/trunk</url>
   </scm>
+  <issueManagement>
+    <system>jira</system>
+    <url>http://jira.exoplatform.org/browse/ECMS</url>
+  </issueManagement>
+  <ciManagement>
+    <system>hudson</system>
+    <url>http://builder.exoplatform.org/hudson/job/ecm-wcm-trunk-ci/</url>
+  </ciManagement>
   <properties>
     <exo.product.name>exo-wcm</exo.product.name>
     <exo.product.specification>2.0</exo.product.specification>
