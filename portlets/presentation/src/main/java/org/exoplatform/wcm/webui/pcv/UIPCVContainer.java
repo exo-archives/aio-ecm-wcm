@@ -260,12 +260,13 @@ public class UIPCVContainer extends UIContainer {
   private String getRequestParameters() throws Exception {
     String parameters = null;
     try {
-      parameters = URLDecoder.decode(StringUtils.substringAfter(Util.getPortalRequestContext().getNodePath(), Util.getUIPortal().getSelectedNode().getUri() + "/"), "UTF-8");
+    	parameters = URLDecoder.decode(StringUtils.substringAfter(Util.getPortalRequestContext().getNodePath(), Util.getUIPortal().getSelectedNode().getUri() + "/"), "UTF-8");
     } catch (UnsupportedEncodingException e) {
       return null;
     }
     if (!parameters.matches(UIPCVPresentation.PARAMETER_REGX)) {
-      return null;
+    	parameters = Util.getPortalRequestContext().getRequestParameter("path").substring(1);
+      return parameters;
     }
     return parameters;
   }

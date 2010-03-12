@@ -342,7 +342,7 @@ import org.exoplatform.webui.event.EventListener;
     String workspace = portletPreferences.getValue(UICLVPortlet.WORKSPACE, null);
     String baseURI = portletRequest.getScheme() + "://" + portletRequest.getServerName() + ":" + String.format("%s", portletRequest.getServerPort());
     String basePath = portletPreferences.getValue(UICLVPortlet.BASE_PATH, null);
-    link = baseURI + portalURI + basePath + "/" + repository + "/" + workspace + node.getPath();
+    link = baseURI + portalURI + basePath + "?path=/" + repository + "/" + workspace + node.getPath();
     return link;
   }
 

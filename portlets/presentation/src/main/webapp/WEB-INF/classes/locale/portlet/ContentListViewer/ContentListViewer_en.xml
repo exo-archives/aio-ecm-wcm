@@ -25,7 +25,7 @@
         <exo:dateModified>Date modified</exo:dateModified>
         <publication:liveDate>Date published</publication:liveDate>
       </option>
-      <DisplaySettingBlock>Display setting</DisplaySettingBlock>
+      <DisplaySettingBlock>Display settings</DisplaySettingBlock>
       <Header>Header</Header>
       <FormViewTemplate>Viewer template</FormViewTemplate>
       <PaginatorTemplate>Paginator template</PaginatorTemplate>
@@ -49,8 +49,8 @@
 
   <ViewerMode>
     <label>
-      <AutoViewerMode>Automatic</AutoViewerMode>
-      <ManualViewerMode>Manual</ManualViewerMode>
+      <AutoViewerMode>By Folder</AutoViewerMode>
+      <ManualViewerMode>By Contents</ManualViewerMode>
     </label>
   </ViewerMode>
 

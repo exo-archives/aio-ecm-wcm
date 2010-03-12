@@ -8,36 +8,36 @@
 
   <UIViewerManagementPopupWindow>
     <title>
-      <UICLVConfig>Configuration de Content list viewer</UICLVConfig>
+      <UICLVConfig>Configuration d'une liste de contenu</UICLVConfig>
     </title>
   </UIViewerManagementPopupWindow>
 
   <UICLVConfig>
     <label>
-      <Title>Configuration de Content list viewer</Title>
-      <ContentSelectionBlock>Sommaire de sélection</ContentSelectionBlock>
+      <Title>Configuration d'une liste de contenu</Title>
+      <ContentSelectionBlock>Sélection de contenus</ContentSelectionBlock>
       <ViewerMode>Mode</ViewerMode>
       <FolderPathInput>Chemin du dossier</FolderPathInput>
       <OrderBy>Classement par</OrderBy>
       <option>
         <exo:title>Titre</exo:title>
-        <exo:dateCreated>La date de création</exo:dateCreated>
-        <exo:dateModified>La date de modification</exo:dateModified>
-        <publication:liveDate>La date de publication</publication:liveDate>
+        <exo:dateCreated>Date de création</exo:dateCreated>
+        <exo:dateModified>Date de modification</exo:dateModified>
+        <publication:liveDate>Date de publication</publication:liveDate>
       </option>
-      <DisplaySettingBlock>L'écran de réglage</DisplaySettingBlock>
-      <Header>Header</Header>
-      <FormViewTemplate>Viewer template</FormViewTemplate>
-      <PaginatorTemplate>Paginator template</PaginatorTemplate>
-      <UICLVBasePathInputSetAction>Base de chemin</UICLVBasePathInputSetAction>
+      <DisplaySettingBlock>Réglages</DisplaySettingBlock>
+      <Header>Entête</Header>
+      <FormViewTemplate>Template de vue</FormViewTemplate>
+      <PaginatorTemplate>Template de pagination</PaginatorTemplate>
+      <UICLVBasePathInputSetAction>URL de destination</UICLVBasePathInputSetAction>
       <UICLVBasePathInput></UICLVBasePathInput>
-      <ItemsPerPage>Articles par page</ItemsPerPage>
+      <ItemsPerPage>Contenus par page</ItemsPerPage>
       <ViewerThumbnailsView>Afficher l'illustration</ViewerThumbnailsView>
       <ViewerSummary>Afficher le résumé</ViewerSummary>
-      <ViewerHeader>Afficher l'en-tête</ViewerHeader>
+      <ViewerHeader>Afficher l'entête</ViewerHeader>
       <ViewerButtonRefresh>Afficher le bouton actualiser</ViewerButtonRefresh>
       <ViewerTitle>Afficher le titre</ViewerTitle>
-      <ViewerDateCreated>Afficher la date de création</ViewerDateCreated>
+      <ViewerDateCreated>Afficher la date</ViewerDateCreated>
       <ViewerLink>Afficher le lien</ViewerLink>
       <ViewerReadmore>Lire la suite</ViewerReadmore>
     </label>
@@ -49,8 +49,8 @@
 
   <ViewerMode>
     <label>
-      <AutoViewerMode>Automatique</AutoViewerMode>
-      <ManualViewerMode>Manuel</ManualViewerMode>
+      <AutoViewerMode>Par Répertoire</AutoViewerMode>
+      <ManualViewerMode>Par Contenus</ManualViewerMode>
     </label>
   </ViewerMode>
 
@@ -62,7 +62,7 @@
 
   <FolderPathSelectorPopupWindow>
     <title>
-      <UIContentSelectorFolder>Dossier navigateur</UIContentSelectorFolder>
+      <UIContentSelectorFolder>Navigateur de dossiers</UIContentSelectorFolder>
     </title>
   </FolderPathSelectorPopupWindow>
 
@@ -111,8 +111,8 @@
   </UIContentDialogFormPopupWindow>
   <UIMessageBoard>
     <msg>
-      <contents-not-found>Ce contenu n'a pas été trouvée ou supprimé.</contents-not-found>
-      <add-node-error>Une erreur lorsque vous effectuez ajouter un nouveau noeud.</add-node-error>
+      <contents-not-found>Ce contenu n'a pas été trouvé ou supprimé.</contents-not-found>
+      <add-node-error>Une erreur lorsque vous voulez ajouter un nouveau noeud.</add-node-error>
  	  <folder-empty>Ce dossier est vide</folder-empty>	
     </msg>
   </UIMessageBoard>

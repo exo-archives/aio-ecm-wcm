@@ -420,7 +420,7 @@ public class UIPCLVForm extends UIForm {
 			backToCategory = itemPath.substring(0, itemPath.indexOf(newNode.getName()) - 1);
 		}
 		String portalURI = portalRequestContext.getPortalURI();
-		link = portalURI + preferenceTargetPage + "/" + itemPath + "?back" + "=" + "/" + backToCategory;
+		link = portalURI + preferenceTargetPage + "?path=/" + itemPath + "&back" + "=" + "/" + backToCategory;
 
 		return link;
 	}
