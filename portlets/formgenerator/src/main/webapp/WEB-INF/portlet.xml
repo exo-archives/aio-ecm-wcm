@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <portlet-app version="1.0"
-   xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
+xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
    
-  <portlet>
-    <description xml:lang="EN">Form Generator</description>
+<portlet>
+    <description xml:lang="EN">Form Generator Portlet</description>
     <portlet-name>FormGeneratorPortlet</portlet-name>
-    <display-name xml:lang="EN">Form Generator</display-name>
+    <display-name xml:lang="EN">Form Generator Portlet</display-name>
     <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
     <init-param>
       <name>webui.configuration</name>
@@ -21,9 +21,9 @@
     <supported-locale>en</supported-locale>
     <resource-bundle>locale.portlet.FormGeneratorPortlet.FormGeneratorPortlet</resource-bundle>
     <portlet-info>
-      <title>Form Generator</title>
-      <short-title>Form Generator</short-title>
-      <keywords>Forms</keywords>
+      <title>Form Generator Portlet</title>
+      <short-title>Form Generator Portlet</short-title>
+      <keywords>Form Generator Portlet</keywords>
     </portlet-info>
     <portlet-preferences>
       <preference>
@@ -35,9 +35,9 @@
   </portlet>
 
   <portlet>
-    <description xml:lang="EN">Content Creator Extended</description>
+    <description xml:lang="EN">Fast Content Creator</description>
     <portlet-name>FastContentCreatorPortlet</portlet-name>
-    <display-name xml:lang="EN">Content Creator Extended</display-name>
+    <display-name xml:lang="EN">Fast Content Creator</display-name>
     <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
     <init-param>
       <name>webui.configuration</name>
@@ -52,9 +52,9 @@
     <supported-locale>en</supported-locale>
     <resource-bundle>locale.portlet.FastContentCreatorPortlet.FastContentCreatorPortlet</resource-bundle>
     <portlet-info>
-      <title>Content Creator Extended</title>
-      <short-title>Content Creator Extended</short-title>
-      <keywords>Forms</keywords>
+      <title>Fast Content Creator</title>
+      <short-title>ECM Fast Content Creator</short-title>
+      <keywords>ecm, fastcontentcreator</keywords>
     </portlet-info>
     <portlet-preferences>
       <!-- Setup the default repository name for fast content creator portlet -->
@@ -185,7 +185,14 @@
         <value>http://www.google.com.vn</value>
         <read-only>false</read-only>
       </preference>
-    </portlet-preferences>
+    <!-- Is an action needed to save the configuration -->
+			<preference>
+				<name>isActionNeeded</name>
+				<value>true</value>
+				<read-only>true</read-only>
+			</preference>
+			
+		</portlet-preferences>
   </portlet>
 
 

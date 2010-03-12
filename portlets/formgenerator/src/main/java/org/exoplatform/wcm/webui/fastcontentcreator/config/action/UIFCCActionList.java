@@ -48,7 +48,6 @@ import org.exoplatform.webui.event.EventListener;
  * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
  * Jun 25, 2009
  */
-@SuppressWarnings("deprecation")
 @ComponentConfig(
     lifecycle = Lifecycle.class,
     template = "app:/groovy/webui/FastContentCreatorPortlet/UIFCCActionList.gtmpl",
@@ -64,7 +63,9 @@ public class UIFCCActionList extends UIContainer {
   private static final String[] HEADERS = {"name", "description", "instanceOf"};
   
   /** The Constant ACTIONS. */
-  private static final String[] ACTIONS = {"Add", "Edit", "Delete"};
+	private String[] ACTIONS = {"Edit", "Delete"};
+
+	private String mode = null;
   
   /**
    * Instantiates a new uIFCC action list.
@@ -72,7 +73,14 @@ public class UIFCCActionList extends UIContainer {
    * @throws Exception the exception
    */
   public UIFCCActionList() throws Exception {
+	}
+	
+	public void init(String mode) throws Exception {
+		this.mode = mode;
     UIGrid grid = addChild(UIGrid.class, null, null);
+		if ("basic".equals(mode)) {
+			ACTIONS = new String[]{"Edit"};
+		}
     grid.configure(UIFCCConstant.ACTION_GRID, HEADERS , ACTIONS );
   }
   
@@ -84,7 +92,6 @@ public class UIFCCActionList extends UIContainer {
    * 
    * @throws Exception the exception
    */
-  @SuppressWarnings("unchecked")
   public void updateGrid(Node node, int currentPage) throws Exception {
     UIPageIterator uiIterator = getChild(UIGrid.class).getUIPageIterator();
     ObjectPageList objPageList = new ObjectPageList(getAllActions(node), 10) ;
@@ -146,6 +153,10 @@ public class UIFCCActionList extends UIContainer {
     return uiIterator.getCurrentPageData() ; 
   }
   
+	public String getMode() {
+		return mode;
+	}
+
   /**
    * The listener interface for receiving addAction events.
    * The class that is interested in processing a addAction
@@ -165,7 +176,7 @@ public class UIFCCActionList extends UIContainer {
     public void execute(Event<UIFCCActionList> event) throws Exception {
       UIFCCActionList fastContentCreatorActionList = event.getSource();
       UIFCCActionContainer fastContentCreatorActionContainer = fastContentCreatorActionList.createUIComponent(UIFCCActionContainer.class, null, null);
-      Utils.createPopupWindow(fastContentCreatorActionList, fastContentCreatorActionContainer, UIFCCConstant.ACTION_POPUP_WINDOW, 550);
+			Utils.createPopupWindow(fastContentCreatorActionList, fastContentCreatorActionContainer, UIFCCConstant.ACTION_POPUP_WINDOW, 550);
       fastContentCreatorActionContainer.getChild(UIFCCActionTypeForm.class).update();
     }
   }
@@ -190,7 +201,7 @@ public class UIFCCActionList extends UIContainer {
       UIFCCActionList fastContentCreatorActionList = event.getSource();
       String actionName = event.getRequestContext().getRequestParameter(OBJECTID);
       UIFCCActionContainer fccActionContainer = fastContentCreatorActionList.createUIComponent(UIFCCActionContainer.class, null, null);
-      Utils.createPopupWindow(fastContentCreatorActionList, fccActionContainer, UIFCCConstant.ACTION_POPUP_WINDOW, 550);
+			Utils.createPopupWindow(fastContentCreatorActionList, fccActionContainer, UIFCCConstant.ACTION_POPUP_WINDOW, 550);
       UIFCCActionTypeForm fccActionTypeForm = fccActionContainer.getChild(UIFCCActionTypeForm.class);
       
       ActionServiceContainer actionService = fastContentCreatorActionList.getApplicationComponent(ActionServiceContainer.class) ;

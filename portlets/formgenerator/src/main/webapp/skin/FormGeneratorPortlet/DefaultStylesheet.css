@@ -64,6 +64,7 @@
   padding: 0px 8px;
 }
 
+
 .UIFormGenerator .UITabPane .UITabContentContainer {
   background: #efefef;
   border: none;
@@ -163,12 +164,14 @@
   border: none;
 }
 
+
 .UIFormGenerator .UITabPane .UITabContentContainer .RightContent {
   border: 1px solid #cccaca;
   background: #fff;
   margin-left: 206px;
   padding: 9px;
 }
+
 
 .UIFormGenerator .UITabPane .UITabContentContainer .RightContent .MiddleCenterViewBoxStyle {
   padding: 5px 10px;
@@ -321,15 +324,10 @@
   margin-left: 5px;
 }
 
-.UIFormGenerator .UIFormEditBox .FieldIcon .DivIcon {
-  width: 40px;
-  padding: 2px;
-  height: 16px;
-}
-
 .UIFormGenerator .UIAction {
   padding: 15px 0px;
 }
+
 
 .UIFormGenerator .BoxAddNew {
   background: #fafafa;

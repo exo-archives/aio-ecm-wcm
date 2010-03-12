@@ -1,7 +1,6 @@
 .UIPopupMessages .UIHorizontalTabs {
   display: none;
 }
-
 .UIPopupMessages .PopupMessageBox {
   height: 100%;
 }
@@ -70,7 +69,8 @@
   border: 1px solid red;
 }
 
-.UIFCCPortlet .UITabPane .TabPaneContent { /*width: 350px;*/
+.UIFCCPortlet .UITabPane .TabPaneContent {
+  /*width: 350px;*/
   margin: auto;
 }
 
