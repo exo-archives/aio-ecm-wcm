@@ -26,7 +26,8 @@ public class FCKFileHandler {
     SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.SHORT, SimpleDateFormat.SHORT);    
     file.setAttribute("dateCreated", formatter.format(sourceNode.getProperty("exo:dateCreated").getDate().getTime()));    
     file.setAttribute("dateModified", formatter.format(sourceNode.getProperty("exo:dateModified").getDate().getTime()));      
-    file.setAttribute("creator", sourceNode.getProperty("exo:owner").getString());
+    file.setAttribute("creator", sourceNode.getProperty("exo:owner").getString());    
+    file.setAttribute("path", displayNode.getPath());
     if (sourceNode.isNodeType("nt:file")) {
     	Node content = sourceNode.getNode("jcr:content");
     	file.setAttribute("nodeType", content.getProperty("jcr:mimeType").getString());

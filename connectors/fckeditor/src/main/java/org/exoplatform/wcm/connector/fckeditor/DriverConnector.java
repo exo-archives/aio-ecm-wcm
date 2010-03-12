@@ -784,6 +784,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
   	folder.setAttribute("name", childName);
   	folder.setAttribute("url", FCKUtils.createWebdavURL(child));
   	folder.setAttribute("folderType", folderType);
+  	folder.setAttribute("path", child.getPath());
   	createAtributeUpload(folder, true);
   	return folder;
   }
