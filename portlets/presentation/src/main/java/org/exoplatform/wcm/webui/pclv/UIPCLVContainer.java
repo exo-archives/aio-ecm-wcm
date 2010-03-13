@@ -100,12 +100,18 @@ public class UIPCLVContainer extends UIContainer {
    * 
    * @return the header
    */
-  private String getHeader() throws Exception {
-    String requestURI = Util.getPortalRequestContext().getNodePath();
-    String selectedPage = Util.getUIPortal().getSelectedNode().getUri();
-    if (requestURI.endsWith(selectedPage)) return null;
-    String[] param = requestURI.split("/");
-    String header = param[param.length - 1];
+  private String getHeader(String categoryPath) throws Exception {
+//    String requestURI = Util.getPortalRequestContext().getNodePath();
+//    String selectedPage = Util.getUIPortal().getSelectedNode().getUri();
+//    if (requestURI.endsWith(selectedPage)) return null;
+//    String[] param = requestURI.split("/");
+//    String header = param[param.length - 1];
+	  String header=null;
+	if (categoryPath!=null && !"".equals(categoryPath))
+	  header = categoryPath.substring(categoryPath.lastIndexOf("/")+1);
+	else 
+		return null;
+
     header = header.replaceAll("%20", " ");
     return header;
   }
@@ -116,19 +122,23 @@ public class UIPCLVContainer extends UIContainer {
 	 * @throws Exception the exception
 	 */
 	public void init() throws Exception {
-		String categoryPath = null;
-		try {
-			categoryPath = URLDecoder.decode(StringUtils.substringAfter(Util.getPortalRequestContext().getNodePath(), Util.getUIPortal().getSelectedNode().getUri() + "/"), "UTF-8");
-		} catch (Exception e) {
-		  Utils.createPopupMessage(this, "UIPCLVConfig.msg.decode", null, ApplicationMessage.ERROR);
-		}
-
 		PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
 		PortletRequest portletRequest = portletRequestContext.getRequest();
 		PortletPreferences portletPreferences = portletRequest.getPreferences();
 		String preferenceRepository = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_REPOSITORY, "");
 		String preferenceTreeName = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_TREE_NAME, "");
 		TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
+		String categoryPath = null;
+		try {
+			categoryPath = URLDecoder.decode(StringUtils.substringAfter(Util.getPortalRequestContext().getNodePath(), Util.getUIPortal().getSelectedNode().getUri() + "/"), "UTF-8");
+		} catch (Exception e) {
+		  Utils.createPopupMessage(this, "UIPCLVConfig.msg.decode", null, ApplicationMessage.ERROR);
+		}
+    	String gpath = Util.getPortalRequestContext().getRequestParameter("path");
+    	if (gpath!=null) {
+    		categoryPath = gpath.substring(gpath.indexOf(preferenceTreeName)+preferenceTreeName.length()+1);
+    	}
+
 		Node treeNode = null;
 		try {
 		  treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
@@ -154,7 +164,7 @@ public class UIPCLVContainer extends UIContainer {
 		parameterizedContentListViewer.setShowLink(Boolean.parseBoolean(portletPreferences.getValue(UIPCLVPortlet.SHOW_LINK, null)));
 		
 		String autoDetect = portletPreferences.getValue(UIPCLVPortlet.SHOW_AUTO_DETECT, null);
-		String currentHeader = getHeader();
+		String currentHeader = getHeader(categoryPath);
 		if (treeNode != null && "true".equals(autoDetect) && currentHeader != null)
 		  parameterizedContentListViewer.setHeader(currentHeader);
 		else 
