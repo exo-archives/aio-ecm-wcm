@@ -265,6 +265,8 @@ public class UIPCVContainer extends UIContainer {
       return null;
     }
     if (!parameters.matches(UIPCVPresentation.PARAMETER_REGX)) {
+    	String path = Util.getPortalRequestContext().getRequestParameter("path");
+    	if (path==null) return null;
     	parameters = Util.getPortalRequestContext().getRequestParameter("path").substring(1);
       return parameters;
     }

@@ -61,7 +61,7 @@
 			}
 		} else {%>
 		  	<div style="padding-bottom: 20px; font-size: 13px; text-align: center;">
-		  		<div class="Message"><span><%= _ctx.appRes("UIPCVContainer.msg.content-not-found") %></span></div>
+		  		<div class="Message" id="ContentNotFound"><!-- <%= _ctx.appRes("UIPCVContainer.msg.content-not-found") %> --></div>
 		  	</div>
 		<%} %>
 	</div>

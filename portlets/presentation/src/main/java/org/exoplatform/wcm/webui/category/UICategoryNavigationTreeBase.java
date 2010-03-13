@@ -206,6 +206,14 @@ public class UICategoryNavigationTreeBase extends UITree {
     // categoryPath: /News/France/Blah/Bom
     String categoryPath = parameters.indexOf("/") >= 0 ? parameters.substring(parameters.indexOf("/")) : "";
     
+    String gpath = Util.getPortalRequestContext().getRequestParameter("path");
+	if (gpath!=null) {
+	    PortletPreferences portletPreferences = UICategoryNavigationUtils.getPortletPreferences();
+	    String preferenceTreeName = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, "");
+		categoryPath = gpath.substring(gpath.indexOf(preferenceTreeName)+preferenceTreeName.length());
+	}
+
+    
     return categoryPath;
   }
   
@@ -257,8 +265,9 @@ public class UICategoryNavigationTreeBase extends UITree {
     Node portalNode = livePortalManagerService.getLivePortalByChild(node);
     String preferenceTreeName = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, "");
     String categoryPath = node.getPath().replaceFirst(portalNode.getPath(), "");
-    categoryPath = categoryPath.substring(categoryPath.indexOf(preferenceTreeName) + preferenceTreeName.length());
+//    categoryPath = categoryPath.substring(categoryPath.indexOf(preferenceTreeName) + preferenceTreeName.length());
+    categoryPath = categoryPath.substring(categoryPath.indexOf(preferenceTreeName)-1);
     
-    return portalURI + preferenceTargetPage + categoryPath;
+    return portalURI + preferenceTargetPage + "?path=" + categoryPath;
   }
 }

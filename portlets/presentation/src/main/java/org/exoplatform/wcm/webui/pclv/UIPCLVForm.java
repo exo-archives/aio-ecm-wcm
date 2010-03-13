@@ -373,13 +373,6 @@ public class UIPCLVForm extends UIForm {
 	public String generateLink(Node node) throws Exception {
 		String categoryPath = null;
 		PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
-    String pageNodeSelected = Util.getUIPortal().getSelectedNode().getUri();
-		try {
-			categoryPath = URLDecoder.decode(StringUtils.substringAfter(portalRequestContext.getNodePath(), pageNodeSelected + "/"), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-		  Utils.createPopupMessage(this, "UIPCLVConfig.msg.decode", null, ApplicationMessage.ERROR);
-		}
-
 		PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
 		PortletRequest portletRequest = portletRequestContext.getRequest();
 		PortletPreferences portletPreferences = portletRequest.getPreferences();
@@ -388,6 +381,18 @@ public class UIPCLVForm extends UIForm {
 		String preferenceTargetPage = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_TARGET_PAGE, "");
 		String workspace = portletPreferences.getValue(UIPCLVPortlet.WORKSPACE, null);
 		String repository = portletPreferences.getValue(UIPCLVPortlet.REPOSITORY, null);
+		String pageNodeSelected = Util.getUIPortal().getSelectedNode().getUri();
+		try {
+			categoryPath = URLDecoder.decode(StringUtils.substringAfter(portalRequestContext.getNodePath(), pageNodeSelected + "/"), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+		  Utils.createPopupMessage(this, "UIPCLVConfig.msg.decode", null, ApplicationMessage.ERROR);
+		}
+    	String gpath = Util.getPortalRequestContext().getRequestParameter("path");
+    	if (gpath!=null) {
+    		categoryPath = gpath.substring(gpath.indexOf(preferenceTreeName)+preferenceTreeName.length()+1);
+    	}
+
+
 		RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
 		ManageableRepository manageableRepository = repositoryService.getRepository(repository);
 		TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
@@ -396,6 +401,12 @@ public class UIPCLVForm extends UIForm {
 		Node categoryNode = null;
 		if (preferenceTreeName.equals(categoryPath) || "".equals(categoryPath)) categoryNode = treeNode;
 		else categoryNode = treeNode.getNode(categoryPath);
+		if (!categoryNode.isNodeType("exo:taxonomy")) {
+			categoryPath = categoryPath.substring(0, categoryPath.lastIndexOf("/"));
+			categoryNode = treeNode.getNode(categoryPath);
+		}
+		
+		
 		String nodeName = null;
 		if(node.getName().equals("jcr:frozenNode")) {
 		  String uuid = node.getProperty("jcr:frozenUuid").getString();
@@ -420,7 +431,8 @@ public class UIPCLVForm extends UIForm {
 			backToCategory = itemPath.substring(0, itemPath.indexOf(newNode.getName()) - 1);
 		}
 		String portalURI = portalRequestContext.getPortalURI();
-		link = portalURI + preferenceTargetPage + "?path=/" + itemPath + "&back" + "=" + "/" + backToCategory;
+//		link = portalURI + preferenceTargetPage + "?path=/" + itemPath + "&back" + "=" + "/" + backToCategory;
+		link = portalURI + preferenceTargetPage + "?path=/" + itemPath;
 
 		return link;
 	}
