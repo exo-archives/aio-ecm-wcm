@@ -17,11 +17,12 @@
 package org.exoplatform.services.wcm.navigation;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
-import org.exoplatform.ws.frameworks.json.value.JsonValue;
+import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.mop.Visibility;
 
 /**
  * Created by The eXo Platform SAS
@@ -32,12 +33,64 @@ import org.exoplatform.ws.frameworks.json.value.JsonValue;
 public class NavigationService {
 
   public String getNavigationsAsJSON(List<PageNavigation> navigations) throws Exception {
-    PortalNavigation portalNavigation = new PortalNavigation(navigations);
-    JsonValue jsonValue = new JsonGeneratorImpl().createJsonObject(portalNavigation);
-    String JSONnavigation = jsonValue.toString();
-    JSONnavigation = JSONnavigation.substring(1, JSONnavigation.length() - 1);
-    JSONnavigation = JSONnavigation.replaceFirst("\"navigations\":", "");
+	  String JSONnavigation = createJsonTree(navigations).toString();
+//    PortalNavigation portalNavigation = new PortalNavigation(navigations);
+//    JsonValue jsonValue = new JsonGeneratorImpl().createJsonObject(portalNavigation);
+//    String JSONnavigation = jsonValue.toString();
+//    JSONnavigation = JSONnavigation.substring(1, JSONnavigation.length() - 1);
+//    JSONnavigation = JSONnavigation.replaceFirst("\"navigations\":", "");
     return JSONnavigation;
+  }
+  
+  private StringBuffer createJsonTree(List<PageNavigation> navigations) {
+	  StringBuffer js = new StringBuffer();
+	  js.append("[");
+	  boolean first = true;
+	  for (PageNavigation navigation:navigations) {
+		  if (!first) js.append(",");
+		  first=false;
+		  js.append("{");
+		  js.append("\"ownerId\":\""+navigation.getOwnerId()+"\",");
+		  js.append("\"ownerType\":\""+navigation.getOwnerType()+"\",");
+		  js.append("\"owner\":\""+navigation.getOwner()+"\",");
+		  js.append("\"priority\":\""+navigation.getPriority()+"\",");
+		  js.append("\"nodes\":"+addJsonNodes(navigation.getNodes()));
+		  js.append("}");
+	  }
+	  js.append("]");
+	  
+	  return js;
+  }
+
+  private String addJsonNodes(List<PageNode> nodes) {
+	  StringBuffer js = new StringBuffer();
+	  js.append("[");
+	  boolean first = true;
+	  for (PageNode node:nodes) {
+		  if (isVisibleNode(node)) {
+			  if (!first) js.append(",");
+			  first=false;
+			  js.append("{");
+			  js.append("\"icon\":"+(node.getIcon()!=null?"\""+node.getIcon()+"\"":"null")+",");
+			  js.append("\"label\":\""+node.getLabel()+"\",");
+			  js.append("\"name\":\""+node.getName()+"\",");
+			  js.append("\"resolvedLabel\":\""+node.getResolvedLabel()+"\",");
+			  js.append("\"uri\":\""+node.getUri()+"\",");
+			  js.append("\"nodes\":"+addJsonNodes(node.getNodes()));
+			  js.append("}");
+		  }
+	  }
+	  js.append("]");
+	  return js.toString();
+  }
+  
+  private boolean isVisibleNode(PageNode node) {
+	  if (!node.getVisibility().equals(Visibility.DISPLAYED) && !node.getVisibility().equals(Visibility.TEMPORAL)) return false;
+	  Date now = new Date(System.currentTimeMillis());
+	  if (node.getStartPublicationDate()!=null && node.getStartPublicationDate().after(now)) return false; 
+	  if (node.getEndPublicationDate()!=null && node.getEndPublicationDate().before(now)) return false; 
+	  
+	  return true;
   }
 
   /**
