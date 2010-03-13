@@ -147,6 +147,11 @@ public class UIPCLVContainer extends UIContainer {
 		Node categoryNode = null;
 		if (preferenceTreeName.equals(categoryPath) || "".equals(categoryPath)) categoryNode = treeNode;
 		else categoryNode = treeNode.getNode(categoryPath);
+		if (!categoryNode.isNodeType("exo:taxonomy")) { 
+			categoryPath = categoryPath.substring(0, categoryPath.lastIndexOf("/"));
+			categoryNode = treeNode.getNode(categoryPath);
+		}
+
 		List<Node> nodes = this.getListSymlinkNode(portletPreferences, categoryNode.getPath());
 		if(nodes == null) {
 		  nodes = new ArrayList<Node>();
