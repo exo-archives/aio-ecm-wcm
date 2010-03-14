@@ -401,9 +401,14 @@ public class UIPCLVForm extends UIForm {
 		Node categoryNode = null;
 		if (preferenceTreeName.equals(categoryPath) || "".equals(categoryPath)) categoryNode = treeNode;
 		else categoryNode = treeNode.getNode(categoryPath);
-		if (!categoryNode.isNodeType("exo:taxonomy")) {
-			categoryPath = categoryPath.substring(0, categoryPath.lastIndexOf("/"));
-			categoryNode = treeNode.getNode(categoryPath);
+		if (!categoryNode.isNodeType("exo:taxonomy")) { 
+			if (categoryPath!=null && categoryPath.lastIndexOf("/")>-1) {
+				categoryPath = categoryPath.substring(0, categoryPath.lastIndexOf("/"));
+				categoryNode = treeNode.getNode(categoryPath);
+			} else {
+				categoryPath = "";
+				categoryNode = treeNode;
+			}
 		}
 		
 		
