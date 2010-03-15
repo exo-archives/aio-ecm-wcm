@@ -37,6 +37,7 @@
             <property name="app" value="http://www.gatein.org/jcr/application-registry/1.0/" />
             <property name="lgn" value="http://www.gatein.org/jcr/autologin/1.0/" />
             <property name="wsrp" value="http://www.gatein.org/jcr/wsrp/1.0/" />
+            <property name="gtn" value="http://www.gatein.org/jcr/gatein/1.0/"/>
           </properties-param>
         </init-params>
       </component-plugin>
@@ -51,6 +52,7 @@
             <value>jar:/conf/mop-nodetypes.xml</value>
             <value>jar:/conf/ext-nodetypes-config.xml</value>
             <value>jar:/conf/content-nodetypes.xml</value>
+            <value>jar:/conf/gatein-nodetypes.xml</value>
             <!-- <value>jar:/conf/organization-nodetypes.xml</value>
             <value>jar:/conf/application-nodetypes.xml</value>
             <value>jar:/conf/autologin-nodetypes.xml</value>

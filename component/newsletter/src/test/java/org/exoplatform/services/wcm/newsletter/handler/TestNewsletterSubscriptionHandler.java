@@ -219,12 +219,14 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 		newsletterSubscriptionHandler.add(sessionProvider, classicPortal, newsletterSubscriptionConfig);
 		
 		Node subscriptionNode = categoryNode.getNode("SubscriptionName");
-		Node nodeTemp;
 		for(int i = 0; i < 5; i++) {
-			nodeTemp = createWebcontentNode(subscriptionNode, "NewsletterEntry"+i, "test content of this node NewsletterEntry" + i, null, null);				
+			Node nodeTemp = createWebcontentNode(subscriptionNode, "NewsletterEntry"+i, "test content of this node NewsletterEntry" + i, null, null);				
 			nodeTemp.addMixin(NodetypeConstant.EXO_NEWSLETTER_ENTRY);
 			nodeTemp.setProperty(NewsletterConstant.ENTRY_PROPERTY_DATE, Calendar.getInstance());
 			nodeTemp.setProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_AWAITING);
+			nodeTemp.setProperty(NewsletterConstant.ENTRY_PROPERTY_SUBSCRIPTION_NAME, "SubscriptionName");
+			nodeTemp.setProperty(NewsletterConstant.ENTRY_PROPERTY_CATEGORY_NAME, "CategoryName");
+			nodeTemp.setProperty(NewsletterConstant.ENTRY_PROPERTY_TYPE, "TemplateName");
 		}
 		session.save();
 		long numNewsletterWaiting = newsletterSubscriptionHandler.getNumberOfNewslettersWaiting(sessionProvider, classicPortal, "CategoryName", "SubscriptionName");

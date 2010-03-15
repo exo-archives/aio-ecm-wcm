@@ -61,7 +61,7 @@ public class TestNavigationService extends BaseWCMTestCase {
 	    		                  "\"ownerId\":\"" + pageNavigation.getOwnerId() + "\"," +
 	    		                  "\"ownerType\":\"" + pageNavigation.getOwnerType() + "\"," +
 	    		                  "\"owner\":\"" + pageNavigation.getOwner() + "\"," +
-	    		                  "\"priority\":" + pageNavigation.getPriority() + "," +
+	    		                  "\"priority\":\"" + pageNavigation.getPriority() + "\"," +
 	    		                  "\"nodes\":" + pageNavigation.getNodes().toString() +
     		                  "}" +
     		                "]";
