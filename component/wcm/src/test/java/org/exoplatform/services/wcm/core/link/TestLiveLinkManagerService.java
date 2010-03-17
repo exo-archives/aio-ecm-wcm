@@ -49,60 +49,6 @@ public class TestLiveLinkManagerService extends BaseWCMTestCase {
   }
   
   /**
-   * Test update links.
-   * 
-   * @throws Exception the exception
-   */
-  public void testUpdateLinks() throws Exception {
-    liveLinkManagerService.updateLinks();
-    Node result = (Node) session.getItem("/sites content/live/classic/web contents/webcontent");
-    Value[] values = result.getProperty(NodetypeConstant.EXO_LINKS).getValues(); 
-    assertEquals(2, values.length);
-    assertEquals("status=active@url=http://www.google.com", values[0].getString());
-    assertEquals("status=broken@url=http://www.thiscannotbeanactivelink.com", values[1].getString());
-  }
-  
-  /**
-   * Test validate link with portal name.
-   * 
-   * @throws Exception the exception
-   */
-  public void testValidateLinkWithPortalName() throws Exception {
-    liveLinkManagerService.updateLinks("classic");
-    Node result = (Node) session.getItem("/sites content/live/classic/web contents/webcontent");
-    Value[] values = result.getProperty(NodetypeConstant.EXO_LINKS).getValues(); 
-    assertEquals(2, values.length);
-    assertEquals("status=active@url=http://www.google.com", values[0].getString());
-    assertEquals("status=broken@url=http://www.thiscannotbeanactivelink.com", values[1].getString());
-  }
-  
-  /**
-   * Test get broken links by portal name.
-   * 
-   * @throws Exception the exception
-   */
-  public void testGetBrokenLinksByPortalName() throws Exception {
-    liveLinkManagerService.updateLinks("classic");
-    List<LinkBean> linkBeans = liveLinkManagerService.getBrokenLinks("classic");
-    assertEquals(1, linkBeans.size());
-    assertEquals("http://www.thiscannotbeanactivelink.com", linkBeans.get(0).getUrl());
-    assertEquals("broken", linkBeans.get(0).getStatus());
-  }
-  
-  /**
-   * Test get broken links by webcontent.
-   * 
-   * @throws Exception the exception
-   */
-  public void testGetBrokenLinksByWebcontent() throws Exception {
-    liveLinkManagerService.updateLinks("classic");
-    Node result = (Node) session.getItem("/sites content/live/classic/web contents/webcontent");
-    List<String> links = liveLinkManagerService.getBrokenLinks(result);
-    assertEquals(1, links.size());
-    assertEquals("http://www.thiscannotbeanactivelink.com", links.get(0));
-  }
-
-  /**
    * Test extract links.
    * 
    * @throws Exception the exception
@@ -131,12 +77,6 @@ public class TestLiveLinkManagerService extends BaseWCMTestCase {
     Value[] values = result.getProperty(NodetypeConstant.EXO_LINKS).getValues(); 
     assertEquals(1, values.length);
     assertEquals("status=unchecked@url=http://www.mozilla.com", values[0].getString());
-  }
-  
-  public void testCheckIsBrokenLink() throws Exception {
-  	liveLinkManagerService.updateLinks("classic");
-    List<LinkBean> linkBeans = liveLinkManagerService.getBrokenLinks("classic");
-    assertTrue(linkBeans.get(0).isBroken()); 
   }
   
   /* (non-Javadoc)

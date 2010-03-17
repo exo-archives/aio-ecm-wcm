@@ -256,22 +256,18 @@ public class TestXSkinService extends BaseWCMTestCase {
 	 * Test update portal Skin on modify_05.
 	 * When node input have jcr:data is "Test XSkin Service".
 	 */
-	public void testUpdatePortalSkinOnModify_05() {
-		try {
-			Node portal = findPortalNode(sessionProvider, documentNode);
-			SkinService configService = null;
-			Node webcontent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
-      Node cssNode = webcontent.getNode("css").getNode("default.css");
-      createSharedCssNode(sharedCssNode);
-			configService = getService(SkinService.class);
-			configService.addSkin("", "Default", "", "");
-			skinService.updatePortalSkinOnModify(portal, cssNode);
-			session.save();
-			String cssData = configService.getMergedCSS("/portlet_app_1/css/jcr/classic/Default/Stylesheet.css");
-			assertEquals("This is the default.css file.", cssData);
-		} catch(Exception e) {
-			fail();
-		}
+	public void testUpdatePortalSkinOnModify_05() throws Exception {
+		Node portal = findPortalNode(sessionProvider, documentNode);
+		SkinService configService = null;
+		Node webcontent = createWebcontentNode(documentNode, WEB_CONTENT_NODE_NAME, null, null, null);
+    Node cssNode = webcontent.getNode("css").getNode("default.css");
+    createSharedCssNode(sharedCssNode);
+		configService = getService(SkinService.class);
+		configService.addSkin("", "Default", "", "");
+		skinService.updatePortalSkinOnModify(portal, cssNode);
+		session.save();
+		String cssData = configService.getMergedCSS("/portlet_app_1/css/jcr/classic/Default/Stylesheet.css");
+		assertEquals("This is the default.css file.", cssData);
 	}
 	
 	/**

@@ -57,13 +57,14 @@ public class TestNavigationService extends BaseWCMTestCase {
     		                  "{" +
     		                    "\"ownerType\":\"" + pageNavigation.getOwnerType() + "\"," +
     		                  	"\"creator\":" + pageNavigation.getCreator() + "," +
-    		                  	"\"modifier\":" + pageNavigation.getModifier() + "," +
     		                  	"\"owner\":\"" + pageNavigation.getOwner() + "\"," +
+    		                  	"\"modifier\":" + pageNavigation.getModifier() + "," +
     		                  	"\"description\":" + pageNavigation.getDescription() + "," +
     		                  	"\"ownerId\":\"" + pageNavigation.getOwnerId() + "\"," +
     		                  	"\"nodes\":" + pageNavigation.getNodes().toString() + "," +
     		                  	"\"priority\":" + pageNavigation.getPriority() + "," +
-    		                  	"\"id\":" + pageNavigation.getId() + "" +
+    		                  	"\"id\":" + pageNavigation.getId() + "," +
+    		                  	"\"serialMark\":" + pageNavigation.getSerialMark() + "" +
     		                  "}" +
     		                "]";
     assertEquals(jsonExpert, jsonResult);
