@@ -20,6 +20,9 @@ import org.exoplatform.portal.config.jcr.DataStorageImpl;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
+import org.exoplatform.services.wcm.javascript.XJavascriptService;
+import org.exoplatform.services.wcm.skin.XSkinService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -45,6 +48,11 @@ public class UpdateLivePortalEventListener extends Listener<DataStorageImpl,Port
    */
   public void onEvent(Event<DataStorageImpl, PortalConfig> event) throws Exception {
 
+    XJavascriptService jsService = WCMCoreUtils.getService(XJavascriptService.class); 
+    XSkinService xSkinService = WCMCoreUtils.getService(XSkinService.class);
+    xSkinService.start();
+    jsService.start();
+    
   }
 
 }
