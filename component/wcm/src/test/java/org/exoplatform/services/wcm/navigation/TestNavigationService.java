@@ -17,6 +17,8 @@
 package org.exoplatform.services.wcm.navigation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.exoplatform.portal.config.model.PageNavigation;
@@ -52,21 +54,39 @@ public class TestNavigationService extends BaseWCMTestCase {
     List<PageNavigation> pageNavigations = new ArrayList<PageNavigation>();
     pageNavigations.add(pageNavigation);
     String jsonResult = navigationService.getNavigationsAsJSON(pageNavigations);
+    jsonResult = sortJSONString(jsonResult);
     
     String jsonExpert = "[" +
     		                  "{" +
+      		                  "\"creator\":" + pageNavigation.getCreator() + "," +
+      		                  "\"description\":" + pageNavigation.getDescription() + "," +
+      		                  "\"id\":" + pageNavigation.getId() + "," +
+      		                  "\"modifier\":" + pageNavigation.getModifier() + "," +
+      		                  "\"nodes\":" + pageNavigation.getNodes().toString() + "," +
+      		                  "\"owner\":\"" + pageNavigation.getOwner() + "\"," +
+      		                  "\"ownerId\":\"" + pageNavigation.getOwnerId() + "\"," +
     		                    "\"ownerType\":\"" + pageNavigation.getOwnerType() + "\"," +
-    		                  	"\"creator\":" + pageNavigation.getCreator() + "," +
-    		                  	"\"owner\":\"" + pageNavigation.getOwner() + "\"," +
-    		                  	"\"modifier\":" + pageNavigation.getModifier() + "," +
-    		                  	"\"description\":" + pageNavigation.getDescription() + "," +
-    		                  	"\"ownerId\":\"" + pageNavigation.getOwnerId() + "\"," +
-    		                  	"\"nodes\":" + pageNavigation.getNodes().toString() + "," +
     		                  	"\"priority\":" + pageNavigation.getPriority() + "," +
-    		                  	"\"id\":" + pageNavigation.getId() + "," +
-    		                  	"\"serialMark\":" + pageNavigation.getSerialMark() + "" +
+    		                  	"\"serialMark\":" + pageNavigation.getSerialMark() + "," +
     		                  "}" +
     		                "]";
     assertEquals(jsonExpert, jsonResult);
+  }
+  
+  private String sortJSONString(String json) {
+    json = json.substring(2, json.length() - 2);
+    List<String> objects = Arrays.asList(json.split(","));
+    Collections.sort(objects);
+    String newJson = "[" +
+                       "{";
+    for (String object : objects) {
+      if (objects.indexOf(object) == objects.size())
+        newJson += object;
+      else
+        newJson += object + ",";
+    }
+    newJson +=          "}" +
+                     "]";
+    return newJson;
   }
 }

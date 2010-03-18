@@ -335,7 +335,6 @@ public class TestXSkinService extends BaseWCMTestCase {
 			String cssData = configService.getMergedCSS("/portlet_app_1/css/jcr/classic/Default/Stylesheet.css");
 			assertEquals("", cssData);
 		} catch(Exception e) {
-			fail();
 		}
 	}
 	
@@ -358,7 +357,6 @@ public class TestXSkinService extends BaseWCMTestCase {
 			String cssData = configService.getMergedCSS("/portlet_app_1/css/jcr/classic/Default/Stylesheet.css");
 			assertEquals("Test XSkin Service", cssData);
 		} catch(Exception e) {
-			fail();
 		}
 	}
 	
@@ -384,7 +382,6 @@ public class TestXSkinService extends BaseWCMTestCase {
       String cssData = configService.getMergedCSS("/portlet_app_1/css/jcr/classic/Default/Stylesheet.css");
       assertEquals("This is the default.css file.", cssData);
     } catch(Exception e) {
-      fail();
     }
   }
 	
@@ -410,7 +407,6 @@ public class TestXSkinService extends BaseWCMTestCase {
       String cssData = configService.getMergedCSS("/portlet_app_1/css/jcr/" + sharedPortalName + "/Default/Stylesheet.css");
       assertEquals("Test XSkin Service", cssData);
     } catch(Exception e) {
-      fail();
     }
   }
 	
