@@ -154,13 +154,6 @@
               <exclude>**/*$*</exclude>
               <!--nested classes prb, http://jira.codehaus.org/browse/SUREFIRE-288-->
               <exclude>**/BaseWCMTestCase</exclude>
-              <!-- Tests are failing : http://jira.exoplatform.org/browse/ -->
-              <exclude>**/TestNewsletterEntryHandler.java</exclude>
-              <exclude>**/TestNewsletterPublicUserHandler.java</exclude>
-              <exclude>**/TestNewsletterManageUserHandler.java</exclude>
-              <exclude>**/TestNewsletterCategoryHandler.java</exclude>
-              <exclude>**/TestNewsletterSubscriptionHandler.java</exclude>
-              <exclude>**/TestNewsletterTemplateHandler.java</exclude>
             </excludes>
           </configuration>
         </plugin>

@@ -139,8 +139,6 @@
               <exclude>**/*$*</exclude>
               <!--nested classes prb, http://jira.codehaus.org/browse/SUREFIRE-288-->
               <exclude>**/BaseWCMTestCase</exclude>
-              <!-- Tests are failing : http://jira.exoplatform.org/browse/ -->
-              <exclude>**/TestSearchService.java</exclude>
             </excludes>
           </configuration>
         </plugin>
