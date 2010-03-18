@@ -20,6 +20,6 @@
 	<% } %>		
 
 	<% 			
-		if (uicomponent.getChild(UICLVPresentation.class) != null) uicomponent.renderChild(UICLVPresentation.class);
+		uicomponent.renderChild(UICLVPresentation.class);
 	%>
 </div>
