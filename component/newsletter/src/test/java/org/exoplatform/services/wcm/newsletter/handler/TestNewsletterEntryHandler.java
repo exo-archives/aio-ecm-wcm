@@ -118,7 +118,7 @@ public class TestNewsletterEntryHandler extends BaseWCMTestCase {
 		List<String> listIds = Arrays.asList(new String[]{"NewsletterEntry0", "NewsletterEntry1"});
 		newsletterEntryHandler.delete(sessionProvider, "classic", "CategoryName", "SubscriptionName", listIds);
 		long countEntry = subscriptionNode.getNodes().getSize();
-		assertEquals(4, countEntry);
+		assertEquals(3, countEntry);
 	}
 	
 	/**
