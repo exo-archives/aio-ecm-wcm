@@ -311,7 +311,7 @@ public class NewsletterConstant {
   @SuppressWarnings("unchecked")
   public static void updateAccessPermission(String[] accessPermissions) throws Exception{
     OrganizationService organizationService = WCMCoreUtils.getService(OrganizationService.class) ;
-    ((ComponentRequestLifecycle) organizationService).startRequest(manager);
+//    ((ComponentRequestLifecycle) organizationService).startRequest(manager);
 
     WCMConfigurationService wcmConfigurationService = WCMCoreUtils.getService(WCMConfigurationService.class);
     String membership = wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.NEWSLETTER_MANAGE_MEMBERSHIP);
@@ -337,7 +337,7 @@ public class NewsletterConstant {
       }
       pageAccessPermissions.add(newAccessPermission);
     }
-    ((ComponentRequestLifecycle) organizationService).endRequest(manager);
+//    ((ComponentRequestLifecycle) organizationService).endRequest(manager);
     page.setAccessPermissions(pageAccessPermissions.toArray(new String[]{}));
     userService.update(page);
   }
