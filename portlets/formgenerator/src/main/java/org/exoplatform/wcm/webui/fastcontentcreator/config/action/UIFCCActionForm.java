@@ -243,10 +243,9 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
    * @see org.exoplatform.ecm.webui.form.UIDialogForm#onchange(org.exoplatform.webui.event.Event)
    */
   public void onchange(Event<?> event) throws Exception {
-    if(!isAddNew){
-      event.getRequestContext().addUIComponentToUpdateByAjax(getParent()) ;
+      UIFCCPortlet portlet = getAncestorOfType(UIFCCPortlet.class);
+      event.getRequestContext().addUIComponentToUpdateByAjax(Utils.getPopupContainer(portlet));
       return;
-    }
   }
   
   /**
@@ -289,6 +288,7 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
         Node storedHomeNode = fccActionForm.getParentNode(currentNode).getNode("exo:actions");
         cmsService.storeNode(fccActionForm.nodeTypeName_, storedHomeNode, sortedInputs, false, repository) ;
         storedHomeNode.getSession().save();
+        event.getRequestContext().addUIComponentToUpdateByAjax(Utils.getPopupContainer(fastContentCreatorPortlet));
       } else {
         
         // Add lock token if node is locked
@@ -360,8 +360,12 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return;
         }      
+      
+        event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorActionList);
+        event.getRequestContext().addUIComponentToUpdateByAjax(Utils.getPopupContainer(fastContentCreatorPortlet));        
       }
-      Utils.closePopupWindow(fccActionForm, UIFCCConstant.ACTION_POPUP_WINDOW);
+      Utils.closePopupWindow(fccActionForm, UIFCCConstant.ACTION_POPUP_WINDOW);      
+      
     }
   }
   
@@ -383,7 +387,9 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
      */
     public void execute(Event<UIFCCActionForm> event) throws Exception {
       UIFCCActionForm fastContentCreatorActionForm = event.getSource();
+      UIFCCPortlet portlet = fastContentCreatorActionForm.getAncestorOfType(UIFCCPortlet.class);
       Utils.closePopupWindow(fastContentCreatorActionForm, UIFCCConstant.ACTION_POPUP_WINDOW);
+      event.getRequestContext().addUIComponentToUpdateByAjax(Utils.getPopupContainer(portlet));
     }
   }  
   
@@ -408,7 +414,7 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
       fastContentCreatorActionForm.isRemovePreference = true;
       String fieldName = event.getRequestContext().getRequestParameter(OBJECTID) ;
       fastContentCreatorActionForm.getUIStringInput(fieldName).setValue(null) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorActionForm.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(Utils.getPopupContainer(fastContentCreatorActionForm));
     }
   }
   
@@ -471,7 +477,7 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
       String param = "returnField=" + fieldName ;
       String[] params = selectorParams == null ? new String[]{param} : new String[]{param, "selectorParams=" + selectorParams};
       ((ComponentSelector)uiComp).setSourceComponent(fastContentCreatorActionForm, params) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(Utils.getPopupContainer(fastContentCreatorActionForm));
     }
   }
 }
