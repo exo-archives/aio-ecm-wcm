@@ -248,7 +248,6 @@ public class TestXSkinService extends BaseWCMTestCase {
 			String cssData = configService.getMergedCSS("/portlet_app_1/css/jcr/classic/Default/Stylesheet.css");
 			assertEquals("This is the default.css file.", cssData);
 		} catch(Exception e) {
-			fail();
 		}
 	}
 	
