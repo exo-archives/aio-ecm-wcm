@@ -32,8 +32,6 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
 import org.apache.commons.logging.Log;
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.webui.util.Util;
@@ -154,8 +152,6 @@ public class NewsletterConstant {
 
   /** The USER base path. */
   public static String       USER_BASE_PATH                      = "/sites content/live/" + PORTAL_NAME + "/ApplicationData/NewsletterApplication/Users";
-  
-  private static PortalContainer manager;
   
   /**
    * Generate default template path.
@@ -311,8 +307,6 @@ public class NewsletterConstant {
   @SuppressWarnings("unchecked")
   public static void updateAccessPermission(String[] accessPermissions) throws Exception{
     OrganizationService organizationService = WCMCoreUtils.getService(OrganizationService.class) ;
-    ((ComponentRequestLifecycle) organizationService).startRequest(manager);
-
     WCMConfigurationService wcmConfigurationService = WCMCoreUtils.getService(WCMConfigurationService.class);
     String membership = wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.NEWSLETTER_MANAGE_MEMBERSHIP);
     MembershipType membershipType = organizationService.getMembershipTypeHandler().findMembershipType(membership.split(":")[0]);
@@ -337,7 +331,6 @@ public class NewsletterConstant {
       }
       pageAccessPermissions.add(newAccessPermission);
     }
-    ((ComponentRequestLifecycle) organizationService).endRequest(manager);
     page.setAccessPermissions(pageAccessPermissions.toArray(new String[]{}));
     userService.update(page);
   }
@@ -349,7 +342,6 @@ public class NewsletterConstant {
    */
   public static void removeAccessPermission(String[] removedPermissions) throws Exception {
     OrganizationService organizationService = WCMCoreUtils.getService(OrganizationService.class) ;
-    ((ComponentRequestLifecycle) organizationService).startRequest(manager);
     MembershipHandler memberShipHandler = organizationService.getMembershipHandler();
     
     UserPortalConfigService userService = WCMCoreUtils.getService(UserPortalConfigService.class);
@@ -361,7 +353,6 @@ public class NewsletterConstant {
         memberShipHandler.removeMembershipByUser(removedPermission, true);
       }
     }
-    ((ComponentRequestLifecycle) organizationService).endRequest(manager);
     page.setAccessPermissions(pageAccessPermissions.toArray(new String[]{}));
     userService.update(page);
   }
