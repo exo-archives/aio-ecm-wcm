@@ -35,11 +35,10 @@ public class NoneHTMLValidator implements Validator {
   private String finishHtmlTag = ".*</.*>.*";
 
   public void validate(UIFormInput uiInput) throws Exception {
-    if((uiInput.getValue() != null)){
-      String input = ((String)uiInput.getValue()).trim();
-      if(input.length() > 0 && !input.matches(fullHtmltag) && !input.matches(startHtmlTag) && !input.matches(finishHtmlTag))
-        return ;
-    }
+    if((uiInput.getValue() == null)) return;               
+    String input = ((String)uiInput.getValue()).trim();
+    if(!input.matches(fullHtmltag) && !input.matches(startHtmlTag) && !input.matches(finishHtmlTag))
+      return;
     
     UIComponent uiComponent = (UIComponent) uiInput ;
     UIForm uiForm = uiComponent.getAncestorOfType(UIForm.class) ;    
