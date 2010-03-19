@@ -149,10 +149,14 @@ public class UISearchResult extends UIContainer {
 			
 			queryCriteria.setSiteName(currentPortal);
 			queryCriteria.setKeyword(keyword.toLowerCase());
-			//queryCriteria.setSearchWebpage(true);
-			queryCriteria.setSearchWebpage(false);
-			queryCriteria.setSearchDocument(true);
-			queryCriteria.setSearchWebContent(true);
+			UISearchForm searchForm = getAncestorOfType(UISearchForm.class).getChild(UISearchForm.class);
+			boolean isSearchDocument = searchForm.getUIFormCheckBoxInput(UISearchForm.PAGE_CHECKING).isChecked();
+			queryCriteria.setSearchWebpage(searchForm.getUIFormCheckBoxInput(UISearchForm.DOCUMENT_CHECKING).isChecked());
+			queryCriteria.setSearchDocument(isSearchDocument);
+			if (isSearchDocument)
+			  queryCriteria.setSearchWebContent(true);
+			else 
+			  queryCriteria.setSearchWebContent(false);
 			if (Boolean.parseBoolean(Utils.getCurrentMode())) {
         queryCriteria.setLiveMode(true);
       } else {
