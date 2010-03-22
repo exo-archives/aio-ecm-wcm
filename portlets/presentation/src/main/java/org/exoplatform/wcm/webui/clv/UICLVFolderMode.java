@@ -16,6 +16,7 @@
  */
 package org.exoplatform.wcm.webui.clv;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -104,7 +105,7 @@ public class UICLVFolderMode extends UICLVContainer {
     String workspace = preferences.getValue(UICLVPortlet.WORKSPACE, null);
     String folderPath = preferences.getValue(UICLVPortlet.FOLDER_PATH, null);
     if (repository == null || workspace == null || folderPath == null)
-      throw new ItemNotFoundException();
+      return new ArrayList<Node>();
 
     WCMComposer wcmComposer = getApplicationComponent(WCMComposer.class);
     HashMap<String, String> filters = new HashMap<String, String>();
@@ -116,7 +117,6 @@ public class UICLVFolderMode extends UICLVContainer {
     filters.put(WCMComposer.FILTER_ORDER_BY, orderBy);
     filters.put(WCMComposer.FILTER_ORDER_TYPE, orderType);
     
-    List<Node> nodes = wcmComposer.getContents(repository, workspace, folderPath, filters, Utils.getSessionProvider());
-    return nodes;
+    return wcmComposer.getContents(repository, workspace, folderPath, filters, Utils.getSessionProvider());
   }
 }
