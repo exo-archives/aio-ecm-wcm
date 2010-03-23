@@ -28,6 +28,12 @@ import org.apache.commons.logging.LogFactory;
 import org.exoplatform.ecm.webui.utils.JCRExceptionManager;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.jcr.access.AccessControlEntry;
+import org.exoplatform.services.jcr.access.AccessControlList;
+import org.exoplatform.services.jcr.access.PermissionType;
+import org.exoplatform.services.jcr.impl.core.NodeImpl;
+import org.exoplatform.services.security.Identity;
+import org.exoplatform.services.security.IdentityRegistry;
 import org.exoplatform.services.wcm.extensions.publication.PublicationManager;
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.authoring.AuthoringPublicationConstant;
 import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig.Lifecycle;
@@ -450,5 +456,94 @@ public class UIPublicationPanel
     }
     return lifecycleName;
   }
+  
+  /**
+   * Check if a user is authorized to reach the given state of a given  node.
+   * The user must satisfy the constraints defined by state (memberships or role)
+   * @param state
+   * @param remoteUser
+   * @param node
+   * @return
+   */
+  public boolean canReachState(State state, String remoteUser, NodeImpl node) {
+    
+    IdentityRegistry identityRegistry = getApplicationComponent(IdentityRegistry.class);
+    Identity currentUser = identityRegistry.getIdentity(remoteUser);
+    
+    if (isAuthorizedByMembership(state, currentUser)) {
+      return true;
+    }
+
+    if (isAuthorizedByRole(state, currentUser, node)) {
+      return true;
+    }
+
+    return false;
+  }
+  
+  /**
+   * Check if the user has the memberships defined in the state
+   * @param state
+   * @param currentUser
+   * @return
+   */
+  boolean isAuthorizedByMembership(State state, Identity currentUser) {
+    String membership = state.getMembership();
+    List<String> memberships = new ArrayList<String>();
+    if (membership != null) {
+      memberships.add(membership);
+    }
+    if (state.getMemberships() != null) {
+      memberships.addAll(state.getMemberships());
+    }
+
+    for (String membership_ : memberships) {
+      String[] membershipTab = membership_.split(":");
+      String expectedRole = membershipTab[0];
+      String expectedGroup = membershipTab[1];
+      if (currentUser.isMemberOf(expectedGroup, expectedRole)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Check if a user is authorized to reach the state based on the state's role.
+   * The user must have the role
+   * @param state
+   * @param currentUser
+   * @param node
+   * @return
+   */
+  boolean isAuthorizedByRole(State state, Identity currentUser, NodeImpl node) {
+    try {
+      String role = state.getRole();
+      AccessControlList acl = node.getACL();
+      if (acl.hasPermissions()) {
+        List<AccessControlEntry> entries = acl.getPermissionEntries();
+        for (AccessControlEntry accessControlEntry : entries) {
+          String identity = accessControlEntry.getIdentity();
+          if (identity.indexOf(':') > 0) {
+            // write access on node is defined by 'set_property' in exo JCR
+            if (PermissionType.SET_PROPERTY.equals(accessControlEntry.getPermission())) {
+              String authorizedGroup = identity.split(":")[1];
+              // user must have the configured role in one of the node's
+              // authorized groups
+              if (currentUser.isMemberOf(authorizedGroup, role)) {
+                return true;
+              }
+            }
+          }
+        }
+      }
+    } catch (Exception e) {
+      LOG.error("Failed to extract node permissions", e);
+    }
+    return false;
+  }
+
+
+
 
 }
