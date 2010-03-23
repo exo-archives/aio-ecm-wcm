@@ -11,7 +11,7 @@
 	<artifactId>wcm.ext.staging</artifactId>
 	<packaging>pom</packaging>
 	<name>eXo WCM Extensions Staging</name>
-	<version>1.0.0-Beta03-SNAPSHOT</version>
+	<version>1.0.0-Beta04-SNAPSHOT</version>
 
 	<scm>
 		<connection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/branches/1.2-staging</connection>
