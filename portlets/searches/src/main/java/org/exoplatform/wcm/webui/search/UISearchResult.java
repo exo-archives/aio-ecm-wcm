@@ -149,7 +149,7 @@ public class UISearchResult extends UIContainer {
 			
 			queryCriteria.setSiteName(currentPortal);
 			queryCriteria.setKeyword(keyword.toLowerCase());
-			UISearchForm searchForm = getAncestorOfType(UISearchForm.class).getChild(UISearchForm.class);
+			UISearchForm searchForm = getAncestorOfType(UISearchPageLayout.class).getChild(UISearchForm.class);
 			boolean isSearchDocument = searchForm.getUIFormCheckBoxInput(UISearchForm.PAGE_CHECKING).isChecked();
 			queryCriteria.setSearchWebpage(searchForm.getUIFormCheckBoxInput(UISearchForm.DOCUMENT_CHECKING).isChecked());
 			queryCriteria.setSearchDocument(isSearchDocument);
