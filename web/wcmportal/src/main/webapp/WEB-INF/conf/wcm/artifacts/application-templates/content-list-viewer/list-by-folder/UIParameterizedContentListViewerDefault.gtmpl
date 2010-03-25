@@ -40,6 +40,7 @@
 						def count = 0;
 						def currentPageData = uicomponent.getCurrentPageData();
 						for (viewNode in currentPageData) {
+							if(!Utils.isViewable(viewNode)) continue;
 						  def itemName = viewNode.getName();
 						  def itemLink = uicomponent.generateLink(viewNode);
 							def itemSummary = uicomponent.getSummary(viewNode);
