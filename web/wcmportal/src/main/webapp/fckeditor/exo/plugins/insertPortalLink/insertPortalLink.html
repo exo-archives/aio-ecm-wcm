@@ -45,11 +45,35 @@
 			var FCK = oEditor.FCK;
 			var FCKConfig = oEditor.FCKConfig;
 			var eXoPlugin = FCK.eXoPlugin;
-			var FCKLang = oEditor.FCKLang ;
+			var FCKLang = oEditor.FCKLang ;			
 			
-			window.onload = function() {
-				oEditor.FCKLanguageManager.TranslatePage(document) ;
+			var UserLanguage = null;
+			eXoPlugin.userLanguage = FCK.Language.GetActiveLanguage() || "en";
+						
+			window.onload = function(){			
+				eXoPlugin.loadScript(window, "lang/" + eXoPlugin.userLanguage + ".js"); 	
+				languageInit(); 				
+			};
+			
+	function languageInit() {
+		if (UserLanguage) {
+			var aElements = document.getElementsByTagName("*");
+			for (var i = 0 ; i < aElements.length; ++i) {
+				if (aElements[i].getAttribute && aElements[i].getAttribute("userLanguage")) {
+					var userLanguage = eval(aElements[i].getAttribute("userLanguage"));
+					if (userLanguage) {
+						var textNode = document.createTextNode(userLanguage);
+						aElements[i].innerHTML = "";
+						aElements[i].appendChild(textNode);
+					}
+				}
 			}
+		} else {
+			//eXoPlugin.loadScript(window, "lang/en.js");
+			setTimeout(languageInit, 1);
+		}
+	}
+					
 			
 			function Trim(text) {
 				if (typeof text == "string") return text.replace(/^\s+|\s+$/g, "");
@@ -114,16 +138,16 @@
 			<div class="DisplayB-2">
 				<table class="UIFormGrid">
     				<tr>
-						<td class="FieldLabel">
-							<label fckLang="WCMInsertPortalLinkInputTitle">Title:</label>
+						<td class="FieldLabel" userLanguage="UserLanguage.WCMInsertPortalLinkInputTitle">
+							Title:
 						</td>
     	  				<td class="FieldComponent" colspan="2">
         					<input type="text" id="inputTitle"/>
       					</td>
     				</tr>
 	    			<tr>
-	      				<td class="FieldLabel" userLanguage="KLang.url">
-	      					<label fckLang="WCMInsertPortalLinkInputUrl">URL:</label>
+	      				<td class="FieldLabel" userLanguage="UserLanguage.WCMInsertPortalLinkInputUrl">
+	      					URL:
 	      				</td>
 	      				<td class="FieldComponent">
 	        				<input type="text" id="txtUrl"/>
@@ -136,8 +160,8 @@
 											<a href="javascript: getPortalLink();" class="ActionButton LightBlueStyle">
 								  				<div class="ButtonLeft">
 													<div class="ButtonRight">
-									  					<div class="ButtonMiddle">
-									  						<label fckLang="WCMInsertPortalLinkButtonGet">Get Portal Link</label>
+									  					<div class="ButtonMiddle" userLanguage="UserLanguage.WCMInsertPortalLinkButtonGet">
+									  						Get Portal Link
 									  					</div>
 													</div>
 								  				</div>
@@ -156,8 +180,8 @@
 	            				<a href="javascript: previewLink();" class="ActionButton LightBlueStyle">
 	              					<div class="ButtonLeft">
 	                					<div class="ButtonRight">
-	                  						<div class="ButtonMiddle" userLanguage="KLang.preview">
-	                  							<label fckLang="WCMInsertPortalLinkButtonPreview">Preview</label>
+	                  						<div class="ButtonMiddle" userLanguage="UserLanguage.WCMInsertPortalLinkButtonPreview">
+	                  							Preview
 	                  						</div>
 	                					</div>
 	              					</div>
@@ -165,8 +189,8 @@
 	            				<a href="javascript: addURL();" class="ActionButton LightBlueStyle">
 	              					<div class="ButtonLeft">
 	                					<div class="ButtonRight">
-	                  						<div class="ButtonMiddle" userLanguage="KLang.save">
-	                    						<label fckLang="WCMInsertPortalLinkButtonSave">Save</label>
+	                  						<div class="ButtonMiddle" userLanguage="UserLanguage.WCMInsertPortalLinkButtonSave">
+	                    						Save
 	                  						</div>
 	                					</div>
 	              					</div>
