@@ -9,23 +9,18 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
 
-import org.exoplatform.portal.webui.page.UIPageBody;
-import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
-import org.exoplatform.services.wcm.core.NodeIdentifier;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
-import org.exoplatform.services.wcm.publication.NotInWCMPublicationException;
 import org.exoplatform.services.wcm.publication.WCMComposer;
-import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.search.PaginatedQueryResult;
 import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
+import org.exoplatform.wcm.webui.selector.content.multi.UICLVContentSelectedGrid;
+import org.exoplatform.wcm.webui.selector.content.multi.UIContentSelectorMulti;
 import org.exoplatform.wcm.webui.viewer.UIContentViewer;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -210,42 +205,17 @@ public class UIContentSearchResult extends UIGrid {
     public void execute(Event<UIContentSearchResult> event) throws Exception {
       UIContentSearchResult contentSearchResult = event.getSource();
       String nodePath = event.getRequestContext().getRequestParameter(OBJECTID);
-      RepositoryService repositoryService = contentSearchResult.getApplicationComponent(RepositoryService.class);
-      String repoName = repositoryService.getCurrentRepository().getConfiguration().getName();
-      WCMConfigurationService configurationService = contentSearchResult.getApplicationComponent(WCMConfigurationService.class);
-      NodeLocation nodeLocation = configurationService.getLivePortalsLocation(repoName);
-
-      ManageableRepository manageableRepository = repositoryService.getRepository(nodeLocation.getRepository());
-      Session session = contentSearchResult.getApplicationComponent(ThreadLocalSessionProviderService.class).getSessionProvider(null)
-      .getSession(nodeLocation.getWorkspace(), manageableRepository);
-      Node webContent = (Node) session.getItem(nodePath);
-      NodeIdentifier nodeIdentifier = NodeIdentifier.make(webContent);
-      PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
-      PortletPreferences prefs = pContext.getRequest().getPreferences();
-      prefs.setValue("repository", nodeIdentifier.getRepository());
-      prefs.setValue("workspace", nodeIdentifier.getWorkspace());
-      prefs.setValue("nodeIdentifier", nodeIdentifier.getUUID());
-      prefs.store();
-
-      String remoteUser = Util.getPortalRequestContext().getRemoteUser();
-      String currentSite = Util.getPortalRequestContext().getPortalOwner();
-
-      WCMPublicationService wcmPublicationService = contentSearchResult.getApplicationComponent(WCMPublicationService.class);
-
-      try {
-        wcmPublicationService.isEnrolledInWCMLifecycle(webContent);
-      } catch (NotInWCMPublicationException e){
-        wcmPublicationService.unsubcribeLifecycle(webContent);
-        wcmPublicationService.enrollNodeInLifecycle(webContent, currentSite, remoteUser);          
-      }
       
-      // Update and Close
-      UIPortal uiPortal = Util.getUIPortal();
-      UIPageBody uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
-      uiPageBody.setUIComponent(null);
-      uiPageBody.setMaximizedUIComponent(null);
+      UIContentSelectorMulti contentSelectorMulti = contentSearchResult.getAncestorOfType(UIContentSelectorMulti.class);      
+      UICLVContentSelectedGrid uiSelectedContentGrid = contentSelectorMulti.findFirstComponentOfType(UICLVContentSelectedGrid.class);
+      
+      if (!uiSelectedContentGrid.getSelectedCategories().contains(nodePath)) {
+        uiSelectedContentGrid.addCategory(nodePath);
+      }
+      uiSelectedContentGrid.updateGrid(uiSelectedContentGrid.getUIPageIterator().getCurrentPage());
+      uiSelectedContentGrid.setRendered(true);
       Utils.updatePortal((PortletRequestContext)event.getRequestContext());
-      Utils.closePopupWindow(contentSearchResult.getAncestorOfType(UIContentSelector.class), UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW);
+      Utils.closePopupWindow(contentSearchResult.getAncestorOfType(UIContentSelectorMulti.class), contentSearchResult.getId());
     }
   }
 
