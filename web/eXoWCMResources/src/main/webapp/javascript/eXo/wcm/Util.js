@@ -163,7 +163,6 @@ eXo.core.Browser.addOnLoadCallback("keepKeywordOnBoxSearch", keepKeywordOnBoxSea
 
 /*------------------Overrite method eXo.webui.UIPopup.init to show popup display center-------------------------------*/
 UIPopupWindow.prototype.init = function(popupId, isShow, isResizable, showCloseButton, isShowMask) {
-	window.scroll(0, 0);	
 	var DOMUtil = eXo.core.DOMUtil ;
 	this.superClass = eXo.webui.UIPopup ;
 	var popup = document.getElementById(popupId) ;
