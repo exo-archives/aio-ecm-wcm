@@ -53,6 +53,7 @@
     <org.exoplatform.exopackage.version>1.2.2</org.exoplatform.exopackage.version>
     <org.exoplatform.ecm.jbpm.version>3.0.2</org.exoplatform.ecm.jbpm.version>
     <bonita.version>4.0</bonita.version>
+    <maven.test.skip>true</maven.test.skip>
   </properties>
   <build>
     <resources>
