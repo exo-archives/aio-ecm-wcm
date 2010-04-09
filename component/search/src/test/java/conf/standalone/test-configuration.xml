@@ -120,6 +120,39 @@
 		</component-plugins>
 	</component>
 
+	<external-component-plugins>
+		<target-component>org.exoplatform.services.listener.ListenerService</target-component>
+		<component-plugin>
+			<name>UserPortalConfigService.page.onCreate</name>
+			<set-method>addListener</set-method>
+			<type>org.exoplatform.services.wcm.search.listener.page.MockCreatePageEventListener</type>
+			<description>this listener update publication state of content when page is created</description>
+		</component-plugin>
+		<component-plugin>
+			<name>UserPortalConfigService.page.onUpdate</name>
+			<set-method>addListener</set-method>
+			<type>org.exoplatform.services.wcm.search.listener.page.MockUpdatePageEventListener</type>
+			<description>this listener update publication state of content when page is updated</description>
+		</component-plugin>
+		<component-plugin>
+			<name>UserPortalConfigService.page.onRemove</name>
+			<set-method>addListener</set-method>
+			<type>org.exoplatform.services.wcm.search.listener.page.MockRemovePageEventListener</type>
+			<description>this listener update publication state of content when page is removed</description>
+		</component-plugin>
+		<component-plugin>
+			<name>UserPortalConfigService.navigation.onUpdate</name>
+			<set-method>addListener</set-method>
+			<type>org.exoplatform.services.wcm.search.listener.navigation.MockUpdateNavigationEventListener</type>
+			<description>this listener update publication state of content when navigation is updated</description>
+		</component-plugin>
+		<component-plugin>
+			<name>UserPortalConfigService.navigation.onRemove</name>
+			<set-method>addListener</set-method>
+			<type>org.exoplatform.services.wcm.search.listener.navigation.MockRemoveNavigationEventListener</type>
+			<description>this listener update publication state of content when navigation is removed</description>
+		</component-plugin>
+	</external-component-plugins>
 
 	<!-- Imports -->
 	<import>classpath:/conf/standalone/test-portal-configuration.xml</import>
