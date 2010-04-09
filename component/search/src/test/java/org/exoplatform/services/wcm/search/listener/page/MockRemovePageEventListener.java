@@ -25,7 +25,6 @@ import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
-import org.exoplatform.services.wcm.publication.listener.navigation.MockRemoveNavigationEventListener;
 
 /**
  * Created by The eXo Platform SAS
@@ -35,7 +34,7 @@ import org.exoplatform.services.wcm.publication.listener.navigation.MockRemoveNa
 public class MockRemovePageEventListener extends Listener<UserPortalConfigService, Page>{
   
   /** The log. */
-  private static Log log = ExoLogger.getLogger(MockRemoveNavigationEventListener.class);
+  private static Log log = ExoLogger.getLogger(MockRemovePageEventListener.class);
   
   /* (non-Javadoc)
    * @see org.exoplatform.services.listener.Listener#onEvent(org.exoplatform.services.listener.Event)
