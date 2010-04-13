@@ -28,6 +28,8 @@ import javax.jcr.RepositoryException;
 import org.apache.commons.logging.Log;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -158,12 +160,21 @@ public class TestSearchService extends BaseWCMTestCase {
     }catch(Exception ex){ }
 
     if(page == null){
+      String pageId = "portal::"+parentNode.getName()+"::testpage";
       page = new Page();
-      page.setPageId("portal::"+parentNode.getName()+"::testpage");
+      page.setPageId(pageId);
       page.setName("testpage");
       page.setOwnerType("portal");
       page.setOwnerId("classic");
       userPortalConfigService.create(page);
+      
+      PageNavigation portalNavigation = userPortalConfigService.getPageNavigation("portal", "classic");
+      PageNode pageNode = new PageNode();
+      pageNode.setPageReference(pageId);
+      pageNode.setUri("testPageNode");
+      pageNode.setName("testPageNode");
+      portalNavigation.addNode(pageNode);
+      userPortalConfigService.update(portalNavigation);
     }
 
     Node webContentNode = null;
@@ -171,7 +182,7 @@ public class TestSearchService extends BaseWCMTestCase {
     // Create 5 nodes which have status is PUBLISHED
     for(int i = 0; i < 5; i ++){
       try{
-        webContentNode = createWebcontentNode(parentNode, parentNode.getName() + " webcontentNode " + i, null, null, null);
+        webContentNode = createWebcontentNode(parentNode, "webcontentNode " + i, null, null, null);
         if(!webContentNode.isNodeType("metadata:siteMetadata"))webContentNode.addMixin("metadata:siteMetadata");
         wcmPublicationService.enrollNodeInLifecycle(webContentNode, StageAndVersionPublicationConstant.LIFECYCLE_NAME);
         wcmPublicationService.publishContentSCV(webContentNode, page, parentNode.getName());
@@ -185,7 +196,7 @@ public class TestSearchService extends BaseWCMTestCase {
     // Create 5 nodes which have status is DRAFT
     for(int i = 5; i < 10; i ++){
       try{
-        webContentNode = createWebcontentNode(parentNode, parentNode.getName() + " webcontentNode " + i, null, null, null);
+        webContentNode = createWebcontentNode(parentNode, "webcontentNode " + i, null, null, null);
         if(!webContentNode.isNodeType("metadata:siteMetadata"))webContentNode.addMixin("metadata:siteMetadata");
         wcmPublicationService.enrollNodeInLifecycle(webContentNode, StageAndVersionPublicationConstant.LIFECYCLE_NAME);
         wcmPublicationService.publishContentSCV(webContentNode, page, parentNode.getName());
@@ -237,9 +248,9 @@ public class TestSearchService extends BaseWCMTestCase {
    * @throws Exception the exception
    */
   public void addContentForLiveNode() throws Exception{
-    Node parentNode = (Node)session.getItem("/sites content/live");
+    Node parentNode = (Node)session.getItem("/sites content/live/classic/documents");
     this.addChildNodes(parentNode);
-    assertEquals(parentNode.getNodes().getSize(), 12);
+    assertEquals(parentNode.getNodes().getSize(), 10);
   }
 
   private void addAnotherNode() throws Exception{
@@ -476,7 +487,7 @@ public class TestSearchService extends BaseWCMTestCase {
                timeSearch + " s\n" +
                "\t with this case, don't search any webcontent node type. In this test now, all nodet" +
       "have node type is webcontent then reult is 0");
-      assertEquals(0, paginatedQueryResult.getPage(1).size());
+      assertEquals(10, paginatedQueryResult.getPage(1).size());
     }catch(Exception ex){
       ex.printStackTrace();
     }
@@ -522,7 +533,7 @@ public class TestSearchService extends BaseWCMTestCase {
       WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
       float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
       log.info("\n\tTest case 11: search pages in shared portal and live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(0, paginatedQueryResult.getPage(1).size());
+      assertEquals(5, paginatedQueryResult.getPage(1).size());
       assertEquals(10, paginatedQueryResult.getTotalNodes());
     }catch(Exception ex){
       ex.printStackTrace();
@@ -546,7 +557,7 @@ public class TestSearchService extends BaseWCMTestCase {
       WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
       float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
       log.info("\n\tTest case 12: search pages shared portal and not live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(0, paginatedQueryResult.getPage(1).size());
+      assertEquals(5, paginatedQueryResult.getPage(1).size());
       assertEquals(10, paginatedQueryResult.getTotalNodes());
     }catch(Exception ex){
       ex.printStackTrace();
@@ -572,7 +583,7 @@ public class TestSearchService extends BaseWCMTestCase {
       WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
       float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
       log.info("\n\tTest case 13: search contents are not page/documents with all portal and live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(0, paginatedQueryResult.getPage(1).size());
+      assertEquals(10, paginatedQueryResult.getPage(1).size());
       assertEquals(20, paginatedQueryResult.getTotalNodes());
     }catch(Exception ex){
       ex.printStackTrace();
@@ -596,7 +607,7 @@ public class TestSearchService extends BaseWCMTestCase {
       WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
       float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
       log.info("\n\tTest case 14: search contents are not page/documents with all portal and not live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(0, paginatedQueryResult.getPage(1).size());
+      assertEquals(10, paginatedQueryResult.getPage(1).size());
       assertEquals(20, paginatedQueryResult.getTotalNodes());
     }catch(Exception ex){
       ex.printStackTrace();
@@ -620,7 +631,7 @@ public class TestSearchService extends BaseWCMTestCase {
       WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
       float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
       log.info("\n\tTest case 15: search contents are not page/documents with shared portal and live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(0, paginatedQueryResult.getPage(1).size());
+      assertEquals(5, paginatedQueryResult.getPage(1).size());
       assertEquals(10, paginatedQueryResult.getTotalNodes());
     }catch(Exception ex){
       ex.printStackTrace();
@@ -644,7 +655,7 @@ public class TestSearchService extends BaseWCMTestCase {
       WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
       float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
       log.info("\n\tTest case 16: search contents are not page/documents with shared portal and not live mode \n\tTime search: " + timeSearch + " s\n");
-      assertEquals(0, paginatedQueryResult.getPage(1).size());
+      assertEquals(5, paginatedQueryResult.getPage(1).size());
       assertEquals(10, paginatedQueryResult.getTotalNodes());
     }catch(Exception ex){
       ex.printStackTrace();
@@ -788,8 +799,8 @@ public class TestSearchService extends BaseWCMTestCase {
     this.searchIsLiveMode = true;
     this.searchSelectedPortal = null;
     this.searchKeyword = "This is";
-    Node documentNode = ((Node)session.getItem("/sites content/live/shared/documents")).getNode("documents webcontentNode 0");
-    Node livenode = ((Node)session.getItem("/sites content/live")).getNode("live webcontentNode 0");
+    Node documentNode = ((Node)session.getItem("/sites content/live/shared/documents")).getNode("webcontentNode 0");
+    Node livenode = ((Node)session.getItem("/sites content/live/classic/documents")).getNode("webcontentNode 0");
     queryCriteria.setCategoryUUIDs(new String[]{documentNode.getUUID(), livenode.getUUID()});
     WCMPaginatedQueryResult paginatedQueryResult = new WCMPaginatedQueryResult(20);
     paginatedQueryResult.setQueryCriteria(this.queryCriteria);
@@ -975,20 +986,20 @@ public class TestSearchService extends BaseWCMTestCase {
   }
   
   public void testSearchByTagUUID() throws Exception{
-    Node node = (Node)session.getItem("/sites content/live");
-    node = node.getNode("live webcontentNode 0");
+    Node node = (Node)session.getItem("/sites content/live/classic/documents");
+    node = node.getNode("webcontentNode 0");
     String uuid = node.getUUID();
     
     this.searchDocumentChecked = true;
     this.searchPageChecked = true;
     this.searchIsLiveMode = true;
-    this.searchSelectedPortal = "live";
+    this.searchSelectedPortal = "classic";
     this.searchKeyword = null;
     queryCriteria = createQueryCriteria();
     
     queryCriteria.setFulltextSearch(true);
     queryCriteria.setFulltextSearchProperty(null);
     queryCriteria.setTagUUIDs(new String[]{uuid});
-    assertEquals(0, siteSearchService.searchSiteContents(sessionProvider, queryCriteria, 10, true).getTotalNodes());
+    assertEquals(20, siteSearchService.searchSiteContents(sessionProvider, queryCriteria, 10, true).getTotalNodes());
   }
 }
