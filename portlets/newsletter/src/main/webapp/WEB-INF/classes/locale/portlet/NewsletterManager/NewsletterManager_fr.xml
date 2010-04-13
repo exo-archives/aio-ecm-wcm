@@ -304,15 +304,7 @@
 		<title>
 			<UINewsletterManagerPopup>Voir le contenu de la Newsletter</UINewsletterManagerPopup>
 		</title>
-	</UINewsletterEntryViewForm>	
-	
-	<WebContent>
-		<dialog>
-			<label>
-				<Advanced>Advanced</Advanced>
-			</label>
-		</dialog>
-	</WebContent>	
+	</UINewsletterEntryViewForm>			
 	
 	<UIRemoveModeratorsFormPopupWindow>
 		<title>
