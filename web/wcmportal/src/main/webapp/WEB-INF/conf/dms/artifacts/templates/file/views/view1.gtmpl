@@ -132,14 +132,9 @@
   	
   	if (node.isNodeType("nt:frozenNode")){
   		String uuid = node.getProperty("jcr:frozenUuid").getString();
-  		Node originalNode = node.getSession().getNodeByUUID(uuid);
-			
-		System.out.println(""+"/rest/jcr/" + repository + "/" + workspace + originalNode.getPath() + "?version=" + node.getParent().getName());
-		return "/rest/jcr/" + repository + "/" + workspace + originalNode.getPath() + "?version=" + node.getParent().getName();
-		
-  	} else {
-	System.out.println("NoteType:"+node.getPrimaryNodeType().getName());
-	System.out.println(""+"/rest/jcr/" + repository + "/" + workspace + node.getPath());
+  		Node originalNode = node.getSession().getNodeByUUID(uuid);					
+		return "/rest/jcr/" + repository + "/" + workspace + originalNode.getPath() + "?version=" + node.getParent().getName();		
+  	} else {	
   		return "/rest/jcr/" + repository + "/" + workspace + node.getPath();
   	}
 	  
