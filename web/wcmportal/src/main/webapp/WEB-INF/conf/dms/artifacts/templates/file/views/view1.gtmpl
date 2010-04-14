@@ -230,12 +230,7 @@
 			        	if(mimeType.startsWith("image")) {
 			        	//prevent ajax cache image
 			        	String rndString = String.valueOf(new Date().getTime());
-			        	String imgSrc = "";
-			        	if(isVersionable(originalNode)) {
-			        	  imgSrc = uicomponent.getDownloadLink(fileLangNode) ;
-			        	} else {
-			        	  imgSrc = "/" + uicomponent.getPortalName() + "/rest/jcr/" + uicomponent.getRepository() + "/" + uicomponent.getWorkspaceName() + fileLangNode.getPath();
-			        	}  
+			        	String imgSrc = "/" + uicomponent.getPortalName() + "/rest/jcr/" + uicomponent.getRepository() + "/" + uicomponent.getWorkspaceName() + originalNode.getPath() + (((fileLangNode.getUUID() != originalNode.getUUID()) && isVersionable(originalNode)) ? ("?version="+fileLangNode.getParent().getName()) :""); 
 			        %> 	
 				    		<div class="ContentDetail">
 				    			<image src="$imgSrc"/>              
