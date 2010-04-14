@@ -30,9 +30,9 @@
   <packaging>pom</packaging>
   <name>eXo ECM - WCM</name>
   <scm>
-    <connection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/tags/1.2.3</connection>
-    <developerConnection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/tags/1.2.3</developerConnection>
-    <url>http://fisheye.exoplatform.org/browse/projects/ecm/wcm/tags/1.2.3</url>
+    <connection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/branches/1.2.3-temp</connection>
+    <developerConnection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/branches/1.2.3-temp</developerConnection>
+    <url>http://fisheye.exoplatform.org/browse/projects/ecm/wcm/branches/1.2.3-temp</url>
   </scm>
   <ciManagement>
     <system>hudson</system>
