@@ -102,16 +102,14 @@ public class UIPCLVContainer extends UIContainer {
    * 
    * @return the header
    */
-  private String getHeader(){
+  private String getHeader() throws Exception {
     PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) portletRequestContext.getRequest();
-    String requestURI = requestWrapper.getRequestURI();
+    String requestURI = URLDecoder.decode(requestWrapper.getRequestURI(), "UTF-8");
     String selectedPage = Util.getUIPortal().getSelectedNode().getUri();
     if (requestURI.endsWith(selectedPage)) return null;
     String[] param = requestURI.split("/");
-    String header = param[param.length - 1];
-    header = header.replaceAll("%20", " ");
-    return header;
+    return param[param.length - 1];
   }
   
 	/**
