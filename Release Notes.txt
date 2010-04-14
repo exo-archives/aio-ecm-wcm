@@ -1,5 +1,5 @@
 ==============================================
-	eXo WCM 1.2.3
+	eXo WCM 1.2.4
 ==============================================
 
 - Introduction
@@ -9,9 +9,6 @@
 	such as webmasters, web designers, content providers and others.
 		eXo WCM helps your company to keep its websites under control by providing a complete solution to build and maintain easily 
 	multiple web sites at a time.
-	
-
-Release Notes - exo-ecm-wcm - Version wcm-1.2.3
 
 ** Bug
     * [WCM-1712] - Can not saved new re-uploaded image for illustration after deleted the old one in images node

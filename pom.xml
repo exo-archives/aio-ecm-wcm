@@ -26,7 +26,7 @@
   </parent>
   <groupId>org.exoplatform.ecm</groupId>
   <artifactId>wcm</artifactId>
-  <version>1.2.3</version>
+  <version>1.2.4-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>eXo ECM - WCM</name>
   <scm>
@@ -49,7 +49,7 @@
     <org.exoplatform.portal.version>2.5.8</org.exoplatform.portal.version>
     <org.exoplatform.webos.version>1.5.5</org.exoplatform.webos.version>
     <org.exoplatform.ecm.workflow.version>1.0.6</org.exoplatform.ecm.workflow.version>
-    <org.exoplatform.ecm.dms.version>2.5.4</org.exoplatform.ecm.dms.version>
+    <org.exoplatform.ecm.dms.version>2.5.5-SNAPSHOT</org.exoplatform.ecm.dms.version>
     <org.exoplatform.exopackage.version>1.2.2</org.exoplatform.exopackage.version>
     <org.exoplatform.ecm.jbpm.version>3.0.2</org.exoplatform.ecm.jbpm.version>
     <bonita.version>4.0</bonita.version>
