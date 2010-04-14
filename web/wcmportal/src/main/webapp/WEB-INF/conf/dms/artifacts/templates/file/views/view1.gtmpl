@@ -73,6 +73,8 @@
 <%
 	import javax.jcr.Node;
 	import javax.jcr.NodeIterator;
+	import org.exoplatform.services.wcm.core.NodeLocation;
+	import javax.portlet.PortletRequest;
 	
 	import org.exoplatform.download.DownloadService;
 	import org.exoplatform.download.InputStreamDownloadResource;
@@ -121,6 +123,26 @@
   public long getFileSize(Node contentNode) throws Exception {
     long size = contentNode.getProperty("jcr:data").getLength()/1024;      	        
     return size;
+  }
+  
+  public String getWebdavURL(Node node) throws Exception {  	  
+	NodeLocation location = NodeLocation.make(node);	  
+  	String repository = location.getRepository();
+  	String workspace = location.getWorkspace();	
+  	
+  	if (node.isNodeType("nt:frozenNode")){
+  		String uuid = node.getProperty("jcr:frozenUuid").getString();
+  		Node originalNode = node.getSession().getNodeByUUID(uuid);
+			
+		System.out.println(""+"/rest/jcr/" + repository + "/" + workspace + originalNode.getPath() + "?version=" + node.getParent().getName());
+		return "/rest/jcr/" + repository + "/" + workspace + originalNode.getPath() + "?version=" + node.getParent().getName();
+		
+  	} else {
+	System.out.println("NoteType:"+node.getPrimaryNodeType().getName());
+	System.out.println(""+"/rest/jcr/" + repository + "/" + workspace + node.getPath());
+  		return "/rest/jcr/" + repository + "/" + workspace + node.getPath();
+  	}
+	  
   }
   
 %>
@@ -213,8 +235,10 @@
 		    <!--div class="Content"-->
 		    	<!--div class="TextContent"-->
 				    <div class="ContentDetail">
-					<%
-					String binarySrc = "/" + uicomponent.getPortalName() + "/rest/jcr/" + uicomponent.getRepository() + "/" + uicomponent.getWorkspaceName() + fileLangNode.getPath();
+					<%			
+							
+					String binarySrc = getWebdavURL(currentNode);					
+					
 					%>
 					<% if(mimeType.startsWith("image")) { %>
 						<!-- ############################ IMAGE ###################################### -->

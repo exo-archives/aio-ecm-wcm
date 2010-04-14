@@ -24,6 +24,7 @@ import javax.portlet.PortletPreferences;
 
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.wcm.core.NodetypeUtils;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.wcm.webui.Utils;
@@ -72,21 +73,23 @@ public class UIPresentationContainer extends UIContainer{
 	 * @throws Exception the exception
 	 */
 	public String getTitle(Node node) throws Exception {
-		String title = null;
-		if (node.hasProperty("exo:title")) {
-			title = node.getProperty("exo:title").getValue().getString();
-		}
+		String title = null;		
 		if (node.hasNode("jcr:content")) {
 			Node content = node.getNode("jcr:content");
 			if (content.hasProperty("dc:title")) {
 				try {
-				title = content.getProperty("dc:title").getValues()[0].getString();
-				} catch (Exception e) {
+					title = content.getProperty("dc:title").getValues()[0].getString();					
+				} catch (Exception e) {	
 					title = null;
 				}
 			}
 		}
-		if (title==null) title = node.getName();
+		
+		if ((title == null) && (node.hasProperty("exo:title"))) {
+			title = node.getProperty("exo:title").getValue().getString();			
+		} else {
+			title = node.getName();
+		}
 
 		return title;
 	}
