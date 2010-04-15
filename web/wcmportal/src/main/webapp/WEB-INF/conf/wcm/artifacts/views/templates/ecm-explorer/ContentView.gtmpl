@@ -98,7 +98,7 @@
 			        %>
 				</div>
 <!-- Status -->
-				<div class="RightColumn" style="border: none" onclick="<%=uicomponent.event("Sort", typeActionLink + "Status")%>">
+				<div class="RightColumn" style="border: none" onclick="<%=uicomponent.event("Sort", typeActionLink + "publication:currentState")%>">
 			    	<%
 			          	if (selectedSortType.equals("Status")) {
 			        		%>
@@ -112,7 +112,7 @@
 					%>
 				</div>
 <!-- Author -->
-				<div class="RightColumn" onclick="<%=uicomponent.event("Sort", typeActionLink + "Author")%>">
+				<div class="RightColumn" onclick="<%=uicomponent.event("Sort", typeActionLink + "exo:owner")%>">
 			        <%
 			          	if (selectedSortType.equals("Author")) {
 			        		%>
@@ -126,7 +126,7 @@
 					%>
 				</div>
 <!-- Date -->			    	
-		    	<div class="RightColumn" onclick="<%= uicomponent.event("Sort", typeActionLink + "Date")%>">
+		    	<div class="RightColumn" onclick="<%= uicomponent.event("Sort", typeActionLink + "exo:dateCreated")%>">
 					<%  
 			       		if (selectedSortType.equals("Date")) {
     	   	 				%>
