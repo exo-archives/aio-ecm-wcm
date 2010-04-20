@@ -26,8 +26,8 @@
     <publication:liveDate>La date de publication</publication:liveDate>
    </option>
    <DisplaySettingBlock>L'écran de réglage</DisplaySettingBlock>
-   <Header>Header</Header>
-   <FormViewTemplate>Viewer template</FormViewTemplate>
+   <Header>En-tête</Header>
+   <FormViewTemplate>Modèle Viewer</FormViewTemplate>
    <PaginatorTemplate>Paginator template</PaginatorTemplate>
    <UICLVBasePathInputSetAction>Base de chemin</UICLVBasePathInputSetAction>
    <UICLVBasePathInput></UICLVBasePathInput>

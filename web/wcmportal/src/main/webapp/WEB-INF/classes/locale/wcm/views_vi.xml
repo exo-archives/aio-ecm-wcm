@@ -28,6 +28,19 @@
   </view>
  </SiteMetadata>
  
+ <UISelectedContentGrid>
+  <label>
+   <name>Tên</name>
+   <add>Thêm</add>
+   <delete>Xóa</delete>  		  		
+  </label>
+  <msg>
+   <no-content-found>Không có nội dung nào được tìm thấy</no-content-found>
+   <non-content>Bạn chưa chọn nội dung nào</non-content>
+   <confirm-delete>Bạn có chắc chắn muốn xóa?</confirm-delete>
+  </msg>
+ </UISelectedContentGrid>
+ 
  <Category>
   <view>
    <label>Phân loại</label>

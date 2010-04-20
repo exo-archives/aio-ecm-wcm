@@ -27,6 +27,19 @@
    </action>
   </view>
  </SiteMetadata>
+ 
+ <UISelectedContentGrid>
+  <label>
+   <name>Nom</name>
+   <add>Ajouter</add>
+   <delete>Effacer</delete>  		  		
+  </label>
+  <msg>
+    <no-content-found>Aucun contenu trouvé</no-content-found>
+    <non-content>Vous n'avez pas choisi n'importe quel contenu</non-content>
+    <confirm-delete>Êtes-vous sûr de vouloir supprimer ?</confirm-delete>
+   </msg>
+ </UISelectedContentGrid>
 
  <Category>
   <view>

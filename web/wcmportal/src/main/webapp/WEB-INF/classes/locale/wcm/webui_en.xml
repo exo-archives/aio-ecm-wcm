@@ -126,6 +126,7 @@
   <msg>
    <no-content-found>No content found</no-content-found>
    <non-content>You didn't select any content</non-content>
+   <confirm-delete>Are you sure want to delete ?</confirm-delete>
   </msg>
  </UISelectedContentGrid>
  
