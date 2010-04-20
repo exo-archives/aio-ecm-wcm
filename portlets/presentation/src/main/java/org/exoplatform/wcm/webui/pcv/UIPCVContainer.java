@@ -281,9 +281,6 @@ public class UIPCVContainer extends UIContainer {
     } catch (UnsupportedEncodingException e) {
       return null;
     }
-    if (!parameters.matches(UIPCVPresentation.PARAMETER_REGX)) {
-      return null;
-    }
     return parameters;
   }
   

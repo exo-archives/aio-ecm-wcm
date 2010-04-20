@@ -416,7 +416,7 @@ public class UIPCLVForm extends UIForm {
 		Node newNode = categoryNode.getNode(nodeName);
 		String path = newNode.getPath();
 
-		String itemPath = path.substring(path.lastIndexOf(preferenceTreeName));
+		String itemPath = preferenceTreeName + path.replaceAll(treeNode.getPath(), "");
 		String backToCategory = "";
 		if (categoryPath.equals("")) {
 			backToCategory = pageNodeSelected;
