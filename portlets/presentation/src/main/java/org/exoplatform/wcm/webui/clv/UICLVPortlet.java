@@ -177,27 +177,11 @@ public class UICLVPortlet extends UIPortletApplication {
   @SuppressWarnings("unchecked")
 	public static String[] getContentsByPreference() {
   	try {
-  		WCMConfigurationService configurationService = WCMCoreUtils.getService(WCMConfigurationService.class);
-  		PortletRequestContext context = WebuiRequestContext.getCurrentInstance();
-  		StringBuilder persistenceId = new StringBuilder();
-  		persistenceId.append(PortalConfig.PORTAL_TYPE)
-  		.append("#")
-  		.append(Util.getUIPortal().getName())
-  		.append(":")
-  		.append(configurationService.getRuntimeContextParam(WCMConfigurationService.CLV_PORTLET))
-  		.append("/")
-  		.append(context.getWindowId());
-  		List<String> contents = new ArrayList<String>();
-  		DataStorage dataStorage = WCMCoreUtils.getService(DataStorage.class);
-  		List<?> preferences = dataStorage.getPortletPreferences(new ExoWindowID(persistenceId.toString())).getPreferences();
-  		for (Object object : preferences) {
-  			Preference preference = (Preference) object;
-  			if (UICLVPortlet.CONTENT_LIST.equals(preference.getName())) {
-  				contents = preference.getValues();
-  				break;
-  			}
-  		}
-  		return contents.toArray(new String[contents.size()]);
+  		PortletRequestContext context  = WebuiRequestContext.getCurrentInstance();  		
+  		PortletPreferences preferences = context.getRequest().getPreferences();
+  		
+  		return preferences.getValues(UICLVPortlet.CONTENT_LIST, null);
+
 		} catch (Exception e) {
 			return null;
 		}
