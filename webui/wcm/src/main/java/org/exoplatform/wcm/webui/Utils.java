@@ -374,6 +374,12 @@ public class Utils {
    * @see ApplicationMessage
    */
   public static void createPopupMessage(UIContainer container, String message, Object[] args, int type) {
+    /** TODO: Need to remove this after portal fix the problem with */ 
+    if (isEditPortletInCreatePageWizard()) {
+      Util.getUIPortalApplication().addMessage(new ApplicationMessage(message, args, type));
+      return;
+    }
+    /** End quick fix */
     UIApplication application = container.getAncestorOfType(UIApplication.class);
     application.addMessage(new ApplicationMessage(message, args, type)) ;
     WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
