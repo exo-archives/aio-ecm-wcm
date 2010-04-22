@@ -17,12 +17,12 @@
     along with this program; if not, see <http://www.gnu.org/licenses />.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.exoplatform.ecm</groupId>
     <artifactId>wcm</artifactId>
-    <version>1.2.4-SNAPSHOT</version>
+    <version>1.2.5-SNAPSHOT</version>
   </parent>
   <artifactId>exo.ecm.wcm.webui.wcm</artifactId>
   <name>eXo WCM webui component</name>
@@ -65,17 +65,17 @@
     <dependency>
       <groupId>org.exoplatform.ecm</groupId>
       <artifactId>exo.ecm.wcm.component.wcm</artifactId>
-      <version>1.2.4-SNAPSHOT</version>
+      <version>1.2.5-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.ecm</groupId>
       <artifactId>exo.ecm.wcm.component.search</artifactId>
-      <version>1.2.4-SNAPSHOT</version>
+      <version>1.2.5-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.ecm</groupId>
       <artifactId>exo.ecm.wcm.component.publication</artifactId>
-      <version>1.2.4-SNAPSHOT</version>
+      <version>1.2.5-SNAPSHOT</version>
     </dependency>
   </dependencies>
   <build>
