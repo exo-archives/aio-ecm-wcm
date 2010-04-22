@@ -213,9 +213,9 @@ public class UIContentSearchResult extends UIGrid {
         uiSelectedContentGrid.addCategory(nodePath);
       }
       uiSelectedContentGrid.updateGrid(uiSelectedContentGrid.getUIPageIterator().getCurrentPage());
-      uiSelectedContentGrid.setRendered(true);
-      Utils.updatePortal((PortletRequestContext)event.getRequestContext());
-      Utils.closePopupWindow(contentSearchResult.getAncestorOfType(UIContentSelectorMulti.class), contentSearchResult.getId());
+      contentSelectorMulti.setSelectedTab(1);
+//      Utils.updatePortal((PortletRequestContext)event.getRequestContext());
+//      Utils.closePopupWindow(contentSearchResult.getAncestorOfType(UIContentSelectorMulti.class), contentSearchResult.getId());
     }
   }
 
