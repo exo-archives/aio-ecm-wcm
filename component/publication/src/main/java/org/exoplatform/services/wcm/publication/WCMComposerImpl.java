@@ -112,11 +112,6 @@ public class WCMComposerImpl implements WCMComposer, Startable {
       } catch (Exception e) {}
 		  if (nodeIdentifier.lastIndexOf("/") == 0) nodeIdentifier = nodeIdentifier.substring(1); 
 		}
-		if (MODE_LIVE.equals(mode) && isCached) {
-			String hash = getHash(nodeIdentifier, version, remoteUser);
-			Node cachedNode = (Node)cache.get(hash);
-			if (cachedNode != null) return cachedNode;
-		}
 		Node node = null;
 		try {
 		  node = wcmService.getReferencedContent(sessionProvider, repository, workspace, nodeIdentifier);
@@ -207,7 +202,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	private Node getViewableContent(Node node, HashMap<String, String> filters) throws Exception {
 		if (node.isNodeType("exo:taxonomyLink")) 
 			try {
-				return node = linkManager.getTarget(node);
+				node = linkManager.getTarget(node);
 			}catch(AccessDeniedException ade) {
 				return null;
 			}
@@ -250,7 +245,15 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 				 * END quick fix
 				 */
 				Node node = wcmService.getReferencedContent(sessionProvider, repository, workspace, path);
-				if (node!=null) oid = node.getUUID();
+				if (node!=null) {
+				  oid = node.getUUID();
+				  /* remove parent cache */
+				  updateContents(repository, workspace, part, filters);
+				  taxonomyService = WCMCoreUtils.getService(TaxonomyService.class);
+				  for (Node catnode : taxonomyService.getAllCategories(node)) {
+				    updateContents(repository, catnode.getSession().getWorkspace().getName(), catnode.getPath(), filters);
+				  }
+				}
 			} catch (RepositoryException e) {
 				if (log.isInfoEnabled()) log.info("Can't find UUID for path : "+workspace+":"+path);
 			} finally {
