@@ -9,6 +9,7 @@
 	import org.exoplatform.container.ExoContainerContext;
 	import org.exoplatform.services.security.Identity;
 	import org.exoplatform.services.security.IdentityRegistry;
+	import org.exoplatform.services.jcr.access.SystemIdentity;
 	import org.exoplatform.services.wcm.extensions.publication.impl.PublicationManagerImpl;
 	import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig.Lifecycle;
 	import org.exoplatform.services.wcm.extensions.publication.lifecycle.impl.LifecyclesConfig.State;
@@ -289,7 +290,13 @@
               %>
             </td>
             <td><%= uicomponent.getRevisionCreatedDate(revision)%></td>
-            <td><%= uicomponent.getRevisionAuthor(revision) %></td>
+			<%
+				String author = uicomponent.getRevisionAuthor(revision);
+				if(author.equals(SystemIdentity.SYSTEM) && cNode.hasProperty("exo:owner")){
+					author = cNode.getProperty("exo:owner").getString();
+				}
+			%>
+            <td><%=author%></td>
             <td>
               <%
                 if (revisions.indexOf(revision) == 0) {
