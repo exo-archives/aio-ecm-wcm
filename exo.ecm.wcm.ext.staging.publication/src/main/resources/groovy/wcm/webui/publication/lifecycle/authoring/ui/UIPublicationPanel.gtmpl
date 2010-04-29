@@ -290,13 +290,7 @@
               %>
             </td>
             <td><%= uicomponent.getRevisionCreatedDate(revision)%></td>
-			<%
-				String author = uicomponent.getRevisionAuthor(revision);
-				if(author.equals(SystemIdentity.SYSTEM) && cNode.hasProperty("exo:owner")){
-					author = cNode.getProperty("exo:owner").getString();
-				}
-			%>
-            <td><%=author%></td>
+            <td><%=uicomponent.getRevisionAuthor(revision)%></td>
             <td>
               <%
                 if (revisions.indexOf(revision) == 0) {

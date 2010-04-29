@@ -31,6 +31,7 @@ import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.access.AccessControlEntry;
 import org.exoplatform.services.jcr.access.AccessControlList;
 import org.exoplatform.services.jcr.access.PermissionType;
+import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.impl.core.NodeImpl;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.services.security.IdentityRegistry;
@@ -556,7 +557,14 @@ public class UIPublicationPanel
     return false;
   }
 
-
+    @Override
+    public String getRevisionAuthor(Node revision) throws Exception {
+	String author = super.getRevisionAuthor(revision);
+	if(author.equals(SystemIdentity.SYSTEM) && getCurrentNode().hasProperty("exo:owner")){
+		author = getCurrentNode().getProperty("exo:owner").getString();
+	}
+	return author;
+    }
 
 
 }
