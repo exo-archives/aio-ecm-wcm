@@ -360,4 +360,28 @@
    <language>Changer de langue</language>
    <register>Enregistrer</register>
  </Signin>
+ 
+  <ContentSelector>
+    <title>
+      <GeneralDrives>Lecteurs principaux</GeneralDrives>
+      <GroupDrives>Lecteurs de vos groupes</GroupDrives>
+      <PersonalDrives>Lecteurs personnels</PersonalDrives>
+      <Private>Privé</Private>
+      <Public>Public</Public>
+      <BackupCenter>Centre de Sauvegarder</BackupCenter>
+      <CategorizedDocumentsCenter>Centre Document des Catégories </CategorizedDocumentsCenter>
+      <CollaborationCenter>Centre de Collaboration</CollaborationCenter>
+      <DigitalAssetsManagementCenter>Centre de Management des Matétiels Digitaux</DigitalAssetsManagementCenter>
+      <DMSAdministration>Administrateur de DMS</DMSAdministration>
+      <DocumentsManagementCenter>Centre de Management des Documents</DocumentsManagementCenter>
+      <LiveDocumentsCenter>Centre des Document Vivrés</LiveDocumentsCenter>
+      <PendingDocumentsCenter>Centre des Documents Suppends</PendingDocumentsCenter>
+      <RecordsManagementCenter>Centre de Management Des Records</RecordsManagementCenter>
+      <SharedUsersSpace>Espace partagé utilisateurs</SharedUsersSpace>
+      <Systemfiles>Fichiers système</Systemfiles>
+      <ValidationRequestsDocumentsCenter>Centre de Validation Des Documents Requêtes</ValidationRequestsDocumentsCenter>
+      <ManagedSites>Gestion des Sites</ManagedSites>
+      <SharedSite>Espace Partagé</SharedSite>   
+    </title>
+   </ContentSelector>
 </bundle>
