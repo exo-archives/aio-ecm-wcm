@@ -93,7 +93,7 @@ public class PublicationManagerImpl implements PublicationManager, Startable {
         ExoContainer container = ExoContainerContext.getCurrentContainer();
         IdentityRegistry identityRegistry = (IdentityRegistry) container.getComponentInstanceOfType(IdentityRegistry.class);
         Identity identity = identityRegistry.getIdentity(remoteUser);
-        for (State state_ : lifecycle.getStates()) {
+        stateBoucle: for (State state_ : lifecycle.getStates()) {
           if (state.equals(state_.getState())) {
             List<String> memberships = new ArrayList<String>();
             if (state_.getMembership() != null && !"automatic".equals(state_.getMembership())) {
@@ -105,8 +105,24 @@ public class PublicationManagerImpl implements PublicationManager, Startable {
               String[] membershipTab = membership.split(":");
               if (identity.isMemberOf(membershipTab[1], membershipTab[0])) {
                 lifecycles.add(lifecycle);
-                break;
+                continue stateBoucle;
               }
+            }
+            
+            if(state_.getRoles() != null && state_.getRoles().size()>0){
+                List<String> userRoles = new ArrayList<String>(identity.getRoles());
+                userRoles.retainAll(state_.getRoles());
+                if(userRoles.size()>0) {
+                    lifecycles.add(lifecycle);
+                    continue stateBoucle;
+                }
+            }
+            
+            if(state_.getRole() != null && state_.getRole().length()>0){
+                if(state_.getRole().contains(state_.getRole())) {
+                    lifecycles.add(lifecycle);
+                    continue stateBoucle;
+                }
             }
           }
         }
