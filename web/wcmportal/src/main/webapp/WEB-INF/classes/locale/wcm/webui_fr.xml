@@ -364,24 +364,24 @@
   <ContentSelector>
     <title>
       <GeneralDrives>Lecteurs principaux</GeneralDrives>
-      <GroupDrives>Lecteurs de vos groupes</GroupDrives>
+      <GroupDrives>Lecteurs vos groupes</GroupDrives>
       <PersonalDrives>Lecteurs personnels</PersonalDrives>
       <Private>Privé</Private>
       <Public>Public</Public>
-      <BackupCenter>Centre de Sauvegarder</BackupCenter>
-      <CategorizedDocumentsCenter>Centre Document des Catégories </CategorizedDocumentsCenter>
+      <BackupCenter>Centre de Sauvegarde</BackupCenter>
+      <CategorizedDocumentsCenter>Centre des documents catégorisés</CategorizedDocumentsCenter>
       <CollaborationCenter>Centre de Collaboration</CollaborationCenter>
-      <DigitalAssetsManagementCenter>Centre de Management des Matétiels Digitaux</DigitalAssetsManagementCenter>
+      <DigitalAssetsManagementCenter>Centre de gestion de Matériels Digitales</DigitalAssetsManagementCenter>
       <DMSAdministration>Administrateur de DMS</DMSAdministration>
-      <DocumentsManagementCenter>Centre de Management des Documents</DocumentsManagementCenter>
-      <LiveDocumentsCenter>Centre des Document Vivrés</LiveDocumentsCenter>
-      <PendingDocumentsCenter>Centre des Documents Suppends</PendingDocumentsCenter>
-      <RecordsManagementCenter>Centre de Management Des Records</RecordsManagementCenter>
-      <SharedUsersSpace>Espace partagé utilisateurs</SharedUsersSpace>
+      <DocumentsManagementCenter>Centre de gestion des Documents</DocumentsManagementCenter>
+      <LiveDocumentsCenter>Centre des Documents publiés</LiveDocumentsCenter>
+      <PendingDocumentsCenter>Centre des Documents en attente</PendingDocumentsCenter>
+      <RecordsManagementCenter>Centre de gestion des enregistrements</RecordsManagementCenter>
+      <SharedUsersSpace>Espace partagé des utilisateurs</SharedUsersSpace>
       <Systemfiles>Fichiers système</Systemfiles>
-      <ValidationRequestsDocumentsCenter>Centre de Validation Des Documents Requêtes</ValidationRequestsDocumentsCenter>
+      <ValidationRequestsDocumentsCenter>Centre des Documents en attente de validation</ValidationRequestsDocumentsCenter>
       <ManagedSites>Gestion des Sites</ManagedSites>
-      <SharedSite>Espace Partagé</SharedSite>   
+      <SharedSite>Site Partagé</SharedSite>   
     </title>
    </ContentSelector>
 </bundle>
