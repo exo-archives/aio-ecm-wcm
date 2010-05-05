@@ -16,10 +16,14 @@
  */
 package org.exoplatform.wcm.webui.selector.content;
 
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
 import org.apache.commons.logging.Log;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.NodeLocation;
 
@@ -74,6 +78,11 @@ public class UIContentTreeNode {
    * @param name the name
    */
   public UIContentTreeNode(String name){
+    name = name.replaceAll("\\.", "/").replaceAll(" ", "");
+    try {
+      name = Util.getPortalRequestContext().getApplicationResourceBundle().getString("ContentSelector.title." + name);
+    } catch (MissingResourceException e) {}
+    
     this.name = name;
     this.treePath = "/" + name;
     nodeLocation = null;
@@ -90,11 +99,24 @@ public class UIContentTreeNode {
    * @param deep the deep
    */
   public UIContentTreeNode(String path, String name, String workSpaceName, Node node, int deep){
+    ResourceBundle resourceBundle = Util.getPortalRequestContext().getApplicationResourceBundle();
+    
+    path = path.replaceAll("\\.", "/").replaceAll(" ", "");
+    path = path.substring(path.lastIndexOf("/") + 1);
+    try {
+      path = resourceBundle.getString("ContentSelector.title." + path);
+    } catch (MissingResourceException e) {}
+    
+    name = name.replaceAll("\\.", "/").replaceAll(" ", "");
+    try {
+      name = resourceBundle.getString("ContentSelector.title." + name);
+    } catch (MissingResourceException e) {}
+    
     this.name = name;
     nodeLocation = NodeLocation.make(node);
     this.deep = deep;
     this.workSpaceName = workSpaceName;
-    this.treePath = path + "/" + name;
+    this.treePath = "/" + path + "/" + name;
   }
 
   /**

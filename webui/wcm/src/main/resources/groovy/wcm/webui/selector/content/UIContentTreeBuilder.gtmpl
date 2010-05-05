@@ -201,7 +201,7 @@
 		else restAction = "eXo.wcm.MyUIWCMTreeView.selectNode('"+id+"')";
 		%>
 		<div onclick="$restAction;$action" treePath="<%=treeNode.getTreePath()%>" style="" id="UIWCMTreeParentNode$id" class="NoneSelectNodeIcon">
-			<div class="DefaultPageIcon"><%=_ctx.appRes("ContentSelector.title." + treeNode.getName().replaceAll("\\.", "/").replaceAll(" ", ""))%></div>
+			<div class="DefaultPageIcon"><%= treeNode.getName() %></div>
 		</div>
 		<div id="UIWCMTreeChildNode$id" class="ViewChildNodes">
 	<%
