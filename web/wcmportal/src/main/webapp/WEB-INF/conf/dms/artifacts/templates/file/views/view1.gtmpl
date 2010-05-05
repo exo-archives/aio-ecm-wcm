@@ -110,7 +110,9 @@
   }
   
   def originalNode = uicomponent.getOriginalNode();
-  def currentNode = uicomponent.getNode() ;
+  def currentNode = uicomponent.getNode() ;  								  
+  def binarySrc = getWebdavURL(currentNode);	
+  def binarySrcWithoutWorkspace = getWebdavURLWithoutWorkspace(currentNode);								
   def fileLangNode = getFileLangNode(currentNode) ;
   def contentNode = fileLangNode.getNode("jcr:content") ;
   def mimeType = contentNode.getProperty("jcr:mimeType").getString() ;
@@ -136,6 +138,20 @@
 		return "/rest/jcr/" + repository + "/" + workspace + originalNode.getPath() + "?version=" + node.getParent().getName();		
   	} else {	
   		return "/rest/jcr/" + repository + "/" + workspace + node.getPath();
+  	}	 
+  }
+  
+    public String getWebdavURLWithoutWorkspace(Node node) throws Exception {  	  
+	NodeLocation location = NodeLocation.make(node);	  
+  	String repository = location.getRepository();
+  	String workspace = location.getWorkspace();	
+  	
+  	if (node.isNodeType("nt:frozenNode")){
+  		String uuid = node.getProperty("jcr:frozenUuid").getString();
+  		Node originalNode = node.getSession().getNodeByUUID(uuid);					
+		return originalNode.getPath() + "?version=" + node.getParent().getName();		
+  	} else {	
+  		return node.getPath();
   	}
 	  
   }
@@ -230,11 +246,6 @@
 		    <!--div class="Content"-->
 		    	<!--div class="TextContent"-->
 				    <div class="ContentDetail">
-					<%			
-							
-					String binarySrc = getWebdavURL(currentNode);					
-					
-					%>
 					<% if(mimeType.startsWith("image")) { %>
 						<!-- ############################ IMAGE ###################################### -->
 						<image src="$imageUrl" width="400" alt="$originalNode.name" />
@@ -296,7 +307,7 @@
 
 		<%} else {%>
 		  <div class="NavigationContainer">       
-		    <div class="TopTitle">$originalNode.name  (<a href="javascript:void(0);" onclick="javascript:eXo.ecm.ECMUtils.generateWebDAVLink('<%=uicomponent.getWebDAVServerPrefix()%>','<%=uicomponent.getPortalName()%>','<%=uicomponent.getRepository()%>','<%=uicomponent.getWorkspaceName()%>','<%=formatNodeName(fileLangNode.getPath())%>','<%=mimeType%>')"><%=_ctx.appRes("File.view.label.download")%></a>)</div>
+		    <div class="TopTitle">$originalNode.name  (<a href="javascript:void(0);" onclick="javascript:eXo.ecm.ECMUtils.generateWebDAVLink('<%=uicomponent.getWebDAVServerPrefix()%>','<%=uicomponent.getPortalName()%>','<%=uicomponent.getRepository()%>','<%=uicomponent.getWorkspaceName()%>','<%=formatNodeName(binarySrcWithoutWorkspace)%>','<%=mimeType%>')"><%=_ctx.appRes("File.view.label.download")%></a>)</div>
 		    <!-- div class="Content" -->
 		    	<!-- div class="TextContent" -->
 			      <%        
