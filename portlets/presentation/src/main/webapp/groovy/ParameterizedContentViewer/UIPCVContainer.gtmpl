@@ -5,7 +5,8 @@
 	import org.exoplatform.portal.webui.util.Util;
 	import org.exoplatform.services.wcm.core.WCMConfigurationService;
 	import org.exoplatform.wcm.webui.pcv.UIPCVPresentation;
-	import org.exoplatform.wcm.webui.Utils;
+	import org.exoplatform.wcm.webui.Utils;	
+	import org.exoplatform.services.wcm.core.NodeLocation;
 
 	def node = uicomponent.getNode();
 	def isPrint = uicomponent.getIsPrint();
@@ -13,12 +14,26 @@
 	def parameterizedPageURI = wcmConfigurationService.getRuntimeContextParam("parameterizedPageURI");
 	def printPreviewPageURI = wcmConfigurationService.getRuntimeContextParam("printPageURI");
 	
+	
+	public Node getSelectedNode(Node node) throws Exception {  	    	
+  	if (node.isNodeType("nt:frozenNode")){
+		NodeLocation location = NodeLocation.make(node);	  
+		String repository = location.getRepository();
+		String workspace = location.getWorkspace();	
+  		String uuid = node.getProperty("jcr:frozenUuid").getString();
+  		Node originalNode = node.getSession().getNodeByUUID(uuid);
+  		return originalNode;		
+	} else {	
+  		return node;
+  	}
+	  
+  }
 %>
 <div id="$uicomponent.id" class="$uicomponent.id">
 	<div class="PCV">
 	<%
 		if (node != null) {
-			def title = uicomponent.getTitle(node);
+			def title = uicomponent.getTitle(getSelectedNode(node));
 			def dateCreated = uicomponent.getCreatedDate(node);
 			boolean isEditMode = false;
 			if(uicomponent.isShowTitle()) {
