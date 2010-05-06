@@ -13,27 +13,13 @@
 	def wcmConfigurationService = uicomponent.getApplicationComponent(WCMConfigurationService.class);
 	def parameterizedPageURI = wcmConfigurationService.getRuntimeContextParam("parameterizedPageURI");
 	def printPreviewPageURI = wcmConfigurationService.getRuntimeContextParam("printPageURI");
-	
-	
-	public Node getSelectedNode(Node node) throws Exception {  	    	
-  	if (node.isNodeType("nt:frozenNode")){
-		NodeLocation location = NodeLocation.make(node);	  
-		String repository = location.getRepository();
-		String workspace = location.getWorkspace();	
-  		String uuid = node.getProperty("jcr:frozenUuid").getString();
-  		Node originalNode = node.getSession().getNodeByUUID(uuid);
-  		return originalNode;		
-	} else {	
-  		return node;
-  	}
-	  
-  }
+  
 %>
 <div id="$uicomponent.id" class="$uicomponent.id">
 	<div class="PCV">
 	<%
 		if (node != null) {
-			def title = uicomponent.getTitle(getSelectedNode(node));
+			def title = uicomponent.getTitle(node);
 			def dateCreated = uicomponent.getCreatedDate(node);
 			boolean isEditMode = false;
 			if(uicomponent.isShowTitle()) {

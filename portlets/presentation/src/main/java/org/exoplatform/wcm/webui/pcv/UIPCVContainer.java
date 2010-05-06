@@ -132,6 +132,10 @@ public class UIPCVContainer extends UIContainer {
    */
   public String getTitle(Node node) throws Exception {
 	  String title = null;
+	  if (node.isNodeType("nt:frozenNode")){
+			String uuid = node.getProperty("jcr:frozenUuid").getString();
+	  		node = node.getSession().getNodeByUUID(uuid);
+	  }
 	  if (node.hasNode("jcr:content")) {
 		  Node content = node.getNode("jcr:content");
 		  if (content.hasProperty("dc:title")) {
