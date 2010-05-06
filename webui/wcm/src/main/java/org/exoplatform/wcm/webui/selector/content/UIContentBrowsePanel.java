@@ -166,12 +166,11 @@ public abstract class UIContentBrowsePanel extends UIBaseNodeTreeSelector implem
       String type = event.getRequestContext().getRequestParameter(OBJECTID);
       if(type.equals(contentBrowsePanel.selectedValues)) return;
       contentBrowsePanel.selectedValues = type;
-      UISelectPathPanel selectPathPanel = contentBrowsePanel.getChild(UISelectPathPanel.class);
-      selectPathPanel.setParentNode(null);
-      selectPathPanel.updateGrid();
       contentBrowsePanel.reRenderChild(contentBrowsePanel.selectedValues);
       contentBrowsePanel.init();
-      event.getRequestContext().addUIComponentToUpdateByAjax(contentBrowsePanel);
+      UISelectPathPanel selectPathPanel = contentBrowsePanel.getChild(UISelectPathPanel.class);
+      selectPathPanel.updateGrid();
+      event.getRequestContext().addUIComponentToUpdateByAjax(selectPathPanel);
     }
   }
 }
