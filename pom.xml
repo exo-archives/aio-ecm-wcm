@@ -81,14 +81,6 @@
         <configuration>
           <systemProperties>
             <property>
-              <name>maven.exoplatform.dir</name>
-              <value>${exo.directory.base}/projects/exo-platform</value>
-            </property>
-            <property>
-              <name>mock.portal.dir</name>
-              <value>${exo.projects.directory.src}/portal/branches/1.2.x/web/portal/src/main/webapp</value>
-            </property>
-            <property>
               <name>org.apache.commons.logging.Log</name>
               <value>org.apache.commons.logging.impl.SimpleLog</value>
             </property>
