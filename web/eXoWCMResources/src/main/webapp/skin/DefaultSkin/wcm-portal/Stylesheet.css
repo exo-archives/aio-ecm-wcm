@@ -238,3 +238,11 @@ td {
 	width: 296px;
 	margin: 3px auto;
 }
+
+.UIPresentationContainer a {
+  color: blue;
+}
+
+.UIPresentationContainer a:hover {
+  text-decoration: underline;
+}
