@@ -110,6 +110,7 @@
   }
   
   def originalNode = uicomponent.getOriginalNode();
+  def originalNodeName = org.exoplatform.ecm.utils.text.Text.unescapeIllegalJcrChars(originalNodeName);  
   def currentNode = uicomponent.getNode() ;  								  
   def binarySrc = getWebdavURL(currentNode);	
   def binarySrcWithoutWorkspace = getWebdavURLWithoutWorkspace(currentNode);								
@@ -201,7 +202,7 @@
 		      <div class="UITabContentContainer">
 		        <div class="UITabContent" style="display: block;"> 
 			        <div class="NavigationContainer">       
-		    				<div class="TopTitle">$originalNode.name</div>
+		    				<div class="TopTitle">$originalNodeName</div>
 				        <%
 				        	if(contentNode.hasProperty("jcr:data")){
 				        	  String iframeId = uicomponent.getId() + "ifame" ;
@@ -215,7 +216,7 @@
 		        </div>
 		        <div class="UITabContent" style="display: none;"> 
 		        	<div class="NavigationContainer">       
-	    					<div class="TopTitle">$originalNode.name</div>
+	    					<div class="TopTitle">$originalNodeName</div>
 			        	<div class="Content">
 			        		<div class="TextContent">
 						        <%
@@ -240,7 +241,7 @@
 						 ) { %>
 
 		  <div class="NavigationContainer">       
-			<div class="TopTitle" style="float:left;">$originalNode.name</div>
+			<div class="TopTitle" style="float:left;">$originalNodeName</div>
 			<div class="TopLink" style="float:right;"><a href="javascript:void(0);" onclick="ajaxRedirect('$imageUrl')"><%=_ctx.appRes("File.view.label.download")%></a></div>
 			<div class="TopTitle">&nbsp;</div>
 		    <!--div class="Content"-->
@@ -248,11 +249,11 @@
 				    <div class="ContentDetail">
 					<% if(mimeType.startsWith("image")) { %>
 						<!-- ############################ IMAGE ###################################### -->
-						<image src="$imageUrl" width="400" alt="$originalNode.name" />
+						<image src="$imageUrl" width="400" alt="$originalNodeName" />
 
 					<% } else if(mimeType.equals("application/x-shockwave-flash")) { %>
 						<!-- ############################ FLASH ########################################## -->
-						<embed width="610" allowscriptaccess="always" wmode="opaque" quality="high" bgcolor="#ffffff" name="$originalNode.name" id="$originalNode.name" src="$binarySrc" type="application/x-shockwave-flash"/>
+						<embed width="610" allowscriptaccess="always" wmode="opaque" quality="high" bgcolor="#ffffff" name="$originalNodeName" id="$originalNodeName" src="$binarySrc" type="application/x-shockwave-flash"/>
 					
 					<% } else if(mimeType.equals("video/x-msvideo")) { %>
 						<!-- ############################ AVI VIDEO ###################################### -->
@@ -291,7 +292,7 @@
 							bgcolor="#ffffff" wmode="transparent" flashvars="playerMode=embedded" />						
 						
 
-					<% } else if(mimeType.equals("application/octet-stream") && originalNode.name.toLowerCase().endsWith(".flv") ) { %>
+					<% } else if(mimeType.equals("application/octet-stream") && originalNodeName.toLowerCase().endsWith(".flv") ) { %>
 						<!-- ############################ FLV VIDEO ###################################### -->
 						<object type="application/x-shockwave-flash" data="/portal/addons/player_flv_multi.swf" width="400" height="300">
 						     <param name="movie" value="/portal/addons/player_flv_multi.swf" />
@@ -307,7 +308,7 @@
 
 		<%} else {%>
 		  <div class="NavigationContainer">       
-		    <div class="TopTitle">$originalNode.name  (<a href="javascript:void(0);" onclick="javascript:eXo.ecm.ECMUtils.generateWebDAVLink('<%=uicomponent.getWebDAVServerPrefix()%>','<%=uicomponent.getPortalName()%>','<%=uicomponent.getRepository()%>','<%=uicomponent.getWorkspaceName()%>','<%=formatNodeName(binarySrcWithoutWorkspace)%>','<%=mimeType%>')"><%=_ctx.appRes("File.view.label.download")%></a>)</div>
+		    <div class="TopTitle">$originalNodeName  (<a href="javascript:void(0);" onclick="javascript:eXo.ecm.ECMUtils.generateWebDAVLink('<%=uicomponent.getWebDAVServerPrefix()%>','<%=uicomponent.getPortalName()%>','<%=uicomponent.getRepository()%>','<%=uicomponent.getWorkspaceName()%>','<%=formatNodeName(binarySrcWithoutWorkspace)%>','<%=mimeType%>')"><%=_ctx.appRes("File.view.label.download")%></a>)</div>
 		    <!-- div class="Content" -->
 		    	<!-- div class="TextContent" -->
 			      <%        
