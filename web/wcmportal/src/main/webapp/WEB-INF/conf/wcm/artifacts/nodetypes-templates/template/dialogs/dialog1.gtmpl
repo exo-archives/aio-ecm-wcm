@@ -17,8 +17,9 @@
 			  <td class="FieldComponent">
 			  <style>
 			  	textarea#templateFile {
-			  		width: 600px !important;
+			  		width: 580px !important;
 			  		height: 400px !important;
+            float: left;
 			  	}
 			  </style>
 				<%
