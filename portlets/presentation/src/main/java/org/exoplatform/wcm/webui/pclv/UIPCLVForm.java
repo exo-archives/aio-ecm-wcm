@@ -285,6 +285,19 @@ public class UIPCLVForm extends UIForm {
 	 * @throws Exception the exception
 	 */
   public String getTitle(Node node) throws Exception {
+    if(node.isNodeType("nt:frozenNode")) {
+      PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+      PortletRequest portletRequest = portletRequestContext.getRequest();
+      PortletPreferences portletPreferences = portletRequest.getPreferences();
+      String workspace = portletPreferences.getValue(UIPCLVPortlet.WORKSPACE, null);
+      String repository = portletPreferences.getValue(UIPCLVPortlet.REPOSITORY, null);
+      String uuid = node.getProperty("jcr:frozenUuid").getString();
+      RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+      Session session = Utils.getSessionProvider().getSession(workspace, manageableRepository);
+      node = session.getNodeByUUID(uuid);
+    }
+    
     String title = null;
     if (node.hasNode("jcr:content")) {
       Node content = node.getNode("jcr:content");
@@ -386,7 +399,7 @@ public class UIPCLVForm extends UIForm {
 		} catch (UnsupportedEncodingException e) {
 		  Utils.createPopupMessage(this, "UIPCLVConfig.msg.decode", null, ApplicationMessage.ERROR);
 		}
-
+		
 		PortletRequest portletRequest = portletRequestContext.getRequest();
 		PortletPreferences portletPreferences = portletRequest.getPreferences();
 		String preferenceRepository = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_REPOSITORY, "");
