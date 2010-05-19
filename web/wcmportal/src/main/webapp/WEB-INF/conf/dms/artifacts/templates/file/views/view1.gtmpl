@@ -110,7 +110,7 @@
   }
   
   def originalNode = uicomponent.getOriginalNode();
-  def originalNodeName = org.exoplatform.ecm.utils.text.Text.unescapeIllegalJcrChars(originalNodeName);  
+  def originalNodeName = org.exoplatform.ecm.utils.text.Text.unescapeIllegalJcrChars(originalNode.name);  
   def currentNode = uicomponent.getNode() ;  								  
   def binarySrc = getWebdavURL(currentNode);	
   def binarySrcWithoutWorkspace = getWebdavURLWithoutWorkspace(currentNode);								
