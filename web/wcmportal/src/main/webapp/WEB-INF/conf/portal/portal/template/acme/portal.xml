@@ -13,19 +13,19 @@
   	</application>	  
   	
   	<container id="ACMEBanner" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
-  		<container id="ACMELogo" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  		<container id="ACMELogo" template="system:/groovy/portal/webui/container/UIContainer2.gtmpl">
   			<application>
 			    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-logo</instance-id>
 			    <title>Banner</title>
 			  </application>
   		</container>
-  		<container id="ACMESearch" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  		<container id="ACMESearch" template="system:/groovy/portal/webui/container/UIContainer2.gtmpl">
 	  		<application>
 			    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-searchbox</instance-id>
 			    <title>Access</title>
 			  </application>
   		</container>
-  		<container id="ACMESignin" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  		<container id="ACMESignin" template="system:/groovy/portal/webui/container/UIContainer2.gtmpl">
 	  		<application>
 			    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-signin</instance-id>
 			    <title>Search box</title>

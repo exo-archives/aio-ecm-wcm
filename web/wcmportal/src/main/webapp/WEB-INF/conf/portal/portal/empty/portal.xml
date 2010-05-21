@@ -13,13 +13,13 @@
   	</application>	  
   	
   	<container id="BannerContainer" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
-  		<container id="Banner" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  		<container id="Banner" template="system:/groovy/portal/webui/container/UIContainer2.gtmpl">
   			<application>
 			    <instance-id>portal#empty:/presentation/SingleContentViewer/empty-banner</instance-id>
 			    <show-info-bar>false</show-info-bar>
 			  </application>
   		</container>
-  		<container id="WCMSearchBox" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  		<container id="WCMSearchBox" template="system:/groovy/portal/webui/container/UIContainer2.gtmpl">
 	  		<application>
 			    <instance-id>portal#empty:/presentation/SingleContentViewer/empty-searchbox</instance-id>
 			    <show-info-bar>false</show-info-bar>

@@ -3,9 +3,9 @@
   <owner-type></owner-type>
   <owner-id></owner-id>
   <name></name>
-  <container template='system:/groovy/portal/webui/container/UIContainer.gtmpl'></container>
-  <container template='system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl'>
-  	<container template='system:/groovy/portal/webui/container/UIContainer.gtmpl'>
+  <container template='system:/groovy/portal/webui/container/UIContainer2.gtmpl'></container>
+  <container template='system:/groovy/portal/webui/container/UITableColumnContainer2.gtmpl'>
+  	<container template='system:/groovy/portal/webui/container/UIContainer2.gtmpl'>
   		<application>
      	 	<instance-id>/presentation/SingleContentViewer</instance-id>
       	<title>Single Content Presentation</title>
@@ -14,7 +14,7 @@
       	<show-application-mode>false</show-application-mode>
     	</application>  
   	</container>
-    <container template='system:/groovy/portal/webui/container/UIContainer.gtmpl'>
+    <container template='system:/groovy/portal/webui/container/UIContainer2.gtmpl'>
     	<application>
      	 	<instance-id>/presentation/SingleContentViewer</instance-id>
       	<title>Single Content Presentation</title>

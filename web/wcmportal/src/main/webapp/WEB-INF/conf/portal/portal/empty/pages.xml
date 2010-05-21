@@ -8,7 +8,7 @@
     <title>Home Page</title>
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>manager:/platform/web-contributors</edit-permission>
-	  <container id="emptyHomepage" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  <container id="emptyHomepage" template="system:/groovy/portal/webui/container/UIContainer2.gtmpl">
 	  	<application>
 	      <instance-id>portal#empty:/presentation/SingleContentViewer/empty-homepage</instance-id>
 	      <title>Homepage</title>

@@ -8,8 +8,8 @@
 		<title>Home Page</title>
 		<access-permissions>Everyone</access-permissions>
 		<edit-permission>*:/platform/administrators</edit-permission>
-		<container id="ClassicBody" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
-			<container id="ClassicLeft" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+		<container id="ClassicBody" template="system:/groovy/portal/webui/container/UITableColumnContainer2.gtmpl">
+			<container id="ClassicLeft" template="system:/groovy/portal/webui/container/UIContainer2.gtmpl">
 	  			<application>
 				    <instance-id>portal#classic:/presentation/SingleContentViewer/classic-introduce</instance-id>
 				    <title>Introduce</title>
@@ -19,7 +19,7 @@
 			    	<title>News</title>
 			  	</application>
 			  </container>
-	  	<container id="ClassicRight" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  	<container id="ClassicRight" template="system:/groovy/portal/webui/container/UIContainer2.gtmpl">
 	  			<application>
 				    <instance-id>portal#classic:/presentation/SingleContentViewer/classic-howto</instance-id>
 				    <title>How to</title>

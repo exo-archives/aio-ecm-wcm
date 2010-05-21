@@ -4,10 +4,10 @@
   <owner-id></owner-id>
   <name></name>
   <title></title>
-	<container template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	<container template="system:/groovy/portal/webui/container/UIContainer2.gtmpl">
   	<container template="system:/groovy/portal/webui/container/UITabContainer.gtmpl">
     	<factory-id>TabContainer</factory-id>
-      	<container template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+      	<container template="system:/groovy/portal/webui/container/UIContainer2.gtmpl">
 			    <application>
 			      <instance-id>/exoadmin/AccountPortlet</instance-id>
 			      <title>New Account</title>
@@ -15,7 +15,7 @@
 			      <show-application-state>true</show-application-state>      
 			    </application>           	
       	</container>
-      	<container template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+      	<container template="system:/groovy/portal/webui/container/UIContainer2.gtmpl">
 			    <application>
 			      <instance-id>/web/SiteMapPortlet</instance-id>
 			      <title>Sitemap Portlet</title>
