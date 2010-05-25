@@ -279,27 +279,30 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       }
-      UIFCCActionList fastContentCreatorActionList = null;
+      
       Map<String, JcrInputProperty> sortedInputs = DialogFormUtil.prepareMap(fccActionForm.getChildren(), fccActionForm.getInputProperties());
       String repository = UIFCCUtils.getPreferenceRepository() ;
       // Update action node:
-      if(!fccActionForm.isAddNew) {
-        CmsService cmsService = fccActionForm.getApplicationComponent(CmsService.class) ;      
-        Node storedHomeNode = fccActionForm.getParentNode(currentNode).getNode("exo:actions");
-        cmsService.storeNode(fccActionForm.nodeTypeName_, storedHomeNode, sortedInputs, false, repository) ;
-        storedHomeNode.getSession().save();
-        event.getRequestContext().addUIComponentToUpdateByAjax(Utils.getPopupContainer(fastContentCreatorPortlet));
-      } else {
-        
-        // Add lock token if node is locked
-        if (currentNode.isLocked()) {
-          String lockToken = LockUtil.getLockToken(currentNode);
-          if(lockToken != null) {
-            currentNode.getSession().addLockToken(lockToken);
+      ActionServiceContainer actionServiceContainer = fccActionForm.getApplicationComponent(ActionServiceContainer.class) ;
+      try{
+        Node parentNode = fccActionForm.getParentNode(currentNode);
+        String actionName = (String)(sortedInputs.get("/node/exo:name")).getValue() ;
+        if(!fccActionForm.isAddNew) {
+          CmsService cmsService = fccActionForm.getApplicationComponent(CmsService.class) ;      
+          Node storedHomeNode = fccActionForm.getParentNode(currentNode).getNode("exo:actions");
+          cmsService.storeNode(fccActionForm.nodeTypeName_, storedHomeNode, sortedInputs, false, repository) ;
+          storedHomeNode.getSession().save();
+          if (actionName != null)
+            actionServiceContainer.removeAction(parentNode, actionName, repository);
+        } else {
+          // Add lock token if node is locked
+          if (currentNode.isLocked()) {
+            String lockToken = LockUtil.getLockToken(currentNode);
+            if(lockToken != null) {
+              currentNode.getSession().addLockToken(lockToken);
+            }
           }
-        }
-        
-        try{
+         
           JcrInputProperty rootProp = sortedInputs.get("/node");
           if(rootProp == null) {
             rootProp = new JcrInputProperty();
@@ -309,9 +312,6 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
           } else {
             rootProp.setValue((sortedInputs.get("/node/exo:name")).getValue());
           }
-          String actionName = (String)(sortedInputs.get("/node/exo:name")).getValue() ;
-          Node parentNode = fccActionForm.getParentNode(currentNode);
-          
           // Check if action existed
           if(parentNode.hasNode(EXO_ACTIONS)) {
             if(parentNode.getNode(EXO_ACTIONS).hasNode(actionName)) { 
@@ -330,40 +330,42 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
             return;
           }
           
-          // Save to database
-          ActionServiceContainer actionServiceContainer = fccActionForm.getApplicationComponent(ActionServiceContainer.class) ;
-          actionServiceContainer.addAction(parentNode, repository, fccActionForm.nodeTypeName_, sortedInputs);
           fccActionForm.setIsOnchange(false) ;
           parentNode.getSession().save() ;
           
           // Create action
           fccActionForm.createNewAction(fastContentCreatorConfig.getSavedLocationNode(), fccActionForm.nodeTypeName_, true) ;
-          fastContentCreatorActionList = fastContentCreatorConfig.findFirstComponentOfType(UIFCCActionList.class) ;  
-          fastContentCreatorActionList.updateGrid(parentNode, fastContentCreatorActionList.getChild(UIGrid.class).getUIPageIterator().getCurrentPage());
           fccActionForm.reset() ;
-        } catch(RepositoryException repo) {      
-          String key = "UIFastContentCreatorActionForm.msg.repository-exception" ;
-          uiApp.addMessage(new ApplicationMessage(key, null, ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return;
-        } catch(NumberFormatException nume) {
-          String key = "UIFastContentCreatorActionForm.msg.numberformat-exception" ;
-          uiApp.addMessage(new ApplicationMessage(key, null, ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return;
-        } catch (NullPointerException nullPointerException) {
-          uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorActionForm.msg.unable-add", null, ApplicationMessage.WARNING));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return;
-        } catch (Exception e) {           
-          uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorActionForm.msg.unable-add", null, ApplicationMessage.WARNING));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return;
-        }      
-      
+        }
+        
+        // Save to database
+        actionServiceContainer.addAction(parentNode, repository, fccActionForm.nodeTypeName_, sortedInputs);
+  
+        UIFCCActionList fastContentCreatorActionList = fastContentCreatorConfig.findFirstComponentOfType(UIFCCActionList.class) ;  
+        fastContentCreatorActionList.updateGrid(parentNode, fastContentCreatorActionList.getChild(UIGrid.class).getUIPageIterator().getCurrentPage());
         event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorActionList);
-        event.getRequestContext().addUIComponentToUpdateByAjax(Utils.getPopupContainer(fastContentCreatorPortlet));        
-      }
+        event.getRequestContext().addUIComponentToUpdateByAjax(Utils.getPopupContainer(fastContentCreatorPortlet));
+      
+      } catch(RepositoryException repo) {      
+        String key = "UIFastContentCreatorActionForm.msg.repository-exception" ;
+        uiApp.addMessage(new ApplicationMessage(key, null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
+      } catch(NumberFormatException nume) {
+        String key = "UIFastContentCreatorActionForm.msg.numberformat-exception" ;
+        uiApp.addMessage(new ApplicationMessage(key, null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
+      } catch (NullPointerException nullPointerException) {
+        uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorActionForm.msg.unable-add", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
+      } catch (Exception e) {           
+        uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorActionForm.msg.unable-add", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
+      }      
+      
       Utils.closePopupWindow(fccActionForm, UIFCCConstant.ACTION_POPUP_WINDOW);      
       
     }
