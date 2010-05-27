@@ -24,6 +24,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.cms.link.LinkManager;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.WCMService;
@@ -59,7 +60,7 @@ public class WCMServiceImpl implements WCMService {
 		  }
 		}
 		if (content != null && linkManager.isLink(content)) {
-		  content = linkManager.getTarget(content, true);
+		  content = linkManager.getTarget(content, SystemIdentity.SYSTEM.equals(session.getUserID()));
 		}
 		return content;
 	}
