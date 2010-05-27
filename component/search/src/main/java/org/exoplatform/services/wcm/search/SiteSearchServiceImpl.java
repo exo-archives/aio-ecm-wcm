@@ -235,11 +235,11 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     QueryTermHelper queryTermHelper = new QueryTermHelper();    
     String queryTerm = null;
     keyword = keyword.replaceAll("'","''");
-    if (keyword.contains("*") || keyword.contains("?") || keyword.contains("~")) {
+//    if (keyword.contains("*") || keyword.contains("?") || keyword.contains("~")) {
       queryTerm = queryTermHelper.contains(keyword).buildTerm();
-    } else {
-      queryTerm = queryTermHelper.contains(keyword).allowFuzzySearch().buildTerm();
-    }      
+//    } else {
+//      queryTerm = queryTermHelper.contains(keyword).allowFuzzySearch().buildTerm();
+//    }      
     String scope = queryCriteria.getFulltextSearchProperty();
     if(QueryCriteria.ALL_PROPERTY_SCOPE.equals(scope) || scope == null) {
       queryBuilder.contains(null, queryTerm, LOGICAL.NULL);
