@@ -22,6 +22,7 @@ import javax.jcr.Session;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.services.cms.link.LinkManager;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -46,6 +47,7 @@ public class WCMServiceImpl implements WCMService {
 		RepositoryService repositoryService = (RepositoryService)container.getComponentInstanceOfType(RepositoryService.class);
 		ManageableRepository manageableRepository = repositoryService.getRepository(repository);
 		Session session = sessionProvider.getSession(workspace, manageableRepository);
+		LinkManager linkManager = (LinkManager)container.getComponentInstanceOfType(LinkManager.class);
 		Node content = null;
 		try {
 			content = session.getNodeByUUID(nodeIdentifier);
@@ -55,6 +57,9 @@ public class WCMServiceImpl implements WCMService {
 		  } catch(Exception exception) {
 		    content = null;
 		  }
+		}
+		if (content != null && linkManager.isLink(content)) {
+		  content = linkManager.getTarget(content, true);
 		}
 		return content;
 	}
