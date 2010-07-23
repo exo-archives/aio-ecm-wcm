@@ -1,0 +1,13 @@
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates/wcm-search/search-page-layout/UIResultPageLayoutDefault.gtmpl
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates/wcm-search/search-page-layout/UIResultPageLayoutDefault.gtmpl	(revision 48875)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates/wcm-search/search-page-layout/UIResultPageLayoutDefault.gtmpl	(working copy)
+@@ -12,7 +12,7 @@
+ 		def portletId = rcontext.getWindowId();
+ 		portletId = isPortalAppEditting ? "EditMode-" + portletId : portletId;
+ 		def quickEditingBlockId = portletId + "-QuickEditingBlock";
+-		rcontext.getJavascriptManager().addOnLoadJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '");');
++		rcontext.getJavascriptManager().addOnLoadJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
+ 		if(Utils.isShowQuickEdit()) {		
+ 	%>
+ 		<div style="position: relative; height: 0px;" id="<%=quickEditingBlockId%>">
