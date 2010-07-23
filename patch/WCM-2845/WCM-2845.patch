@@ -1,0 +1,113 @@
+Index: portlets/presentation/src/main/java/org/exoplatform/wcm/webui/category/UICategoryNavigationTree.java
+===================================================================
+--- portlets/presentation/src/main/java/org/exoplatform/wcm/webui/category/UICategoryNavigationTree.java	(revision 49647)
++++ portlets/presentation/src/main/java/org/exoplatform/wcm/webui/category/UICategoryNavigationTree.java	(working copy)
+@@ -117,7 +117,6 @@
+     try {
+       rootTreeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
+     } catch (RepositoryException e) {
+-      return;
+     }
+     setRootTreeNode(rootTreeNode);
+     setAcceptedNodeTypes(new String[] {"nt:folder", "nt:unstructured", "nt:file", "exo:taxonomy"});
+@@ -205,7 +204,14 @@
+     String preferenceRepository = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_REPOSITORY, "");
+     String preferenceTreeName = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, "");
+     TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
+-    Node treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
++    Node treeNode = null;
++    try {
++      treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
++    } catch (RepositoryException e) {
++      currentNode = null;
++      super.processRender(context);
++      return;
++    }
+     String categoryPath = parameters.substring(parameters.indexOf("/") + 1);
+     if (preferenceTreeName.equals(categoryPath)) categoryPath = "";
+     try {
+Index: portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/CategoryNavigation/CategoryNavigation_fr.xml
+===================================================================
+--- portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/CategoryNavigation/CategoryNavigation_fr.xml	(revision 49647)
++++ portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/CategoryNavigation/CategoryNavigation_fr.xml	(working copy)
+@@ -30,4 +30,9 @@
+    <Save>Sauver</Save>
+   </action>
+  </UICategoryNavigationConfig>
+-</bundle>
+\ No newline at end of file
++ <UICategoryNavigationTreeBase>
++    <msg>
++      <not-existed-category>Cette catégorie n'existe pas</not-existed-category>
++    </msg>
++ </UICategoryNavigationTreeBase>
++</bundle>
+Index: portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/CategoryNavigation/CategoryNavigation_vi.xml
+===================================================================
+--- portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/CategoryNavigation/CategoryNavigation_vi.xml	(revision 49647)
++++ portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/CategoryNavigation/CategoryNavigation_vi.xml	(working copy)
+@@ -30,4 +30,10 @@
+    <Save>Lưu</Save>
+   </action>
+  </UICategoryNavigationConfig>
+-</bundle>
+\ No newline at end of file
++ <UICategoryNavigationTreeBase>
++    <msg>
++      <not-existed-category>Cây phân loại này không tồn tại</not-existed-category>
++    </msg>
++ </UICategoryNavigationTreeBase>
++
++</bundle>
+Index: portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/CategoryNavigation/CategoryNavigation_en.xml
+===================================================================
+--- portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/CategoryNavigation/CategoryNavigation_en.xml	(revision 49647)
++++ portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/CategoryNavigation/CategoryNavigation_en.xml	(working copy)
+@@ -30,4 +30,10 @@
+    <Save>Save</Save>
+   </action>
+  </UICategoryNavigationConfig>
+-</bundle>
+\ No newline at end of file
++ <UICategoryNavigationTreeBase>
++    <msg>
++      <not-existed-category>This category doesn't exist</not-existed-category>
++    </msg>
++ </UICategoryNavigationTreeBase>
++
++</bundle>
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates/category-navigation/vertical-hierachy/SimpleVerticalHierachy.gtmpl
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates/category-navigation/vertical-hierachy/SimpleVerticalHierachy.gtmpl	(revision 49647)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates/category-navigation/vertical-hierachy/SimpleVerticalHierachy.gtmpl	(working copy)
+@@ -36,16 +36,20 @@
+ 		</div>
+ 		<div class="NewContent">
+ 			<%
+-				def categoryUri = uicomponent.resolveCategoryPathByUri(_ctx.getRequestContext());
+-				def categories = uicomponent.getCategoriesByUri(categoryUri);
+-				def rootCategory = categories.get(0);
+-		    def subcategories = uicomponent.getSubcategories(rootCategory);
+-			  for (subcategory in subcategories) {
+-			    def subcategoryName = subcategory.getName();
+-			    def categoryLink = uicomponent.renderCategoryLink(subcategory);
+-			    %><a class="CategoryLabel" href="$categoryLink">$subcategoryName</a><%
+-			    if ((categoryUri+"/").startsWith("/" + subcategoryName + "/")) renderChild(categoryUri, categories, 1);
+-			  }
++		    if (uicomponent.getSelected() != null) {
++  				def categoryUri = uicomponent.resolveCategoryPathByUri(_ctx.getRequestContext());
++  				def categories = uicomponent.getCategoriesByUri(categoryUri);
++  				def rootCategory = categories.get(0);
++  		    def subcategories = uicomponent.getSubcategories(rootCategory);
++  			  for (subcategory in subcategories) {
++  			    def subcategoryName = subcategory.getName();
++  			    def categoryLink = uicomponent.renderCategoryLink(subcategory);
++  			    %><a class="CategoryLabel" href="$categoryLink">$subcategoryName</a><%
++  			    if ((categoryUri+"/").startsWith("/" + subcategoryName + "/")) renderChild(categoryUri, categories, 1);
++  			  }
++		    } else {
++		      %><div style="font-size: 13px; text-align: center; padding: 10px;"><%= _ctx.appRes("UICategoryNavigationTreeBase.msg.not-existed-category");%></div><%
++        }
+ 			%>
+ 		</div>
+ 	</div>
