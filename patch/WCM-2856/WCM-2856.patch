@@ -1,0 +1,111 @@
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/dms/dms-drives-configuration.xml
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/dms/dms-drives-configuration.xml	(revision 48825)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/dms/dms-drives-configuration.xml	(working copy)
+@@ -30,7 +30,29 @@
+               <field  name="showHiddenNode"><boolean>true</boolean></field>
+               <field  name="allowCreateFolder"><string>Both</string></field>       
+             </object>
+-          </object-param>                    
++          </object-param>
++          
++	            <object-param>        
++            <name>Backup Administration</name>
++            <description>Backup workspace set</description>
++            <object type="org.exoplatform.services.cms.drives.DriveData">
++              <field  name="name"><string>Backup Center</string></field>
++              <field  name="repository"><string>repository</string></field>
++              <field  name="workspace"><string>backup</string></field>
++              <field  name="permissions"><string>*:/platform/administrators</string></field>
++              <field  name="homePath"><string>/</string></field>
++              <field  name="icon"><string></string></field>
++              <field  name="views">
++                <string>simple-view, admin-view</string>
++              </field>
++              <field  name="viewPreferences"><boolean>false</boolean></field>
++              <field  name="viewNonDocument"><boolean>false</boolean></field>
++              <field  name="viewSideBar"><boolean>true</boolean></field>
++              <field  name="showHiddenNode"><boolean>false</boolean></field>
++              <field  name="allowCreateFolder"><string>Both</string></field>          
++            </object>
++          </object-param>    
++
+           <object-param>        
+             <name>User's Share</name>
+             <description>Document managements</description>
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/dms/cms-configuration.xml
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/dms/cms-configuration.xml	(revision 48825)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/dms/cms-configuration.xml	(working copy)
+@@ -172,5 +172,71 @@
+ 	  </component-plugin>    
+     
+ 
++    <component-plugin>
++      <name>addPaths</name>
++      <set-method>addPlugin</set-method>
++      <type>org.exoplatform.services.jcr.ext.hierarchy.impl.AddPathPlugin</type>    
++      <init-params>
++        <object-param>
++          <name>cms.configuration</name>
++          <description>configuration for backup workspace</description>
++          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig">
++          	<field  name="repository"><string>repository</string></field>
++           	<field name="workspaces">
++             	<collection type="java.util.ArrayList">
++              	<value><string>backup</string></value>              	               
++              </collection>              	
++            </field>
++            <field  name="jcrPaths">
++             	<collection type="java.util.ArrayList">
++             		<value>              	
++		             	<object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">              	 	
++		             		<field  name="alias"><string>documentsBackupPath</string></field>
++		                <field  name="path"><string>/Expired Documents</string></field>
++		                <field name="mixinTypes">
++				              <collection type="java.util.ArrayList">
++				              	<value><string>exo:documentFolder</string></value>
++				            	</collection>
++				            </field>
++		                <field name="permissions">
++				              <collection type="java.util.ArrayList">               
++				                <value>                            
++				                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
++			                      <field name="identity"><string>*:/platform/administrators</string></field>
++			                      <field name="read"><string>true</string></field>                
++			                      <field name="addNode"><string>true</string></field>                
++			                      <field name="setProperty"><string>true</string></field>                
++			                      <field name="remove"><string>true</string></field>                
++			                    </object>  
++				                </value>
++			                  <value>                            
++			                    <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
++			                      <field name="identity"><string>*:/platform/users</string></field>
++			                      <field name="read"><string>true</string></field>                
++			                      <field name="addNode"><string>true</string></field>                
++			                      <field name="setProperty"><string>true</string></field>                
++			                      <field name="remove"><string>true</string></field>                
++			                    </object>  
++			                  </value>
++			                  <value>                            
++			                    <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
++			                      <field name="identity"><string>any</string></field>
++			                      <field name="read"><string>true</string></field>                
++			                      <field name="addNode"><string>false</string></field>                
++			                      <field name="setProperty"><string>false</string></field>                
++			                      <field name="remove"><string>false</string></field>                
++			                    </object>  
++			                  </value>			                  
++			                </collection>
++			              </field>   			               
++	              	</object>
++              	</value>
++              </collection>              	              	
++            </field>
++          </object>
++        </object-param>
++      </init-params>            
++    </component-plugin>        
++
+   </external-component-plugins> 
+ </configuration>
