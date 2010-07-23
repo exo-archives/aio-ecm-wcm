@@ -34,4 +34,11 @@
    <new-suggestion>Suggestion</new-suggestion>
   </msg>
  </UIDefaultSearchResult>
+ 
+ <UIPaginatorDefault>
+  <label>
+    <previous>Trang trước</previous>
+    <next>Trang sau</next>
+  </label>
+ </UIPaginatorDefault>
 </bundle>

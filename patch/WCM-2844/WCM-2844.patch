@@ -1,0 +1,51 @@
+Index: portlets/searches/src/main/webapp/WEB-INF/classes/locale/portlet/search/AdvanceSearch_vi.xml
+===================================================================
+--- portlets/searches/src/main/webapp/WEB-INF/classes/locale/portlet/search/AdvanceSearch_vi.xml	(revision 48752)
++++ portlets/searches/src/main/webapp/WEB-INF/classes/locale/portlet/search/AdvanceSearch_vi.xml	(working copy)
+@@ -34,4 +34,11 @@
+    <new-suggestion>Suggestion</new-suggestion>
+   </msg>
+  </UIDefaultSearchResult>
++ 
++ <UIPaginatorDefault>
++  <label>
++    <previous>Trang trước</previous>
++    <next>Trang sau</next>
++  </label>
++ </UIPaginatorDefault>
+ </bundle>
+\ No newline at end of file
+Index: portlets/searches/src/main/webapp/WEB-INF/classes/locale/portlet/search/AdvanceSearch_en.xml
+===================================================================
+--- portlets/searches/src/main/webapp/WEB-INF/classes/locale/portlet/search/AdvanceSearch_en.xml	(revision 48752)
++++ portlets/searches/src/main/webapp/WEB-INF/classes/locale/portlet/search/AdvanceSearch_en.xml	(working copy)
+@@ -34,4 +34,11 @@
+    <new-suggestion>Suggestion</new-suggestion>
+   </msg>
+  </UIDefaultSearchResult>
++ 
++ <UIPaginatorDefault>
++  <label>
++    <previous>Previous</previous>
++    <next>Next</next>
++  </label>
++ </UIPaginatorDefault>
+ </bundle>
+\ No newline at end of file
+Index: portlets/searches/src/main/webapp/WEB-INF/classes/locale/portlet/search/AdvanceSearch_fr.xml
+===================================================================
+--- portlets/searches/src/main/webapp/WEB-INF/classes/locale/portlet/search/AdvanceSearch_fr.xml	(revision 48752)
++++ portlets/searches/src/main/webapp/WEB-INF/classes/locale/portlet/search/AdvanceSearch_fr.xml	(working copy)
+@@ -34,4 +34,11 @@
+    <new-suggestion>Suggestion</new-suggestion>
+   </msg>
+  </UIDefaultSearchResult>
++ 
++ <UIPaginatorDefault>
++  <label>
++    <previous>Précédent</previous>
++    <next>Suivant</next>
++  </label>
++ </UIPaginatorDefault>
+ </bundle>
+\ No newline at end of file

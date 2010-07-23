@@ -34,4 +34,11 @@
    <new-suggestion>Suggestion</new-suggestion>
   </msg>
  </UIDefaultSearchResult>
+ 
+ <UIPaginatorDefault>
+  <label>
+    <previous>Précédent</previous>
+    <next>Suivant</next>
+  </label>
+ </UIPaginatorDefault>
 </bundle>
