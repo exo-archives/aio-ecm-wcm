@@ -1,0 +1,27 @@
+Index: connectors/fckeditor/src/main/java/org/exoplatform/wcm/connector/fckeditor/PortalLinkConnector.java
+===================================================================
+--- connectors/fckeditor/src/main/java/org/exoplatform/wcm/connector/fckeditor/PortalLinkConnector.java	(revision 48752)
++++ connectors/fckeditor/src/main/java/org/exoplatform/wcm/connector/fckeditor/PortalLinkConnector.java	(working copy)
+@@ -291,14 +291,15 @@
+     }
+     String pageId = pageNode.getPageReference();
+     Page page = portalConfigService.getPage(pageId, userId);
++    String accessMode = PRIVATE_ACCESS;
+     if (page == null) {
+-      return;
+-    }
+-    String accessMode = PRIVATE_ACCESS;
+-    for (String role : page.getAccessPermissions()) {
+-      if (EVERYONE_PERMISSION.equalsIgnoreCase(role)) {
+-        accessMode = PUBLIC_ACCESS;
+-        break;
++      accessMode = PUBLIC_ACCESS;
++    } else {
++      for (String role : page.getAccessPermissions()) {
++        if (EVERYONE_PERMISSION.equalsIgnoreCase(role)) {
++          accessMode = PUBLIC_ACCESS;
++          break;
++        }
+       }
+     }
+     String pageUri = "/" + servletContext.getServletContextName() + "/" + accessMode + "/" + portalName + "/" + pageNode.getUri();
