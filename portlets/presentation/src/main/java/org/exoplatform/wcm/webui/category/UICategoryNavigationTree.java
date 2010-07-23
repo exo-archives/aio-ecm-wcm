@@ -117,7 +117,6 @@ public class UICategoryNavigationTree extends UIContainer {
     try {
       rootTreeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
     } catch (RepositoryException e) {
-      return;
     }
     setRootTreeNode(rootTreeNode);
     setAcceptedNodeTypes(new String[] {"nt:folder", "nt:unstructured", "nt:file", "exo:taxonomy"});
@@ -205,7 +204,14 @@ public class UICategoryNavigationTree extends UIContainer {
     String preferenceRepository = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_REPOSITORY, "");
     String preferenceTreeName = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, "");
     TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
-    Node treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
+    Node treeNode = null;
+    try {
+      treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
+    } catch (RepositoryException e) {
+      currentNode = null;
+      super.processRender(context);
+      return;
+    }
     String categoryPath = parameters.substring(parameters.indexOf("/") + 1);
     if (preferenceTreeName.equals(categoryPath)) categoryPath = "";
     try {

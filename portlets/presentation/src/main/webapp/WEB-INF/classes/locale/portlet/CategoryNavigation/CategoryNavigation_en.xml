@@ -30,4 +30,10 @@
    <Save>Save</Save>
   </action>
  </UICategoryNavigationConfig>
+ <UICategoryNavigationTreeBase>
+    <msg>
+      <not-existed-category>This category doesn't exist</not-existed-category>
+    </msg>
+ </UICategoryNavigationTreeBase>
+
 </bundle>
