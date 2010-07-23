@@ -1,0 +1,353 @@
+Index: component/search/src/main/java/org/exoplatform/services/wcm/search/PaginatedQueryResult.java
+===================================================================
+--- component/search/src/main/java/org/exoplatform/services/wcm/search/PaginatedQueryResult.java	(revision 48752)
++++ component/search/src/main/java/org/exoplatform/services/wcm/search/PaginatedQueryResult.java	(working copy)
+@@ -16,21 +16,19 @@
+  */
+ package org.exoplatform.services.wcm.search;
+ 
+-import java.util.ArrayList;
+ import java.util.HashMap;
+ import java.util.concurrent.CopyOnWriteArrayList;
+ 
+ import javax.jcr.Node;
+-import javax.jcr.NodeIterator;
+ import javax.jcr.query.QueryResult;
+ import javax.jcr.query.Row;
+ import javax.jcr.query.RowIterator;
+ 
+-import org.exoplatform.container.ExoContainerContext;
+-import org.exoplatform.services.ecm.publication.PublicationPlugin;
+-import org.exoplatform.services.ecm.publication.PublicationService;
++import org.apache.commons.lang.ArrayUtils;
++import org.exoplatform.services.wcm.core.NodeLocation;
+ import org.exoplatform.services.wcm.publication.WCMComposer;
+ import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
++import org.exoplatform.services.wcm.utils.WCMCoreUtils;
+ 
+ /**
+  * Created by The eXo Platform SAS
+@@ -46,28 +44,9 @@
+   /** The row iterator. */  
+   protected QueryResult queryResult;
+   
+-  /** The iterator. */
+-  private NodeIterator iterator;
+-  
+-  /**
+-   * Gets the iterator.
+-   * 
+-   * @return the iterator
+-   */
+-  public NodeIterator getIterator() {
+-    return iterator;
+-  }
++  private boolean isSearchContent;
+ 
+   /**
+-   * Sets the iterator.
+-   * 
+-   * @param iterator the iterator to set
+-   */
+-  public void setIterator(NodeIterator iterator) {
+-    this.iterator = iterator;
+-  }
+-
+-  /**
+    * Instantiates a new paginated query result.
+    * 
+    * @param pageSize the page size
+@@ -85,17 +64,11 @@
+    * 
+    * @throws Exception the exception
+    */
+-  public PaginatedQueryResult(QueryResult queryResult,int pageSize) throws Exception{
++  public PaginatedQueryResult(QueryResult queryResult,int pageSize, boolean isSearchContent) throws Exception{
+     super(pageSize);         
+-    NodeIterator nodeIterator = queryResult.getNodes();
+-    this.setIterator(nodeIterator);
+-    Node node = null;
+-    nodes = new ArrayList<Node>();
+-    while(nodeIterator.hasNext()) {
+-      node = nodeIterator.nextNode();
+-      nodes.add(node);
+-    }
+-    this.setAvailablePage(nodes.size());
++    this.nodeIterator = queryResult.getNodes();
++    this.isSearchContent = isSearchContent;
++    this.setAvailablePage((int)nodeIterator.getSize());    
+     this.queryResult = queryResult;    
+   }
+ 
+@@ -110,10 +83,9 @@
+     checkAndSetPosition(page);            
+     currentListPage_ = new CopyOnWriteArrayList<ResultNode>();
+     int count = 0;    
+-    RowIterator iterator = queryResult.getRows();
+-    NodeIterator nodeIterator = this.getIterator();
+-    while(nodeIterator.hasNext()) {
+-    Node node = nodeIterator.nextNode();      
++    RowIterator iterator = queryResult.getRows();    
++    while (nodeIterator.hasNext()) {      
++      Node node = nodeIterator.nextNode();      
+       Node viewNode = filterNodeToDisplay(node); 
+       
+       if(viewNode != null) {
+@@ -143,15 +115,49 @@
+    * @throws Exception the exception
+    */
+   protected Node filterNodeToDisplay(Node node) throws Exception {
+-    Node displayNode = null;
+-    if(node.isNodeType("nt:resource")) displayNode = node.getParent();
+-    PublicationService publicationService = (PublicationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(PublicationService.class);
+-    String lifecycleName = publicationService.getNodeLifecycleName(node);
+-    if (lifecycleName == null) return node;
+-    PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
+-    HashMap<String, Object> context = new HashMap<String, Object>();
+-    context.put(WCMComposer.FILTER_MODE, queryCriteria.isLiveMode() ? WCMComposer.MODE_LIVE : WCMComposer.MODE_EDIT);
+-    displayNode = publicationPlugin.getNodeView(node, context);
++    Node displayNode = getNodeToCheckState(node);
++    if(displayNode == null) return null;
++    if (isSearchContent) return displayNode;
++    NodeLocation nodeLocation = NodeLocation.make(displayNode);
++    WCMComposer wcmComposer = WCMCoreUtils.getService(WCMComposer.class);
++    HashMap<String, String> filters = new HashMap<String, String>();
++    filters.put(WCMComposer.FILTER_MODE, WCMComposer.MODE_LIVE);
++    return wcmComposer.getContent(nodeLocation.getRepository(), nodeLocation.getWorkspace(), nodeLocation.getPath(), filters, WCMCoreUtils.getSessionProvider());
++  }
++  
++  protected Node getNodeToCheckState(Node node)throws Exception{
++    Node displayNode = node;
++    if (node.getPath().contains("web contents/site artifacts")) {
++      return null;
++    }
++    if (displayNode.isNodeType("nt:resource")) {
++      displayNode = node.getParent();
++    }
++    if (displayNode.isNodeType("exo:htmlFile")) {
++      Node parent = displayNode.getParent();
++      if (parent.isNodeType("exo:webContent")) displayNode = parent;
++    }
++    if(queryCriteria.isSearchWebContent()) {
++      if(!queryCriteria.isSearchDocument()) {
++        if(!displayNode.isNodeType("exo:webContent")) 
++          return null;
++      }
++      if(queryCriteria.isSearchWebpage()) {
++        if (!displayNode.isNodeType("publication:webpagesPublication"))
++          return null;
++      }
++    } else if(queryCriteria.isSearchWebpage()) {
++      if (queryCriteria.isSearchDocument()) {
++        return displayNode;
++      } else if (!displayNode.isNodeType("publication:webpagesPublication"))
++        return null;
++    }
++    String[] contentTypes = queryCriteria.getContentTypes();
++    if(contentTypes != null && contentTypes.length>0) {
++      String primaryNodeType = displayNode.getPrimaryNodeType().getName();
++      if(!ArrayUtils.contains(contentTypes,primaryNodeType))
++        return null;
++    }
+     return displayNode;
+   }
+ }
+Index: component/search/src/main/java/org/exoplatform/services/wcm/search/WCMPaginatedQueryResult.java
+===================================================================
+--- component/search/src/main/java/org/exoplatform/services/wcm/search/WCMPaginatedQueryResult.java	(revision 48752)
++++ component/search/src/main/java/org/exoplatform/services/wcm/search/WCMPaginatedQueryResult.java	(working copy)
+@@ -57,7 +57,7 @@
+    * @throws Exception the exception
+    */
+   public WCMPaginatedQueryResult(QueryResult queryResult, QueryCriteria queryCriteria, int pageSize, boolean isSearchContent) throws Exception {
+-    super(queryResult, pageSize);
++    super(queryResult, pageSize, isSearchContent);
+     this.queryCriteria = queryCriteria;
+   }
+ 
+Index: component/wcm/src/main/java/org/exoplatform/services/wcm/utils/PaginatedQueryResult.java
+===================================================================
+--- component/wcm/src/main/java/org/exoplatform/services/wcm/utils/PaginatedQueryResult.java	(revision 48752)
++++ component/wcm/src/main/java/org/exoplatform/services/wcm/utils/PaginatedQueryResult.java	(working copy)
+@@ -19,7 +19,6 @@
+ import java.util.ArrayList;
+ 
+ import javax.jcr.Node;
+-import javax.jcr.NodeIterator;
+ import javax.jcr.RepositoryException;
+ import javax.jcr.query.QueryResult;
+ import javax.jcr.query.Row;
+@@ -57,13 +56,8 @@
+    */
+   public PaginatedQueryResult(QueryResult queryResult,int pageSize) throws Exception{
+     super(pageSize);         
+-    /*this.nodeIterator = queryResult.getNodes();
+-    this.setAvailablePage((int)nodeIterator.getSize());*/
+-    NodeIterator nodeIterator = queryResult.getNodes();
+-    while(nodeIterator.hasNext()) {
+-      nodes.add(nodeIterator.nextNode());
+-    }
+-    this.setAvailablePage(nodes.size());
++    this.nodeIterator = queryResult.getNodes();
++    this.setAvailablePage((int)nodeIterator.getSize());
+     this.rowIterator = queryResult.getRows();
+   }    
+   
+@@ -73,11 +67,11 @@
+   @SuppressWarnings("unchecked")
+   protected void populateCurrentPage(int page) throws Exception {   
+     checkAndSetPosition(page);
+-    TwoWayRangeIterator twoWayRangeIterator = (TwoWayRangeIterator)nodes;
++    TwoWayRangeIterator twoWayRangeIterator = (TwoWayRangeIterator)nodeIterator;
+     currentListPage_ = new ArrayList();
+     int count = 0;
+-    for(int i = 0; i < nodes.size(); i++){
+-      Node node = nodes.get(i);
++    while (nodeIterator.hasNext()) {
++      Node node = nodeIterator.nextNode();
+       Node viewNode = filterNodeToDisplay(node);      
+       if(viewNode != null) {
+         //Skip back 1 position to get current row mapping to the node
+Index: component/wcm/src/main/java/org/exoplatform/services/wcm/utils/PaginatedNodeIterator.java
+===================================================================
+--- component/wcm/src/main/java/org/exoplatform/services/wcm/utils/PaginatedNodeIterator.java	(revision 48752)
++++ component/wcm/src/main/java/org/exoplatform/services/wcm/utils/PaginatedNodeIterator.java	(working copy)
+@@ -20,6 +20,7 @@
+ import java.util.List;
+ 
+ import javax.jcr.Node;
++import javax.jcr.NodeIterator;
+ 
+ import org.exoplatform.commons.exception.ExoMessageException;
+ import org.exoplatform.commons.utils.PageList;
+@@ -35,6 +36,9 @@
+ 
+   /** The nodes. */
+   protected List<Node> nodes;
++  
++  /** The node iterator. */
++  protected NodeIterator nodeIterator;
+ 
+   /**
+    * Gets the nodes.
+@@ -64,7 +68,7 @@
+   }
+ 
+   /**
+-   * Instantiates a new paginated node iterator.
++   * Used to display nodes in presentation portlets
+    * 
+    * @param pageSize the page size
+    * @param nodes the nodes
+@@ -76,6 +80,19 @@
+     this.currentListPage_ = null;
+   }
+   
++  /**
++   * Used to display nodes in search portlets
++   * 
++   * @param nodeIterator the node iterator
++   * @param pageSize the page size
++   */
++  public PaginatedNodeIterator(NodeIterator nodeIterator, int pageSize) {
++    super(pageSize);
++    this.nodeIterator = nodeIterator;
++    this.setAvailablePage((int)nodeIterator.getSize());
++    this.currentListPage_ = null;
++  }   
++
+   /* (non-Javadoc)
+    * @see org.exoplatform.commons.utils.PageList#populateCurrentPage(int)
+    */
+@@ -88,17 +105,41 @@
+     checkAndSetPosition(page);
+     currentListPage_ = new ArrayList();
+     int count = 0;
+-    for(int i = ((page - 1)*this.getPageSize()); i < nodes.size(); i++) {
+-      currentListPage_.add(nodes.get(i));
+-      count++;
+-      if(count == getPageSize()) {
+-        break;
+-      }  
++    if (nodes != null) {
++      for(int i = ((page - 1)*this.getPageSize()); i < nodes.size(); i++) {
++        currentListPage_.add(nodes.get(i));
++        count++;
++        if(count == getPageSize()) {
++          break;
++        }
++      }
++    } else {
++      while (nodeIterator.hasNext()) {
++        currentListPage_.add(nodeIterator.next());
++        count ++;
++        if(count == getPageSize()) {
++          break;
++        }  
++      }
+     }
+     currentPage_ = page;
+   }
+ 
+   /**
++   * Retrieve the node iterator.
++   * 
++   * @return the node iterator
++   */
++  public NodeIterator getNodeIterator() { return this.nodeIterator; }
++
++  /**
++   * Sets the node iterator.
++   * 
++   * @param iterator the new node iterator
++   */
++  public void setNodeIterator(NodeIterator iterator) { this.nodeIterator = iterator; }
++
++  /**
+    * Retrieve the total pages.
+    * 
+    * @return the total pages
+@@ -117,8 +158,11 @@
+    * 
+    * @return the total nodes
+    */
+-  public long getTotalNodes() { 
+-    return nodes.size();  
++  public long getTotalNodes() {
++    if (nodes != null)
++      return nodes.size();
++    else 
++      return nodeIterator.getSize(); 
+   }
+ 
+   /**
+@@ -163,18 +207,17 @@
+    * @param page the page
+    */
+   protected void checkAndSetPosition(int page) {
+-    try {
+-      //Iterate next
+-      if (page > currentPage_) {
+-        long skipNextNum = (page - (currentPage_ + 1)) * getPageSize();
+-        ((TwoWayRangeIterator)nodes).skip(skipNextNum);
+-      } else if(page <currentPage_) {
+-        //Iterate back
+-        int currentPageSize = currentListPage_.size();
+-        long skipBackNum = ((currentPage_ - page) * getPageSize()) + currentPageSize;      
+-        ((TwoWayRangeIterator)nodes).skipBack(skipBackNum);
+-      }
+-    }catch(Exception e) {}
++    if (nodeIterator == null) return;
++    //Iterate next
++    if (page > currentPage_) {
++      long skipNextNum = (page - (currentPage_ + 1)) * getPageSize();
++      nodeIterator.skip(skipNextNum);
++    } else if(page <currentPage_) {
++      //Iterate back
++      int currentPageSize = currentListPage_.size();
++      long skipBackNum = ((currentPage_ - page) * getPageSize()) + currentPageSize;      
++      ((TwoWayRangeIterator)nodeIterator).skipBack(skipBackNum);           
++    }
+   }
+ 
+   /* (non-Javadoc)
