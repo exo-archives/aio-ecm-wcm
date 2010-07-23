@@ -1,0 +1,725 @@
+Index: component/wcm/src/main/java/org/exoplatform/services/wcm/portal/artifacts/CreatePortalPlugin.java
+===================================================================
+--- component/wcm/src/main/java/org/exoplatform/services/wcm/portal/artifacts/CreatePortalPlugin.java	(revision 48752)
++++ component/wcm/src/main/java/org/exoplatform/services/wcm/portal/artifacts/CreatePortalPlugin.java	(working copy)
+@@ -18,6 +18,7 @@
+ 
+ import org.exoplatform.container.configuration.ConfigurationManager;
+ import org.exoplatform.container.xml.InitParams;
++import org.exoplatform.container.xml.ValueParam;
+ import org.exoplatform.services.deployment.plugins.XMLDeploymentPlugin;
+ import org.exoplatform.services.jcr.RepositoryService;
+ import org.exoplatform.services.jcr.ext.common.SessionProvider;
+@@ -30,6 +31,8 @@
+  */
+ public abstract class CreatePortalPlugin extends XMLDeploymentPlugin { 
+   
++  private int priority;
++  
+   /**
+    * Instantiates a new base portal artifacts plugin.
+    * 
+@@ -40,9 +43,21 @@
+   public CreatePortalPlugin(InitParams initParams, ConfigurationManager configurationManager,
+       RepositoryService repositoryService) {
+     super(initParams, configurationManager, repositoryService);    
++    ValueParam priorityValue = initParams.getValueParam("priority");
++    if (priorityValue != null) priority = Integer.parseInt(priorityValue.getValue());
++    else priority = 0;
+   }
+   
+   /**
++   * Get the plugin's priority
++   * 
++   * @return the plugin's priority 
++   */
++  public int getPriority() {
++    return priority;
++  }
++  
++  /**
+    * Deploy to portal.
+    * 
+    * @param portalName the portal name
+Index: component/wcm/src/main/java/org/exoplatform/services/wcm/portal/artifacts/CreatePortalArtifactsServiceImpl.java
+===================================================================
+--- component/wcm/src/main/java/org/exoplatform/services/wcm/portal/artifacts/CreatePortalArtifactsServiceImpl.java	(revision 48752)
++++ component/wcm/src/main/java/org/exoplatform/services/wcm/portal/artifacts/CreatePortalArtifactsServiceImpl.java	(working copy)
+@@ -17,10 +17,10 @@
+ package org.exoplatform.services.wcm.portal.artifacts;
+ 
+ import java.util.ArrayList;
+-import java.util.HashMap;
++import java.util.Collections;
++import java.util.Comparator;
++import java.util.List;
+ 
+-import org.exoplatform.container.xml.InitParams;
+-import org.exoplatform.container.xml.ValuesParam;
+ import org.exoplatform.services.jcr.ext.common.SessionProvider;
+ import org.exoplatform.services.listener.ListenerService;
+ 
+@@ -33,28 +33,24 @@
+ public class CreatePortalArtifactsServiceImpl implements CreatePortalArtifactsService {
+ 
+   public static final String CREATE_PORTAL_EVENT = "PortalArtifactsInitializerServiceImpl.portal.onCreate";
+-  private HashMap<String,CreatePortalPlugin> artifactPlugins = new HashMap<String,CreatePortalPlugin>();
+-  private ArrayList<String> initialPortals = new ArrayList<String>();
++  private List<CreatePortalPlugin> artifactPlugins = new ArrayList<CreatePortalPlugin>();
+   private ListenerService listenerService;
+ 
+-  @SuppressWarnings("unchecked")
+-  public CreatePortalArtifactsServiceImpl(InitParams initParams, ListenerService listenerService) {     
+-    ValuesParam valuesParam = initParams.getValuesParam("ignored.portals");
+-    if(valuesParam != null) {
+-      initialPortals = valuesParam.getValues();
+-    }
++  public CreatePortalArtifactsServiceImpl(ListenerService listenerService) {     
+     this.listenerService = listenerService;
+   }
+   public void addPlugin(CreatePortalPlugin artifactsPlugin) throws Exception {
+-    artifactPlugins.put(artifactsPlugin.getName(),artifactsPlugin);
++    artifactPlugins.add(artifactsPlugin);
++    Collections.sort(artifactPlugins, new Comparator<CreatePortalPlugin>() {
++      public int compare(CreatePortalPlugin plugin1, CreatePortalPlugin plugin2) {
++        return plugin1.getPriority() - plugin2.getPriority();
++      }
++    });
+   }
+ 
+   public void deployArtifactsToPortal(SessionProvider sessionProvider, String portalName)
+   throws Exception {
+-    //Do not initalize portal artifact for predefined portal
+-    if(initialPortals.contains(portalName)) return ;
+-
+-    for(CreatePortalPlugin plugin: artifactPlugins.values()) {
++    for(CreatePortalPlugin plugin: artifactPlugins) {
+       plugin.deployToPortal(sessionProvider, portalName);
+     }
+     
+Index: component/wcm/src/main/java/org/exoplatform/services/wcm/webcontent/InitialSymlinkPlugin.java
+===================================================================
+--- component/wcm/src/main/java/org/exoplatform/services/wcm/webcontent/InitialSymlinkPlugin.java	(revision 0)
++++ component/wcm/src/main/java/org/exoplatform/services/wcm/webcontent/InitialSymlinkPlugin.java	(revision 0)
+@@ -0,0 +1,96 @@
++/*
++ * Copyright (C) 2003-2010 eXo Platform SAS.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Affero General Public License
++ * as published by the Free Software Foundation; either version 3
++ * of the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see<http://www.gnu.org/licenses/>.
++ */
++package org.exoplatform.services.wcm.webcontent;
++
++import java.util.Iterator;
++
++import javax.jcr.Node;
++import javax.jcr.Session;
++
++import org.apache.commons.logging.Log;
++import org.exoplatform.container.configuration.ConfigurationManager;
++import org.exoplatform.container.xml.InitParams;
++import org.exoplatform.container.xml.ObjectParameter;
++import org.exoplatform.container.xml.ValueParam;
++import org.exoplatform.services.cms.link.LinkManager;
++import org.exoplatform.services.jcr.RepositoryService;
++import org.exoplatform.services.jcr.core.ManageableRepository;
++import org.exoplatform.services.jcr.ext.common.SessionProvider;
++import org.exoplatform.services.log.ExoLogger;
++import org.exoplatform.services.wcm.portal.artifacts.CreatePortalPlugin;
++
++/**
++ * Created by The eXo Platform SAS
++ * Author : Phan Le Thanh Chuong
++ *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
++ * Jun 24, 2010  
++ */
++public class InitialSymlinkPlugin extends CreatePortalPlugin {
++
++  /** The init params. */
++  private InitParams initParams;
++
++  /** The repository service. */
++  private RepositoryService repositoryService;
++
++  /** The link manager service. */
++  private LinkManager linkManager;
++
++  /** The log. */
++  private Log log = ExoLogger.getLogger(this.getClass());
++  
++  public InitialSymlinkPlugin(InitParams initParams, ConfigurationManager configurationManager, RepositoryService repositoryService, LinkManager linkManager) {
++    super(initParams, configurationManager, repositoryService);
++    this.initParams = initParams;
++    this.repositoryService = repositoryService;
++    this.linkManager = linkManager;
++  }
++
++  @SuppressWarnings("unchecked")
++  public void deployToPortal(SessionProvider sessionProvider, String portalName) throws Exception {
++    ValueParam portalValue = initParams.getValueParam("portal");
++    if (portalValue == null || (portalValue != null && !portalName.equals(portalValue.getValue()))) return;
++    Iterator iterator = initParams.getObjectParamIterator();    
++    while(iterator.hasNext()) {
++      ObjectParameter objectParameter = (ObjectParameter)iterator.next();
++      LinkDeploymentDescriptor deploymentDescriptor = (LinkDeploymentDescriptor)objectParameter.getObject();
++      String sourcePath = deploymentDescriptor.getSourcePath();
++      String targetPath = deploymentDescriptor.getTargetPath();
++      // sourcePath should looks like : repository:collaboration:/sites content/live/acme
++
++      String[] src = sourcePath.split(":");
++      String[] tgt = targetPath.split(":");
++
++      if (src.length==3 && tgt.length==3) {
++        ManageableRepository repository = repositoryService.getRepository(src[0]);
++        Session session = sessionProvider.getSession(src[1], repository);
++        ManageableRepository repository2 = repositoryService.getRepository(tgt[0]);
++        Session session2 = sessionProvider.getSession(tgt[1], repository2);
++        try {
++          Node nodeSrc = session.getRootNode().getNode(src[2].substring(1));
++          Node nodeTgt = session2.getRootNode().getNode(tgt[2].substring(1));
++          linkManager.createLink(nodeTgt, "exo:taxonomyLink", nodeSrc);
++          log.info(sourcePath + " has a link into "+targetPath);
++        } finally {
++          session.logout();
++          session2.logout();
++        }
++      }
++    }  
++  }
++  
++}
+Index: component/wcm/src/main/java/org/exoplatform/services/wcm/webcontent/InitialWebContentPlugin.java
+===================================================================
+--- component/wcm/src/main/java/org/exoplatform/services/wcm/webcontent/InitialWebContentPlugin.java	(revision 48752)
++++ component/wcm/src/main/java/org/exoplatform/services/wcm/webcontent/InitialWebContentPlugin.java	(working copy)
+@@ -32,6 +32,7 @@
+ import org.exoplatform.container.configuration.ConfigurationManager;
+ import org.exoplatform.container.xml.InitParams;
+ import org.exoplatform.container.xml.ObjectParameter;
++import org.exoplatform.container.xml.ValueParam;
+ import org.exoplatform.services.cache.CacheService;
+ import org.exoplatform.services.cache.ExoCache;
+ import org.exoplatform.services.deployment.DeploymentDescriptor;
+@@ -39,6 +40,7 @@
+ import org.exoplatform.services.jcr.core.ManageableRepository;
+ import org.exoplatform.services.jcr.ext.common.SessionProvider;
+ import org.exoplatform.services.log.ExoLogger;
++import org.exoplatform.services.security.ConversationState;
+ import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+ import org.exoplatform.services.wcm.portal.artifacts.CreatePortalPlugin;
+ 
+@@ -50,7 +52,6 @@
+  */
+ public class InitialWebContentPlugin extends CreatePortalPlugin {
+   
+-  @SuppressWarnings("unused")
+   private static Log log = ExoLogger.getLogger(CreatePortalPlugin.class);   
+   private InitParams initParams;   
+   private ConfigurationManager configurationManager;  
+@@ -79,6 +80,8 @@
+    */
+   @SuppressWarnings("unchecked")
+   public void deployToPortal(SessionProvider sessionProvider, String portalName) throws Exception {
++    ValueParam portalValue = initParams.getValueParam("portal");
++    if ((portalValue == null && ConversationState.getCurrent() == null) || (portalValue != null && !portalName.equals(portalValue.getValue()))) return;
+     Iterator iterator = initParams.getObjectParamIterator();    
+     while(iterator.hasNext()) {
+       ObjectParameter objectParameter = (ObjectParameter)iterator.next();
+@@ -98,6 +101,7 @@
+       InputStream inputStream = configurationManager.getInputStream(sourcePath);
+       session.importXML(realTargetFolder, inputStream, ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW);
+       session.save();           
++      log.info(deploymentDescriptor.getSourcePath() + " is deployed succesfully into " + realTargetFolder);
+     }
+     Node portalNode = livePortalManagerService.getLivePortal(sessionProvider, portalName);         
+     configure(portalNode,portalName);
+Index: component/wcm/src/main/java/org/exoplatform/services/wcm/webcontent/LinkDeploymentDescriptor.java
+===================================================================
+--- component/wcm/src/main/java/org/exoplatform/services/wcm/webcontent/LinkDeploymentDescriptor.java	(revision 0)
++++ component/wcm/src/main/java/org/exoplatform/services/wcm/webcontent/LinkDeploymentDescriptor.java	(revision 0)
+@@ -0,0 +1,21 @@
++package org.exoplatform.services.wcm.webcontent;
++
++public class LinkDeploymentDescriptor {
++
++	private String sourcePath;
++	private String targetPath;
++	public String getSourcePath() {
++		return sourcePath;
++	}
++	public void setSourcePath(String sourcePath) {
++		this.sourcePath = sourcePath;
++	}
++	public String getTargetPath() {
++		return targetPath;
++	}
++	public void setTargetPath(String targetPath) {
++		this.targetPath = targetPath;
++	}
++	
++	
++}
+Index: component/wcm/src/main/java/org/exoplatform/services/wcm/category/CreateTaxonomyPlugin.java
+===================================================================
+--- component/wcm/src/main/java/org/exoplatform/services/wcm/category/CreateTaxonomyPlugin.java	(revision 48752)
++++ component/wcm/src/main/java/org/exoplatform/services/wcm/category/CreateTaxonomyPlugin.java	(working copy)
+@@ -55,6 +55,7 @@
+ import org.exoplatform.services.jcr.ext.common.SessionProvider;
+ import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+ import org.exoplatform.services.log.ExoLogger;
++import org.exoplatform.services.security.ConversationState;
+ import org.exoplatform.services.wcm.portal.artifacts.CreatePortalPlugin;
+ 
+ /**
+@@ -148,6 +149,8 @@
+    * @see org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin#deployToPortal(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
+    */
+   public void deployToPortal(SessionProvider sessionProvider, String portalName) throws Exception {
++    ValueParam portalValue = params.getValueParam("portal");
++    if ((portalValue == null && ConversationState.getCurrent() == null) || (portalValue != null && !portalName.equals(portalValue.getValue()))) return;
+   	this.portalName = portalName;
+   	ValueParam autoCreated = params.getValueParam("autoCreateInNewRepository");
+     ValueParam workspaceParam = params.getValueParam("workspace");
+Index: component/publication/src/main/java/org/exoplatform/services/wcm/deployment/plugins/XMLDeploymentPlugin.java
+===================================================================
+--- component/publication/src/main/java/org/exoplatform/services/wcm/deployment/plugins/XMLDeploymentPlugin.java	(revision 48752)
++++ component/publication/src/main/java/org/exoplatform/services/wcm/deployment/plugins/XMLDeploymentPlugin.java	(working copy)
+@@ -34,6 +34,12 @@
+ import org.exoplatform.services.log.ExoLogger;
+ 
+ /**
++ * @deprecated This class is deprecated since WCM 1.2.6
++ * @see org.exoplatform.services.wcm.webcontent.InitialWebContentPlugin
++ */
++@Deprecated
++
++/**
+  * Created by The eXo Platform SAS
+  * Author : Hoa Pham
+  * hoa.pham@exoplatform.com
+Index: component/publication/src/main/java/org/exoplatform/services/wcm/deployment/plugins/LinkDeploymentDescriptor.java
+===================================================================
+--- component/publication/src/main/java/org/exoplatform/services/wcm/deployment/plugins/LinkDeploymentDescriptor.java	(revision 48752)
++++ component/publication/src/main/java/org/exoplatform/services/wcm/deployment/plugins/LinkDeploymentDescriptor.java	(working copy)
+@@ -1,5 +1,11 @@
+ package org.exoplatform.services.wcm.deployment.plugins;
+ 
++/**
++ * @deprecated This class is deprecated since WCM 1.2.6
++ * @see org.exoplatform.services.wcm.webcontent.LinkDeploymentDescriptor
++ */
++@Deprecated
++
+ public class LinkDeploymentDescriptor {
+ 
+ 	private String sourcePath;
+Index: component/publication/src/main/java/org/exoplatform/services/wcm/deployment/plugins/LinkDeploymentPlugin.java
+===================================================================
+--- component/publication/src/main/java/org/exoplatform/services/wcm/deployment/plugins/LinkDeploymentPlugin.java	(revision 48752)
++++ component/publication/src/main/java/org/exoplatform/services/wcm/deployment/plugins/LinkDeploymentPlugin.java	(working copy)
+@@ -33,6 +33,12 @@
+ import org.exoplatform.services.log.ExoLogger;
+ 
+ /**
++ * @deprecated This class is deprecated since WCM 1.2.6
++ * @see org.exoplatform.services.wcm.webcontent.InitialSymlinkPlugin
++ */
++@Deprecated
++
++/**
+  * Created by The eXo Platform SAS
+  * Author : Hoa Pham
+  * hoa.pham@exoplatform.com
+Index: component/publication/src/main/java/org/exoplatform/services/wcm/deployment/WCMContentInitializerService.java
+===================================================================
+--- component/publication/src/main/java/org/exoplatform/services/wcm/deployment/WCMContentInitializerService.java	(revision 48752)
++++ component/publication/src/main/java/org/exoplatform/services/wcm/deployment/WCMContentInitializerService.java	(working copy)
+@@ -36,6 +36,12 @@
+ import org.picocontainer.Startable;
+ 
+ /**
++ * @deprecated This class is deprecated since WCM 1.2.6
++ * @see org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService
++ */
++@Deprecated
++
++/**
+  * Created by The eXo Platform SAS
+  * Author : Hoa Pham
+  * hoa.pham@exoplatform.com
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/deployment/classic-deployment-configuration.xml
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/deployment/classic-deployment-configuration.xml	(revision 48752)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/deployment/classic-deployment-configuration.xml	(working copy)
+@@ -2,18 +2,22 @@
+ 
+ <configuration>
+ 
+-  <component>
+-    <type>org.exoplatform.services.wcm.deployment.WCMContentInitializerService</type>
+-  </component>  
+-  
+ 	<external-component-plugins>
+-   		<target-component>org.exoplatform.services.wcm.deployment.WCMContentInitializerService</target-component>    
++   		<target-component>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService</target-component>    
+       <component-plugin> 
+-        <name>Content Initializer Service</name>
++        <name>Initial webcontent artifact for classic site</name>
+         <set-method>addPlugin</set-method>
+-        <type>org.exoplatform.services.wcm.deployment.plugins.XMLDeploymentPlugin</type>
++        <type>org.exoplatform.services.wcm.webcontent.InitialWebContentPlugin</type>
+         <description>XML Deployment Plugin</description>
+         <init-params>
++          <value-param>
++            <name>portal</name>
++            <value>classic</value>
++          </value-param>
++          <value-param>
++            <name>priority</name>
++            <value>1</value>
++          </value-param>
+           <object-param>        
+             <name>Classic Logo Data</name>
+             <description>Deployment Descriptor</description>
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/deployment/acme-deployment-configuration.xml
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/deployment/acme-deployment-configuration.xml	(revision 48752)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/deployment/acme-deployment-configuration.xml	(working copy)
+@@ -2,18 +2,22 @@
+ 
+ <configuration>
+ 
+-  <component>
+-    <type>org.exoplatform.services.wcm.deployment.WCMContentInitializerService</type>
+-  </component>  
+-  
+ 	<external-component-plugins>
+-   		<target-component>org.exoplatform.services.wcm.deployment.WCMContentInitializerService</target-component>    
++   		<target-component>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService</target-component>    
+       <component-plugin> 
+-        <name>Content Initializer Service</name>
++        <name>Initial webcontent artifact for acme site</name>
+         <set-method>addPlugin</set-method>
+-        <type>org.exoplatform.services.wcm.deployment.plugins.XMLDeploymentPlugin</type>
++        <type>org.exoplatform.services.wcm.webcontent.InitialWebContentPlugin</type>
+         <description>XML Deployment Plugin</description>
+         <init-params>
++          <value-param>
++            <name>portal</name>
++            <value>acme</value>
++          </value-param>
++          <value-param>
++            <name>priority</name>
++            <value>1</value>
++          </value-param>
+           <object-param>        
+             <name>ACME Logo data</name>
+             <description>Deployment Descriptor</description>
+@@ -258,17 +262,25 @@
+    
+    
+    	<external-component-plugins>
+-   		<target-component>org.exoplatform.services.wcm.deployment.WCMContentInitializerService</target-component>    
++   		<target-component>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService</target-component>    
+       <component-plugin> 
+-        <name>Content Initializer Service</name>
++        <name>Initial link artifact for acme site</name>
+         <set-method>addPlugin</set-method>
+-        <type>org.exoplatform.services.wcm.deployment.plugins.LinkDeploymentPlugin</type>
++        <type>org.exoplatform.services.wcm.webcontent.InitialSymlinkPlugin</type>
+         <description>Link Deployment Plugin</description>
+         <init-params>
++          <value-param>
++            <name>portal</name>
++            <value>acme</value>
++          </value-param>
++          <value-param>
++            <name>priority</name>
++            <value>3</value>
++          </value-param>
+           <object-param>        
+             <name>link01</name>
+             <description>Deployment Descriptor</description>
+-            <object type="org.exoplatform.services.wcm.deployment.plugins.LinkDeploymentDescriptor">
++            <object type="org.exoplatform.services.wcm.webcontent.LinkDeploymentDescriptor">
+               <field  name="sourcePath"><string>repository:collaboration:/sites content/live/acme/web contents/site artifacts/News/News1</string></field>
+               <field  name="targetPath"><string>repository:collaboration:/sites content/live/acme/categories/acme</string></field>
+             </object>
+@@ -276,7 +288,7 @@
+           <object-param>        
+             <name>link02</name>
+             <description>Deployment Descriptor</description>
+-            <object type="org.exoplatform.services.wcm.deployment.plugins.LinkDeploymentDescriptor">
++            <object type="org.exoplatform.services.wcm.webcontent.LinkDeploymentDescriptor">
+               <field  name="sourcePath"><string>repository:collaboration:/sites content/live/acme/web contents/site artifacts/News/News2</string></field>
+               <field  name="targetPath"><string>repository:collaboration:/sites content/live/acme/categories/acme</string></field>
+             </object>
+@@ -284,7 +296,7 @@
+           <object-param>        
+             <name>link03</name>
+             <description>Deployment Descriptor</description>
+-            <object type="org.exoplatform.services.wcm.deployment.plugins.LinkDeploymentDescriptor">
++            <object type="org.exoplatform.services.wcm.webcontent.LinkDeploymentDescriptor">
+               <field  name="sourcePath"><string>repository:collaboration:/sites content/live/acme/web contents/site artifacts/News/News3</string></field>
+               <field  name="targetPath"><string>repository:collaboration:/sites content/live/acme/categories/acme</string></field>
+             </object>
+@@ -292,7 +304,7 @@
+           <object-param>        
+             <name>link04</name>
+             <description>Deployment Descriptor</description>
+-            <object type="org.exoplatform.services.wcm.deployment.plugins.LinkDeploymentDescriptor">
++            <object type="org.exoplatform.services.wcm.webcontent.LinkDeploymentDescriptor">
+               <field  name="sourcePath"><string>repository:collaboration:/sites content/live/acme/web contents/site artifacts/News/News4</string></field>
+               <field  name="targetPath"><string>repository:collaboration:/sites content/live/acme/categories/acme</string></field>
+             </object>
+@@ -300,7 +312,7 @@
+           <object-param>        
+             <name>link11</name>
+             <description>Deployment Descriptor</description>
+-            <object type="org.exoplatform.services.wcm.deployment.plugins.LinkDeploymentDescriptor">
++            <object type="org.exoplatform.services.wcm.webcontent.LinkDeploymentDescriptor">
+               <field  name="sourcePath"><string>repository:collaboration:/sites content/live/acme/web contents/site artifacts/News/News1</string></field>
+               <field  name="targetPath"><string>repository:collaboration:/sites content/live/acme/categories/acme/World</string></field>
+             </object>
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/deployment/template-deployment-configuration.xml
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/deployment/template-deployment-configuration.xml	(revision 48752)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/deployment/template-deployment-configuration.xml	(working copy)
+@@ -5,14 +5,6 @@
+   <component>
+     <key>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService</key>
+     <type>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsServiceImpl</type>
+-    <init-params>
+-      <values-param>
+-        <name>ignored.portals</name>
+-        <description>initial portals. the service will not deploy data to the initial portal</description>
+-        <value>classic</value>
+-        <value>acme</value>
+-      </values-param>
+-    </init-params>   
+   </component>
+ 
+    <external-component-plugins>
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/deployment/backoffice-deployment-configuration.xml
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/deployment/backoffice-deployment-configuration.xml	(revision 48752)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/deployment/backoffice-deployment-configuration.xml	(working copy)
+@@ -2,18 +2,22 @@
+ 
+ <configuration>
+ 
+-  <component>
+-    <type>org.exoplatform.services.wcm.deployment.WCMContentInitializerService</type>
+-  </component>  
+-  
+ 	<external-component-plugins>
+-   		<target-component>org.exoplatform.services.wcm.deployment.WCMContentInitializerService</target-component>    
++   		<target-component>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService</target-component>    
+       <component-plugin> 
+         <name>Content Initializer Service</name>
+         <set-method>addPlugin</set-method>
+-        <type>org.exoplatform.services.wcm.deployment.plugins.XMLDeploymentPlugin</type>
++        <type>org.exoplatform.services.wcm.webcontent.InitialWebContentPlugin</type>
+         <description>XML Deployment Plugin</description>
+         <init-params>
++          <value-param>
++            <name>portal</name>
++            <value>backoffice</value>
++          </value-param>
++          <value-param>
++            <name>priority</name>
++            <value>1</value>
++          </value-param>
+           <object-param>        
+             <name>Backoffice Breadcrumb data</name>
+             <description>Deployment Descriptor</description>
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/newsletter-configuration.xml
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/newsletter-configuration.xml	(revision 48752)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/newsletter-configuration.xml	(working copy)
+@@ -113,13 +113,21 @@
+ 	</external-component-plugins>
+ 	
+ 	<external-component-plugins>
+-		<target-component>org.exoplatform.services.wcm.deployment.WCMContentInitializerService</target-component>
++		<target-component>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService</target-component>
+ 		<component-plugin>
+-			<name>Content Initializer Service</name>
++			<name>Initial newsletter for classic site</name>
+ 			<set-method>addPlugin</set-method>
+-			<type>org.exoplatform.services.wcm.deployment.plugins.XMLDeploymentPlugin</type>
++			<type>org.exoplatform.services.wcm.webcontent.InitialWebContentPlugin</type>
+ 			<description>XML Deployment Plugin</description>
+ 			<init-params>
++        <value-param>
++          <name>portal</name>
++          <value>classic</value>
++        </value-param>
++        <value-param>
++            <name>priority</name>
++            <value>1</value>
++          </value-param>
+ 				<object-param>
+ 					<name>Demo newsletter for classic site</name>
+ 					<description>Deployment Descriptor</description>
+@@ -136,26 +144,46 @@
+ 						</field>
+ 					</object>
+ 				</object-param>
+-				<object-param>
+-					<name>Demo newsletter for acme site</name>
+-					<description>Deployment Descriptor</description>
+-					<object type="org.exoplatform.services.deployment.DeploymentDescriptor">
+-						<field name="target">
+-							<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
+-								<field name="repository"><string>repository</string></field>
+-								<field name="workspace"><string>collaboration</string></field>
+-								<field name="nodePath"><string>/sites content/live/acme/ApplicationData/NewsletterApplication/DefaultTemplates</string></field>
+-							</object>
+-						</field>
+-						<field name="sourcePath">
+-							<string>war:/conf/wcm/artifacts/site-resources/templates/newsletterBasicTemplate.xml</string>
+-						</field>
+-					</object>
+-				</object-param>
+ 			</init-params>
+ 		</component-plugin>
+ 	</external-component-plugins>
+-	
++  
++  <external-component-plugins>
++    <target-component>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService</target-component>
++    <component-plugin>
++      <name>Initial newsletter for acme site</name>
++      <set-method>addPlugin</set-method>
++      <type>org.exoplatform.services.wcm.webcontent.InitialWebContentPlugin</type>
++      <description>XML Deployment Plugin</description>
++      <init-params>
++        <value-param>
++          <name>portal</name>
++          <value>acme</value>
++        </value-param>
++        <value-param>
++          <name>priority</name>
++          <value>1</value>
++        </value-param>
++        <object-param>
++          <name>Demo newsletter for acme site</name>
++          <description>Deployment Descriptor</description>
++          <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
++            <field name="target">
++              <object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
++                <field name="repository"><string>repository</string></field>
++                <field name="workspace"><string>collaboration</string></field>
++                <field name="nodePath"><string>/sites content/live/acme/ApplicationData/NewsletterApplication/DefaultTemplates</string></field>
++              </object>
++            </field>
++            <field name="sourcePath">
++              <string>war:/conf/wcm/artifacts/site-resources/templates/newsletterBasicTemplate.xml</string>
++            </field>
++          </object>
++        </object-param>
++      </init-params>
++    </component-plugin>
++  </external-component-plugins>
++  
+ 	<external-component-plugins>
+ 		<target-component>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService</target-component>    
+ 			<component-plugin> 
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/taxonomy/backoffice-taxonomies-configuration.xml
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/taxonomy/backoffice-taxonomies-configuration.xml	(revision 48752)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/taxonomy/backoffice-taxonomies-configuration.xml	(working copy)
+@@ -1,12 +1,20 @@
+ <?xml version="1.0" encoding="ISO-8859-1"?>
+ <configuration>
+ 	<external-component-plugins>
+-		<target-component>org.exoplatform.services.cms.taxonomy.TaxonomyService</target-component>
++		<target-component>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService</target-component>
+ 		<component-plugin>
+-			<name>TaxonomyPlugin</name>
+-			<set-method>addTaxonomyPlugin</set-method>
+-			<type>org.exoplatform.services.cms.taxonomy.impl.TaxonomyPlugin</type>
++			<name>Initial taxonomy tree for classic site</name>
++			<set-method>addPlugin</set-method>
++      <type>org.exoplatform.services.wcm.category.CreateTaxonomyPlugin</type>
+ 			<init-params>
++        <value-param>
++          <name>portal</name>
++          <value>backoffice</value>
++        </value-param>
++        <value-param>
++          <name>priority</name>
++          <value>2</value>
++        </value-param>
+ 				<value-param>
+ 					<name>autoCreateInNewRepository</name>
+ 					<value>false</value>
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/taxonomy/classic-taxonomies-configuration.xml
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/taxonomy/classic-taxonomies-configuration.xml	(revision 48752)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/taxonomy/classic-taxonomies-configuration.xml	(working copy)
+@@ -1,12 +1,20 @@
+ <?xml version="1.0" encoding="ISO-8859-1"?>
+ <configuration>
+ 	<external-component-plugins>
+-		<target-component>org.exoplatform.services.cms.taxonomy.TaxonomyService</target-component>
++		<target-component>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService</target-component>
+ 		<component-plugin>
+-			<name>TaxonomyPlugin</name>
+-			<set-method>addTaxonomyPlugin</set-method>
+-			<type>org.exoplatform.services.cms.taxonomy.impl.TaxonomyPlugin</type>
++			<name>Initial taxonomy tree for classic site</name>
++			<set-method>addPlugin</set-method>
++			<type>org.exoplatform.services.wcm.category.CreateTaxonomyPlugin</type>
+ 			<init-params>
++        <value-param>
++          <name>portal</name>
++          <value>classic</value>
++        </value-param>
++        <value-param>
++          <name>priority</name>
++          <value>2</value>
++        </value-param>
+ 				<value-param>
+ 					<name>autoCreateInNewRepository</name>
+ 					<value>false</value>
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/taxonomy/acme-taxonomies-configuration.xml
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/taxonomy/acme-taxonomies-configuration.xml	(revision 48752)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/taxonomy/acme-taxonomies-configuration.xml	(working copy)
+@@ -1,12 +1,20 @@
+ <?xml version="1.0" encoding="ISO-8859-1"?>
+ <configuration>
+ 	<external-component-plugins>
+-		<target-component>org.exoplatform.services.cms.taxonomy.TaxonomyService</target-component>
++		<target-component>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService</target-component>
+ 		<component-plugin>
+-			<name>TaxonomyPlugin</name>
+-			<set-method>addTaxonomyPlugin</set-method>
+-			<type>org.exoplatform.services.cms.taxonomy.impl.TaxonomyPlugin</type>
++			<name>Initial taxonomy tree for acme site</name>
++			<set-method>addPlugin</set-method>
++			<type>org.exoplatform.services.wcm.category.CreateTaxonomyPlugin</type>
+ 			<init-params>
++        <value-param>
++          <name>portal</name>
++          <value>acme</value>
++        </value-param>
++        <value-param>
++          <name>priority</name>
++          <value>2</value>
++        </value-param>
+ 				<value-param>
+ 					<name>autoCreateInNewRepository</name>
+ 					<value>false</value>
