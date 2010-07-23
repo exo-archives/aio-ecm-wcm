@@ -1,0 +1,216 @@
+Index: connectors/fckeditor/src/main/java/org/exoplatform/wcm/connector/fckeditor/DriverConnector.java
+===================================================================
+--- connectors/fckeditor/src/main/java/org/exoplatform/wcm/connector/fckeditor/DriverConnector.java	(revision 48752)
++++ connectors/fckeditor/src/main/java/org/exoplatform/wcm/connector/fckeditor/DriverConnector.java	(working copy)
+@@ -23,6 +23,9 @@
+ import java.util.HashSet;
+ import java.util.Iterator;
+ import java.util.List;
++import java.util.Locale;
++import java.util.MissingResourceException;
++import java.util.ResourceBundle;
+ import java.util.Set;
+ 
+ import javax.jcr.Node;
+@@ -52,6 +55,7 @@
+ import org.exoplatform.services.organization.Group;
+ import org.exoplatform.services.organization.Membership;
+ import org.exoplatform.services.organization.OrganizationService;
++import org.exoplatform.services.resources.ResourceBundleService;
+ import org.exoplatform.services.rest.CacheControl;
+ import org.exoplatform.services.rest.HTTPMethod;
+ import org.exoplatform.services.rest.HeaderParam;
+@@ -65,6 +69,7 @@
+ import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
+ import org.exoplatform.services.wcm.core.NodetypeConstant;
+ import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
++import org.exoplatform.services.wcm.utils.WCMCoreUtils;
+ import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
+ import org.exoplatform.wcm.connector.BaseConnector;
+ import org.exoplatform.wcm.connector.FileUploadHandler;
+@@ -100,6 +105,10 @@
+   /** The limit. */
+   private int limit;
+   
++  private ResourceBundleService  resourceBundleService;
++  
++  private String  resourceBundleNames[];
++  
+   /**
+    * Instantiates a new driver connector.
+    * 
+@@ -109,6 +118,7 @@
+   public DriverConnector(ExoContainer container, InitParams params) {
+     super(container);
+     limit = Integer.parseInt(params.getValueParam("upload.limit.size").getValue());
++    resourceBundleService = WCMCoreUtils.getService(ResourceBundleService.class);
+   }
+ 	
+   /**
+@@ -128,7 +138,8 @@
+   public Response getDrivers(
+   		@QueryParam("repositoryName") String repositoryName,
+   		@QueryParam("workspaceName") String workspaceName,
+-  		@QueryParam("userId") String userId)
++  		@QueryParam("userId") String userId,
++  		@QueryParam("lang") String lang)
+   		throws Exception {
+   	List<DriveData> listDriver = getDriversByUserId(repositoryName, userId);
+   	
+@@ -140,9 +151,9 @@
+     document.appendChild(rootElement);
+ 
+     createAtributeUpload(rootElement, false);
+-    rootElement.appendChild(appendDrivers(document, generalDrivers(listDriver), "General Drives"));
+-    rootElement.appendChild(appendDrivers(document, groupDrivers(listDriver, userId), "Group Drives"));
+-    rootElement.appendChild(appendDrivers(document, personalDrivers(listDriver), "Personal Drives"));
++    rootElement.appendChild(appendDrivers(document, generalDrivers(listDriver), "General Drives", lang));
++    rootElement.appendChild(appendDrivers(document, groupDrivers(listDriver, userId), "Group Drives", lang));
++    rootElement.appendChild(appendDrivers(document, personalDrivers(listDriver), "Personal Drives", lang));
+     
+     CacheControl cacheControl = new CacheControl();
+     cacheControl.setNoCache(true);
+@@ -184,8 +195,9 @@
+       ManageDriveService manageDriveService = (ManageDriveService)ExoContainerContext.getCurrentContainer()
+       	.getComponentInstanceOfType(ManageDriveService.class);
+       
+-      String itemPath = manageDriveService.getDriveByName(driverName, repositoryName).getHomePath()
+-                        + ((currentFolder != null && currentFolder.length() != 0) ? "/" : "")
++      String driverHomePath  = manageDriveService.getDriveByName(driverName, repositoryName).getHomePath();
++      String itemPath = driverHomePath
++                        + ((currentFolder != null && !"".equals(currentFolder) && !driverHomePath.endsWith("/")) ? "/" : "")
+                         + currentFolder;
+       itemPath = StringUtils.replaceOnce(itemPath, "${userId}", userId);
+       Node node = (Node)session.getItem(itemPath);
+@@ -193,7 +205,7 @@
+       return buildXMLResponseForChildren(node, null, repositoryName, filterBy, session, currentPortal);
+ 
+     } catch (Exception e) {
+-      log.error("Error when perform getFoldersAndFiles: ", e.fillInStackTrace());
++      log.error("Error when perform getFoldersAndFiles: ", e);
+     }    
+     return Response.Builder.ok().build();
+   }
+@@ -277,7 +289,7 @@
+       return createProcessUploadResponse(repositoryName, workspaceName, currentFolderNode, siteName, userId, jcrPath,
+           action, language, fileName, uploadId);  
+     } catch (Exception e) {
+-      log.error("Error when perform processUpload: ", e.fillInStackTrace());
++      log.error("Error when perform processUpload: ", e);
+     }
+     return Response.Builder.ok().build();
+   }
+@@ -352,13 +364,15 @@
+ 	 * 
+ 	 * @return the element
+ 	 */
+-	private Element appendDrivers(Document document, List<DriveData> driversList, String groupName) {
++	private Element appendDrivers(Document document, List<DriveData> driversList, String groupName, String lang) {
+ 	  Element folders = document.createElement("Folders");
+-	  folders.setAttribute("name", groupName);
++	  folders.setAttribute("name", resolveDriveLabel(groupName, lang));
+ 	  createAtributeUpload(folders, false);
+     for (DriveData driver : driversList) {
++      String name  = driver.getName();
+       Element folder = document.createElement("Folder");
+-      folder.setAttribute("name", driver.getName());
++      folder.setAttribute("name", name);
++      folder.setAttribute("label", resolveDriveLabel(name, lang));
+       folder.setAttribute("driverPath", driver.getHomePath());
+       createAtributeUpload(folder, true);
+       folders.appendChild(folder);  
+@@ -366,6 +380,17 @@
+ 	  return folders;
+   }
+   
++	private String resolveDriveLabel(String name, String lang) {
++	  if (resourceBundleNames == null) resourceBundleNames = resourceBundleService.getSharedResourceBundleNames();
++	  for (String resourceBundleName : resourceBundleNames) {
++	    try {
++	      ResourceBundle resourceBundle = resourceBundleService.getResourceBundle(resourceBundleName, new Locale(lang));
++	      return resourceBundle.getString("ContentSelector.title."  + name.replaceAll(" ", ""));
++      } catch (MissingResourceException e) {}
++	  }
++	  return name;
++	}
++	
+   /**
+    * Personal drivers.
+    * 
+Index: web/wcmportal/src/main/webapp/fckeditor/exo/content/js/PluginUtils.js
+===================================================================
+--- web/wcmportal/src/main/webapp/fckeditor/exo/content/js/PluginUtils.js	(revision 48752)
++++ web/wcmportal/src/main/webapp/fckeditor/exo/content/js/PluginUtils.js	(working copy)
+@@ -54,11 +54,13 @@
+ 		for(var i = 0; i < nodeList.length; i++) {
+ 			var id = eXoWCM.PluginUtils.generateIdDriver(nodeList[i]);
+ 			var strName = nodeList[i].getAttribute("name");
++			var label  = nodeList[i].getAttribute("label");
++			if (!label) label = strName;
+ 			var driverPath = nodeList[i].getAttribute("driverPath");
+ 			treeHTML += '<div class="Node" onclick="eXoWCM.PluginUtils.actionColExp(this);">';
+ 			treeHTML += 	'<div class="ExpandIcon">';
+-			treeHTML +=			'<a title="'+strName+'" class="NodeIcon DefaultPageIcon" href="javascript:void(0);" onclick="getDir(this, event);" name="'+strName+'" id="'+id+'"  driverPath="'+driverPath+'">';
+-			treeHTML +=				strName;	
++			treeHTML +=			'<a title="'+label+'" class="NodeIcon DefaultPageIcon" href="javascript:void(0);" onclick="getDir(this, event);" name="'+strName+'" id="'+id+'"  driverPath="'+driverPath+'">';
++			treeHTML +=				label;	
+ 			treeHTML += 		'</a>';
+ 			treeHTML +=		'</div>';
+ 			treeHTML +=	'</div>';
+@@ -155,7 +157,7 @@
+ 	} 
+ 	if(!list || list.length <= 0) {
+ 		var tdNoContent = tblRWS.insertRow(1).insertCell(0);
+-		tdNoContent.innerHTML = "There is no content";
++		tdNoContent.innerHTML = UserLanguage.NoContent;
+ 		tdNoContent.className = "Item TRNoContent";
+ 		tdNoContent.setAttribute('colspan', 3);
+ 		document.getElementById("pageNavPosition").innerHTML = "";
+@@ -173,9 +175,11 @@
+ 		var url 			= list[i].getAttribute("url");
+ 		var nodeType	= list[i].getAttribute("nodeType");
+ 		var node = list[i].getAttribute("name");
++		var label = list[i].getAttribute("label");
++		if (!label) label = node;
+ 		var newRow = tblRWS.insertRow(i+1);
+ 		newRow.className = clazz;
+-		newRow.insertCell(0).innerHTML = '<div class="Item '+clazzItem+'" url="'+url+'" nodeType="'+nodeType+'" onclick="eXoWCM.PluginUtils.insertContent(this);">'+node+'</div>';
++		newRow.insertCell(0).innerHTML = '<div class="Item '+clazzItem+'" url="'+url+'" nodeType="'+nodeType+'" onclick="eXoWCM.PluginUtils.insertContent(this);">'+label+'</div>';
+ 		newRow.insertCell(1).innerHTML = '<div class="Item">'+ list[i].getAttribute("dateCreated") +'</div>';
+ 		newRow.insertCell(2).innerHTML = '<div class="Item">'+ list[i].getAttribute("size")+'&nbsp;kb' +'</div>';
+ 		
+@@ -307,6 +311,7 @@
+ 	var beforeNode = null;
+ 	while(currentNode.className != "LeftWorkspace") {
+ 		var curName = currentNode.getAttribute('name');
++		var label  = currentNode.getAttribute('title');
+ 		if(curName != null) {
+ 			var tmpNode = document.createElement("div");	
+ 			tmpNode.className = 'BreadcumbTab';
+@@ -315,11 +320,11 @@
+ 			var node = document.getElementById(currentNode.id);
+ 			if(node) strOnclick = "eXoWCM.PluginUtils.actionBreadcrumbs('"+node.id+"')";		
+ 			if(beforeNode == null) {
+-				strHTML += '<a class="Nomal" href="javascript:void(0);" onclick="'+strOnclick+'">'+curName+'</a>';
++				strHTML += '<a class="Nomal" href="javascript:void(0);" onclick="'+strOnclick+'">'+label+'</a>';
+ 				tmpNode.innerHTML = strHTML;
+ 				breadscrumbsContainer.appendChild(tmpNode);
+ 			} else {
+-				strHTML += '<a class="Nomal" href="javascript:void(0);" onclick="'+strOnclick+'">'+curName+'</a>';
++				strHTML += '<a class="Nomal" href="javascript:void(0);" onclick="'+strOnclick+'">'+label+'</a>';
+ 				strHTML += '<div class="RightArrowIcon"><span></span></div>';
+ 				tmpNode.innerHTML = strHTML;
+ 				breadscrumbsContainer.insertBefore(tmpNode, beforeNode);
+Index: web/wcmportal/src/main/webapp/fckeditor/exo/content/content.html
+===================================================================
+--- web/wcmportal/src/main/webapp/fckeditor/exo/content/content.html	(revision 48752)
++++ web/wcmportal/src/main/webapp/fckeditor/exo/content/content.html	(working copy)
+@@ -389,7 +389,7 @@
+ 	}
+ 
+ 	function requestInit() {
+-		var connector = eXoPlugin.hostName + eXp.connector+ eXp.command.init+"&currentPortal="+eXoPlugin.portalName;
++		var connector = eXoPlugin.hostName + eXp.connector+ eXp.command.init+"&currentPortal="+eXoPlugin.portalName+"&lang="+eXoPlugin.userLanguage;
+ 		eXp.sendRequest(connector);
+ 	}
+ 
