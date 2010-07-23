@@ -16,21 +16,19 @@
  */
 package org.exoplatform.services.wcm.search;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
 import javax.jcr.query.QueryResult;
 import javax.jcr.query.Row;
 import javax.jcr.query.RowIterator;
 
-import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.services.ecm.publication.PublicationPlugin;
-import org.exoplatform.services.ecm.publication.PublicationService;
+import org.apache.commons.lang.ArrayUtils;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -46,26 +44,7 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
   /** The row iterator. */  
   protected QueryResult queryResult;
   
-  /** The iterator. */
-  private NodeIterator iterator;
-  
-  /**
-   * Gets the iterator.
-   * 
-   * @return the iterator
-   */
-  public NodeIterator getIterator() {
-    return iterator;
-  }
-
-  /**
-   * Sets the iterator.
-   * 
-   * @param iterator the iterator to set
-   */
-  public void setIterator(NodeIterator iterator) {
-    this.iterator = iterator;
-  }
+  private boolean isSearchContent;
 
   /**
    * Instantiates a new paginated query result.
@@ -85,17 +64,11 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
    * 
    * @throws Exception the exception
    */
-  public PaginatedQueryResult(QueryResult queryResult,int pageSize) throws Exception{
+  public PaginatedQueryResult(QueryResult queryResult,int pageSize, boolean isSearchContent) throws Exception{
     super(pageSize);         
-    NodeIterator nodeIterator = queryResult.getNodes();
-    this.setIterator(nodeIterator);
-    Node node = null;
-    nodes = new ArrayList<Node>();
-    while(nodeIterator.hasNext()) {
-      node = nodeIterator.nextNode();
-      nodes.add(node);
-    }
-    this.setAvailablePage(nodes.size());
+    this.nodeIterator = queryResult.getNodes();
+    this.isSearchContent = isSearchContent;
+    this.setAvailablePage((int)nodeIterator.getSize());    
     this.queryResult = queryResult;    
   }
 
@@ -110,10 +83,9 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
     checkAndSetPosition(page);            
     currentListPage_ = new CopyOnWriteArrayList<ResultNode>();
     int count = 0;    
-    RowIterator iterator = queryResult.getRows();
-    NodeIterator nodeIterator = this.getIterator();
-    while(nodeIterator.hasNext()) {
-    Node node = nodeIterator.nextNode();      
+    RowIterator iterator = queryResult.getRows();    
+    while (nodeIterator.hasNext()) {      
+      Node node = nodeIterator.nextNode();      
       Node viewNode = filterNodeToDisplay(node); 
       
       if(viewNode != null) {
@@ -143,15 +115,49 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
    * @throws Exception the exception
    */
   protected Node filterNodeToDisplay(Node node) throws Exception {
-    Node displayNode = null;
-    if(node.isNodeType("nt:resource")) displayNode = node.getParent();
-    PublicationService publicationService = (PublicationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(PublicationService.class);
-    String lifecycleName = publicationService.getNodeLifecycleName(node);
-    if (lifecycleName == null) return node;
-    PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
-    HashMap<String, Object> context = new HashMap<String, Object>();
-    context.put(WCMComposer.FILTER_MODE, queryCriteria.isLiveMode() ? WCMComposer.MODE_LIVE : WCMComposer.MODE_EDIT);
-    displayNode = publicationPlugin.getNodeView(node, context);
+    Node displayNode = getNodeToCheckState(node);
+    if(displayNode == null) return null;
+    if (isSearchContent) return displayNode;
+    NodeLocation nodeLocation = NodeLocation.make(displayNode);
+    WCMComposer wcmComposer = WCMCoreUtils.getService(WCMComposer.class);
+    HashMap<String, String> filters = new HashMap<String, String>();
+    filters.put(WCMComposer.FILTER_MODE, WCMComposer.MODE_LIVE);
+    return wcmComposer.getContent(nodeLocation.getRepository(), nodeLocation.getWorkspace(), nodeLocation.getPath(), filters, WCMCoreUtils.getSessionProvider());
+  }
+  
+  protected Node getNodeToCheckState(Node node)throws Exception{
+    Node displayNode = node;
+    if (node.getPath().contains("web contents/site artifacts")) {
+      return null;
+    }
+    if (displayNode.isNodeType("nt:resource")) {
+      displayNode = node.getParent();
+    }
+    if (displayNode.isNodeType("exo:htmlFile")) {
+      Node parent = displayNode.getParent();
+      if (parent.isNodeType("exo:webContent")) displayNode = parent;
+    }
+    if(queryCriteria.isSearchWebContent()) {
+      if(!queryCriteria.isSearchDocument()) {
+        if(!displayNode.isNodeType("exo:webContent")) 
+          return null;
+      }
+      if(queryCriteria.isSearchWebpage()) {
+        if (!displayNode.isNodeType("publication:webpagesPublication"))
+          return null;
+      }
+    } else if(queryCriteria.isSearchWebpage()) {
+      if (queryCriteria.isSearchDocument()) {
+        return displayNode;
+      } else if (!displayNode.isNodeType("publication:webpagesPublication"))
+        return null;
+    }
+    String[] contentTypes = queryCriteria.getContentTypes();
+    if(contentTypes != null && contentTypes.length>0) {
+      String primaryNodeType = displayNode.getPrimaryNodeType().getName();
+      if(!ArrayUtils.contains(contentTypes,primaryNodeType))
+        return null;
+    }
     return displayNode;
   }
 }

@@ -19,7 +19,6 @@ package org.exoplatform.services.wcm.utils;
 import java.util.ArrayList;
 
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.query.QueryResult;
 import javax.jcr.query.Row;
@@ -57,13 +56,8 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
    */
   public PaginatedQueryResult(QueryResult queryResult,int pageSize) throws Exception{
     super(pageSize);         
-    /*this.nodeIterator = queryResult.getNodes();
-    this.setAvailablePage((int)nodeIterator.getSize());*/
-    NodeIterator nodeIterator = queryResult.getNodes();
-    while(nodeIterator.hasNext()) {
-      nodes.add(nodeIterator.nextNode());
-    }
-    this.setAvailablePage(nodes.size());
+    this.nodeIterator = queryResult.getNodes();
+    this.setAvailablePage((int)nodeIterator.getSize());
     this.rowIterator = queryResult.getRows();
   }    
   
@@ -73,11 +67,11 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
   @SuppressWarnings("unchecked")
   protected void populateCurrentPage(int page) throws Exception {   
     checkAndSetPosition(page);
-    TwoWayRangeIterator twoWayRangeIterator = (TwoWayRangeIterator)nodes;
+    TwoWayRangeIterator twoWayRangeIterator = (TwoWayRangeIterator)nodeIterator;
     currentListPage_ = new ArrayList();
     int count = 0;
-    for(int i = 0; i < nodes.size(); i++){
-      Node node = nodes.get(i);
+    while (nodeIterator.hasNext()) {
+      Node node = nodeIterator.nextNode();
       Node viewNode = filterNodeToDisplay(node);      
       if(viewNode != null) {
         //Skip back 1 position to get current row mapping to the node
