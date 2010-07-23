@@ -1,0 +1,13 @@
+Index: webui/wcm/src/main/resources/groovy/wcm/webui/selector/content/UIContentTreeBuilder.gtmpl
+===================================================================
+--- webui/wcm/src/main/resources/groovy/wcm/webui/selector/content/UIContentTreeBuilder.gtmpl	(revision 48249)
++++ webui/wcm/src/main/resources/groovy/wcm/webui/selector/content/UIContentTreeBuilder.gtmpl	(working copy)
+@@ -58,7 +58,7 @@
+ 								workspaceName = list[i].getElementsByTagName("workspaceName")[0].childNodes[0].nodeValue;
+ 								repositoryName = list[i].getElementsByTagName("repositoryName")[0].childNodes[0].nodeValue;
+ 								name = list[i].getElementsByTagName("name")[0].childNodes[0].nodeValue;
+-								nodePath = list[i].getElementsByTagName("nodePath")[0].childNodes[0].nodeValue;
++								nodePath = encodeURIComponent(list[i].getElementsByTagName("nodePath")[0].childNodes[0].nodeValue);
+ 							
+ 								treePath = parentPath + "/" + name;
+ 								firstId = eXo.wcm.MyUIWCMTreeView.replaceAll(
