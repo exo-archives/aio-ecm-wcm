@@ -23,6 +23,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.jcr.Node;
@@ -52,6 +55,7 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.resources.ResourceBundleService;
 import org.exoplatform.services.rest.CacheControl;
 import org.exoplatform.services.rest.HTTPMethod;
 import org.exoplatform.services.rest.HeaderParam;
@@ -65,6 +69,7 @@ import org.exoplatform.services.rest.transformer.PassthroughInputTransformer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
 import org.exoplatform.services.wcm.core.NodetypeConstant;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.connector.BaseConnector;
 import org.exoplatform.wcm.connector.FileUploadHandler;
@@ -100,6 +105,10 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
   /** The limit. */
   private int limit;
   
+  private ResourceBundleService  resourceBundleService;
+  
+  private String  resourceBundleNames[];
+  
   /**
    * Instantiates a new driver connector.
    * 
@@ -109,6 +118,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
   public DriverConnector(ExoContainer container, InitParams params) {
     super(container);
     limit = Integer.parseInt(params.getValueParam("upload.limit.size").getValue());
+    resourceBundleService = WCMCoreUtils.getService(ResourceBundleService.class);
   }
 	
   /**
@@ -128,7 +138,8 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
   public Response getDrivers(
   		@QueryParam("repositoryName") String repositoryName,
   		@QueryParam("workspaceName") String workspaceName,
-  		@QueryParam("userId") String userId)
+  		@QueryParam("userId") String userId,
+  		@QueryParam("lang") String lang)
   		throws Exception {
   	List<DriveData> listDriver = getDriversByUserId(repositoryName, userId);
   	
@@ -140,9 +151,9 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     document.appendChild(rootElement);
 
     createAtributeUpload(rootElement, false);
-    rootElement.appendChild(appendDrivers(document, generalDrivers(listDriver), "General Drives"));
-    rootElement.appendChild(appendDrivers(document, groupDrivers(listDriver, userId), "Group Drives"));
-    rootElement.appendChild(appendDrivers(document, personalDrivers(listDriver), "Personal Drives"));
+    rootElement.appendChild(appendDrivers(document, generalDrivers(listDriver), "General Drives", lang));
+    rootElement.appendChild(appendDrivers(document, groupDrivers(listDriver, userId), "Group Drives", lang));
+    rootElement.appendChild(appendDrivers(document, personalDrivers(listDriver), "Personal Drives", lang));
     
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
@@ -184,8 +195,9 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
       ManageDriveService manageDriveService = (ManageDriveService)ExoContainerContext.getCurrentContainer()
       	.getComponentInstanceOfType(ManageDriveService.class);
       
-      String itemPath = manageDriveService.getDriveByName(driverName, repositoryName).getHomePath()
-                        + ((currentFolder != null && currentFolder.length() != 0) ? "/" : "")
+      String driverHomePath  = manageDriveService.getDriveByName(driverName, repositoryName).getHomePath();
+      String itemPath = driverHomePath
+                        + ((currentFolder != null && !"".equals(currentFolder) && !driverHomePath.endsWith("/")) ? "/" : "")
                         + currentFolder;
       itemPath = StringUtils.replaceOnce(itemPath, "${userId}", userId);
       Node node = (Node)session.getItem(itemPath);
@@ -193,7 +205,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
       return buildXMLResponseForChildren(node, null, repositoryName, filterBy, session, currentPortal);
 
     } catch (Exception e) {
-      log.error("Error when perform getFoldersAndFiles: ", e.fillInStackTrace());
+      log.error("Error when perform getFoldersAndFiles: ", e);
     }    
     return Response.Builder.ok().build();
   }
@@ -277,7 +289,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
       return createProcessUploadResponse(repositoryName, workspaceName, currentFolderNode, siteName, userId, jcrPath,
           action, language, fileName, uploadId);  
     } catch (Exception e) {
-      log.error("Error when perform processUpload: ", e.fillInStackTrace());
+      log.error("Error when perform processUpload: ", e);
     }
     return Response.Builder.ok().build();
   }
@@ -352,13 +364,15 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
 	 * 
 	 * @return the element
 	 */
-	private Element appendDrivers(Document document, List<DriveData> driversList, String groupName) {
+	private Element appendDrivers(Document document, List<DriveData> driversList, String groupName, String lang) {
 	  Element folders = document.createElement("Folders");
-	  folders.setAttribute("name", groupName);
+	  folders.setAttribute("name", resolveDriveLabel(groupName, lang));
 	  createAtributeUpload(folders, false);
     for (DriveData driver : driversList) {
+      String name  = driver.getName();
       Element folder = document.createElement("Folder");
-      folder.setAttribute("name", driver.getName());
+      folder.setAttribute("name", name);
+      folder.setAttribute("label", resolveDriveLabel(name, lang));
       folder.setAttribute("driverPath", driver.getHomePath());
       createAtributeUpload(folder, true);
       folders.appendChild(folder);  
@@ -366,6 +380,17 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
 	  return folders;
   }
   
+	private String resolveDriveLabel(String name, String lang) {
+	  if (resourceBundleNames == null) resourceBundleNames = resourceBundleService.getSharedResourceBundleNames();
+	  for (String resourceBundleName : resourceBundleNames) {
+	    try {
+	      ResourceBundle resourceBundle = resourceBundleService.getResourceBundle(resourceBundleName, new Locale(lang));
+	      return resourceBundle.getString("ContentSelector.title."  + name.replaceAll(" ", ""));
+      } catch (MissingResourceException e) {}
+	  }
+	  return name;
+	}
+	
   /**
    * Personal drivers.
    * 
