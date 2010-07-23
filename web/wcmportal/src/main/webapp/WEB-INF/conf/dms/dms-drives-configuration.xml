@@ -30,7 +30,29 @@
               <field  name="showHiddenNode"><boolean>true</boolean></field>
               <field  name="allowCreateFolder"><string>Both</string></field>       
             </object>
-          </object-param>                    
+          </object-param>
+          
+	            <object-param>        
+            <name>Backup Administration</name>
+            <description>Backup workspace set</description>
+            <object type="org.exoplatform.services.cms.drives.DriveData">
+              <field  name="name"><string>Backup Center</string></field>
+              <field  name="repository"><string>repository</string></field>
+              <field  name="workspace"><string>backup</string></field>
+              <field  name="permissions"><string>*:/platform/administrators</string></field>
+              <field  name="homePath"><string>/</string></field>
+              <field  name="icon"><string></string></field>
+              <field  name="views">
+                <string>simple-view, admin-view</string>
+              </field>
+              <field  name="viewPreferences"><boolean>false</boolean></field>
+              <field  name="viewNonDocument"><boolean>false</boolean></field>
+              <field  name="viewSideBar"><boolean>true</boolean></field>
+              <field  name="showHiddenNode"><boolean>false</boolean></field>
+              <field  name="allowCreateFolder"><string>Both</string></field>          
+            </object>
+          </object-param>    
+
           <object-param>        
             <name>User's Share</name>
             <description>Document managements</description>
