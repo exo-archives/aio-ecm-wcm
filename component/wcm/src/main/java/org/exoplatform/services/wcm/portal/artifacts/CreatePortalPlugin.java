@@ -18,6 +18,7 @@ package org.exoplatform.services.wcm.portal.artifacts;
 
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.services.deployment.plugins.XMLDeploymentPlugin;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -30,6 +31,8 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
  */
 public abstract class CreatePortalPlugin extends XMLDeploymentPlugin { 
   
+  private int priority;
+  
   /**
    * Instantiates a new base portal artifacts plugin.
    * 
@@ -40,6 +43,18 @@ public abstract class CreatePortalPlugin extends XMLDeploymentPlugin {
   public CreatePortalPlugin(InitParams initParams, ConfigurationManager configurationManager,
       RepositoryService repositoryService) {
     super(initParams, configurationManager, repositoryService);    
+    ValueParam priorityValue = initParams.getValueParam("priority");
+    if (priorityValue != null) priority = Integer.parseInt(priorityValue.getValue());
+    else priority = 0;
+  }
+  
+  /**
+   * Get the plugin's priority
+   * 
+   * @return the plugin's priority 
+   */
+  public int getPriority() {
+    return priority;
   }
   
   /**

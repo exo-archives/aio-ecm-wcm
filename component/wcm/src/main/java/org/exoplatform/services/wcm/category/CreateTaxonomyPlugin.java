@@ -55,6 +55,7 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.wcm.portal.artifacts.CreatePortalPlugin;
 
 /**
@@ -148,6 +149,8 @@ public class CreateTaxonomyPlugin extends CreatePortalPlugin {
    * @see org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin#deployToPortal(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
   public void deployToPortal(SessionProvider sessionProvider, String portalName) throws Exception {
+    ValueParam portalValue = params.getValueParam("portal");
+    if ((portalValue == null && ConversationState.getCurrent() == null) || (portalValue != null && !portalName.equals(portalValue.getValue()))) return;
   	this.portalName = portalName;
   	ValueParam autoCreated = params.getValueParam("autoCreateInNewRepository");
     ValueParam workspaceParam = params.getValueParam("workspace");

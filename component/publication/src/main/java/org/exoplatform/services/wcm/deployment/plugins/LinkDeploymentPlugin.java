@@ -33,6 +33,12 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 
 /**
+ * @deprecated This class is deprecated since WCM 1.2.6
+ * @see org.exoplatform.services.wcm.webcontent.InitialSymlinkPlugin
+ */
+@Deprecated
+
+/**
  * Created by The eXo Platform SAS
  * Author : Hoa Pham
  * hoa.pham@exoplatform.com

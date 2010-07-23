@@ -1,5 +1,11 @@
 package org.exoplatform.services.wcm.deployment.plugins;
 
+/**
+ * @deprecated This class is deprecated since WCM 1.2.6
+ * @see org.exoplatform.services.wcm.webcontent.LinkDeploymentDescriptor
+ */
+@Deprecated
+
 public class LinkDeploymentDescriptor {
 
 	private String sourcePath;

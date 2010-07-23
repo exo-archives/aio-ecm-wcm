@@ -36,6 +36,12 @@ import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.picocontainer.Startable;
 
 /**
+ * @deprecated This class is deprecated since WCM 1.2.6
+ * @see org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService
+ */
+@Deprecated
+
+/**
  * Created by The eXo Platform SAS
  * Author : Hoa Pham
  * hoa.pham@exoplatform.com

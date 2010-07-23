@@ -2,18 +2,22 @@
 
 <configuration>
 
-  <component>
-    <type>org.exoplatform.services.wcm.deployment.WCMContentInitializerService</type>
-  </component>  
-  
 	<external-component-plugins>
-   		<target-component>org.exoplatform.services.wcm.deployment.WCMContentInitializerService</target-component>    
+   		<target-component>org.exoplatform.services.wcm.portal.artifacts.CreatePortalArtifactsService</target-component>    
       <component-plugin> 
         <name>Content Initializer Service</name>
         <set-method>addPlugin</set-method>
-        <type>org.exoplatform.services.wcm.deployment.plugins.XMLDeploymentPlugin</type>
+        <type>org.exoplatform.services.wcm.webcontent.InitialWebContentPlugin</type>
         <description>XML Deployment Plugin</description>
         <init-params>
+          <value-param>
+            <name>portal</name>
+            <value>backoffice</value>
+          </value-param>
+          <value-param>
+            <name>priority</name>
+            <value>1</value>
+          </value-param>
           <object-param>        
             <name>Backoffice Breadcrumb data</name>
             <description>Deployment Descriptor</description>

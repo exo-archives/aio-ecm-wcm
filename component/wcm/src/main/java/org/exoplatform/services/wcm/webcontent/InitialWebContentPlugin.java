@@ -32,6 +32,7 @@ import org.exoplatform.commons.utils.IOUtil;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ObjectParameter;
+import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.deployment.DeploymentDescriptor;
@@ -39,6 +40,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.portal.artifacts.CreatePortalPlugin;
 
@@ -50,7 +52,6 @@ import org.exoplatform.services.wcm.portal.artifacts.CreatePortalPlugin;
  */
 public class InitialWebContentPlugin extends CreatePortalPlugin {
   
-  @SuppressWarnings("unused")
   private static Log log = ExoLogger.getLogger(CreatePortalPlugin.class);   
   private InitParams initParams;   
   private ConfigurationManager configurationManager;  
@@ -79,6 +80,8 @@ public class InitialWebContentPlugin extends CreatePortalPlugin {
    */
   @SuppressWarnings("unchecked")
   public void deployToPortal(SessionProvider sessionProvider, String portalName) throws Exception {
+    ValueParam portalValue = initParams.getValueParam("portal");
+    if ((portalValue == null && ConversationState.getCurrent() == null) || (portalValue != null && !portalName.equals(portalValue.getValue()))) return;
     Iterator iterator = initParams.getObjectParamIterator();    
     while(iterator.hasNext()) {
       ObjectParameter objectParameter = (ObjectParameter)iterator.next();
@@ -98,6 +101,7 @@ public class InitialWebContentPlugin extends CreatePortalPlugin {
       InputStream inputStream = configurationManager.getInputStream(sourcePath);
       session.importXML(realTargetFolder, inputStream, ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW);
       session.save();           
+      log.info(deploymentDescriptor.getSourcePath() + " is deployed succesfully into " + realTargetFolder);
     }
     Node portalNode = livePortalManagerService.getLivePortal(sessionProvider, portalName);         
     configure(portalNode,portalName);

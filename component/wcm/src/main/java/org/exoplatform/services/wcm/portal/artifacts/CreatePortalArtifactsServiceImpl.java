@@ -17,10 +17,10 @@
 package org.exoplatform.services.wcm.portal.artifacts;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
-import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.container.xml.ValuesParam;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.listener.ListenerService;
 
@@ -33,28 +33,24 @@ import org.exoplatform.services.listener.ListenerService;
 public class CreatePortalArtifactsServiceImpl implements CreatePortalArtifactsService {
 
   public static final String CREATE_PORTAL_EVENT = "PortalArtifactsInitializerServiceImpl.portal.onCreate";
-  private HashMap<String,CreatePortalPlugin> artifactPlugins = new HashMap<String,CreatePortalPlugin>();
-  private ArrayList<String> initialPortals = new ArrayList<String>();
+  private List<CreatePortalPlugin> artifactPlugins = new ArrayList<CreatePortalPlugin>();
   private ListenerService listenerService;
 
-  @SuppressWarnings("unchecked")
-  public CreatePortalArtifactsServiceImpl(InitParams initParams, ListenerService listenerService) {     
-    ValuesParam valuesParam = initParams.getValuesParam("ignored.portals");
-    if(valuesParam != null) {
-      initialPortals = valuesParam.getValues();
-    }
+  public CreatePortalArtifactsServiceImpl(ListenerService listenerService) {     
     this.listenerService = listenerService;
   }
   public void addPlugin(CreatePortalPlugin artifactsPlugin) throws Exception {
-    artifactPlugins.put(artifactsPlugin.getName(),artifactsPlugin);
+    artifactPlugins.add(artifactsPlugin);
+    Collections.sort(artifactPlugins, new Comparator<CreatePortalPlugin>() {
+      public int compare(CreatePortalPlugin plugin1, CreatePortalPlugin plugin2) {
+        return plugin1.getPriority() - plugin2.getPriority();
+      }
+    });
   }
 
   public void deployArtifactsToPortal(SessionProvider sessionProvider, String portalName)
   throws Exception {
-    //Do not initalize portal artifact for predefined portal
-    if(initialPortals.contains(portalName)) return ;
-
-    for(CreatePortalPlugin plugin: artifactPlugins.values()) {
+    for(CreatePortalPlugin plugin: artifactPlugins) {
       plugin.deployToPortal(sessionProvider, portalName);
     }
     
