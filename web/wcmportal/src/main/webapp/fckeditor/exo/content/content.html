@@ -413,14 +413,14 @@ var eXp = {
 				var nodeLink = eXo.core.DOMUtil.findFirstDescendantByClass(nodeParent, "a", "NodeIcon");
 				if(nodeLink) {
 					if(nodeLink.getAttribute('currentFolder') && nodeLink.getAttribute('currentFolder') != null) {
-						currentFolder = nodeLink.getAttribute('currentFolder') + '/' + currentNode.getAttribute('name');
+						currentFolder = nodeLink.getAttribute('currentFolder') + '/' + encodeURIComponent(currentNode.getAttribute('name'));
 						currentNode.setAttribute("currentFolder", currentFolder);
 					}	else {
-						currentFolder = currentNode.getAttribute('name');
+						currentFolder = encodeURIComponent(currentNode.getAttribute('name'));
 						currentNode.setAttribute("currentFolder", currentFolder);
 					}				
 				} else {
-					currentFolder = currentNode.getAttribute('name');
+					currentFolder = encodeURIComponent(currentNode.getAttribute('name'));
 					currentNode.setAttribute("currentFolder", currentFolder);
 				}
 		}
