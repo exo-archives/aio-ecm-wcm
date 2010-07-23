@@ -291,14 +291,15 @@ public class PortalLinkConnector implements ResourceContainer {
     }
     String pageId = pageNode.getPageReference();
     Page page = portalConfigService.getPage(pageId, userId);
-    if (page == null) {
-      return;
-    }
     String accessMode = PRIVATE_ACCESS;
-    for (String role : page.getAccessPermissions()) {
-      if (EVERYONE_PERMISSION.equalsIgnoreCase(role)) {
-        accessMode = PUBLIC_ACCESS;
-        break;
+    if (page == null) {
+      accessMode = PUBLIC_ACCESS;
+    } else {
+      for (String role : page.getAccessPermissions()) {
+        if (EVERYONE_PERMISSION.equalsIgnoreCase(role)) {
+          accessMode = PUBLIC_ACCESS;
+          break;
+        }
       }
     }
     String pageUri = "/" + servletContext.getServletContextName() + "/" + accessMode + "/" + portalName + "/" + pageNode.getUri();
