@@ -31,6 +31,7 @@ import javax.portlet.PortletRequest;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.ecm.utils.text.Text;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.Util;
@@ -295,7 +296,7 @@ import org.exoplatform.webui.event.EventListener;
 	  	
 	  }
 	  
-	  return title;
+	  return Text.unescapeIllegalJcrChars(title);
   }
 
   /**
