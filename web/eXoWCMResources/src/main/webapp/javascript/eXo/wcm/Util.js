@@ -196,16 +196,7 @@ UIPopupWindow.prototype.init = function(popupId, isShow, isResizable, showCloseB
 	
 	popup.style.visibility = "hidden" ;
 	if(isShow == true) {
-		var iframes = DOMUtil.findDescendantsByTagName(popup, "iframe") ;
-		if(iframes.length > 0) {
-			setTimeout("eXo.webui.UIPopupWindow.show('" + popupId + "'," + isShowMask + ")", 500) ;
-		} else {
-		if(popup.offsetHeight == 0){
-			setTimeout("eXo.webui.UIPopupWindow.show('" + popupId + "'," + isShowMask + ")", 500) ;
-			return ;
-		}
-			this.show(popup, isShowMask) ;
-		}
+		setTimeout("eXo.webui.UIPopupWindow.show('" + popupId + "'," + isShowMask + ")", 500) ;
 	}
 } ;
 /*----------------------------------------------End of overrite-------------------------------------------------------*/
