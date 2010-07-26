@@ -1,0 +1,34 @@
+Index: portlets/presentation/src/main/webapp/skin/ContentListViewer/DefaultStylesheet.css
+===================================================================
+--- portlets/presentation/src/main/webapp/skin/ContentListViewer/DefaultStylesheet.css	(revision 48186)
++++ portlets/presentation/src/main/webapp/skin/ContentListViewer/DefaultStylesheet.css	(working copy)
+@@ -204,6 +204,7 @@
+ 
+ .UICLVPortlet .UIFormGrid {
+ 	margin: 0;
++	width: 100%;
+ }
+ 
+ .UICLVPortlet .HorizontalLayout .UIFormInputSet{
+Index: portlets/presentation/src/main/webapp/groovy/ContentListViewer/config/UICLVConfig.gtmpl
+===================================================================
+--- portlets/presentation/src/main/webapp/groovy/ContentListViewer/config/UICLVConfig.gtmpl	(revision 48186)
++++ portlets/presentation/src/main/webapp/groovy/ContentListViewer/config/UICLVConfig.gtmpl	(working copy)
+@@ -45,6 +45,8 @@
+ 								List<String> contents = uiform.getViewAbleContentList();							
+ 								if (contents != null && contents.size() != 0) {
+ 				  %>
++              <tr>
++                <td colspan="2">
+ 				  			<table class="UIContentGrid">
+ 									<thead>
+ 										<tr>
+@@ -86,6 +88,8 @@
+ 								}
+ 					%>
+ 								</table>
++                </td>
++                </tr>
+ 					<%				
+ 								}//end if
+ 						}//edn else
