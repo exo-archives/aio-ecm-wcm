@@ -1,0 +1,23 @@
+Index: portlets/presentation/src/main/java/org/exoplatform/wcm/webui/clv/UICLVPresentation.java
+===================================================================
+--- portlets/presentation/src/main/java/org/exoplatform/wcm/webui/clv/UICLVPresentation.java	(revision 49749)
++++ portlets/presentation/src/main/java/org/exoplatform/wcm/webui/clv/UICLVPresentation.java	(working copy)
+@@ -30,7 +30,8 @@
+ import javax.portlet.PortletRequest;
+ 
+ import org.apache.commons.logging.Log;
+-import org.exoplatform.commons.utils.PageList;
++import org.exoplatform.commons.utils.PageList;
++import org.exoplatform.ecm.utils.text.Text;
+ import org.exoplatform.portal.application.PortalRequestContext;
+ import org.exoplatform.portal.webui.container.UIContainer;
+ import org.exoplatform.portal.webui.util.Util;
+@@ -295,7 +296,7 @@
+ 	  	
+ 	  }
+ 	  
+-	  return title;
++	  return Text.unescapeIllegalJcrChars(title);
+   }
+ 
+   /**
