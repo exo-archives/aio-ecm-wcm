@@ -1,0 +1,13 @@
+Index: portlets/presentation/src/main/webapp/groovy/SiteAdministration/UISiteAdminToolBar.gtmpl
+===================================================================
+--- portlets/presentation/src/main/webapp/groovy/SiteAdministration/UISiteAdminToolBar.gtmpl	(revision 49760)
++++ portlets/presentation/src/main/webapp/groovy/SiteAdministration/UISiteAdminToolBar.gtmpl	(working copy)
+@@ -105,7 +105,7 @@
+ 					if (node.pageReference != null) {
+ 			        print """<a href="$href" class="ItemIcon DefaultPageIcon" title="$node.resolvedLabel" onmouseover="showPopupSubMenu(this)">$label</a>""";
+ 					} else {
+-							print """<a href="#" class="ItemIcon DefaultPageIcon" title="$node.resolvedLabel">$label</a>""";
++							print """<a href="#" class="ItemIcon DefaultPageIcon" title="$node.resolvedLabel" onmouseover="showPopupSubMenu(this)">$label</a>""";
+ 					}
+ 			print """				
+ 						</div>
