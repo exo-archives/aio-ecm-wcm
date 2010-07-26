@@ -30,14 +30,11 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 import javax.jcr.query.RowIterator;
 
-import org.apache.commons.logging.Log;
 import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
@@ -56,12 +53,6 @@ import org.exoplatform.services.wcm.utils.AbstractQueryBuilder.QueryTermHelper;
  */
 public class SiteSearchServiceImpl implements SiteSearchService {
 
-  protected static final Log log = ExoLogger.getLogger("wcm:SiteSearchServiceImpl"); 
-  
-  private static final String IS_ENABLED_FUZZY_SEARCH = "isEnabledFuzzySearch";
-  
-  private static final String FUZZY_SEARCH_INDEX = "fuzzySearchIndex";
-  
   /** The live portal manager service. */
   private LivePortalManagerService livePortalManagerService;
 
@@ -86,10 +77,6 @@ public class SiteSearchServiceImpl implements SiteSearchService {
   /** The include mime types. */
   private CopyOnWriteArraySet<String> includeMimeTypes = new CopyOnWriteArraySet<String>();
 
-  private boolean isEnabledFuzzySearch = true;
-  
-  private double fuzzySearchIndex = 0.5;
-  
   /**
    * Instantiates a new site search service impl.
    * 
@@ -106,27 +93,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     this.livePortalManagerService = portalManagerService;
     this.templateService = templateService;
     this.repositoryService = repositoryService;
-    this.configurationService = configurationService;
-    
-    if (initParams != null) {
-      ValueParam isEnabledFuzzySearchValue = initParams.getValueParam(IS_ENABLED_FUZZY_SEARCH);
-      if (isEnabledFuzzySearchValue != null)
-        isEnabledFuzzySearch = Boolean.parseBoolean(isEnabledFuzzySearchValue.getValue());
-  
-      ValueParam enabledFuzzySearchValue = initParams.getValueParam(FUZZY_SEARCH_INDEX);
-      if (enabledFuzzySearchValue != null) {
-        try {
-          fuzzySearchIndex = Double.parseDouble(enabledFuzzySearchValue.getValue());
-        } catch (NumberFormatException e) {
-          log.warn("The current fuzzySearchIndex value is not a number, default value 0.5 will be used");
-          fuzzySearchIndex = 0.5;
-        }
-      }
-      if (fuzzySearchIndex < 0 || fuzzySearchIndex >= 1) {
-        log.warn("The current fuzzySearchIndex value is out of range from 0 to 1, default value 0.5 will be used");
-        fuzzySearchIndex = 0.5;
-      }
-    }
+    this.configurationService = configurationService;        
   }
 
   /* (non-Javadoc)
@@ -268,15 +235,11 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     QueryTermHelper queryTermHelper = new QueryTermHelper();    
     String queryTerm = null;
     keyword = keyword.replaceAll("'","''");
-    if (isEnabledFuzzySearch) {
-      if (keyword.contains("*") || keyword.contains("?") || keyword.contains("~")) {
-        queryTerm = queryTermHelper.contains(keyword).buildTerm();
-      } else {
-        queryTerm = queryTermHelper.contains(keyword).allowFuzzySearch(fuzzySearchIndex).buildTerm();
-      }      
-    } else {
+    if (keyword.contains("*") || keyword.contains("?") || keyword.contains("~")) {
       queryTerm = queryTermHelper.contains(keyword).buildTerm();
-    }
+    } else {
+      queryTerm = queryTermHelper.contains(keyword).allowFuzzySearch().buildTerm();
+    }      
     String scope = queryCriteria.getFulltextSearchProperty();
     if(QueryCriteria.ALL_PROPERTY_SCOPE.equals(scope) || scope == null) {
       queryBuilder.contains(null, queryTerm, LOGICAL.NULL);
