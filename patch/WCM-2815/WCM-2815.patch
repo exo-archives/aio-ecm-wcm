@@ -1,0 +1,137 @@
+Index: webui/wcm/src/main/java/org/exoplatform/wcm/webui/dialog/UIContentDialogForm.java
+===================================================================
+--- webui/wcm/src/main/java/org/exoplatform/wcm/webui/dialog/UIContentDialogForm.java	(revision 48396)
++++ webui/wcm/src/main/java/org/exoplatform/wcm/webui/dialog/UIContentDialogForm.java	(working copy)
+@@ -35,9 +35,12 @@
+ 
+ import org.exoplatform.ecm.resolver.JCRResourceResolver;
+ import org.exoplatform.ecm.webui.form.UIDialogForm;
++import org.exoplatform.ecm.webui.selector.ComponentSelector;
+ import org.exoplatform.ecm.webui.selector.UISelectable;
++import org.exoplatform.ecm.webui.tree.selectone.UIOneNodePathSelector;
+ import org.exoplatform.ecm.webui.tree.selectone.UIOneTaxonomySelector;
+ import org.exoplatform.ecm.webui.utils.DialogFormUtil;
++import org.exoplatform.portal.webui.util.SessionProviderFactory;
+ import org.exoplatform.portal.webui.util.Util;
+ import org.exoplatform.resolver.ResourceResolver;
+ import org.exoplatform.services.cms.BasePath;
+@@ -52,10 +55,12 @@
+ import org.exoplatform.services.ecm.publication.PublicationService;
+ import org.exoplatform.services.jcr.RepositoryService;
+ import org.exoplatform.services.jcr.core.ManageableRepository;
++import org.exoplatform.services.jcr.ext.common.SessionProvider;
+ import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+ import org.exoplatform.services.wcm.core.NodeLocation;
+ import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
+ import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
++import org.exoplatform.services.wcm.utils.WCMCoreUtils;
+ import org.exoplatform.wcm.webui.Utils;
+ import org.exoplatform.web.application.ApplicationMessage;
+ import org.exoplatform.webui.application.WebuiRequestContext;
+@@ -91,6 +96,7 @@
+       @EventConfig(listeners = UIContentDialogForm.FastPublishActionListener.class),
+       @EventConfig(listeners = UIContentDialogForm.PreferencesActionListener.class),
+       @EventConfig(listeners = UIContentDialogForm.CloseActionListener.class),
++      @EventConfig(listeners = UIContentDialogForm.ShowComponentActionListener.class, phase = Phase.DECODE),
+       @EventConfig(listeners = UIContentDialogForm.RemoveDataActionListener.class)
+     }
+ )
+@@ -682,4 +688,76 @@
+   		event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent());
+   	}
+   }
++  
++  @SuppressWarnings("unchecked")
++  static public class ShowComponentActionListener extends EventListener<UIContentDialogForm> {
++    public void execute(Event<UIContentDialogForm> event) throws Exception {
++      UIContentDialogForm uiForm = event.getSource() ;
++      UIPopupContainer uiContainer = Utils.getPopupContainer(uiForm);
++      uiForm.isShowingComponent = true;
++      String fieldName = event.getRequestContext().getRequestParameter(OBJECTID) ;
++      Map fieldPropertiesMap = uiForm.componentSelectors.get(fieldName) ;
++      String classPath = (String)fieldPropertiesMap.get("selectorClass") ;
++      String rootPath = (String)fieldPropertiesMap.get("rootPath") ;
++      ClassLoader cl = Thread.currentThread().getContextClassLoader() ;
++      Class clazz = Class.forName(classPath, true, cl) ;
++      UIComponent uiComp = uiForm.createUIComponent(clazz, null, null);
++      NodeHierarchyCreator nodeHierarchyCreator = uiForm.getApplicationComponent(NodeHierarchyCreator.class);  
++      String selectorParams = (String)fieldPropertiesMap.get("selectorParams") ;
++      SessionProvider provider = WCMCoreUtils.getSessionProvider();                
++      if(uiComp instanceof UIOneNodePathSelector) {
++//        PortletPreferences preferences = uiForm.getPortletPreferences() ;
++//        String repositoryName = preferences.getValue("repository", "") ;
++        String wsFieldName = (String)fieldPropertiesMap.get("workspaceField") ;
++        String wsName = "";
++        if(wsFieldName != null && wsFieldName.length() > 0) {
++          wsName = (String)uiForm.<UIFormInputBase>getUIInput(wsFieldName).getValue() ;
++          ((UIOneNodePathSelector)uiComp).setIsDisable(wsName, true) ;      
++        }
++        if(selectorParams != null) {
++          String[] arrParams = selectorParams.split(",") ;
++          if(arrParams.length == 4) {
++            ((UIOneNodePathSelector)uiComp).setAcceptedNodeTypesInPathPanel(new String[] {org.exoplatform.ecm.webui.utils.Utils.NT_FILE}) ;
++            wsName = arrParams[1];
++            rootPath = arrParams[2];
++            ((UIOneNodePathSelector)uiComp).setIsDisable(wsName, true) ;
++            if(arrParams[3].indexOf(";") > -1) {
++              ((UIOneNodePathSelector)uiComp).setAcceptedMimeTypes(arrParams[3].split(";")) ;
++            } else {
++              ((UIOneNodePathSelector)uiComp).setAcceptedMimeTypes(new String[] {arrParams[3]}) ;
++            }
++          }
++        }
++        if(rootPath == null) rootPath = "/";
++        ((UIOneNodePathSelector)uiComp).setRootNodeLocation(uiForm.repositoryName, wsName, rootPath) ;
++        ((UIOneNodePathSelector)uiComp).setShowRootPathSelect(true);
++        ((UIOneNodePathSelector)uiComp).init(provider);
++      } else if (uiComp instanceof UIOneTaxonomySelector) {
++        DMSConfiguration dmsConfiguration = uiForm.getApplicationComponent(DMSConfiguration.class);
++        String workspaceName = dmsConfiguration.getConfig(uiForm.repositoryName).getSystemWorkspace();   
++        ((UIOneTaxonomySelector)uiComp).setIsDisable(workspaceName, false);
++        String rootTreePath = nodeHierarchyCreator.getJcrPath(BasePath.TAXONOMIES_TREE_STORAGE_PATH);
++        RepositoryService repositoryService = uiForm.getApplicationComponent(RepositoryService.class);
++        ManageableRepository repository = repositoryService.getRepository(uiForm.repositoryName);
++        Session session = provider.getSession(workspaceName, repository);
++        Node rootTree = (Node) session.getItem(rootTreePath);      
++        NodeIterator childrenIterator = rootTree.getNodes();
++        while (childrenIterator.hasNext()) {
++          Node childNode = childrenIterator.nextNode();
++          rootTreePath = childNode.getPath();
++          break;
++        }
++        
++        ((UIOneTaxonomySelector)uiComp).setRootNodeLocation(uiForm.repositoryName, workspaceName, rootTreePath);
++        ((UIOneTaxonomySelector)uiComp).setExceptedNodeTypesInPathPanel(new String[] {org.exoplatform.ecm.webui.utils.Utils.EXO_SYMLINK});
++        ((UIOneTaxonomySelector)uiComp).init(SessionProviderFactory.createSystemProvider());
++        
++      }
++      String param = "returnField=" + fieldName;
++      String[] params = selectorParams == null ? new String[]{param} : new String[]{param, "selectorParams=" + selectorParams};
++      ((ComponentSelector)uiComp).setSourceComponent(uiForm, params);
++      
++      Utils.createPopupWindow(uiForm, uiComp, "PopupComponent", 640, 300);
++    }
++  } 
+ }
+Index: web/eXoWCMResources/src/main/webapp/javascript/eXo/wcm/Util.js
+===================================================================
+--- web/eXoWCMResources/src/main/webapp/javascript/eXo/wcm/Util.js	(revision 48396)
++++ web/eXoWCMResources/src/main/webapp/javascript/eXo/wcm/Util.js	(working copy)
+@@ -196,16 +196,7 @@
+ 	
+ 	popup.style.visibility = "hidden" ;
+ 	if(isShow == true) {
+-		var iframes = DOMUtil.findDescendantsByTagName(popup, "iframe") ;
+-		if(iframes.length > 0) {
+-			setTimeout("eXo.webui.UIPopupWindow.show('" + popupId + "'," + isShowMask + ")", 500) ;
+-		} else {
+-		if(popup.offsetHeight == 0){
+-			setTimeout("eXo.webui.UIPopupWindow.show('" + popupId + "'," + isShowMask + ")", 500) ;
+-			return ;
+-		}
+-			this.show(popup, isShowMask) ;
+-		}
++		setTimeout("eXo.webui.UIPopupWindow.show('" + popupId + "'," + isShowMask + ")", 500) ;
+ 	}
+ } ;
+ /*----------------------------------------------End of overrite-------------------------------------------------------*/
