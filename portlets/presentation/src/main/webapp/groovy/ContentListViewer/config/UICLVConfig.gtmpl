@@ -45,6 +45,8 @@
 								List<String> contents = uiform.getViewAbleContentList();							
 								if (contents != null && contents.size() != 0) {
 				  %>
+              <tr>
+                <td colspan="2">
 				  			<table class="UIContentGrid">
 									<thead>
 										<tr>
@@ -86,6 +88,8 @@
 								}
 					%>
 								</table>
+                </td>
+                </tr>
 					<%				
 								}//end if
 						}//edn else
