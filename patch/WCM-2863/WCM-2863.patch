@@ -1,0 +1,13 @@
+Index: portlets/presentation/src/main/webapp/groovy/ContentListViewer/UICLVContainer.gtmpl
+===================================================================
+--- portlets/presentation/src/main/webapp/groovy/ContentListViewer/UICLVContainer.gtmpl	(revision 49645)
++++ portlets/presentation/src/main/webapp/groovy/ContentListViewer/UICLVContainer.gtmpl	(working copy)
+@@ -20,6 +20,6 @@
+ 	<% } %>		
+ 
+ 	<% 			
+-		uicomponent.renderChild(UICLVPresentation.class);
++		if (uicomponent.getChild(UICLVPresentation.class) !=null)	uicomponent.renderChild(UICLVPresentation.class);
+ 	%>
+ </div>
+\ No newline at end of file
