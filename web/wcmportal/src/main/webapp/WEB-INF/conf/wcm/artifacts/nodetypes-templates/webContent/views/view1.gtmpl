@@ -81,9 +81,21 @@
 					%>
 				</div>
 				$html
+				<% if (uicomponent.isEnableVote())  
+				    _ctx.include(uicomponent.getViewTemplate("mix:votable", "view1"));
+				   if (uicomponent.isEnableComment())
+				    _ctx.include(uicomponent.getViewTemplate("exo:comments", "view1"));
+        %>
 			</div>
 		<%
 	} else {
-		%>$html<%
+		%>$html
+    <% if (uicomponent.isEnableVote())  
+        _ctx.include(uicomponent.getViewTemplate("mix:votable", "view1"));
+       if (uicomponent.isEnableComment())
+        _ctx.include(uicomponent.getViewTemplate("exo:comments", "view1"));
+       
+    %>		
+    <%
 	}
 %>
