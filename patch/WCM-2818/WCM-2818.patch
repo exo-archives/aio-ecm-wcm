@@ -1,0 +1,18 @@
+Index: portlets/presentation/src/main/java/org/exoplatform/wcm/webui/clv/config/UICLVConfig.java
+===================================================================
+--- portlets/presentation/src/main/java/org/exoplatform/wcm/webui/clv/config/UICLVConfig.java	(revision 48186)
++++ portlets/presentation/src/main/java/org/exoplatform/wcm/webui/clv/config/UICLVConfig.java	(working copy)
+@@ -660,8 +660,11 @@
+   	Page page = upcService.getPage(pageId);
+ 
+   	for(String nodePath : oldList) {
+-  		publicationService.suspendPublishedContentFromPage(
+-  				(Node)session.getItem(nodePath), page, portletRequestContext.getRemoteUser());
++  	  Node node = (Node)session.getItem(nodePath);
++  	  if (node.isNodeType("exo:taxonomyLink")) {
++  	    node = linkManager.getTarget((Node)session.getItem(nodePath));
++  	  } 
++  		publicationService.suspendPublishedContentFromPage(node, page, portletRequestContext.getRemoteUser());
+   	}
+   }
+   
