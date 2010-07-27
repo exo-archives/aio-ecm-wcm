@@ -323,7 +323,7 @@ public class NewsletterConstant {
       if(pageAccessPermissions.contains(newAccessPermission)) continue;
       User currentUser = userHandler.findUserByName(newAccessPermission);
       if (currentUser == null)
-        users = userHandler.findUsersByGroup(newAccessPermission.split(":")[1]).getAll();
+        users = getNameList(userHandler.findUsersByGroup(newAccessPermission.split(":")[1]).getAll());
       else
         users.add(currentUser.getUserName());
       for(String user : users){
@@ -333,6 +333,17 @@ public class NewsletterConstant {
     }
     page.setAccessPermissions(pageAccessPermissions.toArray(new String[]{}));
     userService.update(page);
+  }
+  
+  private static List<String> getNameList(List list) {
+    List<String> ret = new ArrayList<String>();
+    for (Object elem : list) {
+      if (elem instanceof User) {
+        ret.add(((User) elem).getUserName());
+      } else if (elem instanceof String)
+        ret.add((String)elem);
+    }
+    return ret;
   }
   
   /**
