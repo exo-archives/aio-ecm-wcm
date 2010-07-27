@@ -1,0 +1,28 @@
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/nodetypes-templates/webContent/views/view1.gtmpl
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/nodetypes-templates/webContent/views/view1.gtmpl	(revision 49825)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/nodetypes-templates/webContent/views/view1.gtmpl	(working copy)
+@@ -81,9 +81,21 @@
+ 					%>
+ 				</div>
+ 				$html
++				<% if (uicomponent.isEnableVote())  
++				    _ctx.include(uicomponent.getViewTemplate("mix:votable", "view1"));
++				   if (uicomponent.isEnableComment())
++				    _ctx.include(uicomponent.getViewTemplate("exo:comments", "view1"));
++        %>
+ 			</div>
+ 		<%
+ 	} else {
+-		%>$html<%
++		%>$html
++    <% if (uicomponent.isEnableVote())  
++        _ctx.include(uicomponent.getViewTemplate("mix:votable", "view1"));
++       if (uicomponent.isEnableComment())
++        _ctx.include(uicomponent.getViewTemplate("exo:comments", "view1"));
++       
++    %>		
++    <%
+ 	}
+ %>
+\ No newline at end of file
