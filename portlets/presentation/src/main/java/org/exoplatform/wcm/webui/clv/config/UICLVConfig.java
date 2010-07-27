@@ -660,8 +660,11 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
   	Page page = upcService.getPage(pageId);
 
   	for(String nodePath : oldList) {
-  		publicationService.suspendPublishedContentFromPage(
-  				(Node)session.getItem(nodePath), page, portletRequestContext.getRemoteUser());
+  	  Node node = (Node)session.getItem(nodePath);
+  	  if (node.isNodeType("exo:taxonomyLink")) {
+  	    node = linkManager.getTarget((Node)session.getItem(nodePath));
+  	  } 
+  		publicationService.suspendPublishedContentFromPage(node, page, portletRequestContext.getRemoteUser());
   	}
   }
   
