@@ -1,0 +1,31 @@
+Index: component/newsletter/src/main/java/org/exoplatform/services/wcm/newsletter/NewsletterConstant.java
+===================================================================
+--- component/newsletter/src/main/java/org/exoplatform/services/wcm/newsletter/NewsletterConstant.java	(revision 47980)
++++ component/newsletter/src/main/java/org/exoplatform/services/wcm/newsletter/NewsletterConstant.java	(working copy)
+@@ -323,7 +323,7 @@
+       if(pageAccessPermissions.contains(newAccessPermission)) continue;
+       User currentUser = userHandler.findUserByName(newAccessPermission);
+       if (currentUser == null)
+-        users = userHandler.findUsersByGroup(newAccessPermission.split(":")[1]).getAll();
++        users = getNameList(userHandler.findUsersByGroup(newAccessPermission.split(":")[1]).getAll());
+       else
+         users.add(currentUser.getUserName());
+       for(String user : users){
+@@ -335,6 +335,17 @@
+     userService.update(page);
+   }
+   
++  private static List<String> getNameList(List list) {
++    List<String> ret = new ArrayList<String>();
++    for (Object elem : list) {
++      if (elem instanceof User) {
++        ret.add(((User) elem).getUserName());
++      } else if (elem instanceof String)
++        ret.add((String)elem);
++    }
++    return ret;
++  }
++  
+   /**
+    * Remove access  permissions 
+    * @param accessPermissions   list of user will be set access permission
