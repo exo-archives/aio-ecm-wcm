@@ -1,0 +1,59 @@
+Index: component/publication/src/main/resources/groovy/wcm/webui/publication/lifecycle/stageversion/ui/UIPublicationPanel.gtmpl
+===================================================================
+--- component/publication/src/main/resources/groovy/wcm/webui/publication/lifecycle/stageversion/ui/UIPublicationPanel.gtmpl	(revision 49561)
++++ component/publication/src/main/resources/groovy/wcm/webui/publication/lifecycle/stageversion/ui/UIPublicationPanel.gtmpl	(working copy)
+@@ -2,8 +2,10 @@
+   import java.util.List;
+   import javax.jcr.Node;
+   import javax.jcr.version.Version;
++  import org.exoplatform.services.jcr.util.Text;//Add
+   import org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationPanel;
+   import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
++  
+   Node currentRevision = uicomponent.getCurrentRevision();
+   Node cNode = uicomponent.getCurrentNode();  
+   public boolean isCurrentRevision(String inputStatus, Node revision) throws Exception {    
+@@ -14,7 +16,7 @@
+ <% uicomponent.begin(); %>
+ <div class="UIPublicationPanel" id="$uicomponent.id">
+   <fieldset class="StatusTable">
+-    <% String versionName = currentRevision.getName();  %>
++    <% String versionName = Text.unescapeIllegalJcrChars(currentRevision.getName());  %>
+     <legend class="Legend"> <%=_ctx.appRes("UIPublicationPanel.status.version")%> $versionName </legend>
+     <div class="StatusAction">
+       <div class="StatusTitle"><%=_ctx.appRes("UIPublicationPanel.status.title")%>: </div>
+@@ -95,11 +97,11 @@
+               <%
+                 if (versionName.equals(revision.getName())) {
+                   %>
+-                    <a><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%= revision.getName() %></a>
++                    <a><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%= Text.unescapeIllegalJcrChars(revision.getName()) %></a>
+                   <%
+                 } else {
+                   %>
+-                    <a class="ActiveLink" href="<%= uicomponent.event("ChangeVersion", revision.getUUID()) %>"><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%= revision.getName() %></a>
++                    <a class="ActiveLink" href="<%= uicomponent.event("ChangeVersion", revision.getUUID()) %>"><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%= Text.unescapeIllegalJcrChars(revision.getName()) %></a>
+                   <%
+                 }
+               %>
+Index: component/publication/src/main/resources/groovy/wcm/webui/publication/lifecycle/stageversion/ui/UIPublicationHistory.gtmpl
+===================================================================
+--- component/publication/src/main/resources/groovy/wcm/webui/publication/lifecycle/stageversion/ui/UIPublicationHistory.gtmpl	(revision 49561)
++++ component/publication/src/main/resources/groovy/wcm/webui/publication/lifecycle/stageversion/ui/UIPublicationHistory.gtmpl	(working copy)
+@@ -8,6 +8,7 @@
+  */
+   import java.text.SimpleDateFormat;
+   import org.exoplatform.commons.utils.ISO8601;
++  import org.exoplatform.services.jcr.util.Text;
+   import org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationContainer;
+ %>
+ 
+@@ -33,7 +34,7 @@
+   	      out.println("<tr class=\"" + rowClass + "\">");
+   	      
+ 					out.println("<td><div class=\"Text\">" + uicomponent.getAncestorOfType(UIPublicationContainer.class).getDateTimeFormater().format(bean.getLogDate().getTime()) + "</div></td>");
+-					out.println("<td><div class=\"Text\">" + bean.getVersionName() + "</div></td>");
++					out.println("<td><div class=\"Text\">" + Text.unescapeIllegalJcrChars(bean.getVersionName()) + "</div></td>");
+ 					out.println("<td><div class=\"Text\">" + _ctx.appRes("UIPublicationPanel.status." + bean.getState()) + "</div></td>");	          
+ 					out.println("<td><div class=\"Text\">" + bean.getAuthor() + "</div></td>");	          
+ 					out.println("<td><div class=\"Text\">" + _ctx.appRes(bean.getDescription()) + "</div></td>");	          
