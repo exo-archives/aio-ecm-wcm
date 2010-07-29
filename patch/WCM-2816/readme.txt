@@ -3,29 +3,27 @@ Summary
     * Status: CLV, SCV when browsing directories with special characters (using IE7)
     * CCP Issue: CCP-422, Product Jira Issue : WCM-2816
     * Complexity: LOW
-    * Impacted Client(s): CG95 and probably all.
-    * Client expectations (date/content): N/A
-
+    
 The Proposal
 Problem description
 
-What is the problem to fix ?
+What is the problem to fix?
 
     * in IE7, an exception occurs when browsing directories with name containing special characters such as é, à in a CLV or an SCV  
 
 Fix description
 
-How the problem is fixed ?
+How is the problem fixed?
 
     * Encode the special characters before sending the request  
 
-Patch informations:
+Patch information:
 Patches files:
 WCM-2816.patch 	
 
 Tests to perform
 
-Which test should have detect the issue ?
+Which test should have detect the issue?
 *
 
 ie7 should be used to reproduce the problem:
@@ -39,10 +37,10 @@ t?rep1 in workspace collaboration>javax.jcr.PathNotFoundException: Item not foun
 
 testérep1 was the directory's name
 
-Is a test missing in the TestCase file ?
+Is a test missing in the TestCase file?
 *
 
-Added UnitTest ?
+Added UnitTest?
 *
 
 Recommended Performance test?
@@ -51,7 +49,7 @@ Recommended Performance test?
 
 Documentation changes
 
-Where is the documentation for this feature ?
+Where is the documentation for this feature?
 *
 
 Changes Needed:
@@ -60,7 +58,7 @@ Changes Needed:
 
 Configuration changes
 
-Is this bug changing the product configuration ?
+Is this bug changing the product configuration?
 *
 
 Describe configuration changes:
@@ -72,10 +70,10 @@ Previous configuration will continue to work?
 
 Risks and impacts
 
-Is there a risk applying this bug fix ?
+Is there a risk applying this bug fix?
 *
 
-Is this bug fix can have an impact on current client projects ?
+Can this bug fix have an impact on current client projects?
 *
 
 Is there a performance risk/cost?
