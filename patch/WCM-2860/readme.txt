@@ -7,29 +7,29 @@ Summary
 The Proposal
 Problem description
 
-What is the problem to fix ?
+What is the problem to fix?
 
     *  Search within DMS/WCM doesn't ignore accented charcters, thus searching for test does not give as results tést
 
 Fix description
 
-How the problem is fixed ?
+How is the problem fixed?
 
     *  This is fixed using a customized Lucene analyzer that 
          1. Unescape HTML characters :  since we are using FCKEditor as editor, then most of our contents are in HTML 
          2. Convert accented characters as normal characters
 
-Patch informations:
+Patch information:
 Patches files:
 WCM-2860.patch
 
 
 Tests to perform
 
-Tests performed at DevLevel ?
+Tests performed at DevLevel?
 *
 
-Tests performed at QA/Support Level ?
+Tests performed at QA/Support Level?
 * create a document containing tést
 * search for word test
 
@@ -51,7 +51,7 @@ Previous configuration will continue to work?
 
 Risks and impacts
 
-Is this bug fix can have an impact on current client projects ?
+Can this bug fix have an impact on current client projects?
 
     * Function or ClassName change ?
 
