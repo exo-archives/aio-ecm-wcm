@@ -24,13 +24,13 @@ WCM-2815.patch
 
 Tests to perform
 
-Which test should have detected the issue ?
+Which test should have detected the issue?
 * This test could be complex and not complete from our side.
 
-Is a test missing in the TestCase file ?
+Is a test missing in the TestCase file?
 * Yes
 
-Added UnitTest ?
+Added UnitTest?
 * No
 
 Recommended Performance test?
@@ -45,7 +45,7 @@ Documentation Changes:
 
 Configuration changes
 
-Is this bug changing the product configuration ?
+Is this bug changing the product configuration?
 * No
 
 Will previous configuration continue to work?
@@ -54,7 +54,7 @@ Will previous configuration continue to work?
 
 Risks and impacts
 
-Is there a risk applying this bug fix ?
+Is there a risk applying this bug fix?
 * No
 
 Can this bug fix have an impact on current client projects?
