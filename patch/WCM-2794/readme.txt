@@ -15,11 +15,11 @@ Problem analysis
 When displaying document title, the unescapeIllegalJcrChars method of org.exoplatform.ecm.utils.text.Text should be applied in order to revert changes done to save node in the JCR. The changes should be done in the view1.gtmpl related to the nt:file
 Fix description
 
-How is the problem fixed ?
+How is the problem fixed?
 
     * Escape these characters before displaying them.
 
-Patch informations:
+Patch information:
 
     * Final files to use should be attached to this page (Jira is for the dicussion)
 
@@ -44,10 +44,10 @@ Scenario 2:
 2- Select the document-> manage publication
 3-The problem of display appears in publication status and publication history.
 
-Tests performed at DevLevel ?
+Tests performed at DevLevel?
 *
 
-Tests performed at QA/Support Level ?
+Tests performed at QA/Support Level?
 *
 Documentation changes
 
@@ -62,7 +62,7 @@ Previous configuration will continue to work?
 *
 Risks and impacts
 
-Is this bug fix can have an impact on current client projects ?
+Can this bug fix have an impact on current client projects?
 
     * Function or ClassName change ?
 
