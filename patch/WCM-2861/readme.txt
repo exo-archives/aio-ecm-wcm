@@ -3,13 +3,11 @@ Summary
     * Status: A problem with WCMInsertContent when browsing directories with special characters (IE7)
     * CCP Issue: CCP-438, Product Jira Issue: WCM-2861
     * Complexity: low.
-    * Impacted Client(s): CG95 and probably all.
-    * Client expectations (date/content): N/A
-
+    
 The Proposal
 Problem description
 
-What is the problem to fix ?
+What is the problem to fix?
 
     * Environment: IE7.
       Context: edit a document using CK Editor.
@@ -21,19 +19,19 @@ How is the problem fixed?
 
     * Encode the folder's name before sending the request.
 
-Patch informations:
+Patch information:
 
     * Final files to use should be attached to this page (Jira is for the dicussion)
 
 Patches files:
  	 
-File WCM2861.patch 	 	  	
+File WCM-2861.patch 	 	  	
 
     * Properties
 
 Tests to perform
 
-Which test should have detect the issue ?
+Which test should have detect the issue?
 To reproduce the problem (using IE7):
 1- In BO, choose File Explorer: Managed Sites -> acme -> documents
 2- Add a folder "testé"
@@ -54,24 +52,24 @@ e collaboration>javax.jcr.PathNotFoundException: Item not found /sites content/l
 
 The path is not recognized since it contain a special character.
 
-Is a test missing in the TestCase file ?
+Is a test missing in the TestCase file?
 *
 
-Added UnitTest ?
+Added UnitTest?
 * No.
 
 Recommended Performance test?
 *
 Documentation changes
 
-Where is the documentation for this feature ?
+Where is the documentation for this feature?
 *
 
 Changes Needed:
 *
 Configuration changes
 
-Is this bug changing the product configuration ?
+Is this bug changing the product configuration?
 * No.
 
 Describe configuration changes:
@@ -81,10 +79,10 @@ Previous configuration will continue to work?
 * Yes.
 Risks and impacts
 
-Is there a risk applying this bug fix ?
+Is there a risk applying this bug fix?
 * None.
 
-Is this bug fix can have an impact on current client projects ?
+Can this bug fix have an impact on current client projects?
 *
 
 Is there a performance risk/cost?
