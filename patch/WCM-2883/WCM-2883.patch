@@ -1,0 +1,139 @@
+Index: web/wcmportal/src/main/webapp/groovy/portal/webui/container/UIContainer2.gtmpl
+===================================================================
+--- web/wcmportal/src/main/webapp/groovy/portal/webui/container/UIContainer2.gtmpl	(revision 49913)
++++ web/wcmportal/src/main/webapp/groovy/portal/webui/container/UIContainer2.gtmpl	(working copy)
+@@ -7,9 +7,12 @@
+    * May 21, 2010 
+    */
+   import org.exoplatform.commons.utils.ExpressionUtil;
++  import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+   
+   def rcontext = _ctx.getRequestContext() ;
+   ResourceBundle res = rcontext.getApplicationResourceBundle() ;
++  UIPortalApplication uiPortalApp = rcontext.getUIApplication();
++  int portalMode = uiPortalApp.getModeState();
+ 
+   String cssStyle = "";
+   String uiComponentWidth = uicomponent.getWidth();
+@@ -31,7 +34,7 @@
+     <div class="description"><%=_ctx.appRes("UIContainer.label.Thecontainer")%></div>
+   </div>
+   
+-  <div class="CONTROL-CONTAINER CONTROL-BLOCK" style="display: none">
++  <div class="CONTROL-CONTAINER CONTROL-BLOCK"  <%if(portalMode != UIPortalApplication.CONTAINER_EDIT_MODE) print("style=\"display: none\"")%>>
+     <%/*Begin InfoBar*/%>
+     <div class="UIInfoBar">
+       <div class="BlueRoundedStyle">
+@@ -62,9 +65,10 @@
+     <%/*End InfoBar*/ %>
+   </div>
+   
+-  <div class="LAYOUT-CONTAINER" style="display: none"></div>
++  <div class="LAYOUT-CONTAINER">
++<%} else {%>
++  <div class="VIEW-CONTAINER">
+ <%}%>
+-  <div class="VIEW-CONTAINER">
+     <div id="$uicomponent.id">
+       <div class="UIRowContainer"><%uicomponent.renderChildren()%></div>
+     </div>
+Index: web/wcmportal/src/main/webapp/groovy/portal/webui/container/UITableColumnContainer2.gtmpl
+===================================================================
+--- web/wcmportal/src/main/webapp/groovy/portal/webui/container/UITableColumnContainer2.gtmpl	(revision 49913)
++++ web/wcmportal/src/main/webapp/groovy/portal/webui/container/UITableColumnContainer2.gtmpl	(working copy)
+@@ -9,21 +9,25 @@
+  
+  import org.exoplatform.web.application.JavascriptManager;
+  import org.exoplatform.commons.utils.ExpressionUtil;
++ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+ 
+   def rcontext = _ctx.getRequestContext() ;
+   JavascriptManager jsmanager = rcontext.getJavascriptManager();
+   ResourceBundle res = rcontext.getApplicationResourceBundle() ;
++  UIPortalApplication uiPortalApp = rcontext.getUIApplication();
++  int portalMode = uiPortalApp.getModeState();
+   
+   jsmanager.importJavascript('eXo.portal.PortalDragDrop');
+ %>
+ <div class="UIContainer" id="UIContainer-${uicomponent.id}">
++<%if(uiPortalApp.isEditting()){%>
+   <div class="META-DATA-BLOCK" style="display: none">
+     <div class="id">$uicomponent.id</div>
+     <div class="title"><%=_ctx.appRes("UITableColumnContainer.label.title")%></div>
+     <div class="description"><%=_ctx.appRes("UITableColumnContainer.label.description")%></div>
+   </div>
+   
+-  <div class="CONTROL-CONTAINER CONTROL-BLOCK" style="display: none">
++  <div class="CONTROL-CONTAINER CONTROL-BLOCK" <%if(portalMode != UIPortalApplication.CONTAINER_EDIT_MODE) print("style=\"display: none\"")%>>
+     <%/*Begin InfoBar*/%>
+      <div class="UIInfoBar">
+       <div class="BlueRoundedStyle">
+@@ -53,15 +57,16 @@
+     <%/*End InfoBar*/ %>
+   </div>
+   
+-  <div class="LAYOUT-CONTAINER" style="display: none;"><span></span></div>
+-  <% 
++  <div class="LAYOUT-CONTAINER">
++<%} else {%>
++  <div class="VIEW-CONTAINER" >
++<%} 
+      String style = "";
+      String width  = uicomponent.getWidth();
+      String height  = uicomponent.getHeight();
+      if(width != null) style += "width:"+width+";";
+      if(height != null) style += "height:"+height+";";
+   %>
+-  <div class="VIEW-CONTAINER" >
+     <div id="$uicomponent.id">    
+       <table class="UITableColumnContainer" style="table-layout: fixed; margin: 0px auto; width: 99%; $style">
+         <tr class="TRContainer">
+Index: web/wcmportal/src/main/webapp/groovy/wcm/webui/container/UITableColumnContainer.gtmpl
+===================================================================
+--- web/wcmportal/src/main/webapp/groovy/wcm/webui/container/UITableColumnContainer.gtmpl	(revision 49913)
++++ web/wcmportal/src/main/webapp/groovy/wcm/webui/container/UITableColumnContainer.gtmpl	(working copy)
+@@ -1,19 +1,23 @@
+ <%
+  import org.exoplatform.web.application.JavascriptManager;
++ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+ 
+   def rcontext = _ctx.getRequestContext() ;
+   JavascriptManager jsmanager = rcontext.getJavascriptManager();
++  UIPortalApplication uiPortalApp = rcontext.getUIApplication();
++  int portalMode = uiPortalApp.getModeState();
+   
+   jsmanager.importJavascript('eXo.portal.PortalDragDrop');
+ %>
+ <div class="UIContainer" id="UIContainer-${uicomponent.id}">
++<%if(uiPortalApp.isEditting()){%>
+   <div class="META-DATA-BLOCK" style="display: none">
+     <div class="id">$uicomponent.id</div>
+     <div class="title"><%=_ctx.appRes("UITableColumnContainer.label.title")%></div>
+     <div class="description"><%=_ctx.appRes("UITableColumnContainer.label.description")%></div>
+   </div>
+   
+-  <div class="CONTROL-CONTAINER CONTROL-BLOCK" style="display: none">
++  <div class="CONTROL-CONTAINER CONTROL-BLOCK" <%if(portalMode != UIPortalApplication.CONTAINER_EDIT_MODE) print("style=\"display: none\"")%>>
+     <%/*Begin InfoBar*/%>
+      <div class="UIInfoBar">
+       <div class="BlueRoundedStyle">
+@@ -45,15 +49,16 @@
+     <%/*End InfoBar*/ %>
+   </div>
+   
+-  <div class="LAYOUT-CONTAINER" style="display: none;"><span></span></div>
+-  <% 
++  <div class="LAYOUT-CONTAINER">
++<%} else {%>
++  <div class="VIEW-CONTAINER" >
++<%}
+      String style = "";
+      String width  = uicomponent.getWidth();
+      String height  = uicomponent.getHeight();
+      if(width != null) style += "width:"+width+";";
+      if(height != null) style += "height:"+height+";";
+   %>
+-  <div class="VIEW-CONTAINER" >
+     <div id="$uicomponent.id">    
+ 		<div class="UIWCMColumnContainer" style="margin: 0px auto; $style">
+ 			<div class="WCMTRContainer">
