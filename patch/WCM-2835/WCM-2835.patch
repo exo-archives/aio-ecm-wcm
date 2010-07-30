@@ -1,0 +1,96 @@
+Index: webui/wcm/src/main/resources/groovy/wcm/webui/selector/content/one/UIContentBrowsePanel.gtmpl
+===================================================================
+--- webui/wcm/src/main/resources/groovy/wcm/webui/selector/content/one/UIContentBrowsePanel.gtmpl	(revision 50071)
++++ webui/wcm/src/main/resources/groovy/wcm/webui/selector/content/one/UIContentBrowsePanel.gtmpl	(working copy)
+@@ -1,7 +1,19 @@
+ <%
+ 	import org.exoplatform.wcm.webui.selector.UISelectPathPanel; 
+ 	import org.exoplatform.wcm.webui.selector.content.UIContentTreeBuilder;
+-%>
++%>
++
++<script>
++function changeContentType(type) {
++  <% for(String type : uicomponent.types) { %>
++
++    if (type == "$type") {
++        <%=  uicomponent.event("ChangeContentType", type).replaceAll("\\&amp;", "&") %>;
++    }
++  <% } %>
++}
++</script>
++
+ <div id="$uicomponent.id" class="UIWCMSearchContainer $uicomponent.id">
+ 	<div style="padding:10px;float:left">
+ 		<%String selected = "";%>
+@@ -9,13 +21,13 @@
+ 			<%= _ctx.appRes("UIContentBrowsePanelOne.selectBoxValues.FilterBy")%> :
+ 		</div>
+ 		<div style="float:left;padding:5px;">
+-			<select>
++			<select onchange="changeContentType(this.value)">
+ 				<%
+ 					for(String type : uicomponent.types){
+ 						if(type.equals(uicomponent.selectedValues)) selected = "selected";
+ 						else selected = "";
+ 				%>
+-						<option id="$type" $selected value="$type" onclick="<%=uicomponent.event("ChangeContentType", type)%>">
++						<option id="$type" $selected value="$type" >
+ 							<%= _ctx.appRes("UIContentBrowsePanelOne.selectBoxValues." + type) %>
+ 						</option>
+ 				<%}%>
+@@ -39,4 +51,4 @@
+ 			<% uicomponent.renderChild(UISelectPathPanel.class); %>
+ 		</div>
+ 	</div>
+-</div>
+\ No newline at end of file
++</div>
+Index: webui/wcm/src/main/resources/groovy/wcm/webui/selector/content/multi/UIContentBrowsePanel.gtmpl
+===================================================================
+--- webui/wcm/src/main/resources/groovy/wcm/webui/selector/content/multi/UIContentBrowsePanel.gtmpl	(revision 50071)
++++ webui/wcm/src/main/resources/groovy/wcm/webui/selector/content/multi/UIContentBrowsePanel.gtmpl	(working copy)
+@@ -2,7 +2,19 @@
+ 	import org.exoplatform.wcm.webui.selector.UISelectPathPanel; 
+ 	import org.exoplatform.wcm.webui.selector.content.UIContentTreeBuilder;
+ 	import org.exoplatform.wcm.webui.selector.content.multi.UICLVContentSelectedGrid;
+-%>
++%>
++
++<script>
++function changeContentType(type) {
++  <% for(String type : uicomponent.types) { %>
++
++    if (type == "$type") {
++        <%=  uicomponent.event("ChangeContentType", type).replaceAll("\\&amp;", "&") %>;
++    }
++  <% } %>
++}
++</script>
++
+ <div id="$uicomponent.id" class="UIWCMSearchContainer $uicomponent.id">
+ 	<div style="padding:10px;float:left">
+ 		<%String selected = "";%>
+@@ -10,13 +22,13 @@
+ 			<%= _ctx.appRes("UIContentBrowsePanelMulti.selectBoxValues.FilterBy")%> :
+ 		</div>
+ 		<div style="float:left;padding:5px;">
+-			<select>
++			<select onchange="changeContentType(this.value)">
+ 				<%
+ 					for(String type : uicomponent.types){
+ 						if(type.equals(uicomponent.selectedValues)) selected = "selected";
+ 						else selected = "";
+ 				%>
+-						<option id="$type" $selected value="$type" onclick="<%=uicomponent.event("ChangeContentType", type)%>">
++						<option id="$type" $selected value="$type" >
+ 							<%= _ctx.appRes("UIContentBrowsePanelMulti.selectBoxValues." + type) %>
+ 						</option>
+ 				<%}%>
+@@ -46,4 +58,4 @@
+ 
+ 		</div>
+ 	</div>
+-</div>
+\ No newline at end of file
++</div>
