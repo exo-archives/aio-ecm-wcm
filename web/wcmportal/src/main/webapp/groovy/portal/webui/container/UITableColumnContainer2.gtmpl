@@ -9,21 +9,25 @@
  
  import org.exoplatform.web.application.JavascriptManager;
  import org.exoplatform.commons.utils.ExpressionUtil;
+ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 
   def rcontext = _ctx.getRequestContext() ;
   JavascriptManager jsmanager = rcontext.getJavascriptManager();
   ResourceBundle res = rcontext.getApplicationResourceBundle() ;
+  UIPortalApplication uiPortalApp = rcontext.getUIApplication();
+  int portalMode = uiPortalApp.getModeState();
   
   jsmanager.importJavascript('eXo.portal.PortalDragDrop');
 %>
 <div class="UIContainer" id="UIContainer-${uicomponent.id}">
+<%if(uiPortalApp.isEditting()){%>
   <div class="META-DATA-BLOCK" style="display: none">
     <div class="id">$uicomponent.id</div>
     <div class="title"><%=_ctx.appRes("UITableColumnContainer.label.title")%></div>
     <div class="description"><%=_ctx.appRes("UITableColumnContainer.label.description")%></div>
   </div>
   
-  <div class="CONTROL-CONTAINER CONTROL-BLOCK" style="display: none">
+  <div class="CONTROL-CONTAINER CONTROL-BLOCK" <%if(portalMode != UIPortalApplication.CONTAINER_EDIT_MODE) print("style=\"display: none\"")%>>
     <%/*Begin InfoBar*/%>
      <div class="UIInfoBar">
       <div class="BlueRoundedStyle">
@@ -53,15 +57,16 @@
     <%/*End InfoBar*/ %>
   </div>
   
-  <div class="LAYOUT-CONTAINER" style="display: none;"><span></span></div>
-  <% 
+  <div class="LAYOUT-CONTAINER">
+<%} else {%>
+  <div class="VIEW-CONTAINER" >
+<%} 
      String style = "";
      String width  = uicomponent.getWidth();
      String height  = uicomponent.getHeight();
      if(width != null) style += "width:"+width+";";
      if(height != null) style += "height:"+height+";";
   %>
-  <div class="VIEW-CONTAINER" >
     <div id="$uicomponent.id">    
       <table class="UITableColumnContainer" style="table-layout: fixed; margin: 0px auto; width: 99%; $style">
         <tr class="TRContainer">
