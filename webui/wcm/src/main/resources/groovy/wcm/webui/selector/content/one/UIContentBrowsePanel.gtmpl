@@ -2,6 +2,18 @@
 	import org.exoplatform.wcm.webui.selector.UISelectPathPanel; 
 	import org.exoplatform.wcm.webui.selector.content.UIContentTreeBuilder;
 %>
+
+<script>
+function changeContentType(type) {
+  <% for(String type : uicomponent.types) { %>
+
+    if (type == "$type") {
+        <%=  uicomponent.event("ChangeContentType", type).replaceAll("\\&amp;", "&") %>;
+    }
+  <% } %>
+}
+</script>
+
 <div id="$uicomponent.id" class="UIWCMSearchContainer $uicomponent.id">
 	<div style="padding:10px;float:left">
 		<%String selected = "";%>
@@ -9,13 +21,13 @@
 			<%= _ctx.appRes("UIContentBrowsePanelOne.selectBoxValues.FilterBy")%> :
 		</div>
 		<div style="float:left;padding:5px;">
-			<select>
+			<select onchange="changeContentType(this.value)">
 				<%
 					for(String type : uicomponent.types){
 						if(type.equals(uicomponent.selectedValues)) selected = "selected";
 						else selected = "";
 				%>
-						<option id="$type" $selected value="$type" onclick="<%=uicomponent.event("ChangeContentType", type)%>">
+						<option id="$type" $selected value="$type" >
 							<%= _ctx.appRes("UIContentBrowsePanelOne.selectBoxValues." + type) %>
 						</option>
 				<%}%>
