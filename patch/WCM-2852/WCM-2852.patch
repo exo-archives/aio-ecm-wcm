@@ -1,29 +1,38 @@
-Index: web/wcmportal/src/main/webapp/WEB-INF/conf/dms/dms-templates-configuration.xml
+Index: ecm/wcm/branches/1.2.x/web/wcmportal/src/main/webapp/WEB-INF/conf/dms/dms-templates-configuration.xml
 ===================================================================
---- web/wcmportal/src/main/webapp/WEB-INF/conf/dms/dms-templates-configuration.xml	(revision 49747)
-+++ web/wcmportal/src/main/webapp/WEB-INF/conf/dms/dms-templates-configuration.xml	(working copy)
-@@ -453,7 +453,23 @@
+diff -u -N -r41909 -r50125
+--- ecm/wcm/branches/1.2.x/web/wcmportal/src/main/webapp/WEB-INF/conf/dms/dms-templates-configuration.xml	(.../dms-templates-configuration.xml)	(revision 41909)
++++ ecm/wcm/branches/1.2.x/web/wcmportal/src/main/webapp/WEB-INF/conf/dms/dms-templates-configuration.xml	(.../dms-templates-configuration.xml)	(revision 50125)
+@@ -453,7 +453,7 @@
                              </object>                                                   
                            </value>  
                          </collection>
 -                      </field>
 +                      </field>
-+                      <field  name="referencedSkin">
-+                         <collection type="java.util.ArrayList">
-+                           <value>
-+                             <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
-+                               <field name="templateFile"><string>/comment/skins/Stylesheet-lt.css</string></field>
-+                               <field name="roles"><string>*</string></field>                
-+                             </object>                                                   
-+                           </value>
-+                           <value>
-+                             <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
-+                               <field name="templateFile"><string>/comment/skins/Stylesheet-rt.css</string></field>
-+                               <field name="roles"><string>*</string></field>                
-+                             </object>                                                   
-+                           </value>  
-+                         </collection>
-+                       </field>
                      </object>
                    </value>  
                   <value>
+@@ -590,6 +590,22 @@
+                           </value>                                            
+                         </collection>
+                       </field>                  
++                      <field  name="referencedSkin">
++                        <collection type="java.util.ArrayList">
++                          <value>
++                            <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
++                              <field name="templateFile"><string>/comment/skins/Stylesheet-lt.css</string></field>
++                              <field name="roles"><string>*</string></field>                
++                            </object>                                                   
++                          </value>
++                          <value>
++                            <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
++                              <field name="templateFile"><string>/comment/skins/Stylesheet-rt.css</string></field>
++                              <field name="roles"><string>*</string></field>                
++                            </object>                                                   
++                          </value>  
++                        </collection>
++                      </field>
+                     </object>
+                   </value>
+                   
+
