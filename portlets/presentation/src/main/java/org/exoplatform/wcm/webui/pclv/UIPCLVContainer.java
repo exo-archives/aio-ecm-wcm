@@ -144,16 +144,15 @@ public class UIPCLVContainer extends UIContainer {
 		try {
 		  treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
 		} catch(RepositoryException ex){
-		  return;
 		}
 		
 		Node categoryNode = null;
-		if (preferenceTreeName.equals(categoryPath) || "".equals(categoryPath)) categoryNode = treeNode;
-		else categoryNode = treeNode.getNode(categoryPath);
-		List<Node> nodes = this.getListSymlinkNode(portletPreferences, categoryNode.getPath());
-		if(nodes == null) {
-		  nodes = new ArrayList<Node>();
-		}
+		List<Node> nodes = new ArrayList<Node>();
+		if (treeNode != null) {
+  		if (preferenceTreeName.equals(categoryPath) || "".equals(categoryPath)) categoryNode = treeNode;
+  		else categoryNode = treeNode.getNode(categoryPath);
+  		nodes = this.getListSymlinkNode(portletPreferences, categoryNode.getPath());
+  	}
 		this.setListNode(nodes);
 		int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIPCLVPortlet.ITEMS_PER_PAGE, null));
 		PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(nodes, itemsPerPage);
