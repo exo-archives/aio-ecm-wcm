@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.exoplatform.ecm</groupId>
     <artifactId>wcm</artifactId>
-    <version>1.2.6-SNAPSHOT</version>
+    <version>1.2.6</version>
   </parent>
   <artifactId>exo.ecm.wcm.component.wcm</artifactId>
   <name>eXo WCM Service</name>
