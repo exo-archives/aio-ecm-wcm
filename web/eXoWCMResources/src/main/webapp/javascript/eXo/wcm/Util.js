@@ -55,6 +55,7 @@ Utils = function(){
 		
 	Utils.prototype.insertQuickeditingBlock = function(portletID, quickEditingBlockId) {
 		var presentation = document.getElementById(portletID);		
+		if(!presentation) return;
 		var parentNode = presentation.parentNode;
 		var fistChild = eXo.core.DOMUtil.getChildrenByTagName(parentNode, "div")[0];
 		if (fistChild.id == quickEditingBlockId) {
