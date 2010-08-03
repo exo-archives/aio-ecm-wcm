@@ -1,0 +1,12 @@
+Index: web/eXoWCMResources/src/main/webapp/javascript/eXo/wcm/Util.js
+===================================================================
+--- web/eXoWCMResources/src/main/webapp/javascript/eXo/wcm/Util.js	(revision 50162)
++++ web/eXoWCMResources/src/main/webapp/javascript/eXo/wcm/Util.js	(working copy)
+@@ -55,6 +55,7 @@
+ 		
+ 	Utils.prototype.insertQuickeditingBlock = function(portletID, quickEditingBlockId) {
+ 		var presentation = document.getElementById(portletID);		
++		if(!presentation) return;
+ 		var parentNode = presentation.parentNode;
+ 		var fistChild = eXo.core.DOMUtil.getChildrenByTagName(parentNode, "div")[0];
+ 		if (fistChild.id == quickEditingBlockId) {
