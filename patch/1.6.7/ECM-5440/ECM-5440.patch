@@ -1,0 +1,26 @@
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/views/templates/ecm-explorer/ContentView.gtmpl
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/views/templates/ecm-explorer/ContentView.gtmpl	(revision 50536)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/views/templates/ecm-explorer/ContentView.gtmpl	(working copy)
+@@ -310,7 +310,7 @@
+ 	    		<div class="RightColumn"><% println(status); %></div>
+ 			<!-- Author -->
+ 	    		<div class="RightColumn" style="width: 90px;">
+-	        		<%=uicomponent.getNodeOwner(data)%>
++	        		<%=uicomponent.getNodeOwner(uicomponent.getNodeLink(data))%>
+ 	    		</div>
+ 			<!-- Date -->
+ 	    		<div class="RightColumn" style="width: 125px;">
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/views/templates/ecm-explorer/CategoryView.gtmpl
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/views/templates/ecm-explorer/CategoryView.gtmpl	(revision 50536)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/views/templates/ecm-explorer/CategoryView.gtmpl	(working copy)
+@@ -304,7 +304,7 @@
+ 			        		<div class="RightColumn"><% println(status); %></div>
+ <!-- Author -->
+ 			        		<div class="RightColumn" style="width: 90px;">
+-				        		<%=uicomponent.getNodeOwner(data)%>
++				        		<%=uicomponent.getNodeOwner(uicomponent.getNodeLink(data))%>
+ 			        		</div>
+ <!-- Date -->
+ 			        		<div class="RightColumn" style="width: 125px;">
