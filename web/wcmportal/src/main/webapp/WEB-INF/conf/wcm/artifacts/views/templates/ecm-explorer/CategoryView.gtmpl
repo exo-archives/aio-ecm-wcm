@@ -304,7 +304,7 @@
 			        		<div class="RightColumn"><% println(status); %></div>
 <!-- Author -->
 			        		<div class="RightColumn" style="width: 90px;">
-				        		<%=uicomponent.getNodeOwner(data)%>
+				        		<%=uicomponent.getNodeOwner(uicomponent.getNodeLink(data))%>
 			        		</div>
 <!-- Date -->
 			        		<div class="RightColumn" style="width: 125px;">
