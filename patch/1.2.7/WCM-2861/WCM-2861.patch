@@ -1,0 +1,20 @@
+Index: web/wcmportal/src/main/webapp/fckeditor/exo/content/content.html
+===================================================================
+--- web/wcmportal/src/main/webapp/fckeditor/exo/content/content.html	(revision 51766)
++++ web/wcmportal/src/main/webapp/fckeditor/exo/content/content.html	(working copy)
+@@ -402,7 +402,7 @@
+ 		var uploadItem = document.getElementById("UploadItem");	
+ 		if(uploadItem) uploadItem.style.display = "block";
+ 		if(driverPath && driverPath != "") {
+-			driverName =	currentNode.getAttribute('name');
++			driverName =	encodeURIComponent(currentNode.getAttribute('name'));
+ 			eXp.store.driverName = driverName;
+ 			currentFolder = '';
+ 		} else {
+@@ -472,4 +472,4 @@
+ 	};
+ 
+ </script>
+-</html>
+\ No newline at end of file
++</html>
