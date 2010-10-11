@@ -1,0 +1,13 @@
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/dms/artifacts/templates/file/views/view1.gtmpl
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/dms/artifacts/templates/file/views/view1.gtmpl	(revision 51211)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/dms/artifacts/templates/file/views/view1.gtmpl	(working copy)
+@@ -209,7 +209,7 @@
+ 				        	  rcontext.getJavascriptManager().addCustomizedOnLoadScript("eXo.ecm.ECMUtils.replaceToIframe('$iframeId');");
+ 				        %>
+ 				        	<div style="text-align: center">
+-				        	  <textarea id="<%=iframeId%>"><%=contentNode.getProperty("jcr:data").getString()%></textarea> 
++				        			<div id="<%=iframeId%>" class="<%=iframeId%>"><code><%=contentNode.getProperty("jcr:data").getString()%></code></div> 
+ 				        	</div>
+ 				        <%}%>
+ 					    </div>   

@@ -1,0 +1,115 @@
+Index: webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/content/one/UIContentBrowsePanelOne.java
+===================================================================
+--- webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/content/one/UIContentBrowsePanelOne.java	(revision 50733)
++++ webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/content/one/UIContentBrowsePanelOne.java	(working copy)
+@@ -114,11 +114,11 @@
+     }
+ 
+     // Update Page And Close PopUp
+-    UIPortal uiPortal = Util.getUIPortal();
+-    UIPageBody uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
+-    uiPageBody.setUIComponent(null);
+-    uiPageBody.setMaximizedUIComponent(null);
+-    Utils.updatePortal((PortletRequestContext)requestContext);
++//    UIPortal uiPortal = Util.getUIPortal();
++//    UIPageBody uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
++//    uiPageBody.setUIComponent(null);
++//    uiPageBody.setMaximizedUIComponent(null);
++//    Utils.updatePortal((PortletRequestContext)requestContext);
+     Utils.closePopupWindow(this, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW);
+   }
+ }
+Index: webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/content/multi/UIContentBrowsePanelMulti.java
+===================================================================
+--- webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/content/multi/UIContentBrowsePanelMulti.java	(revision 50733)
++++ webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/content/multi/UIContentBrowsePanelMulti.java	(working copy)
+@@ -20,6 +20,7 @@
+ 
+ import org.exoplatform.wcm.webui.selector.UISelectPathPanel;
+ import org.exoplatform.wcm.webui.selector.content.UIContentBrowsePanel;
++import org.exoplatform.wcm.webui.selector.content.UIContentSelector;
+ import org.exoplatform.webui.application.WebuiRequestContext;
+ import org.exoplatform.webui.config.annotation.ComponentConfig;
+ import org.exoplatform.webui.config.annotation.ComponentConfigs;
+@@ -72,6 +73,8 @@
+     }
+     uiSelectedContentGrid.updateGrid(uiSelectedContentGrid.getUIPageIterator().getCurrentPage());
+     uiSelectedContentGrid.setRendered(true);
+-    requestContext.addUIComponentToUpdateByAjax(this);
++    UIContentSelector contentSelector = uiSelectedContentGrid.getAncestorOfType(UIContentSelector.class);
++    contentSelector.setSelectedTab(1);
++    requestContext.addUIComponentToUpdateByAjax(contentSelector);
+   }
+ }
+Index: webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/content/UIContentSearchResult.java
+===================================================================
+--- webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/content/UIContentSearchResult.java	(revision 50733)
++++ webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/content/UIContentSearchResult.java	(working copy)
+@@ -19,8 +19,6 @@
+ import org.exoplatform.services.wcm.publication.WCMComposer;
+ import org.exoplatform.services.wcm.search.PaginatedQueryResult;
+ import org.exoplatform.wcm.webui.Utils;
+-import org.exoplatform.wcm.webui.selector.content.multi.UICLVContentSelectedGrid;
+-import org.exoplatform.wcm.webui.selector.content.multi.UIContentSelectorMulti;
+ import org.exoplatform.wcm.webui.viewer.UIContentViewer;
+ import org.exoplatform.webui.application.WebuiRequestContext;
+ import org.exoplatform.webui.application.portlet.PortletRequestContext;
+@@ -206,16 +204,9 @@
+       UIContentSearchResult contentSearchResult = event.getSource();
+       String nodePath = event.getRequestContext().getRequestParameter(OBJECTID);
+       
+-      UIContentSelectorMulti contentSelectorMulti = contentSearchResult.getAncestorOfType(UIContentSelectorMulti.class);      
+-      UICLVContentSelectedGrid uiSelectedContentGrid = contentSelectorMulti.findFirstComponentOfType(UICLVContentSelectedGrid.class);
+-      
+-      if (!uiSelectedContentGrid.getSelectedCategories().contains(nodePath)) {
+-        uiSelectedContentGrid.addCategory(nodePath);
+-      }
+-      uiSelectedContentGrid.updateGrid(uiSelectedContentGrid.getUIPageIterator().getCurrentPage());
+-      contentSelectorMulti.setSelectedTab(1);
+-//      Utils.updatePortal((PortletRequestContext)event.getRequestContext());
+-//      Utils.closePopupWindow(contentSearchResult.getAncestorOfType(UIContentSelectorMulti.class), contentSearchResult.getId());
++      UIContentSelector contentSelector = contentSearchResult.getAncestorOfType(UIContentSelector.class);      
++      UIContentBrowsePanel uiSelectedContentGrid = contentSelector.findFirstComponentOfType(UIContentBrowsePanel.class);
++      uiSelectedContentGrid.doSelect(NodeLocation.getNodeByLocation(NodeLocation.parse(nodePath)), event.getRequestContext());
+     }
+   }
+ 
+@@ -238,11 +229,12 @@
+     public void execute(Event<UIContentSearchResult> event) throws Exception {
+       UIContentSearchResult contentSearchResult = event.getSource();
+       String webcontentPath = event.getRequestContext().getRequestParameter(OBJECTID);
+-      PortletPreferences prefs = ((PortletRequestContext)event.getRequestContext()).getRequest().getPreferences();
+-      String workspace = prefs.getValue("workspace", null);
+-      String repository = prefs.getValue("repository", null);
+-      Node originalNode = Utils.getViewableNodeByComposer(repository, workspace, webcontentPath, WCMComposer.BASE_VERSION);
+-      Node viewNode = Utils.getViewableNodeByComposer(repository, workspace, webcontentPath);
++      NodeLocation location = NodeLocation.parse(webcontentPath);
++      String workspace = location.getWorkspace();
++      String repository = location.getRepository();
++      String path = location.getPath();
++      Node originalNode = Utils.getViewableNodeByComposer(repository, workspace, path, WCMComposer.BASE_VERSION);
++      Node viewNode = Utils.getViewableNodeByComposer(repository, workspace, path);
+       UIContentSelector contentSelector = contentSearchResult.getAncestorOfType(UIContentSelector.class);
+       UIContentViewer contentResultViewer = contentSelector.getChild(UIContentViewer.class);
+       if (contentResultViewer == null) contentResultViewer = contentSelector.addChild(UIContentViewer.class, null, null);
+Index: webui/wcm/src/main/resources/groovy/wcm/webui/selector/content/UIContentSearchResult.gtmpl
+===================================================================
+--- webui/wcm/src/main/resources/groovy/wcm/webui/selector/content/UIContentSearchResult.gtmpl	(revision 50733)
++++ webui/wcm/src/main/resources/groovy/wcm/webui/selector/content/UIContentSearchResult.gtmpl	(working copy)
+@@ -8,6 +8,7 @@
+   import org.exoplatform.ecm.webui.utils.Utils;
+   import org.exoplatform.services.ecm.publication.PublicationService;
+   import org.exoplatform.services.wcm.publication.WCMPublicationService;
++  import org.exoplatform.services.wcm.core.NodeLocation;
+ 
+   String[] beanFields =  uicomponent.getBeanFields();  
+   String[] beanActions =  uicomponent.getBeanActions();
+@@ -87,7 +88,7 @@
+               <%
+                 def beanIdField = uicomponent.getBeanIdField() ;           
+                 for(action in beanActions) { 
+-                  def beanId = uicomponent.getFieldValue(bean, beanIdField)  ;
++                  def beanId = NodeLocation.serialize(NodeLocation.make(bean));
+                   if(action == null) continue;
+                   String title = _ctx.appRes("UIContentSearchResult.title." + action);
+                   String actionLink = uicomponent.event(action, beanId);
