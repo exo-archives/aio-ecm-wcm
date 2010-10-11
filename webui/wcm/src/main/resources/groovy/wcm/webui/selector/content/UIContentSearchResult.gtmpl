@@ -8,6 +8,7 @@
   import org.exoplatform.ecm.webui.utils.Utils;
   import org.exoplatform.services.ecm.publication.PublicationService;
   import org.exoplatform.services.wcm.publication.WCMPublicationService;
+  import org.exoplatform.services.wcm.core.NodeLocation;
 
   String[] beanFields =  uicomponent.getBeanFields();  
   String[] beanActions =  uicomponent.getBeanActions();
@@ -87,7 +88,7 @@
               <%
                 def beanIdField = uicomponent.getBeanIdField() ;           
                 for(action in beanActions) { 
-                  def beanId = uicomponent.getFieldValue(bean, beanIdField)  ;
+                  def beanId = NodeLocation.serialize(NodeLocation.make(bean));
                   if(action == null) continue;
                   String title = _ctx.appRes("UIContentSearchResult.title." + action);
                   String actionLink = uicomponent.event(action, beanId);

@@ -19,8 +19,6 @@ import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.search.PaginatedQueryResult;
 import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.wcm.webui.selector.content.multi.UICLVContentSelectedGrid;
-import org.exoplatform.wcm.webui.selector.content.multi.UIContentSelectorMulti;
 import org.exoplatform.wcm.webui.viewer.UIContentViewer;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -206,16 +204,9 @@ public class UIContentSearchResult extends UIGrid {
       UIContentSearchResult contentSearchResult = event.getSource();
       String nodePath = event.getRequestContext().getRequestParameter(OBJECTID);
       
-      UIContentSelectorMulti contentSelectorMulti = contentSearchResult.getAncestorOfType(UIContentSelectorMulti.class);      
-      UICLVContentSelectedGrid uiSelectedContentGrid = contentSelectorMulti.findFirstComponentOfType(UICLVContentSelectedGrid.class);
-      
-      if (!uiSelectedContentGrid.getSelectedCategories().contains(nodePath)) {
-        uiSelectedContentGrid.addCategory(nodePath);
-      }
-      uiSelectedContentGrid.updateGrid(uiSelectedContentGrid.getUIPageIterator().getCurrentPage());
-      contentSelectorMulti.setSelectedTab(1);
-//      Utils.updatePortal((PortletRequestContext)event.getRequestContext());
-//      Utils.closePopupWindow(contentSearchResult.getAncestorOfType(UIContentSelectorMulti.class), contentSearchResult.getId());
+      UIContentSelector contentSelector = contentSearchResult.getAncestorOfType(UIContentSelector.class);      
+      UIContentBrowsePanel uiSelectedContentGrid = contentSelector.findFirstComponentOfType(UIContentBrowsePanel.class);
+      uiSelectedContentGrid.doSelect(NodeLocation.getNodeByLocation(NodeLocation.parse(nodePath)), event.getRequestContext());
     }
   }
 
@@ -238,11 +229,12 @@ public class UIContentSearchResult extends UIGrid {
     public void execute(Event<UIContentSearchResult> event) throws Exception {
       UIContentSearchResult contentSearchResult = event.getSource();
       String webcontentPath = event.getRequestContext().getRequestParameter(OBJECTID);
-      PortletPreferences prefs = ((PortletRequestContext)event.getRequestContext()).getRequest().getPreferences();
-      String workspace = prefs.getValue("workspace", null);
-      String repository = prefs.getValue("repository", null);
-      Node originalNode = Utils.getViewableNodeByComposer(repository, workspace, webcontentPath, WCMComposer.BASE_VERSION);
-      Node viewNode = Utils.getViewableNodeByComposer(repository, workspace, webcontentPath);
+      NodeLocation location = NodeLocation.parse(webcontentPath);
+      String workspace = location.getWorkspace();
+      String repository = location.getRepository();
+      String path = location.getPath();
+      Node originalNode = Utils.getViewableNodeByComposer(repository, workspace, path, WCMComposer.BASE_VERSION);
+      Node viewNode = Utils.getViewableNodeByComposer(repository, workspace, path);
       UIContentSelector contentSelector = contentSearchResult.getAncestorOfType(UIContentSelector.class);
       UIContentViewer contentResultViewer = contentSelector.getChild(UIContentViewer.class);
       if (contentResultViewer == null) contentResultViewer = contentSelector.addChild(UIContentViewer.class, null, null);

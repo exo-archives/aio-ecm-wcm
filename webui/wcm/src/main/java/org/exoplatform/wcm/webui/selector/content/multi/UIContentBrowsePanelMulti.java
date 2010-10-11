@@ -20,6 +20,7 @@ import javax.jcr.Node;
 
 import org.exoplatform.wcm.webui.selector.UISelectPathPanel;
 import org.exoplatform.wcm.webui.selector.content.UIContentBrowsePanel;
+import org.exoplatform.wcm.webui.selector.content.UIContentSelector;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -72,6 +73,8 @@ public class UIContentBrowsePanelMulti extends UIContentBrowsePanel{
     }
     uiSelectedContentGrid.updateGrid(uiSelectedContentGrid.getUIPageIterator().getCurrentPage());
     uiSelectedContentGrid.setRendered(true);
-    requestContext.addUIComponentToUpdateByAjax(this);
+    UIContentSelector contentSelector = uiSelectedContentGrid.getAncestorOfType(UIContentSelector.class);
+    contentSelector.setSelectedTab(1);
+    requestContext.addUIComponentToUpdateByAjax(contentSelector);
   }
 }

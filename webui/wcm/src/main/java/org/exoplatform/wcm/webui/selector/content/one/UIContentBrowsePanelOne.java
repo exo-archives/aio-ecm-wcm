@@ -114,11 +114,11 @@ public class UIContentBrowsePanelOne extends UIContentBrowsePanel{
     }
 
     // Update Page And Close PopUp
-    UIPortal uiPortal = Util.getUIPortal();
-    UIPageBody uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
-    uiPageBody.setUIComponent(null);
-    uiPageBody.setMaximizedUIComponent(null);
-    Utils.updatePortal((PortletRequestContext)requestContext);
+//    UIPortal uiPortal = Util.getUIPortal();
+//    UIPageBody uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
+//    uiPageBody.setUIComponent(null);
+//    uiPageBody.setMaximizedUIComponent(null);
+//    Utils.updatePortal((PortletRequestContext)requestContext);
     Utils.closePopupWindow(this, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW);
   }
 }
