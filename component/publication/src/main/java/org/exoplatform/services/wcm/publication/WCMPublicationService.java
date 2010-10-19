@@ -34,6 +34,8 @@ import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleExcepti
  */
 public interface WCMPublicationService {   
   
+  public static final String UPDATE_EVENT = "WCMPublicationService.event.updateState";
+  
  /**
   * Add a Web Publication Plugin to the service.
   * The method caches all added plugins.
