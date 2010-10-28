@@ -1,0 +1,11 @@
+Index: portlets/presentation/src/main/webapp/skin/SiteAdministration/DefaultStylesheet.css
+===================================================================
+--- portlets/presentation/src/main/webapp/skin/SiteAdministration/DefaultStylesheet.css	(revision 61967)
++++ portlets/presentation/src/main/webapp/skin/SiteAdministration/DefaultStylesheet.css	(working copy)
+@@ -1,5 +1,6 @@
+ .UISiteAdministrationPortlet {
+ 	position: relative;
++	z-index: 100;
+ }
+ 
+ .UISiteAdminToolBar {	
