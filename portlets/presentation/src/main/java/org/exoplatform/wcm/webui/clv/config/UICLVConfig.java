@@ -547,23 +547,24 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
       portletPreferences.setValue(UICLVPortlet.ORDER_TYPE, orderType);
       portletPreferences.setValue(UICLVPortlet.BASE_PATH, basePath);
       portletPreferences.setValue(UICLVPortlet.ORDER_BY, orderBy);
-      
-      if (uiViewerManagementForm.isManualMode()) {
-        String[] sl = (String[]) uiViewerManagementForm.getViewAbleContentList().toArray(new String[0]);
-        portletPreferences.setValues(UICLVPortlet.CONTENT_LIST, sl);
-      } else {        
-        portletPreferences.setValues(UICLVPortlet.CONTENT_LIST, new String [] {});
-      }
       portletPreferences.store();
+      
       if (!Utils.isQuickEditMode(uiViewerManagementForm, "UIViewerManagementPopupWindow")) {
+		
+		
       	if (currentViewerMode.equals(UICLVConfig.VIEWER_MANUAL_MODE)) {
-      		uiViewerManagementForm.doSuspendPublication(repository, workspace,
-      				portletRequestContext, oldContentList, portletId);
+      	  uiViewerManagementForm.doSuspendPublication(repository, workspace, portletRequestContext, oldContentList, portletId);
       	}
       	if (newViewerMode.equals(UICLVConfig.VIEWER_MANUAL_MODE)) {
-      		uiViewerManagementForm.doPublication(repository, workspace,
-      				portletRequestContext, selectedList, portletId);
+      		uiViewerManagementForm.doPublication(repository, workspace, portletRequestContext, selectedList, portletId);
       	}
+      	if (uiViewerManagementForm.isManualMode()) {
+          String[] sl = (String[]) uiViewerManagementForm.getViewAbleContentList().toArray(new String[0]);
+          portletPreferences.setValues(UICLVPortlet.CONTENT_LIST, sl);
+        } else {        
+          portletPreferences.setValues(UICLVPortlet.CONTENT_LIST, new String [] {});
+        }
+  		portletPreferences.store();
       	Utils.createPopupMessage(uiViewerManagementForm, "UIMessageBoard.msg.saving-success", null, ApplicationMessage.INFO);
       } else {
         portletRequestContext.setApplicationMode(PortletMode.VIEW);
@@ -595,6 +596,13 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
             uiFolderViewer.init();
           }
         }
+        if (uiViewerManagementForm.isManualMode()) {
+           String[] sl = (String[]) uiViewerManagementForm.getViewAbleContentList().toArray(new String[0]);
+           portletPreferences.setValues(UICLVPortlet.CONTENT_LIST, sl);
+        } else {        
+           portletPreferences.setValues(UICLVPortlet.CONTENT_LIST, new String [] {});
+        }
+        portletPreferences.store();
         Utils.closePopupWindow(uiViewerManagementForm, "UIViewerManagementPopupWindow");
       }
     }
