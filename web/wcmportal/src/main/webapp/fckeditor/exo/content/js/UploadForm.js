@@ -39,7 +39,7 @@ UploadForm.prototype.showUploadForm = function() {
 	var tblActionContainer =  eXo.core.DOMUtil.findFirstDescendantByClass(uploadForm, "table", "ActionContainer");
 	var trFolder =  eXo.core.DOMUtil.findFirstDescendantByClass(tblActionContainer, "tr", "PathFolder");
 	var spanFolder = eXo.core.DOMUtil.findDescendantsByTagName(trFolder, "span")[0];
-	spanFolder.innerHTML += ":"+ eXp.store.currentFolder;
+	spanFolder.innerHTML += ":"+ decodeURIComponent(decodeURIComponent(eXp.store.currentFolder));
 };
 
 UploadForm.prototype.showAlert = function() {
@@ -167,7 +167,7 @@ UploadForm.prototype.uploadFile = function() {
 		}
 	} else {
 		eXoWCM.UploadForm.showAlert();	
-	}
+	}	
 };
 
 UploadForm.prototype.uploadFileAbort = function() {
@@ -284,7 +284,7 @@ UploadForm.prototype.updateFiles = function(nodeId) {
 	var xmlTreeNodes = eXoWCM.PluginUtils.request(connector);
 	if(!xmlTreeNodes) return;
 	var fileList = xmlTreeNodes.getElementsByTagName('File');
-	if(fileList && fileList.length > 0) eXoWCM.PluginUtils.listFiles(fileList);
+	if(fileList && fileList.length > 0) eXoWCM.PluginUtils.listFiles(fileList);	
 };
 
 UploadForm.prototype.isInvalidName = function(name) {
