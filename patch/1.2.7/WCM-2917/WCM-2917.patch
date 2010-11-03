@@ -1,0 +1,78 @@
+Index: portlets/presentation/src/main/java/org/exoplatform/wcm/webui/scv/config/UINameWebContentForm.java
+===================================================================
+--- portlets/presentation/src/main/java/org/exoplatform/wcm/webui/scv/config/UINameWebContentForm.java	(revision 61593)
++++ portlets/presentation/src/main/java/org/exoplatform/wcm/webui/scv/config/UINameWebContentForm.java	(working copy)
+@@ -18,12 +18,16 @@
+ 
+ import java.util.ArrayList;
+ import java.util.Collections;
++import java.util.GregorianCalendar;
+ import java.util.List;
+ 
+ import javax.jcr.Node;
++import javax.jcr.PropertyType;
+ import javax.jcr.RepositoryException;
++import javax.jcr.Value;
+ import javax.jcr.nodetype.NodeType;
+ import javax.jcr.nodetype.NodeTypeManager;
++import javax.jcr.nodetype.PropertyDefinition;
+ import javax.portlet.PortletPreferences;
+ 
+ import org.exoplatform.ecm.webui.comparator.ItemOptionNameComparator;
+@@ -166,7 +170,7 @@
+       Node webContentNode = null;
+       String contentType = uiNameWebContentForm.getUIFormSelectBox(FIELD_SELECT).getValue();
+       try {
+-        webContentNode = webContentStorage.addNode(webContentName, contentType);          
++        webContentNode = webContentStorage.addNode(webContentName, contentType);
+       } catch (RepositoryException e) {
+         uiApplication.addMessage(new ApplicationMessage("UINameWebContentForm.msg.non-firstwhiteletter", null, ApplicationMessage.WARNING));
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+@@ -181,6 +185,7 @@
+         webContentNode.addMixin("mix:votable");
+       if (webContentNode.canAddMixin("mix:commentable"))
+         webContentNode.addMixin("mix:commentable");
++      fillMandatoryProperties(webContentNode);
+       webContentStorage.getSession().save();
+ 
+       NodeLocation webcontentNodeLocation = NodeLocation.make(webContentNode);
+@@ -203,6 +208,39 @@
+       Utils.updatePopupWindow(uiNameWebContentForm, portletConfig, UIContentDialogForm.CONTENT_DIALOG_FORM_POPUP_WINDOW);
+       portletConfig.init();
+     }
++    
++    private void fillMandatoryProperties(Node node) throws Exception {
++      for (PropertyDefinition propertyDef : node.getPrimaryNodeType().getPropertyDefinitions()) 
++        if (!node.hasProperty(propertyDef.getName()) && !propertyDef.isAutoCreated() && propertyDef.isMandatory()) {
++          setPropertyValue(node, propertyDef);
++        }
++       for (NodeType mixin : node.getMixinNodeTypes()) {
++         for (PropertyDefinition propertyDef : mixin.getPropertyDefinitions()) {
++           if (!node.hasProperty(propertyDef.getName()) && !propertyDef.isAutoCreated() && propertyDef.isMandatory()) {
++             setPropertyValue(node, propertyDef);             
++           }
++         }
++       }
++    }
++    
++    private void setPropertyValue(Node node, PropertyDefinition propertyDef) throws Exception {
++      int[] types =  {PropertyType.BINARY, PropertyType.BOOLEAN, PropertyType.DATE, PropertyType.DOUBLE,
++                     PropertyType.LONG, PropertyType.NAME, PropertyType.PATH, PropertyType.REFERENCE, 
++                     PropertyType.STRING, PropertyType.UNDEFINED};
++      
++      Object[] values = {"", true, new GregorianCalendar(), 0, 0, "", "", "", "", ""};
++      for (int i = 0; i < types.length; i++)
++        if (propertyDef.getRequiredType() == types[i]) {
++          if (propertyDef.isMultiple()) {
++            node.setProperty(propertyDef.getName(), new String[]{}, propertyDef.getRequiredType());
++          } else {
++            if (types[i] == PropertyType.DATE)
++              node.setProperty(propertyDef.getName(), new GregorianCalendar());
++            else 
++              node.setProperty(propertyDef.getName(), values[i].toString(), propertyDef.getRequiredType());
++          }
++        }
++    }
+   }
+ 
+   /**
