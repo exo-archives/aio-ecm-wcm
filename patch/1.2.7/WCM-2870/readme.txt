@@ -16,6 +16,7 @@ Fix description
 How is the problem fixed?
 
     * Replace a textbox to textarea, because there are 2 nested textareas.
+    * Modify row and column width of view templates.
 
 Patch information:
 

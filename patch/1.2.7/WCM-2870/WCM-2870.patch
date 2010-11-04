@@ -11,3 +11,16 @@ Index: web/wcmportal/src/main/webapp/WEB-INF/conf/dms/artifacts/templates/file/v
  				        	</div>
  				        <%}%>
  					    </div>   
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/nodetypes-templates/template/views/view1.gtmpl
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/nodetypes-templates/template/views/view1.gtmpl	(revision 62154)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/nodetypes-templates/template/views/view1.gtmpl	(working copy)
+@@ -1,6 +1,6 @@
+ <%
+ 	 def node = uicomponent.getNode() ;	
+ %>
+-<textarea cols="100" rows="20" readonly>
++<textarea cols="83" rows="28" readonly>
+ <%=node.getProperty("exo:templateFile").getString()%>
+ </textarea>
+\ No newline at end of file

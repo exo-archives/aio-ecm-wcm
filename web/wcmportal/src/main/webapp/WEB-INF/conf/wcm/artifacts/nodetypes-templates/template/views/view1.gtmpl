@@ -1,6 +1,6 @@
 <%
 	 def node = uicomponent.getNode() ;	
 %>
-<textarea cols="100" rows="20" readonly>
+<textarea cols="83" rows="28" readonly>
 <%=node.getProperty("exo:templateFile").getString()%>
 </textarea>
