@@ -1,0 +1,34 @@
+Index: portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pclv/UIPCLVContainer.java
+===================================================================
+--- portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pclv/UIPCLVContainer.java	(revision 61594)
++++ portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pclv/UIPCLVContainer.java	(working copy)
+@@ -180,7 +180,15 @@
+ 		String server =  Util.getPortalRequestContext().getRequest().getRequestURL().toString();
+ 		server = server.substring(0, server.indexOf('/', 8));
+ 		
+-		parameterizedContentListViewer.setRssLink("/rest/rss/generate?repository=" + preferenceRepository + "&workspace=" + workspace + "&server=" + server + "&siteName=" + siteName + "&categoryPath=" + ("".equals(categoryPath) ? preferenceTreeName : preferenceTreeName + "/" + categoryPath));
++		//build rss link
++		String strRssLink = new StringBuilder().append("/rest/rss/generate?repository=").append(preferenceRepository)
++		                                        .append("&workspace=").append(workspace)
++		                                        .append("&server=").append(server)
++		                                        .append("&siteName=").append(siteName)
++		                                        .append("&categoryPath=").append(("".equals(categoryPath) ? preferenceTreeName : preferenceTreeName + "/" + categoryPath)).toString();
++		//replace '&' character by '&amp;' to pass the W3C validator
++		String strEncodeRssLink = StringUtils.replace(strRssLink, "&", "&amp;");
++		parameterizedContentListViewer.setRssLink(strEncodeRssLink);
+ 	}
+ 
+ 	/**
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates/content-list-viewer/list-by-folder/BigHotNewsTemplate.gtmpl
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates/content-list-viewer/list-by-folder/BigHotNewsTemplate.gtmpl	(revision 61594)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates/content-list-viewer/list-by-folder/BigHotNewsTemplate.gtmpl	(working copy)
+@@ -25,7 +25,7 @@
+ 					</div>
+ 					<%
+ 						if (isShowRSSLink) {
+-							%><a class="RssIcon" href="$rssLink" target="_newrss">RSS Feed</a><%
++							%><a class="RssIcon" onclick="javascript:window.open('$rssLink');" style="cursor:pointer">RSS Feed</a><%
+ 						}
+ 					%>
+ 					<div class="ClearBoth"><span></span></div>

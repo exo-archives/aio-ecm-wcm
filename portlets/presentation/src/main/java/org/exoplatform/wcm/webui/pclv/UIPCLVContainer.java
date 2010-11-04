@@ -180,7 +180,15 @@ public class UIPCLVContainer extends UIContainer {
 		String server =  Util.getPortalRequestContext().getRequest().getRequestURL().toString();
 		server = server.substring(0, server.indexOf('/', 8));
 		
-		parameterizedContentListViewer.setRssLink("/rest/rss/generate?repository=" + preferenceRepository + "&workspace=" + workspace + "&server=" + server + "&siteName=" + siteName + "&categoryPath=" + ("".equals(categoryPath) ? preferenceTreeName : preferenceTreeName + "/" + categoryPath));
+		//build rss link
+		String strRssLink = new StringBuilder().append("/rest/rss/generate?repository=").append(preferenceRepository)
+		                                        .append("&workspace=").append(workspace)
+		                                        .append("&server=").append(server)
+		                                        .append("&siteName=").append(siteName)
+		                                        .append("&categoryPath=").append(("".equals(categoryPath) ? preferenceTreeName : preferenceTreeName + "/" + categoryPath)).toString();
+		//replace '&' character by '&amp;' to pass the W3C validator
+		String strEncodeRssLink = StringUtils.replace(strRssLink, "&", "&amp;");
+		parameterizedContentListViewer.setRssLink(strEncodeRssLink);
 	}
 
 	/**
