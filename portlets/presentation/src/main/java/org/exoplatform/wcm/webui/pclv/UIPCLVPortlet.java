@@ -16,6 +16,8 @@
  */
 package org.exoplatform.wcm.webui.pclv;
 
+import java.util.Calendar;
+
 import javax.portlet.PortletMode;
 
 import org.exoplatform.wcm.webui.pclv.config.UIPCLVConfig;
@@ -145,7 +147,8 @@ public class UIPCLVPortlet extends UIPortletApplication {
 	 */
 	private void activateMode(PortletMode mode) throws Exception {
 		getChildren().clear();
-		addChild(UIPopupContainer.class, null, null);
+		Calendar lCDateTime = Calendar.getInstance();
+		addChild(UIPopupContainer.class, null, "UIPopupContainer-" + lCDateTime.getTimeInMillis());
 		if (PortletMode.VIEW.equals(mode)) {
       UIPCLVContainer container = addChild(UIPCLVContainer.class, null, null);
       container.init();

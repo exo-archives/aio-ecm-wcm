@@ -5,7 +5,7 @@
 	def docBase = Util.getPortalRequestContext().getRequestContextPath();
 	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs');
 	def String htmlWYSIWYGFormId = "htmlData[" + uicomponent.hashCode() + "]";
-	def String cssFormId = "ContentCSS[" + uicomponent.hashCode() + "]";
+	def String cssFormId = "ContentCSS-" + uicomponent.hashCode();
 	def String jsFormId = "ContentJS[" + uicomponent.hashCode() + "]";
 	//rcontext.getJavascriptManager().importJavascript('eXo.wcm.Util' , "/eXoWCMResources/javascript");
 	rcontext.getJavascriptManager().addOnLoadJavascript("wcm.insertCSSFromTextArea2FCK('" + htmlWYSIWYGFormId + "', '" + cssFormId + "')");

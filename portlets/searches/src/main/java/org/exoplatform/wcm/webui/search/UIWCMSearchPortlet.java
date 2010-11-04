@@ -11,6 +11,9 @@
  */
 package org.exoplatform.wcm.webui.search;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import javax.portlet.PortletMode;
 
 import org.exoplatform.wcm.webui.search.config.UIPortletConfig;
@@ -95,10 +98,11 @@ public class UIWCMSearchPortlet extends UIPortletApplication {
 	private void activateMode(PortletMode mode) throws Exception {
 		getChildren().clear();
 		addChild(UIPopupContainer.class, null, "UISearchedContentEdittingPopup");
+		Calendar lCDateCalendar = Calendar.getInstance();
 		if (PortletMode.VIEW.equals(mode)) {
-				addChild(UISearchPageLayout.class, null, UIPortletApplication.VIEW_MODE);
+				addChild(UISearchPageLayout.class, null, UIPortletApplication.VIEW_MODE + "-" + lCDateCalendar.getTimeInMillis());
 		} else if (PortletMode.EDIT.equals(mode)) {
-			addChild(UIPortletConfig.class, null, UIPortletApplication.EDIT_MODE);
+			addChild(UIPortletConfig.class, null, UIPortletApplication.EDIT_MODE + "-" + lCDateCalendar.getTimeInMillis());
 		}
 	}
 }

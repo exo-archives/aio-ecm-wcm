@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003-2009 eXo Platform SAS.
+* Copyright (C) 2003-2009 eXo Platform SAS.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
@@ -15,6 +15,8 @@
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
 package org.exoplatform.wcm.webui.category;
+
+import java.util.Calendar;
 
 import javax.portlet.PortletMode;
 
@@ -59,7 +61,8 @@ public class UICategoryNavigationPortlet extends UIPortletApplication {
    */
   public void activateMode(PortletMode mode) throws Exception {
     getChildren().clear();
-    addChild(UIPopupContainer.class, null, null);
+    Calendar lCDateTime = Calendar.getInstance();
+    addChild(UIPopupContainer.class, null, "UIPopupContainer-" + lCDateTime.getTimeInMillis());
     if (PortletMode.VIEW.equals(mode)) {
       addChild(UICategoryNavigationTree.class, null, null);
     } else if (PortletMode.EDIT.equals(mode)) {

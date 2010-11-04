@@ -16,6 +16,8 @@
  */
 package org.exoplatform.wcm.webui.newsletter.manager;
 
+import java.util.Calendar;
+
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPortletApplication;
@@ -77,6 +79,7 @@ public class UINewsletterManagerPortlet extends UIPortletApplication {
 	  addChild(UICategories.class, null, null).setRendered(isRenderUICategories);
 	  addChild(UISubscriptions.class, null, null).setRendered(isRenderUICategories);
 		addChild(UINewsletterEntryManager.class, null, null).setRendered(isRenderUINewsLetters);
-		addChild(UIPopupContainer.class, null, null);
+		Calendar lCDateTime = Calendar.getInstance();
+		addChild(UIPopupContainer.class, null, "UIPopupContainer-"+ lCDateTime.getTimeInMillis());
 	}
 }

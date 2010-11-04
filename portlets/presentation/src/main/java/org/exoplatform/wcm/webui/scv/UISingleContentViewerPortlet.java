@@ -16,6 +16,8 @@
  */
 package org.exoplatform.wcm.webui.scv;
 
+import java.util.Calendar;
+
 import javax.jcr.Node;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
@@ -75,8 +77,9 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
    * 
    * @throws Exception the exception
    */
-  public void activateMode(PortletMode mode) throws Exception {       
-    addChild(UIPopupContainer.class, null, null);
+  public void activateMode(PortletMode mode) throws Exception {   
+	Calendar lCDateCalendar = Calendar.getInstance();  
+    addChild(UIPopupContainer.class, null, "UIPopupContainer-" + lCDateCalendar.getTimeInMillis());
     if(PortletMode.VIEW.equals(mode)) {      
     	if (getChild(UIPresentationContainer.class) == null) addChild(UIPresentationContainer.class, null, null);                   
     } else if (PortletMode.EDIT.equals(mode)) {

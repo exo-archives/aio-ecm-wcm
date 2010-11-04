@@ -16,6 +16,8 @@
  */
 package org.exoplatform.wcm.webui.fastcontentcreator;
 
+import java.util.Calendar;
+
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
@@ -53,7 +55,8 @@ public class UIFCCPortlet extends UIPortletApplication {
     context.getJavascriptManager().importJavascript("eXo.ecm.ECMUtils","/ecm/javascript/");
     context.getJavascriptManager().addJavascript("eXo.ecm.ECMUtils.init('UIFastContentCreatorPortlet') ;");
     PortletRequestContext portletRequestContext = (PortletRequestContext)  context ;
-    addChild(UIPopupContainer.class, null, null);
+    Calendar lCDateTime = Calendar.getInstance();
+    addChild(UIPopupContainer.class, null, "UIPopupContainer-" + lCDateTime.getTimeInMillis());
     if (portletRequestContext.getApplicationMode() == PortletMode.VIEW) {
       if(getChild(UIFCCConfig.class) != null) {
         removeChild(UIFCCConfig.class) ;

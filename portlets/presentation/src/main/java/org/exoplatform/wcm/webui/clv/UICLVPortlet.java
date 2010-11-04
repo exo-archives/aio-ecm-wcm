@@ -16,19 +16,11 @@
  */
 package org.exoplatform.wcm.webui.clv;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
 
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
-import org.exoplatform.portal.application.Preference;
-import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
-import org.exoplatform.services.wcm.core.WCMConfigurationService;
-import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.clv.config.UICLVConfig;
 import org.exoplatform.webui.application.WebuiApplication;
@@ -143,17 +135,18 @@ public class UICLVPortlet extends UIPortletApplication {
    */
   private void activateMode(PortletMode mode) throws Exception {
     getChildren().clear();
-    addChild(UIPopupContainer.class, null, null);
+    Calendar lCDateTime = Calendar.getInstance();
+    addChild(UIPopupContainer.class, null, "UIPopupContainer-" + lCDateTime.getTimeInMillis());
     PortletRequestContext context = WebuiRequestContext.getCurrentInstance();
     PortletPreferences preferences = context.getRequest().getPreferences();
     String viewerMode = preferences.getValue(VIEWER_MODE, null);        
     if (PortletMode.VIEW.equals(mode)) {
       if (viewerMode == null) viewerMode = UICLVConfig.VIEWER_AUTO_MODE;
       if (viewerMode.equals(UICLVConfig.VIEWER_AUTO_MODE)) {        
-        UICLVFolderMode uiFolderViewer = addChild(UICLVFolderMode.class, null, UIPortletApplication.VIEW_MODE);
+        UICLVFolderMode uiFolderViewer = addChild(UICLVFolderMode.class, null, UIPortletApplication.VIEW_MODE+"-" +lCDateTime.getTimeInMillis());
         uiFolderViewer.init(); 
       } else if (viewerMode.equals(UICLVConfig.VIEWER_MANUAL_MODE)) {        
-        UICLVManualMode uiCorrectContentsViewer = addChild(UICLVManualMode.class, null, UIPortletApplication.VIEW_MODE);
+        UICLVManualMode uiCorrectContentsViewer = addChild(UICLVManualMode.class, null, UIPortletApplication.VIEW_MODE+"-" + lCDateTime.getTimeInMillis());
         uiCorrectContentsViewer.init();
       }
     } else if (PortletMode.EDIT.equals(mode)) {
