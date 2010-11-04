@@ -44,7 +44,7 @@
 						<div class="CaptionItem" style="border-bottom: 0px;">
 							<% 
                                 if(imgSrc != null && uicomponent.isShowField(UICLVPortlet.SHOW_THUMBNAILS_VIEW)) {
-                                    %><img src="$imgSrc" width="270px" style="padding-bottom:10px;" /><%
+                                    %><img src="$imgSrc" alt="$imgSrc" width="270px" style="padding-bottom:10px;" /><%
                                 }
 								if (uicomponent.isShowField(UICLVPortlet.SHOW_TITLE)) {
 									%>
