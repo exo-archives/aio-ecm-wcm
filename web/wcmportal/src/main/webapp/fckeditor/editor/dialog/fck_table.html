@@ -48,6 +48,11 @@ if ( e && e.tagName == "TABLE" )
 // actual values if a table is selected in the editor.
 window.onload = function()
 {
+	setTimeout(setTableValues, 500);
+}
+
+function setTableValues() 
+{
 	// First of all, translate the dialog box texts
 	oEditor.FCKLanguageManager.TranslatePage(document) ;
 
@@ -73,20 +78,27 @@ window.onload = function()
 
 		if (iHeight && iHeight.indexOf('px') >= 0)		// Style Pixel = px
 			iHeight = iHeight.substr(0,iHeight.length - 2);
+		
+		//get css text of table
+		var cssText = table.style.cssText.toLowerCase();
 
 		document.getElementById('txtWidth').value		= iWidth || '' ;
 		document.getElementById('txtHeight').value		= iHeight || '' ;
-		document.getElementById('txtBorder').value		=
-			getValueFromMultiValuesStyle(GetAttribute( table, 'style', '' ), 'border', 1);
 		document.getElementById('selAlignment').value	= GetAttribute( table, 'align', '' ) ;
-		document.getElementById('txtCellPadding').value	=
-			getValueFromStyle(GetAttribute( table.getElementsByTagName('td')[0], 'style', '' ), 'padding');
-		document.getElementById('txtCellSpacing').value	=
-			getValueFromStyle(GetAttribute( table, 'style', '' ), 'border-spacing');
+		document.getElementById('txtCellSpacing').value	= getValueFromStyle(cssText, 'border-spacing');
 		document.getElementById('txtSummary').value     = GetAttribute( table, 'summary', '' ) ;
-		document.getElementById('txtBgColor').value     = getHexColorFromStyle(GetAttribute( table, 'style', '' ), "background-color");
-		document.getElementById('txtBorderColor').value     = getHexColorFromStyle(GetAttribute( table, 'style', '' ), "border");
-//		document.getElementById('cmbFontStyle').value	= table.className ;
+		document.getElementById('txtBgColor').value     = getColorFromSingleValueStyle(cssText, "background-color");
+		document.getElementById('txtInlineStyle').value = filterCSSText(cssText);
+		
+		if (navigator.userAgent.indexOf("Firefox") >= 0) {
+			document.getElementById('txtBorder').value	= getValueFromMultiValuesStyle(cssText, 'border', 1);
+			document.getElementById('txtCellPadding').value	= getValueFromStyle(table.getElementsByTagName('td')[0].style.cssText.toLowerCase(), 'padding');
+			document.getElementById('txtBorderColor').value = getColorFromMultiValueStyle(cssText, 'border', 3);
+		} else {
+			document.getElementById('txtBorder').value	= getValueFromMultiValuesStyle(cssText, 'border-top', 2);
+			document.getElementById('txtCellPadding').value	= getValueFromStyle(table.getElementsByTagName('td')[0].style.cssText.toLowerCase(), 'padding-right');
+			document.getElementById('txtBorderColor').value = getColorFromMultiValueStyle(cssText, 'border-top', 1);
+		}
 
 		var eCaption = oEditor.FCKDomTools.GetFirstChild( table, 'CAPTION' ) ;
 		if ( eCaption ) document.getElementById('txtCaption').value = eCaption.innerHTML ;
@@ -98,6 +110,32 @@ window.onload = function()
 	window.parent.SetOkButton( true ) ;
 	window.parent.SetAutoSize( true ) ;
 }
+
+function filterCSSText (cssText) {
+	var maskArray = new Array ("width", "height", "border", "background-color", "border-spacing", "border-right", "border-top", "border-left", "border-bottom", "margin");
+	var cssArray = cssText.split(";");
+	var result = "";
+
+	for (i = 0; i < cssArray.length; i++) {
+		var cssKey = cssArray[i].split(":")[0].replace(" ", "");
+		if(cssKey.length > 0 && contains(maskArray, cssKey) == false) {
+			result += cssArray[i] + ";";		
+		}
+	}
+
+	return result;
+}
+
+function contains(array, obj) {
+  var i = array.length;
+  while (i--) {
+    if (array[i] === obj) {
+      return true;
+    }
+  }
+  return false;
+}
+
 
 // Fired when the user press the OK button
 function Ok()
@@ -122,10 +160,12 @@ function Ok()
 	strStyle += "border: " +  GetE('txtBorder').value + "px " + "solid" + " " + GetE('txtBorderColor').value + ";";
 	strStyle += "background-color: " + GetE('txtBgColor').value + ";";
 	strStyle += "border-collapse: separate;";
-	strStyle += "border-spacing:" +  GetE('txtCellSpacing').value + "px;";
-	strStyle += "vertical-align: middle;";
+	strStyle += "border-spacing:" +  GetE('txtCellSpacing').value + "px;";	
 	strStyle += GetE('txtInlineStyle').value;
-	SetAttribute( table, 'style'		, strStyle) ;
+	strStyle += "margin: 0 auto";
+		
+	table.style.cssText = strStyle;
+	table.cellSpacing = GetE('txtCellSpacing').value;
 	
 	var eCaption = oEditor.FCKDomTools.GetFirstChild( table, 'CAPTION' ) ;
 
@@ -162,7 +202,8 @@ function Ok()
 				var oCell = oRow.insertCell(-1) ;
 				var strCellStyle = "border: " +  GetE('txtBorder').value + "px " + "solid" + " " + GetE('txtBorderColor').value + ";";
 				strCellStyle += "padding: " +  GetE('txtCellPadding').value + "px;";
-				SetAttribute( oCell, 'style'		, strCellStyle) ;
+				oCell.style.cssText = strCellStyle;
+				oCell.innerHTML = "&nbsp;";
 				if ( oEditor.FCKBrowserInfo.IsGeckoLike )
 					oEditor.FCKTools.AppendBogusBr( oCell ) ;
 			}
@@ -177,7 +218,10 @@ function Ok()
 		strCellStyle += "padding: " +  GetE('txtCellPadding').value + "px;";
 		for ( var i = 0 ; i < cells.length ; i++ )
 		{
-			SetAttribute( cells[i], 'style' , strCellStyle) ;
+			cells[i].style.cssText = strCellStyle;
+			if (cells[i].innerHTML.length == 0) {
+				cells[i].innerHTML = "&nbsp;";		
+			}
 		}
 	}
 	
@@ -204,23 +248,74 @@ function getValueFromMultiValuesStyle(styleString, key, valueNum) {
 	}
 }
 
-function getHexColorFromStyle(styleString, key)
+function getColorFromSingleValueStyle(styleString, key)
 {
-	var hexString = "#";
-	var valuesArray = styleString.split(";");
-	for (i = 0; i < valuesArray.length; i++)
-	{
-		if(valuesArray[i].split(":")[0].replace(" ", "") == key)
-		{
-			var colorDeciValues =
-				 valuesArray[i].split(":")[1].split("rgb")[1].replace(/[() ]/g,"").split(",");
-			for (k = 0; k < colorDeciValues.length; k++)
-			{
-				hexString += deciToHex(colorDeciValues[k]);
+    var colorString = "";
+	
+	//get the list of declarations which are declared in style string
+    var declarationArray = styleString.split(";");
+	
+	//find the delaration which we want to get the value 
+	//(its property equal to the 'key' paramerter)
+    for (i = 0; i < declarationArray.length; i++)
+    {
+        if(declarationArray[i].split(":")[0].replace(" ", "") == key)
+        {
+			//get the value of the delaration
+            var cssValue = declarationArray[i].split(":")[1].replace(/ /g, "");
+            if (cssValue.toLowerCase().indexOf("rgb") >= 0) {    //in case: color value is in RGB format
+				//get the decimal values
+				var colorDecimalValues = cssValue.toLowerCase().split("rgb")[1].replace(/[() ]/g,"").split(",");
+                
+				//convert the decimal value to hex value
+				colorString = "#";
+				for (k = 0; k < colorDecimalValues.length; k++)
+                {
+                    colorString += deciToHex(colorDecimalValues[k]);
+                }                
+            } else { //in case: color value is in HEX or text format
+                colorString = cssValue;
+            }
+            break;
+         }
+    }
+    return colorString;
+}
+				
+function getColorFromMultiValueStyle(styleString, key, index) {
+    var colorString = "";    
+    
+	//get the list of declarations which are declared in style string
+	var declarationArray = styleString.split(";");
+	
+	//find the delaration which we want to get the value 
+	//(its property equal to the 'key' paramerter)
+    for (i = 0; i < declarationArray.length; i++) {
+        if(declarationArray[i].split(":")[0].replace(" ", "") == key) {
+			//get the value of the delaration
+			var cssValue = declarationArray[i].split(":")[1].replace(/ /g, "");
+			
+			//refine the value
+			if (cssValue.toLowerCase().indexOf("rgb") >= 0) {   //in case: color value is in RGB format
+				//get the decimal values
+				var colorDecimalValues = cssValue.substring(cssValue.indexOf("(") + 1, cssValue.indexOf(")")).split(",");
+				
+				//convert the decimal value to hex value
+				colorString = "#";
+				for (k = 0; k < colorDecimalValues.length; k++)
+                {
+                    colorString += deciToHex(colorDecimalValues[k]);
+                }  
+			} else if (cssValue.indexOf("#") >= 0) {   //in case: color value is in HEX format
+				colorString = cssValue.substring(cssValue.indexOf("#"), cssValue.indexOf("#") + 7);
+			} else { //in case: color value is in text format (example: red, green, blue, yellow...)
+				colorString = getValueFromMultiValuesStyle(styleString, key, index);
 			}
-		 }
+			break;
+		}
 	}
-	return hexString;
+		
+    return colorString;
 }
 
 function deciToHex(arg)
