@@ -1,0 +1,38 @@
+Open siteExplorer
+Chose the "Site Managements"
+Chose /acme/css, then edit node: GlobalStylesheet_Blue
+Go to line 105: remove the "!position: relative;"
+Append the following style at the end of the node content:
+
+.ACMELeftTDContainer {
+  width: 674px;
+  float:left;
+}
+.ACMERightTDContainer {
+  float: right;
+  *margin-left: 684px;
+  *float: none;
+}
+#acme-latest-documents .DocumentsCLVTemplate{
+ height: 210px;
+}
+
+
+Open siteExplorer
+Chose the "Site Managements"
+Chose /acme/css, then edit node: GlobalStylesheet_Green
+Go to line 107: remove the "!position: relative;"
+Append the following style at the end of the node content:
+
+.ACMELeftTDContainer {
+  width: 674px;
+  float:left;
+}
+.ACMERightTDContainer {
+  float: right;
+  *margin-left: 684px;
+  *float: none;
+}
+#acme-latest-documents .DocumentsCLVTemplate{
+ height: 210px;
+}
