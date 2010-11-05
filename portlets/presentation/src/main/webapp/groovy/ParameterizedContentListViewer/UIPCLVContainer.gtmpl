@@ -18,7 +18,7 @@ def quickEditingBlockId = portletId + "-QuickEditingBlock";
 	%>
 			<div style="position: relative; height: 0px;" id="<%=quickEditingBlockId%>">
 				<div style="position: absolute; right: 0px; top: 0px; z-index: 1">
-					<a href="<%=uicomponent.event("QuickEdit")%>" title="<%= _ctx.appRes("UIPCLVContainer.title.QuickEdit");%>"><div class="QuickEdit"><span></span></div></a>					 
+					<a class="QuickEdit" href="<%=uicomponent.event("QuickEdit")%>" title="<%= _ctx.appRes("UIPCLVContainer.title.QuickEdit");%>"></a>					 
 				</div>
 			</div>
 	<% }
