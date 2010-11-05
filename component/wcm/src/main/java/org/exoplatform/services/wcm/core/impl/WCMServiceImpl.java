@@ -51,17 +51,25 @@ public class WCMServiceImpl implements WCMService {
 		LinkManager linkManager = (LinkManager)container.getComponentInstanceOfType(LinkManager.class);
 		Node content = null;
 		try {
-			content = session.getNodeByUUID(nodeIdentifier);
-		} catch (ItemNotFoundException itemNotFoundException) {
+			
 		  try {
-		    content = (Node) session.getItem(nodeIdentifier);
-		  } catch(Exception exception) {
-		    content = null;
+			  content = session.getNodeByUUID(nodeIdentifier);
+			  		  } catch (ItemNotFoundException itemNotFoundException) {
+			  		    try {
+			  		      content = (Node) session.getItem(nodeIdentifier);
+			  		    } catch(Exception exception) {
+			  		      content = null;
+			  		    }
 		  }
+			  		if (content != null && linkManager.isLink(content)) {
+			  					    content = linkManager.getTarget(content, SystemIdentity.SYSTEM.equals(session.getUserID()));
+			  					  }
+			  					} catch(Exception e) {
+			  					  
+			  					} finally {
+			  					  if(session != null) session.logout();
 		}
-		if (content != null && linkManager.isLink(content)) {
-		  content = linkManager.getTarget(content, SystemIdentity.SYSTEM.equals(session.getUserID()));
-		}
+		
 		return content;
 	}
 

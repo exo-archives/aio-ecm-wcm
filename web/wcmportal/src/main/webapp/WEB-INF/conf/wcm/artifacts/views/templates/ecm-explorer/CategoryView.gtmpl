@@ -245,7 +245,6 @@
 	        		def status = wcmPublicationService.getContentState(data);
 	        		if (status == null) status = "";
 	        		Date date = getDate(data, status); 	        	        
-	          		def isPreferenceNode = uicomponent.isPreferenceNode(data) ;
 	          		def preferenceWS = data.getSession().getWorkspace().getName() ;
 	          		String nodePath = data.getPath() ;
 	          		String name = nodePath.substring(nodePath.lastIndexOf("/") + 1, nodePath.length()) ;   

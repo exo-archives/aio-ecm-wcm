@@ -43,7 +43,7 @@ import org.exoplatform.services.wcm.utils.WCMCoreUtils;
  */
 public class PublicationUpdateStateListener extends Listener<CmsService, Node> {
 
-  private static Log log = ExoLogger.getLogger("wcm:ModifyLinkListener");
+	private static Log log = ExoLogger.getLogger("wcm:PublicationUpdateStateListener");
   
   private RepositoryService repositoryService;
   
@@ -115,76 +115,84 @@ public class PublicationUpdateStateListener extends Listener<CmsService, Node> {
 		String[] wsNames = repositoryService.getCurrentRepository().getWorkspaceNames();
 		for (String workspace:wsNames) {
 			Session session = repositoryService.getCurrentRepository().getSystemSession(workspace);
-//		Session session = repositoryService.getCurrentRepository().login(targetLocation.getWorkspace());
-			QueryManager queryManager = session.getWorkspace().getQueryManager();
-			Query query = queryManager.createQuery("SELECT * FROM exo:taxonomyLink WHERE exo:uuid='" + targetNode.getUUID() + "'", Query.SQL);
-			NodeIterator iterator = query.execute().getNodes();
-			boolean needSessionSave=false;
-			while (iterator.hasNext()) {
-				Node linkNode = iterator.nextNode();
-				if (!linkNode.isNodeType("exo:sortable")) {
-					if (!linkNode.canAddMixin("exo:sortable")) {
-						break;
-					}
-				    linkNode.addMixin("exo:sortable");
-				}
-				try {
-					String currentName = linkNode.hasProperty("exo:name")?linkNode.getProperty("exo:name").getString():null;
-					if (name != null && !name.equals(currentName)) {
-						linkNode.setProperty("exo:name", name);
-						needSessionSave = true;
-					}
-				} catch (PathNotFoundException e) {}
-				
-				try {
-					String currentTitle = linkNode.hasProperty("exo:title")?linkNode.getProperty("exo:title").getString():null;
-					if (title != null && !title.equals(currentTitle)) {
-						linkNode.setProperty("exo:title", title);
-						needSessionSave = true;
-					}
-				} catch (PathNotFoundException e) {}
+						try {
+							  QueryManager queryManager = session.getWorkspace().getQueryManager();
+							  Query query = queryManager.createQuery("SELECT * FROM exo:taxonomyLink WHERE exo:uuid='" + targetNode.getUUID() + "'", Query.SQL);
+							  NodeIterator iterator = query.execute().getNodes();
+							  boolean needSessionSave=false;
+							  while (iterator.hasNext()) {
+							    Node linkNode = iterator.nextNode();
+							    if (!linkNode.isNodeType("exo:sortable")) {
+							      if (!linkNode.canAddMixin("exo:sortable")) {
+							        break;
+							      }
+							      linkNode.addMixin("exo:sortable");
+							    }
+							    try {
+							      String currentName = linkNode.hasProperty("exo:name")?linkNode.getProperty("exo:name").getString():null;
+							      if (name != null && !name.equals(currentName)) {
+							        linkNode.setProperty("exo:name", name);
+							        needSessionSave = true;
+							      }
+							    } catch (PathNotFoundException e) {}
+							    
+							    try {
+							      String currentTitle = linkNode.hasProperty("exo:title")?linkNode.getProperty("exo:title").getString():null;
+							      if (title != null && !title.equals(currentTitle)) {
+							        linkNode.setProperty("exo:title", title);
+							        needSessionSave = true;
+							      }
+							    } catch (PathNotFoundException e) {}
+							    
 				
 //				if (targetNode.hasProperty("publication:currentState") && "published".equals(targetNode.getProperty("publication:currentState").getString())) {
-				try {
-					String currentTitlePublished = linkNode.hasProperty("exo:titlePublished")?linkNode.getProperty("exo:titlePublished").getString():null;
-					if (titlePublished != null && !titlePublished.equals(currentTitlePublished)) {
-						linkNode.setProperty("exo:titlePublished", titlePublished);
-						needSessionSave = true;
-					}
-				} catch (PathNotFoundException e) {}
+							    			    try {
+							    				      String currentTitlePublished = linkNode.hasProperty("exo:titlePublished")?linkNode.getProperty("exo:titlePublished").getString():null;
+							    				      if (titlePublished != null && !titlePublished.equals(currentTitlePublished)) {
+							    				        linkNode.setProperty("exo:titlePublished", titlePublished);
+							    				        needSessionSave = true;
+							    				      }
+							    				    } catch (PathNotFoundException e) {}				
 //				}
-				
-				try {
-					Calendar currentLiveDate = linkNode.hasProperty("publication:liveDate")?linkNode.getProperty("publication:liveDate").getDate():null;
-					if (liveDate != null && !liveDate.equals(currentLiveDate)) {
-						linkNode.setProperty("publication:liveDate", liveDate);
-						needSessionSave = true;
-					}
-				} catch (PathNotFoundException e) {}
-				
-				try {
-					Calendar currentDateModified = linkNode.getProperty("exo:dateModified").getDate();
-					if (dateModified != null && !dateModified.equals(currentDateModified)) {
-						linkNode.setProperty("exo:dateModified", dateModified);  
-						needSessionSave = true;
-					}
-				} catch (PathNotFoundException e) {}
-				
-				if (log.isInfoEnabled()) {
-					String currentState = targetNode.hasProperty("publication:currentState")?targetNode.getProperty("publication:currentState").getString():"";
-					String currentName = linkNode.hasProperty("exo:name")?linkNode.getProperty("exo:name").getString():"";
-					String currentTitle = linkNode.hasProperty("exo:title")?linkNode.getProperty("exo:title").getString():"";
-					String currentTitlePub = linkNode.hasProperty("exo:titlePublished")?linkNode.getProperty("exo:titlePublished").getString():"";
-					String currentLiveDate = linkNode.hasProperty("publication:liveDate")?linkNode.getProperty("publication:liveDate").getDate().getTime().toString():"";
-					String currentDateModified = linkNode.hasProperty("exo:dateModified")?linkNode.getProperty("exo:dateModified").getDate().getTime().toString():"";
-					
-					log.info("@@@@ "+needSessionSave+" @state@"+currentState+" @Name@"+currentName+" @Title@"+currentTitle+" @TitlePub@"+currentTitlePub+" @DateLive@"+currentLiveDate+" @DateMod@"+currentDateModified);
-				}
+							    				    			    
+							    				    			    try {
+							    				    			      Calendar currentLiveDate = linkNode.hasProperty("publication:liveDate")?linkNode.getProperty("publication:liveDate").getDate():null;
+							    				    			      if (liveDate != null && !liveDate.equals(currentLiveDate)) {
+							    				    			        linkNode.setProperty("publication:liveDate", liveDate);
+							    				    			        needSessionSave = true;
+							    				    			      }
+							    				    			    } catch (PathNotFoundException e) {}
+							    				    			    
+							    				    			    try {
+							    				    			      Calendar currentDateModified = linkNode.getProperty("exo:dateModified").getDate();
+							    				    			      if (dateModified != null && !dateModified.equals(currentDateModified)) {
+							    				    			        linkNode.setProperty("exo:dateModified", dateModified);  
+							    				    			        needSessionSave = true;
+							    				    			      }
+							    				    			    } catch (PathNotFoundException e) {}
+							    				   			    
+							    				    			    if (log.isInfoEnabled()) {
+							    				    			      String currentState = targetNode.hasProperty("publication:currentState")?targetNode.getProperty("publication:currentState").getString():"";
+							    				    			      String currentName = linkNode.hasProperty("exo:name")?linkNode.getProperty("exo:name").getString():"";
+							    				    			      String currentTitle = linkNode.hasProperty("exo:title")?linkNode.getProperty("exo:title").getString():"";
+							    				    			      String currentTitlePub = linkNode.hasProperty("exo:titlePublished")?linkNode.getProperty("exo:titlePublished").getString():"";
+							    				    			      String currentLiveDate = linkNode.hasProperty("publication:liveDate")?linkNode.getProperty("publication:liveDate").getDate().getTime().toString():"";
+							    				    			      String currentDateModified = linkNode.hasProperty("exo:dateModified")?linkNode.getProperty("exo:dateModified").getDate().getTime().toString():"";
+							    				    			      
+							    				    			      log.info("@@@@ "+needSessionSave+" @state@"+currentState+" @Name@"+currentName+" @Title@"+currentTitle+" @TitlePub@"+currentTitlePub+" @DateLive@"+currentLiveDate+" @DateMod@"+currentDateModified);
+							    				    			    }
+							    				    			    
 				
 //      linkNode.setProperty("exo:dateModified", dateModified);
-				
+							    				    			    			    
+							    				    			    			  }
+							    				    			    			  if (needSessionSave) session.save();
+							    				    			    			} catch(Exception e) {
+							    				    			    			  log.error("Unexpected problem occur. Update state process is not completed", e);
+							    				    			    			} finally {
+							    				    			    			  if(session != null) session.logout();				
 			}
-			if (needSessionSave) session.save();
+			
 			
 		}
 	}
