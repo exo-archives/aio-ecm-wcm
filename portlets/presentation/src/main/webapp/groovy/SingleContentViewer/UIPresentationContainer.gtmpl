@@ -11,7 +11,7 @@
 		def portletId = rcontext.getWindowId();
 		portletId = isPortalAppEditting ? "EditMode-" + portletId : portletId;
 		def quickEditingBlockId = portletId + "-QuickEditingBlock";
-		rcontext.getJavascriptManager().addJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '");');
+//		rcontext.getJavascriptManager().addJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '");');
 		def node = uicomponent.getNodeView();
 		if (node != null) {
 			def preferences = rcontext.getRequest().getPreferences();

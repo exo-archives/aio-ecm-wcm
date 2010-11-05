@@ -9,7 +9,7 @@ def isPortalAppEditting = Util.getUIPortalApplication().isEditting();
 def portletId = rcontext.getWindowId();
 portletId = isPortalAppEditting ? "EditMode-" + portletId : portletId;
 def quickEditingBlockId = portletId + "-QuickEditingBlock";
-rcontext.getJavascriptManager().addJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '");');
+//rcontext.getJavascriptManager().addJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '");');
 
 %>
 <div class="$uicomponent.id" id="$uicomponent.id">
