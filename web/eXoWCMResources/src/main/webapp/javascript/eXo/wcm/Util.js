@@ -418,10 +418,7 @@ function showPopupMenu(obj) {
 	// Will remove when add javascript for navagation ok
 	var uiACMENavi = document.getElementById('navigation-generator');
 	var uiWCMNavigationPortlet = eXo.core.DOMUtil.findFirstDescendantByClass(uiACMENavi, "div", "UIWCMNavigationPortlet");
-	if(eXo.core.Browser.browserType == 'ie')  {
-		if(uiNavi) uiNavi.style.position = "static";
-		if(uiWCMNavigationPortlet) uiWCMNavigationPortlet.style.position = "static";
-	}
+	
 	if(obj.Timeout) clearTimeout(obj.Timeout);
 	var DOMUtil = eXo.core.DOMUtil;
 	var mnuItemContainer = DOMUtil.findNextElementByTagName(obj, "div");
@@ -431,10 +428,7 @@ function showPopupMenu(obj) {
 		mnuItemContainer.style.width = mnuItemContainer.offsetWidth - parseInt(DOMUtil.getStyle(mnuItemContainer, "borderLeftWidth")) - parseInt(DOMUtil.getStyle(mnuItemContainer, "borderRightWidth")) + 'px';
 		objParent.className = 'TBItemHover';
 		mnuItemContainer.onmouseout = function(){
-			if(eXo.core.Browser.browserType == 'ie')  {
-			 if(uiNavi) uiNavi.style.position = "relative";
-			 if(uiWCMNavigationPortlet) uiWCMNavigationPortlet.style.position = "relative";
-			}
+			
 			obj.Timeout = setTimeout(function() {
 				mnuItemContainer.style.display = 'none';
 				objParent.className = 'TBItem';
@@ -445,10 +439,7 @@ function showPopupMenu(obj) {
 
 		mnuItemContainer.onmouseover = function() {
 			objParent.className = 'TBItemHover';
-			if(eXo.core.Browser.browserType == 'ie')  {
-				if(uiNavi) uiNavi.style.position = "static";
-				if(uiWCMNavigationPortlet) uiWCMNavigationPortlet.style.position = "static";
-			}
+			
 			if(obj.Timeout) clearTimeout(obj.Timeout);
 			obj.Timeout = null;
 		}

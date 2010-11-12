@@ -121,7 +121,13 @@
 			}
 		%>
 	</div>
-	<div class="CaptionFunc">
+	
+	<% if (uicomponent.showPaginator() || uicomponent.showRefreshButton()) {
+		def footer = 5;
+		if ( uicomponent.showPaginator() ) footer = footer + 20;
+		if ( uicomponent.showRefreshButton() ) footer = footer + 12;
+		%>
+	<div class="CaptionFunc" style="height:<%=footer%>px">
 		<% 
 		String labelRefreshAction = _ctx.appRes("UICLVPresentation.action.refresh");
 			if (uicomponent.showRefreshButton()) { 
@@ -138,4 +144,6 @@
 		%>
 		<div style="clear: left"><span></span></div>
 	</div>
+	<% } %>
+	
 </div>
