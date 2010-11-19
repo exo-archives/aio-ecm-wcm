@@ -26,13 +26,13 @@
   </parent>
   <groupId>org.exoplatform.ecm</groupId>
   <artifactId>wcm</artifactId>
-  <version>1.2.7-SNAPSHOT</version>
+  <version>1.2.7</version>
   <packaging>pom</packaging>
   <name>eXo ECM - WCM</name>
   <scm>
-    <connection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/branches/1.2.x</connection>
-    <developerConnection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/branches/1.2.x</developerConnection>
-    <url>http://fisheye.exoplatform.org/browse/projects/ecm/wcm/branches/1.2.x</url>
+    <connection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/tags/1.2.7</connection>
+    <developerConnection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/tags/1.2.7</developerConnection>
+    <url>http://fisheye.exoplatform.org/browse/projects/ecm/wcm/tags/1.2.7</url>
   </scm>
   <ciManagement>
     <system>hudson</system>
