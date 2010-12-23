@@ -17,6 +17,9 @@
 package org.exoplatform.services.wcm.images;
 
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
@@ -33,6 +36,7 @@ import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.rest.HTTPMethod;
+import org.exoplatform.services.rest.HeaderParam;
 import org.exoplatform.services.rest.InputTransformer;
 import org.exoplatform.services.rest.OutputTransformer;
 import org.exoplatform.services.rest.QueryParam;
@@ -52,6 +56,12 @@ import org.exoplatform.services.rest.transformer.PassthroughOutputTransformer;
  */
 @URITemplate("/images/{repositoryName}/{workspaceName}/{nodeIdentifier}/")
 public class RESTImagesRendererService implements ResourceContainer{
+
+  /** The Constant LAST_MODIFIED_PROPERTY. */
+  private static final String LAST_MODIFIED_PROPERTY = "Last-Modified";
+
+  /** The Constant IF_MODIFIED_SINCE_DATE_FORMAT. */
+  private static final String IF_MODIFIED_SINCE_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss z";
 
   /** The session provider service. */
   private SessionProviderService sessionProviderService;
@@ -90,7 +100,7 @@ public class RESTImagesRendererService implements ResourceContainer{
   @InputTransformer(PassthroughInputTransformer.class)
   @OutputTransformer(PassthroughOutputTransformer.class)
   public Response serveImage(@URIParam("repositoryName") String repository, @URIParam("workspaceName") String workspace,
-      @URIParam("nodeIdentifier") String nodeIdentifier) { 
+      @URIParam("nodeIdentifier") String nodeIdentifier, @HeaderParam("If-Modified-Since") String ifModifiedSince) { 
     Node node = null;
     SessionProvider sessionProvider = sessionProviderService.getSessionProvider(null);
     Session session = null;
@@ -113,9 +123,15 @@ public class RESTImagesRendererService implements ResourceContainer{
         dataNode = session.getNodeByUUID(versionableUUID);
       }else {
         return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).build();
-      }     
+      } 
+      
+      if (ifModifiedSince != null && isModified(ifModifiedSince, dataNode) == false) {
+      	return Response.Builder.notModified().build();
+      }
+      
       jcrData = dataNode.getNode("jcr:content").getProperty("jcr:data").getStream();
-      return Response.Builder.ok().entity(jcrData, "image").build();
+      DateFormat dateFormat = new SimpleDateFormat(IF_MODIFIED_SINCE_DATE_FORMAT);
+      return Response.Builder.ok().header(LAST_MODIFIED_PROPERTY, dateFormat.format(new Date())).entity(jcrData, "image").build();
     } catch (PathNotFoundException e) {
       return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).build();
     }catch (ItemNotFoundException e) {
@@ -143,7 +159,7 @@ public class RESTImagesRendererService implements ResourceContainer{
   @InputTransformer(PassthroughInputTransformer.class)
   @OutputTransformer(PassthroughOutputTransformer.class)
   public Response serveImage(@URIParam("repositoryName") String repository, @URIParam("workspaceName") String workspace,
-      @URIParam("nodeIdentifier") String nodeIdentifier, @QueryParam("propertyName") String propertyName) {
+      @URIParam("nodeIdentifier") String nodeIdentifier, @QueryParam("propertyName") String propertyName, @HeaderParam("If-Modified-Since") String ifModifiedSince) {
     Node node = null;
     SessionProvider sessionProvider = sessionProviderService.getSessionProvider(null);
     Session session = null;
@@ -155,9 +171,15 @@ public class RESTImagesRendererService implements ResourceContainer{
         node = session.getNodeByUUID(nodeIdentifier);
       if(node == null) {
         return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).build();
-      }            
+      }           
+      
+      if (ifModifiedSince != null && isModified(ifModifiedSince, node) == false) {
+      	return Response.Builder.notModified().build();
+      }
+      
       InputStream jcrData = node.getProperty(propertyName).getStream();
-      return Response.Builder.ok().entity(jcrData, "image").build();
+      DateFormat dateFormat = new SimpleDateFormat(IF_MODIFIED_SINCE_DATE_FORMAT);
+      return Response.Builder.ok().header(LAST_MODIFIED_PROPERTY, dateFormat.format(new Date())).entity(jcrData, "image").build();
     } catch (PathNotFoundException e) {
       return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).build();
     }catch (ItemNotFoundException e) {
@@ -230,5 +252,45 @@ public class RESTImagesRendererService implements ResourceContainer{
     }
     return builder.append(accessURI).append("images/").append(repository).append("/").append(workspaceName)
       .append("/").append(nodeIdentifiler).append("?propertyName=").append(propertyName).toString();
+  }
+  
+  /**
+   * get the last modified date of node
+ * @param node
+ * @return the last modified date
+ * @throws Exception
+ */
+  private Date getLastModifiedDate(Node node) throws Exception {
+	  Date lastModifiedDate = null;
+	  if (node.hasNode("jcr:content")) {
+		  lastModifiedDate = node.getNode("jcr:content").getProperty("jcr:lastModified").getDate().getTime();
+	  } else if (node.hasNode("exo:dateModified")) {
+    	  lastModifiedDate = node.getProperty("exo:dateModified").getDate().getTime();
+	  } else {
+		  lastModifiedDate = node.getProperty("jcr:created").getDate().getTime();
+	  }
+	  return lastModifiedDate;
+  }
+  
+  /**
+   * check resources were modified or not
+   * @param ifModifiedSince
+   * @param node
+   * @return
+   * @throws Exception
+   */
+  private boolean isModified(String ifModifiedSince, Node node) throws Exception {
+	  // get last-modified-since from header
+	  DateFormat dateFormat = new SimpleDateFormat(IF_MODIFIED_SINCE_DATE_FORMAT);
+	  Date ifModifiedSinceDate = dateFormat.parse(ifModifiedSince);
+
+	  // get last modified date of node
+	  Date lastModifiedDate = getLastModifiedDate(node);
+
+	  // Check if cached resource has not been modifed, return 304 code
+	  if (ifModifiedSinceDate.getTime() >= lastModifiedDate.getTime()) {			
+		return false;
+	  }		
+	  return true;
   }
 }

@@ -16,6 +16,9 @@
  */
 package org.exoplatform.wcm.connector.collaboration;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -43,8 +46,14 @@ import org.w3c.dom.Element;
  */
 @URITemplate("/bundle/")
 public class ResourceBundleConnector implements ResourceContainer {
+	
+   /** The Constant LAST_MODIFIED_PROPERTY. */
+   private static final String LAST_MODIFIED_PROPERTY = "Last-Modified";
 
-	@HTTPMethod(HTTPMethods.GET)
+   /** The Constant IF_MODIFIED_SINCE_DATE_FORMAT. */
+   private static final String IF_MODIFIED_SINCE_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss z";
+
+  @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/getBundle/")
   @OutputTransformer(XMLOutputTransformer.class)
   public Response getBundle (
@@ -69,7 +78,8 @@ public class ResourceBundleConnector implements ResourceContainer {
 				}
 			}
 			document.appendChild(bundles);
-		  return Response.Builder.ok(document, "text/xml").build();
+			DateFormat dateFormat = new SimpleDateFormat(IF_MODIFIED_SINCE_DATE_FORMAT);
+			return Response.Builder.ok(document, "text/xml").header(LAST_MODIFIED_PROPERTY, dateFormat.format(new Date())).build();
 		} catch (Exception e) {
 			return Response.Builder.serverError().build();
 		}

@@ -19,7 +19,10 @@ package org.exoplatform.wcm.connector.fckeditor;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -76,6 +79,12 @@ public class GadgetConnector implements ResourceContainer {
   /** The log. */
   private static Log log = ExoLogger.getLogger(GadgetConnector.class);
   
+  /** The Constant LAST_MODIFIED_PROPERTY. */
+  private static final String LAST_MODIFIED_PROPERTY = "Last-Modified";
+
+  /** The Constant IF_MODIFIED_SINCE_DATE_FORMAT. */
+  private static final String IF_MODIFIED_SINCE_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss z";
+  
   /**
    * Instantiates a new gadget connector.
    * 
@@ -124,7 +133,8 @@ public class GadgetConnector implements ResourceContainer {
     } catch (Exception e) {
       log.error("Error when perform getFoldersAndFiles: ", e.fillInStackTrace());
     }    
-    return Response.Builder.ok().build();
+    DateFormat dateFormat = new SimpleDateFormat(IF_MODIFIED_SINCE_DATE_FORMAT);
+    return Response.Builder.ok().header(LAST_MODIFIED_PROPERTY, dateFormat.format(new Date())).build();
   }
   
   /**
@@ -143,7 +153,8 @@ public class GadgetConnector implements ResourceContainer {
     Document document = rootElement.getOwnerDocument();
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
-    return Response.Builder.ok(document).mediaType("text/xml").cacheControl(cacheControl).build();
+    DateFormat dateFormat = new SimpleDateFormat(IF_MODIFIED_SINCE_DATE_FORMAT);
+    return Response.Builder.ok(document).header(LAST_MODIFIED_PROPERTY, dateFormat.format(new Date())).mediaType("text/xml").cacheControl(cacheControl).build();
   }
   
   /**

@@ -15,9 +15,12 @@
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
 package org.exoplatform.wcm.webui.selector.content;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -77,6 +80,12 @@ public class UpdateTreeConnector implements ResourceContainer {
   
   /** The log. */
   private static Log log = ExoLogger.getLogger(UpdateTreeConnector.class);
+  
+  /** The Constant LAST_MODIFIED_PROPERTY. */
+  private static final String LAST_MODIFIED_PROPERTY = "Last-Modified";
+
+  /** The Constant IF_MODIFIED_SINCE_DATE_FORMAT. */
+  private static final String IF_MODIFIED_SINCE_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss z";
 
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/getChildNodes/")
@@ -137,7 +146,8 @@ public class UpdateTreeConnector implements ResourceContainer {
     }
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
-    return Response.Builder.ok(document).mediaType("text/xml").cacheControl(cacheControl).build();
+    DateFormat dateFormat = new SimpleDateFormat(IF_MODIFIED_SINCE_DATE_FORMAT);
+    return Response.Builder.ok(document).header(LAST_MODIFIED_PROPERTY, dateFormat.format(new Date())).mediaType("text/xml").cacheControl(cacheControl).build();
   }
   
   /**
