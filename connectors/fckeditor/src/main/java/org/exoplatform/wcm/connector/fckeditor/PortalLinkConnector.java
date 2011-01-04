@@ -304,15 +304,12 @@ public class PortalLinkConnector implements ResourceContainer {
     if (page == null) {
       accessMode = PUBLIC_ACCESS;
     } else {
-      String[] roles = page.getAccessPermissions();
-      if (roles !=null) {
-        for (String role : roles) {
+        for (String role : page.getAccessPermissions()) {
           if (EVERYONE_PERMISSION.equalsIgnoreCase(role)) {
             accessMode = PUBLIC_ACCESS;
             break;
           }
-        }
-      }
+        }      
     }
     String pageUri = "/" + servletContext.getServletContextName() + "/" + accessMode + "/" + portalName + "/" + pageNode.getUri();
 
