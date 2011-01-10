@@ -18,6 +18,7 @@ package org.exoplatform.wcm.webui.viewer;
 
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
+import javax.jcr.RepositoryException;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
@@ -25,6 +26,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -94,7 +96,11 @@ public class UIContentViewer extends UIBaseNodePresentation {
 	}
 	
 	public String getRepositoryName() {
-		return null;
+	  try {
+      return ((ManageableRepository)getNode().getSession().getRepository()).getConfiguration().getName();
+    } catch (RepositoryException e) {
+      return null;
+    }
 	}
 	
 	public String getTemplatePath() {
