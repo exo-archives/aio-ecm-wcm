@@ -1,0 +1,20 @@
+Index: portlets/newsletter/src/main/webapp/WEB-INF/classes/locale/portlet/NewsletterViewer/NewsletterViewer_fr.xml
+===================================================================
+--- portlets/newsletter/src/main/webapp/WEB-INF/classes/locale/portlet/NewsletterViewer/NewsletterViewer_fr.xml	(revision 63709)
++++ portlets/newsletter/src/main/webapp/WEB-INF/classes/locale/portlet/NewsletterViewer/NewsletterViewer_fr.xml	(working copy)
+@@ -13,7 +13,7 @@
+   <action>
+    <Subcribe>Je m'inscris</Subcribe>
+    <ForgetEmail>Oublier cet email</ForgetEmail>
+-   <ChangeSubcribe>Modifier mon Abonnement</ChangeSubcribe>
++    <ChangeSubcriptions>Modifier mon abonnement</ChangeSubcriptions>
+   </action>
+   <title>
+    <userEmail>Email</userEmail>
+@@ -27,4 +27,4 @@
+    </ConfirmUser>
+   </Email>
+  </UINewsletterViewerForm>
+-</bundle>
+\ No newline at end of file
++</bundle>
