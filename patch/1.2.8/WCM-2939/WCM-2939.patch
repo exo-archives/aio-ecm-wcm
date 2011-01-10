@@ -1,0 +1,13 @@
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates/content-list-viewer/list-by-folder/DocumentsTemplate.gtmpl
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates/content-list-viewer/list-by-folder/DocumentsTemplate.gtmpl	(revision 64469)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates/content-list-viewer/list-by-folder/DocumentsTemplate.gtmpl	(working copy)
+@@ -81,7 +81,7 @@
+ 													if (isShowTitle) {
+ 														%><div title="$itemName" class="FloatLeft $itemIcon"></div><%
+ 														if (isShowLink) {
+-															%><div class="Title"><a href="$itemWebdavLink" target="_newdoc">$itemName</a></div><%
++															%><div class="Title"><a onclick="javascript:window.open('$itemWebdavLink');" style="cursor:pointer">$itemName</a></div><%
+ 														} else {
+ 															%><div class="Title">$itemName</div><%
+ 														}
