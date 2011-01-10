@@ -8,7 +8,7 @@
 	<NewsletterPortlet>
     <action>
     	<Preferences>Préférences</Preferences>
-      <Save>Sauver</Save>
+      <Save>Enregistrer</Save>
       <Open>Ouvrir</Open>
       <Cancel>Annuler</Cancel>
       <Close>Fermer</Close>
@@ -54,13 +54,13 @@
 	
 	<FormWebcontentSelector>
 		<title>
-			<SelectWebcontent>Sélectionnez un contenu</SelectWebcontent>
+			<SelectWebcontent>Sélection de contenu</SelectWebcontent>
 		</title>
 	</FormWebcontentSelector>
 	
 	<UICategoryFormPopupWindow>
 		<title>
-			<UICategoryForm>Edition d'une Catégorie</UICategoryForm>
+			<UICategoryForm>Edition de Catégorie</UICategoryForm>
 		</title>
 	</UICategoryFormPopupWindow>
 	
@@ -104,7 +104,7 @@
 			<CategoryModerator></CategoryModerator>
 		</label>
 		<action>
-			<Save>Sauver</Save>
+			<Save>Enregistrer</Save>
 			<Cancel>Annuler</Cancel>
 		</action>
   </UICategoryForm>
@@ -120,8 +120,8 @@
     	<Administration>Administration</Administration>
     </title>
     <msg>
-    	<get-list-categories>erreur lorsque vous effectuez obtenir liste des catégories.</get-list-categories>
-    	<get-list-subscriptions>erreur lorsque vous effectuez obtenir abonnements liste.</get-list-subscriptions>
+    	<get-list-categories>Une erreur est survenue lors de la récupération de la liste des catégories</get-list-categories>
+    	<get-list-subscriptions>Une erreur est survenue lors de la récupération de la liste des abonnements</get-list-subscriptions>
     </msg>
   </UICategories>
   
@@ -139,11 +139,11 @@
     	<checkOnlyOneNewsletterToConvert>S'il vous plaît cocher une seule lettre d'information pour convertir!</checkOnlyOneNewsletterToConvert>
     	<convertSuccessful>Lettre convertie en tant que modèle avec succès</convertSuccessful>
     	<templateIsExist>Il existe déjà un modèle avec le même nom! Merci de modifier le titre et de réessayer.</templateIsExist>
-			<get-list-subscriptions>erreur lorsque vous effectuez obtenir abonnements liste. </get-list-subscriptions>
+			<get-list-subscriptions>Une erreur est survenue lors de la récupération de la liste des abonnements </get-list-subscriptions>
     </msg>
     <title>
     	<ManageCategory>Gérer la catégorie</ManageCategory>
-    	<EditCategory>Éditer une catégorie</EditCategory>
+    	<EditCategory>Éditer la catégorie</EditCategory>
     	<DeleteCategory>Supprimer la catégorie</DeleteCategory>
     	<Edit>Éditer</Edit>
     	<Delete>Supprimer</Delete>
@@ -189,7 +189,7 @@
     <msg>
       <saveSuccess>L'abonnement a été enregistré.</saveSuccess>
       <subcriptionNameIsNotEmpty>Le nom d'abonnement ne peut pas être vide!</subcriptionNameIsNotEmpty>
-      <subcriptionTitleIsNotEmpty>le titre d'abonnement ne peut pas être vide!</subcriptionTitleIsNotEmpty>
+      <subcriptionTitleIsNotEmpty>Le titre de l'abonnement ne peut pas être vide</subcriptionTitleIsNotEmpty>
       <subcriptionNameIsAlreadyExist>Le nom de cet abonnement existe déjà!</subcriptionNameIsAlreadyExist>
       <selectRedactorPermission>Vous devez sélectionner l'utilisateur ou rédacteur membre!</selectRedactorPermission>
     </msg>
@@ -210,7 +210,7 @@
 		<action>
 			<Select>Sélectionner</Select>
 			<Preview>Prévisualiser</Preview>
-			<Save>Sauver</Save>
+			<Save>Enregistrer</Save>
 			<Send>Envoyer</Send>
 			<Cancel>Annuler</Cancel>
 		</action>
@@ -219,19 +219,19 @@
 				Merci de valider la date d'envoi envoyer d'enregistrer la lettre. 
 			</UpdateBeforeSave>
 			<DateTimeIsNotNull>
-				la date d'envoi est nulle. Merci de vérifier à nouveau!
+				La date d'envoi est nulle. 
 			</DateTimeIsNotNull>
 			<DateTimeIsInvalid>
-				La date d'envoi n'est pas valide. Merci de vérifier à nouveau!
+				La date d'envoi n'est pas valide. 
 			</DateTimeIsInvalid>
 			<UpdateInformationSuccessful>Mise à jour des informations réussie!</UpdateInformationSuccessful>
 			<NodeNameInvalid>
 				Impossible de créer la lettre car son titre existe déjà. Merci d'essayer à nouveau!
 			</NodeNameInvalid>
-			<get-template>erreur lorsque vous effectuez obtenir template. </get-template>
-			<get-template-resource>erreur lorsque vous effectuez obtenir modèle de résolution de ressource </get-template-resource>
-			<add-email-newsletter>erreur lorsque vous effectuez ajouter l'adresse e-mail liste. </add-email-newsletter>
-			<send-newsletter>erreur lorsque vous effectuez envoyer des lettres d'informations. </send-newsletter>
+			<get-template>Une erreur est survenue lors de la récupération du modèle </get-template>
+			<get-template-resource>Une erreur est survenue lors de la récupération des chaines de caractères </get-template-resource>
+			<add-email-newsletter>Une erreur est survenue lors de l'ajout de l'adresse mail </add-email-newsletter>
+			<send-newsletter>Une erreur est survenue lors de l'envoi des lettres d'information </send-newsletter>
 		</msg>
 	</UINewsletterEntryForm>
 	
@@ -279,17 +279,17 @@
 			<User>Utilisateur</User>
 		</role>
 		<msg>
-			<get-list-users> erreur lorsque obtenir la liste des utilisateurs publics. </get-list-users>
-			<set-infor-users> erreur lorsque ensemble d'information pour les utilisateurs. </set-infor-users>
+			<get-list-users> Une erreur est survenue lors de la récupération de la liste des utilisateurs publics </get-list-users>
+			<set-infor-users> Une erreur est survenue lors de l'établissement les informations pour les utilisateurs </set-infor-users>
 		</msg>
 	</UIManagerUsers>
 	
 	<UINewsletterEntryManager>
 		<msg>
 			<confirmDeleteNewsletter>Êtes-vous sûr de vouloir supprimer cette Newsletter ?</confirmDeleteNewsletter>
-			<get-checked>erreur lorsque vous effectuez obtenir un bulletin ou de souscription est cochée. </get-checked>
-			<set-list-newsletter>erreur lorsque vous effectuez ensemble des entrées newsletter liste. </set-list-newsletter>
-			<canNotEditNewsletter>Ce bulletin a été transmis, ne peut pas modifier. Vous ne convertir que ce modèle au fur et à ajouter de nouveaux Newsletter avec ce modèle.</canNotEditNewsletter>
+			<get-checked>Une erreur est survenue lors de la récupération du bulletin ou la souscription est cochée </get-checked>
+			<set-list-newsletter>Une erreur est survenue lors de l'établissement une liste des entrées de newsletter </set-list-newsletter>
+			<canNotEditNewsletter>Ce bulletin a été transmis, il ne peut pas être modifié. Vous ne pouvez que convertir ce modèle et ajouter de nouveaux Newsletter avec.</canNotEditNewsletter>
 		</msg>
 		<title>
 			<ConvertAsTemplate>Convertir en tant que modèle</ConvertAsTemplate>
@@ -312,7 +312,7 @@
 		</title>
 		<msg>
 			<checkToRemove>S'il vous plaît, cocher une ou plusieurs autorisations dans la liste à supprimer</checkToRemove>
-			<donotMoveYourSelt>Vous avez seulement retirer votre autorisation dans la liste, s'il vous plaît vérifier à nouveau!</donotMoveYourSelt>
+			<donotMoveYourSelt>Vous avez seulement retiré votre autorisation dans la liste, s'il vous plaît vérifier à nouveau!</donotMoveYourSelt>
 		</msg>
 	</UIRemoveModeratorsFormPopupWindow>		
 </bundle>

@@ -1,0 +1,1091 @@
+Index: portlets/formgenerator/src/main/webapp/WEB-INF/classes/locale/portlet/FastContentCreatorPortlet/FastContentCreatorPortlet_fr.xml
+===================================================================
+--- portlets/formgenerator/src/main/webapp/WEB-INF/classes/locale/portlet/FastContentCreatorPortlet/FastContentCreatorPortlet_fr.xml	(revision 61769)
++++ portlets/formgenerator/src/main/webapp/WEB-INF/classes/locale/portlet/FastContentCreatorPortlet/FastContentCreatorPortlet_fr.xml	(working copy)
+@@ -4,7 +4,7 @@
+   <msg>
+    <name-not-allowed>Ce nom n'est pas autorisé.</name-not-allowed>
+    <in-versioning>Le répertoire est bloqué</in-versioning>
+-   <cannot-save>Impossible de sauver</cannot-save>
++   <cannot-save>Impossible d'enregistrer</cannot-save>
+    <saved-successfully>{0}</saved-successfully>
+    <not-support>Impossible de charger le modèle de '{0}'.</not-support>
+    <not-add-folder>Seuls les fichiers sont autorisés dans ce dossier</not-add-folder>
+@@ -16,7 +16,7 @@
+    <new-jcr-template>Impossible de trouver un gabarit d'affichage</new-jcr-template>>
+   </msg>
+   <action>
+-   <Save>Sauver</Save>
++   <Save>Enregistrer</Save>
+    <Cancel>Annuler</Cancel>
+   </action>
+  </UIFCCForm>
+@@ -48,7 +48,7 @@
+    <do-select>Erreur de sélection</do-select>
+   </msg>
+   <action>
+-   <Save>Sauver</Save>
++   <Save>Enregistrer</Save>
+   </action>
+  </UIFCCConfig>
+  
+@@ -117,7 +117,7 @@
+  <UIFCCActionForm>
+   <title>Ajouter / Éditer une action</title>
+   <action>
+-   <Save>Sauver</Save>
++   <Save>Enregistrer</Save>
+    <Close>Fermer</Close>
+   </action>
+   <msg>
+@@ -163,7 +163,7 @@
+  <UITabPane>
+   <title>
+    <UICategoriesSelectPanel>Sélectionner les catégories</UICategoriesSelectPanel>
+-   <UISelectedCategoriesGrid>Referenced catégories</UISelectedCategoriesGrid>
++   <UISelectedCategoriesGrid>Catégories référencées</UISelectedCategoriesGrid>
+   </title>
+  </UITabPane>
+  
+@@ -187,13 +187,13 @@
+  
+  <UITreeTaxonomyList>
+   <label>
+-   <taxonomyTree>Taxonomie Tree</taxonomyTree>
++   <taxonomyTree>Arbre de Taxonomie</taxonomyTree>
+   </label>
+  </UITreeTaxonomyList>
+  
+  <UIFCCTaxonomyPopupWindow>
+   <title>
+-   <UIOneTaxonomySelector>Taxonomie sélecteur</UIOneTaxonomySelector>
++   <UIOneTaxonomySelector>Sélecteur de Taxonomie</UIOneTaxonomySelector>
+   </title>
+  </UIFCCTaxonomyPopupWindow> 
+-</bundle>
+\ No newline at end of file
++</bundle>
+Index: portlets/formgenerator/src/main/webapp/WEB-INF/classes/locale/portlet/FormGeneratorPortlet/FormGeneratorPortlet_fr.xml
+===================================================================
+--- portlets/formgenerator/src/main/webapp/WEB-INF/classes/locale/portlet/FormGeneratorPortlet/FormGeneratorPortlet_fr.xml	(revision 61769)
++++ portlets/formgenerator/src/main/webapp/WEB-INF/classes/locale/portlet/FormGeneratorPortlet/FormGeneratorPortlet_fr.xml	(working copy)
+@@ -7,18 +7,18 @@
+    <UIFormGeneratorNodetypeFormSelectBox>Sur la base nodeType</UIFormGeneratorNodetypeFormSelectBox>
+    <UIFormGeneratorJsonObjectStringInput></UIFormGeneratorJsonObjectStringInput>
+    <UIFormGeneratorDescriptionFormWYSIWYGInput>Description</UIFormGeneratorDescriptionFormWYSIWYGInput>
+-   <UIFormGeneratorIconFormUploadInput>Icon</UIFormGeneratorIconFormUploadInput>
++   <UIFormGeneratorIconFormUploadInput>Icône</UIFormGeneratorIconFormUploadInput>
+    <UIFormGeneratorDnDTab>Constructeur de formulaire</UIFormGeneratorDnDTab>
+    <UIFormGeneratorOptionsTab>Options</UIFormGeneratorOptionsTab>
+    <UIFormGeneratorVoteFormCheckboxInput>Permettez-vote</UIFormGeneratorVoteFormCheckboxInput>
+    <UIFormGeneratorCommentFormCheckboxInput>Laisser un commentaire</UIFormGeneratorCommentFormCheckboxInput>
+   </label>
+   <action>
+-   <Save>Sauver</Save>
+-   <Reset>Reset</Reset>
++   <Save>Enregistrer</Save>
++   <Reset>Réinitialiser</Reset>
+   </action>
+   <msg>
+-   <register-failed>NodeType enregistrement est vain. Il est en vigueur ou Super types est invalide</register-failed>
++   <register-failed>Enregistrement de NodeType  est vain. Il existe déjà ou types Supérieurs sont invalides</register-failed>
+    <AddNewsSuccessful>Le formulaire a été créé avec succès</AddNewsSuccessful>
+    <duplicate-name>Nom du champ label est double, s'il vous plaît le nom de différence d'entrée</duplicate-name>
+    <select-value-empty>Certains champs de la valeur par défaut de boîte de sélection ne peut pas être vide, s'il vous plaît valeur d'entrée pour lui.</select-value-empty>
+@@ -29,4 +29,4 @@
+    <Download>Télécharger ce document</Download>
+   </label>
+  </FormGeneratorDialog>
+-</bundle>
+\ No newline at end of file
++</bundle>
+Index: portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/ParameterizedContentListViewer/ParameterizedContentListViewer_fr.xml
+===================================================================
+--- portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/ParameterizedContentListViewer/ParameterizedContentListViewer_fr.xml	(revision 61769)
++++ portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/ParameterizedContentListViewer/ParameterizedContentListViewer_fr.xml	(working copy)
+@@ -21,11 +21,11 @@
+     <exo:dateCreated>La date de création</exo:dateCreated>
+    </option>
+    <DisplaySettingBlock>L'écran de réglage</DisplaySettingBlock>
+-   <Header>Header</Header>
+-   <AutomaticDetection>Automatic Detection</AutomaticDetection>
+-   <FormViewTemplate>Modèle Viewer</FormViewTemplate>
+-   <PaginatorTemplate>Paginator template</PaginatorTemplate>
+-   <UICategoryNavigationTreeNameFormSelectBox>Arbre taxonomique</UICategoryNavigationTreeNameFormSelectBox>
++   <Header>En-tête</Header>
++   <AutomaticDetection>Détection automatique</AutomaticDetection>
++   <FormViewTemplate>Modèle de visualiseur</FormViewTemplate>
++   <PaginatorTemplate>Modèle de paginateur</PaginatorTemplate>
++   <UICategoryNavigationTreeNameFormSelectBox>Arbre de catégories</UICategoryNavigationTreeNameFormSelectBox>
+    <ItemsPerPage>Articles par page</ItemsPerPage>
+    <ViewerTitle>Afficher le titre</ViewerTitle>
+    <ViewerHeader>Afficher l'en-tête</ViewerHeader>
+@@ -34,14 +34,14 @@
+    <ViewerDateCreated>Afficher la date de création</ViewerDateCreated>
+    <ShowReadMore>Lire la suite</ShowReadMore>
+    <ViewerSummary>Afficher le résumé</ViewerSummary>
+-   <ShowRSSLink>Show RSS link</ShowRSSLink>
++   <ShowRSSLink>Afficher le lien RSS</ShowRSSLink>
+    <ShowLink>Afficher le lien</ShowLink>
+    <LinkFormatBlock>Le format de lien</LinkFormatBlock>
+-   <UIParameterizedTagetPageInputSetAction>Page cible</UIParameterizedTagetPageInputSetAction>
++   <UIParameterizedTagetPageInputSetAction>Page cible du détail</UIParameterizedTagetPageInputSetAction>
+    <content-not-found>Ce contenu n'est pas trouvé.</content-not-found>
+   </label>
+   <action>
+-   <Save>Sauver</Save>
++   <Save>Enregistrer</Save>
+    <Cancel>Annuler</Cancel>
+   </action>
+  </UIPCLVConfig>
+@@ -58,4 +58,4 @@
+    <SelectTargetPage>Sélectionnez page cible</SelectTargetPage>
+   </title>
+  </UIParameterizedTagetPageInputSetAction>
+-</bundle>
+\ No newline at end of file
++</bundle>
+Index: portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/ContentListViewer/ContentListViewer_fr.xml
+===================================================================
+--- portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/ContentListViewer/ContentListViewer_fr.xml	(revision 61769)
++++ portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/ContentListViewer/ContentListViewer_fr.xml	(working copy)
+@@ -27,8 +27,8 @@
+    </option>
+    <DisplaySettingBlock>L'écran de réglage</DisplaySettingBlock>
+    <Header>En-tête</Header>
+-   <FormViewTemplate>Modèle Viewer</FormViewTemplate>
+-   <PaginatorTemplate>Paginator template</PaginatorTemplate>
++   <FormViewTemplate>Modèle de visualisation</FormViewTemplate>
++   <PaginatorTemplate>Modèle de pagination</PaginatorTemplate>
+    <UICLVBasePathInputSetAction>Base de chemin</UICLVBasePathInputSetAction>
+    <UICLVBasePathInput></UICLVBasePathInput>
+    <ItemsPerPage>Articles par page</ItemsPerPage>
+@@ -42,7 +42,7 @@
+    <ViewerReadmore>Lire la suite</ViewerReadmore>
+   </label>
+   <action>
+-   <Save>Sauver</Save>
++   <Save>Enregistrer</Save>
+    <Cancel>Annuler</Cancel>
+   </action>
+  </UICLVConfig>
+@@ -101,9 +101,9 @@
+  </CorrectContentSelectorPopupWindow>
+  <UIMessageBoard>
+     <msg>
+-      <contents-not-found>Ce contenu n'a pas été trouvée ou supprimé.</contents-not-found>
+-      <add-node-error>Une erreur lorsque vous effectuez ajouter un nouveau noeud.</add-node-error>
++      <contents-not-found>Ce contenu ne peut pas être trouvé ou a été supprimé.</contents-not-found>
++      <add-node-error>Une erreur est survenue lors de la création du noeud</add-node-error>
+  	  <folder-empty>Ce dossier est vide</folder-empty>	
+     </msg>
+   </UIMessageBoard>
+-</bundle>
+\ No newline at end of file
++</bundle>
+Index: portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/ParameterizedContentViewer/ParameterizedContentViewer_fr.xml
+===================================================================
+--- portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/ParameterizedContentViewer/ParameterizedContentViewer_fr.xml	(revision 61769)
++++ portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/ParameterizedContentViewer/ParameterizedContentViewer_fr.xml	(working copy)
+@@ -30,8 +30,8 @@
+    <ShowBar>Afficher la barre d'options</ShowBar>
+   </label>
+   <action>
+-   <Save>Sauver</Save>
++   <Save>Enregistrer</Save>
+    <Cancel>Annuler</Cancel>
+   </action>
+  </UIPCVConfig>
+-</bundle>
+\ No newline at end of file
++</bundle>
+Index: portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/CategoryNavigation/CategoryNavigation_fr.xml
+===================================================================
+--- portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/CategoryNavigation/CategoryNavigation_fr.xml	(revision 61769)
++++ portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/CategoryNavigation/CategoryNavigation_fr.xml	(working copy)
+@@ -2,7 +2,7 @@
+ <bundle>
+  <UICategoryNavigationTargetPathFormInputSet>
+   <title>
+-   <SelectTargetPath></SelectTargetPath>
++   <SelectTargetPath>Sélectionner le chemin cible</SelectTargetPath>
+   </title>
+  </UICategoryNavigationTargetPathFormInputSet>
+  
+@@ -14,25 +14,20 @@
+  
+  <UICategoryNavigationConfig>
+   <label>
+-   <UICategoryNavigationRepositoryFormSelectBox>Repository</UICategoryNavigationRepositoryFormSelectBox>
+-   <UICategoryNavigationTreeNameSelectBox>Arbre taxonomique</UICategoryNavigationTreeNameSelectBox>
++   <UICategoryNavigationRepositoryFormSelectBox>Dépôt de données</UICategoryNavigationRepositoryFormSelectBox>
++   <UICategoryNavigationTreeNameSelectBox>Arbre de catégories</UICategoryNavigationTreeNameSelectBox>
+    <UICategoryNavigationTreeTitleFormStringInput>Titre</UICategoryNavigationTreeTitleFormStringInput>
+-   <UICategoryNavigationTargetPathFormInputSet>Target Path</UICategoryNavigationTargetPathFormInputSet>
++   <UICategoryNavigationTargetPathFormInputSet>Chemin cible</UICategoryNavigationTargetPathFormInputSet>
+    <UICategoryNavigationTreeNameFormSelectBox>Nom de l'arbre</UICategoryNavigationTreeNameFormSelectBox>
+-   <UICategoryNavigationTemplateFormSelectBox>Tree viewer template</UICategoryNavigationTemplateFormSelectBox>
++   <UICategoryNavigationTemplateFormSelectBox>Modèle de visualisation en Arbre</UICategoryNavigationTemplateFormSelectBox>
+   </label>
+   <msg>
+-   <not-support-encoding>L'encodage est prend pas en charge.</not-support-encoding>
+-   <render> erreur lorsque processus de rendu. </render>
+-   <saving-success>Ce portlet a été mis à jour</saving-success>
++   <not-support-encoding>L'encodage n'est pas pris en charge.</not-support-encoding>
++   <render>Une erreur est survenue lors de l'affichage.</render>
++   <saving-success>Cette portlet a été mise à jour</saving-success>
+   </msg>
+   <action>
+-   <Save>Sauver</Save>
++   <Save>Enregistrer</Save>
+   </action>
+  </UICategoryNavigationConfig>
+- <UICategoryNavigationTreeBase>
+-    <msg>
+-      <not-existed-category>Cette catégorie n'existe pas</not-existed-category>
+-    </msg>
+- </UICategoryNavigationTreeBase>
+ </bundle>
+Index: portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/SingleContentViewer/SingleContentViewer_fr.xml
+===================================================================
+--- portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/SingleContentViewer/SingleContentViewer_fr.xml	(revision 61769)
++++ portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/SingleContentViewer/SingleContentViewer_fr.xml	(working copy)
+@@ -6,11 +6,11 @@
+    <print>Imprimer cette page</print>
+   </title>
+   <label>
+-   <draft>brouillon</draft>
++   <draft>Brouillon</draft>
+    <print>Imprimer</print>
+   </label>
+   <msg>
+-   <no-content>Il n'ya pas de contenu à afficher</no-content>
++   <no-content>Il n'y a pas de contenu à afficher</no-content>
+   </msg>
+  </UIPresentationContainer>
+ 
+@@ -35,11 +35,11 @@
+    <name>Titre</name>
+    <selectTemplate>Sélectionnez un modèle</selectTemplate>
+    <option>
+-    <exo:siteBreadcrumb>Site Breadcrumb</exo:siteBreadcrumb>
+-    <exo:siteNavigationWebContent>Site Navigation</exo:siteNavigationWebContent>
+-    <exo:pictureOnHeadWebcontent>Picture on head layout webcontent</exo:pictureOnHeadWebcontent>
+-    <exo:siteSearchBox>Site search box webcontent</exo:siteSearchBox>
+-    <exo:webContent>Free layout webcontent</exo:webContent>
++    <exo:siteBreadcrumb>Fil d'Ariane</exo:siteBreadcrumb>
++    <exo:siteNavigationWebContent>Barre de Navigation</exo:siteNavigationWebContent>
++    <exo:pictureOnHeadWebcontent>Contenu web contenant une image dans l'entête</exo:pictureOnHeadWebcontent>
++    <exo:siteSearchBox>Formulaire de recherche dans le site</exo:siteSearchBox>
++    <exo:webContent>Contenu web divers</exo:webContent>
+    </option>
+   </label>
+  </UINameWebContentForm>
+@@ -67,8 +67,8 @@
+    <title>
+     <UIWelcomeScreen>Bienvenue dans Single content viewer</UIWelcomeScreen>
+     <UINameWebContentForm>Suivant un modèle</UINameWebContentForm>
+-    <UIContentDialogForm>Web content form</UIContentDialogForm>
++    <UIContentDialogForm>Formulaire du contenu web</UIContentDialogForm>
+     <UIContentSelectorOne>Single content selector panel</UIContentSelectorOne>
+    </title>
+   </UIContentDialogFormPopupWindow>
+-</bundle>
+\ No newline at end of file
++</bundle>
+Index: portlets/newsletter/src/main/webapp/WEB-INF/classes/locale/portlet/NewsletterManager/NewsletterManager_en.xml
+===================================================================
+--- portlets/newsletter/src/main/webapp/WEB-INF/classes/locale/portlet/NewsletterManager/NewsletterManager_en.xml	(revision 61769)
++++ portlets/newsletter/src/main/webapp/WEB-INF/classes/locale/portlet/NewsletterManager/NewsletterManager_en.xml	(working copy)
+@@ -319,4 +319,4 @@
+ 			<donotMoveYourSelt>You have just removed your permission from list, please check again!</donotMoveYourSelt>
+ 		</msg>
+ 	</UIRemoveModeratorsFormPopupWindow>
+-</bundle>
+\ No newline at end of file
++</bundle>
+Index: portlets/newsletter/src/main/webapp/WEB-INF/classes/locale/portlet/NewsletterManager/NewsletterManager_fr.xml
+===================================================================
+--- portlets/newsletter/src/main/webapp/WEB-INF/classes/locale/portlet/NewsletterManager/NewsletterManager_fr.xml	(revision 61769)
++++ portlets/newsletter/src/main/webapp/WEB-INF/classes/locale/portlet/NewsletterManager/NewsletterManager_fr.xml	(working copy)
+@@ -8,7 +8,7 @@
+ 	<NewsletterPortlet>
+     <action>
+     	<Preferences>Préférences</Preferences>
+-      <Save>Sauver</Save>
++      <Save>Enregistrer</Save>
+       <Open>Ouvrir</Open>
+       <Cancel>Annuler</Cancel>
+       <Close>Fermer</Close>
+@@ -54,13 +54,13 @@
+ 	
+ 	<FormWebcontentSelector>
+ 		<title>
+-			<SelectWebcontent>Sélectionnez un contenu</SelectWebcontent>
++			<SelectWebcontent>Sélection de contenu</SelectWebcontent>
+ 		</title>
+ 	</FormWebcontentSelector>
+ 	
+ 	<UICategoryFormPopupWindow>
+ 		<title>
+-			<UICategoryForm>Edition d'une Catégorie</UICategoryForm>
++			<UICategoryForm>Edition de Catégorie</UICategoryForm>
+ 		</title>
+ 	</UICategoryFormPopupWindow>
+ 	
+@@ -104,7 +104,7 @@
+ 			<CategoryModerator></CategoryModerator>
+ 		</label>
+ 		<action>
+-			<Save>Sauver</Save>
++			<Save>Enregistrer</Save>
+ 			<Cancel>Annuler</Cancel>
+ 		</action>
+   </UICategoryForm>
+@@ -120,8 +120,8 @@
+     	<Administration>Administration</Administration>
+     </title>
+     <msg>
+-    	<get-list-categories>erreur lorsque vous effectuez obtenir liste des catégories.</get-list-categories>
+-    	<get-list-subscriptions>erreur lorsque vous effectuez obtenir abonnements liste.</get-list-subscriptions>
++    	<get-list-categories>Une erreur est survenue lors de la récupération de la liste des catégories</get-list-categories>
++    	<get-list-subscriptions>Une erreur est survenue lors de la récupération de la liste des abonnements</get-list-subscriptions>
+     </msg>
+   </UICategories>
+   
+@@ -139,11 +139,11 @@
+     	<checkOnlyOneNewsletterToConvert>S'il vous plaît cocher une seule lettre d'information pour convertir!</checkOnlyOneNewsletterToConvert>
+     	<convertSuccessful>Lettre convertie en tant que modèle avec succès</convertSuccessful>
+     	<templateIsExist>Il existe déjà un modèle avec le même nom! Merci de modifier le titre et de réessayer.</templateIsExist>
+-			<get-list-subscriptions>erreur lorsque vous effectuez obtenir abonnements liste. </get-list-subscriptions>
++			<get-list-subscriptions>Une erreur est survenue lors de la récupération de la liste des abonnements </get-list-subscriptions>
+     </msg>
+     <title>
+     	<ManageCategory>Gérer la catégorie</ManageCategory>
+-    	<EditCategory>Éditer une catégorie</EditCategory>
++    	<EditCategory>Éditer la catégorie</EditCategory>
+     	<DeleteCategory>Supprimer la catégorie</DeleteCategory>
+     	<Edit>Éditer</Edit>
+     	<Delete>Supprimer</Delete>
+@@ -189,7 +189,7 @@
+     <msg>
+       <saveSuccess>L'abonnement a été enregistré.</saveSuccess>
+       <subcriptionNameIsNotEmpty>Le nom d'abonnement ne peut pas être vide!</subcriptionNameIsNotEmpty>
+-      <subcriptionTitleIsNotEmpty>le titre d'abonnement ne peut pas être vide!</subcriptionTitleIsNotEmpty>
++      <subcriptionTitleIsNotEmpty>Le titre de l'abonnement ne peut pas être vide</subcriptionTitleIsNotEmpty>
+       <subcriptionNameIsAlreadyExist>Le nom de cet abonnement existe déjà!</subcriptionNameIsAlreadyExist>
+       <selectRedactorPermission>Vous devez sélectionner l'utilisateur ou rédacteur membre!</selectRedactorPermission>
+     </msg>
+@@ -210,7 +210,7 @@
+ 		<action>
+ 			<Select>Sélectionner</Select>
+ 			<Preview>Prévisualiser</Preview>
+-			<Save>Sauver</Save>
++			<Save>Enregistrer</Save>
+ 			<Send>Envoyer</Send>
+ 			<Cancel>Annuler</Cancel>
+ 		</action>
+@@ -219,19 +219,19 @@
+ 				Merci de valider la date d'envoi envoyer d'enregistrer la lettre. 
+ 			</UpdateBeforeSave>
+ 			<DateTimeIsNotNull>
+-				la date d'envoi est nulle. Merci de vérifier à nouveau!
++				La date d'envoi est nulle. 
+ 			</DateTimeIsNotNull>
+ 			<DateTimeIsInvalid>
+-				La date d'envoi n'est pas valide. Merci de vérifier à nouveau!
++				La date d'envoi n'est pas valide. 
+ 			</DateTimeIsInvalid>
+ 			<UpdateInformationSuccessful>Mise à jour des informations réussie!</UpdateInformationSuccessful>
+ 			<NodeNameInvalid>
+ 				Impossible de créer la lettre car son titre existe déjà. Merci d'essayer à nouveau!
+ 			</NodeNameInvalid>
+-			<get-template>erreur lorsque vous effectuez obtenir template. </get-template>
+-			<get-template-resource>erreur lorsque vous effectuez obtenir modèle de résolution de ressource </get-template-resource>
+-			<add-email-newsletter>erreur lorsque vous effectuez ajouter l'adresse e-mail liste. </add-email-newsletter>
+-			<send-newsletter>erreur lorsque vous effectuez envoyer des lettres d'informations. </send-newsletter>
++			<get-template>Une erreur est survenue lors de la récupération du modèle </get-template>
++			<get-template-resource>Une erreur est survenue lors de la récupération des chaines de caractères </get-template-resource>
++			<add-email-newsletter>Une erreur est survenue lors de l'ajout de l'adresse mail </add-email-newsletter>
++			<send-newsletter>Une erreur est survenue lors de l'envoi des lettres d'information </send-newsletter>
+ 		</msg>
+ 	</UINewsletterEntryForm>
+ 	
+@@ -279,17 +279,17 @@
+ 			<User>Utilisateur</User>
+ 		</role>
+ 		<msg>
+-			<get-list-users> erreur lorsque obtenir la liste des utilisateurs publics. </get-list-users>
+-			<set-infor-users> erreur lorsque ensemble d'information pour les utilisateurs. </set-infor-users>
++			<get-list-users> Une erreur est survenue lors de la récupération de la liste des utilisateurs publics </get-list-users>
++			<set-infor-users> Une erreur est survenue lors de l'établissement les informations pour les utilisateurs </set-infor-users>
+ 		</msg>
+ 	</UIManagerUsers>
+ 	
+ 	<UINewsletterEntryManager>
+ 		<msg>
+ 			<confirmDeleteNewsletter>Êtes-vous sûr de vouloir supprimer cette Newsletter ?</confirmDeleteNewsletter>
+-			<get-checked>erreur lorsque vous effectuez obtenir un bulletin ou de souscription est cochée. </get-checked>
+-			<set-list-newsletter>erreur lorsque vous effectuez ensemble des entrées newsletter liste. </set-list-newsletter>
+-			<canNotEditNewsletter>Ce bulletin a été transmis, ne peut pas modifier. Vous ne convertir que ce modèle au fur et à ajouter de nouveaux Newsletter avec ce modèle.</canNotEditNewsletter>
++			<get-checked>Une erreur est survenue lors de la récupération du bulletin ou la souscription est cochée </get-checked>
++			<set-list-newsletter>Une erreur est survenue lors de l'établissement une liste des entrées de newsletter </set-list-newsletter>
++			<canNotEditNewsletter>Ce bulletin a été transmis, il ne peut pas être modifié. Vous ne pouvez que convertir ce modèle et ajouter de nouveaux Newsletter avec.</canNotEditNewsletter>
+ 		</msg>
+ 		<title>
+ 			<ConvertAsTemplate>Convertir en tant que modèle</ConvertAsTemplate>
+@@ -312,7 +312,7 @@
+ 		</title>
+ 		<msg>
+ 			<checkToRemove>S'il vous plaît, cocher une ou plusieurs autorisations dans la liste à supprimer</checkToRemove>
+-			<donotMoveYourSelt>Vous avez seulement retirer votre autorisation dans la liste, s'il vous plaît vérifier à nouveau!</donotMoveYourSelt>
++			<donotMoveYourSelt>Vous avez seulement retiré votre autorisation dans la liste, s'il vous plaît vérifier à nouveau!</donotMoveYourSelt>
+ 		</msg>
+ 	</UIRemoveModeratorsFormPopupWindow>		
+-</bundle>
+\ No newline at end of file
++</bundle>
+Index: web/wcmportal/src/main/webapp/WEB-INF/classes/locale/navigation/portal/classic_fr.xml
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/classes/locale/navigation/portal/classic_fr.xml	(revision 61769)
++++ web/wcmportal/src/main/webapp/WEB-INF/classes/locale/navigation/portal/classic_fr.xml	(working copy)
+@@ -3,7 +3,7 @@
+   <portal>
+     <classic>
+       <home>Accueil</home>
+-      <dashboard>Dashboard</dashboard>
++      <dashboard>Tableau de bord</dashboard>
+       <presentation>Contenu simple</presentation>
+       <listViewer>Contenus multiples</listViewer>
+       <search>Recherche</search>
+@@ -14,11 +14,11 @@
+       <parameterizedviewer>Visualiseur de contenu paramétré</parameterizedviewer>
+       <viewer>Visualiseurs</viewer>
+ 			<categories>Catégories</categories>
+-			<formgenerator>Form Generator</formgenerator>
++			<formgenerator>Générateur de formulaire</formgenerator>
+       <newsletter>Newsletter</newsletter>
+-      <newsletterviewer>Newsletter Viewer</newsletterviewer>
+-      <newslettermanager>Newsletter Gestionnaire</newslettermanager>
+-      <printviewer></printviewer>
++      <newsletterviewer>Visualiseur de Newsletter</newsletterviewer>
++      <newslettermanager>Gestionnaire de Newsletter</newslettermanager>
++      <printviewer>Aperçu avant impression</printviewer>
+       <newAccount>Nouveau compte</newAccount>
+     </classic>
+   </portal>
+Index: web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/publication_fr.xml
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/publication_fr.xml	(revision 61769)
++++ web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/publication_fr.xml	(working copy)
+@@ -1,126 +1,133 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <bundle>
+- <UIPublishingPanel>
+-  <panelLeft>
+-   <title>Ci-dessous sont les pages possibles où le contenu peut être affiché</title>
+-  </panelLeft>
+-  <panelRight>
+-   <title>Ci-dessous sont les pages où le contenu est affiché</title>
+-  </panelRight>
+-  <currentPortal>
+-   <title>Site courant</title>
+-   <none>Aucun</none>
+-  </currentPortal>
+-  <currentNode>
+-   <title>Noeud courant</title>
+-   <none>Aucun</none>
+-  </currentNode>
+- </UIPublishingPanel>
+- <UIPublicationComponentStatus>
++  <UIPublishingPanel>
++    <panelLeft>
++      <title>Ci-dessous sont les pages possibles où le contenu peut être affiché</title>
++    </panelLeft>
++    <panelRight>
++      <title>Ci-dessous sont les pages où le contenu est affiché</title>
++    </panelRight>
++    <currentPortal>
++      <title>Site courant</title>
++      <none>Aucun</none>
++    </currentPortal>
++    <currentNode>
++      <title>Nœud courant</title>
++      <none>Aucun</none>
++    </currentNode>
++  </UIPublishingPanel>
++  <UIPublicationComponentStatus>
++    <action>
++      <Close>Fermer</Close>
++    </action>
++  </UIPublicationComponentStatus>
++  <UIPopupWindow>
++  	<title>
++  		<UIPublicationContainer>Gérer la publication</UIPublicationContainer>
++  		<UIPublishingPanel>Gérer la publication</UIPublishingPanel>
++  	</title>
++  </UIPopupWindow>
++  <UITabPane>
++    <title>
++      <UIPublishingPanel>Panneau de publication</UIPublishingPanel>
++      <UIPublicationPanel>Publication</UIPublicationPanel>
++      <UIPublicationPagesContainer>Publication des pages</UIPublicationPagesContainer>
++      <UIPublicationHistory>Historique de Publication</UIPublicationHistory>
++      <UIVersionViewer>Visualiseur de version</UIVersionViewer>
++    </title>
++  </UITabPane>
++  <UIClvPopupContainer>
++  	<title>
++  		<UIClvPopupContainer>Conteneur de list de contenus</UIClvPopupContainer>
++  		<UIPublishClvChooser>Choisir un bloc de contenus</UIPublishClvChooser>
++  	</title>
++  	<action>
++ 			<close>Fermer</close>
++ 		</action>
++  </UIClvPopupContainer>
++  <UIPublicationAction>
++    <msg>
++      <none>Aucun nœud de navigation sélectionné</none>
++      <duplicate>Le contenu a déjà été ajouté à la page</duplicate>
++      <wrongNode>Ceci n'est pas un nœud de page. Veuillez sélectionner un autre nœud.</wrongNode>
++    </msg>
++    <action>
++      <add>Publier le contenu dans la page</add>
++      <remove>Annuler la publication du contenu dans la page</remove>
++    </action>
++  </UIPublicationAction>
++  <UIPublishedPages>
++    <label>
++      <noitem>Ce contenu n'a été publié dans aucune page pour le moment</noitem>
++    </label>
++  </UIPublishedPages>
++  <UIPublicationPanel>
+   <action>
+-   <Close>Fermer</Close>
++      <Save>Enregistrer</Save>
++      <Close>Fermer</Close>
+   </action>
+- </UIPublicationComponentStatus>
+- <UIPopupWindow>
+-  <title>
+-   <UIPublicationContainer>Gérer la publication</UIPublicationContainer>
+-   <UIPublishingPanel>Gérer la publication</UIPublishingPanel>
+-  </title>
+- </UIPopupWindow>
+- <UITabPane>
+-  <title>
+-   <UIPublishingPanel>Panneau de publication</UIPublishingPanel>
+-   <UIPublicationPanel>Publication de l'état</UIPublicationPanel>
+-   <UIPublicationPagesContainer>Publication des pages</UIPublicationPagesContainer>
+-   <UIPublicationHistory>Historique de Publication</UIPublicationHistory>
+-   <UIVersionViewer>Visualiseur de version</UIVersionViewer>
+-  </title>
+- </UITabPane>
+- <UIClvPopupContainer>
+-  <title>
+-   <UIClvPopupContainer>Conteneur de list de contenus</UIClvPopupContainer>
+-   <UIPublishClvChooser>Choisir un bloc de contenus</UIPublishClvChooser>
+-  </title>
+-  <action>
+-    <close>Fermer</close>
+-   </action>
+- </UIClvPopupContainer>
+- <UIPublicationAction>
+-  <msg>
+-   <none>Aucun noeud de navigation sélectionné</none>
+-   <duplicate>Le contenu a déjà été ajouté à la page</duplicate>
+-   <wrongNode>Ceci n'est pas un noeud de page. Veuillez sélectionner un autre noeud.</wrongNode>
+-  </msg>
+-  <action>
+-   <add>Publier le contenu dans la page</add>
+-   <remove>Annuler la publication du contenu dans la page</remove>
+-  </action>
+- </UIPublicationAction>
+- <UIPublishedPages>
+-  <label>
+-   <noitem>Ce contenu n'a été publié dans aucune page pour le moment</noitem>
+-  </label>
+- </UIPublishedPages>
+- <UIPublicationPanel>
+-  <button>
+-   <close>Fermer</close>
+-  </button>
+-  <revisions>
+-   <version>Versions</version>
+-   <date>Date</date>
+-   <author>Auteur</author>
+-   <status>Etat</status>
+-   <action>Action</action>
+-   <label>Version</label>
+-   <none>Aucune version</none>
+-   <seeall>Voir toutes les versions</seeall>
+-   <currentVersion>Version courante</currentVersion>
+-   <confirm>Vous allez perdre votre brouillon, voulez-vous restaurer cette version et remplacer le brouillon courant ?</confirm>
+-  </revisions>
+-  <status>
+-   <version>Révision</version>
+-   <title>Etat</title>
+-   <enrolled>Créé</enrolled>
+-   <draft>Brouillon</draft>
+-   <awaiting>En attente</awaiting>
+-   <live>Publié</live>
+-   <obsolete>Obsolète</obsolete>
+-  </status>
+-  <scheduled>
+-   <title>Planifier</title>
+-   <from>de</from>
+-   <to>à</to>
+-  </scheduled>
+-  <title>
+-   <preview>Prévisualiser</preview>
+-   <restore>Restaurer</restore>
+-  </title>
+-  <msg>
+-   <have-no-view-template>Le formulaire de consultation n'est pas supporté</have-no-view-template>
+-   <restore-complete>Restauration complète</restore-complete>
+-  </msg>
+- </UIPublicationPanel>
+- <UIPublicationHistory>
+-  <header>
+-   <date>La date</date>
+-   <versionName>Le nom de version</versionName>
+-   <currentState>L'état courant</currentState>
+-   <user>L'auteur</user>
+-   <description>La description</description>
+-  </header>
+- </UIPublicationHistory>
+- 
+- <UIPublicationPanel>
+-  <label>
+-   <header>Le temps de publication</header>
+-   <start>Début de la publication</start>
+-   <end>Fin de la publication</end>
+-  </label>
+-  <action>
+-   <Save>Sauver</Save>
+-  </action>
+-  <msg>
+-   <invalid-format>Format incorrect. S'il vous plaît vérifier à nouveau</invalid-format>
+-  </msg>
+- </UIPublicationPanel>
+-</bundle>
+\ No newline at end of file
++  	<button>
++  		<close>Fermer</close>
++  	</button>
++  	<revisions>
++  		<version>Versions</version>
++  		<date>Date</date>
++  		<author>Auteur</author>
++  		<status>Etat</status>
++  		<action>Action</action>
++  		<label>Version</label>
++  		<none>Aucune version</none>
++  		<seeall>Voir toutes les versions</seeall>
++  		<currentVersion>Version courante</currentVersion>
++  		<confirm>Vous allez perdre votre brouillon, voulez-vous restaurer cette version et remplacer le brouillon courant ?</confirm>
++  	</revisions>
++  	<status>
++  		<version>Révision</version>
++  		<title>Etat</title>
++  		<enrolled>Créé</enrolled>
++  		<draft>Brouillon</draft>
++  		<awaiting>En attente</awaiting>
++  		<live>Publié</live>    
++  		<obsolete>Obsolète</obsolete>
++        <pending>Rédigé</pending>
++        <approved>Validé</approved>
++        <staged>Validé</staged>
++        <published>Publié</published>   
++        <unpublished>Expiré</unpublished>  
++        <archived>Archivé</archived>
++  	</status>
++  	<scheduled>
++  		<title>Planifier</title>
++  		<from>Publié du </from>
++  		<to>au </to>
++  	</scheduled>
++  	<title>
++  		<preview>Prévisualiser</preview>
++  		<restore>Restaurer</restore>
++  	</title>
++  	<msg>
++    	<have-no-view-template>Le formulaire de consultation n'est pas supporté</have-no-view-template>
++    	<restore-complete>Restauration complète</restore-complete>
++        <no-states>Nous n'avons pas pu associer votre contenu à des étapes de publication. Vous ne pourrez pas publier ce contenu.</no-states>
++    </msg>
++  </UIPublicationPanel>
++  <UIPublicationHistory>
++  	<header>
++  		<date>La date</date>
++  		<versionName>Le nom de version</versionName>
++  		<currentState>L'état courant</currentState>
++  		<user>L'auteur</user>
++  		<description>La description</description>
++  	</header>
++  </UIPublicationHistory>
++  <Publication>
++  	<log>
++	  	<description>
++	  		<enrolled>Le contenu a été créé</enrolled>
++	  		<change-to-draft-state>Modification d'un brouillon</change-to-draft-state>
++	  		<change-to-live-state>Publication d'un brouillon</change-to-live-state>
++	  		<change-to-obsolete-state>Dépublication d'une version</change-to-obsolete-state>
++	  	</description>
++  	</log>
++  </Publication>
++</bundle>
+Index: web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/webui_fr.xml
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/webui_fr.xml	(revision 61769)
++++ web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/webui_fr.xml	(working copy)
+@@ -8,24 +8,24 @@
+  
+  <UIFormInputSetWithAction>
+   <msg>
+-   <confirm-delete>Êtes-vous sûr de vouloir supprimer ?</confirm-delete>
++   <confirm-delete>Êtes-vous sûr de vouloir supprimer?</confirm-delete>
+   </msg>
+  </UIFormInputSetWithAction>
+  
+  <Drives>
+   <label>
+-   <ManagedSites>Gestion des Sites</ManagedSites>
+-   <SharedSite>Espace Partagé</SharedSite>
++   <ManagedSites>Gestion des sites</ManagedSites>
++   <SharedSite>Espace partagé</SharedSite>
+   </label>
+  </Drives>
+  
+  <Views>
+   <label>
+    <wcm-view>Vue WCM</wcm-view>
+-   <admin-view>Vue administration</admin-view>
+-   <icon-view>Vue icônes</icon-view>
+-   <thumbails-view>Vue vignettes</thumbails-view>
+-   <cover-flow>Vue défilé</cover-flow>
++   <admin-view>Vue d'administration</admin-view>
++   <icon-view>Vue d'icônes</icon-view>
++   <thumbails-view>Vue de vignettes</thumbails-view>
++   <cover-flow>Vue de défilé</cover-flow>
+   </label>
+  </Views>
+  
+@@ -57,7 +57,7 @@
+  
+  <UIContentDialogFormPopupWindow>
+   <title>
+-   <UIContentDialogPreference>Webcontent préférence</UIContentDialogPreference>
++   <UIContentDialogPreference>Préférences du contenu web</UIContentDialogPreference>
+   </title>
+  </UIContentDialogFormPopupWindow>
+  
+@@ -70,7 +70,7 @@
+    <UIContentSearchResult>Le résultat de recherche</UIContentSearchResult>
+    <UIContentViewer>Aperçu du contenu</UIContentViewer>
+    <WebContentMetadataPopup>Propriété sélecteur</WebContentMetadataPopup>
+-   <WebContentNodeTypePopup>Nodetype selector</WebContentNodeTypePopup>
++   <WebContentNodeTypePopup>sélecteur de Nodetype</WebContentNodeTypePopup>
+    <UIPermissionManager>Permission gestionnaire</UIPermissionManager>
+   </title>
+  </UITabPane>
+@@ -78,19 +78,19 @@
+  <UIContentBrowsePanelOne>
+   <selectBoxValues>
+    <FilterBy>Filtrer par</FilterBy>
+-   <WebContent>Webcontent</WebContent>
++   <WebContent>Contenu web</WebContent>
+    <DMSDocument>Document</DMSDocument>
+    <Media>Média</Media>
+   </selectBoxValues>
+   <msg>
+-  	<node-checkout>Le noeud est extrait. S'il vous plaît vérifier dans le nœud avant de faire cette fonction</node-checkout>
++  	<node-checkout>Le noeud est extrait. Veuillez-vous en vérifier avant de faire cette fonction</node-checkout>
+   </msg>
+  </UIContentBrowsePanelOne>
+  
+  <UIContentBrowsePanelMulti>
+   <selectBoxValues>
+    <FilterBy>Filtrer par</FilterBy>
+-   <WebContent>Webcontent</WebContent>
++   <WebContent>Contenu web</WebContent>
+    <DMSDocument>Document</DMSDocument>
+    <Media>Média</Media>
+   </selectBoxValues>
+@@ -98,21 +98,21 @@
+   
+  <UIContentBrowsePanelOne>
+   <label>
+-   <LeftColumn>Sélectionnez un dossier pour afficher ses enfants en tant que contenu</LeftColumn>
++   <LeftColumn>Sélectionnez un dossier pour afficher son contenu</LeftColumn>
+    <RightColumn>Ci-dessous le contenu possible peut être sélectionné</RightColumn>
+   </label>
+  </UIContentBrowsePanelOne>
+  
+  <UIContentBrowsePanelMulti>
+   <label>
+-   <LeftColumn>Sélectionnez un dossier pour afficher ses enfants en tant que contenu</LeftColumn>
++   <LeftColumn>Sélectionnez un dossier pour afficher son contenu</LeftColumn>
+    <RightColumn>Ci-dessous le contenu possible peut être sélectionné</RightColumn>
+   </label>
+  </UIContentBrowsePanelMulti>
+  
+  <UIContentBrowsePanelFolder>
+   <label>
+-   <LeftColumn>Sélectionnez un dossier pour afficher ses enfants en tant que contenu</LeftColumn>
++   <LeftColumn>Sélectionnez un dossier pour afficher son contenu</LeftColumn>
+    <RightColumn>Ci-dessous le dossier possible peut être sélectionné</RightColumn>
+   </label>
+  </UIContentBrowsePanelFolder>
+@@ -125,14 +125,14 @@
+   </label>
+   <msg>
+    <no-content-found>Aucun contenu trouvé</no-content-found>
+-   <non-content>Vous n'avez pas choisi n'importe quel contenu</non-content>
++   <non-content>Vous n'avez choisi aucun contenu</non-content>
+    <confirm-delete>Êtes-vous sûr de vouloir supprimer ?</confirm-delete>
+   </msg>
+  </UISelectedContentGrid>
+  
+  <UICLVContentSelectedGrid>
+   <action>
+-   <SaveCategories>Sauver</SaveCategories>
++   <SaveCategories>Enregistrer</SaveCategories>
+    <Cancel>Annuler</Cancel>
+   </action>
+  </UICLVContentSelectedGrid>
+@@ -161,11 +161,11 @@
+  
+  <UIContentSearchForm>
+    <title>
+-    <Location>Site nom</Location>
++    <Location>Nom du site</Location>
+     <SearchByName>Recherche par nom</SearchByName>
+     <Fulltext>Mots à rechercher</Fulltext>
+     <Property>Propriété</Property>
+-    <Contain>Contain</Contain>
++    <Contain>Contient</Contain>
+     <FromDate>De</FromDate>
+     <ToDate>à</ToDate>
+     <DocumentType>Type de document</DocumentType>
+@@ -181,9 +181,9 @@
+    </action>
+    <msg>
+     <empty-field>La valeur de ce champ est nulle ou vide!</empty-field>
+-    <invalid-date>"To Date" have to greater than "From Date"</invalid-date>
+-    <invalid-nodeType>Type de noeud "(0)" n'est pas valide! S'il vous plaît vérifiez à nouveau.</invalid-nodeType>
+-    <invalid-format>Blancs datetime format dans le champ '{0}'</invalid-format>
++    <invalid-date>Le champ "A" doit être ultérieur au champ "De"</invalid-date>
++    <invalid-nodeType>Type de noeud "(0)" n'est pas valide! Veuillez-vous le vérifier.</invalid-nodeType>
++    <invalid-format>Le format de date et heure dans le champ '{0}' est invalide</invalid-format>
+    </msg>
+   </UIContentSearchForm>
+   
+@@ -199,20 +199,20 @@
+     <Cancel>Annuler</Cancel>
+    </action>
+    <label>
+-    <metadataType>Métadonnées de type</metadataType>
++    <metadataType>Type de métadonnées</metadataType>
+     <property_select>Propriété</property_select>
+    </label>
+   </UIContentPropertySelector>
+   
+   <WebContentNodeTypePopup>
+    <title>
+-    <UIContentNodeTypeSelector>Sélecteur de la Nodetype</UIContentNodeTypeSelector>
++    <UIContentNodeTypeSelector>Sélecteur du Nodetype</UIContentNodeTypeSelector>
+    </title>
+   </WebContentNodeTypePopup>
+   
+   <UIContentNodeTypeSelector>
+    <action>
+-    <Save>Sauver</Save>
++    <Save>Enregistrer</Save>
+     <Cancel>Annuler</Cancel>
+    </action>
+   </UIContentNodeTypeSelector>
+@@ -225,39 +225,39 @@
+     <action>Action</action>
+    </header>
+    <title>
+-    <Select>Sélectionnez</Select>
++    <Select>Sélection</Select>
+     <View>Affichage</View>
+    </title>
+   </UIContentSearchResult>
+   
+   <UIContentDialogForm>
+    <action>
+-    <SaveDraft>Sauver le brouillon</SaveDraft>
++    <SaveDraft>Enregistrer le brouillon</SaveDraft>
+     <FastPublish>Publication rapide</FastPublish>
+     <Preferences>Préférences</Preferences>
+     <Close>Fermer</Close>
+    </action>
+    <msg>
+    	<access-denied>
+-   		Vous n'avez pas la permission ajouter des catégories pour ce document.
++   		Vous n'avez pas la permission à ajouter des catégories pour ce document.
+    	</access-denied>
+    	<exception>
+-   		Pour toute exception élever tout accomplir ajouter des catégories pour ce document.
++   		Avoir aucune exception quand ajouter des catégories pour ce document.
+    	</exception>
+-	<non-categories>Les catégories sont faux. S'il vous plaît sélectionner des catégories bien.</non-categories>
++	<non-categories>Les catégories sont faux. Veuillez-vous sélectionner des bonnes catégories.</non-categories>
+    </msg>
+   </UIContentDialogForm>
+   
+   <UIPermissionManager>
+    <label>
+     <UIPermissionInputSetWithAction>Permission</UIPermissionInputSetWithAction>
+-    <UIPermissionStringInput></UIPermissionStringInput>
++    <UIPermissionStringInput>Permission</UIPermissionStringInput>
+     <UIAccessibleCheckboxInput>Droit d'accès</UIAccessibleCheckboxInput>
+-    <UIEditableCheckboxInput>Droit de modifié</UIEditableCheckboxInput>
++    <UIEditableCheckboxInput>Droit de modification</UIEditableCheckboxInput>
+    </label>
+    <action>
+-    <Save>Sauver</Save>
+-    <Clear>Clair</Clear>
++    <Save>Enregistrer</Save>
++    <Clear>Nettoyer</Clear>
+     <title>
+      <Edit>Modifier</Edit>
+      <Delete>Supprimer</Delete>
+@@ -274,25 +274,26 @@
+    </header>
+    <msg>
+     <confirm-delete-permission>Confirmez-vous vouloir supprimer cette permission ?</confirm-delete-permission>
+-    <no-permission-remove>Il n'y a pas de permission à supprimer</no-permission-remove>
++    <no-permission-remove>Vous n'avez pas de permission à supprimer</no-permission-remove>
+     <access-denied>Accès refusé</access-denied>
+-    <node-locked>L'élément de chemin {0} ou l'un de ses parents est verrouillé.</node-locked>
+-    <checkbox-require>Vous devriez droit prévu.</checkbox-require>
+-    <node-checkedin>Vous devez vérifier en premier</node-checkedin>
++    <node-locked>L'élément ayant le chemin {0} ou l'un de ses parents est verrouillé.</node-locked>
++    <userOrGroup-required>Vous devriez sélectionner un utilisateur ou un groupe.</userOrGroup-required>
++    <checkbox-require>Vous devriez choisir le droit.</checkbox-require>
++    <node-checkedin>Vous devez faire check-out en premier.</node-checkedin>
+    </msg>
+   </UIPermissionManagerGrid>
+   
+   <UIPermissionInputSetWithAction>
+    <title>
+     <SelectUser>Sélectionner l'utilisateur</SelectUser>
+-    <SelectMember>Sélectionne le membre</SelectMember>
++    <SelectMember>Sélectionner le membre</SelectMember>
+     <AddAny>Ajouter toute autorisation</AddAny>
+    </title>
+   </UIPermissionInputSetWithAction>
+   
+   <UIUserSelectorPopupWindow>
+    <title>
+-    <UIUserContainer>Utilisateur sélecteur</UIUserContainer>
++    <UIUserContainer>Sélecteur d'utilisateur</UIUserContainer>
+    </title>
+   </UIUserSelectorPopupWindow>
+   
+@@ -305,7 +306,7 @@
+   <UIGroupMemberSelector>
+    <label>
+     <selectGroup>Sélectionner le groupe</selectGroup>
+-    <selectMembership>Sélectionnez l'adhésion</selectMembership>
++    <selectMembership>Sélectionner l'adhésion</selectMembership>
+    </label>
+   </UIGroupMemberSelector>
+   
+@@ -322,16 +323,16 @@
+   </ZeroValidator>
+ 
+  <ACMESite>
+-  <label>ACME Template</label>
++  <label>Modèle ACME</label>
+  </ACMESite>
+   
+   <UIDropDownPageTemp>
+   <item>
+-   <WCMPageConfigs>WCM page configs</WCMPageConfigs>
+-   <ColumnPageConfigs>Column page configs</ColumnPageConfigs>
+-   <RowPageConfigs>Row page configs</RowPageConfigs>
+-   <TabsPageConfigs>Tabs page configs</TabsPageConfigs>
+-   <MixPageConfigs>Mix page config</MixPageConfigs>
++   <WCMPageConfigs>Configuration de la page WCM</WCMPageConfigs>
++   <ColumnPageConfigs>Configuration des colonnes</ColumnPageConfigs>
++   <RowPageConfigs>Configuration des lignes</RowPageConfigs>
++   <TabsPageConfigs>Configuration des onglets</TabsPageConfigs>
++   <MixPageConfigs>Configuration d'une page à disposition mixte</MixPageConfigs>
+   </item>
+  </UIDropDownPageTemp>
+   
+@@ -339,17 +340,17 @@
+   <label>
+    <SingleContentViewer>Single content viewer</SingleContentViewer>
+    <ContentListViewer>Content list viewer</ContentListViewer>
+-   <Search>Search</Search>
++   <Search>Recherche</Search>
+    <Sitemap>Sitemap</Sitemap>
+-   <TwoColumnsLayout>Two columns layout</TwoColumnsLayout>
+-   <ThreeColumnsLayout>Three columns layout</ThreeColumnsLayout>
+-   <TwoRowsLayout>Two rows layout</TwoRowsLayout>
+-   <ThreeRowsLayout>Three rows layout</ThreeRowsLayout>
+-   <TwoTabsLayout>Two tabs layout</TwoTabsLayout>
+-   <ThreeTabsLayout>Three tabs layout</ThreeTabsLayout>
+-   <TwoColumnsOneRowLayout>Two columns One row layout</TwoColumnsOneRowLayout>
+-   <OneRowTwoColumnsLayout>One row Two columns layout</OneRowTwoColumnsLayout>
+-   <ThreeRowsTwoColumnsLayout>Three rows Two columns layout </ThreeRowsTwoColumnsLayout>
++   <TwoColumnsLayout>Disposition en deux colonnes</TwoColumnsLayout>
++   <ThreeColumnsLayout>Disposition en trois colonnes</ThreeColumnsLayout>
++   <TwoRowsLayout>Disposition en deux lignes</TwoRowsLayout>
++    <ThreeRowsLayout>Disposition en trois lignes</ThreeRowsLayout>
++   <TwoTabsLayout>Disposition en deux onglets</TwoTabsLayout>
++   <ThreeTabsLayout>Disposition en trois onglets</ThreeTabsLayout>
++   <TwoColumnsOneRowLayout>Disposition en deux colonnes et une ligne</TwoColumnsOneRowLayout>
++   <OneRowTwoColumnsLayout>Disposition en une ligne et deux colonnes </OneRowTwoColumnsLayout>
++   <ThreeRowsTwoColumnsLayout>Disposition en trois lignes et deux colonnes </ThreeRowsTwoColumnsLayout>
+   </label>
+  </UIWizardPageSelectLayoutForm>
+  
+@@ -358,7 +359,7 @@
+    <login>Connexion</login>
+    <logout>Déconnexion</logout>
+    <language>Changer de langue</language>
+-   <register>Enregistrer</register>
++   <register>S'enregistrer</register>
+  </Signin>
+  
+   <ContentSelector>
+@@ -368,20 +369,20 @@
+       <PersonalDrives>Lecteurs personnels</PersonalDrives>
+       <Private>Privé</Private>
+       <Public>Public</Public>
+-      <BackupCenter>Centre de Sauvegarde</BackupCenter>
++      <BackupCenter>Centre de sauvegarde</BackupCenter>
+       <CategorizedDocumentsCenter>Centre des documents catégorisés</CategorizedDocumentsCenter>
+-      <CollaborationCenter>Centre de Collaboration</CollaborationCenter>
+-      <DigitalAssetsManagementCenter>Centre de gestion de Matériels Digitales</DigitalAssetsManagementCenter>
++      <CollaborationCenter>Centre de collaboration</CollaborationCenter>
++      <DigitalAssetsManagementCenter>Centre de gestion de matériels digitales</DigitalAssetsManagementCenter>
+       <DMSAdministration>Administrateur de DMS</DMSAdministration>
+-      <DocumentsManagementCenter>Centre de gestion des Documents</DocumentsManagementCenter>
+-      <LiveDocumentsCenter>Centre des Documents publiés</LiveDocumentsCenter>
+-      <PendingDocumentsCenter>Centre des Documents en attente</PendingDocumentsCenter>
++      <DocumentsManagementCenter>Centre de gestion des documents</DocumentsManagementCenter>
++      <LiveDocumentsCenter>Centre des documents publiés</LiveDocumentsCenter>
++      <PendingDocumentsCenter>Centre des documents en attente</PendingDocumentsCenter>
+       <RecordsManagementCenter>Centre de gestion des enregistrements</RecordsManagementCenter>
+       <SharedUsersSpace>Espace partagé des utilisateurs</SharedUsersSpace>
+-      <Systemfiles>Fichiers système</Systemfiles>
+-      <ValidationRequestsDocumentsCenter>Centre des Documents en attente de validation</ValidationRequestsDocumentsCenter>
+-      <ManagedSites>Gestion des Sites</ManagedSites>
+-      <SharedSite>Site Partagé</SharedSite>   
++      <Systemfiles>Fichiers du système</Systemfiles>
++      <ValidationRequestsDocumentsCenter>Centre des documents en attente de validation</ValidationRequestsDocumentsCenter>
++      <ManagedSites>Gestion des sites</ManagedSites>
++      <SharedSite>Site partagé</SharedSite>   
+     </title>
+    </ContentSelector>
+-</bundle>
+\ No newline at end of file
++</bundle>

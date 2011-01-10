@@ -6,11 +6,11 @@
    <print>Imprimer cette page</print>
   </title>
   <label>
-   <draft>brouillon</draft>
+   <draft>Brouillon</draft>
    <print>Imprimer</print>
   </label>
   <msg>
-   <no-content>Il n'ya pas de contenu à afficher</no-content>
+   <no-content>Il n'y a pas de contenu à afficher</no-content>
   </msg>
  </UIPresentationContainer>
 
@@ -35,11 +35,11 @@
    <name>Titre</name>
    <selectTemplate>Sélectionnez un modèle</selectTemplate>
    <option>
-    <exo:siteBreadcrumb>Site Breadcrumb</exo:siteBreadcrumb>
-    <exo:siteNavigationWebContent>Site Navigation</exo:siteNavigationWebContent>
-    <exo:pictureOnHeadWebcontent>Picture on head layout webcontent</exo:pictureOnHeadWebcontent>
-    <exo:siteSearchBox>Site search box webcontent</exo:siteSearchBox>
-    <exo:webContent>Free layout webcontent</exo:webContent>
+    <exo:siteBreadcrumb>Fil d'Ariane</exo:siteBreadcrumb>
+    <exo:siteNavigationWebContent>Barre de Navigation</exo:siteNavigationWebContent>
+    <exo:pictureOnHeadWebcontent>Contenu web contenant une image dans l'entête</exo:pictureOnHeadWebcontent>
+    <exo:siteSearchBox>Formulaire de recherche dans le site</exo:siteSearchBox>
+    <exo:webContent>Contenu web divers</exo:webContent>
    </option>
   </label>
  </UINameWebContentForm>
@@ -67,7 +67,7 @@
    <title>
     <UIWelcomeScreen>Bienvenue dans Single content viewer</UIWelcomeScreen>
     <UINameWebContentForm>Suivant un modèle</UINameWebContentForm>
-    <UIContentDialogForm>Web content form</UIContentDialogForm>
+    <UIContentDialogForm>Formulaire du contenu web</UIContentDialogForm>
     <UIContentSelectorOne>Single content selector panel</UIContentSelectorOne>
    </title>
   </UIContentDialogFormPopupWindow>

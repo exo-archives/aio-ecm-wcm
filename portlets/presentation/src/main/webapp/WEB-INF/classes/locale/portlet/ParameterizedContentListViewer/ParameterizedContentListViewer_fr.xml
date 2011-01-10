@@ -21,11 +21,11 @@
     <exo:dateCreated>La date de création</exo:dateCreated>
    </option>
    <DisplaySettingBlock>L'écran de réglage</DisplaySettingBlock>
-   <Header>Header</Header>
-   <AutomaticDetection>Automatic Detection</AutomaticDetection>
-   <FormViewTemplate>Modèle Viewer</FormViewTemplate>
-   <PaginatorTemplate>Paginator template</PaginatorTemplate>
-   <UICategoryNavigationTreeNameFormSelectBox>Arbre taxonomique</UICategoryNavigationTreeNameFormSelectBox>
+   <Header>En-tête</Header>
+   <AutomaticDetection>Détection automatique</AutomaticDetection>
+   <FormViewTemplate>Modèle de visualiseur</FormViewTemplate>
+   <PaginatorTemplate>Modèle de paginateur</PaginatorTemplate>
+   <UICategoryNavigationTreeNameFormSelectBox>Arbre de catégories</UICategoryNavigationTreeNameFormSelectBox>
    <ItemsPerPage>Articles par page</ItemsPerPage>
    <ViewerTitle>Afficher le titre</ViewerTitle>
    <ViewerHeader>Afficher l'en-tête</ViewerHeader>
@@ -34,14 +34,14 @@
    <ViewerDateCreated>Afficher la date de création</ViewerDateCreated>
    <ShowReadMore>Lire la suite</ShowReadMore>
    <ViewerSummary>Afficher le résumé</ViewerSummary>
-   <ShowRSSLink>Show RSS link</ShowRSSLink>
+   <ShowRSSLink>Afficher le lien RSS</ShowRSSLink>
    <ShowLink>Afficher le lien</ShowLink>
    <LinkFormatBlock>Le format de lien</LinkFormatBlock>
-   <UIParameterizedTagetPageInputSetAction>Page cible</UIParameterizedTagetPageInputSetAction>
+   <UIParameterizedTagetPageInputSetAction>Page cible du détail</UIParameterizedTagetPageInputSetAction>
    <content-not-found>Ce contenu n'est pas trouvé.</content-not-found>
   </label>
   <action>
-   <Save>Sauver</Save>
+   <Save>Enregistrer</Save>
    <Cancel>Annuler</Cancel>
   </action>
  </UIPCLVConfig>

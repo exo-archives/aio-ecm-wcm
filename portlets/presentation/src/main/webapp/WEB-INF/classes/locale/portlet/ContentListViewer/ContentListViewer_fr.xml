@@ -27,8 +27,8 @@
    </option>
    <DisplaySettingBlock>L'écran de réglage</DisplaySettingBlock>
    <Header>En-tête</Header>
-   <FormViewTemplate>Modèle Viewer</FormViewTemplate>
-   <PaginatorTemplate>Paginator template</PaginatorTemplate>
+   <FormViewTemplate>Modèle de visualisation</FormViewTemplate>
+   <PaginatorTemplate>Modèle de pagination</PaginatorTemplate>
    <UICLVBasePathInputSetAction>Base de chemin</UICLVBasePathInputSetAction>
    <UICLVBasePathInput></UICLVBasePathInput>
    <ItemsPerPage>Articles par page</ItemsPerPage>
@@ -42,7 +42,7 @@
    <ViewerReadmore>Lire la suite</ViewerReadmore>
   </label>
   <action>
-   <Save>Sauver</Save>
+   <Save>Enregistrer</Save>
    <Cancel>Annuler</Cancel>
   </action>
  </UICLVConfig>
@@ -101,8 +101,8 @@
  </CorrectContentSelectorPopupWindow>
  <UIMessageBoard>
     <msg>
-      <contents-not-found>Ce contenu n'a pas été trouvée ou supprimé.</contents-not-found>
-      <add-node-error>Une erreur lorsque vous effectuez ajouter un nouveau noeud.</add-node-error>
+      <contents-not-found>Ce contenu ne peut pas être trouvé ou a été supprimé.</contents-not-found>
+      <add-node-error>Une erreur est survenue lors de la création du noeud</add-node-error>
  	  <folder-empty>Ce dossier est vide</folder-empty>	
     </msg>
   </UIMessageBoard>

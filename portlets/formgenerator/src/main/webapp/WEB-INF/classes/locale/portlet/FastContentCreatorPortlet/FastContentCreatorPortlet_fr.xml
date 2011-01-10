@@ -4,7 +4,7 @@
   <msg>
    <name-not-allowed>Ce nom n'est pas autorisé.</name-not-allowed>
    <in-versioning>Le répertoire est bloqué</in-versioning>
-   <cannot-save>Impossible de sauver</cannot-save>
+   <cannot-save>Impossible d'enregistrer</cannot-save>
    <saved-successfully>{0}</saved-successfully>
    <not-support>Impossible de charger le modèle de '{0}'.</not-support>
    <not-add-folder>Seuls les fichiers sont autorisés dans ce dossier</not-add-folder>
@@ -16,7 +16,7 @@
    <new-jcr-template>Impossible de trouver un gabarit d'affichage</new-jcr-template>>
   </msg>
   <action>
-   <Save>Sauver</Save>
+   <Save>Enregistrer</Save>
    <Cancel>Annuler</Cancel>
   </action>
  </UIFCCForm>
@@ -48,7 +48,7 @@
    <do-select>Erreur de sélection</do-select>
   </msg>
   <action>
-   <Save>Sauver</Save>
+   <Save>Enregistrer</Save>
   </action>
  </UIFCCConfig>
  
@@ -117,7 +117,7 @@
  <UIFCCActionForm>
   <title>Ajouter / Éditer une action</title>
   <action>
-   <Save>Sauver</Save>
+   <Save>Enregistrer</Save>
    <Close>Fermer</Close>
   </action>
   <msg>
@@ -163,7 +163,7 @@
  <UITabPane>
   <title>
    <UICategoriesSelectPanel>Sélectionner les catégories</UICategoriesSelectPanel>
-   <UISelectedCategoriesGrid>Referenced catégories</UISelectedCategoriesGrid>
+   <UISelectedCategoriesGrid>Catégories référencées</UISelectedCategoriesGrid>
   </title>
  </UITabPane>
  
@@ -187,13 +187,13 @@
  
  <UITreeTaxonomyList>
   <label>
-   <taxonomyTree>Taxonomie Tree</taxonomyTree>
+   <taxonomyTree>Arbre de Taxonomie</taxonomyTree>
   </label>
  </UITreeTaxonomyList>
  
  <UIFCCTaxonomyPopupWindow>
   <title>
-   <UIOneTaxonomySelector>Taxonomie sélecteur</UIOneTaxonomySelector>
+   <UIOneTaxonomySelector>Sélecteur de Taxonomie</UIOneTaxonomySelector>
   </title>
  </UIFCCTaxonomyPopupWindow> 
 </bundle>
