@@ -83,7 +83,7 @@ if (isPrint) {
 	 </script>
  <style type="text/css">
   @media print{
-   a{ display:none; }
+   a{ display:block; }
    overflow{ display:none;}
   }
  </style>

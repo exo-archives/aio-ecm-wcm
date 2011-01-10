@@ -1,0 +1,13 @@
+Index: portlets/presentation/src/main/webapp/groovy/ParameterizedContentViewer/UIPCVContainer.gtmpl
+===================================================================
+--- portlets/presentation/src/main/webapp/groovy/ParameterizedContentViewer/UIPCVContainer.gtmpl	(revision 64921)
++++ portlets/presentation/src/main/webapp/groovy/ParameterizedContentViewer/UIPCVContainer.gtmpl	(working copy)
+@@ -83,7 +83,7 @@
+ 	 </script>
+  <style type="text/css">
+   @media print{
+-   a{ display:none; }
++   a{ display:block; }
+    overflow{ display:none;}
+   }
+  </style>
