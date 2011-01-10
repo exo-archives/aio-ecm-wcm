@@ -18,6 +18,7 @@ package org.exoplatform.wcm.webui.pclv;
 
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -158,7 +159,8 @@ public class UIPCLVContainer extends UIContainer {
 		PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(nodes, itemsPerPage);
 		getChildren().clear();
 
-		UIPCLVForm parameterizedContentListViewer = addChild(	UIPCLVForm.class, null, null);
+		Calendar lCDateTime = Calendar.getInstance();
+		UIPCLVForm parameterizedContentListViewer = addChild(	UIPCLVForm.class, null, "UIPCLVForm-" + lCDateTime.getTimeInMillis());
 		String templatePath = getFormViewTemplatePath();
 		ResourceResolver resourceResolver = getTemplateResourceResolver();
 		parameterizedContentListViewer.init(templatePath, resourceResolver, paginatedNodeIterator);

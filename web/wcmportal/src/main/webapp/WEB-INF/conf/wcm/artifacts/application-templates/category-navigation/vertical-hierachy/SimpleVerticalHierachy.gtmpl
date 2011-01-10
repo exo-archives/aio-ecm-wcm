@@ -6,6 +6,11 @@
 	 * Jun 27, 2009  
 	 */
 	 
+	import java.util.Calendar;
+	
+	Calendar lCDateCalendar = Calendar.getInstance();
+	def timeCreated = lCDateCalendar.getTimeInMillis();
+	 
 	/**
 	 * Render sub categories
 	 */
@@ -25,7 +30,7 @@
 	}
 %>
 
-<div id="$uicomponent.id" class="SimpleVerticalHierachy">
+<div id="$uicomponent.id-$timeCreated" class="SimpleVerticalHierachy">
 	<div class="CategoriesContainer">
 		<div class="TitleBarL">
 			<div class="TitleBarR">

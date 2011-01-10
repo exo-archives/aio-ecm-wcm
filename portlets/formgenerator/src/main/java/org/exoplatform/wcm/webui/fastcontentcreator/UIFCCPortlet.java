@@ -62,7 +62,7 @@ public class UIFCCPortlet extends UIPortletApplication {
         removeChild(UIFCCConfig.class) ;
       }
       if(getChild(UIFCCForm.class) == null) {
-        UIFCCForm fastContentCreatorForm = addChild(UIFCCForm.class, null, null) ;
+        UIFCCForm fastContentCreatorForm = addChild(UIFCCForm.class, null, "UIFCCForm-"+ lCDateTime.getTimeInMillis()) ;
         PortletPreferences preferences = UIFCCUtils.getPortletPreferences();
         fastContentCreatorForm.setTemplateNode(preferences.getValue(UIFCCConstant.PREFERENCE_TYPE, "")) ;
         fastContentCreatorForm.setWorkspace(preferences.getValue(UIFCCConstant.PREFERENCE_WORKSPACE, "")) ;

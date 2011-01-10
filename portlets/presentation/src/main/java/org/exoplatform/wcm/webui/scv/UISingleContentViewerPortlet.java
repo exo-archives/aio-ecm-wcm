@@ -81,7 +81,7 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
 	Calendar lCDateCalendar = Calendar.getInstance();  
     addChild(UIPopupContainer.class, null, "UIPopupContainer-" + lCDateCalendar.getTimeInMillis());
     if(PortletMode.VIEW.equals(mode)) {      
-    	if (getChild(UIPresentationContainer.class) == null) addChild(UIPresentationContainer.class, null, null);                   
+    	if (getChild(UIPresentationContainer.class) == null) addChild(UIPresentationContainer.class, null, UIPortletApplication.VIEW_MODE+"-" +lCDateCalendar.getTimeInMillis());                   
     } else if (PortletMode.EDIT.equals(mode)) {
       WebUIPropertiesConfigService propertiesConfigService = getApplicationComponent(WebUIPropertiesConfigService.class);
       PopupWindowProperties popupProperties = (PopupWindowProperties)propertiesConfigService.getProperties(WebUIPropertiesConfigService.SCV_POPUP_SIZE_EDIT_PORTLET_MODE);

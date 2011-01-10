@@ -16,6 +16,8 @@
  */
 package org.exoplatform.wcm.webui.wiki;
 
+import java.util.Calendar;
+
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
@@ -38,7 +40,8 @@ public class UIWikiPortlet extends UIPortletApplication {
    * @throws Exception the exception
    */
   public UIWikiPortlet() throws Exception {
-    addChild(UIWikiContentForm.class, null, null);
+	Calendar lCDateTime = Calendar.getInstance();
+    addChild(UIWikiContentForm.class, null, "UIWikiContentForm-"+ lCDateTime.getTimeInMillis());
   }
 
 }

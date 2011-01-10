@@ -3,13 +3,18 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Calendar;
 //import org.exoplatform.web.application.JavascriptManager;
 //def rcontext = _ctx.getRequestContext();
 //JavascriptManager jsmanager = rcontext.getJavascriptManager();
 //jsmanager.importJavascript('eXo.newsletterManager.UINewsletterManagerPortlet','/newsletter/javascript/');
+
+Calendar lCDateCalendar = Calendar.getInstance();
+def timeCreated = lCDateCalendar.getTimeInMillis();
+
 %>
 
-<div class="UINewsletterPortlet" id="$uicomponent.id">
+<div class="UINewsletterPortlet" id="$uicomponent.id-$timeCreated">
 	<div class="NewsletterBoxContent">
 		<div class="BreadCumbs">
 			<a href="#" class="Selected"><%=_ctx.appRes("NewsletterPortlet.title.eXoNewsletter")%></a>

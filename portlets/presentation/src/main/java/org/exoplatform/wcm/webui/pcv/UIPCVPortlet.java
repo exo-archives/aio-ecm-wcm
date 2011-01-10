@@ -84,7 +84,7 @@ public class UIPCVPortlet extends UIPortletApplication {
   	Calendar lCDateTime = Calendar.getInstance();		
 	addChild(UIPopupContainer.class, null, "UIPopupContainer-" + lCDateTime.getTimeInMillis());
 	if (PortletMode.VIEW.equals(mode)) {
-		addChild(UIPCVContainer.class, null, null);
+		addChild(UIPCVContainer.class, null, UIPortletApplication.VIEW_MODE+"-" +lCDateTime.getTimeInMillis());
     } else if (PortletMode.EDIT.equals(mode)) {
     	addChild(UIPCVConfig.class, null, null);
     }
