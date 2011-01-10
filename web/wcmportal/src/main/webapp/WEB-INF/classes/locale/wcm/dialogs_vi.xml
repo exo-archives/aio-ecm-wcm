@@ -69,4 +69,18 @@
    </label>
   </dialog>
  </SiteMetadata>
+ 
+  <FormGenerator>
+     <dialog>
+       <label>
+         <Date>Date</Date>
+         <Select_a_recipient>Chọn người nhận</Select_a_recipient>
+         <Your_Name>Tên bạn</Your_Name>
+         <Your_Address>Địa chỉ nhà bạn</Your_Address>
+         <Your_Email_Address>Địa chỉ Email của bạn</Your_Email_Address>
+         <Your_Phone_Number>Số điện thoại của bạn</Your_Phone_Number>
+         <Your_Message>Message của bạn</Your_Message>       
+      </label>
+    </dialog>
+   </FormGenerator>  
 </bundle>

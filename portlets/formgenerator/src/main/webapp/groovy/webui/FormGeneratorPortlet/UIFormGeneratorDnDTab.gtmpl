@@ -14,7 +14,7 @@
 						<div class="RightMenu">
 							<div class="CenterMenu">
 								<a class="IconMenu IconInput"><span></span></a>
-								<div class="ContentMenu">Input Text</div>
+								<div class="ContentMenu"><%=_ctx.appRes("FormGeneratorDialog.UITabContent.ContentMenu.Input_Text")%></div>
 								<div class="ClearLeft"><span></span></div>
 							</div>
 						</div>
@@ -23,7 +23,7 @@
 						<div class="RightMenu">
 							<div class="CenterMenu">
 								<a class="IconMenu IconLabel"><span></span></a>
-								<div class="ContentMenu">Label</div>
+								<div class="ContentMenu"><%=_ctx.appRes("FormGeneratorDialog.UITabContent.ContentMenu.Label")%></div>
 								<div class="ClearLeft"><span></span></div>
 							</div>
 						</div>
@@ -32,7 +32,7 @@
 						<div class="RightMenu">
 							<div class="CenterMenu">
 								<a class="IconMenu IconContent"><span></span></a>
-								<div class="ContentMenu">Text Area</div>
+								<div class="ContentMenu"><%=_ctx.appRes("FormGeneratorDialog.UITabContent.ContentMenu.Text_Area")%></div>
 								<div class="ClearLeft"><span></span></div>
 							</div>
 						</div>
@@ -41,7 +41,7 @@
 						<div class="RightMenu">
 							<div class="CenterMenu">
 								<a class="IconMenu IconContent"><span></span></a>
-								<div class="ContentMenu">Editor</div>
+								<div class="ContentMenu"><%=_ctx.appRes("FormGeneratorDialog.UITabContent.ContentMenu.Editor")%></div>
 								<div class="ClearLeft"><span></span></div>
 							</div>
 						</div>
@@ -50,7 +50,7 @@
 						<div class="RightMenu">
 							<div class="CenterMenu">
 								<a class="IconMenu IconSelect"><span></span></a>
-								<div class="ContentMenu">Select Box</div>
+								<div class="ContentMenu"><%=_ctx.appRes("FormGeneratorDialog.UITabContent.ContentMenu.Select_Box")%></div>
 								<div class="ClearLeft"><span></span></div>
 							</div>
 						</div>
@@ -59,7 +59,7 @@
 						<div class="RightMenu">
 							<div class="CenterMenu">
 								<a class="IconMenu IconRadio"><span></span></a>
-								<div class="ContentMenu">Radio</div>
+								<div class="ContentMenu"><%=_ctx.appRes("FormGeneratorDialog.UITabContent.ContentMenu.Radio")%></div>
 								<div class="ClearLeft"><span></span></div>
 							</div>
 						</div>
@@ -68,7 +68,7 @@
 						<div class="RightMenu">
 							<div class="CenterMenu">
 								<a class="IconMenu IconUpload"><span></span></a>
-								<div class="ContentMenu">Upload</div>
+								<div class="ContentMenu"><%=_ctx.appRes("FormGeneratorDialog.UITabContent.ContentMenu.Upload")%></div>
 								<div class="ClearLeft"><span></span></div>
 							</div>
 						</div>
@@ -77,7 +77,7 @@
 						<div class="RightMenu">
 							<div class="CenterMenu">
 								<a class="IconMenu IconCheckBox"><span></span></a>
-								<div class="ContentMenu">CheckBox</div>
+								<div class="ContentMenu"><%=_ctx.appRes("FormGeneratorDialog.UITabContent.ContentMenu.CheckBox")%></div>
 								<div class="ClearLeft"><span></span></div>
 							</div>
 						</div>

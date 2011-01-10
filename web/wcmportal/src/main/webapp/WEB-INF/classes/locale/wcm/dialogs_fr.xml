@@ -69,4 +69,18 @@
    </label>
   </dialog>
  </SiteMetadata>
+ 
+       <FormGenerator>
+        <dialog>
+        <label>
+         <Date>Date</Date>
+         <Select_a_recipient>Sélectionnez un destinataire</Select_a_recipient>
+         <Your_Name>Votre nom</Your_Name>
+         <Your_Address>Votre adresse</Your_Address>
+         <Your_Email_Address> Votre adresse e-mail</Your_Email_Address>
+         <Your_Phone_Number> Votre numéro de téléphone</Your_Phone_Number>
+         <Your_Message>Votre message</Your_Message>        
+      </label>
+    </dialog>
+   </FormGenerator>
 </bundle>

@@ -28,5 +28,28 @@
    <label>
     <Download>Download this document</Download>
    </label>
+     <UITabContent>
+      <ContentMenu>
+         <Input_Text>Input Text</Input_Text>
+         <Label>Label</Label>
+         <Text_Area>Text Area</Text_Area>
+         <Editor>Editor</Editor>
+         <Select_Box>Select Box</Select_Box>
+         <Radio>Radio</Radio>
+         <Upload>Upload</Upload>
+         <CheckBox>CheckBox</CheckBox>         
+      </ContentMenu>
+   </UITabContent> 
+
   </FormGeneratorDialog>
+    
+   
+   <UIFormEditBox>
+       <EditBox>
+          <RemoveComponent>Click here to remove this component</RemoveComponent>
+          <ShowEditBox>Click here to edit property</ShowEditBox>
+          <MoveDown>Move down component</MoveDown>
+          <MoveUp>Move up component</MoveUp>         
+       </EditBox>
+   </UIFormEditBox>
 </bundle>

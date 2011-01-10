@@ -28,5 +28,26 @@
    <label>
     <Download>Download tài liệu này</Download>
    </label>
+        <UITabContent>
+      <ContentMenu>
+         <Input_Text>Điền text</Input_Text>
+         <Label>Nhãn</Label>
+         <Text_Area>Text Area</Text_Area>
+         <Editor>Công cụ edit</Editor>
+         <Select_Box>Select Box</Select_Box>
+         <Radio>Radio</Radio>
+         <Upload>Upload</Upload>
+         <CheckBox>CheckBox</CheckBox>         
+      </ContentMenu>
+   </UITabContent>
+  <UIFormEditBox>
+       <EditBox>
+          <RemoveComponent>Ấn vào đây để xóa</RemoveComponent>
+          <ShowEditBox>Ấn vào đây để sửa</ShowEditBox>
+          <MoveDown>Chuyển xuống</MoveDown>
+          <MoveUp>Chuyển lên</MoveUp>         
+       </EditBox>
+   </UIFormEditBox>  
+   
   </FormGeneratorDialog>
 </bundle>

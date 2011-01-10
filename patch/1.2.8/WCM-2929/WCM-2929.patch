@@ -1,0 +1,269 @@
+Index: portlets/formgenerator/src/main/webapp/groovy/webui/FormGeneratorPortlet/UIFormGeneratorDnDTab.gtmpl
+===================================================================
+--- portlets/formgenerator/src/main/webapp/groovy/webui/FormGeneratorPortlet/UIFormGeneratorDnDTab.gtmpl	(revision 64920)
++++ portlets/formgenerator/src/main/webapp/groovy/webui/FormGeneratorPortlet/UIFormGeneratorDnDTab.gtmpl	(working copy)
+@@ -14,7 +14,7 @@
+ 						<div class="RightMenu">
+ 							<div class="CenterMenu">
+ 								<a class="IconMenu IconInput"><span></span></a>
+-								<div class="ContentMenu">Input Text</div>
++								<div class="ContentMenu"><%=_ctx.appRes("FormGeneratorDialog.UITabContent.ContentMenu.Input_Text")%></div>
+ 								<div class="ClearLeft"><span></span></div>
+ 							</div>
+ 						</div>
+@@ -23,7 +23,7 @@
+ 						<div class="RightMenu">
+ 							<div class="CenterMenu">
+ 								<a class="IconMenu IconLabel"><span></span></a>
+-								<div class="ContentMenu">Label</div>
++								<div class="ContentMenu"><%=_ctx.appRes("FormGeneratorDialog.UITabContent.ContentMenu.Label")%></div>
+ 								<div class="ClearLeft"><span></span></div>
+ 							</div>
+ 						</div>
+@@ -32,7 +32,7 @@
+ 						<div class="RightMenu">
+ 							<div class="CenterMenu">
+ 								<a class="IconMenu IconContent"><span></span></a>
+-								<div class="ContentMenu">Text Area</div>
++								<div class="ContentMenu"><%=_ctx.appRes("FormGeneratorDialog.UITabContent.ContentMenu.Text_Area")%></div>
+ 								<div class="ClearLeft"><span></span></div>
+ 							</div>
+ 						</div>
+@@ -41,7 +41,7 @@
+ 						<div class="RightMenu">
+ 							<div class="CenterMenu">
+ 								<a class="IconMenu IconContent"><span></span></a>
+-								<div class="ContentMenu">Editor</div>
++								<div class="ContentMenu"><%=_ctx.appRes("FormGeneratorDialog.UITabContent.ContentMenu.Editor")%></div>
+ 								<div class="ClearLeft"><span></span></div>
+ 							</div>
+ 						</div>
+@@ -50,7 +50,7 @@
+ 						<div class="RightMenu">
+ 							<div class="CenterMenu">
+ 								<a class="IconMenu IconSelect"><span></span></a>
+-								<div class="ContentMenu">Select Box</div>
++								<div class="ContentMenu"><%=_ctx.appRes("FormGeneratorDialog.UITabContent.ContentMenu.Select_Box")%></div>
+ 								<div class="ClearLeft"><span></span></div>
+ 							</div>
+ 						</div>
+@@ -59,7 +59,7 @@
+ 						<div class="RightMenu">
+ 							<div class="CenterMenu">
+ 								<a class="IconMenu IconRadio"><span></span></a>
+-								<div class="ContentMenu">Radio</div>
++								<div class="ContentMenu"><%=_ctx.appRes("FormGeneratorDialog.UITabContent.ContentMenu.Radio")%></div>
+ 								<div class="ClearLeft"><span></span></div>
+ 							</div>
+ 						</div>
+@@ -68,7 +68,7 @@
+ 						<div class="RightMenu">
+ 							<div class="CenterMenu">
+ 								<a class="IconMenu IconUpload"><span></span></a>
+-								<div class="ContentMenu">Upload</div>
++								<div class="ContentMenu"><%=_ctx.appRes("FormGeneratorDialog.UITabContent.ContentMenu.Upload")%></div>
+ 								<div class="ClearLeft"><span></span></div>
+ 							</div>
+ 						</div>
+@@ -77,7 +77,7 @@
+ 						<div class="RightMenu">
+ 							<div class="CenterMenu">
+ 								<a class="IconMenu IconCheckBox"><span></span></a>
+-								<div class="ContentMenu">CheckBox</div>
++								<div class="ContentMenu"><%=_ctx.appRes("FormGeneratorDialog.UITabContent.ContentMenu.CheckBox")%></div>
+ 								<div class="ClearLeft"><span></span></div>
+ 							</div>
+ 						</div>
+Index: portlets/formgenerator/src/main/webapp/WEB-INF/classes/locale/portlet/FormGeneratorPortlet/FormGeneratorPortlet_vi.xml
+===================================================================
+--- portlets/formgenerator/src/main/webapp/WEB-INF/classes/locale/portlet/FormGeneratorPortlet/FormGeneratorPortlet_vi.xml	(revision 64920)
++++ portlets/formgenerator/src/main/webapp/WEB-INF/classes/locale/portlet/FormGeneratorPortlet/FormGeneratorPortlet_vi.xml	(working copy)
+@@ -28,5 +28,26 @@
+    <label>
+     <Download>Download tài liệu này</Download>
+    </label>
++        <UITabContent>
++      <ContentMenu>
++         <Input_Text>Điền text</Input_Text>
++         <Label>Nhãn</Label>
++         <Text_Area>Text Area</Text_Area>
++         <Editor>Công cụ edit</Editor>
++         <Select_Box>Select Box</Select_Box>
++         <Radio>Radio</Radio>
++         <Upload>Upload</Upload>
++         <CheckBox>CheckBox</CheckBox>         
++      </ContentMenu>
++   </UITabContent>
++  <UIFormEditBox>
++       <EditBox>
++          <RemoveComponent>Ấn vào đây để xóa</RemoveComponent>
++          <ShowEditBox>Ấn vào đây để sửa</ShowEditBox>
++          <MoveDown>Chuyển xuống</MoveDown>
++          <MoveUp>Chuyển lên</MoveUp>         
++       </EditBox>
++   </UIFormEditBox>  
++   
+   </FormGeneratorDialog>
+ </bundle>
+\ No newline at end of file
+Index: portlets/formgenerator/src/main/webapp/WEB-INF/classes/locale/portlet/FormGeneratorPortlet/FormGeneratorPortlet_en.xml
+===================================================================
+--- portlets/formgenerator/src/main/webapp/WEB-INF/classes/locale/portlet/FormGeneratorPortlet/FormGeneratorPortlet_en.xml	(revision 64920)
++++ portlets/formgenerator/src/main/webapp/WEB-INF/classes/locale/portlet/FormGeneratorPortlet/FormGeneratorPortlet_en.xml	(working copy)
+@@ -28,5 +28,28 @@
+    <label>
+     <Download>Download this document</Download>
+    </label>
++     <UITabContent>
++      <ContentMenu>
++         <Input_Text>Input Text</Input_Text>
++         <Label>Label</Label>
++         <Text_Area>Text Area</Text_Area>
++         <Editor>Editor</Editor>
++         <Select_Box>Select Box</Select_Box>
++         <Radio>Radio</Radio>
++         <Upload>Upload</Upload>
++         <CheckBox>CheckBox</CheckBox>         
++      </ContentMenu>
++   </UITabContent> 
++
+   </FormGeneratorDialog>
++    
++   
++   <UIFormEditBox>
++       <EditBox>
++          <RemoveComponent>Click here to remove this component</RemoveComponent>
++          <ShowEditBox>Click here to edit property</ShowEditBox>
++          <MoveDown>Move down component</MoveDown>
++          <MoveUp>Move up component</MoveUp>         
++       </EditBox>
++   </UIFormEditBox>
+ </bundle>
+\ No newline at end of file
+Index: portlets/formgenerator/src/main/webapp/WEB-INF/classes/locale/portlet/FormGeneratorPortlet/FormGeneratorPortlet_fr.xml
+===================================================================
+--- portlets/formgenerator/src/main/webapp/WEB-INF/classes/locale/portlet/FormGeneratorPortlet/FormGeneratorPortlet_fr.xml	(revision 64929)
++++ portlets/formgenerator/src/main/webapp/WEB-INF/classes/locale/portlet/FormGeneratorPortlet/FormGeneratorPortlet_fr.xml	(working copy)
+@@ -28,5 +28,25 @@
+   <label>
+    <Download>Télécharger ce document</Download>
+   </label>
++     <UITabContent>
++      <ContentMenu>
++         <Input_Text>Input Text</Input_Text>
++         <Label>Label</Label>
++         <Text_Area>zone de texte</Text_Area>
++         <Editor>Sous la direction de</Editor>
++         <Select_Box>Box Sélectionnez</Select_Box>
++         <Radio>Radio</Radio>
++         <Upload>Upload</Upload>
++         <CheckBox>CheckBox</CheckBox>         
++      </ContentMenu>
++   </UITabContent>
++    <UIFormEditBox>
++       <EditBox>
++          <RemoveComponent>Cliquez ici pour supprimer ce composant </RemoveComponent>
++          <ShowEditBox>Cliquez ici pour modifier la propriété</ShowEditBox>
++          <MoveDown>Descendre composante</MoveDown>
++          <MoveUp>Monter élément</MoveUp>         
++       </EditBox>
++   </UIFormEditBox>
+  </FormGeneratorDialog>
+ </bundle>
+Index: portlets/newsletter/src/main/webapp/WEB-INF/classes/locale/portlet/NewsletterManager/NewsletterManager_fr.xml
+===================================================================
+--- portlets/newsletter/src/main/webapp/WEB-INF/classes/locale/portlet/NewsletterManager/NewsletterManager_fr.xml	(revision 64929)
++++ portlets/newsletter/src/main/webapp/WEB-INF/classes/locale/portlet/NewsletterManager/NewsletterManager_fr.xml	(working copy)
+@@ -94,7 +94,7 @@
+       <categoryNameIsAlreadyExist>Ce nom de catégorie existe déjà!</categoryNameIsAlreadyExist>
+       <inputModeratorEmpty>Vous devez sélectionner un modérateur</inputModeratorEmpty>
+       <error-add-category>Erreur lors de l'ajouter ou modifier catégorie.</error-add-category>
+-      <doNotHaveModerators>Ne pas avoir d'animateurs!</doNotHaveModerators>
++      <doNotHaveModerators>Ne pas avoir de modérateurs</doNotHaveModerators>
+     </msg>
+ 		<label>
+     	<CategoryName>Nom</CategoryName>
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/nodetypes-templates/contactUs/dialogs/dialog1.gtmpl
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/nodetypes-templates/contactUs/dialogs/dialog1.gtmpl	(revision 64920)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/nodetypes-templates/contactUs/dialogs/dialog1.gtmpl	(working copy)
+@@ -8,4 +8,4 @@
+  }
+  String timestampName = getTimestampName();
+  %>
+-<div class="UIForm FormLayout">  <% uiform.begin() %>    <div class="HorizontalLayout">      <table class="UIFormGrid">        <tr style="display:none;">          <td class="FieldLabel"><%=_ctx.appRes("FormGenerator.dialog.label.Date")%></td>          <td class="FieldComponent">            $timestampName <div style="display:none;"><%              String[] fieldName = ["jcrPath=/node", "mixintype=mix:i18n", "editable=if-null", "validate=empty,name", timestampName] ;              uicomponent.addTextField("name", fieldName) ;            %></div>          </td>        </tr>      <tr>        <td class="FieldLabel" colspan="2"></td>        </td>      </tr>      <tr>        <td>&nbsp;</td>        <td>          <div class="GuideLine">LEAVE YOUR MESSAGE</div>        </td>      </tr>      <tr>        <td class="FieldLabel"><%=_ctx.appRes("FormGenerator.dialog.label.Select a recipient")%></td>        <td class="FieldComponent">          <%           String[] select_a_recipientFieldName = ["jcrPath=/node/exo:fg_p_select_a_recipient", "defaultValues=Infos", "", "options=Infos,Sales,OEM,Partners,Support"];           uicomponent.addSelectBoxField("select_a_recipientFieldName", select_a_recipientFieldName);          %>        </td>      </tr>      <tr>        <td>&nbsp;</td>        <td>          <div class="GuideLine"></div>        </td>      </tr>      <tr>        <td class="FieldLabel"><%=_ctx.appRes("FormGenerator.dialog.label.Your Name")%></td>        <td class="FieldComponent">          <%           String[] your_nameFieldName = ["jcrPath=/node/exo:fg_p_your_name", "defaultValues=", "", "options=null"];           uicomponent.addTextField("your_nameFieldName", your_nameFieldName);          %>        </td>      </tr>      <tr>        <td>&nbsp;</td>        <td>          <div class="GuideLine"></div>        </td>      </tr>      <tr>        <td class="FieldLabel"><%=_ctx.appRes("FormGenerator.dialog.label.Your Address")%></td>        <td class="FieldComponent">          <%           String[] your_addressFieldName = ["jcrPath=/node/exo:fg_p_your_address", "defaultValues=", "", "options=null"];           uicomponent.addTextField("your_addressFieldName", your_addressFieldName);          %>        </td>      </tr>      <tr>        <td>&nbsp;</td>        <td>          <div class="GuideLine"></div>        </td>      </tr>      <tr>        <td class="FieldLabel"><%=_ctx.appRes("FormGenerator.dialog.label.Your Email Address")%></td>        <td class="FieldComponent">          <%           String[] your_email_addressFieldName = ["jcrPath=/node/exo:fg_p_your_email_address", "defaultValues=", "", "options=null"];           uicomponent.addTextField("your_email_addressFieldName", your_email_addressFieldName);          %>        </td>      </tr>      <tr>        <td>&nbsp;</td>        <td>          <div class="GuideLine"></div>        </td>      </tr>      <tr>        <td class="FieldLabel"><%=_ctx.appRes("FormGenerator.dialog.label.Your Phone Number")%></td>        <td class="FieldComponent">          <%           String[] your_phone_numberFieldName = ["jcrPath=/node/exo:fg_p_your_phone_number", "defaultValues=", "", "options=null"];           uicomponent.addTextField("your_phone_numberFieldName", your_phone_numberFieldName);          %>        </td>      </tr>      <tr>        <td>&nbsp;</td>        <td>          <div class="GuideLine"></div>        </td>      </tr>      <tr>        <td class="FieldLabel"><%=_ctx.appRes("FormGenerator.dialog.label.Your Message")%></td>        <td class="FieldComponent">          <%           String[] your_messageFieldName = ["jcrPath=/node/exo:fg_p_your_message", "defaultValues=", "", "options=null"];           uicomponent.addTextAreaField("your_messageFieldName", your_messageFieldName);          %>        </td>      </tr>      <tr>        <td>&nbsp;</td>        <td>          <div class="GuideLine"></div>        </td>      </tr>      </table>      <div class="UIAction">        <table class="ActionContainer">          <tr>            <td>              <%                for(action in uicomponent.getActions()) {                  String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);                  String link = uicomponent.event(action);                  %>                    <div onclick="$link" class="ActionButton LightBlueStyle">                      <div class="ButtonLeft">                        <div class="ButtonRight">                          <div class="ButtonMiddle">                            <a href="javascript:void(0);">$actionLabel</a>                          </div>                        </div>                      </div>                    </div>                  <%                }              %>            </td>          </tr>        </table>      </div>    </div>  <% uiform.end() %></div>
+\ No newline at end of file
++<div class="UIForm FormLayout">  <% uiform.begin() %>    <div class="HorizontalLayout">      <table class="UIFormGrid">        <tr style="display:none;">          <td class="FieldLabel"><%=_ctx.appRes("FormGenerator.dialog.label.Date")%></td>          <td class="FieldComponent">            $timestampName <div style="display:none;"><%              String[] fieldName = ["jcrPath=/node", "mixintype=mix:i18n", "editable=if-null", "validate=empty,name", timestampName] ;              uicomponent.addTextField("name", fieldName) ;            %></div>          </td>        </tr>      <tr>        <td class="FieldLabel" colspan="2"></td>        </td>      </tr>      <tr>        <td>&nbsp;</td>        <td>          <div class="GuideLine">LEAVE YOUR MESSAGE</div>        </td>      </tr>      <tr>        <td class="FieldLabel"><%=_ctx.appRes("FormGenerator.dialog.label.Select_a_recipient")%></td>        <td class="FieldComponent">          <%           String[] select_a_recipientFieldName = ["jcrPath=/node/exo:fg_p_select_a_recipient", "defaultValues=Infos", "", "options=Infos,Sales,OEM,Partners,Support"];           uicomponent.addSelectBoxField("select_a_recipientFieldName", select_a_recipientFieldName);          %>        </td>      </tr>      <tr>        <td>&nbsp;</td>        <td>          <div class="GuideLine"></div>        </td>      </tr>      <tr>        <td class="FieldLabel"><%=_ctx.appRes("FormGenerator.dialog.label.Your_Name")%></td>        <td class="FieldComponent">          <%           String[] your_nameFieldName = ["jcrPath=/node/exo:fg_p_your_name", "defaultValues=", "", "options=null"];           uicomponent.addTextField("your_nameFieldName", your_nameFieldName);          %>        </td>      </tr>      <tr>        <td>&nbsp;</td>        <td>          <div class="GuideLine"></div>        </td>      </tr>      <tr>        <td class="FieldLabel"><%=_ctx.appRes("FormGenerator.dialog.label.Your_Address")%></td>        <td class="FieldComponent">          <%           String[] your_addressFieldName = ["jcrPath=/node/exo:fg_p_your_address", "defaultValues=", "", "options=null"];           uicomponent.addTextField("your_addressFieldName", your_addressFieldName);          %>        </td>      </tr>      <tr>        <td>&nbsp;</td>        <td>          <div class="GuideLine"></div>        </td>      </tr>      <tr>        <td class="FieldLabel"><%=_ctx.appRes("FormGenerator.dialog.label.Your_Email_Address")%></td>        <td class="FieldComponent">          <%           String[] your_email_addressFieldName = ["jcrPath=/node/exo:fg_p_your_email_address", "defaultValues=", "", "options=null"];           uicomponent.addTextField("your_email_addressFieldName", your_email_addressFieldName);          %>        </td>      </tr>      <tr>        <td>&nbsp;</td>        <td>          <div class="GuideLine"></div>        </td>      </tr>      <tr>        <td class="FieldLabel"><%=_ctx.appRes("FormGenerator.dialog.label.Your_Phone_Number")%></td>        <td class="FieldComponent">          <%           String[] your_phone_numberFieldName = ["jcrPath=/node/exo:fg_p_your_phone_number", "defaultValues=", "", "options=null"];           uicomponent.addTextField("your_phone_numberFieldName", your_phone_numberFieldName);          %>        </td>      </tr>      <tr>        <td>&nbsp;</td>        <td>          <div class="GuideLine"></div>        </td>      </tr>      <tr>        <td class="FieldLabel"><%=_ctx.appRes("FormGenerator.dialog.label.Your_Message")%></td>        <td class="FieldComponent">          <%           String[] your_messageFieldName = ["jcrPath=/node/exo:fg_p_your_message", "defaultValues=", "", "options=null"];           uicomponent.addTextAreaField("your_messageFieldName", your_messageFieldName);          %>        </td>      </tr>      <tr>        <td>&nbsp;</td>        <td>          <div class="GuideLine"></div>        </td>      </tr>      </table>      <div class="UIAction">        <table class="ActionContainer">          <tr>            <td>              <%                for(action in uicomponent.getActions()) {                  String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);                  String link = uicomponent.event(action);                  %>                    <div onclick="$link" class="ActionButton LightBlueStyle">                      <div class="ButtonLeft">                        <div class="ButtonRight">                          <div class="ButtonMiddle">                            <a href="javascript:void(0);">$actionLabel</a>                          </div>                        </div>                      </div>                    </div>                  <%                }              %>            </td>          </tr>        </table>      </div>    </div>  <% uiform.end() %></div>
+\ No newline at end of file
+Index: web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/dialogs_vi.xml
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/dialogs_vi.xml	(revision 64920)
++++ web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/dialogs_vi.xml	(working copy)
+@@ -69,4 +69,18 @@
+    </label>
+   </dialog>
+  </SiteMetadata>
++ 
++  <FormGenerator>
++     <dialog>
++       <label>
++         <Date>Date</Date>
++         <Select_a_recipient>Chọn người nhận</Select_a_recipient>
++         <Your_Name>Tên bạn</Your_Name>
++         <Your_Address>Địa chỉ nhà bạn</Your_Address>
++         <Your_Email_Address>Địa chỉ Email của bạn</Your_Email_Address>
++         <Your_Phone_Number>Số điện thoại của bạn</Your_Phone_Number>
++         <Your_Message>Message của bạn</Your_Message>       
++      </label>
++    </dialog>
++   </FormGenerator>  
+ </bundle>
+\ No newline at end of file
+Index: web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/dialogs_en.xml
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/dialogs_en.xml	(revision 64920)
++++ web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/dialogs_en.xml	(working copy)
+@@ -69,4 +69,18 @@
+    </label>
+   </dialog>
+  </SiteMetadata>
++ 
++  <FormGenerator>
++       <dialog>
++      <label>
++         <Date>Date</Date>
++         <Select_a_recipient>Select a recipient</Select_a_recipient>
++         <Your_Name>Your Name</Your_Name>
++         <Your_Address>Your Address</Your_Address>
++         <Your_Email_Address>Your Email Address </Your_Email_Address>
++         <Your_Phone_Number>Your Phone Number</Your_Phone_Number>
++         <Your_Message>Your Message</Your_Message>       
++      </label>
++    </dialog>
++   </FormGenerator>  
+ </bundle>
+\ No newline at end of file
+Index: web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/dialogs_fr.xml
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/dialogs_fr.xml	(revision 64920)
++++ web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/dialogs_fr.xml	(working copy)
+@@ -69,4 +69,18 @@
+    </label>
+   </dialog>
+  </SiteMetadata>
++ 
++       <FormGenerator>
++        <dialog>
++        <label>
++         <Date>Date</Date>
++         <Select_a_recipient>Sélectionnez un destinataire</Select_a_recipient>
++         <Your_Name>Votre nom</Your_Name>
++         <Your_Address>Votre adresse</Your_Address>
++         <Your_Email_Address> Votre adresse e-mail</Your_Email_Address>
++         <Your_Phone_Number> Votre numéro de téléphone</Your_Phone_Number>
++         <Your_Message>Votre message</Your_Message>        
++      </label>
++    </dialog>
++   </FormGenerator>
+ </bundle>
+\ No newline at end of file
