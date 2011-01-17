@@ -226,6 +226,7 @@ public class UICategoryNavigationTree extends UIContainer {
    * @throws Exception the exception
    */
   public void buildTree() throws Exception {
+    if (currentNode == null) return;
     NodeIterator sibbling = null;
     NodeIterator children = null;
     UICategoryNavigationTreeBase tree = getChild(UICategoryNavigationTreeBase.class);

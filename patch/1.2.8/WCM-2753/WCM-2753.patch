@@ -1,0 +1,30 @@
+Index: portlets/presentation/src/main/java/org/exoplatform/wcm/webui/category/UICategoryNavigationTreeBase.java
+===================================================================
+--- portlets/presentation/src/main/java/org/exoplatform/wcm/webui/category/UICategoryNavigationTreeBase.java	(revision 64638)
++++ portlets/presentation/src/main/java/org/exoplatform/wcm/webui/category/UICategoryNavigationTreeBase.java	(working copy)
+@@ -177,7 +177,12 @@
+     PortletPreferences portletPreferences = UICategoryNavigationUtils.getPortletPreferences();
+     String preferenceRepository = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_REPOSITORY, "");
+     String preferenceTreeName = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, "");
+-    Node treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
++    Node treeNode;
++    try {
++      treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
++    } catch (Exception e) {
++      return new ArrayList<Node>();
++    }
+     Node categoryNode = null;
+     if ("".equals(categoryPath)) categoryNode = treeNode;
+     else categoryNode = treeNode.getNode(categoryPath);
+Index: portlets/presentation/src/main/java/org/exoplatform/wcm/webui/category/UICategoryNavigationTree.java
+===================================================================
+--- portlets/presentation/src/main/java/org/exoplatform/wcm/webui/category/UICategoryNavigationTree.java	(revision 64638)
++++ portlets/presentation/src/main/java/org/exoplatform/wcm/webui/category/UICategoryNavigationTree.java	(working copy)
+@@ -226,6 +226,7 @@
+    * @throws Exception the exception
+    */
+   public void buildTree() throws Exception {
++    if (currentNode == null) return;
+     NodeIterator sibbling = null;
+     NodeIterator children = null;
+     UICategoryNavigationTreeBase tree = getChild(UICategoryNavigationTreeBase.class);
