@@ -33,6 +33,8 @@ import org.exoplatform.webui.form.wysiwyg.FCKEditorConfig;
  * Aug 28, 2008
  */
 public class FCKDynamicSkinPlugin extends FCKConfigPlugin {
+	
+	private final static String DEFAULT_BASE_PATH = "/portal/fckeditor/";
 
   /* (non-Javadoc)
    * @see org.exoplatform.services.ecm.fckconfig.FCKConfigPlugin#addParameters(org.exoplatform.webui.form.wysiwyg.FCKEditorConfig, org.exoplatform.services.ecm.fckconfig.FCKEditorContext)
@@ -49,7 +51,7 @@ public class FCKDynamicSkinPlugin extends FCKConfigPlugin {
     if (skinConfig != null) {
       cssMergedBuffer = cssMergedBuffer.append(skinConfig.getCSSPath());
     }
-    String cssMerged = cssMergedBuffer.toString();
+    String cssMerged = DEFAULT_BASE_PATH + "editor/css/fck_editorarea.css," + cssMergedBuffer.toString();
     if (cssMerged.endsWith(","))
       cssMerged = cssMerged.substring(0, cssMerged.length() - 1);
     
