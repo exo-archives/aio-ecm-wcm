@@ -89,7 +89,7 @@ FCKConfig.ShowBorders	= true ;
 FCKConfig.SourcePopup	= false ;
 FCKConfig.ToolbarStartExpanded	= true ;
 FCKConfig.ToolbarCanCollapse	= true ;
-FCKConfig.IgnoreEmptyParagraphValue = false ;
+FCKConfig.IgnoreEmptyParagraphValue = true ;
 FCKConfig.ProtectedSource.Add(/<span><\/span>/g);
 
 FCKConfig.FloatingPanelsZIndex = 10000 ;
@@ -122,8 +122,8 @@ FCKConfig.ToolbarSets["Basic"] = [
 ] ;
 
 //Use br to avoid content is wrapped by <p> when swith to source mode in FF
-FCKConfig.EnterMode = 'br' ;			// p | div | br
-FCKConfig.ShiftEnterMode = 'p' ;	// p | div | br
+FCKConfig.EnterMode = 'p' ;			// p | div | br
+FCKConfig.ShiftEnterMode = 'br' ;	// p | div | br
 
 FCKConfig.Keystrokes = [
 	[ CTRL + 65 /*A*/, true ],
