@@ -1,0 +1,92 @@
+Index: webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/content/UIContentSearchForm.java
+===================================================================
+--- webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/content/UIContentSearchForm.java	(revision 64920)
++++ webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/content/UIContentSearchForm.java	(working copy)
+@@ -100,7 +100,7 @@
+     addUIFormInput(new UIFormStringInput(SEARCH_BY_NAME,SEARCH_BY_NAME,null));
+     addUIFormInput(new UIFormStringInput(SEARCH_BY_CONTENT, SEARCH_BY_CONTENT, null));
+ 
+-    addUIFormInput(new UIFormStringInput(PROPERTY, PROPERTY, null));
++    addUIFormInput(new UIFormStringInput(PROPERTY, PROPERTY, null).setEditable(false));
+     addUIFormInput(new UIFormStringInput(CONTAIN, CONTAIN, null));
+ 
+     List<SelectItemOption<String>> dateOptions = new ArrayList<SelectItemOption<String>>();
+@@ -111,8 +111,7 @@
+     addUIFormInput(startTime);
+     UIFormDateTimeInput endTime = new UIFormDateTimeInput(END_TIME, END_TIME, null, true);
+     addUIFormInput(endTime);
+-    addUIFormInput(new UIFormStringInput(DOC_TYPE, DOC_TYPE, null));
+-//  addUIFormInput(new UIFormStringInput(CATEGORY, CATEGORY, null));
++    addUIFormInput(new UIFormStringInput(DOC_TYPE, DOC_TYPE, null).setEditable(false));
+ 
+     setActions(new String[] {"SearchWebContent"} );
+   }
+@@ -293,6 +292,16 @@
+       if(typeSearch.equals(UIContentBrowsePanel.WEBCONTENT) || typeSearch.equals(UIContentBrowsePanel.MEDIA)){
+         if(UIContentSearchForm.SEARCH_BY_NAME.equals(radioValue)) {
+           String keyword = uiWCSearch.getUIStringInput(radioValue).getValue();
++          
++          String[] arrFilterChar = {"&", "$", "@", ":", "]", "[", "*", "%", "!", "+", "(", ")", "'", "#", ";", "}", "{", "/", "|", "\""};
++          for(String filterChar : arrFilterChar) {
++            if(keyword.indexOf(filterChar) > -1) {
++              uiApp.addMessage(new ApplicationMessage("UIContentSearchForm.msg.name-not-allowed", null, 
++                  ApplicationMessage.WARNING));
++              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
++              return;
++            }
++          }      
+           if(uiWCSearch.haveEmptyField(uiApp, event, keyword)) return;
+           pagResult = uiWCSearch.searchWebContentByName(keyword.trim(), qCriteria, pageSize);
+         } else if(UIContentSearchForm.SEARCH_BY_CONTENT.equals(radioValue)) {
+@@ -351,6 +360,15 @@
+       }else if(typeSearch.equals(UIContentBrowsePanel.DMSDOCUMENT)){
+         if(UIContentSearchForm.SEARCH_BY_NAME.equals(radioValue)) {
+           String keyword = uiWCSearch.getUIStringInput(radioValue).getValue();
++          String[] arrFilterChar = {"&", "$", "@", ":", "]", "[", "*", "%", "!", "+", "(", ")", "'", "#", ";", "}", "{", "/", "|", "\""};
++          for(String filterChar : arrFilterChar) {
++            if(keyword.indexOf(filterChar) > -1) {
++              uiApp.addMessage(new ApplicationMessage("UIContentSeachForm.msg.name-not-allowed", null, 
++                  ApplicationMessage.WARNING));
++              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
++              return;
++            }
++          }  
+           if(uiWCSearch.haveEmptyField(uiApp, event, keyword)) return;
+           pagResult = uiWCSearch.searchDocumentByName(keyword.trim(), qCriteria, pageSize);
+         } else if(UIContentSearchForm.SEARCH_BY_CONTENT.equals(radioValue)) {
+Index: web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/webui_fr.xml
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/webui_fr.xml	(revision 64929)
++++ web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/webui_fr.xml	(working copy)
+@@ -180,6 +180,7 @@
+     <SearchWebContent>Recherche</SearchWebContent>
+    </action>
+    <msg>
++    <name-not-allowed>Il y a des caractères invalides dans ce champ. Insérez une autre valeur ! </name-not-allowed>
+     <empty-field>La valeur de ce champ est nulle ou vide!</empty-field>
+     <invalid-date>Le champ "A" doit être ultérieur au champ "De"</invalid-date>
+     <invalid-nodeType>Type de noeud "(0)" n'est pas valide! Veuillez-vous le vérifier.</invalid-nodeType>
+Index: web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/webui_vi.xml
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/webui_vi.xml	(revision 64920)
++++ web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/webui_vi.xml	(working copy)
+@@ -180,6 +180,7 @@
+     <SearchWebContent>Tìm</SearchWebContent>
+    </action>
+    <msg>
++    <name-not-allowed>Bạn vừa nhập một số kí tự không hợp lệ. Xin vui lòng nhập lại !</name-not-allowed>
+     <empty-field>Hãy nhập từ khóa để tìm kiếm</empty-field>
+     <invalid-format>Định dạng ngày tháng không đúng ở trường '{0}'</invalid-format>
+     <invalid-date>"Đến ngày" phải lớn hơn "Từ ngày"</invalid-date>
+Index: web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/webui_en.xml
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/webui_en.xml	(revision 64920)
++++ web/wcmportal/src/main/webapp/WEB-INF/classes/locale/wcm/webui_en.xml	(working copy)
+@@ -184,6 +184,7 @@
+     <invalid-format>Invalid format datetime in field '{0}'</invalid-format>
+     <invalid-date>"To Date" have to greater than "From Date"</invalid-date>
+     <invalid-nodeType>Node type "{0}" is invalid! Please check again.</invalid-nodeType>
++    <name-not-allowed>There are some invalid characters in this field. Type another value, please! </name-not-allowed>
+    </msg>
+   </UIContentSearchForm>
+   

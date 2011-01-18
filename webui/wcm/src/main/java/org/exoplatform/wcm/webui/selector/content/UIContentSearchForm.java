@@ -100,7 +100,7 @@ public class UIContentSearchForm extends UIForm {
     addUIFormInput(new UIFormStringInput(SEARCH_BY_NAME,SEARCH_BY_NAME,null));
     addUIFormInput(new UIFormStringInput(SEARCH_BY_CONTENT, SEARCH_BY_CONTENT, null));
 
-    addUIFormInput(new UIFormStringInput(PROPERTY, PROPERTY, null));
+    addUIFormInput(new UIFormStringInput(PROPERTY, PROPERTY, null).setEditable(false));
     addUIFormInput(new UIFormStringInput(CONTAIN, CONTAIN, null));
 
     List<SelectItemOption<String>> dateOptions = new ArrayList<SelectItemOption<String>>();
@@ -111,8 +111,7 @@ public class UIContentSearchForm extends UIForm {
     addUIFormInput(startTime);
     UIFormDateTimeInput endTime = new UIFormDateTimeInput(END_TIME, END_TIME, null, true);
     addUIFormInput(endTime);
-    addUIFormInput(new UIFormStringInput(DOC_TYPE, DOC_TYPE, null));
-//  addUIFormInput(new UIFormStringInput(CATEGORY, CATEGORY, null));
+    addUIFormInput(new UIFormStringInput(DOC_TYPE, DOC_TYPE, null).setEditable(false));
 
     setActions(new String[] {"SearchWebContent"} );
   }
@@ -293,6 +292,16 @@ public class UIContentSearchForm extends UIForm {
       if(typeSearch.equals(UIContentBrowsePanel.WEBCONTENT) || typeSearch.equals(UIContentBrowsePanel.MEDIA)){
         if(UIContentSearchForm.SEARCH_BY_NAME.equals(radioValue)) {
           String keyword = uiWCSearch.getUIStringInput(radioValue).getValue();
+          
+          String[] arrFilterChar = {"&", "$", "@", ":", "]", "[", "*", "%", "!", "+", "(", ")", "'", "#", ";", "}", "{", "/", "|", "\""};
+          for(String filterChar : arrFilterChar) {
+            if(keyword.indexOf(filterChar) > -1) {
+              uiApp.addMessage(new ApplicationMessage("UIContentSearchForm.msg.name-not-allowed", null, 
+                  ApplicationMessage.WARNING));
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+              return;
+            }
+          }      
           if(uiWCSearch.haveEmptyField(uiApp, event, keyword)) return;
           pagResult = uiWCSearch.searchWebContentByName(keyword.trim(), qCriteria, pageSize);
         } else if(UIContentSearchForm.SEARCH_BY_CONTENT.equals(radioValue)) {
@@ -351,6 +360,15 @@ public class UIContentSearchForm extends UIForm {
       }else if(typeSearch.equals(UIContentBrowsePanel.DMSDOCUMENT)){
         if(UIContentSearchForm.SEARCH_BY_NAME.equals(radioValue)) {
           String keyword = uiWCSearch.getUIStringInput(radioValue).getValue();
+          String[] arrFilterChar = {"&", "$", "@", ":", "]", "[", "*", "%", "!", "+", "(", ")", "'", "#", ";", "}", "{", "/", "|", "\""};
+          for(String filterChar : arrFilterChar) {
+            if(keyword.indexOf(filterChar) > -1) {
+              uiApp.addMessage(new ApplicationMessage("UIContentSeachForm.msg.name-not-allowed", null, 
+                  ApplicationMessage.WARNING));
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+              return;
+            }
+          }  
           if(uiWCSearch.haveEmptyField(uiApp, event, keyword)) return;
           pagResult = uiWCSearch.searchDocumentByName(keyword.trim(), qCriteria, pageSize);
         } else if(UIContentSearchForm.SEARCH_BY_CONTENT.equals(radioValue)) {

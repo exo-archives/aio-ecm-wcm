@@ -180,6 +180,7 @@
     <SearchWebContent>Recherche</SearchWebContent>
    </action>
    <msg>
+    <name-not-allowed>Il y a des caractères invalides dans ce champ. Insérez une autre valeur ! </name-not-allowed>
     <empty-field>La valeur de ce champ est nulle ou vide!</empty-field>
     <invalid-date>Le champ "A" doit être ultérieur au champ "De"</invalid-date>
     <invalid-nodeType>Type de noeud "(0)" n'est pas valide! Veuillez-vous le vérifier.</invalid-nodeType>

@@ -180,6 +180,7 @@
     <SearchWebContent>Tìm</SearchWebContent>
    </action>
    <msg>
+    <name-not-allowed>Bạn vừa nhập một số kí tự không hợp lệ. Xin vui lòng nhập lại !</name-not-allowed>
     <empty-field>Hãy nhập từ khóa để tìm kiếm</empty-field>
     <invalid-format>Định dạng ngày tháng không đúng ở trường '{0}'</invalid-format>
     <invalid-date>"Đến ngày" phải lớn hơn "Từ ngày"</invalid-date>
