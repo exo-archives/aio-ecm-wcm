@@ -1,0 +1,30 @@
+Index: portlets/presentation/src/main/webapp/skin/ParameterizedContentListViewer/DefaultStylesheet.css
+===================================================================
+--- portlets/presentation/src/main/webapp/skin/ParameterizedContentListViewer/DefaultStylesheet.css	(revision 62823)
++++ portlets/presentation/src/main/webapp/skin/ParameterizedContentListViewer/DefaultStylesheet.css	(working copy)
+@@ -92,4 +92,12 @@
+ 	line-height:25px;
+ 	padding-left:10px;
+ 	text-align: center;
++}
++
++.ACMECategoriesTDContainer {
++ float: left; margin-left: 5px;
++}
++.ACMEParameterizedTDContainer {
++ float: left; margin-left: 5px;
++ width: 695px;
+ }
+\ No newline at end of file
+Index: web/wcmportal/src/main/webapp/groovy/wcm/webui/container/UITableColumnContainer.gtmpl
+===================================================================
+--- web/wcmportal/src/main/webapp/groovy/wcm/webui/container/UITableColumnContainer.gtmpl	(revision 62823)
++++ web/wcmportal/src/main/webapp/groovy/wcm/webui/container/UITableColumnContainer.gtmpl	(working copy)
+@@ -65,6 +65,7 @@
+ 				<% for(uiChild in uicomponent.getChildren()) { %>
+ 					<div class="${uiChild.id}TDContainer"><% uicomponent.renderUIComponent(uiChild) %></div>
+ 				<% } %>
++				<div style="clear: both"><span></span></div>
+ 			</div>
+ 		</div>
+     </div>    

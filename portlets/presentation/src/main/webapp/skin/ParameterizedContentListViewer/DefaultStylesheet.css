@@ -93,3 +93,11 @@
 	padding-left:10px;
 	text-align: center;
 }
+
+.ACMECategoriesTDContainer {
+ float: left; margin-left: 5px;
+}
+.ACMEParameterizedTDContainer {
+ float: left; margin-left: 5px;
+ width: 695px;
+}
