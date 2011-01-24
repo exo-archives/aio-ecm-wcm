@@ -44,6 +44,9 @@ public class UISiteAdministrationPortlet extends UIPortletApplication {
   /** The last locale. */
   private Locale lastLocale = null;
   
+
+  /** The Constant VISITOR. */
+  public static final int VISITOR           = -1;
   /**
    * Instantiates a new uI site administration portlet.
    * 
@@ -79,7 +82,7 @@ public class UISiteAdministrationPortlet extends UIPortletApplication {
         adminToolbar.changeNavigationsLanguage(currentLocale.getLanguage());
         lastLocale = currentLocale;
       }
-    }        
-    super.processRender(app, context);
+      if (adminToolbar.getRole() != VISITOR) super.processRender(app, context);
+    }             
   }
 }
