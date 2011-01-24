@@ -340,8 +340,8 @@
   
  <UIWizardPageSelectLayoutForm>
   <label>
-   <SingleContentViewer>Single content viewer</SingleContentViewer>
-   <ContentListViewer>Content list viewer</ContentListViewer>
+   <SingleContentViewer>Xem nội dung đơn</SingleContentViewer>
+   <ContentListViewer>Xem nội dung danh sách </ContentListViewer>
    <Search>Trang tìm kiếm</Search>
    <Sitemap>Trang sơ đồ</Sitemap>
    <TwoColumnsLayout>Trang có hai cột</TwoColumnsLayout>

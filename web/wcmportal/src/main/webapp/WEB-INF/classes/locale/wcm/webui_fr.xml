@@ -339,19 +339,19 @@
   
  <UIWizardPageSelectLayoutForm>
   <label>
-   <SingleContentViewer>Single content viewer</SingleContentViewer>
-   <ContentListViewer>Content list viewer</ContentListViewer>
+   <SingleContentViewer>Visualiseur de Contenu unique</SingleContentViewer>
+   <ContentListViewer>Visualiseur de liste de contenu</ContentListViewer>
    <Search>Recherche</Search>
-   <Sitemap>Sitemap</Sitemap>
+   <Sitemap>Plan de site</Sitemap>
    <TwoColumnsLayout>Disposition en deux colonnes</TwoColumnsLayout>
    <ThreeColumnsLayout>Disposition en trois colonnes</ThreeColumnsLayout>
    <TwoRowsLayout>Disposition en deux lignes</TwoRowsLayout>
     <ThreeRowsLayout>Disposition en trois lignes</ThreeRowsLayout>
    <TwoTabsLayout>Disposition en deux onglets</TwoTabsLayout>
    <ThreeTabsLayout>Disposition en trois onglets</ThreeTabsLayout>
-   <TwoColumnsOneRowLayout>Disposition en deux colonnes et une ligne</TwoColumnsOneRowLayout>
-   <OneRowTwoColumnsLayout>Disposition en une ligne et deux colonnes </OneRowTwoColumnsLayout>
-   <ThreeRowsTwoColumnsLayout>Disposition en trois lignes et deux colonnes </ThreeRowsTwoColumnsLayout>
+   <TwoColumnsOneRowLayout>Disposition en 2 colonnes et 1 ligne</TwoColumnsOneRowLayout>
+   <OneRowTwoColumnsLayout>Disposition en 1 ligne et 2 colonnes </OneRowTwoColumnsLayout>
+   <ThreeRowsTwoColumnsLayout>Disposition en 3 lignes et 2 colonnes </ThreeRowsTwoColumnsLayout>
   </label>
  </UIWizardPageSelectLayoutForm>
  
