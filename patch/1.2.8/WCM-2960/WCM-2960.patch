@@ -1,0 +1,17 @@
+Index: connectors/fckeditor/src/main/java/org/exoplatform/wcm/connector/fckeditor/PortalLinkConnector.java
+===================================================================
+--- connectors/fckeditor/src/main/java/org/exoplatform/wcm/connector/fckeditor/PortalLinkConnector.java	(revision 65037)
++++ connectors/fckeditor/src/main/java/org/exoplatform/wcm/connector/fckeditor/PortalLinkConnector.java	(working copy)
+@@ -295,9 +295,9 @@
+                                Element filesElement,
+                                String userId,
+                                UserPortalConfigService portalConfigService) throws Exception {
+-    if (!pageNode.isDisplay()) {
+-      return;
+-    }
++    //if (!pageNode.isDisplay()) {
++    //  return;
++    //}
+     String pageId = pageNode.getPageReference();
+     Page page = portalConfigService.getPage(pageId, userId);
+     String accessMode = PRIVATE_ACCESS;
