@@ -58,7 +58,7 @@ import org.exoplatform.webui.event.EventListener;
 public class UIContentTreeBuilder extends UIContainer {
   
 	public List<String> path = new ArrayList<String>();
-  protected String repositoryName;
+  protected static String repositoryName;
   /**
    * Instantiates a new uI web content tree builder.
    * 
@@ -66,6 +66,20 @@ public class UIContentTreeBuilder extends UIContainer {
    */
   public UIContentTreeBuilder() throws Exception {
   }
+  
+  /*
+   * Get repository name
+   */
+  public static String getRepository(){
+	  return repositoryName;
+  }
+  /*
+   * Set repository name value 
+   * @param repoName the repository name
+   */
+  public void setRepository(String repoName){
+	  repositoryName = repoName;
+  } 
 
   /**
    * Checks if is sym link.

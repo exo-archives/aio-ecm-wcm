@@ -85,10 +85,11 @@ public class UIContentTreeBuilderFolder extends UIContentTreeBuilder {
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
       Session session = sessionProvider.getSession(workSpaceName, manageableRepository);
       Node rootNode = (Node)session.getItem(nodePath);
-      UISelectPathPanel selectPathPanel = contentTreeBuilder.getAncestorOfType(UIContentBrowsePanelFolder.class).getChild(UISelectPathPanelFolder.class);
-      selectPathPanel.setParentNode(rootNode);
-      selectPathPanel.updateGrid();
-      event.getRequestContext().addUIComponentToUpdateByAjax(selectPathPanel);
+      UISelectPathPanelFolder selectPathPanelFolder = contentTreeBuilder.getAncestorOfType(UIContentBrowsePanelFolder.class).getChild(UISelectPathPanelFolder.class);
+      selectPathPanelFolder.setParentNode(rootNode);
+      selectPathPanelFolder.setRepositoryName(getRepository());
+      selectPathPanelFolder.updateGrid();
+      event.getRequestContext().addUIComponentToUpdateByAjax(selectPathPanelFolder);
       session.logout();
       sessionProvider.close();
     }

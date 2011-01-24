@@ -21,8 +21,10 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-
 import org.exoplatform.ecm.webui.utils.Utils;
+import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.wcm.webui.selector.UISelectPathPanel;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -41,9 +43,18 @@ import org.exoplatform.webui.config.annotation.EventConfig;
                  }
 )
 public class UISelectPathPanelFolder extends UISelectPathPanel {
+  private String repositoryName_;
 
   public UISelectPathPanelFolder() throws Exception {
 	  super();
+	  RepositoryService repoService = WCMCoreUtils.getService(RepositoryService.class);
+	  this.repositoryName_ = repoService.getCurrentRepository().getConfiguration().getName();	  
+  }
+  public String getRepositoryName(){
+	  return repositoryName_;
+  }
+  public void setRepositoryName(String repositoryName){
+	  repositoryName_ = repositoryName;
   }
 
   /**
@@ -53,7 +64,7 @@ public class UISelectPathPanelFolder extends UISelectPathPanel {
    * 
    * @throws Exception the exception
    */
-  public List<Node> getListSelectableNodes() throws Exception {
+  public List<Node> getListSelectableNodes() throws Exception {	
     List<Node> list = new ArrayList<Node>();
     if (parentNode == null) return list;
     Node realNode = Utils.getNodeSymLink(parentNode);
@@ -82,7 +93,29 @@ public class UISelectPathPanelFolder extends UISelectPathPanel {
    * @throws Exception the exception
    */
   private boolean isFolder(Node node) throws Exception{
-  	return 		!node.isNodeType("exo:webContent") && 
+	 
+  	return 		!isDocumentType(node) && 
   						(node.isNodeType("nt:folder") || node.isNodeType("nt:unstructured") || node.isNodeType("exo:taxonomy"));
+  }
+  /**
+   * Checks if is document type.
+   * 
+   * @param node the node
+   * 
+   * @return true, if is folder
+   * 
+   * @throws Exception the exception
+   */
+  private boolean isDocumentType(Node node) throws Exception {
+	  if (repositoryName_.equals(null)){
+		  RepositoryService repoService = WCMCoreUtils.getService(RepositoryService.class);
+		  repositoryName_ = repoService.getCurrentRepository().getConfiguration().getName();
+	  }
+	  TemplateService templateService = WCMCoreUtils.getService(TemplateService.class);	  	
+	  List<String> documentList = templateService.getAllDocumentNodeTypes(repositoryName_);	  	
+	  for (String documentType : documentList) {		  
+		  if (node.getPrimaryNodeType().isNodeType(documentType))	return true;		   
+	  }
+	  return false;
   }
 }

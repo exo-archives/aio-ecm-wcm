@@ -57,6 +57,7 @@ import org.exoplatform.services.rest.URITemplate;
 import org.exoplatform.services.rest.container.ResourceContainer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
 import org.exoplatform.services.wcm.core.NodetypeConstant;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -114,8 +115,8 @@ public class UpdateTreeConnector implements ResourceContainer {
       Element nameEle;
       Element nodePathEle;
       while(nodeIterator.hasNext()){
-        node = nodeIterator.nextNode();
-        if (!node.isNodeType(NodetypeConstant.EXO_WEBCONTENT) && !node.isNodeType(NodetypeConstant.EXO_HIDDENABLE) &&
+        node = nodeIterator.nextNode();        
+        if (!isDocumentType(node, repositoryName) && !node.isNodeType(NodetypeConstant.EXO_HIDDENABLE) &&
             (node.isNodeType(NodetypeConstant.EXO_TAXONOMY) || node.isNodeType(NodetypeConstant.NT_UNSTRUCTURED) || node.isNodeType(NodetypeConstant.NT_FOLDER)) ) {
           buffer = new StringBuilder(128);
           buffer.append(node.getName());
@@ -377,5 +378,23 @@ public class UpdateTreeConnector implements ResourceContainer {
 	    }
     }
   	return false;
+  }
+  /**
+   * Checks if is document type.
+   * 
+   * @param node the node
+   * @param repoName the repository name
+   * 
+   * @return true, if is folder
+   * 
+   * @throws Exception the exception
+   */
+  private boolean isDocumentType(Node node, String repoName) throws Exception {
+	  TemplateService templateService = WCMCoreUtils.getService(TemplateService.class);	  	
+	  List<String> documentList = templateService.getAllDocumentNodeTypes(repoName);	  	
+	  for (String documentType : documentList) {		  
+		  if (node.getPrimaryNodeType().isNodeType(documentType))	return true;		   
+	  }
+	  return false;
   }
 }

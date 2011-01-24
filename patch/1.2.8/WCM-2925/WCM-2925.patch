@@ -1,0 +1,176 @@
+Index: webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/content/UIContentTreeBuilder.java
+===================================================================
+--- webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/content/UIContentTreeBuilder.java	(revision 65319)
++++ webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/content/UIContentTreeBuilder.java	(working copy)
+@@ -58,7 +58,7 @@
+ public class UIContentTreeBuilder extends UIContainer {
+   
+ 	public List<String> path = new ArrayList<String>();
+-  protected String repositoryName;
++  protected static String repositoryName;
+   /**
+    * Instantiates a new uI web content tree builder.
+    * 
+@@ -66,6 +66,20 @@
+    */
+   public UIContentTreeBuilder() throws Exception {
+   }
++  
++  /*
++   * Get repository name
++   */
++  public static String getRepository(){
++	  return repositoryName;
++  }
++  /*
++   * Set repository name value 
++   * @param repoName the repository name
++   */
++  public void setRepository(String repoName){
++	  repositoryName = repoName;
++  } 
+ 
+   /**
+    * Checks if is sym link.
+Index: webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/content/UpdateTreeConnector.java
+===================================================================
+--- webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/content/UpdateTreeConnector.java	(revision 65319)
++++ webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/content/UpdateTreeConnector.java	(working copy)
+@@ -57,6 +57,7 @@
+ import org.exoplatform.services.rest.container.ResourceContainer;
+ import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
+ import org.exoplatform.services.wcm.core.NodetypeConstant;
++import org.exoplatform.services.wcm.utils.WCMCoreUtils;
+ import org.w3c.dom.Document;
+ import org.w3c.dom.Element;
+ 
+@@ -114,8 +115,8 @@
+       Element nameEle;
+       Element nodePathEle;
+       while(nodeIterator.hasNext()){
+-        node = nodeIterator.nextNode();
+-        if (!node.isNodeType(NodetypeConstant.EXO_WEBCONTENT) && !node.isNodeType(NodetypeConstant.EXO_HIDDENABLE) &&
++        node = nodeIterator.nextNode();        
++        if (!isDocumentType(node, repositoryName) && !node.isNodeType(NodetypeConstant.EXO_HIDDENABLE) &&
+             (node.isNodeType(NodetypeConstant.EXO_TAXONOMY) || node.isNodeType(NodetypeConstant.NT_UNSTRUCTURED) || node.isNodeType(NodetypeConstant.NT_FOLDER)) ) {
+           buffer = new StringBuilder(128);
+           buffer.append(node.getName());
+@@ -378,4 +379,22 @@
+     }
+   	return false;
+   }
++  /**
++   * Checks if is document type.
++   * 
++   * @param node the node
++   * @param repoName the repository name
++   * 
++   * @return true, if is folder
++   * 
++   * @throws Exception the exception
++   */
++  private boolean isDocumentType(Node node, String repoName) throws Exception {
++	  TemplateService templateService = WCMCoreUtils.getService(TemplateService.class);	  	
++	  List<String> documentList = templateService.getAllDocumentNodeTypes(repoName);	  	
++	  for (String documentType : documentList) {		  
++		  if (node.getPrimaryNodeType().isNodeType(documentType))	return true;		   
++	  }
++	  return false;
++  }
+ }
+Index: webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/folder/UISelectPathPanelFolder.java
+===================================================================
+--- webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/folder/UISelectPathPanelFolder.java	(revision 65319)
++++ webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/folder/UISelectPathPanelFolder.java	(working copy)
+@@ -21,8 +21,10 @@
+ 
+ import javax.jcr.Node;
+ import javax.jcr.NodeIterator;
+-
+ import org.exoplatform.ecm.webui.utils.Utils;
++import org.exoplatform.services.cms.templates.TemplateService;
++import org.exoplatform.services.jcr.RepositoryService;
++import org.exoplatform.services.wcm.utils.WCMCoreUtils;
+ import org.exoplatform.wcm.webui.selector.UISelectPathPanel;
+ import org.exoplatform.webui.config.annotation.ComponentConfig;
+ import org.exoplatform.webui.config.annotation.EventConfig;
+@@ -41,10 +43,19 @@
+                  }
+ )
+ public class UISelectPathPanelFolder extends UISelectPathPanel {
++  private String repositoryName_;
+ 
+   public UISelectPathPanelFolder() throws Exception {
+ 	  super();
++	  RepositoryService repoService = WCMCoreUtils.getService(RepositoryService.class);
++	  this.repositoryName_ = repoService.getCurrentRepository().getConfiguration().getName();	  
+   }
++  public String getRepositoryName(){
++	  return repositoryName_;
++  }
++  public void setRepositoryName(String repositoryName){
++	  repositoryName_ = repositoryName;
++  }
+ 
+   /**
+    * Gets the list selectable nodes.
+@@ -53,7 +64,7 @@
+    * 
+    * @throws Exception the exception
+    */
+-  public List<Node> getListSelectableNodes() throws Exception {
++  public List<Node> getListSelectableNodes() throws Exception {	
+     List<Node> list = new ArrayList<Node>();
+     if (parentNode == null) return list;
+     Node realNode = Utils.getNodeSymLink(parentNode);
+@@ -82,7 +93,29 @@
+    * @throws Exception the exception
+    */
+   private boolean isFolder(Node node) throws Exception{
+-  	return 		!node.isNodeType("exo:webContent") && 
++	 
++  	return 		!isDocumentType(node) && 
+   						(node.isNodeType("nt:folder") || node.isNodeType("nt:unstructured") || node.isNodeType("exo:taxonomy"));
+   }
++  /**
++   * Checks if is document type.
++   * 
++   * @param node the node
++   * 
++   * @return true, if is folder
++   * 
++   * @throws Exception the exception
++   */
++  private boolean isDocumentType(Node node) throws Exception {
++	  if (repositoryName_.equals(null)){
++		  RepositoryService repoService = WCMCoreUtils.getService(RepositoryService.class);
++		  repositoryName_ = repoService.getCurrentRepository().getConfiguration().getName();
++	  }
++	  TemplateService templateService = WCMCoreUtils.getService(TemplateService.class);	  	
++	  List<String> documentList = templateService.getAllDocumentNodeTypes(repositoryName_);	  	
++	  for (String documentType : documentList) {		  
++		  if (node.getPrimaryNodeType().isNodeType(documentType))	return true;		   
++	  }
++	  return false;
++  }
+ }
+Index: webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/folder/UIContentTreeBuilderFolder.java
+===================================================================
+--- webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/folder/UIContentTreeBuilderFolder.java	(revision 65319)
++++ webui/wcm/src/main/java/org/exoplatform/wcm/webui/selector/folder/UIContentTreeBuilderFolder.java	(working copy)
+@@ -85,10 +85,11 @@
+       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+       Session session = sessionProvider.getSession(workSpaceName, manageableRepository);
+       Node rootNode = (Node)session.getItem(nodePath);
+-      UISelectPathPanel selectPathPanel = contentTreeBuilder.getAncestorOfType(UIContentBrowsePanelFolder.class).getChild(UISelectPathPanelFolder.class);
+-      selectPathPanel.setParentNode(rootNode);
+-      selectPathPanel.updateGrid();
+-      event.getRequestContext().addUIComponentToUpdateByAjax(selectPathPanel);
++      UISelectPathPanelFolder selectPathPanelFolder = contentTreeBuilder.getAncestorOfType(UIContentBrowsePanelFolder.class).getChild(UISelectPathPanelFolder.class);
++      selectPathPanelFolder.setParentNode(rootNode);
++      selectPathPanelFolder.setRepositoryName(getRepository());
++      selectPathPanelFolder.updateGrid();
++      event.getRequestContext().addUIComponentToUpdateByAjax(selectPathPanelFolder);
+       session.logout();
+       sessionProvider.close();
+     }
