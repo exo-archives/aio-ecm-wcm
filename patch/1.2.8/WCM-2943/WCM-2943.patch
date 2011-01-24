@@ -1,0 +1,13 @@
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/dms/artifacts/templates/file/views/view1.gtmpl
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/dms/artifacts/templates/file/views/view1.gtmpl	(revision 65039)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/dms/artifacts/templates/file/views/view1.gtmpl	(working copy)
+@@ -312,7 +312,7 @@
+ 		    <!-- div class="Content" -->
+ 		    	<!-- div class="TextContent" -->
+ 			      <%        
+-			        if(mimeType.startsWith("text") && contentNode.hasProperty("jcr:data")) {
++			        if(mimeType.startsWith("text") && !mimeType.equals("text/rtf") && contentNode.hasProperty("jcr:data")) {
+ 			          if(getFileSize(contentNode) < 1024) {
+ 			            println uicomponent.encodeHTML(contentNode.getProperty("jcr:data").getString()); 
+ 			          } else {

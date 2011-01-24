@@ -312,7 +312,7 @@
 		    <!-- div class="Content" -->
 		    	<!-- div class="TextContent" -->
 			      <%        
-			        if(mimeType.startsWith("text") && contentNode.hasProperty("jcr:data")) {
+			        if(mimeType.startsWith("text") && !mimeType.equals("text/rtf") && contentNode.hasProperty("jcr:data")) {
 			          if(getFileSize(contentNode) < 1024) {
 			            println uicomponent.encodeHTML(contentNode.getProperty("jcr:data").getString()); 
 			          } else {
