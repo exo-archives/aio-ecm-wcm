@@ -1,0 +1,12 @@
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/nodetypes-templates/webContent/dialogs/dialog1.gtmpl
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/nodetypes-templates/webContent/dialogs/dialog1.gtmpl	(revision 65158)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/nodetypes-templates/webContent/dialogs/dialog1.gtmpl	(working copy)
+@@ -121,7 +121,6 @@
+ 										<div class="WebContentMain"><%=_ctx.appRes("WebContent.dialog.label.WebContentHtml")%></div>
+ 					 				</td>
+ 					  				<td class="FieldComponent">
+-					  				<script>var yyy = 0; while (yyy < 10000) {yyy++;}</script>
+ 										<%
+ 											String[] htmlHiddenField1 = ["jcrPath=/node/default.html", "nodetype=nt:file", "defaultValues=default.html", "mixintype=exo:htmlFile"];
+ 					   						String[] htmlHiddenField2 = ["jcrPath=/node/default.html/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"]; 
