@@ -68,7 +68,7 @@
      if(height != null) style += "height:"+height+";";
   %>
     <div id="$uicomponent.id">    
-      <table class="UITableColumnContainer" style="table-layout: fixed; margin: 0px auto; width: 99%; $style">
+      <table class="UITableColumnContainer" style="position:relative; table-layout: fixed; margin: 0px auto; width: 99%; $style">
         <tr class="TRContainer">
           <% for(uiChild in uicomponent.getChildren()) {
 			// Workaround for bug# PORTAL-2983
