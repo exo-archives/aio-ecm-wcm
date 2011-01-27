@@ -3,20 +3,24 @@ function PluginUtils() {
 
 PluginUtils.prototype.request = function(urlRequestXML) {
 	var xmlHttpRequest = false;
-	if (window.XMLHttpRequest) {
+	try {
 		xmlHttpRequest = new window.XMLHttpRequest();
 		xmlHttpRequest.open("GET",urlRequestXML,false);
 		xmlHttpRequest.send("");
 		return xmlHttpRequest.responseXML;
-		}
-	else if (ActiveXObject("Microsoft.XMLDOM")) { // for IE
+	}
+	catch(e){
+   	  try{  
 		xmlHttpRequest = new ActiveXObject("Microsoft.XMLDOM");
 		xmlHttpRequest.async=false;
 		xmlHttpRequest.load(urlRequestXML);
 		return xmlHttpRequest;
-	}
-	alert("There was a problem retrieving the XML data!");
-	return null;
+	  }
+	  catch(e){
+            alert("There was a problem retrieving the XML data!");
+            return null;
+	  }
+        } 
 };
 
 PluginUtils.prototype.renderTree = function(objXML) {
