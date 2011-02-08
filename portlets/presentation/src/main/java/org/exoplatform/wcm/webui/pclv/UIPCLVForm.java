@@ -16,6 +16,7 @@
  */
 package org.exoplatform.wcm.webui.pclv;
 
+import java.awt.image.TileObserver;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.text.DateFormat;
@@ -285,19 +286,7 @@ public class UIPCLVForm extends UIForm {
 	 * @throws Exception the exception
 	 */
   public String getTitle(Node node) throws Exception {
-    if(node.isNodeType("nt:frozenNode")) {
-      PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-      PortletRequest portletRequest = portletRequestContext.getRequest();
-      PortletPreferences portletPreferences = portletRequest.getPreferences();
-      String workspace = portletPreferences.getValue(UIPCLVPortlet.WORKSPACE, null);
-      String repository = portletPreferences.getValue(UIPCLVPortlet.REPOSITORY, null);
-      String uuid = node.getProperty("jcr:frozenUuid").getString();
-      RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = Utils.getSessionProvider().getSession(workspace, manageableRepository);
-      node = session.getNodeByUUID(uuid);
-    }
-    
+
     String title = null;
     if (node.hasNode("jcr:content")) {
       Node content = node.getNode("jcr:content");
@@ -311,8 +300,18 @@ public class UIPCLVForm extends UIForm {
     } else if (node.hasProperty("exo:title")) {
       title = node.getProperty("exo:title").getValue().getString();
     }
-    if (title==null) title = node.getName();
-    
+    if (title==null) {
+	  	if (node.isNodeType("nt:frozenNode")){
+	  		String uuid = node.getProperty("jcr:frozenUuid").getString();
+	  		Node originalNode = node.getSession().getNodeByUUID(uuid);
+	  		if (originalNode.hasProperty("exo:title")) {
+	  	      title = originalNode.getProperty("exo:title").getValue().getString();
+	  		}
+	  	    if (title == null) title = node.getName();
+	  	} else {
+	  		title = node.getName();
+	  	}
+	}
     return title;
   }
 
