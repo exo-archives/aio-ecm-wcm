@@ -24,7 +24,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.PathNotFoundException;
 import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
@@ -98,18 +97,9 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService, S
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.portal.LivePortalManagerService#getLivePortal(java.lang.String, java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  public final Node getLivePortal(final SessionProvider sessionProvider, final String repository, final String portalName) {    
-    Node node = null;
-    try{
-    	Node portalsStorage = getLivePortalsStorage(sessionProvider, repository);
-    	node = portalsStorage.getNode(portalName);     	
-    }catch (PathNotFoundException pne){
-    	livePortalPaths.remove(portalName);
-    }catch (Exception e){
-    	livePortalPaths.remove(portalName);
-    	log.error("Error when get Live Portal " + portalName, e.fillInStackTrace());
-    }    
-    return node;
+  public final Node getLivePortal(final SessionProvider sessionProvider, final String repository, final String portalName) throws Exception {
+    Node portalsStorage = getLivePortalsStorage(sessionProvider, repository);
+    return portalsStorage.getNode(portalName); 
   }
 
   /* (non-Javadoc)
@@ -187,13 +177,11 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService, S
     //Remove site content folder for the portal in this version
     //for next version, we will move it to backup ws
     Node node = getLivePortal(sessionProvider, portalConfig.getName());
-    if (node != null){
-        Session session = node.getSession();
-    	node.remove();
-    	session.save();
-    	session.logout();
-    	livePortalPaths.remove(portalConfig.getName());
-    }  
+    Session session = node.getSession();
+    node.remove();
+    session.save();
+    session.logout();
+    livePortalPaths.remove(portalConfig.getName());
   }
 
   /* (non-Javadoc)

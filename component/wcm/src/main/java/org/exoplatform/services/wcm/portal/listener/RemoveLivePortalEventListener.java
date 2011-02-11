@@ -16,16 +16,17 @@
  */
 package org.exoplatform.services.wcm.portal.listener;
 
-import javax.jcr.PathNotFoundException;
+import javax.jcr.Node;
+
 import org.apache.commons.logging.Log;
 import org.exoplatform.portal.config.jcr.DataStorageImpl;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.cms.drives.ManageDriveService;
-import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.portal.artifacts.RemovePortalArtifactsService;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
@@ -48,10 +49,11 @@ public class RemoveLivePortalEventListener extends Listener<DataStorageImpl, Por
   	String portalName = portalConfig.getName();
   	LivePortalManagerService livePortalManagerService = WCMCoreUtils.getService(LivePortalManagerService.class);
   	SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();    
-    	// Remove drive for the site content storage
+  	Node portal = livePortalManagerService.getLivePortal(sessionProvider, portalName);
+  	
+  	// Remove drive for the site content storage
   	ManageDriveService manageDriveService = WCMCoreUtils.getService(ManageDriveService.class);    
-  	RepositoryService reoService = WCMCoreUtils.getService(RepositoryService.class);
-  	String repository = reoService.getCurrentRepository().getConfiguration().getName();
+  	String repository = NodeLocation.make(portal).getRepository();
   	try {
   		manageDriveService.removeDrive(portalName, repository);
   		log.info("Removed drive for portal: " + portalName);
@@ -67,14 +69,11 @@ public class RemoveLivePortalEventListener extends Listener<DataStorageImpl, Por
   	try {
   		livePortalManagerService.removeLivePortal(sessionProvider, portalConfig);
   		log.info("Removed resource storage for portal: " + portalName);
-		} catch(PathNotFoundException pne) {
-			//Do nothing in the case content storage was removed already	
-			log.error("Path not found for the portal to remove its resource" + portalName, pne.fillInStackTrace());
 		} catch (Exception e) {
 			log.error("Error when remove resource storage: " + portalName, e.fillInStackTrace());
-		}finally{
-			 sessionProvider.close();
-		}   
+		}
+  	
+    sessionProvider.close();
   }
 
 }

@@ -24,7 +24,7 @@ import org.exoplatform.services.cms.actions.ActionServiceContainer;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.wcm.portal.artifacts.RemovePortalPlugin;;
+import org.exoplatform.services.wcm.portal.artifacts.RemovePortalPlugin;
 
 /**
  * Created by The eXo Platform SAS
@@ -69,15 +69,9 @@ public class RemoveTaxonomyPlugin extends RemovePortalPlugin {
    * @see org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin#deployToPortal(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
   public void invalidateFromPortal(SessionProvider sessionProvider, String portalName) throws Exception {
-  	String repository = repositoryService.getCurrentRepository().getConfiguration().getName();  
-  	try{
+  	String repository = repositoryService.getCurrentRepository().getConfiguration().getName();
   	Node taxonomyTreeNode = taxonomyService.getTaxonomyTree(repository, portalName, true);
-  	if (taxonomyTreeNode != null){
-  		actionServiceContainer.removeAction(taxonomyTreeNode, repository);
-  	} 
-  	taxonomyService.removeTaxonomyTree(portalName);
-  	}catch (Exception e){
-  		taxonomyService.removeTaxonomyTree(portalName);
-  	}  	
+  	actionServiceContainer.removeAction(taxonomyTreeNode, repository);
+    taxonomyService.removeTaxonomyTree(portalName);
   }
 }
