@@ -4,9 +4,7 @@ import org.exoplatform.webui.core.UIPopupContainer;
 import	org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.portal.webui.util.Util; 
 import java.util.Calendar;
-		
-Calendar lCDateCalendar = Calendar.getInstance();
-def timeCreated = lCDateCalendar.getTimeInMillis();
+
 def rcontext = _ctx.getRequestContext() ;
 def isPortalAppEditting = Util.getUIPortalApplication().isEditting();
 def portletId = rcontext.getWindowId();
@@ -15,7 +13,7 @@ def quickEditingBlockId = portletId + "-QuickEditingBlock";
 //rcontext.getJavascriptManager().addJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '");');
 
 %>
-<div class="$uicomponent.id" id="$uicomponent.id-$timeCreated">
+<div class="UIPCLVContainer" id="$uicomponent.id">
 	<%
 		if (Utils.isShowQuickEdit()) {					
 	%>

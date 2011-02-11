@@ -21,6 +21,7 @@ How is the problem fixed?
       In WCM project, FCKeditor was changed to use the stylesheets of PORTAL, WCM. 
       The links in FCKeditor applies those stylesheets (color:black, text-decoration:none) => can't be distinguished.
     * To fix this problem, put fck_editorarea.css file into the list of stylesheet files which are applied to FCKeditor.
+    * The same problem in view mode is caused by stylesheet. To fix it, change the document template to apply the correct stylesheet.
 
 Patch file: WCM-2823.patch
 

@@ -4,7 +4,7 @@
 	import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
 	import org.exoplatform.portal.webui.util.Util; 
 %>
-<div class="$uicomponent.id">
+<div id="$uicomponent.id" class="UIPresentationContainer">
 	<%	
 		def rcontext = _ctx.getRequestContext() ;
 		def isPortalAppEditting = Util.getUIPortalApplication().isEditting();

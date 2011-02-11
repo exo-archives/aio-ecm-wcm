@@ -45,13 +45,13 @@ public class FCKDynamicSkinPlugin extends FCKConfigPlugin {
     SkinService skinService = (SkinService) exoContainer.getComponentInstanceOfType(SkinService.class);
     Collection<SkinConfig> collecionSkin = skinService.getPortalSkins(editorContext.getSkinName());
     for (SkinConfig skinConfig : collecionSkin) {
-      cssMergedBuffer = cssMergedBuffer.append(skinConfig.getCSSPath()).append(",");
+      cssMergedBuffer = cssMergedBuffer.append("'").append(skinConfig.getCSSPath()).append("',");
     }    
     SkinConfig skinConfig = skinService.getSkin(editorContext.getPortalName(), editorContext.getSkinName());
     if (skinConfig != null) {
-      cssMergedBuffer = cssMergedBuffer.append(skinConfig.getCSSPath());
+      cssMergedBuffer = cssMergedBuffer.append("'").append(skinConfig.getCSSPath()).append("',");
     }
-    String cssMerged = DEFAULT_BASE_PATH + "editor/css/fck_editorarea.css," + cssMergedBuffer.toString();
+    String cssMerged = "'" + DEFAULT_BASE_PATH + "editor/css/fck_editorarea.css'," + cssMergedBuffer.toString();
     if (cssMerged.endsWith(","))
       cssMerged = cssMerged.substring(0, cssMerged.length() - 1);
     

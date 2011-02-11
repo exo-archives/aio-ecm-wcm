@@ -9,8 +9,6 @@
 	import org.exoplatform.services.wcm.core.NodeLocation;
 	import java.util.Calendar;
 		
-	Calendar lCDateCalendar = Calendar.getInstance();
-	def timeCreated = lCDateCalendar.getTimeInMillis();
 	def node = uicomponent.getNode();
 	def isPrint = uicomponent.getIsPrint();
 	def wcmConfigurationService = uicomponent.getApplicationComponent(WCMConfigurationService.class);
@@ -18,7 +16,7 @@
 	def printPreviewPageURI = wcmConfigurationService.getRuntimeContextParam("printPageURI");
   
 %>
-<div id="$uicomponent.id-$timeCreated" class="$uicomponent.id">
+<div id="$uicomponent.id" class="UIPCVContainer">
 	<div class="PCV">
 	<%
 		if (node != null) {
