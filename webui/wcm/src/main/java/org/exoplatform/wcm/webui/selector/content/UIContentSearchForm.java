@@ -295,11 +295,13 @@ public class UIContentSearchForm extends UIForm {
           
           String[] arrFilterChar = {"&", "$", "@", ":", "]", "[", "*", "%", "!", "+", "(", ")", "'", "#", ";", "}", "{", "/", "|", "\""};
           for(String filterChar : arrFilterChar) {
-            if(keyword.indexOf(filterChar) > -1) {
-              uiApp.addMessage(new ApplicationMessage("UIContentSearchForm.msg.name-not-allowed", null, 
-                  ApplicationMessage.WARNING));
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-              return;
+            if (keyword != null){
+            	if(keyword.indexOf(filterChar) > -1) {
+                    uiApp.addMessage(new ApplicationMessage("UIContentSearchForm.msg.name-not-allowed", null, 
+                        ApplicationMessage.WARNING));
+                    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+                    return;
+                  }
             }
           }      
           if(uiWCSearch.haveEmptyField(uiApp, event, keyword)) return;
@@ -362,11 +364,13 @@ public class UIContentSearchForm extends UIForm {
           String keyword = uiWCSearch.getUIStringInput(radioValue).getValue();
           String[] arrFilterChar = {"&", "$", "@", ":", "]", "[", "*", "%", "!", "+", "(", ")", "'", "#", ";", "}", "{", "/", "|", "\""};
           for(String filterChar : arrFilterChar) {
-            if(keyword.indexOf(filterChar) > -1) {
-              uiApp.addMessage(new ApplicationMessage("UIContentSeachForm.msg.name-not-allowed", null, 
-                  ApplicationMessage.WARNING));
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-              return;
+            if(keyword != null){
+            	if(keyword.indexOf(filterChar) > -1) {
+                    uiApp.addMessage(new ApplicationMessage("UIContentSeachForm.msg.name-not-allowed", null, 
+                        ApplicationMessage.WARNING));
+                    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+                    return;
+                  }
             }
           }  
           if(uiWCSearch.haveEmptyField(uiApp, event, keyword)) return;
