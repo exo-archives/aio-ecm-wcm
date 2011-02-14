@@ -1,19 +1,64 @@
-Index: portlets/formgenerator/src/main/java/org/exoplatform/wcm/webui/fastcontentcreator/UIFCCPortlet.java
+Index: portlets/presentation/src/main/webapp/groovy/ParameterizedContentViewer/UIPCVContainer.gtmpl
 ===================================================================
---- portlets/formgenerator/src/main/java/org/exoplatform/wcm/webui/fastcontentcreator/UIFCCPortlet.java	(revision 62390)
-+++ portlets/formgenerator/src/main/java/org/exoplatform/wcm/webui/fastcontentcreator/UIFCCPortlet.java	(working copy)
-@@ -62,7 +62,7 @@
-         removeChild(UIFCCConfig.class) ;
-       }
-       if(getChild(UIFCCForm.class) == null) {
--        UIFCCForm fastContentCreatorForm = addChild(UIFCCForm.class, null, null) ;
-+        UIFCCForm fastContentCreatorForm = addChild(UIFCCForm.class, null, "UIFCCForm-"+ lCDateTime.getTimeInMillis()) ;
-         PortletPreferences preferences = UIFCCUtils.getPortletPreferences();
-         fastContentCreatorForm.setTemplateNode(preferences.getValue(UIFCCConstant.PREFERENCE_TYPE, "")) ;
-         fastContentCreatorForm.setWorkspace(preferences.getValue(UIFCCConstant.PREFERENCE_WORKSPACE, "")) ;
+--- portlets/presentation/src/main/webapp/groovy/ParameterizedContentViewer/UIPCVContainer.gtmpl	(revision 64920)
++++ portlets/presentation/src/main/webapp/groovy/ParameterizedContentViewer/UIPCVContainer.gtmpl	(working copy)
+@@ -7,7 +7,8 @@
+ 	import org.exoplatform.wcm.webui.pcv.UIPCVPresentation;
+ 	import org.exoplatform.wcm.webui.Utils;	
+ 	import org.exoplatform.services.wcm.core.NodeLocation;
+-
++	import java.util.Calendar;
++		
+ 	def node = uicomponent.getNode();
+ 	def isPrint = uicomponent.getIsPrint();
+ 	def wcmConfigurationService = uicomponent.getApplicationComponent(WCMConfigurationService.class);
+@@ -15,7 +16,7 @@
+ 	def printPreviewPageURI = wcmConfigurationService.getRuntimeContextParam("printPageURI");
+   
+ %>
+-<div id="$uicomponent.id" class="$uicomponent.id">
++<div id="$uicomponent.id" class="UIPCVContainer">
+ 	<div class="PCV">
+ 	<%
+ 		if (node != null) {
+@@ -80,7 +81,7 @@
+ 	 </script>
+  <style type="text/css">
+   @media print{
+-   a{ display:none; }
++   a{ display:block; }
+    overflow{ display:none;}
+   }
+  </style>
+Index: portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pclv/UIPCLVPortlet.java
+===================================================================
+--- portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pclv/UIPCLVPortlet.java	(revision 64920)
++++ portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pclv/UIPCLVPortlet.java	(working copy)
+@@ -150,7 +150,7 @@
+ 		Calendar lCDateTime = Calendar.getInstance();
+ 		addChild(UIPopupContainer.class, null, "UIPopupContainer-" + lCDateTime.getTimeInMillis());
+ 		if (PortletMode.VIEW.equals(mode)) {
+-      UIPCLVContainer container = addChild(UIPCLVContainer.class, null, null);
++      UIPCLVContainer container = addChild(UIPCLVContainer.class, null, UIPortletApplication.VIEW_MODE+"-" +lCDateTime.getTimeInMillis());
+       container.init();
+     } else if (PortletMode.EDIT.equals(mode)) {
+         addChild(UIPCLVConfig.class, null, null);
+Index: portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pcv/UIPCVPortlet.java
+===================================================================
+--- portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pcv/UIPCVPortlet.java	(revision 64920)
++++ portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pcv/UIPCVPortlet.java	(working copy)
+@@ -84,7 +84,7 @@
+   	Calendar lCDateTime = Calendar.getInstance();		
+ 	addChild(UIPopupContainer.class, null, "UIPopupContainer-" + lCDateTime.getTimeInMillis());
+ 	if (PortletMode.VIEW.equals(mode)) {
+-		addChild(UIPCVContainer.class, null, null);
++		addChild(UIPCVContainer.class, null, UIPortletApplication.VIEW_MODE+"-" +lCDateTime.getTimeInMillis());
+     } else if (PortletMode.EDIT.equals(mode)) {
+     	addChild(UIPCVConfig.class, null, null);
+     }
 Index: portlets/presentation/src/main/java/org/exoplatform/wcm/webui/wiki/UIWikiPortlet.java
 ===================================================================
---- portlets/presentation/src/main/java/org/exoplatform/wcm/webui/wiki/UIWikiPortlet.java	(revision 62390)
+--- portlets/presentation/src/main/java/org/exoplatform/wcm/webui/wiki/UIWikiPortlet.java	(revision 64920)
 +++ portlets/presentation/src/main/java/org/exoplatform/wcm/webui/wiki/UIWikiPortlet.java	(working copy)
 @@ -16,6 +16,8 @@
   */
@@ -34,57 +79,34 @@ Index: portlets/presentation/src/main/java/org/exoplatform/wcm/webui/wiki/UIWiki
    }
  
  }
-Index: portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pclv/UIPCLVContainer.java
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates/category-navigation/vertical-hierachy/SimpleVerticalHierachy.gtmpl
 ===================================================================
---- portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pclv/UIPCLVContainer.java	(revision 62390)
-+++ portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pclv/UIPCLVContainer.java	(working copy)
-@@ -18,6 +18,7 @@
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates/category-navigation/vertical-hierachy/SimpleVerticalHierachy.gtmpl	(revision 64920)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates/category-navigation/vertical-hierachy/SimpleVerticalHierachy.gtmpl	(working copy)
+@@ -6,6 +6,11 @@
+ 	 * Jun 27, 2009  
+ 	 */
+ 	 
++	import java.util.Calendar;
++	
++	Calendar lCDateCalendar = Calendar.getInstance();
++	def timeCreated = lCDateCalendar.getTimeInMillis();
++	 
+ 	/**
+ 	 * Render sub categories
+ 	 */
+@@ -25,7 +30,7 @@
+ 	}
+ %>
  
- import java.net.URLDecoder;
- import java.util.ArrayList;
-+import java.util.Calendar;
- import java.util.HashMap;
- import java.util.List;
- 
-@@ -158,7 +159,8 @@
- 		PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(nodes, itemsPerPage);
- 		getChildren().clear();
- 
--		UIPCLVForm parameterizedContentListViewer = addChild(	UIPCLVForm.class, null, null);
-+		Calendar lCDateTime = Calendar.getInstance();
-+		UIPCLVForm parameterizedContentListViewer = addChild(	UIPCLVForm.class, null, "UIPCLVForm-" + lCDateTime.getTimeInMillis());
- 		String templatePath = getFormViewTemplatePath();
- 		ResourceResolver resourceResolver = getTemplateResourceResolver();
- 		parameterizedContentListViewer.init(templatePath, resourceResolver, paginatedNodeIterator);
-Index: portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pclv/UIPCLVPortlet.java
-===================================================================
---- portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pclv/UIPCLVPortlet.java	(revision 62390)
-+++ portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pclv/UIPCLVPortlet.java	(working copy)
-@@ -150,7 +150,7 @@
- 		Calendar lCDateTime = Calendar.getInstance();
- 		addChild(UIPopupContainer.class, null, "UIPopupContainer-" + lCDateTime.getTimeInMillis());
- 		if (PortletMode.VIEW.equals(mode)) {
--      UIPCLVContainer container = addChild(UIPCLVContainer.class, null, null);
-+      UIPCLVContainer container = addChild(UIPCLVContainer.class, null, UIPortletApplication.VIEW_MODE+"-" +lCDateTime.getTimeInMillis());
-       container.init();
-     } else if (PortletMode.EDIT.equals(mode)) {
-         addChild(UIPCLVConfig.class, null, null);
-Index: portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pcv/UIPCVPortlet.java
-===================================================================
---- portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pcv/UIPCVPortlet.java	(revision 62390)
-+++ portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pcv/UIPCVPortlet.java	(working copy)
-@@ -84,7 +84,7 @@
-   	Calendar lCDateTime = Calendar.getInstance();		
- 	addChild(UIPopupContainer.class, null, "UIPopupContainer-" + lCDateTime.getTimeInMillis());
- 	if (PortletMode.VIEW.equals(mode)) {
--		addChild(UIPCVContainer.class, null, null);
-+		addChild(UIPCVContainer.class, null, UIPortletApplication.VIEW_MODE+"-" +lCDateTime.getTimeInMillis());
-     } else if (PortletMode.EDIT.equals(mode)) {
-     	addChild(UIPCVConfig.class, null, null);
-     }
+-<div id="$uicomponent.id" class="SimpleVerticalHierachy">
++<div id="$uicomponent.id-$timeCreated" class="SimpleVerticalHierachy">
+ 	<div class="CategoriesContainer">
+ 		<div class="TitleBarL">
+ 			<div class="TitleBarR">
 Index: portlets/presentation/src/main/java/org/exoplatform/wcm/webui/scv/UISingleContentViewerPortlet.java
 ===================================================================
---- portlets/presentation/src/main/java/org/exoplatform/wcm/webui/scv/UISingleContentViewerPortlet.java	(revision 62390)
+--- portlets/presentation/src/main/java/org/exoplatform/wcm/webui/scv/UISingleContentViewerPortlet.java	(revision 64920)
 +++ portlets/presentation/src/main/java/org/exoplatform/wcm/webui/scv/UISingleContentViewerPortlet.java	(working copy)
 @@ -81,7 +81,7 @@
  	Calendar lCDateCalendar = Calendar.getInstance();  
@@ -95,41 +117,68 @@ Index: portlets/presentation/src/main/java/org/exoplatform/wcm/webui/scv/UISingl
      } else if (PortletMode.EDIT.equals(mode)) {
        WebUIPropertiesConfigService propertiesConfigService = getApplicationComponent(WebUIPropertiesConfigService.class);
        PopupWindowProperties popupProperties = (PopupWindowProperties)propertiesConfigService.getProperties(WebUIPropertiesConfigService.SCV_POPUP_SIZE_EDIT_PORTLET_MODE);
-Index: portlets/presentation/src/main/webapp/groovy/ParameterizedContentListViewer/UIPCLVContainer.gtmpl
+Index: portlets/formgenerator/src/main/java/org/exoplatform/wcm/webui/fastcontentcreator/UIFCCPortlet.java
 ===================================================================
---- portlets/presentation/src/main/webapp/groovy/ParameterizedContentListViewer/UIPCLVContainer.gtmpl	(revision 62390)
-+++ portlets/presentation/src/main/webapp/groovy/ParameterizedContentListViewer/UIPCLVContainer.gtmpl	(working copy)
-@@ -3,7 +3,10 @@
- import org.exoplatform.webui.core.UIPopupContainer;
- import	org.exoplatform.wcm.webui.Utils;
- import org.exoplatform.portal.webui.util.Util; 
--
+--- portlets/formgenerator/src/main/java/org/exoplatform/wcm/webui/fastcontentcreator/UIFCCPortlet.java	(revision 64920)
++++ portlets/formgenerator/src/main/java/org/exoplatform/wcm/webui/fastcontentcreator/UIFCCPortlet.java	(working copy)
+@@ -62,7 +62,7 @@
+         removeChild(UIFCCConfig.class) ;
+       }
+       if(getChild(UIFCCForm.class) == null) {
+-        UIFCCForm fastContentCreatorForm = addChild(UIFCCForm.class, null, null) ;
++        UIFCCForm fastContentCreatorForm = addChild(UIFCCForm.class, null, "UIFCCForm-"+ lCDateTime.getTimeInMillis()) ;
+         PortletPreferences preferences = UIFCCUtils.getPortletPreferences();
+         fastContentCreatorForm.setTemplateNode(preferences.getValue(UIFCCConstant.PREFERENCE_TYPE, "")) ;
+         fastContentCreatorForm.setWorkspace(preferences.getValue(UIFCCConstant.PREFERENCE_WORKSPACE, "")) ;
+Index: portlets/newsletter/src/main/webapp/groovy/webui/newsletter/NewsletterManager/UICategories.gtmpl
+===================================================================
+--- portlets/newsletter/src/main/webapp/groovy/webui/newsletter/NewsletterManager/UICategories.gtmpl	(revision 64920)
++++ portlets/newsletter/src/main/webapp/groovy/webui/newsletter/NewsletterManager/UICategories.gtmpl	(working copy)
+@@ -3,13 +3,18 @@
+ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
+ import java.util.ArrayList;
+ import java.util.List;
 +import java.util.Calendar;
-+		
+ //import org.exoplatform.web.application.JavascriptManager;
+ //def rcontext = _ctx.getRequestContext();
+ //JavascriptManager jsmanager = rcontext.getJavascriptManager();
+ //jsmanager.importJavascript('eXo.newsletterManager.UINewsletterManagerPortlet','/newsletter/javascript/');
++
 +Calendar lCDateCalendar = Calendar.getInstance();
 +def timeCreated = lCDateCalendar.getTimeInMillis();
- def rcontext = _ctx.getRequestContext() ;
- def isPortalAppEditting = Util.getUIPortalApplication().isEditting();
- def portletId = rcontext.getWindowId();
-@@ -12,7 +15,7 @@
- //rcontext.getJavascriptManager().addJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '");');
- 
++
  %>
--<div class="$uicomponent.id" id="$uicomponent.id">
-+<div class="$uicomponent.id" id="$uicomponent.id-$timeCreated">
- 	<%
- 		if (Utils.isShowQuickEdit()) {					
- 	%>
-@@ -24,4 +27,4 @@
- 	<% }
- 		uicomponent.renderChild(UIPCLVForm.class);
- 	%>
--</div>
-\ No newline at end of file
-+</div>
+ 
+-<div class="UINewsletterPortlet" id="$uicomponent.id">
++<div class="UINewsletterPortlet" id="$uicomponent.id-$timeCreated">
+ 	<div class="NewsletterBoxContent">
+ 		<div class="BreadCumbs">
+ 			<a href="#" class="Selected"><%=_ctx.appRes("NewsletterPortlet.title.eXoNewsletter")%></a>
+Index: portlets/newsletter/src/main/java/org/exoplatform/wcm/webui/newsletter/viewer/UINewsletterViewerPortlet.java
+===================================================================
+--- portlets/newsletter/src/main/java/org/exoplatform/wcm/webui/newsletter/viewer/UINewsletterViewerPortlet.java	(revision 64920)
++++ portlets/newsletter/src/main/java/org/exoplatform/wcm/webui/newsletter/viewer/UINewsletterViewerPortlet.java	(working copy)
+@@ -18,6 +18,7 @@
+ 
+ import java.util.ArrayList;
+ import java.util.List;
++import java.util.Calendar;
+ 
+ import org.exoplatform.services.jcr.ext.common.SessionProvider;
+ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
+@@ -50,7 +51,8 @@
+    * @throws Exception the exception
+    */
+   public UINewsletterViewerPortlet() throws Exception {
+-    this.addChild(UINewsletterViewerForm.class, null, null);
++	Calendar lCDateTime = Calendar.getInstance();
++    this.addChild(UINewsletterViewerForm.class, null, "UINewsletterViewerForm-"+ lCDateTime.getTimeInMillis());
+   }
+   
+   /**
 Index: portlets/presentation/src/main/webapp/groovy/ContentListViewer/UICLVContainer.gtmpl
 ===================================================================
---- portlets/presentation/src/main/webapp/groovy/ContentListViewer/UICLVContainer.gtmpl	(revision 62390)
+--- portlets/presentation/src/main/webapp/groovy/ContentListViewer/UICLVContainer.gtmpl	(revision 64920)
 +++ portlets/presentation/src/main/webapp/groovy/ContentListViewer/UICLVContainer.gtmpl	(working copy)
 @@ -1,9 +1,14 @@
 -<div class="$uicomponent.id" id="$uicomponent.id">
@@ -156,34 +205,9 @@ Index: portlets/presentation/src/main/webapp/groovy/ContentListViewer/UICLVConta
 -</div>
 \ No newline at end of file
 +</div>
-Index: portlets/presentation/src/main/webapp/groovy/ParameterizedContentViewer/UIPCVContainer.gtmpl
-===================================================================
---- portlets/presentation/src/main/webapp/groovy/ParameterizedContentViewer/UIPCVContainer.gtmpl	(revision 62390)
-+++ portlets/presentation/src/main/webapp/groovy/ParameterizedContentViewer/UIPCVContainer.gtmpl	(working copy)
-@@ -7,7 +7,10 @@
- 	import org.exoplatform.wcm.webui.pcv.UIPCVPresentation;
- 	import org.exoplatform.wcm.webui.Utils;	
- 	import org.exoplatform.services.wcm.core.NodeLocation;
--
-+	import java.util.Calendar;
-+		
-+	Calendar lCDateCalendar = Calendar.getInstance();
-+	def timeCreated = lCDateCalendar.getTimeInMillis();
- 	def node = uicomponent.getNode();
- 	def isPrint = uicomponent.getIsPrint();
- 	def wcmConfigurationService = uicomponent.getApplicationComponent(WCMConfigurationService.class);
-@@ -15,7 +18,7 @@
- 	def printPreviewPageURI = wcmConfigurationService.getRuntimeContextParam("printPageURI");
-   
- %>
--<div id="$uicomponent.id" class="$uicomponent.id">
-+<div id="$uicomponent.id-$timeCreated" class="$uicomponent.id">
- 	<div class="PCV">
- 	<%
- 		if (node != null) {
 Index: portlets/presentation/src/main/webapp/groovy/CategoryNavigation/UICategoryNavigationTree.gtmpl
 ===================================================================
---- portlets/presentation/src/main/webapp/groovy/CategoryNavigation/UICategoryNavigationTree.gtmpl	(revision 62390)
+--- portlets/presentation/src/main/webapp/groovy/CategoryNavigation/UICategoryNavigationTree.gtmpl	(revision 64920)
 +++ portlets/presentation/src/main/webapp/groovy/CategoryNavigation/UICategoryNavigationTree.gtmpl	(working copy)
 @@ -5,11 +5,15 @@
  	 *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
@@ -204,74 +228,79 @@ Index: portlets/presentation/src/main/webapp/groovy/CategoryNavigation/UICategor
 -</div>
 \ No newline at end of file
 +</div>
-Index: portlets/newsletter/src/main/java/org/exoplatform/wcm/webui/newsletter/viewer/UINewsletterViewerPortlet.java
+Index: portlets/presentation/src/main/webapp/groovy/ParameterizedContentListViewer/UIPCLVContainer.gtmpl
 ===================================================================
---- portlets/newsletter/src/main/java/org/exoplatform/wcm/webui/newsletter/viewer/UINewsletterViewerPortlet.java	(revision 62390)
-+++ portlets/newsletter/src/main/java/org/exoplatform/wcm/webui/newsletter/viewer/UINewsletterViewerPortlet.java	(working copy)
+--- portlets/presentation/src/main/webapp/groovy/ParameterizedContentListViewer/UIPCLVContainer.gtmpl	(revision 64920)
++++ portlets/presentation/src/main/webapp/groovy/ParameterizedContentListViewer/UIPCLVContainer.gtmpl	(working copy)
+@@ -3,6 +3,7 @@
+ import org.exoplatform.webui.core.UIPopupContainer;
+ import	org.exoplatform.wcm.webui.Utils;
+ import org.exoplatform.portal.webui.util.Util; 
++import java.util.Calendar;
+ 
+ def rcontext = _ctx.getRequestContext() ;
+ def isPortalAppEditting = Util.getUIPortalApplication().isEditting();
+@@ -12,7 +13,7 @@
+ //rcontext.getJavascriptManager().addJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '");');
+ 
+ %>
+-<div class="$uicomponent.id" id="$uicomponent.id">
++<div class="UIPCLVContainer" id="$uicomponent.id">
+ 	<%
+ 		if (Utils.isShowQuickEdit()) {					
+ 	%>
+@@ -24,4 +25,4 @@
+ 	<% }
+ 		uicomponent.renderChild(UIPCLVForm.class);
+ 	%>
+-</div>
+\ No newline at end of file
++</div>
+Index: portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pclv/UIPCLVContainer.java
+===================================================================
+--- portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pclv/UIPCLVContainer.java	(revision 64920)
++++ portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pclv/UIPCLVContainer.java	(working copy)
 @@ -18,6 +18,7 @@
  
+ import java.net.URLDecoder;
  import java.util.ArrayList;
- import java.util.List;
 +import java.util.Calendar;
- 
- import org.exoplatform.services.jcr.ext.common.SessionProvider;
- import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
-@@ -50,7 +51,8 @@
-    * @throws Exception the exception
-    */
-   public UINewsletterViewerPortlet() throws Exception {
--    this.addChild(UINewsletterViewerForm.class, null, null);
-+	Calendar lCDateTime = Calendar.getInstance();
-+    this.addChild(UINewsletterViewerForm.class, null, "UINewsletterViewerForm-"+ lCDateTime.getTimeInMillis());
-   }
-   
-   /**
-Index: portlets/newsletter/src/main/webapp/groovy/webui/newsletter/NewsletterManager/UICategories.gtmpl
-===================================================================
---- portlets/newsletter/src/main/webapp/groovy/webui/newsletter/NewsletterManager/UICategories.gtmpl	(revision 62390)
-+++ portlets/newsletter/src/main/webapp/groovy/webui/newsletter/NewsletterManager/UICategories.gtmpl	(working copy)
-@@ -3,13 +3,18 @@
- import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
- import java.util.ArrayList;
+ import java.util.HashMap;
  import java.util.List;
-+import java.util.Calendar;
- //import org.exoplatform.web.application.JavascriptManager;
- //def rcontext = _ctx.getRequestContext();
- //JavascriptManager jsmanager = rcontext.getJavascriptManager();
- //jsmanager.importJavascript('eXo.newsletterManager.UINewsletterManagerPortlet','/newsletter/javascript/');
-+
-+Calendar lCDateCalendar = Calendar.getInstance();
-+def timeCreated = lCDateCalendar.getTimeInMillis();
-+
- %>
  
--<div class="UINewsletterPortlet" id="$uicomponent.id">
-+<div class="UINewsletterPortlet" id="$uicomponent.id-$timeCreated">
- 	<div class="NewsletterBoxContent">
- 		<div class="BreadCumbs">
- 			<a href="#" class="Selected"><%=_ctx.appRes("NewsletterPortlet.title.eXoNewsletter")%></a>
-Index: web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates/category-navigation/vertical-hierachy/SimpleVerticalHierachy.gtmpl
+@@ -158,7 +159,8 @@
+ 		PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(nodes, itemsPerPage);
+ 		getChildren().clear();
+ 
+-		UIPCLVForm parameterizedContentListViewer = addChild(	UIPCLVForm.class, null, null);
++		Calendar lCDateTime = Calendar.getInstance();
++		UIPCLVForm parameterizedContentListViewer = addChild(	UIPCLVForm.class, null, "UIPCLVForm-" + lCDateTime.getTimeInMillis());
+ 		String templatePath = getFormViewTemplatePath();
+ 		ResourceResolver resourceResolver = getTemplateResourceResolver();
+ 		parameterizedContentListViewer.init(templatePath, resourceResolver, paginatedNodeIterator);
+Index: portlets/newsletter/src/main/webapp/groovy/webui/newsletter/NewsletterViewer/UINewsletterListViewer.gtmpl
 ===================================================================
---- web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates/category-navigation/vertical-hierachy/SimpleVerticalHierachy.gtmpl	(revision 62390)
-+++ web/wcmportal/src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates/category-navigation/vertical-hierachy/SimpleVerticalHierachy.gtmpl	(working copy)
-@@ -6,6 +6,11 @@
- 	 * Jun 27, 2009  
- 	 */
- 	 
-+	import java.util.Calendar;
-+	
-+	Calendar lCDateCalendar = Calendar.getInstance();
-+	def timeCreated = lCDateCalendar.getTimeInMillis();
-+	 
- 	/**
- 	 * Render sub categories
- 	 */
-@@ -25,7 +30,7 @@
- 	}
+--- portlets/newsletter/src/main/webapp/groovy/webui/newsletter/NewsletterViewer/UINewsletterListViewer.gtmpl	(revision 64920)
++++ portlets/newsletter/src/main/webapp/groovy/webui/newsletter/NewsletterViewer/UINewsletterListViewer.gtmpl	(working copy)
+@@ -9,7 +9,7 @@
+ 	uicomponent.setActionAgain();
+ }
  %>
- 
--<div id="$uicomponent.id" class="SimpleVerticalHierachy">
-+<div id="$uicomponent.id-$timeCreated" class="SimpleVerticalHierachy">
- 	<div class="CategoriesContainer">
- 		<div class="TitleBarL">
- 			<div class="TitleBarR">
+-<div class="UINewsletterPortlet $uicomponent.id">
++<div class="UINewsletterPortlet UINewsletterViewerForm" id="$uicomponent.id">
+ 	<%uiform.begin()%>
+ 		<div class="NewsletterBoxContent">
+ 			<div class="UserName" style="height:32px;width:auto;line-height:32px;width:auto;margin-bottom:7px;">
+Index: portlets/presentation/src/main/webapp/groovy/SingleContentViewer/UIPresentationContainer.gtmpl
+===================================================================
+--- portlets/presentation/src/main/webapp/groovy/SingleContentViewer/UIPresentationContainer.gtmpl	(revision 64920)
++++ portlets/presentation/src/main/webapp/groovy/SingleContentViewer/UIPresentationContainer.gtmpl	(working copy)
+@@ -4,7 +4,7 @@
+ 	import org.exoplatform.wcm.webui.dialog.UIContentDialogForm;
+ 	import org.exoplatform.portal.webui.util.Util; 
+ %>
+-<div class="$uicomponent.id">
++<div id="$uicomponent.id" class="UIPresentationContainer">
+ 	<%	
+ 		def rcontext = _ctx.getRequestContext() ;
+ 		def isPortalAppEditting = Util.getUIPortalApplication().isEditting();
