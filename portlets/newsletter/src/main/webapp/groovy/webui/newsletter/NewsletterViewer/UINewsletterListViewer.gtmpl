@@ -9,7 +9,7 @@ if(uicomponent.userCode != null){
 	uicomponent.setActionAgain();
 }
 %>
-<div class="UINewsletterPortlet UINewsletterViewerForm" id="$uicomponent.id">
+<div class="UINewsletterPortlet UINewsletterViewerForm">
 	<%uiform.begin()%>
 		<div class="NewsletterBoxContent">
 			<div class="UserName" style="height:32px;width:auto;line-height:32px;width:auto;margin-bottom:7px;">

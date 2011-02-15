@@ -1,0 +1,13 @@
+Index: portlets/newsletter/src/main/webapp/groovy/webui/newsletter/NewsletterViewer/UINewsletterListViewer.gtmpl
+===================================================================
+--- portlets/newsletter/src/main/webapp/groovy/webui/newsletter/NewsletterViewer/UINewsletterListViewer.gtmpl	(revision 65962)
++++ portlets/newsletter/src/main/webapp/groovy/webui/newsletter/NewsletterViewer/UINewsletterListViewer.gtmpl	(working copy)
+@@ -9,7 +9,7 @@
+ 	uicomponent.setActionAgain();
+ }
+ %>
+-<div class="UINewsletterPortlet UINewsletterViewerForm" id="$uicomponent.id">
++<div class="UINewsletterPortlet UINewsletterViewerForm">
+ 	<%uiform.begin()%>
+ 		<div class="NewsletterBoxContent">
+ 			<div class="UserName" style="height:32px;width:auto;line-height:32px;width:auto;margin-bottom:7px;">
