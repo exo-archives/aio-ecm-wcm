@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.exoplatform.ecm</groupId>
     <artifactId>wcm</artifactId>
-    <version>1.2.8</version>
+    <version>1.2.9-SNAPSHOT</version>
   </parent>
   <artifactId>exo.ecm.wcm.web.portal</artifactId>
   <packaging>war</packaging>
