@@ -9,7 +9,8 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>editor:/platform/web-contributors</edit-permission>
 	  <container id="ACMEBody" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
-			<container id="ACMELeft" template="system:/groovy/portal/webui/container/UIContainer2.gtmpl">
+			<container id="ACMELeft" template="system:/groovy/portal/webui/container/UIColumnContainer.gtmpl">
+				<factory-id>ColumnContainer</factory-id>
 	  			<application>
 				    <instance-id>portal#acme:/presentation/SingleContentViewer/acme-introduce</instance-id>
 				    <title>Homepage</title>
@@ -23,7 +24,8 @@
 				    <title>News</title>
 				  </application>
 	  		</container>
-	 	 	<container id="ACMERight" template="system:/groovy/portal/webui/container/UIContainer2.gtmpl" width="230px">
+	 	 	<container id="ACMERight" template="system:/groovy/portal/webui/container/UIColumnContainer.gtmpl" width="230px">
+				<factory-id>ColumnContainer</factory-id>
 	  			<application>
 				    <instance-id>portal#acme:/presentation/ContentListViewerPortlet/acme-latest-documents</instance-id>
 				    <title>Documents</title>
@@ -45,13 +47,15 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>editor:/platform/web-contributors</edit-permission>
 	  <container id="ACMEBody" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
-	  	<container id="ACMECategories" template="system:/groovy/portal/webui/container/UIContainer2.gtmpl" width="200px">
+	  	<container id="ACMECategories" template="system:/groovy/portal/webui/container/UIColumnContainer.gtmpl" width="200px">
+			<factory-id>ColumnContainer</factory-id>
 	  		<application>
 			    <instance-id>portal#acme:/presentation/CategoryNavigationPortlet/acme-categories</instance-id>
 			    <title>Categories</title>
 			  </application>
 	  	</container>
-	  	<container id="ACMEParameterized" template="system:/groovy/portal/webui/container/UIContainer2.gtmpl" width="680px">
+	  	<container id="ACMEParameterized" template="system:/groovy/portal/webui/container/UIColumnContainer.gtmpl" width="680px">
+			<factory-id>ColumnContainer</factory-id>
 	  		<application>
 			    <instance-id>portal#acme:/presentation/ParameterizedContentListViewerPortlet/acme-parameterized</instance-id>
 			    <title>Parameterized</title>

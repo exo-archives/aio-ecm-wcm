@@ -13,24 +13,27 @@
     </application>	  	
       
 	  <container id="ClassicBanner" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
-      <container id="ClassicLogo" template="system:/groovy/portal/webui/container/UIContainer2.gtmpl">
+      <container id="ClassicLogo" template="system:/groovy/portal/webui/container/UIColumnContainer.gtmpl">
+		<factory-id>ColumnContainer</factory-id>
         <application>
           <instance-id>portal#classic:/presentation/SingleContentViewer/classic-logo</instance-id>
           <show-info-bar>false</show-info-bar>
         </application>
       </container>
-      <container id="ClassicSearch" template="system:/groovy/portal/webui/container/UIContainer2.gtmpl">
-        <application>
-				  <instance-id>portal#classic:/presentation/SingleContentViewer/classic-searchbox</instance-id>
-				  <show-info-bar>false</show-info-bar>
-				</application>
-      </container>
-      <container id="ClassicSignin" template="system:/groovy/portal/webui/container/UIContainer2.gtmpl">
+      <container id="ClassicSignin" template="system:/groovy/portal/webui/container/UIColumnContainer.gtmpl">
+		  <factory-id>ColumnContainer</factory-id>
 				<application>
 				  <instance-id>portal#classic:/presentation/SingleContentViewer/classic-signin</instance-id>
 				  <show-info-bar>false</show-info-bar>
 				</application>
       </container>
+	  <container id="ClassicSearchBox" template="system:/groovy/portal/webui/container/UIColumnContainer.gtmpl">
+		<factory-id>ColumnContainer</factory-id>
+        <application>
+				  <instance-id>portal#classic:/presentation/SingleContentViewer/classic-searchbox</instance-id>
+				  <show-info-bar>false</show-info-bar>
+				</application>
+      </container>      
     </container>	 
 	  	  
 	  <page-body> </page-body>

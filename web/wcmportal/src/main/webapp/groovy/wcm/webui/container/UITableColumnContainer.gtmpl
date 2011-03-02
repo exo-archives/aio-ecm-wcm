@@ -1,15 +1,17 @@
 <%
  import org.exoplatform.web.application.JavascriptManager;
  import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+ import org.exoplatform.commons.utils.ExpressionUtil;
 
   def rcontext = _ctx.getRequestContext() ;
   JavascriptManager jsmanager = rcontext.getJavascriptManager();
+  ResourceBundle res = rcontext.getApplicationResourceBundle() ;
   UIPortalApplication uiPortalApp = rcontext.getUIApplication();
   int portalMode = uiPortalApp.getModeState();
   
   jsmanager.importJavascript('eXo.portal.PortalDragDrop');
 %>
-<div class="UIContainer" id="UIContainer-${uicomponent.id}">
+<div class="UIContainer UITableColumnContainer" id="UIContainer-${uicomponent.id}">
 <%if(uiPortalApp.isEditting()){%>
   <div class="META-DATA-BLOCK" style="display: none">
     <div class="id">$uicomponent.id</div>
@@ -24,21 +26,20 @@
         <div class="LeftBar">
           <div class="RightBar">
             <div class="MiddleBar">
-            	<div class="FixHeight">
-	              <div class="DragControlArea" title="<%=_ctx.appRes("UIContainer.tooltip.drag")%>"><span></span></div>
+            	<div class="FixHeight ClearFix">
+	              <div class="DragControlArea" onmousedown="eXo.portal.PortalDragDrop.init.call(this, event)" title="<%=_ctx.appRes("UIContainer.tooltip.drag")%>"><span></span></div>
 	              <div class="ContainerIcon DefaultContainer16x16Icon"><span></span></div>
+				  <a href="<%=uicomponent.event("DeleteComponent","$uicomponent.id")%>" class="DeleteContainerIcon" title="<%=_ctx.appRes("UIContainer.tooltip.closeContainer")%>"></a>
+	              <a href="<%=uicomponent.event("EditContainer","$uicomponent.id")%>" class="EditContainerIcon" title="<%=_ctx.appRes("UIContainer.tooltip.editContainer")%>"></a>
 	              <div class="Title">
 	                <% 
 	                  if(uicomponent.getTitle() != null) {
-	                    println(uicomponent.getTitle()) ; 
+	                    println(ExpressionUtil.getExpressionValue(res, uicomponent.getTitle())) ;  
 	                  } else {
 	                %>
 	                    <%=_ctx.appRes("UIContainer.title.Container")%>
 	                <%}%>
 	              </div>
-	              
-	              <a href="<%=uicomponent.event("DeleteComponent","$uicomponent.id")%>" class="DeleteContainerIcon" title="<%=_ctx.appRes("UIContainer.tooltip.closeContainer")%>"></a>
-	              <a href="<%=uicomponent.event("EditContainer","$uicomponent.id")%>" class="EditContainerIcon" title="<%=_ctx.appRes("UIContainer.tooltip.editContainer")%>"></a>
 	              <div style="clear: both"><span></span></div>
 	            </div>
             </div>
@@ -60,14 +61,13 @@
      if(height != null) style += "height:"+height+";";
   %>
     <div id="$uicomponent.id">    
-		<div class="UIWCMColumnContainer" style="margin: 0px auto; $style">
-			<div class="WCMTRContainer">
-				<% for(uiChild in uicomponent.getChildren()) { %>
-					<div class="${uiChild.id}TDContainer"><% uicomponent.renderUIComponent(uiChild) %></div>
-				<% } %>
-				<div style="clear: both"><span></span></div>
-			</div>
-		</div>
+		<table class="UITableColumn" style="position:relative; table-layout: fixed; margin: 0px auto; width: 99%; $style">
+			<tr class="TRContainer">
+			  <% for(uiChild in uicomponent.getChildren()) { %>
+				<td class="${uiChild.id}TDContainer" <% if(uiChild.getWidth()) { %> width="<%= uiChild.getWidth(); %>" <% } %>><% uicomponent.renderUIComponent(uiChild) %></td>
+			  <% } %>
+			</tr>
+		</table>
     </div>    
   </div>
   <%/*Debug On IE  -----For DND */%>

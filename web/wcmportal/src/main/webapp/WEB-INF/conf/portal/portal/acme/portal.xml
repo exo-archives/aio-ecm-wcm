@@ -13,22 +13,25 @@
   	</application>	  
   	
   	<container id="ACMEBanner" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
-  		<container id="ACMELogo" template="system:/groovy/portal/webui/container/UIContainer2.gtmpl">
+  		<container id="ACMELogo" template="system:/groovy/portal/webui/container/UIColumnContainer.gtmpl">
+			<factory-id>ColumnContainer</factory-id>
   			<application>
 			    <instance-id>portal#acme:/presentation/SingleContentViewer/acme-logo</instance-id>
 			    <title>Banner</title>
 			  </application>
   		</container>
-  		<container id="ACMESearch" template="system:/groovy/portal/webui/container/UIContainer2.gtmpl">
-	  		<application>
-			    <instance-id>portal#acme:/presentation/SingleContentViewer/acme-searchbox</instance-id>
-			    <title>Access</title>
-			  </application>
-  		</container>
-  		<container id="ACMESignin" template="system:/groovy/portal/webui/container/UIContainer2.gtmpl">
+  		<container id="ACMESignin" template="system:/groovy/portal/webui/container/UIColumnContainer.gtmpl">
+			<factory-id>ColumnContainer</factory-id>
 	  		<application>
 			    <instance-id>portal#acme:/presentation/SingleContentViewer/acme-signin</instance-id>
 			    <title>Search box</title>
+			  </application>
+  		</container>
+		<container id="ACMESearch" template="system:/groovy/portal/webui/container/UIColumnContainer.gtmpl">
+			<factory-id>ColumnContainer</factory-id>
+	  		<application>
+			    <instance-id>portal#acme:/presentation/SingleContentViewer/acme-searchbox</instance-id>
+			    <title>Access</title>
 			  </application>
   		</container>
   	</container>
