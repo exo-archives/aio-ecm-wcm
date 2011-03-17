@@ -12,7 +12,7 @@ FCKConfig.Plugins.Add('insertContent', 'en,fr,vi', FCKConfig.eXoPath + "plugins/
 
 //config style
 FCKConfig.EditorAreaCSS = '';
-FCKConfig.EditorAreaStyles = 'body{background: #ffffff; margin: 0px;}' ;
+FCKConfig.EditorAreaStyles = 'body{background: #ffffff; margin: 0px;} a{color: blue; text-decoration: underline;} a:visited{color: #551A8B; text-decoration: underline;}' ;
 
 FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/default/' ;
 

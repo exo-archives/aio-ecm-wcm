@@ -1,0 +1,43 @@
+Index: connectors/fckeditor/src/main/java/org/exoplatform/services/wcm/fckconfig/FCKDynamicSkinPlugin.java
+===================================================================
+--- connectors/fckeditor/src/main/java/org/exoplatform/services/wcm/fckconfig/FCKDynamicSkinPlugin.java	(revision 67260)
++++ connectors/fckeditor/src/main/java/org/exoplatform/services/wcm/fckconfig/FCKDynamicSkinPlugin.java	(working copy)
+@@ -34,8 +34,6 @@
+  */
+ public class FCKDynamicSkinPlugin extends FCKConfigPlugin {
+ 	
+-	private final static String DEFAULT_BASE_PATH = "/portal/fckeditor/";
+-
+   /* (non-Javadoc)
+    * @see org.exoplatform.services.ecm.fckconfig.FCKConfigPlugin#addParameters(org.exoplatform.webui.form.wysiwyg.FCKEditorConfig, org.exoplatform.services.ecm.fckconfig.FCKEditorContext)
+    */
+@@ -45,13 +43,13 @@
+     SkinService skinService = (SkinService) exoContainer.getComponentInstanceOfType(SkinService.class);
+     Collection<SkinConfig> collecionSkin = skinService.getPortalSkins(editorContext.getSkinName());
+     for (SkinConfig skinConfig : collecionSkin) {
+-      cssMergedBuffer = cssMergedBuffer.append("'").append(skinConfig.getCSSPath()).append("',");
++      cssMergedBuffer = cssMergedBuffer.append(skinConfig.getCSSPath()).append(",");
+     }    
+     SkinConfig skinConfig = skinService.getSkin(editorContext.getPortalName(), editorContext.getSkinName());
+     if (skinConfig != null) {
+-      cssMergedBuffer = cssMergedBuffer.append("'").append(skinConfig.getCSSPath()).append("',");
++      cssMergedBuffer = cssMergedBuffer.append(skinConfig.getCSSPath());
+     }
+-    String cssMerged = "'" + DEFAULT_BASE_PATH + "editor/css/fck_editorarea.css'," + cssMergedBuffer.toString();
++    String cssMerged = cssMergedBuffer.toString();
+     if (cssMerged.endsWith(","))
+       cssMerged = cssMerged.substring(0, cssMerged.length() - 1);
+     
+Index: web/wcmportal/src/main/webapp/fckeditor/exo/exoconfig.js
+===================================================================
+--- web/wcmportal/src/main/webapp/fckeditor/exo/exoconfig.js	(revision 67260)
++++ web/wcmportal/src/main/webapp/fckeditor/exo/exoconfig.js	(working copy)
+@@ -12,7 +12,7 @@
+ 
+ //config style
+ FCKConfig.EditorAreaCSS = '';
+-FCKConfig.EditorAreaStyles = 'body{background: #ffffff; margin: 0px;}' ;
++FCKConfig.EditorAreaStyles = 'body{background: #ffffff; margin: 0px;} a{color: blue; text-decoration: underline;} a:visited{color: #551A8B; text-decoration: underline;}' ;
+ 
+ FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/default/' ;
+ 
