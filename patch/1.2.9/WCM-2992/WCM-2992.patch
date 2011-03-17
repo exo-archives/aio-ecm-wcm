@@ -1,0 +1,13 @@
+Index: web/wcmportal/src/main/webapp/fckeditor/exo/content/js/PluginUtils.js
+===================================================================
+--- web/wcmportal/src/main/webapp/fckeditor/exo/content/js/PluginUtils.js	(revision 66776)
++++ web/wcmportal/src/main/webapp/fckeditor/exo/content/js/PluginUtils.js	(working copy)
+@@ -425,7 +425,7 @@
+ 		if(nodeType.indexOf("image") >=0) {
+ 			strHTML += "<img src=\""+url+"\" name=\""+name+"\" alt=\""+name+"\"/>";
+ 		} else {
+-			strHTML += "<a href=\"" + url+"\" style='text-decoration:none;'>"+name+"</a>";		
++			strHTML += "<a href=\"" + url+"\">"+name+"</a>";		
+ 		}
+ 		FCK.InsertHtml(strHTML);
+ 	}			
