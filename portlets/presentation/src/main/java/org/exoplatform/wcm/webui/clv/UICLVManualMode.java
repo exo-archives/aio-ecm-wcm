@@ -17,6 +17,7 @@
 package org.exoplatform.wcm.webui.clv;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -76,7 +77,7 @@ public class UICLVManualMode extends UICLVContainer {
     ObjectPageList pageList = new ObjectPageList(nodes, itemsPerPage);    
     String templatePath = getFormViewTemplatePath();
     ResourceResolver resourceResolver = getTemplateResourceResolver();
-    UICLVPresentation clvPresentation = addChild(UICLVPresentation.class, null, null);
+    UICLVPresentation clvPresentation = addChild(UICLVPresentation.class, null, "UICLVPresentation-" + Calendar.getInstance().getTimeInMillis());
     clvPresentation.init(templatePath, resourceResolver, pageList);    
     clvPresentation.setContentColumn(portletPreferences.getValue(UICLVPortlet.HEADER, null));
     clvPresentation.setShowLink(Boolean.parseBoolean(portletPreferences.getValue(UICLVPortlet.SHOW_LINK, null)));

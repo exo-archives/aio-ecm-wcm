@@ -18,6 +18,7 @@ package org.exoplatform.wcm.webui.clv.config;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -57,6 +58,7 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -578,7 +580,7 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
             uiFolderViewer.init();
           } else if (newViewerMode.equals(UICLVConfig.VIEWER_MANUAL_MODE)) {                       
             uiContentListViewerPortlet.removeChild(UICLVFolderMode.class);
-            uiCorrectContentsViewer = uiContentListViewerPortlet.addChild(UICLVManualMode.class, null, null);            
+            uiCorrectContentsViewer = uiContentListViewerPortlet.addChild(UICLVManualMode.class, null, UIPortletApplication.VIEW_MODE+"-" + Calendar.getInstance().getTimeInMillis());
             uiCorrectContentsViewer.init();
             uiViewerManagementForm.doPublication(repository, workspace, portletRequestContext, selectedList, portletId);
           }
@@ -592,7 +594,7 @@ public class UICLVConfig extends UIForm implements UISelectable, UISourceGridUpd
             uiViewerManagementForm.doPublication(repository, workspace, portletRequestContext, selectedList, portletId);
           } else if (newViewerMode.equals(UICLVConfig.VIEWER_AUTO_MODE)) {            
             uiContentListViewerPortlet.removeChild(UICLVManualMode.class);
-            uiFolderViewer = uiContentListViewerPortlet.addChild(UICLVFolderMode.class, null, null);
+            uiFolderViewer = uiContentListViewerPortlet.addChild(UICLVFolderMode.class, null, UIPortletApplication.VIEW_MODE+"-" +Calendar.getInstance().getTimeInMillis());
             uiFolderViewer.init();
           }
         }

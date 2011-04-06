@@ -64,7 +64,7 @@ public class UICategoryNavigationPortlet extends UIPortletApplication {
     Calendar lCDateTime = Calendar.getInstance();
     addChild(UIPopupContainer.class, null, "UIPopupContainer-" + lCDateTime.getTimeInMillis());
     if (PortletMode.VIEW.equals(mode)) {
-      addChild(UICategoryNavigationTree.class, null, null);
+      addChild(UICategoryNavigationTree.class, null, "UICategoryNavigationTree-" + lCDateTime.getTimeInMillis());
     } else if (PortletMode.EDIT.equals(mode)) {
       addChild(UICategoryNavigationConfig.class, null, null);
     } 

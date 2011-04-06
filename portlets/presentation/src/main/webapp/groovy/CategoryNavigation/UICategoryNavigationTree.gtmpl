@@ -5,13 +5,9 @@
 	 *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
 	 * Jun 29, 2009  
 	 */
-	 import java.util.Calendar;
-		
-	 Calendar lCDateCalendar = Calendar.getInstance();
-	 def timeCreated = lCDateCalendar.getTimeInMillis();
 %>
 
-<div id="$uicomponent.id-$timeCreated" class="$uicomponent.id">
+<div id="$uicomponent.id" class="$uicomponent.id">
 	<% 
 		uicomponent.buildTree();
 		uicomponent.renderChildren(); 
