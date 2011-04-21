@@ -306,7 +306,7 @@
 					</div>
 	    		</div>
 			<!-- Status -->
-	    		<div class="RightColumn"><% println(status); %></div>
+	    		<div class="RightColumn"><%=_ctx.appRes("UIPublicationPanel.status."+status); %></div>
 			<!-- Author -->
 	    		<div class="RightColumn" style="width: 90px;">
 	        		<%=uicomponent.getNodeOwner(uicomponent.getNodeLink(data))%>
