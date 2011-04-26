@@ -1,0 +1,13 @@
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/portal/portal/classic/pages.xml
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/portal/portal/classic/pages.xml	(revision 68334)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/portal/portal/classic/pages.xml	(working copy)
+@@ -92,7 +92,7 @@
+     <access-permissions>Everyone</access-permissions>
+     <edit-permission>*:/platform/administrators</edit-permission>
+     <application>
+-      <instance-id>protal#classic:/exoadmin/AccountPortlet/Account</instance-id>
++      <instance-id>portal#classic:/exoadmin/AccountPortlet/Account</instance-id>
+       <title>New Account</title>
+       <show-info-bar>false</show-info-bar>
+       <show-application-state>false</show-application-state>
