@@ -92,7 +92,7 @@
     <access-permissions>Everyone</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>protal#classic:/exoadmin/AccountPortlet/Account</instance-id>
+      <instance-id>portal#classic:/exoadmin/AccountPortlet/Account</instance-id>
       <title>New Account</title>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
