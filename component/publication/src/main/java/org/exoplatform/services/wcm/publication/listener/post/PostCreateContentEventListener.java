@@ -21,6 +21,7 @@ import javax.jcr.Node;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.util.Text;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.wcm.core.NodeLocation;
@@ -67,7 +68,7 @@ public class PostCreateContentEventListener extends Listener<CmsService, Node>{
     if(currentNode.canAddMixin("exo:rss-enable")) {
       currentNode.addMixin("exo:rss-enable");
       if(!currentNode.hasProperty("exo:title")) {
-        currentNode.setProperty("exo:title",currentNode.getName()); 
+    	  currentNode.setProperty("exo:title",Text.unescapeIllegalJcrChars(currentNode.getName())); 
       }      
     }
     if(webContentSchemaHandler.isWebcontentChildNode(currentNode) || currentNode.isNodeType("exo:cssFile") || 

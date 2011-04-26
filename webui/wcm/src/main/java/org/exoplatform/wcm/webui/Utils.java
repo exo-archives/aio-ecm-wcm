@@ -33,6 +33,7 @@ import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.jcr.util.Text;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.services.security.IdentityRegistry;
 import org.exoplatform.services.security.MembershipEntry;
@@ -222,11 +223,30 @@ public class Utils {
 			HashMap<String, String> filters = new HashMap<String, String>();
 			filters.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
 			if (version != null) filters.put(WCMComposer.FILTER_VERSION, version);
-			return getService(WCMComposer.class).getContent(repository, workspace, nodeIdentifier, filters, getSessionProvider());
+			return getService(WCMComposer.class).getContent(repository, workspace, escapeIllegalJcrChars(nodeIdentifier), filters, getSessionProvider());
 		} catch (Exception e) {
 			return null;
 		}
 	}
+	
+	private static String escapeIllegalJcrChars(String path) {
+	    StringBuffer buffer = new StringBuffer(path.length() * 2);
+	    for (int i = 0; i < path.length(); i++) {
+	      char ch = path.charAt(i);
+	      if (ch == '&' || ch == '#' 
+	        || ch == '*' || ch == '@' || ch == '\'' || ch == '"' || ch == '|' 
+	          || (ch == '.' && path.length() < 3) || (ch == ' ' && (i == 0 || i == path.length() - 1)) 
+	          || ch == '\t' || ch == '\r' || ch == '\n' || ch == '>' || ch == '<' 
+			  || ch == '$' || ch == '&') {
+	        buffer.append('%');
+	        buffer.append(Character.toUpperCase(Character.forDigit(ch / 16, 16)));
+	        buffer.append(Character.toUpperCase(Character.forDigit(ch % 16, 16)));
+	      } else {
+	        buffer.append(ch);
+	      }
+	    }
+	    return buffer.toString();
+	  }
   
   /**
    * Gets the current mode of the site
