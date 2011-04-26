@@ -1,0 +1,143 @@
+Index: component/publication/src/main/java/org/exoplatform/services/wcm/publication/listener/post/PostCreateContentEventListener.java
+===================================================================
+--- component/publication/src/main/java/org/exoplatform/services/wcm/publication/listener/post/PostCreateContentEventListener.java	(revision 68615)
++++ component/publication/src/main/java/org/exoplatform/services/wcm/publication/listener/post/PostCreateContentEventListener.java	(working copy)
+@@ -21,6 +21,7 @@
+ import org.exoplatform.portal.webui.util.Util;
+ import org.exoplatform.services.cms.CmsService;
+ import org.exoplatform.services.jcr.core.ManageableRepository;
++import org.exoplatform.services.jcr.util.Text;
+ import org.exoplatform.services.listener.Event;
+ import org.exoplatform.services.listener.Listener;
+ import org.exoplatform.services.wcm.core.NodeLocation;
+@@ -67,7 +68,7 @@
+     if(currentNode.canAddMixin("exo:rss-enable")) {
+       currentNode.addMixin("exo:rss-enable");
+       if(!currentNode.hasProperty("exo:title")) {
+-        currentNode.setProperty("exo:title",currentNode.getName()); 
++    	  currentNode.setProperty("exo:title",Text.unescapeIllegalJcrChars(currentNode.getName())); 
+       }      
+     }
+     if(webContentSchemaHandler.isWebcontentChildNode(currentNode) || currentNode.isNodeType("exo:cssFile") || 
+Index: webui/wcm/src/main/java/org/exoplatform/wcm/webui/Utils.java
+===================================================================
+--- webui/wcm/src/main/java/org/exoplatform/wcm/webui/Utils.java	(revision 68615)
++++ webui/wcm/src/main/java/org/exoplatform/wcm/webui/Utils.java	(working copy)
+@@ -33,6 +33,7 @@
+ import org.exoplatform.services.jcr.access.PermissionType;
+ import org.exoplatform.services.jcr.core.ExtendedNode;
+ import org.exoplatform.services.jcr.ext.common.SessionProvider;
++import org.exoplatform.services.jcr.util.Text;
+ import org.exoplatform.services.security.Identity;
+ import org.exoplatform.services.security.IdentityRegistry;
+ import org.exoplatform.services.security.MembershipEntry;
+@@ -222,11 +223,30 @@
+ 			HashMap<String, String> filters = new HashMap<String, String>();
+ 			filters.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
+ 			if (version != null) filters.put(WCMComposer.FILTER_VERSION, version);
+-			return getService(WCMComposer.class).getContent(repository, workspace, nodeIdentifier, filters, getSessionProvider());
++			return getService(WCMComposer.class).getContent(repository, workspace, escapeIllegalJcrChars(nodeIdentifier), filters, getSessionProvider());
+ 		} catch (Exception e) {
+ 			return null;
+ 		}
+ 	}
++	
++	private static String escapeIllegalJcrChars(String path) {
++	    StringBuffer buffer = new StringBuffer(path.length() * 2);
++	    for (int i = 0; i < path.length(); i++) {
++	      char ch = path.charAt(i);
++	      if (ch == '&' || ch == '#' 
++	        || ch == '*' || ch == '@' || ch == '\'' || ch == '"' || ch == '|' 
++	          || (ch == '.' && path.length() < 3) || (ch == ' ' && (i == 0 || i == path.length() - 1)) 
++	          || ch == '\t' || ch == '\r' || ch == '\n' || ch == '>' || ch == '<' 
++			  || ch == '$' || ch == '&') {
++	        buffer.append('%');
++	        buffer.append(Character.toUpperCase(Character.forDigit(ch / 16, 16)));
++	        buffer.append(Character.toUpperCase(Character.forDigit(ch % 16, 16)));
++	      } else {
++	        buffer.append(ch);
++	      }
++	    }
++	    return buffer.toString();
++	  }
+   
+   /**
+    * Gets the current mode of the site
+Index: portlets/presentation/src/main/webapp/groovy/ParameterizedContentViewer/UIPCVContainer.gtmpl
+===================================================================
+--- portlets/presentation/src/main/webapp/groovy/ParameterizedContentViewer/UIPCVContainer.gtmpl	(revision 68615)
++++ portlets/presentation/src/main/webapp/groovy/ParameterizedContentViewer/UIPCVContainer.gtmpl	(working copy)
+@@ -8,6 +8,7 @@
+ 	import org.exoplatform.wcm.webui.Utils;	
+ 	import org.exoplatform.services.wcm.core.NodeLocation;
+ 	import java.util.Calendar;
++	import org.exoplatform.services.jcr.util.Text;
+ 		
+ 	def node = uicomponent.getNode();
+ 	def isPrint = uicomponent.getIsPrint();
+@@ -20,7 +21,7 @@
+ 	<div class="PCV">
+ 	<%
+ 		if (node != null) {
+-			def title = uicomponent.getTitle(node);
++			def title = Text.unescapeIllegalJcrChars(uicomponent.getTitle(node));
+ 			def dateCreated = uicomponent.getCreatedDate(node);
+ 			boolean isEditMode = false;
+ 			if(uicomponent.isShowTitle()) {
+Index: portlets/searches/src/main/webapp/WEB-INF/classes/locale/portlet/search/AdvanceSearch_vi.xml
+===================================================================
+--- portlets/searches/src/main/webapp/WEB-INF/classes/locale/portlet/search/AdvanceSearch_vi.xml	(revision 68615)
++++ portlets/searches/src/main/webapp/WEB-INF/classes/locale/portlet/search/AdvanceSearch_vi.xml	(working copy)
+@@ -11,6 +11,14 @@
+    <Search>Search</Search>
+   </action>
+  </UIDefaultSearchForm>
++	
++ <UISearchForm>
++   <message>
++	 <keyword-not-support>The keyword is invalid. Some characters are not supported.</keyword-not-support>
++	 <keyword-not-empty>The value of keyword should not null or empty!</keyword-not-empty>
++	 <not-checked>Search type is not checked. Choose a search type, please.</not-checked>
++   </message>
++ </UISearchForm> 
+  
+  <UIDefaultSearchResult>
+   <label>
+Index: portlets/searches/src/main/webapp/WEB-INF/classes/locale/portlet/search/AdvanceSearch_en.xml
+===================================================================
+--- portlets/searches/src/main/webapp/WEB-INF/classes/locale/portlet/search/AdvanceSearch_en.xml	(revision 68615)
++++ portlets/searches/src/main/webapp/WEB-INF/classes/locale/portlet/search/AdvanceSearch_en.xml	(working copy)
+@@ -11,6 +11,14 @@
+    <Search>Search</Search>
+   </action>
+  </UIDefaultSearchForm>
++	
++ <UISearchForm>
++	 <message>
++		 <keyword-not-support>The keyword is invalid. Some characters are not supported.</keyword-not-support>
++		 <keyword-not-empty>The value of keyword should not null or empty!</keyword-not-empty>
++		 <not-checked>Search type is not checked. Choose a search type, please.</not-checked>
++	 </message>
++ </UISearchForm> 
+  
+  <UIDefaultSearchResult>
+   <label>
+Index: portlets/searches/src/main/webapp/WEB-INF/classes/locale/portlet/search/AdvanceSearch_fr.xml
+===================================================================
+--- portlets/searches/src/main/webapp/WEB-INF/classes/locale/portlet/search/AdvanceSearch_fr.xml	(revision 68615)
++++ portlets/searches/src/main/webapp/WEB-INF/classes/locale/portlet/search/AdvanceSearch_fr.xml	(working copy)
+@@ -11,6 +11,14 @@
+    <Search>Recherche</Search>
+   </action>
+  </UIDefaultSearchForm>
++	
++ <UISearchForm>
++   <message>
++	 <keyword-not-support>Le mot clé est invalide. Certains caractères ne sont pas autorisés.</keyword-not-support>
++	 <keyword-not-empty>La valeur de ce mot clé ne peut pas être nul ou vide</keyword-not-empty>
++	 <not-checked>Le type de recherche n'est pas sélectionné. Veuillez en choisir un.</not-checked>
++   </message>
++ </UISearchForm> 
+  
+  <UIDefaultSearchResult>
+   <label>
