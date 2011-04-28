@@ -25,7 +25,7 @@ Index: web/wcmportal/src/main/webapp/groovy/webui/core/UIToolbar.gtmpl
 +                
 +            %>
 +                  <a class="Icon <%=event.getName();%>Icon" <%=uicomponent.getJavascript();%> title="<%=_ctx.appRes(uicomponent.id + ".tooltip." + event.getName())%>"><span></span></a>
-+            <%  } else if(!event.getName().equals("Save")) {  %>
++            <%  } else if(event.getName().equals("Discard") || event.getName().equals("Finish") || event.getName().equals("Abort")) {  %>
 +                  <a class="Icon <%=event.getName();%>Icon" onClick="javascript:eXo.portal.UIControlWorkspace.showWorkspace();" href="<%=uicomponent.event(event.getName())%>" title="<%=_ctx.appRes(uicomponent.id + ".tooltip." + event.getName())%>"><span></span></a>
 +            <%  } else { %>
 +								<a class="Icon <%=event.getName();%>Icon" href="<%=uicomponent.event(event.getName())%>" title="<%=_ctx.appRes(uicomponent.id + ".tooltip." + event.getName())%>"><span></span></a>

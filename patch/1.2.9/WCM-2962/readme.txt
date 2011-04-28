@@ -15,7 +15,8 @@ Fix description
 
 How is the problem fixed?
 
-    * Add a onClick event to Discard and Save and Finish buttons of User Workspace Panel. When user click on these buttons, User workspace will close automatically and returning to Front Office.
+    * Add an onClick event for Discard, Save and Finish buttons of User Workspace Panel. 
+      When user clicks on these buttons, User workspace will close automatically and returning to Front Office.
 
 
 Patch files: WCM-2962
