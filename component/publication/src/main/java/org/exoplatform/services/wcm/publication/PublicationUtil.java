@@ -73,10 +73,8 @@ public class PublicationUtil {
    */
   public static List<PageNode> findPageNodeByPageId(PageNavigation nav, String pageId) throws Exception {
     List<PageNode> list = new ArrayList<PageNode>();
-    if (nav.getOwnerType().equals(PortalConfig.PORTAL_TYPE)) {
-      for (PageNode node : nav.getNodes()) {
-        findPageNodeByPageId(node, pageId, list);
-      }
+    for (PageNode node : nav.getNodes()) {
+      findPageNodeByPageId(node, pageId, list);
     }
     return list;
   }

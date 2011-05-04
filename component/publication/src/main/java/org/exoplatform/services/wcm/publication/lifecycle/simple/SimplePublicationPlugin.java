@@ -373,8 +373,8 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
   public List<String> getListPageNavigationUri(Page page, String remoteUser) throws Exception {
     List<String> listPageNavigationUri = new ArrayList<String>();
     DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);    
-    for (String portalName : getRunningPortals(remoteUser)) {
-      Query<PageNavigation> query = new Query<PageNavigation>(PortalConfig.PORTAL_TYPE,portalName,PageNavigation.class);
+    for (String portalName : getNavigationNames(remoteUser)) {
+      Query<PageNavigation> query = new Query<PageNavigation>(null,portalName,PageNavigation.class);
       PageList list = dataStorage.find(query);
       for(Object object: list.getAll()) {
         PageNavigation pageNavigation = PageNavigation.class.cast(object);
@@ -385,6 +385,37 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
       }
     }
     return listPageNavigationUri;
+  }
+  
+  private List<String> getNavigationNames(String userId) throws Exception {
+	DataStorage service = PublicationUtil.getServices(DataStorage.class);
+	UserACL userACL = PublicationUtil.getServices(UserACL.class);
+	  
+	//get portal type navigations
+	List<String> listNavName = new ArrayList<String>();
+	listNavName.addAll(getRunningPortals(userId));
+	
+	//get group type navigations
+	Query<PageNavigation> queryByGroup = new Query<PageNavigation>(PortalConfig.GROUP_TYPE, null, PageNavigation.class);
+	PageList pageList = service.find(queryByGroup);
+	for (Object object : pageList.getAll()) {
+	  PageNavigation nav = (PageNavigation) object;
+	  if (userACL.hasEditPermission(nav, userId)) {
+		listNavName.add(nav.getOwnerId());
+	  }
+	}
+	
+	//get user type navigations
+	Query<PageNavigation> queryByUser = new Query<PageNavigation>(PortalConfig.USER_TYPE, null, PageNavigation.class);
+	pageList = service.find(queryByUser);
+	for (Object object : pageList.getAll()) {
+	  PageNavigation nav = (PageNavigation) object;
+	  if (userACL.hasEditPermission(nav, userId)) {
+		listNavName.add(nav.getOwnerId());
+	  }
+	}
+	  
+	return listNavName;
   }
 
   /**

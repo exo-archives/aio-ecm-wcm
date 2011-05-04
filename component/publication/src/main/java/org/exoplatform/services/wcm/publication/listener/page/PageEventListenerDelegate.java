@@ -270,7 +270,6 @@ public class PageEventListenerDelegate {
     for (String existedNavigationNodeUri : listExistedNavigationNodeUriTmp) {
       if (listPageNavigationUri.contains(existedNavigationNodeUri)) {
         listExistedNavigationNodeUri.remove(existedNavigationNodeUri);
-        break;
       }
     }
     content.setProperty("publication:navigationNodeURIs", PublicationUtil.toValues(valueFactory, listExistedNavigationNodeUri));
