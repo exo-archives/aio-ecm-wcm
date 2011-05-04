@@ -1,0 +1,45 @@
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/dms/dms-jobs-configuration.xml
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/dms/dms-jobs-configuration.xml	(revision 0)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/dms/dms-jobs-configuration.xml	(revision 0)
+@@ -0,0 +1,28 @@
++<?xml version="1.0" encoding="ISO-8859-1"?>
++<configuration>
++
++  <external-component-plugins>
++    <target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
++    <component-plugin>
++      <name>ClearOrphanSymlinksJob</name>
++      <set-method>addPeriodJob</set-method>
++      <type>org.exoplatform.services.scheduler.PeriodJob</type>
++      <description>add to the JobSchedulerService a job which cleans all the unassigned symlinks</description>
++      <init-params>
++        <properties-param>
++          <name>job.info</name>
++          <description>info of jobs</description>
++          <property name="jobName" value="ClearOrphanSymlinksJob"/>
++          <property name="job" value="org.exoplatform.services.cms.jobs.symlink.ClearOrphanSymlinksJob"/>
++          <property name="repeatCount" value="0"/>
++          <property name="period" value="6000"/>     
++          <property name="startTime" value="+24000"/>
++          <property name="endTime" value=""/>               
++          <property name="repository" value="repository"/>
++        </properties-param>
++      </init-params>
++    </component-plugin>
++  </external-component-plugins>
++    
++</configuration>
++  
+Index: web/wcmportal/src/main/webapp/WEB-INF/conf/configuration.xml
+===================================================================
+--- web/wcmportal/src/main/webapp/WEB-INF/conf/configuration.xml	(revision 68786)
++++ web/wcmportal/src/main/webapp/WEB-INF/conf/configuration.xml	(working copy)
+@@ -41,6 +41,7 @@
+ 	<import>war:/conf/dms/dms-metadata-configuration.xml</import>
+ 	<import>war:/conf/dms/dms-folksonomy-configuration.xml</import>
+ 	<import>war:/conf/dms/dms-records-configuration.xml</import>
++	<import>war:/conf/dms/dms-jobs-configuration.xml</import>
+ 	<import>war:/conf/dms/dms-queries-configuration.xml</import>
+ 	<import>war:/conf/dms/organization-component-plugins-configuration.xml</import>
+ 	<import>war:/conf/dms/publication-configuration.xml</import>  
