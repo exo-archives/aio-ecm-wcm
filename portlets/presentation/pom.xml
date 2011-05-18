@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.exoplatform.ecm</groupId>
     <artifactId>wcm</artifactId>
-    <version>1.2.9-SNAPSHOT</version>
+    <version>1.2.9</version>
   </parent>
   <artifactId>exo.ecm.wcm.portlet.presentation</artifactId>
   <packaging>war</packaging>
@@ -55,7 +55,7 @@
     <dependency>
       <groupId>org.exoplatform.ecm</groupId>
       <artifactId>exo.ecm.wcm.component.wcm</artifactId>
-      <version>1.2.9-SNAPSHOT</version>
+      <version>1.2.9</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -85,13 +85,13 @@
     <dependency>
       <groupId>org.exoplatform.ecm</groupId>
       <artifactId>exo.ecm.wcm.webui.wcm</artifactId>
-      <version>1.2.9-SNAPSHOT</version>
+      <version>1.2.9</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.ecm</groupId>
       <artifactId>exo.ecm.wcm.component.publication</artifactId>
-      <version>1.2.9-SNAPSHOT</version>
+      <version>1.2.9</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
