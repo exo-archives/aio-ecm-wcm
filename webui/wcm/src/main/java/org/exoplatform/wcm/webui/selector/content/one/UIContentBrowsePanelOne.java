@@ -106,7 +106,6 @@ public class UIContentBrowsePanelOne extends UIContentBrowsePanel{
       wcmPublicationService.enrollNodeInLifecycle(realNode, portalOwner, remoteUser);          
     }
     
-    wcmPublicationService.updateLifecyleOnChangeContent(realNode, portalOwner, remoteUser, null);
     if (!Utils.isEditPortletInCreatePageWizard()) {
       String pageId = Util.getUIPortal().getSelectedNode().getPageReference();
       UserPortalConfigService upcService = getApplicationComponent(UserPortalConfigService.class);
