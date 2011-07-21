@@ -4,6 +4,7 @@
   import org.exoplatform.wcm.webui.selector.content.UIContentTreeNode ;
   import org.exoplatform.web.application.JavascriptManager;
   import java.util.Date;
+  import org.exoplatform.ecm.utils.text.Text;
   
   def rcontext = _ctx.getRequestContext() ;
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -70,7 +71,7 @@
 																																	
 								objChild.innerHTML += '<div class="NoneSelectNodeIcon" onclick="' + restAction + '" id="'+
 																			eXo.wcm.MyUIWCMTreeView.constParentNode + firstId+'" treePath="'+treePath+'">'+
-																			'<div class="DefaultPageIcon">'+name+'</div>'+
+																			'<div class="DefaultPageIcon">'+decodeURI(name)+'</div>'+
 																			'</div>'+
 																			'<div class="ViewChildNodes" id="'+eXo.wcm.MyUIWCMTreeView.constChildNode + firstId+'"></div>';
 							}
@@ -126,7 +127,7 @@
 			newDiv.id = eXo.wcm.MyUIWCMTreeView.constBreadcumbsElement + i;
 			if(i <= 1) newDiv.className ="FirstNode";
 			else newDiv.className ="RightArrowIcon";
-			if(i != 0) newDiv.innerHTML = nodeNames[i];
+			if(i != 0) newDiv.innerHTML = decodeURI(nodeNames[i]);
 			else newDiv.innerHTML = "";
 			if(objParent){
 				if(objParent.getAttribute("onclick") && objParent.getAttribute("onclick") != null && objParent.getAttribute("onclick") != "null")
@@ -201,7 +202,7 @@
 		else restAction = "eXo.wcm.MyUIWCMTreeView.selectNode('"+id+"')";
 		%>
 		<div onclick="$restAction;$action" treePath="<%=treeNode.getTreePath()%>" style="" id="UIWCMTreeParentNode$id" class="NoneSelectNodeIcon">
-			<div class="DefaultPageIcon"><%= treeNode.getName() %></div>
+			<div class="DefaultPageIcon"><%=Text.unescapeIllegalJcrChars(treeNode.getName()) %></div>
 		</div>
 		<div id="UIWCMTreeChildNode$id" class="ViewChildNodes">
 	<%
