@@ -71,4 +71,10 @@
     <UIContentSelectorOne>Single content selector panel</UIContentSelectorOne>
    </title>
   </UIContentDialogFormPopupWindow>
+ <Comments>
+ 	<tooltip>
+		<edit-comment>Sửa bình luận này</edit-comment>
+		<remove-comment>Xóa bỏ bình luận này</remove-comment>
+ 	</tooltip>
+  </Comments>  
 </bundle>

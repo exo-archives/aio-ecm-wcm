@@ -1,0 +1,576 @@
+Index: webui/wcm/src/main/java/org/exoplatform/wcm/webui/Utils.java
+===================================================================
+--- webui/wcm/src/main/java/org/exoplatform/wcm/webui/Utils.java	(revision 71393)
++++ webui/wcm/src/main/java/org/exoplatform/wcm/webui/Utils.java	(working copy)
+@@ -20,6 +20,7 @@
+ 
+ import javax.jcr.Node;
+ 
++import org.exoplatform.ecm.webui.utils.LockUtil;
+ import org.exoplatform.portal.application.PortalRequestContext;
+ import org.exoplatform.portal.webui.portal.UIPortal;
+ import org.exoplatform.portal.webui.util.SessionProviderFactory;
+@@ -455,4 +456,15 @@
+   public static SessionProvider getSystemProvider() {
+     return SessionProviderFactory.createSystemProvider();
+   }
++  
++  public static boolean nodeIsLocked(Node node) throws Exception {
++    if(!node.isLocked()) return false;        
++    String lockToken = LockUtil.getLockToken(node);
++    if(lockToken != null) {
++      node.getSession().addLockToken(lockToken);
++      return false;
++    }                
++    return true;
++  }
++
+ }
+Index: webui/wcm/src/main/java/org/exoplatform/wcm/webui/viewer/UIContentViewer.java
+===================================================================
+--- webui/wcm/src/main/java/org/exoplatform/wcm/webui/viewer/UIContentViewer.java	(revision 71393)
++++ webui/wcm/src/main/java/org/exoplatform/wcm/webui/viewer/UIContentViewer.java	(working copy)
+@@ -16,19 +16,30 @@
+  */
+ package org.exoplatform.wcm.webui.viewer;
+ 
++import java.util.Arrays;
++import java.util.List;
++
+ import javax.jcr.Node;
+ import javax.jcr.PathNotFoundException;
+ import javax.jcr.RepositoryException;
+ 
+ import org.exoplatform.ecm.resolver.JCRResourceResolver;
++import org.exoplatform.ecm.webui.presentation.AbstractActionComponent;
+ import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
++import org.exoplatform.ecm.webui.presentation.removeattach.RemoveAttachmentComponent;
++import org.exoplatform.ecm.webui.presentation.removecomment.RemoveCommentComponent;
++import org.exoplatform.ecm.webui.utils.PermissionUtil;
+ import org.exoplatform.portal.webui.util.Util;
+ import org.exoplatform.resolver.ResourceResolver;
++import org.exoplatform.services.cms.comments.CommentsService;
+ import org.exoplatform.services.cms.impl.DMSConfiguration;
+ import org.exoplatform.services.cms.templates.TemplateService;
+ import org.exoplatform.services.jcr.core.ManageableRepository;
+ import org.exoplatform.services.wcm.core.NodeLocation;
++import org.exoplatform.services.wcm.publication.WCMComposer;
+ import org.exoplatform.wcm.webui.Utils;
++import org.exoplatform.wcm.webui.component.action.CommentActionComponent;
++import org.exoplatform.wcm.webui.selector.content.UIContentSelector;
+ import org.exoplatform.web.application.ApplicationMessage;
+ import org.exoplatform.webui.application.WebuiRequestContext;
+ import org.exoplatform.webui.config.annotation.ComponentConfig;
+@@ -116,15 +127,55 @@
+ 	}
+ 
+ 	public UIComponent getCommentComponent() {
+-		return null;
++    try {
++      Node node = getOriginalNode();
++      if (!PermissionUtil.canAddNode(node) || !node.isNodeType(org.exoplatform.ecm.webui.utils.Utils.MIX_COMMENTABLE) ||
++          !node.isCheckedOut() || Utils.nodeIsLocked(node))
++        return null;
++      removeChild(CommentActionComponent.class);
++      UIComponent uicomponent = addChild(CommentActionComponent.class, null,
++          "DocumentInfoCommentComponent");
++      return uicomponent;
++    } catch (Exception e) {
++      return null;
++    }
+ 	}
+-	
+-	public UIComponent getRemoveAttach() {
+-		return null;
+-	}
+ 
+-	public UIComponent getRemoveComment() {
+-		return null;
+-	}
+-	
++  /* (non-Javadoc)
++   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getRemoveAttach()
++   */
++  public UIComponent getRemoveAttach() throws Exception {
++    if (WCMComposer.MODE_LIVE.equals(Utils.getCurrentMode()))
++      return null;    
++    removeChild(RemoveAttachmentComponent.class);
++    UIComponent uicomponent = addChild(RemoveAttachmentComponent.class, null,
++        "DocumentInfoRemoveAttach");
++    ((AbstractActionComponent) uicomponent).setLstComponentupdate(Arrays
++        .asList(new Class[] { UIContentSelector.class }));
++    return uicomponent;
++  }
++  
++  /* (non-Javadoc)
++   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getRemoveComment()
++   */
++  public UIComponent getRemoveComment() throws Exception {
++    Node node = getOriginalNode();
++    if (!PermissionUtil.canRemoveNode(node) || !node.isNodeType(org.exoplatform.ecm.webui.utils.Utils.MIX_COMMENTABLE) ||
++        !node.isCheckedOut() || Utils.nodeIsLocked(node))
++      return null;
++    removeChild(RemoveCommentComponent.class);
++    UIComponent uicomponent = addChild(RemoveCommentComponent.class, null,
++        "DocumentInfoRemoveAttach");
++    ((AbstractActionComponent) uicomponent).setLstComponentupdate(Arrays
++        .asList(new Class[] { UIContentSelector.class }));
++    return uicomponent;
++  }
++  
++  /* (non-Javadoc)
++   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getComments()
++   */
++  public List<Node> getComments() throws Exception {
++    return getApplicationComponent(CommentsService.class).getComments(getOriginalNode(), getLanguage()) ;
++  }
++  
+ }
+Index: webui/wcm/src/main/java/org/exoplatform/wcm/webui/component/UICommentForm.java
+===================================================================
+--- webui/wcm/src/main/java/org/exoplatform/wcm/webui/component/UICommentForm.java	(revision 0)
++++ webui/wcm/src/main/java/org/exoplatform/wcm/webui/component/UICommentForm.java	(revision 0)
+@@ -0,0 +1,99 @@
++/*
++ * Copyright (C) 2003-2011 eXo Platform SAS.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Affero General Public License
++ * as published by the Free Software Foundation; either version 3
++ * of the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see<http://www.gnu.org/licenses/>.
++ */
++package org.exoplatform.wcm.webui.component;
++
++import javax.jcr.Node;
++
++import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
++import org.exoplatform.wcm.webui.Utils;
++import org.exoplatform.webui.config.annotation.ComponentConfig;
++import org.exoplatform.webui.config.annotation.EventConfig;
++import org.exoplatform.webui.core.UIApplication;
++import org.exoplatform.webui.core.UIPopupContainer;
++import org.exoplatform.webui.core.UIPortletApplication;
++import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
++import org.exoplatform.webui.event.Event;
++import org.exoplatform.webui.event.Event.Phase;
++
++/**
++ * Created by The eXo Platform SAS
++ * Author : Nguyen Anh Vu
++ *          vuna@exoplatform.com
++ *          anhvurz90@gmail.com
++ * Jul 14, 2011  
++ */
++
++@ComponentConfig(
++                 lifecycle = UIFormLifecycle.class,
++                 template = "system:/groovy/webui/form/UIForm.gtmpl",
++                 events = {
++                   @EventConfig(listeners = UICommentForm.SaveActionListener.class),
++                   @EventConfig(listeners = UICommentForm.CancelActionListener.class, phase = Phase.DECODE)
++                 }
++             ) 
++
++public class UICommentForm extends org.exoplatform.ecm.webui.presentation.comment.UICommentForm {
++
++  public UICommentForm() throws Exception {
++    super();
++  }
++
++  @Override
++  public Node getCommentNode() throws Exception {
++    UIBaseNodePresentation uiComponent = 
++      getAncestorOfType(UIPortletApplication.class).
++      findFirstComponentOfType(UIBaseNodePresentation.class);
++    int index1 = nodeCommentPath.lastIndexOf('/');
++    int index2 = nodeCommentPath.lastIndexOf('/', index1 - 1);
++    return uiComponent.getOriginalNode().getNode(
++                       nodeCommentPath.substring(index2 + 1));
++  }
++
++  @Override
++  public Node getCurrentNode() throws Exception {
++    UIBaseNodePresentation uiComponent = 
++            getAncestorOfType(UIPortletApplication.class).
++            findFirstComponentOfType(UIBaseNodePresentation.class);
++    return (uiComponent == null ? null : uiComponent.getOriginalNode());
++  }
++
++  @Override
++  public String getLanguage() {
++    UIBaseNodePresentation uiComponent = 
++      getAncestorOfType(UIPortletApplication.class).
++      findFirstComponentOfType(UIBaseNodePresentation.class);
++    return (uiComponent == null ? null : uiComponent.getLanguage());
++  }
++
++  @Override
++  public void updateAjax(Event<org.exoplatform.ecm.webui.presentation.comment.UICommentForm> event) throws Exception {
++    UIApplication uiApp = getAncestorOfType(UIPortletApplication.class);
++    UIBaseNodePresentation uiComponent = uiApp.findFirstComponentOfType(UIBaseNodePresentation.class);
++
++    UIPopupContainer uiPopupContainer = 
++      event.getSource().getAncestorOfType(UIPortletApplication.class)
++                       .findFirstComponentOfType(UIPopupContainer.class);
++    uiPopupContainer.cancelPopupAction();
++
++    event.getRequestContext().addUIComponentToUpdateByAjax(
++               uiComponent != null ? uiComponent : uiApp);
++    event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer);
++  }
++  
++  
++
++}
+Index: webui/wcm/src/main/java/org/exoplatform/wcm/webui/component/action/CommentActionComponent.java
+===================================================================
+--- webui/wcm/src/main/java/org/exoplatform/wcm/webui/component/action/CommentActionComponent.java	(revision 0)
++++ webui/wcm/src/main/java/org/exoplatform/wcm/webui/component/action/CommentActionComponent.java	(revision 0)
+@@ -0,0 +1,58 @@
++/*
++ * Copyright (C) 2003-2011 eXo Platform SAS.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Affero General Public License
++ * as published by the Free Software Foundation; either version 3
++ * of the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see<http://www.gnu.org/licenses/>.
++ */
++package org.exoplatform.wcm.webui.component.action;
++
++import org.exoplatform.wcm.webui.component.UICommentForm;
++import org.exoplatform.webui.config.annotation.ComponentConfig;
++import org.exoplatform.webui.config.annotation.EventConfig;
++import org.exoplatform.webui.core.UIComponent;
++import org.exoplatform.webui.core.UIPopupContainer;
++import org.exoplatform.webui.core.UIPortletApplication;
++import org.exoplatform.webui.event.Event;
++import org.exoplatform.webui.event.EventListener;
++
++/**
++ * Created by The eXo Platform SAS 
++ * Author : Nguyen Anh Vu 
++ *          vuna@exoplatform.com
++ *          anhvurz90@gmail.com Jul 14, 2011
++ */
++@ComponentConfig(
++     events = { 
++         @EventConfig(listeners = CommentActionComponent.CommentActionListener.class) 
++     }
++)
++public class CommentActionComponent extends UIComponent {
++
++  public static class CommentActionListener extends EventListener<CommentActionComponent> {
++    public void execute(Event<CommentActionComponent> event) throws Exception {
++      UIPopupContainer uiPopupContainer = event.getSource()
++                                               .getAncestorOfType(UIPortletApplication.class)
++                                               .findFirstComponentOfType(UIPopupContainer.class);
++      UICommentForm uiCommentForm = uiPopupContainer.createUIComponent(UICommentForm.class,
++                                                                       null,
++                                                                       null);
++      String commentNodePath = event.getRequestContext().getRequestParameter("nodePath");
++      if (commentNodePath != null && commentNodePath.length() > 0) {
++        uiCommentForm.setNodeCommentPath(commentNodePath);
++        uiCommentForm.setEdit(true);
++      }
++      uiPopupContainer.activate(uiCommentForm, 750, 700);
++      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer);
++    }
++  }
++}
+Index: portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pcv/UIPCVPresentation.java
+===================================================================
+--- portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pcv/UIPCVPresentation.java	(revision 71393)
++++ portlets/presentation/src/main/java/org/exoplatform/wcm/webui/pcv/UIPCVPresentation.java	(working copy)
+@@ -16,16 +16,27 @@
+  */
+ package org.exoplatform.wcm.webui.pcv;
+ 
++import java.util.Arrays;
++import java.util.List;
++
+ import javax.jcr.Node;
+ 
+ import org.exoplatform.ecm.resolver.JCRResourceResolver;
++import org.exoplatform.ecm.webui.presentation.AbstractActionComponent;
+ import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
++import org.exoplatform.ecm.webui.presentation.removeattach.RemoveAttachmentComponent;
++import org.exoplatform.ecm.webui.presentation.removecomment.RemoveCommentComponent;
++import org.exoplatform.ecm.webui.utils.PermissionUtil;
+ import org.exoplatform.resolver.ResourceResolver;
++import org.exoplatform.services.cms.comments.CommentsService;
++import org.exoplatform.services.cms.impl.DMSConfiguration;
+ import org.exoplatform.services.cms.templates.TemplateService;
+-import org.exoplatform.services.cms.impl.DMSConfiguration;
+ import org.exoplatform.services.wcm.core.NodeLocation;
+ import org.exoplatform.services.wcm.publication.WCMComposer;
+ import org.exoplatform.wcm.webui.Utils;
++import org.exoplatform.wcm.webui.component.action.CommentActionComponent;
++import org.exoplatform.wcm.webui.pclv.UIPCLVContainer;
++import org.exoplatform.wcm.webui.scv.UIPresentationContainer;
+ import org.exoplatform.web.application.ApplicationMessage;
+ import org.exoplatform.webui.application.WebuiRequestContext;
+ import org.exoplatform.webui.config.annotation.ComponentConfig;
+@@ -202,16 +213,55 @@
+    * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getCommentComponent()
+    */
+   public UIComponent getCommentComponent() {
+-  	return null;
++    try {
++      Node node = getOriginalNode();
++      if (!PermissionUtil.canAddNode(node) || !node.isNodeType(org.exoplatform.ecm.webui.utils.Utils.MIX_COMMENTABLE) ||
++          !node.isCheckedOut() || Utils.nodeIsLocked(node))
++        return null;
++      removeChild(CommentActionComponent.class);
++      UIComponent uicomponent = addChild(CommentActionComponent.class, null,
++          "DocumentInfoCommentComponent");
++      return uicomponent;
++    } catch (Exception e) {
++      return null;
++    }
+   }
+ 
++  /* (non-Javadoc)
++   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getRemoveAttach()
++   */
+   public UIComponent getRemoveAttach() throws Exception {
+-  	// TODO Auto-generated method stub
+-  	return null;
++    if (WCMComposer.MODE_LIVE.equals(Utils.getCurrentMode()))
++      return null;    
++    removeChild(RemoveAttachmentComponent.class);
++    UIComponent uicomponent = addChild(RemoveAttachmentComponent.class, null,
++        "DocumentInfoRemoveAttach");
++    ((AbstractActionComponent) uicomponent).setLstComponentupdate(Arrays
++        .asList(new Class[] { UIPCVContainer.class }));
++    return uicomponent;
+   }
+   
++  /* (non-Javadoc)
++   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getRemoveComment()
++   */
+   public UIComponent getRemoveComment() throws Exception {
+-  	// TODO Auto-generated method stub
+-  	return null;
++    Node node = getOriginalNode();
++    if (!PermissionUtil.canRemoveNode(node) || !node.isNodeType(org.exoplatform.ecm.webui.utils.Utils.MIX_COMMENTABLE) ||
++        !node.isCheckedOut() || Utils.nodeIsLocked(node))
++      return null;
++    removeChild(RemoveCommentComponent.class);
++    UIComponent uicomponent = addChild(RemoveCommentComponent.class, null,
++        "DocumentInfoRemoveAttach");
++    ((AbstractActionComponent) uicomponent).setLstComponentupdate(Arrays
++        .asList(new Class[] { UIPCVContainer.class }));
++    return uicomponent;
+   }
++  
++  /* (non-Javadoc)
++   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getComments()
++   */
++  public List<Node> getComments() throws Exception {
++    return getApplicationComponent(CommentsService.class).getComments(getOriginalNode(), getLanguage()) ;
++  }
++  
+ }
+Index: portlets/presentation/src/main/java/org/exoplatform/wcm/webui/scv/UIPresentation.java
+===================================================================
+--- portlets/presentation/src/main/java/org/exoplatform/wcm/webui/scv/UIPresentation.java	(revision 71393)
++++ portlets/presentation/src/main/java/org/exoplatform/wcm/webui/scv/UIPresentation.java	(working copy)
+@@ -16,17 +16,26 @@
+  */
+ package org.exoplatform.wcm.webui.scv;
+ 
++import java.util.Arrays;
++import java.util.List;
++
+ import javax.jcr.Node;
+ import javax.portlet.PortletPreferences;
+ 
+ import org.exoplatform.ecm.resolver.JCRResourceResolver;
++import org.exoplatform.ecm.webui.presentation.AbstractActionComponent;
+ import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
++import org.exoplatform.ecm.webui.presentation.removeattach.RemoveAttachmentComponent;
++import org.exoplatform.ecm.webui.presentation.removecomment.RemoveCommentComponent;
++import org.exoplatform.ecm.webui.utils.PermissionUtil;
+ import org.exoplatform.resolver.ResourceResolver;
++import org.exoplatform.services.cms.comments.CommentsService;
+ import org.exoplatform.services.cms.impl.DMSConfiguration;
+ import org.exoplatform.services.cms.templates.TemplateService;
+ import org.exoplatform.services.wcm.core.NodeLocation;
+ import org.exoplatform.services.wcm.publication.WCMComposer;
+ import org.exoplatform.wcm.webui.Utils;
++import org.exoplatform.wcm.webui.component.action.CommentActionComponent;
+ import org.exoplatform.webui.application.WebuiRequestContext;
+ import org.exoplatform.webui.application.portlet.PortletRequestContext;
+ import org.exoplatform.webui.config.annotation.ComponentConfig;
+@@ -133,20 +142,56 @@
+    * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getCommentComponent()
+    */
+   public UIComponent getCommentComponent() {
+-  	return null;
++    try {
++      Node node = getOriginalNode();
++      if (!PermissionUtil.canAddNode(node) || !node.isNodeType(org.exoplatform.ecm.webui.utils.Utils.MIX_COMMENTABLE) ||
++          !node.isCheckedOut() || Utils.nodeIsLocked(node))
++        return null;
++      removeChild(CommentActionComponent.class);
++      UIComponent uicomponent = addChild(CommentActionComponent.class, null,
++          "DocumentInfoCommentComponent");
++      return uicomponent;
++    } catch (Exception e) {
++      return null;
++    }
+   }
+ 
+   /* (non-Javadoc)
+-   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getCommentComponent()
++   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getRemoveAttach()
+    */
+   public UIComponent getRemoveAttach() throws Exception {
+-  	return null;
++    if (WCMComposer.MODE_LIVE.equals(Utils.getCurrentMode()))
++      return null;    
++    removeChild(RemoveAttachmentComponent.class);
++    UIComponent uicomponent = addChild(RemoveAttachmentComponent.class, null,
++        "DocumentInfoRemoveAttach");
++    ((AbstractActionComponent) uicomponent).setLstComponentupdate(Arrays
++        .asList(new Class[] { UIPresentationContainer.class }));
++    return uicomponent;
+   }
+   
+   /* (non-Javadoc)
+-   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getCommentComponent()
++   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getRemoveComment()
+    */
+   public UIComponent getRemoveComment() throws Exception {
+-  	return null;
++    Node node = getOriginalNode();
++    if (!PermissionUtil.canRemoveNode(node) || !node.isNodeType(org.exoplatform.ecm.webui.utils.Utils.MIX_COMMENTABLE) ||
++        !node.isCheckedOut() || Utils.nodeIsLocked(node))
++      return null;
++    removeChild(RemoveCommentComponent.class);
++    UIComponent uicomponent = addChild(RemoveCommentComponent.class, null,
++        "DocumentInfoRemoveAttach");
++    ((AbstractActionComponent) uicomponent).setLstComponentupdate(Arrays
++        .asList(new Class[] { UIPresentationContainer.class }));
++    return uicomponent;
+   }
++  
++  /* (non-Javadoc)
++   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getComments()
++   */
++  public List<Node> getComments() throws Exception {
++    return getApplicationComponent(CommentsService.class).getComments(getOriginalNode(), getLanguage()) ;
++  }
++  
++  
+ }
+Index: portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/ParameterizedContentViewer/ParameterizedContentViewer_fr.xml
+===================================================================
+--- portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/ParameterizedContentViewer/ParameterizedContentViewer_fr.xml	(revision 71393)
++++ portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/ParameterizedContentViewer/ParameterizedContentViewer_fr.xml	(working copy)
+@@ -34,4 +34,10 @@
+    <Cancel>Annuler</Cancel>
+   </action>
+  </UIPCVConfig>
++ <Comments>
++ 	<tooltip>
++		<edit-comment>Editer le commentaire</edit-comment>
++		<remove-comment>Supprimer le commentaire</remove-comment>
++ 	</tooltip>
++  </Comments>
+ </bundle>
+Index: portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/ParameterizedContentViewer/ParameterizedContentViewer_vi.xml
+===================================================================
+--- portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/ParameterizedContentViewer/ParameterizedContentViewer_vi.xml	(revision 71393)
++++ portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/ParameterizedContentViewer/ParameterizedContentViewer_vi.xml	(working copy)
+@@ -34,4 +34,10 @@
+    <Cancel>Hủy</Cancel>
+   </action>
+  </UIPCVConfig>
++ <Comments>
++ 	<tooltip>
++		<edit-comment>Sửa bình luận này</edit-comment>
++		<remove-comment>Xóa bỏ bình luận này</remove-comment>
++ 	</tooltip>
++  </Comments>
+ </bundle>
+\ No newline at end of file
+Index: portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/ParameterizedContentViewer/ParameterizedContentViewer_en.xml
+===================================================================
+--- portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/ParameterizedContentViewer/ParameterizedContentViewer_en.xml	(revision 71393)
++++ portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/ParameterizedContentViewer/ParameterizedContentViewer_en.xml	(working copy)
+@@ -34,4 +34,10 @@
+    <Cancel>Cancel</Cancel>
+   </action>
+  </UIPCVConfig>
++ <Comments>
++ 	<tooltip>
++ 		<edit-comment>Edit comment</edit-comment>
++ 		<remove-comment>Remove comment</remove-comment>
++ 	</tooltip>
++  </Comments>
+ </bundle>
+\ No newline at end of file
+Index: portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/SingleContentViewer/SingleContentViewer_en.xml
+===================================================================
+--- portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/SingleContentViewer/SingleContentViewer_en.xml	(revision 71393)
++++ portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/SingleContentViewer/SingleContentViewer_en.xml	(working copy)
+@@ -71,4 +71,10 @@
+     <UIContentSelectorOne>Single content selector panel</UIContentSelectorOne>
+    </title>
+   </UIContentDialogFormPopupWindow>
++ <Comments>
++ 	<tooltip>
++ 		<edit-comment>Edit comment</edit-comment>
++ 		<remove-comment>Remove comment</remove-comment>
++ 	</tooltip>
++  </Comments>
+ </bundle>
+\ No newline at end of file
+Index: portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/SingleContentViewer/SingleContentViewer_fr.xml
+===================================================================
+--- portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/SingleContentViewer/SingleContentViewer_fr.xml	(revision 71393)
++++ portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/SingleContentViewer/SingleContentViewer_fr.xml	(working copy)
+@@ -71,4 +71,10 @@
+     <UIContentSelectorOne>Single content selector panel</UIContentSelectorOne>
+    </title>
+   </UIContentDialogFormPopupWindow>
++ <Comments>
++ 	<tooltip>
++		<edit-comment>Editer le commentaire</edit-comment>
++		<remove-comment>Supprimer le commentaire</remove-comment>
++ 	</tooltip>
++  </Comments>
+ </bundle>
+Index: portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/SingleContentViewer/SingleContentViewer_vi.xml
+===================================================================
+--- portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/SingleContentViewer/SingleContentViewer_vi.xml	(revision 71393)
++++ portlets/presentation/src/main/webapp/WEB-INF/classes/locale/portlet/SingleContentViewer/SingleContentViewer_vi.xml	(working copy)
+@@ -71,4 +71,10 @@
+     <UIContentSelectorOne>Single content selector panel</UIContentSelectorOne>
+    </title>
+   </UIContentDialogFormPopupWindow>
++ <Comments>
++ 	<tooltip>
++		<edit-comment>Sửa bình luận này</edit-comment>
++		<remove-comment>Xóa bỏ bình luận này</remove-comment>
++ 	</tooltip>
++  </Comments>  
+ </bundle>
+\ No newline at end of file

@@ -16,17 +16,26 @@
  */
 package org.exoplatform.wcm.webui.scv;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.jcr.Node;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
+import org.exoplatform.ecm.webui.presentation.AbstractActionComponent;
 import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
+import org.exoplatform.ecm.webui.presentation.removeattach.RemoveAttachmentComponent;
+import org.exoplatform.ecm.webui.presentation.removecomment.RemoveCommentComponent;
+import org.exoplatform.ecm.webui.utils.PermissionUtil;
 import org.exoplatform.resolver.ResourceResolver;
+import org.exoplatform.services.cms.comments.CommentsService;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.component.action.CommentActionComponent;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -133,20 +142,56 @@ public class UIPresentation extends UIBaseNodePresentation {
    * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getCommentComponent()
    */
   public UIComponent getCommentComponent() {
-  	return null;
+    try {
+      Node node = getOriginalNode();
+      if (!PermissionUtil.canAddNode(node) || !node.isNodeType(org.exoplatform.ecm.webui.utils.Utils.MIX_COMMENTABLE) ||
+          !node.isCheckedOut() || Utils.nodeIsLocked(node))
+        return null;
+      removeChild(CommentActionComponent.class);
+      UIComponent uicomponent = addChild(CommentActionComponent.class, null,
+          "DocumentInfoCommentComponent");
+      return uicomponent;
+    } catch (Exception e) {
+      return null;
+    }
   }
 
   /* (non-Javadoc)
-   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getCommentComponent()
+   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getRemoveAttach()
    */
   public UIComponent getRemoveAttach() throws Exception {
-  	return null;
+    if (WCMComposer.MODE_LIVE.equals(Utils.getCurrentMode()))
+      return null;    
+    removeChild(RemoveAttachmentComponent.class);
+    UIComponent uicomponent = addChild(RemoveAttachmentComponent.class, null,
+        "DocumentInfoRemoveAttach");
+    ((AbstractActionComponent) uicomponent).setLstComponentupdate(Arrays
+        .asList(new Class[] { UIPresentationContainer.class }));
+    return uicomponent;
   }
   
   /* (non-Javadoc)
-   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getCommentComponent()
+   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getRemoveComment()
    */
   public UIComponent getRemoveComment() throws Exception {
-  	return null;
+    Node node = getOriginalNode();
+    if (!PermissionUtil.canRemoveNode(node) || !node.isNodeType(org.exoplatform.ecm.webui.utils.Utils.MIX_COMMENTABLE) ||
+        !node.isCheckedOut() || Utils.nodeIsLocked(node))
+      return null;
+    removeChild(RemoveCommentComponent.class);
+    UIComponent uicomponent = addChild(RemoveCommentComponent.class, null,
+        "DocumentInfoRemoveAttach");
+    ((AbstractActionComponent) uicomponent).setLstComponentupdate(Arrays
+        .asList(new Class[] { UIPresentationContainer.class }));
+    return uicomponent;
   }
+  
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getComments()
+   */
+  public List<Node> getComments() throws Exception {
+    return getApplicationComponent(CommentsService.class).getComments(getOriginalNode(), getLanguage()) ;
+  }
+  
+  
 }

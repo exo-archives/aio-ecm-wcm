@@ -20,6 +20,7 @@ import java.util.HashMap;
 
 import javax.jcr.Node;
 
+import org.exoplatform.ecm.webui.utils.LockUtil;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -455,4 +456,15 @@ public class Utils {
   public static SessionProvider getSystemProvider() {
     return SessionProviderFactory.createSystemProvider();
   }
+  
+  public static boolean nodeIsLocked(Node node) throws Exception {
+    if(!node.isLocked()) return false;        
+    String lockToken = LockUtil.getLockToken(node);
+    if(lockToken != null) {
+      node.getSession().addLockToken(lockToken);
+      return false;
+    }                
+    return true;
+  }
+
 }

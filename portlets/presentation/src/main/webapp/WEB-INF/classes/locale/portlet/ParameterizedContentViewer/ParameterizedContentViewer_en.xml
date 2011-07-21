@@ -34,4 +34,10 @@
    <Cancel>Cancel</Cancel>
   </action>
  </UIPCVConfig>
+ <Comments>
+ 	<tooltip>
+ 		<edit-comment>Edit comment</edit-comment>
+ 		<remove-comment>Remove comment</remove-comment>
+ 	</tooltip>
+  </Comments>
 </bundle>

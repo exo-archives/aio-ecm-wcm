@@ -34,4 +34,10 @@
    <Cancel>Hủy</Cancel>
   </action>
  </UIPCVConfig>
+ <Comments>
+ 	<tooltip>
+		<edit-comment>Sửa bình luận này</edit-comment>
+		<remove-comment>Xóa bỏ bình luận này</remove-comment>
+ 	</tooltip>
+  </Comments>
 </bundle>

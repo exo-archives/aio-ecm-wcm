@@ -71,4 +71,10 @@
     <UIContentSelectorOne>Single content selector panel</UIContentSelectorOne>
    </title>
   </UIContentDialogFormPopupWindow>
+ <Comments>
+ 	<tooltip>
+ 		<edit-comment>Edit comment</edit-comment>
+ 		<remove-comment>Remove comment</remove-comment>
+ 	</tooltip>
+  </Comments>
 </bundle>
