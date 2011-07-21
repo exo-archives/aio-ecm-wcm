@@ -21,6 +21,10 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
@@ -28,6 +32,7 @@ import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterPublicUserHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.newsletter.manager.NewsLetterUtil;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -110,8 +115,44 @@ public class UINewsletterViewerForm extends UIForm {
     publicUserHandler = newsletterManagerService.getPublicUserHandler();
     managerUserHandler = newsletterManagerService.getManageUserHandler();
 
-    this.setActions(new String[] { "Subcribe" });
-    inputEmail = new UIFormStringInput("inputEmail", "Email", null);
+    // get email when user have login
+    String username = Util.getPortalRequestContext().getRemoteUser();
+    if(username!=null) {    	    	
+    	OrganizationService service = WCMCoreUtils.getService(OrganizationService.class);
+    	User useraccount = service.getUserHandler().findUserByName(username);
+    	inputEmail = new UIFormStringInput("inputEmail", "Email", useraccount.getEmail());
+    	SessionProvider sessionProvider = Utils.getSessionProvider();
+    	List<String> Ids = new ArrayList<String>();
+    	List<NewsletterSubscriptionConfig> listSubscriptions = this.subcriptionHandler.getSubscriptionIdsByPublicUser(sessionProvider, NewsLetterUtil.getPortalName(), useraccount.getEmail());
+        for(NewsletterSubscriptionConfig subscriptionConfig : listSubscriptions){
+        	Ids.add(subscriptionConfig.getCategoryName() + "#" + subscriptionConfig.getName());
+        }        
+        if(Ids.size()>0) {
+        	this.setListIds(Ids);
+        	this.userMail = useraccount.getEmail();
+        	this.inputEmail.setRendered(false);
+        	this.setActionAgain();
+        } else {
+        	boolean isExistedEmail = this.managerUserHandler.checkExistedEmail(WCMCoreUtils.getUserSessionProvider(),
+                    NewsLetterUtil.getPortalName(),
+                    useraccount.getEmail());
+			if(isExistedEmail) {
+				this.userMail = useraccount.getEmail();
+				this.inputEmail.setRendered(false);
+				this.setActionAgain();       
+			} else {
+				this.inputEmail.setRendered(true);
+				this.inputEmail.setValue(useraccount.getEmail());
+				this.setActions(new String[] { "Subcribe" });  
+				this.isUpdated = false;
+			}
+        }
+        	
+    } else {
+    	this.setActions(new String[] { "Subcribe" });
+    	inputEmail = new UIFormStringInput("inputEmail", "Email", null);
+    }
+    
     inputEmail.addValidator(MandatoryValidator.class).addValidator(UINewsletterViewerEmailAddressValidator.class);
     this.addChild(inputEmail);
   }
@@ -134,7 +175,7 @@ public class UINewsletterViewerForm extends UIForm {
    * @throws Exception the exception
    */
   public void init(List<NewsletterSubscriptionConfig> listNewsletterSubcription, String categoryName) throws Exception {
-    if(userCode != null && userCode.trim().length() > 0){ // run when confirm user code
+	if((listIds!=null && listIds.size()>0) || (userCode != null && userCode.trim().length() > 0)){ // run when confirm user code
       String subcriptionPattern;
       for (NewsletterSubscriptionConfig newsletterSubcription : listNewsletterSubcription) {
         subcriptionPattern = categoryName + "#" + newsletterSubcription.getName();
@@ -260,7 +301,8 @@ public class UINewsletterViewerForm extends UIForm {
       UINewsletterViewerForm newsletterForm = event.getSource();
       newsletterForm.publicUserHandler.forgetEmail(Utils.getSessionProvider(), NewsLetterUtil.getPortalName(), newsletterForm.userMail);
       
-      newsletterForm.isUpdated = false;
+      newsletterForm.isUpdated = true;
+      newsletterForm.setListIds(null);
       newsletterForm.inputEmail.setValue("");
       newsletterForm.inputEmail.setRendered(true);
       newsletterForm.userMail = "";
@@ -304,7 +346,8 @@ public class UINewsletterViewerForm extends UIForm {
       UIApplication uiApp = context.getUIApplication();
       uiApp.addMessage(new ApplicationMessage("UINewsletterViewerForm.msg.updateSuccess", null, ApplicationMessage.INFO));
 
-      newsletterForm.isUpdated = true;
+      newsletterForm.setListIds(listSubcriptionPattern);
+      newsletterForm.isUpdated = true;  
       newsletterForm.userMail = newsletterForm.userMail;
       newsletterForm.inputEmail.setRendered(false);
       newsletterForm.setActions(new String[] {"ForgetEmail", "ChangeSubcriptions" });
@@ -363,6 +406,7 @@ public class UINewsletterViewerForm extends UIForm {
                                                        listCategorySubscription,
                                                        newsletterForm.linkToSendMail,
                                                        emailContent);
+            newsletterForm.setListIds(listCategorySubscription);
             newsletterForm.inputEmail.setRendered(false);
             newsletterForm.userMail = userEmail;
             newsletterForm.isUpdated = true;

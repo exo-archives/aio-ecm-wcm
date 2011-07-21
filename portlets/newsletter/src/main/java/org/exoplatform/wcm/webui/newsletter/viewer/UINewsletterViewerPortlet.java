@@ -18,7 +18,6 @@ package org.exoplatform.wcm.webui.newsletter.viewer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Calendar;
 
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
@@ -51,8 +50,8 @@ public class UINewsletterViewerPortlet extends UIPortletApplication {
    * @throws Exception the exception
    */
   public UINewsletterViewerPortlet() throws Exception {
-	Calendar lCDateTime = Calendar.getInstance();
-    this.addChild(UINewsletterViewerForm.class, null, "UINewsletterViewerForm-"+ lCDateTime.getTimeInMillis());
+	  setId("UINewsletterViewerPortlet");
+	  this.addChild(UINewsletterViewerForm.class, null, null);
   }
   
   /**
