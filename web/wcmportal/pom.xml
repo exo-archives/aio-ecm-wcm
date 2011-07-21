@@ -61,7 +61,6 @@
 						WEB-INF/webui-configuration.xml,
 						groovy/portal/webui/workspace/UIWorkingWorkspace.gtmpl,
 						groovy/webui/form/ext/UIFormInputSetWithAction.gtmpl,
-						groovy/webui/form/UIFormUploadInput.gtmpl,
 						fckeditor/editor/dialog/fck_table.html,
 						fckeditor/editor/dialog/fck_image.html</dependentWarExcludes>
         </configuration>
