@@ -183,7 +183,7 @@ PluginUtils.prototype.listFiles = function(list) {
 		if (!label) label = node;
 		var newRow = tblRWS.insertRow(i+1);
 		newRow.className = clazz;
-		newRow.insertCell(0).innerHTML = '<div class="Item '+clazzItem+'" url="'+url+'" nodeType="'+nodeType+'" onclick="eXoWCM.PluginUtils.insertContent(this);">'+decodeURIComponent(label)+'</div>';
+		newRow.insertCell(0).innerHTML = '<div class="Item default16x16Icon '+clazzItem+'" url="'+url+'" nodeType="'+nodeType+'" onclick="eXoWCM.PluginUtils.insertContent(this);">'+decodeURIComponent(label)+'</div>';
 		newRow.insertCell(1).innerHTML = '<div class="Item">'+ list[i].getAttribute("dateCreated") +'</div>';
 		newRow.insertCell(2).innerHTML = '<div class="Item">'+ list[i].getAttribute("size")+'&nbsp;kb' +'</div>';
 		
