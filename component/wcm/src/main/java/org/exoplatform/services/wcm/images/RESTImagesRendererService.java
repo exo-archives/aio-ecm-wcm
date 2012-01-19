@@ -74,6 +74,11 @@ public class RESTImagesRendererService implements ResourceContainer{
   
   /** The base rest uri. */
   private String baseRestURI = "/portal/rest/";
+  /** Default mime type **/
+  private static String DEFAULT_MIME_TYPE = "image/jpg";
+
+  /** Mime type property **/
+  private static String PROPERTY_MIME_TYPE = "jcr:mimeType";
   
   /**
    * Instantiates a new rEST images renderer service.
@@ -129,9 +134,17 @@ public class RESTImagesRendererService implements ResourceContainer{
       	return Response.Builder.notModified().build();
       }
       
-      jcrData = dataNode.getNode("jcr:content").getProperty("jcr:data").getStream();
       DateFormat dateFormat = new SimpleDateFormat(IF_MODIFIED_SINCE_DATE_FORMAT);
-      return Response.Builder.ok().header(LAST_MODIFIED_PROPERTY, dateFormat.format(new Date())).entity(jcrData, "image").build();
+      Node jcrContentNode = dataNode.getNode("jcr:content");
+      String mimeType = DEFAULT_MIME_TYPE;
+      if (jcrContentNode.hasProperty(PROPERTY_MIME_TYPE))
+      {
+          mimeType = jcrContentNode.getProperty(PROPERTY_MIME_TYPE).getString();
+      }
+
+      jcrData = jcrContentNode.getProperty("jcr:data").getStream();
+      return Response.Builder.ok().entity(jcrData, mimeType).build();
+
     } catch (PathNotFoundException e) {
       return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).build();
     }catch (ItemNotFoundException e) {
@@ -179,7 +192,7 @@ public class RESTImagesRendererService implements ResourceContainer{
       
       InputStream jcrData = node.getProperty(propertyName).getStream();
       DateFormat dateFormat = new SimpleDateFormat(IF_MODIFIED_SINCE_DATE_FORMAT);
-      return Response.Builder.ok().header(LAST_MODIFIED_PROPERTY, dateFormat.format(new Date())).entity(jcrData, "image").build();
+      return Response.Builder.ok().entity(jcrData, DEFAULT_MIME_TYPE).build();
     } catch (PathNotFoundException e) {
       return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).build();
     }catch (ItemNotFoundException e) {
